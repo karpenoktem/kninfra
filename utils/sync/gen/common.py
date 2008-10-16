@@ -5,6 +5,10 @@ def read_ssv_file(filename):
         with open(filename) as f:
                 return f.readline()[:-1].split(' ')
 
+def sesc(t):
+	return t.replace('\\','\\\\').replace(' ','\\ ')
+	
+
 DOMAIN = 'karpenoktem.nl'
 LISTDOMAIN = 'lists.karpenoktem.nl'
 
