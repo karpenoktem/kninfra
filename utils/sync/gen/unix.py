@@ -1,3 +1,5 @@
+from common import *
+
 import os
 import grp
 import pwd
@@ -39,6 +41,6 @@ def sync_unix():
 		group = line[0]
 		if group[0:3] == 'kn-' and not group in gr_accounted:
 			print "warn Stray group %s" % group
-	for user in os.listdir('/home/kn'):
+	for user in os.listdir(MEMBERS_HOME):
 		if not user in usr_accounted:
 			print "warn Stray unix user %s" % user
