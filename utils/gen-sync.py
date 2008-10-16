@@ -13,7 +13,7 @@ import Mailman.MailList
 from kn.leden.models import Member, Commission, Seat, Alias
 
 DOMAIN = 'karpenoktem.nl'
-LISTDOMAIN = 'lists.w-nz.com'
+LISTDOMAIN = 'lists.karpenoktem.nl'
 
 
 def sync_commissions():

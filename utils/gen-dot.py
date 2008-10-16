@@ -8,7 +8,7 @@ from pydot import Node, Dot, Edge
 from Mailman import MailList, Utils
 
 DOMAIN = "karpenoktem.nl"
-LISTDOMAIN = "lists.w-nz.com"
+LISTDOMAIN = "lists.karpenoktem.nl"
 
 def gen_dot():
 	d = Dot()
