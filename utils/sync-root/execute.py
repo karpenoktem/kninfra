@@ -22,4 +22,4 @@ if __name__ == '__main__':
 		if not os.path.exists('actions/%s' % action):
 			print "Action %s doesn't exist" % action
 			sys.exit(-1)
-		subprocess.call(['actions/%s'%action,]+args.split(' '))
+		subprocess.call(['actions/%s'%action,]+args.strip().split(' '))
