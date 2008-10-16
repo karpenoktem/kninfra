@@ -17,9 +17,11 @@ def setup_virtual_package(name, path=os.curdir):
 	imp.load_module(name, f, fn, suffix)
 	sys.modules[name].__path__ = [modulePath]
 
-if '_import' in sys.modules:
+
+if __name__ != '__main__':
 	setup_virtual_package('kn', os.path.join(
-		os.path.dirname(sys.modules['_import'].__file__),
-		os.path.expanduser('~/repo/kn')))
+		os.path.dirname(sys.modules[__name__].__file__),
+		os.path.expanduser('~kn-django/repo/kn')))
 	setup_virtual_package('Mailman', os.path.expanduser('~mailman/Mailman'))
+	import Mailman
 	os.environ['DJANGO_SETTINGS_MODULE'] = 'kn.settings'

@@ -2,10 +2,11 @@
 
 import _import
 
+import sys
 from Mailman import Utils, MailList, UserDesc
 
 def execute(args):
-	if len(sys.argv) < 1:
+	if len(args) < 1:
 		print 'Missing command'
 		return -1
 	cmd = args[0]
