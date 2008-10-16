@@ -13,3 +13,6 @@ EMAIL_ALLOWED = frozenset(
 		    map(lambda x: chr(ord('A') + x), xrange(26)) +
 		    map(lambda x: chr(ord('0') + x), xrange(10)) +
 		    ['.', '-'])
+
+GALLERY_PATH = '/var/galleries/kn'
+MEMBERS_HOME = '/home/kn'
