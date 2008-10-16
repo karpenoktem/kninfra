@@ -1,38 +1,37 @@
 #!/usr/bin/env python
 
 import _import
-import sys
 
 from Mailman import Utils, MailList, UserDesc
 
-if __name__ == '__main__':
-	if len(sys.argv) < 2:
+def execute(args):
+	if len(sys.argv) < 1:
 		print 'Missing command'
-		sys.exit(-1)
-	cmd = sys.argv[1]
+		return -1
+	cmd = args[0]
 	if cmd == 'subscribe':
-		if len(sys.argv) != 4:
+		if len(args) != 3:
 			print 'Expected 3 parameters'
-			sys.exit(-2)
-		m = MailList.MailList(sys.argv[2])
+			return -2
+		m = MailList.MailList(args[1])
 		try:
 			pw = Utils.MakeRandomPassword()
-			desc = UserDesc.UserDesc(sys.argv[3], '', pw, False)
+			desc = UserDesc.UserDesc(args[2], '', pw, False)
 			m.ApprovedAddMember(desc, False, False)
 			m.Save()
 		finally:
 			m.Unlock()
 	elif cmd == 'unsubscribe':
-		if len(sys.argv) != 4:
+		if len(args) != 3:
 			print 'Expected 3 parameters'
-			sys.exit(-3)
-		m = MailList.MailList(sys.argv[2])
+			return -3
+		m = MailList.MailList(args[1])
 		try:
-			m.ApprovedDeleteMember(sys.argv[3], admin_notif=False,
+			m.ApprovedDeleteMember(args[2], admin_notif=False,
 					userack=False)
 			m.Save()
 		finally:
 			m.Unlock()
 	else:
 		print 'Unknown command'
-		sys.exit(-4)
+		return -4

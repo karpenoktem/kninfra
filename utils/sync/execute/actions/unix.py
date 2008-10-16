@@ -1,28 +1,27 @@
 #!/usr/bin/env python
 
-import sys
 import subprocess
 
-if __name__ == '__main__':
-	if len(sys.argv) < 2:
+def execute(args):
+	if len(args) < 1:
 		print "Missing command"
-		sys.exit(-1)
-	cmd = sys.argv[1]
+		return -1
+	cmd = args[0]
 	if cmd == 'add-user':
-		if len(sys.argv) != 3:
+		if len(args) != 2:
 			print 'Expecting 2 arguments'
-			sys.exit(-2)
-		user = sys.argv[2]
+			return -2
+		user = args[1]
 		home = '/home/kn/%s' % user
 		subprocess.call(['mkdir', home])
 		subprocess.call(['useradd', '-d', home, '-g', 'kn', user])
 		subprocess.call(['chown', '%s:kn' % user, home])
 		subprocess.call(['chmod', '750', home])
 	elif cmd == 'add-group':
-		if len(sys.argv) != 3:
+		if len(args) != 2:
 			print 'Expecting 2 arguments'
-			sys.exit(-3)
-		group = sys.argv[2]
+			return -3
+		group = args[1]
 		rawname = group.split('kn-')[1]
 		home = '/groups/kn/%s' % rawname
 		subprocess.call(['mkdir', home])
@@ -30,13 +29,20 @@ if __name__ == '__main__':
 		subprocess.call(['chown', 'root:%s' % group, home])
 		subprocess.call(['chmod', '770', home])
 	elif cmd == 'add-to':
-		if len(sys.argv) != 4:
+		if len(args) != 3:
 			print 'Expecting 3 arguments'
-			sys.exit(-4)
-		group = sys.argv[2]
-		user = sys.argv[3]
+			return -4
+		group = args[1]
+		user = args[2]
 		subprocess.call(['gpasswd', '-a', user, group])
+	elif cmd == 'rm-from':
+		if len(args) != 3:
+			print 'Expecting 3 arguments'
+			return -5
+		group = args[1]
+		user = args[2]
+		subprocess.call(['gpasswd', '-d', user, group])
 	else:
-		print 'Unknown command'
-		sys.exit(-5)
+		print 'Unknown command %s'
+		return -5
 	

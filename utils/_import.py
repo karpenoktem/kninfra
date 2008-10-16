@@ -20,6 +20,6 @@ def setup_virtual_package(name, path=os.curdir):
 if '_import' in sys.modules:
 	setup_virtual_package('kn', os.path.join(
 		os.path.dirname(sys.modules['_import'].__file__),
-		'..', 'kn'))
+		os.path.expanduser('~/repo/kn')))
 	setup_virtual_package('Mailman', os.path.expanduser('~mailman/Mailman'))
 	os.environ['DJANGO_SETTINGS_MODULE'] = 'kn.settings'
