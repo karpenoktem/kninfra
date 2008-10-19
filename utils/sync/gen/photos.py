@@ -53,8 +53,8 @@ def checkMemberAlbum(msa, members, name):
 	if not os.path.islink(ma):
 		print "warn %s's album, %s, is not a link." % (name, ma)
 		return
-	mf = memberPhotoDir(username)
-	lt = os.path.readlink(ma)
+	mf = memberPhotoDir(name)
+	lt = os.readlink(ma)
 	if lt!=mf:
 		print ("warn %s does not link to %s, as instead to %s" 
 				% (ma,mf,lt))
@@ -64,7 +64,7 @@ def checkMemberAlbum(msa, members, name):
 			"us remove the link to it,") % (name,mf))
 		print "photos rm %s" % sesc(ma)
 		return
-	if len(os.listdir(mf)==0):
+	if len(os.listdir(mf))==0:
 		print (("# %s's photodir, %s, is trivial, so let us remove" +
 			" the link to it,")% (name,mf))
 		print "photos rm %s" % sesc(ma)
