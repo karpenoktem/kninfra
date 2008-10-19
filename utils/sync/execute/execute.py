@@ -38,6 +38,7 @@ if __name__ == '__main__':
 		if l == '': break
 		l = l[:-1]
 		l = l.split('#')[0]
+		if l.strip() == '': continue
 		action, args = l.split(' ', 1)
 		args = args.strip().split(' ')
 		if not action in actions:
