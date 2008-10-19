@@ -18,6 +18,11 @@ def execute(args):
 			print "Not exactly two arguments given."
 			return -1
 		os.symlink(args[1],args[2])
+	elif cmd == "rm":
+		if len(args)!=2:
+			print "Not exactly one argument given."
+			return -1
+		os.unlink(args[1])
 	else:
 		print "Unknown command: %s" % cmd
 		return -1
