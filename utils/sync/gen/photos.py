@@ -15,34 +15,61 @@ def sync_members_album():
 	members = dict([(m.username,m) for m in Member.objects.all()])
 	
 	if not os.path.exists(msa):
+		print "# The members gallery does not exist, so,"
 		print "photos mkdir %s " % sesc(msa)
 	else:
 		for name in os.listdir(msa):
-			ma = os.path.join(msa,name)
-			if name not in members:
-				print "photos rm %s" % sesc(ma)
-				continue
-			# The link will be checked in the next loop.
+			checkMemberAlbum(msa, members, name)
 
 	for member in members.values():
-		mh = os.path.expanduser('~%s'%member.username)
-		if not os.path.exists(mh):
-			print "warn %s's home, %s, does not exist" % (
-					member.username,mh)
-			continue
-		mf = os.path.join(mh, MEMBER_PHOTO_DIR)
-		if not os.path.exists(mf):
-			continue
-		ma = os.path.join(msa, member.username)
-		if not os.path.exists(ma):
-			print "photos symlink %s %s" % (sesc(mf),sesc(ma))
-			continue
-		if not os.path.islink(ma):
-			print "warn %s's album, %s, is not a link." % (
-					member.username, ma)
-			continue
-		if os.readlink(ma)!=mf:
-			print (("warn %s's album, %s, does not link to her/his" 
-					+ " photodir, %s.") % (member.username,
-						ma, mf))
+		checkMemberPhotoDir(msa, member.username)
 
+def memberPhotoDir(username):
+	mh = os.path.expanduser('~%s'%username)
+	mf = os.path.join(mh, MEMBER_PHOTO_DIR)
+	return mf
+
+def checkMemberPhotoDir(msa, name):
+	mf = memberPhotoDir(name)
+	if not os.path.exists(mf):
+		return
+	if len(os.listdir(mf))==0:
+		return
+	ma = os.path.join(msa, name)
+	if not os.path.exists(ma):
+		print ("# %s has a non-trivial photodir, so, "+
+				"let us link an album to it,") % name
+		print "photos symlink %s %s" % (sesc(mf),sesc(ma))
+		return
+	# Since the album exists, it should have been checked.
+	# Ah, the smell of race conditions.
+
+def checkMemberAlbum(msa, members, name):
+	ma = os.path.join(msa,name)
+	if name not in members:
+		print "# %s is not a member, so," % name
+		print "photos rm %s" % sesc(ma)
+		return
+	if not os.path.islink(ma):
+		print "warn %s's album, %s, is not a link." % (name, ma)
+		return
+	mf = memberPhotoDir(username)
+	lt = os.path.readlink(ma)
+	if lt!=mf:
+		print ("warn %s does not link to %s, as instead to %s" 
+				% (ma,mf,lt))
+		return
+	if not os.path.exists(mf):
+		print (("# %s's photodir, %s, does not exist, so let " +
+			"us remove the link to it,") % (name,mf))
+		print "photos rm %s" % sesc(ma)
+		return
+	if len(os.listdir(mf)==0):
+		print (("# %s's photodir, %s, is trivial, so let us remove" +
+			" the link to it,")% (name,mf))
+		print "photos rm %s" % sesc(ma)
+
+
+
+
+					
