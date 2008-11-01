@@ -15,15 +15,22 @@ def execute(args):
 			print "Not exactly one argument given."
 			return -1
 		os.mkdir(args[1])
-	elif cmd == "symlink":
-		if len(args)!=3:
-			print "Not exactly two arguments given."
+	elif cmd == "gal-symlink":
+		if len(args)!=2:
+			print "Not exactly one argument given."
 			return -1
-		os.symlink(args[1],args[2])
+		user = args[1]
+		assert("/" not in user)
+		assert(" " not in user)
+		userfotosdir = os.path.join(MEMBERS_HOME,user,MEMBER_PHOTO_DIR)
+		useralbum = os.path.join(GALLERY_PATH,MEMBERS_ALBUM,user)
+		os.symlink(userfotosdir,useralbum)
 	elif cmd == "gal-rm":
 		if len(args)!=2:
 			print "Not exactly one argument given."
 			return -1
+		assert(".." not in args[1])
+		# WARNING: there is still a priveliges escalation: symlinks.
 		pth = os.path.join(GALLERY_PATH, MEMBERS_ALBUM, args[1])
 		os.unlink(pth)
 	elif cmd == "adm-add":

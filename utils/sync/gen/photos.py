@@ -102,7 +102,7 @@ def checkMemberPhotoDir(msa, name):
 	if not os.path.exists(ma):
 		print ("# %s has a non-trivial photodir, so, "+
 				"let us link an album to it,") % name
-		print "photos symlink %s %s" % (sesc(mf),sesc(ma))
+		print "photos gal-symlink %s" % name
 		return
 	# Since the album exists, it should have been checked.
 	# Ah, the smell of race conditions.
