@@ -26,7 +26,7 @@ def sync_unix():
 				rmap[gr_member] = set()
 			rmap[gr_member].add(gr)
 	pw_users = set(map(lambda x: x[0], pwd.getpwall()))
-	for m in Member.objects.select_related('groups').all():
+	for m in Member.objects.all():
 		usr_accounted.add(m.username)
 		if not m.username in pw_users:
 			print "unix add-user %s" % m.username
