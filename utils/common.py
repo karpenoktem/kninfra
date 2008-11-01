@@ -21,3 +21,4 @@ EMAIL_ALLOWED = frozenset(
 GALLERY_PATH = '/var/galleries/kn/'
 MEMBERS_HOME = '/home/kn/'
 MEMBER_PHOTO_DIR = 'fotos/'
+MEMBERS_ALBUM = 'per-lid'

@@ -4,8 +4,6 @@ import MySQLdb
 from kn.leden.models import Member
 import os
 
-MEMBERS_ALBUM = "per-lid"
-
 def sync_photos():
 	members = dict([(m.username,m) for m in Member.objects.all()])
 	
@@ -20,12 +18,38 @@ def sync_database(members):
 	c.execute('SELECT id, user, password, name, email, rights '+
 			'FROM zp_administrators')
 	
-	uid = set([])
+	uid = set()
 
+	
 	for adm in c.fetchall():
 		uid.add(adm[1]) #[1]=username
 		checkDatabaseAdmin(adm, members)
 	
+	alb2adm = dict()
+
+	q = """ SELECT alb.folder, adm.user
+		FROM zp_albums alb 
+		JOIN zp_albums palb ON alb.parentid=palb.id 
+		LEFT JOIN zp_admintoalbum adm2alb ON adm2alb.albumid=alb.id
+		LEFT JOIN zp_administrators adm ON adm.id=adm2alb.adminid
+		WHERE palb.folder=%s """
+	
+	c.execute(q, MEMBERS_ALBUM)
+	
+	for folder, user in c.fetchall():
+		if folder not in alb2adm:
+			alb2adm[folder]=set()
+		if user != None:
+			alb2adm[folder].add(user)
+	
+	for folder in alb2adm.keys():
+		dummy, user = folder.split('/')
+		if user  in alb2adm[folder]:
+			continue
+		print "# %s is not allowed to manage its own album, so" % user
+		print "photos adm2alb-add %s %s" % (user,
+				sesc(os.path.join(MEMBERS_ALBUM,user)))
+
 	for member in members.values():
 		if member.username in uid:
 			continue
@@ -38,7 +62,6 @@ def sync_database(members):
 				email, rights)
 
 
-
 def checkDatabaseAdmin(adm, members):
 	id, user, passwd, name, email, rights = adm
 	if user not in members:
@@ -49,6 +72,7 @@ def checkDatabaseAdmin(adm, members):
 	if member_name!=name:
 		print "# %s's name, %s, is outdated," % (user,name) 
 		print "photos adm-update %s name %s" % (user,sesc(member_name))	
+	
 
 def sync_members_album(members):
 	msa = os.path.join(GALLERY_PATH, MEMBERS_ALBUM)
