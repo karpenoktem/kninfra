@@ -7,13 +7,52 @@ import os
 MEMBERS_ALBUM = "per-lid"
 
 def sync_photos():
-	sync_members_album()
-
-def sync_members_album():
-	msa = os.path.join(GALLERY_PATH, MEMBERS_ALBUM)
-
 	members = dict([(m.username,m) for m in Member.objects.all()])
 	
+	sync_members_album(members)
+	sync_database(members)
+
+
+def sync_database(members):
+	user, db, passwd = read_ssv_file('photos.login')
+	dc = MySQLdb.connect(host='localhost', user=user, db=db, passwd=passwd)
+	c = dc.cursor()
+	c.execute('SELECT id, user, password, name, email, rights '+
+			'FROM zp_administrators')
+	
+	uid = set([])
+
+	for adm in c.fetchall():
+		uid.add(adm[1]) #[1]=username
+		checkDatabaseAdmin(adm, members)
+	
+	for member in members.values():
+		if member.username in uid:
+			continue
+		user = member.username
+		name = member.get_full_name()
+		email = member.username+"@"+DOMAIN
+		rights = 258
+
+		print "photos adm-add %s %s %s %s" % (user, sesc(name), 
+				email, rights)
+
+
+
+def checkDatabaseAdmin(adm, members):
+	id, user, passwd, name, email, rights = adm
+	if user not in members:
+		print "warn gallery admin %s is not a member." % user
+		return
+	member = members[user]
+	member_name = member.get_full_name()
+	if member_name!=name:
+		print "# %s's name, %s, is outdated," % (user,name) 
+		print "photos adm-update %s name %s" % (user,sesc(member_name))	
+
+def sync_members_album(members):
+	msa = os.path.join(GALLERY_PATH, MEMBERS_ALBUM)
+
 	if not os.path.exists(msa):
 		print "# The members gallery does not exist, so,"
 		print "photos mkdir %s " % sesc(msa)
