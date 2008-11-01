@@ -20,11 +20,12 @@ def execute(args):
 			print "Not exactly two arguments given."
 			return -1
 		os.symlink(args[1],args[2])
-	elif cmd == "rm":
+	elif cmd == "gal-rm":
 		if len(args)!=2:
 			print "Not exactly one argument given."
 			return -1
-		os.unlink(args[1])
+		pth = os.path.join(GALLERY_PATH, MEMBERS_ALBUM, args[1])
+		os.unlink(pth)
 	elif cmd == "adm-add":
 		if len(args)!=5:
 			print "Not exactly 4 arguments given."

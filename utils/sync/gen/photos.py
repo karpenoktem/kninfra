@@ -111,7 +111,7 @@ def checkMemberAlbum(msa, members, name):
 	ma = os.path.join(msa,name)
 	if name not in members:
 		print "# %s is not a member, so," % name
-		print "photos rm %s" % sesc(ma)
+		print "photos gal-rm %s" % name
 		return
 	if not os.path.islink(ma):
 		print "warn %s's album, %s, is not a link." % (name, ma)
@@ -125,12 +125,12 @@ def checkMemberAlbum(msa, members, name):
 	if not os.path.exists(mf):
 		print (("# %s's photodir, %s, does not exist, so let " +
 			"us remove the link to it,") % (name,mf))
-		print "photos rm %s" % sesc(ma)
+		print "photos gal-rm %s" % name
 		return
 	if len(os.listdir(mf))==0:
 		print (("# %s's photodir, %s, is trivial, so let us remove" +
 			" the link to it,")% (name,mf))
-		print "photos rm %s" % sesc(ma)
+		print "photos gal-rm %s" % name
 
 
 
