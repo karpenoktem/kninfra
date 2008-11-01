@@ -7,6 +7,28 @@ import sys
 import os.path
 import cStringIO
 
+def escapable_space_split(text):
+	""" Splits text on spaces except for those escaped by \\ """
+	cur = ''
+	ps = False
+	for c in text:
+		if ps:
+			if c == '\\' or c == ' ':
+				cur += c
+			else:
+				cur += '\\'+c
+			ps = False
+		else:
+			if c == '\\':
+				ps = True
+			elif c == ' ':
+				yield cur
+				cur = ''
+			else:
+				cur += c
+	if cur != ' ':
+		yield cur
+
 def _get_by_path(bits, _globals):
 	c = None
 	for i in xrange(len(bits)):
@@ -40,7 +62,7 @@ if __name__ == '__main__':
 		l = l.split('#')[0]
 		if l.strip() == '': continue
 		action, args = l.split(' ', 1)
-		args = args.strip().split(' ')
+		args = list(escapable_space_split(args.strip()))
 		if not action in actions:
 			print 'WARNING Action %s not found' % action
 		actions[action](args)
