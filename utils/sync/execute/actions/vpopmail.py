@@ -5,13 +5,6 @@ import os
 import sys
 import MySQLdb
 
-DOMAIN = 'karpenoktem.nl'
-
-def read_ssv_file(filename):
-	""" Reads values seperated by spaces in a simple one line file """
-	with open(filename) as f:
-		return f.readline()[:-1].split(' ')
-
 def execute(args):
 	login = read_ssv_file('vpopmail.login')
 	db = MySQLdb.connect(host='localhost', user=login[0],
