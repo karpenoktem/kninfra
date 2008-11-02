@@ -1,5 +1,11 @@
 from __future__ import with_statement
 
+import random
+
+ALPHA = 'qwertyuiopasdfghjklzxcvbnm'
+NUM = '1234567890'
+ALPHANUMUL = ALPHA + ALPHA.upper() + NUM
+
 def read_ssv_file(filename):
         """ Reads values seperated by spaces in a simple one line file """
         with open(filename) as f:
@@ -7,7 +13,12 @@ def read_ssv_file(filename):
 
 def sesc(t):
 	return t.replace('\\','\\\\').replace(' ','\\ ')
-	
+
+def pseudo_randstr(l=12, cs=ALPHANUMUL):
+	ret = ''
+	for i in xrange(l):
+		ret += cs[random.randint(0, len(cs))]
+	return ret
 
 DOMAIN = 'karpenoktem.nl'
 LISTDOMAIN = 'lists.karpenoktem.nl'
