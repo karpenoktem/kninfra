@@ -1,0 +1,84 @@
+# checks for inconsistencies
+
+import _import
+from datetime import datetime, date
+
+from kn.leden.models import KnUser, KnGroup, Seat, Alias
+
+DAYS_IN_YEAR = 365.242199
+
+def check_namespace():
+	print "NAMESPACE"
+	cn = set(map(lambda c: c.name, KnGroup.objects.all()))
+	un = set(map(lambda m: m.username, KnUser.objects.all()))
+	sn = set(map(lambda s: s.name if s.isGlobal else s.group.name \
+					+ '-' + s.name, Seat.objects.all()))
+	an = set(map(lambda a: a.source, Alias.objects.all()))
+	
+	n = set()
+	for o in (cn, un, sn, an):
+		inter = n.intersection(o)
+		if len(inter) != 0:
+			for el in inter:
+				print '%s: namespace conflict' % el
+		n = n.union(o)
+	
+	for a in Alias.objects.all():
+		if not a.target in n:
+			print '%s -> %s, target doesn\'t exist' % \
+					(a.source, a.target)
+
+
+def check_commissions():
+	print "COMMISSIONS"
+	for c in KnGroup.objects.all():
+		if len(c.description) < 15:
+			print "%s: description too short (<15)" % c.name
+
+def check_members():
+	print "MEMBERS"
+	for m in KnUser.objects.all():
+		if m.dateJoined is None:
+			print "%s: dateJoined is None" % m.username
+		else:
+			if m.dateJoined < date(2004, 4, 1):
+				print "%s: joined before constitution" % \
+						m.username
+		if m.dateOfBirth is None:
+			print "%s: dateOfBirth is None" % m.username
+		else:
+			age = (datetime.now().date() - m.dateOfBirth).days \
+					/ DAYS_IN_YEAR
+			if age < 15:
+				print "%s: age < 15" % m.username
+			elif age > 40:
+				print "%s: age > 40" % m.username 
+		if m.password == '$$' or \
+		   m.password == '':
+			print "%s: no empty password" % m.username
+		if m.addr_street == '':
+			print "%s: no empty addr_street" % m.username
+		if m.addr_zipCode == '':
+			print "%s: no empty addr_zipcode" % m.username
+		if m.addr_number == '':
+			print "%s: no empty addr_number" % m.username
+		if m.addr_city == '':
+			print "%s: no empty addr_city" % m.username
+		if not m.gender in ('m', 'v'):
+			print "%s: gender not in {m, v}" % m.username
+		if m.telephone is None:
+			print "%s: telephone is None" % m.username
+		elif m.telephone == '':
+			print "%s: empty telephone" % m.username
+		elif not m.telephone[0:1] == '+':
+			print "%s: un-normalised telephone" % m.username
+		if m.studentNumber is None:
+			print "%s: studentNumber is None" % m.username
+		elif len(m.studentNumber) != 7:
+			print "%s: student number of incorrect length" \
+					% m.username
+
+if __name__ == '__main__':
+	check_commissions()
+	check_members()
+	check_namespace()
