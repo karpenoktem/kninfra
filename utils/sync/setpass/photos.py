@@ -12,5 +12,3 @@ def setpass(user, passwd):
 	c.execute("""	UPDATE zp_administrators 
 			SET password=%s 
 			WHERE user=%s""", (hashed_passwd, user))
-	print "Done"
-	
