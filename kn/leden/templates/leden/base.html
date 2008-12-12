@@ -1,0 +1,14 @@
+{% extends "leden/bare.html" %}
+
+{% block head %}
+{{ block.super }}
+<link href="{% url style-common %}"
+	rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block wrapper %}
+<div id="logo"></div>
+{{ block.super }}
+<ul id="menu">
+</ul>
+{% endblock %}

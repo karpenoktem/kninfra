@@ -1,0 +1,60 @@
+#menu ul {
+	margin-left: 0;
+}
+
+#logo {
+	height: 97px;
+	background-image: url({{ MEDIA_URL }}/leden/logo.png);
+	background-repeat: no-repeat;
+}
+
+#body {
+        float: right;
+        width: 600px;
+        margin: 0 0 0 0;
+        padding: 12px 14px 10px 0;
+        height: 511px;
+        overflow: auto;
+}
+
+
+#menu {
+	padding: 15px 630px 0 0;
+	margin: 0 0 0 10px;
+}
+
+#menu li {
+	padding-top: 4px;
+	font-weight: bold;
+}
+
+#menu ul li {
+	padding-top: 0;
+	font-weight: normal;
+}
+
+#menu ul, #menu {
+	list-style: none;
+	padding-left: 10px;
+}
+
+#menu a {
+	text-decoration: none;
+}
+
+#menu a {
+	display: block;
+}
+
+a:hover {
+	color: #f00;
+}
+
+#menu a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
+#footer, #main {
+        border-top: 1px solid #800100;
+}

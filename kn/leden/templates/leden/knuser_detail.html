@@ -1,0 +1,36 @@
+{% extends "leden/base.html" %}
+{% load leden %}
+
+{% block body %}
+<h1>{{ object.get_full_name }}</h1>
+<dl>
+	<dt>Gebruikersnaam</dt>
+	<dd>{{ object.username }}</dd>
+	<dt>E-Mail</dt>
+	<dd>{{ object.get_primary_email|email }}</dd>
+	<dt>Studie</dt>
+	<dd><a href="{% url study-detail object_id=object.study.id %}"
+		>{{ object.study }}</a></dd>
+	<dt>Geboortedatum</dt>
+	<dd>{{ object.dateOfBirth }}</dd>
+</dl>
+{% if object.groups.all %}
+	<h2>Commissies</h2>
+	<ul>
+	{% for comm in object.groups.all %}
+	<li><a href="{% url comm-detail object_id=comm.id %}"
+		>{{ comm.kngroup.humanName }}</a></li>
+	{% endfor %}
+	</ul>
+{% endif %}
+{% if object.seat_set.all %}
+	<h2>Zetels</h2>
+	<ul>
+		{% for seat in object.seat_set.all %}
+		<li>{{ seat.humanName }} {{ seat.group.genitive_prefix }}
+		<a href="{% url comm-detail object_id=seat.group.id %}"
+			>{{ seat.group.humanName }}</a></li>
+		{% endfor %}
+	</ul>
+{% endif %}
+{% endblock %}

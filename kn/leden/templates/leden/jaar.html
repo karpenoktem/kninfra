@@ -1,0 +1,11 @@
+{% extends "leden/base.html" %}
+
+{% block body %}
+<h1>Toegetreden in {{ year }}</h1>
+<ul>
+	{% for m in object_list %}
+	<li><a href="{% url leden-detail object_id=m.id %}"
+		>{{ m.get_full_name }}</a></li>
+	{% endfor %}
+</ul>
+{% endblock %}

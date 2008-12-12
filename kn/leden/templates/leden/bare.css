@@ -1,0 +1,64 @@
+a, body, #menu a {
+        color: #eee;
+}
+
+body {
+        background-color: black;
+        font-family: "trebuchet ms", verdana;
+        padding-left: 50%;
+}
+
+#wrapper {
+        width: 800px;
+        margin-left: -400px;
+}
+
+#main {
+        background-repeat: no-repeat;
+        min-height: 533px;
+}
+
+h1 {
+        font-size: 1.3em;
+}
+
+img.left {
+        float: left;
+        margin: 0.5em 0.5em 0.5em 0;
+}
+
+img.right {
+        float: right;
+        margin: 0.5em 0 0.5em 0.5em;
+}
+
+h2 {
+        font-size: 1.4em;
+}
+
+p, h2, img {
+        padding: 0;
+        margin: 0 0 1em 0;
+}
+
+h2 {
+        margin-bottom: 0.5em;
+}
+
+#footer a {
+	text-decoration: none;
+}
+
+#footer a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
+#footer {
+        clear: both;
+        text-align: center;
+}
+
+address {
+	padding-left: 3em;
+}

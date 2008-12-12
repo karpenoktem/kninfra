@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="nl">
+<html>
+	<head>
+		{% block head %}
+		<title>{% block title %}ASV Karpe Noktem{% endblock %}</title>
+		<link href="{% url style-bare %}"
+			rel="stylesheet" type="text/css" />
+		<script type="text/javascript"
+			src="{{ MEDIA_URL }}/leden/common.js"></script>
+		<link rel="icon" href="{{ MEDIA_URL }}/leden/favicon.ico" />
+		<!--[if lte IE 7]>
+		<link rel="stylesheet" type="text/css"
+			href="{{ MEDIA_URL }}/leden/iehacks.css" />
+		<![endif]-->
+		{% endblock %}
+	</head>
+	<body><div id="wrapper">
+		{% block wrapper %}
+		<div id="main">
+			<div id="body">
+			{% block body %}
+			{% endblock %}
+			</div>
+		</div>
+		{% endblock %}
+		<div id="footer">
+		<!--[if IE]>
+		Internet Explorer is 
+		<a href="http://www.google.com/search?q=ie+sucks">smerige
+			rotzooi</a>. Gebruik een
+		fatsoenlijke browser zoals 
+		<a href="http://www.mozilla.com/en-US/firefox/">Firefox</a>.
+		<br/>
+		<![endif]-->
+		&copy;2007, 2008 &mdash; Karpe Noktem
+		</div>
+	</div></body>
+</html>

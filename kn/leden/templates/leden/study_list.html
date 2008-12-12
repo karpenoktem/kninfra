@@ -1,0 +1,20 @@
+{% extends "leden/base.html" %}
+
+{% block body %}
+<h1>Studies</h1>
+<ul>
+{% for object in object_list %}
+<li><a href="{% url study-detail object_id=object.id %}"
+	>{{ object.name }}</a></li>
+{% endfor %}
+</ul>
+
+{% if page_obj.has_previous %}
+<a href="{% url study-list page=page_obj.previous_page_number %}">Vorige</a>
+{% endif %}
+Pagina {{ page_obj.number }} van de {{ paginator.num_pages }}.
+{% if page_obj.has_next %}
+<a href="{% url study-list page=page_obj.next_page_number %}">Volgende</a>
+{% endif %}
+
+{% endblock %}
