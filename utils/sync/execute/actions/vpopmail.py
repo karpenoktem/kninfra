@@ -5,6 +5,8 @@ import os
 import sys
 import MySQLdb
 
+from common import *
+
 def execute(args):
 	login = read_ssv_file('vpopmail.login')
 	db = MySQLdb.connect(host='localhost', user=login[0],

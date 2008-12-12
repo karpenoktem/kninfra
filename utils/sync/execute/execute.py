@@ -6,6 +6,7 @@ import os
 import sys
 import os.path
 import cStringIO
+from common import *
 
 def escapable_space_split(text):
 	""" Splits text on spaces except for those escaped by \\ """
