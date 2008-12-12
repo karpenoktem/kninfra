@@ -33,3 +33,7 @@ GALLERY_PATH = '/var/galleries/kn/'
 MEMBERS_HOME = '/home/kn/'
 MEMBER_PHOTO_DIR = 'fotos/'
 MEMBERS_ALBUM = 'per-lid'
+
+GCAL_MAIN = 'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com'
+GCAL_UIT = '56ndj4j9iei03ahqa7fkrl566s@group.calendar.google.com'
+GCAL_BD = '3p6k3ge8476t1bs5c20khat1uc@group.calendar.google.com'
