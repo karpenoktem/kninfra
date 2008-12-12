@@ -17,7 +17,7 @@ def sesc(t):
 def pseudo_randstr(l=12, cs=ALPHANUMUL):
 	ret = ''
 	for i in xrange(l):
-		ret += cs[random.randint(0, len(cs))]
+		ret += cs[random.randint(0, len(cs)-1)]
 	return ret
 
 DOMAIN = 'karpenoktem.nl'
