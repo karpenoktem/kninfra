@@ -1,7 +1,7 @@
 from common import *
 
 import MySQLdb
-from kn.leden.models import Member, Commission, Seat, Alias
+from kn.leden.models import KnUser, KnGroup, Seat, Alias
 import Mailman
 import Mailman.Utils
 
@@ -32,7 +32,7 @@ def sync_vpopmail():
 		target = target[1:]
 		map[alias] = target
 
-	for user in Member.objects.all():
+	for user in KnUser.objects.all():
 		claimed.add(user.username)
 		if not user.username in map:
 			print "vpopmail add %s %s" % (user.username, user.email)
@@ -59,19 +59,19 @@ def sync_vpopmail():
 			print "vpopmail alter %s %s@%s # was %s" % (
 					list, list, LISTDOMAIN, map[list])
 
-	for seat in Seat.objects.select_related('commission', 'member').all():
+	for seat in Seat.objects.select_related('group', 'user').all():
 		if seat.isGlobal:
 			name, email = seat.name, "%s@%s" % (seat.name, DOMAIN)
 		else:
-			name, email = seat.commission.name + '-' + seat.name, \
-				"%s-%s@%s" % (seat.commission.name, seat.name, DOMAIN)
-		temail = seat.member.username + '@' + DOMAIN		
+			name, email = seat.group.name + '-' + seat.name, \
+				"%s-%s@%s" % (seat.group.name, seat.name, DOMAIN)
+		temail = seat.user.username + '@' + DOMAIN		
 		if seat.name in claimed:
 			print "warn CONFLICT %s already claimed (Seat)" % email
 			continue
 		claimed.add(name)
 		if not name in map:
-			print "vpopmail add %s %s@%s" % (name, seat.member.username, DOMAIN)
+			print "vpopmail add %s %s@%s" % (name, seat.user.username, DOMAIN)
 			continue
 		if map[name] != temail:
 			print "vpopmail alter %s %s # was %s" % (

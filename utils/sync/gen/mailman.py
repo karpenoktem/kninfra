@@ -2,13 +2,13 @@ import Mailman
 from common import *
 import Mailman.Utils
 import Mailman.MailList
-from kn.leden.models import Member, Commission, Seat, Alias
+from kn.leden.models import KnUser, KnGroup, Seat, Alias
 
 
 def sync_mailman():
 	mls = set(Mailman.Utils.list_names())
 	coms = set()
-	for com in Commission.objects.all():
+	for com in KnGroup.objects.filter(isVirtual=False):
 		coms.add(com.name)
 		if not com.name in mls:
 			print "mailman create %s" % com

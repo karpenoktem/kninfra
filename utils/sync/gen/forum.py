@@ -1,7 +1,7 @@
 from common import *
 
 import MySQLdb
-from kn.leden.models import Member, Commission, Seat, Alias
+from kn.leden.models import KnUser, KnGroup, Seat, Alias
 
 def sync_forum():
 	login = read_ssv_file('forum.login')
@@ -13,7 +13,7 @@ def sync_forum():
 	for username, in c.fetchall():
 		forum_users.add(username)
 	forum_users_unaccounted = set(forum_users)
-	for m in Member.objects.all():
+	for m in KnUser.objects.all():
 		if not m.username in forum_users:
 			print "forum user-add %s %s" % (m.username,
 						   sesc(m.get_full_name()))

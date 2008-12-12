@@ -4,14 +4,14 @@ import os
 import grp
 import pwd
 import os.path
-from kn.leden.models import Member, Commission, Seat, Alias
+from kn.leden.models import KnUser, KnGroup, Seat, Alias
 
 def sync_unix():
 	gr_accounted = set()
 	usr_accounted = set()
 	fmap = dict()
 	rmap = dict()
-	for c in Commission.objects.all():
+	for c in KnGroup.objects.filter(isVirtual=False):
 		gr_accounted.add('kn-'+c.name)
 		fmap[c.name] = set()
 		try:
@@ -26,7 +26,7 @@ def sync_unix():
 				rmap[gr_member] = set()
 			rmap[gr_member].add(gr)
 	pw_users = set(map(lambda x: x[0], pwd.getpwall()))
-	for m in Member.objects.all():
+	for m in KnUser.objects.all():
 		usr_accounted.add(m.username)
 		if not m.username in pw_users:
 			print "unix add-user %s" % m.username
@@ -35,8 +35,10 @@ def sync_unix():
 			_grp_accounted.add(g.name)
 			if not m.username in fmap[g.name]:
 				print "unix add-to kn-%s %s" % (g.name, m.username)
-		for stray_g in  rmap[m.username] - _grp_accounted:
-			print "unix rm-from kn-%s %s" % (stray_g, m.username)
+		if m.username in rmap:
+			for stray_g in  rmap[m.username] - _grp_accounted:
+				print "unix rm-from kn-%s %s" % (
+						stray_g, m.username)
 	for line in grp.getgrall():
 		group = line[0]
 		if group[0:3] == 'kn-' and not group in gr_accounted:
