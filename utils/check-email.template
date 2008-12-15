@@ -1,0 +1,35 @@
+Beste %(fullName)s,
+
+In de ledenadministratie van Karpe Noktem is van jou het volgende opgenomen:
+
+ voornaam              %(firstName)s
+ achternaam            %(lastName)s
+ geslacht              %(gender)s
+ geboortedatum         %(dateOfBirth)s
+ datum van toetreding  %(dateJoined)s
+
+ e-mail adres          %(email)s
+ telefoonnummer        %(telephone)s
+
+ adres
+  straat               %(addr_street)s
+  huisnummer           %(addr_number)s
+  postcode             %(addr_zipCode)s
+  woonplaats           %(addr_city)s
+ 
+ studie
+  instituut            %(institute)s
+  studie               %(study)s
+  student-nummer       %(studentNumber)s
+
+Kun je terugmailen of deze informatie klopt en deze zo nodig aanvullen of 
+corrigeren?
+
+%(extra)s
+Bij voorbaat dank.
+
+Met vriendelijke groet,
+
+
+  Rik Sprenkels
+  Secretaris
