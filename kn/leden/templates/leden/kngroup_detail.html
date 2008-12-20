@@ -29,20 +29,20 @@
 	{% endfor %}
 	</ul>
 {% endif %}
-{% if object.seat_set.all %}
+{% if seats %}
 	<h2>Zetels</h2>
 	<dl>
-	{% for seat in object.seat_set.all %}
+	{% for seat in seats %}
 	<dt>{{ seat.humanName }}</dt>
 	<dd><a href="{% url leden-detail object_id=seat.user.id %}"
 		>{{ seat.user.get_full_name }}</a></dd>
 	{% endfor %}
 	</dl>
 {% endif %}
-{% if object.user_set.all %}
-	<h2>Leden</h2>
+{% if otherMembers %}
+	<h2>Algemeen leden</h2>
 	<ul>
-	{% for user in object.user_set.all %}
+	{% for user in otherMembers %}
 	<li><a href="{% url leden-detail object_id=user.id %}"
 		>{{ user.knuser.get_full_name }}</a></li>
 	{% endfor %}

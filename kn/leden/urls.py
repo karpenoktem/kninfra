@@ -6,6 +6,7 @@ import django.views.generic.date_based
 
 import django.views.generic as generic
 from django.contrib.auth.decorators import login_required
+from kn.leden import views
 
 urlpatterns = patterns('',
 	url(r'^(?:page/(?P<page>[0-9]+)/)?$',
@@ -38,8 +39,7 @@ urlpatterns = patterns('',
 	     'template_name':'leden/jaar.html',
 	     'make_object_list':True}, name='jaar'),
 	url(r'^commissie/(?P<object_id>[0-9]+)/$',
-	    login_required(generic.list_detail.object_detail),
-	    {'queryset':KnGroup.objects.all()}, name='comm-detail'),
+	    views.kngroup_detail, name='comm-detail'),
 	url(r'^studie/(?P<object_id>[0-9]+)/$',
 	    login_required(generic.list_detail.object_detail),
 	    {'queryset':Study.objects.all()}, name='study-detail'),
