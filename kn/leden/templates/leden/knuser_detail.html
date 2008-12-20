@@ -11,8 +11,20 @@
 	<dt>Studie</dt>
 	<dd><a href="{% url study-detail object_id=object.study.id %}"
 		>{{ object.study }}</a></dd>
+	{% if object.dateOfBirth %}
 	<dt>Geboortedatum</dt>
-	<dd>{{ object.dateOfBirth }}</dd>
+	<dd>
+	<a href="{% url bouwjaar year=object.dateOfBirth.year %}"
+		>{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth.month }}-{{ object.dateOfBirth.day }}
+	</dd>
+	{% endif %}
+	{% if object.dateJoined %}
+	<dt>Lid sinds</dt>
+	<dd>
+	<a href="{% url jaar year=object.dateJoined.year %}"
+		>{{ object.dateJoined.year }}</a>-{{ object.dateJoined.month }}-{{ object.dateJoined.day }}
+	</dd>
+	{% endif %}
 </dl>
 {% if object.groups.all %}
 	<h2>Commissies</h2>
