@@ -4,7 +4,7 @@
 <h1>Bouwjaar {{ year }}</h1>
 <ul>
 	{% for m in object_list %}
-	<li><a href="{% url leden-detail object_id=m.id %}"
+	<li><a href="{{ m.get_absolute_url }}"
 		>{{ m.get_full_name }}</a></li>
 	{% endfor %}
 </ul>

@@ -30,7 +30,7 @@
 	<h2>Commissies</h2>
 	<ul>
 	{% for comm in object.groups.all %}
-	<li><a href="{% url comm-detail object_id=comm.id %}"
+	<li><a href="{{ comm.kngroup.get_absolute_url }}"
 		>{{ comm.kngroup.humanName }}</a></li>
 	{% endfor %}
 	</ul>
@@ -40,7 +40,7 @@
 	<ul>
 		{% for seat in object.seat_set.all %}
 		<li>{{ seat.humanName }} {{ seat.group.genitive_prefix }}
-		<a href="{% url comm-detail object_id=seat.group.id %}"
+		<a href="{{ seat.group.get_absolute_uri }}"
 			>{{ seat.group.humanName }}</a></li>
 		{% endfor %}
 	</ul>

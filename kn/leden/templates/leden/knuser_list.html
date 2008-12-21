@@ -4,7 +4,7 @@
 <h1>Leden</h1>
 <ul>
 {% for object in object_list %}
-<li><a href="{% url leden-detail object_id=object.id %}">{{ object.get_full_name }}</a></li>
+<li><a href="{{ object.get_absolute_url }}">{{ object.get_full_name }}</a></li>
 {% endfor %}
 </ul>
 

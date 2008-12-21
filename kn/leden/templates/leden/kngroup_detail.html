@@ -8,7 +8,7 @@
 	{% if object.parent %}
 	{% ifnotequal object.parent object %}
 	<dt>Onder</dt>
-	<dd><a href="{% url comm-detail object_id=object.parent.id %}"
+	<dd><a href="{{ object.parent.get_absolute_url }}"
 		>{{ object.parent.humanName }}</a></dd>
 	{% endifnotequal %}
 	{% endif %}
@@ -22,7 +22,7 @@
 	{% for comm in object.kngroup_set.all %}
 	{% ifnotequal comm object %}
 	<li>
-	<a href="{% url comm-detail object_id=comm.id %}"
+	<a href="{{ comm.get_absolute_url }}"
 		>{{ comm.humanName }}</a>
 	</li>
 	{% endifnotequal %}
@@ -34,7 +34,7 @@
 	<dl>
 	{% for seat in seats %}
 	<dt>{{ seat.humanName }}</dt>
-	<dd><a href="{% url leden-detail object_id=seat.user.id %}"
+	<dd><a href="{{ seat.user.get_absolute_url }}"
 		>{{ seat.user.get_full_name }}</a></dd>
 	{% endfor %}
 	</dl>
@@ -43,7 +43,7 @@
 	<h2>Algemeen leden</h2>
 	<ul>
 	{% for user in otherMembers %}
-	<li><a href="{% url leden-detail object_id=user.id %}"
+	<li><a href="{{ user.knuser.get_absolute_url }}"
 		>{{ user.knuser.get_full_name }}</a></li>
 	{% endfor %}
 	</ul>

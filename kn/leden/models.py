@@ -45,6 +45,10 @@ class KnUser(User):
 	def get_primary_email(self):
 		return self.username + '@' + KN_DOMAIN
 
+	@models.permalink
+	def get_absolute_url(self):
+		return ('knuser-detail', (), {'name': self.username})
+
 class KnGroup(Group):
 	parent = models.ForeignKey('KnGroup')
 	humanName = models.CharField(max_length=120)
@@ -55,6 +59,10 @@ class KnGroup(Group):
 	
 	def get_primary_email(self):
 		return self.name + '@' + KN_DOMAIN
+
+	@models.permalink
+	def get_absolute_url(self):
+		return ('kngroup-detail', (), {'name': self.name})
 
 class Seat(models.Model):
 	name = models.CharField(max_length=80)
