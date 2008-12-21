@@ -16,7 +16,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
 	(r'^admin/(.*)', admin.site.root),
-	(r'^leden/', include('kn.leden.urls')),
+	(r'^smoelen/', include('kn.leden.urls')),
 	(r'^accounts/login/$', auth.views.login),
 	(r'^accounts/logout/$', auth.views.logout_then_login),
 )
