@@ -9,7 +9,8 @@ DAYS_IN_YEAR = 365.242199
 
 def check_namespace():
 	print "NAMESPACE"
-	cn = set(map(lambda c: c.name, KnGroup.objects.all()))
+	cn = set(map(lambda c: c.name, 
+		filter(lambda c: not c.isVirtual, KnGroup.objects.all())))
 	un = set(map(lambda m: m.username, KnUser.objects.all()))
 	sn = set(map(lambda s: s.name if s.isGlobal else s.group.name \
 					+ '-' + s.name, Seat.objects.all()))
