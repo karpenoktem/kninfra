@@ -41,6 +41,16 @@ def check_commissions():
 						c.name
 def check_members():
 	print "MEMBERS"
+
+	ledeng = dict()
+	c = 0
+	while True:
+		c += 1
+		ms = date(2004 + c, 8, 1)
+		if datetime.now().date() < ms:
+			break
+		ledeng[c] = KnGroup.objects.get(name='leden%s' % c)
+
 	for m in KnUser.objects.all():
 		if m.dateJoined is None:
 			print "%s: dateJoined is None" % m.username
@@ -48,6 +58,19 @@ def check_members():
 			if m.dateJoined < date(2004, 4, 1):
 				print "%s: joined before constitution" % \
 						m.username
+			c = 0
+			while True:
+				c += 1
+				ms = date(2004 + c, 8, 1)
+				if datetime.now().date() < ms:
+					break
+				if m.dateJoined > ms:
+					continue
+				if len(ledeng[c].user_set.filter(
+						username=m.username)) == 0:
+					print "%s: should be in leden%s" \
+							% (m.username, c)
+				
 		if m.dateOfBirth is None:
 			print "%s: dateOfBirth is None" % m.username
 		else:
