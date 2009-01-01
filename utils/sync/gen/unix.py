@@ -32,6 +32,8 @@ def sync_unix():
 			print "unix add-user %s" % m.username
 		_grp_accounted = set()
 		for g in m.groups.all():
+			if not g.name in fmap:
+				continue
 			_grp_accounted.add(g.name)
 			if not m.username in fmap[g.name]:
 				print "unix add-to kn-%s %s" % (g.name, m.username)
