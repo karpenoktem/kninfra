@@ -35,7 +35,10 @@ def check_commissions():
 	for c in KnGroup.objects.all():
 		if len(c.description) < 15:
 			print "%s: description too short (<15)" % c.name
-
+		if c.isVirtual:
+			if c.user_set.count() != 0:
+				print "%s: virtual commission got members" % \
+						c.name
 def check_members():
 	print "MEMBERS"
 	for m in KnUser.objects.all():
