@@ -1,6 +1,7 @@
 # checks for inconsistencies
 
 import _import
+from common import *
 from datetime import datetime, date
 
 from kn.leden.models import KnUser, KnGroup, Seat, Alias
@@ -104,6 +105,9 @@ def check_members():
 		elif len(m.studentNumber) != 7:
 			print "%s: student number of incorrect length" \
 					% m.username
+		if (not m.is_active and
+				len(m.groups.filter(name=MEMBER_GROUP)) > 0):
+			print "%s: not active" % m.username
 
 if __name__ == '__main__':
 	check_commissions()
