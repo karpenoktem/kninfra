@@ -1,16 +1,6 @@
 from kn.leden.models import KnUser, KnGroup, Seat, Alias
 
 def sync_commissions():
-	leden = KnGroup.objects.get(name='leden')
-	accounted = set()
-	for user in leden.user_set.all():
-		accounted.add(user.username)
-	for user in KnUser.objects.all():
-		if not user.username in accounted:
-			user.groups.add(leden)
-			user.save()
-			print "notice Added %s to leden" % user.username
-	
 	mannen = KnGroup.objects.get(name='mannen')
 	accounted = set()
 	seen = set()
