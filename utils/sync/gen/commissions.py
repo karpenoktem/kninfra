@@ -1,6 +1,16 @@
+from common import *
 from kn.leden.models import KnUser, KnGroup, Seat, Alias
 
 def sync_commissions():
+	mg = KnGroup.objects.get(name=MEMBER_GROUP)
+	for user in KnUser.objects.all():
+		if (not user.groups.filter(pk=mg.pk) and
+			user.is_active):
+			print "notice %s not in %s, deactivated" % (
+					user.username, MEMBER_GROUP)
+			user.is_active = False
+			user.save()
+		
 	mannen = KnGroup.objects.get(name='mannen')
 	accounted = set()
 	seen = set()
