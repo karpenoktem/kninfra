@@ -82,3 +82,23 @@ class Alias(models.Model):
 
 	def __unicode__(self):
 		return unicode(self.source + " -> " + self.target)
+
+class Transaction(models.Model):
+	user = models.ForeignKey('KnUser')
+	value = models.DecimalField(max_digits=11, decimal_places=2)
+	date = models.DateField()
+	type = models.ForeignKey('TransactionType')
+	description = models.TextField()
+	
+	def __unicode__(self):
+		return unicode('%s %s %s (%s): %s' % (self.user,
+						      self.date,
+						      self.value,
+						      self.type.name,
+						      self.description))
+
+class TransactionType(models.Model):
+	name = models.CharField(max_length=80)
+
+	def __unicode__(self):
+		return unicode(self.name)
