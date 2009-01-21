@@ -3,10 +3,20 @@
 import _import
 from common import *
 from datetime import datetime, date
+from Mailman.MailList import MailList
 
 from kn.leden.models import KnUser, KnGroup, Seat, Alias
 
 DAYS_IN_YEAR = 365.242199
+
+def check_geinteresseerden():
+	print "GEINTERESSEERDEN"
+	es = frozenset(map(lambda m: m.email.lower(),
+		KnGroup.objects.get(name=MEMBER_GROUP).user_set.all()))
+	ml = MailList('geinteresseerden', False)
+	for m in ml.members:
+		if m.lower() in es:
+			print "%s in geinteresseerden" % m
 
 def check_namespace():
 	print "NAMESPACE"
@@ -113,3 +123,4 @@ if __name__ == '__main__':
 	check_commissions()
 	check_members()
 	check_namespace()
+	check_geinteresseerden()
