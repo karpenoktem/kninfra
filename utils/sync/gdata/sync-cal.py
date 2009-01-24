@@ -1,6 +1,7 @@
 import _import
 
 from common import *
+from cal_common import *
 
 from kn.leden.models import KnUser
 import gdata.calendar.service
@@ -72,15 +73,6 @@ def sync_bd(cs, cal):
 		event.recurrence = gdata.calendar.Recurrence(text=rdata)
 		cs.InsertEvent(event, cal_uri)
 		print 'Added %s' % m.get_full_name()
-
-def get_cs():
-	username, password = read_ssv_file('gaccount.login')
-	cs = gdata.calendar.service.CalendarService()
-	cs.email = username
-	cs.password = password
-	cs.source = 'karpenoktem.nl_sync-1'
-	cs.ProgrammaticLogin()
-	return cs
 
 if __name__ == '__main__':
 	cs = get_cs()
