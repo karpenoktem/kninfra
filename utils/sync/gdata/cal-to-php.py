@@ -80,7 +80,8 @@ def gen_php(cal, cs, target):
 				")"))
 		if feed.GetNextLink() is None:
 			break
-		feed = cs.Query(feed.GetNextLink().href)
+		feed = cs.Query(feed.GetNextLink().href,
+			converter=gdata.calendar.CalendarEventFeedFromString)
 	ret.write(("\n);\n"+
 		   "?>"))
 	return ret.getvalue()
