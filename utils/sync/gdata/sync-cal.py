@@ -4,10 +4,10 @@ from common import *
 from cal_common import *
 
 from kn.leden.models import KnUser
+from iso8601 import parse_date
 import gdata.calendar.service
 import datetime
 import atom
-
 
 def acl_sync_cal(cs, cal, initial_role):
 	acl_url = 'http://www.google.com/calendar'+ \
@@ -47,36 +47,57 @@ def sync_bd(cs, cal):
 	todo = set(filter(lambda x: not x.dateOfBirth is None,
 			  KnUser.objects.all()))
 	fn_lut = dict()
+	rd_lut = dict()
 	for m in todo:
 		fn_lut[m.get_full_name()] = m
+		rd_lut[m.get_full_name()] = ('DTSTART;VALUE=DATE:%s\n'+
+			 		     'DTEND;VALUE=DATE:%s\n'+
+					     'RRULE:FREQ=YEARLY\n') % (
+						icaldate(m.dateOfBirth),
+						icaldate(m.dateOfBirth +
+							datetime.timedelta(1)))
 	feed = cs.CalendarQuery(query)
 	while True:
+		print 'WEE!'
 		for event in feed.entry:
 			if not event.title.text in fn_lut:
 				print "STRAY EVENT: %s" % event.title.text
 				continue
+			if not fn_lut[event.title.text] in todo:
+				print 'DOUBLE EVENT: %s' % event.title.text
+				continue
 			todo.remove(fn_lut[event.title.text])
+			if not hasattr(event, 'recurrence'):
+				print 'RECC-less EVENT: %s' % event.title.text
+				continue
+			if event.recurrence.text != rd_lut[event.title.text]:
+				print "RECC: %s %s != %s" % (
+						event.title.text,
+						rd_lut[event.title.text],
+						event.recurrence.text)
+				continue
 		if feed.GetNextLink() is None:
 			break
-		feed = cs.Query(feed.GetNextLink().href)
+		feed = cs.Query(feed.GetNextLink().href,
+			converter=gdata.calendar.CalendarEventFeedFromString)
 	for m in todo:
 		if m.dateOfBirth is None:
 			continue
-		rdata = ('DTSTART;VALUE=DATE:%s\r\n'+
-			 'DTEND;VALUE=DATE:%s\r\n'+
-			 'RRULE:FREQ=YEARLY\r\n') % (icaldate(m.dateOfBirth),
-			icaldate(m.dateOfBirth + datetime.timedelta(1)))
 		event = gdata.calendar.CalendarEventEntry()
 		event.title = atom.Title(text=m.get_full_name())
 		event.content = atom.Content(
 			text='Verjaardag van %s'%m.get_full_name())
-		event.recurrence = gdata.calendar.Recurrence(text=rdata)
+		event.recurrence = gdata.calendar.Recurrence(
+					text=rd_lut[m.get_full_name()])
 		cs.InsertEvent(event, cal_uri)
 		print 'Added %s' % m.get_full_name()
 
 if __name__ == '__main__':
 	cs = get_cs()
+	print 'BIRTHDAY ACCESS'
 	acl_sync_cal(cs, GCAL_BD, 'read')
+	print 'UIT AGENDA'
 	acl_sync_cal(cs, GCAL_UIT, 'editor')
+	print 'BIRTHDAYS'
 	sync_bd(cs, GCAL_BD)
 
