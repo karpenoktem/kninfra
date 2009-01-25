@@ -73,8 +73,8 @@ def gen_php(cal, cs, target):
 			ret.write((
 				 "array(\n"+
 				("\t%s,\n" % phpstr(title)) +
-				("\t%s\n" %  phpstr(short_time)) +
-				("\t%s\n" %  phpstr(time)) +
+				("\t%s,\n" %  phpstr(short_time)) +
+				("\t%s,\n" %  phpstr(time)) +
 				("\t%s,\n" % phpstr(title)) +
 				("\t%s,\n" % phpstr(content)) +
 				")"))
