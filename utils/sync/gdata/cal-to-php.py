@@ -45,43 +45,53 @@ def gen_php(cal, cs, target):
 			'private', 'full')
 	query.start_min = str(now)
 	feed = cs.CalendarQuery(query)
-	first = True
+	the_events = list()
 	while True:
 		for event in feed.entry:
-			if first: first = False
-			else: ret.write(',\n')
-			if event.when[0].start_time is None:
-				time = short_time = '?'
-			else:
+			start_time = datetime.now().date()
+			if not event.when[0].start_time is None:
 				start_time, end_time = parse_date_range(
-					event.when[0].start_time,
-					event.when[0].end_time)
-				short_time = (start_time.strftime('%%s %b') %
-						start_time.day)
-				if (end_time - start_time) < timedelta(1, 0, 0):
-					time = start_time.strftime('%A %d %B')
-				else:
-					time = "%s&mdash;%s" % (
-						(start_time.strftime('%A %%s %B') %
-							start_time.day),
-						(end_time.strftime('%%s %B') %
-							end_time.day))
-			title = ('?' if event.title.text is None
-					else event.title.text)
-			content = ('?' if event.content.text is None
-					else event.content.text)
-			ret.write((
-				 "array(\n"+
-				("\t%s,\n" % phpstr(title)) +
-				("\t%s,\n" %  phpstr(short_time)) +
-				("\t%s,\n" %  phpstr(time)) +
-				("\t%s,\n" % phpstr(title)) +
-				("\t%s,\n" % phpstr(content)) +
-				")"))
+						event.when[0].start_time,
+						event.when[0].end_time)
+			the_events.append((start_time, event))
 		if feed.GetNextLink() is None:
 			break
 		feed = cs.Query(feed.GetNextLink().href,
 			converter=gdata.calendar.CalendarEventFeedFromString)
+	the_events.sort(lambda x,y: cmp(x[0], y[0]))
+	first = True
+	for start_time, event in the_events:
+		if first: first = False
+		else: ret.write(',\n')
+		if event.when[0].start_time is None:
+			time = short_time = '?'
+		else:
+			start_time, end_time = parse_date_range(
+				event.when[0].start_time,
+				event.when[0].end_time)
+			short_time = (start_time.strftime('%%s %b') %
+					start_time.day)
+			if (end_time - start_time) < timedelta(1, 0, 0):
+				time = start_time.strftime('%A %d %B')
+			else:
+				time = "%s&mdash;%s" % (
+					(start_time.strftime('%A %%s %B') %
+						start_time.day),
+					(end_time.strftime('%%s %B') %
+						end_time.day))
+		title = ('?' if event.title.text is None
+				else event.title.text)
+		content = ('?' if event.content.text is None
+				else event.content.text)
+		ret.write((
+			"array(\n"+
+			("\t%s,\n" % phpstr(title)) +
+			("\t%s,\n" % phpstr(short_time)) +
+			("\t%s,\n" % phpstr(time)) +
+			("\t%s,\n" % phpstr(title)) +
+			("\t%s,\n" % phpstr(content)) +
+			")"))
+
 	ret.write(("\n);\n"+
 		   "?>"))
 	return ret.getvalue()
