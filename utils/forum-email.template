@@ -1,0 +1,37 @@
+Beste %(fullName)s,
+
+Zo te zien ben jij nog nooit op het forum geweest[1].  Dat is helemaal niet erg!
+Maar als je toch al eens wou kijken, maar je login nooit kon vinden, dan
+hierbij een herinnering:
+
+  gebruikersnaam    %(userName)s
+  wachtwoord        %(password)s
+
+Het forum is hier te vinden
+
+  http://karpenoktem.nl/forum
+
+Merk op dat de meeste deelforums pas te zien zijn, als je bent ingelogd.  Ook
+leuk is dat we een fotoalbum hebben
+
+  http://karpenoktem.nl/fotos
+
+en -- achter dezelfde login -- een smoelenboek-in-aanbouw
+
+  http://django.karpenoktem.nl/smoelen
+
+Veel plezier!
+
+En heb je ergens een probleem mee?  Aarzel dan niet even een mailtje naar de
+webcie te sturen: < webcie@karpenoktem.nl >.
+
+  namens de webcie,
+
+     Bas
+
+
+--
+[1] Deze e-mail is automatisch verstuurd aan de hand van de sessie informatie
+    van het forum.  Er is niet iemand die uren spendeert met het in de gaten
+    houden van jouw nachterlijke online activiteit, voor de paranoiden onder
+    ons ;).
