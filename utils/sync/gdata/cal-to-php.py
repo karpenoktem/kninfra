@@ -1,6 +1,6 @@
 import _import
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from optparse import OptionParser
 from cStringIO import StringIO
 from iso8601 import parse_date
@@ -49,6 +49,9 @@ def gen_php(cal, cs, target):
 	while True:
 		for event in feed.entry:
 			start_time = datetime.now().date()
+			start_time = date(start_time.year,
+					  start_time.month,
+					  start_time.day - 1)
 			if not event.when[0].start_time is None:
 				start_time, end_time = parse_date_range(
 						event.when[0].start_time,
