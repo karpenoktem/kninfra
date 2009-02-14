@@ -58,7 +58,6 @@ def sync_bd(cs, cal):
 							datetime.timedelta(1)))
 	feed = cs.CalendarQuery(query)
 	while True:
-		print 'WEE!'
 		for event in feed.entry:
 			if not event.title.text in fn_lut:
 				print "STRAY EVENT: %s" % event.title.text
