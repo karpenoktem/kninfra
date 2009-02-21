@@ -66,7 +66,7 @@ def sync_vpopmail():
 			name, email = seat.group.name + '-' + seat.name, \
 				"%s-%s@%s" % (seat.group.name, seat.name, DOMAIN)
 		temail = seat.user.username + '@' + DOMAIN		
-		if seat.name in claimed:
+		if name in claimed:
 			print "warn CONFLICT %s already claimed (Seat)" % email
 			continue
 		claimed.add(name)
