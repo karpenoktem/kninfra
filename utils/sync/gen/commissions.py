@@ -46,7 +46,12 @@ def sync_commissions():
 	seen = set()
 	for user in choofden.user_set.all():
 		accounted.add(user.username)
+	todo = list()
 	for seat in Seat.objects.select_related('user').filter(name='hoofd'):
+		todo.append(seat)
+	for seat in KnGroup.objects.get(name='hoofden').seat_set.all():
+		todo.append(seat)
+	for seat in todo:
 		seen.add(seat.user.username)
 		if not seat.user.username in accounted:
 			seat.user.groups.add(choofden)
