@@ -3,14 +3,17 @@ from __future__ import with_statement
 import _import
 import datetime
 
-from kn.leden.models import KnUser
+from common import *
+from kn.leden.models import KnGroup
 from django.core.mail import EmailMessage
 
 def birthday_email():
 	with open('birthday-email.template') as f:
 		templ = f.read()
 	now = datetime.datetime.now().date()
-	for user in KnUser.objects.all():
+	for _user in KnGroup.objects.get(name=MEMBER_GROUP
+				).user_set.select_related('knuser').all():
+		user = _user.knuser
 		if user.dateOfBirth is None:
 			continue
 		if (user.dateOfBirth.day != now.day or
