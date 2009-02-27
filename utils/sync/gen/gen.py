@@ -2,6 +2,8 @@ from __future__ import with_statement
 import _import
 
 from unix import sync_unix
+from wiki import sync_wiki
+from forum import sync_forum
 from photos import sync_photos
 from mailman import sync_mailman
 from vpopmail import sync_vpopmail
@@ -16,6 +18,8 @@ def sync_all():
 	sync_mailman()
 	sync_unix()
 	sync_photos()
+	sync_wiki()
+	sync_forum()
 
 if __name__ == '__main__':
 	p = os.path.dirname(sys.argv[0])
