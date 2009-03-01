@@ -51,7 +51,7 @@ def gen_php(cal, cs, target):
 			start_time = datetime.now().date()
 			start_time = date(start_time.year,
 					  start_time.month,
-					  start_time.day - 1)
+					  start_time.day) - timedelta(1, 0, 0)
 			if not event.when[0].start_time is None:
 				start_time, end_time = parse_date_range(
 						event.when[0].start_time,
