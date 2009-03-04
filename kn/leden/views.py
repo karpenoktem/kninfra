@@ -12,21 +12,28 @@ def knuser_detail(request, name):
 				'groups').get(username=name)
 	except KnUser.DoesNotExist:
 		raise Http404
+	seats = list(user.seat_set.select_related('group').all())
+	seats.sort(lambda x,y: cmp(x.group.humanName, y.group.humanName))
+	comms = map(lambda x: x.kngroup, user.groups.all())
+	comms.sort(lambda x,y: cmp(x.humanName, y.humanName))
 	return render_to_response('leden/knuser_detail.html',
-			{'object': user},
+			{'object': user,
+			 'seats': seats,
+			 'comms': comms},
 			context_instance=RequestContext(request))
 
 @login_required
 def kngroup_detail(request, name):
 	try:
 		group = KnGroup.objects.select_related('seat_set',
-				'user_set').get(name=name)
+				'user_set').order_by('humanName').get(name=name)
 	except KnGroup.DoesNotExist:
 		raise Http404
 	otherMembers = list()
-	seats = list(group.seat_set.all())
+	seats = list(group.seat_set.order_by('humanName').all())
 	seat_ids = frozenset(map(lambda x: x.user_id, seats))
-	for user in group.user_set.select_related('knuser').all():
+	for user in group.user_set.select_related('knuser'
+			).order_by('first_name').all():
 		if user.id in seat_ids:
 			continue
 		otherMembers.append(user)

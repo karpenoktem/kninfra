@@ -26,19 +26,19 @@
 	</dd>
 	{% endif %}
 </dl>
-{% if object.groups.all %}
+{% if comms %}
 	<h2>Commissies</h2>
 	<ul>
-	{% for comm in object.groups.all %}
+	{% for comm in comms %}
 	<li><a href="{{ comm.kngroup.get_absolute_url }}"
 		>{{ comm.kngroup.humanName }}</a></li>
 	{% endfor %}
 	</ul>
 {% endif %}
-{% if object.seat_set.all %}
+{% if seats %}
 	<h2>Zetels</h2>
 	<ul>
-		{% for seat in object.seat_set.all %}
+		{% for seat in seats %}
 		<li>{{ seat.humanName }} {{ seat.group.genitive_prefix }}
 		<a href="{{ seat.group.get_absolute_uri }}"
 			>{{ seat.group.humanName }}</a></li>
