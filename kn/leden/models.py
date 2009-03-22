@@ -56,6 +56,7 @@ class KnGroup(Group):
 					   default='van de')
 	description = models.TextField()
 	isVirtual = models.BooleanField()
+	subscribeParentToML = models.BooleanField()
 	
 	def get_primary_email(self):
 		return self.name + '@' + KN_DOMAIN

@@ -20,6 +20,11 @@ def sync_mailman():
 			accounted.add(email)
 			if not email in m.members:
 				print "mailman subscribe %s %s" % (com.name, email)
+		if com.subscribeParentToML:
+			email = com.parent.get_primary_email()
+			accounted.add(email)
+			if not email in m.members:
+				print "mailman subscribe %s %s" % (com.name, email)
 		for member, dummy in m.members.iteritems():
 			if not member in accounted:
 				print "mailman unsubscribe %s %s" % (com.name, member)
