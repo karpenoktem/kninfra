@@ -30,6 +30,7 @@ def kngroup_detail(request, name):
 	except KnGroup.DoesNotExist:
 		raise Http404
 	otherMembers = list()
+	subGroups = list(group.kngroup_set.order_by('humanName').all())
 	seats = list(group.seat_set.order_by('humanName').all())
 	seat_ids = frozenset(map(lambda x: x.user_id, seats))
 	for user in group.user_set.select_related('knuser'
@@ -40,5 +41,6 @@ def kngroup_detail(request, name):
 	return render_to_response('leden/kngroup_detail.html',
 			{'object': group,
 		 	 'seats': seats,
+			 'subGroups': subGroups,
 			 'otherMembers': otherMembers},
 			context_instance=RequestContext(request))

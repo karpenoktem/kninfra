@@ -17,9 +17,9 @@
 	<dd>{{ object.get_primary_email|email }}
 	{% endif %}
 </dl>
-{% if object.kngroup_set.all %}
+{% if subGroups %}
 	<ul>
-	{% for comm in object.kngroup_set.all %}
+	{% for comm in subGroups %}
 	{% ifnotequal comm object %}
 	<li>
 	<a href="{{ comm.get_absolute_url }}"
