@@ -1,6 +1,7 @@
 import re
 import sys
 import unix
+import wiki
 import forum
 import photos
 import _django
@@ -19,5 +20,5 @@ if __name__ == '__main__':
 	if not PASSRE.match(password):
 		print "Password isn't sane"
 		sys.exit(-3)
-	for i in [unix, photos, forum, _django]:
+	for i in [unix, photos, forum, _django, wiki]:
 		i.setpass(user, password)
