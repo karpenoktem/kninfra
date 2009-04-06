@@ -20,7 +20,7 @@ def sync_wiki():
 			print "warn wiki user %s is not a member." % user
 	
 	for name, member in members.iteritems():
-		if name in users:
+		if name.capitalize() in users:
 			continue
 		print "wiki user-add %s %s" % (name, 
 				sesc(member.get_full_name()))
