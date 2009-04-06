@@ -23,8 +23,8 @@ def execute(args):
 		with open('wiki.insert_user.sql') as f:
 			q = f.read()
 		
-		c.execute(q, args[1], args[2], args[1]+'@'+DOMAIN)
-		c.execute('commit;')
+		c.execute(q, (args[1].capitalize(), args[2], args[1]+'@'+DOMAIN))
+		c.execute("commit;")
 		c.close()
 		dc.close()
 	else:
