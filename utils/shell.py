@@ -36,3 +36,9 @@ def ml(name):
 	""" Gets the Mailman.MailList.MailList object for the list
 		<name>. (Unlocked) """
 	return Mailman.MailList.MailList(name, False)
+
+def setgp(name, parent):
+	""" Sets the parent of <name> to <parent> """
+	gr = g(name)
+	gr.parent = g(parent)
+	gr.save()
