@@ -14,7 +14,7 @@ for _u in g.user_set.all():
 				     u.last_name,
 				     u.gender,
 				     u.dateOfBirth,
-				     u.get_primary_email(),
+				     u.primary_email,
 				     u.addr_street + ' ' + u.addr_number,
 				     u.addr_zipCode,
 				     u.addr_city,

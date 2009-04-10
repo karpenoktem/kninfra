@@ -7,7 +7,7 @@
 	<dt>Gebruikersnaam</dt>
 	<dd>{{ object.username }}</dd>
 	<dt>E-Mail</dt>
-	<dd>{{ object.get_primary_email|email }}</dd>
+	<dd>{{ object.primary_email|email }}</dd>
 	<dt>Studie</dt>
 	<dd><a href="{% url study-detail object_id=object.study.id %}"
 		>{{ object.study }}</a></dd>

@@ -4,7 +4,8 @@ from django.contrib.auth.models import User, Group
 from kn.leden.settings import MAILDOMAIN
 
 class NamedMixin(object):
-	def get_primary_email(self):
+	@property
+	def primary_email(self):
 		return self.primary_name + '@' + MAILDOMAIN
 
 class EduInstitute(models.Model):

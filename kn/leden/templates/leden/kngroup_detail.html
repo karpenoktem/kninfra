@@ -14,7 +14,7 @@
 	{% endif %}
 	{% if not object.isVirtual %}
 	<dt>E-Mail lijst</dt>
-	<dd>{{ object.get_primary_email|email }}
+	<dd>{{ object.primary_email|email }}
 	{% endif %}
 </dl>
 {% if subGroups %}
