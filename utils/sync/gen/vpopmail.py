@@ -67,7 +67,7 @@ def sync_vpopmail():
 			continue
 		claimed.add(name)
 		if not name in map:
-			print "vpopmail add %s %s" % (name, seat.user.username, temail)
+			print "vpopmail add %s %s" % (name, temail)
 			continue
 		if map[name] != temail:
 			print "vpopmail alter %s %s # was %s" % (

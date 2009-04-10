@@ -1,5 +1,6 @@
 from __future__ import with_statement
 
+import _import
 import random
 import kn.leden.settings
 
