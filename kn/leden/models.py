@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 
-KN_DOMAIN = 'karpenoktem.nl'
+from kn.leden.settings import MAILDOMAIN
 
 class EduInstitute(models.Model):
 	name = models.CharField(max_length=80)
@@ -43,7 +43,7 @@ class KnUser(User):
 		return self.first_name + bits[1] + ' ' + bits[0]
 
 	def get_primary_email(self):
-		return self.username + '@' + KN_DOMAIN
+		return self.username + '@' + MAILDOMAIN
 
 	@models.permalink
 	def get_absolute_url(self):
@@ -59,7 +59,7 @@ class KnGroup(Group):
 	subscribeParentToML = models.BooleanField()
 	
 	def get_primary_email(self):
-		return self.name + '@' + KN_DOMAIN
+		return self.name + '@' + MAILDOMAIN
 
 	@models.permalink
 	def get_absolute_url(self):
