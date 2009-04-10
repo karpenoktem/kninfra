@@ -1,6 +1,7 @@
 from __future__ import with_statement
 
 import random
+import kn.leden.settings
 
 ALPHA = 'qwertyuiopasdfghjklzxcvbnm'
 NUM = '1234567890'
@@ -20,8 +21,8 @@ def pseudo_randstr(l=12, cs=ALPHANUMUL):
 		ret += cs[random.randint(0, len(cs)-1)]
 	return ret
 
-DOMAIN = 'karpenoktem.nl'
-LISTDOMAIN = 'lists.karpenoktem.nl'
+MAILDOMAIN = kn.leden.settings.MAILDOMAIN
+LISTDOMAIN = 'lists.'+MAILDOMAIN
 
 EMAIL_ALLOWED = frozenset(
 		    map(lambda x: chr(ord('a') + x), xrange(26)) +

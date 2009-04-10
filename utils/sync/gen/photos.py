@@ -55,7 +55,7 @@ def sync_database(members):
 			continue
 		user = member.username
 		name = member.get_full_name()
-		email = member.username+"@"+DOMAIN
+		email = member.username+"@"+MAILDOMAIN
 		rights = 258
 
 		print "photos adm-add %s %s %s %s" % (user, sesc(name), 

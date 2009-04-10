@@ -24,7 +24,7 @@ def sync_vpopmail():
 		passwd=login[2], db=login[1])
 	c = db.cursor()
 	c.execute("SELECT alias, valias_line FROM valias WHERE domain=%s",
-		(DOMAIN, ))
+		(MAILDOMAIN, ))
 	map = dict()
 	claimed = set()
 	for alias, target in c.fetchall():
@@ -42,10 +42,10 @@ def sync_vpopmail():
 		fn = emailfy_name(user.first_name, user.last_name)
 		claimed.add(fn)
 		if not fn in map:
-			print "vpopmail add %s %s" % (fn, user.username+"@"+DOMAIN)
-		elif map[fn] != user.username+"@"+DOMAIN:
+			print "vpopmail add %s %s" % (fn, user.username+"@"+MAILDOMAIN)
+		elif map[fn] != user.username+"@"+MAILDOMAIN:
 			print "vpopmail alter %s %s@%s # was %s" % (
-				fn, user.username, DOMAIN, map[fn])
+				fn, user.username, MAILDOMAIN, map[fn])
 
 	for list in Mailman.Utils.list_names():
 		if list in claimed:
@@ -61,17 +61,17 @@ def sync_vpopmail():
 
 	for seat in Seat.objects.select_related('group', 'user').all():
 		if seat.isGlobal:
-			name, email = seat.name, "%s@%s" % (seat.name, DOMAIN)
+			name, email = seat.name, "%s@%s" % (seat.name, MAILDOMAIN)
 		else:
 			name, email = seat.group.name + '-' + seat.name, \
-				"%s-%s@%s" % (seat.group.name, seat.name, DOMAIN)
-		temail = seat.user.username + '@' + DOMAIN		
+				"%s-%s@%s" % (seat.group.name, seat.name, MAILDOMAIN)
+		temail = seat.user.username + '@' + MAILDOMAIN		
 		if name in claimed:
 			print "warn CONFLICT %s already claimed (Seat)" % email
 			continue
 		claimed.add(name)
 		if not name in map:
-			print "vpopmail add %s %s@%s" % (name, seat.user.username, DOMAIN)
+			print "vpopmail add %s %s@%s" % (name, seat.user.username, MAILDOMAIN)
 			continue
 		if map[name] != temail:
 			print "vpopmail alter %s %s # was %s" % (
@@ -83,11 +83,11 @@ def sync_vpopmail():
 			continue
 		claimed.add(alias.source)
 		if not alias.source in map:
-			print "vpopmail add %s %s@%s" % (alias.source, alias.target, DOMAIN)
+			print "vpopmail add %s %s@%s" % (alias.source, alias.target, MAILDOMAIN)
 			continue
-		if map[alias.source] != "%s@%s" % (alias.target, DOMAIN):
+		if map[alias.source] != "%s@%s" % (alias.target, MAILDOMAIN):
 			print "vpopmail alter %s %s@%s # was %s" % (
-					alias.source, alias.target, DOMAIN, map[alias.source])
+					alias.source, alias.target, MAILDOMAIN, map[alias.source])
 
 	for alias, target in map.iteritems():
 		if not alias in claimed:

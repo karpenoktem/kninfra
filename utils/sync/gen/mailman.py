@@ -16,7 +16,7 @@ def sync_mailman():
 		m = Mailman.MailList.MailList(com.name, lock=False)
 		accounted = set()
 		for user in com.user_set.all():
-			email = "%s@%s" % (user, DOMAIN)
+			email = "%s@%s" % (user, MAILDOMAIN)
 			accounted.add(email)
 			if not email in m.members:
 				print "mailman subscribe %s %s" % (com.name, email)

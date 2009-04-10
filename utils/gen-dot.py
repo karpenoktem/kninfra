@@ -7,7 +7,7 @@ from common import *
 from pydot import Node, Dot, Edge
 from Mailman import MailList, Utils
 
-DOMAIN = "karpenoktem.nl"
+MAILDOMAIN = "karpenoktem.nl"
 LISTDOMAIN = "lists.karpenoktem.nl"
 
 def gen_dot():
@@ -18,11 +18,11 @@ def gen_dot():
 		passwd=login[2], db=login[1])
 	c = db.cursor()
 	c.execute("SELECT alias, valias_line FROM valias WHERE domain=%s",
-		(DOMAIN, ))
+		(MAILDOMAIN, ))
 	for alias, target in c.fetchall():
 		assert target[0] == '&'
 		target = target[1:]
-		alias+="@"+DOMAIN
+		alias+="@"+MAILDOMAIN
 		if not alias in nodes:
 			nodes[alias] = Node(alias)
 			d.add_node(nodes[alias])

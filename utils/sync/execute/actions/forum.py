@@ -24,7 +24,7 @@ def execute(args):
 					     "`realname`,"+
 					     "`registered`)"+
 			   "VALUES (%s, %s, %s, %s, %s);",
-			   (username, '37', username+'@'+DOMAIN,
+			   (username, '37', username+'@'+MAILDOMAIN,
 			    fn, int(time.time())))
 	else:
 		print "Unknown command"
