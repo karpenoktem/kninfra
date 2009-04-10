@@ -1,4 +1,5 @@
 import re
+import os
 import sys
 import unix
 import wiki
@@ -13,6 +14,7 @@ if __name__ == '__main__':
 	if len(sys.argv) != 3:
 		print "Usage: setpass.py <username> <password>"
 		sys.exit(-1)
+	os.chdir(os.path.abspath(os.path.dirname(sys.argv[0])))
 	user, password = sys.argv[1:]
 	if not USERRE.match(user):
 		print "Username isn't sane"
