@@ -3,6 +3,10 @@ from django.contrib.auth.models import User, Group
 
 from kn.leden.settings import MAILDOMAIN
 
+class NamedMixin(object):
+	def get_primary_email(self):
+		return self.primary_name + '@' + MAILDOMAIN
+
 class EduInstitute(models.Model):
 	name = models.CharField(max_length=80)
 	
@@ -18,7 +22,7 @@ class Study(models.Model):
 	def __unicode__(self):
 		return self.name
 
-class KnUser(User):
+class KnUser(User, NamedMixin):
 	dateOfBirth = models.DateField(null=True, blank=True)
 	dateJoined = models.DateField(null=True, blank=True)
 	
@@ -36,20 +40,21 @@ class KnUser(User):
 	institute = models.ForeignKey('EduInstitute')
 	study = models.ForeignKey('Study')
 
+	@property
+	def primary_name(self):
+		return self.username
+
 	def get_full_name(self):
 		bits = self.last_name.split(',', 1)
 		if len(bits) == 1:
 			return self.first_name + ' ' + self.last_name
 		return self.first_name + bits[1] + ' ' + bits[0]
 
-	def get_primary_email(self):
-		return self.username + '@' + MAILDOMAIN
-
 	@models.permalink
 	def get_absolute_url(self):
 		return ('knuser-detail', (), {'name': self.username})
 
-class KnGroup(Group):
+class KnGroup(Group, NamedMixin):
 	parent = models.ForeignKey('KnGroup')
 	humanName = models.CharField(max_length=120)
 	genitive_prefix = models.CharField(max_length=20,
@@ -58,20 +63,26 @@ class KnGroup(Group):
 	isVirtual = models.BooleanField()
 	subscribeParentToML = models.BooleanField()
 	
-	def get_primary_email(self):
-		return self.name + '@' + MAILDOMAIN
+	@property
+	def primary_name(self):
+		return self.name
 
 	@models.permalink
 	def get_absolute_url(self):
 		return ('kngroup-detail', (), {'name': self.name})
 
-class Seat(models.Model):
+class Seat(models.Model, NamedMixin):
 	name = models.CharField(max_length=80)
 	humanName = models.CharField(max_length=120)
 	description = models.TextField()
 	group = models.ForeignKey('KnGroup')
 	user = models.ForeignKey('KnUser')
 	isGlobal = models.BooleanField()
+
+	@property
+	def primary_name(self):
+		return (self.name if self.isGlobal else
+			self.group.name + '-' + self.name)
 
 	def __unicode__(self):
 		return unicode(self.humanName) + " (" + \
