@@ -42,10 +42,10 @@ def sync_vpopmail():
 		fn = emailfy_name(user.first_name, user.last_name)
 		claimed.add(fn)
 		if not fn in map:
-			print "vpopmail add %s %s" % (fn, user.username+"@"+MAILDOMAIN)
-		elif map[fn] != user.username+"@"+MAILDOMAIN:
-			print "vpopmail alter %s %s@%s # was %s" % (
-				fn, user.username, MAILDOMAIN, map[fn])
+			print "vpopmail add %s %s" % (fn, user.primary_email)
+		elif map[fn] != user.primary_email:
+			print "vpopmail alter %s %s # was %s" % (
+				fn, user.primary_email, map[fn])
 
 	for list in Mailman.Utils.list_names():
 		if list in claimed:
@@ -60,18 +60,14 @@ def sync_vpopmail():
 					list, list, LISTDOMAIN, map[list])
 
 	for seat in Seat.objects.select_related('group', 'user').all():
-		if seat.isGlobal:
-			name, email = seat.name, "%s@%s" % (seat.name, MAILDOMAIN)
-		else:
-			name, email = seat.group.name + '-' + seat.name, \
-				"%s-%s@%s" % (seat.group.name, seat.name, MAILDOMAIN)
-		temail = seat.user.username + '@' + MAILDOMAIN		
+		name, email = seat.primary_name, seat.primary_email
+		temail = seat.user.primary_email		
 		if name in claimed:
 			print "warn CONFLICT %s already claimed (Seat)" % email
 			continue
 		claimed.add(name)
 		if not name in map:
-			print "vpopmail add %s %s@%s" % (name, seat.user.username, MAILDOMAIN)
+			print "vpopmail add %s %s" % (name, seat.user.username, temail)
 			continue
 		if map[name] != temail:
 			print "vpopmail alter %s %s # was %s" % (
