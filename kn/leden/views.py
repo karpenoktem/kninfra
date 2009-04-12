@@ -13,7 +13,7 @@ def knuser_detail(request, name):
 	except KnUser.DoesNotExist:
 		raise Http404
 	seats = list(user.seat_set.select_related('group').all())
-	seats.sort(lambda x,y: cmp(x.group.humanName, y.group.humanName))
+	seats.sort(lambda x,y: cmp(x.humanName, y.humanName))
 	comms = map(lambda x: x.kngroup, user.groups.all())
 	comms.sort(lambda x,y: cmp(x.humanName, y.humanName))
 	return render_to_response('leden/knuser_detail.html',
