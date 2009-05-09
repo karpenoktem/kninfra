@@ -27,10 +27,10 @@ class KnUser(User, NamedMixin):
 	dateOfBirth = models.DateField(null=True, blank=True)
 	dateJoined = models.DateField(null=True, blank=True)
 	
-	addr_street = models.CharField(max_length=100)
-	addr_number = models.CharField(max_length=20)
-	addr_zipCode = models.CharField(max_length=10)
-	addr_city = models.CharField(max_length=80)
+	addr_street = models.CharField(max_length=100, blank=True)
+	addr_number = models.CharField(max_length=20, blank=True)
+	addr_zipCode = models.CharField(max_length=10, blank=True)
+	addr_city = models.CharField(max_length=80, blank=True)
 	
 	gender = models.CharField(max_length=1, blank=True)
 	telephone = models.CharField(max_length=20, null=True)
@@ -38,8 +38,8 @@ class KnUser(User, NamedMixin):
 					 unique=True,
 					 null=True,
 					 blank=True)
-	institute = models.ForeignKey('EduInstitute')
-	study = models.ForeignKey('Study')
+	institute = models.ForeignKey('EduInstitute', null=True)
+	study = models.ForeignKey('Study', null=True)
 
 	@property
 	def primary_name(self):
