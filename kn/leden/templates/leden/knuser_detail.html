@@ -8,9 +8,11 @@
 	<dd>{{ object.username }}</dd>
 	<dt>E-Mail</dt>
 	<dd>{{ object.primary_email|email }}</dd>
+	{% if object.study %}
 	<dt>Studie</dt>
 	<dd><a href="{% url study-detail object_id=object.study.id %}"
 		>{{ object.study }}</a></dd>
+	{% endif %}
 	{% if object.dateOfBirth %}
 	<dt>Geboortedatum</dt>
 	<dd>
