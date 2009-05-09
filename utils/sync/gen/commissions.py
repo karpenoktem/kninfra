@@ -10,7 +10,27 @@ def sync_commissions():
 					user.username, MEMBER_GROUP)
 			user.is_active = False
 			user.save()
-		
+	omg = KnGroup.objects.get(name='leden-oud')
+	mgs = set(KnGroup.objects.filter(
+			parent=KnGroup.objects.get(name='leden')))
+	mgs.remove(omg)
+	mgs.remove(mg)
+	accounted = set()
+	seen = set()
+	for user in omg.user_set.all():
+		accounted.add(user.username)
+	for amg in mgs:
+		for user in amg.user_set.all():
+			seen.add(user.username)
+	for user in mg.user_set.all():
+		if user.username in seen:
+			seen.remove(user.username)
+	for user in accounted - seen:
+		print "notice %s removes from leden-oud" % user
+		KnUser.objects.get(username=user).groups.remove(omg)
+	for user in seen - accounted:
+		print "notice %s added to leden-oud" % user
+		KnUser.objects.get(username=user).groups.add(omg)
 	mannen = KnGroup.objects.get(name='mannen')
 	accounted = set()
 	seen = set()
