@@ -3,8 +3,8 @@ from common import *
 import MySQLdb
 from kn.leden.models import KnUser, KnGroup, Seat, Alias
 
-def sync_forum():
-	login = read_ssv_file('forum.login')
+def sync_forum(loginFile):
+	login = read_ssv_file(loginFile)
 	db = MySQLdb.connect(host='localhost', user=login[0],
 		passwd=login[2], db=login[1])
 	c = db.cursor()
@@ -15,9 +15,11 @@ def sync_forum():
 	forum_users_unaccounted = set(forum_users)
 	for m in KnUser.objects.all():
 		if not m.username in forum_users:
-			print "forum user-add %s %s" % (m.username,
-						   sesc(m.get_full_name()))
+			print "forum %s user-add %s %s" % (
+						loginFile,
+						m.username,
+						sesc(m.get_full_name()))
 			continue
 		forum_users_unaccounted.remove(m.username)
 	for m in forum_users_unaccounted:
-		print "warn forum: unaccounted user %s" % m
+		print "warn %s: unaccounted user %s" % (loginFile, m)

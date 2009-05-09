@@ -19,7 +19,8 @@ def sync_all():
 	sync_unix()
 	sync_photos()
 	sync_wiki()
-	sync_forum()
+	sync_forum('zeusForum.login')
+	sync_forum('forum.login')
 
 if __name__ == '__main__':
 	p = os.path.dirname(sys.argv[0])
