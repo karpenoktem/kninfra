@@ -6,6 +6,7 @@ import wiki
 import forum
 import photos
 import _django
+import zeusForum
 
 USERRE = re.compile("^[a-z0-9]+$")
 PASSRE = re.compile("^[a-zA-Z0-9`~!@#$%^&*()-_=+[{\\]}\\\\|;:\"'<,>.?/]+$")
@@ -22,5 +23,5 @@ if __name__ == '__main__':
 	if not PASSRE.match(password):
 		print "Password isn't sane"
 		sys.exit(-3)
-	for i in [unix, photos, forum, _django, wiki]:
+	for i in [unix, zeusForum, photos, forum, _django, wiki]:
 		i.setpass(user, password)
