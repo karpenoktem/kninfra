@@ -4,7 +4,7 @@
 
 #logo {
 	height: 97px;
-	background-image: url({{ MEDIA_URL }}/leden/logo.png);
+	background-image: url({{ MEDIA_URL }}/base/logo.png);
 	background-repeat: no-repeat;
 }
 

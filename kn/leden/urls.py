@@ -46,13 +46,5 @@ urlpatterns = patterns('',
 	    login_required(generic.list_detail.object_list),
 	    {'queryset':Study.objects.order_by('name').all(),
 	     'paginate_by':20}, name='study-list'),
-	url(r'^styles/bare/$',
-	    generic.simple.direct_to_template,
-	    {'template':'leden/bare.css',
-	     'mimetype':'text/css'}, name='style-bare'),
-	url(r'^styles/common/$',
-	    generic.simple.direct_to_template,
-	    {'template':'leden/common.css',
-	     'mimetype':'text/css'}, name='style-common'),
 )
 
