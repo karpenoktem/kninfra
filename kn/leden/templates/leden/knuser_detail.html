@@ -42,7 +42,7 @@
 	<ul>
 		{% for seat in seats %}
 		<li>{{ seat.humanName }} {{ seat.group.genitive_prefix }}
-		<a href="{{ seat.group.get_absolute_uri }}"
+		<a href="{{ seat.group.get_absolute_url }}"
 			>{{ seat.group.humanName }}</a></li>
 		{% endfor %}
 	</ul>
