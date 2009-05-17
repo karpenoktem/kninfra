@@ -1,0 +1,12 @@
+{% extends "base/base.html" %}
+
+{% block body %}
+<form action="?" method="post">
+<table>
+{% for form in forms %}
+{{ form }}
+{% endfor %}
+</table>
+<input type="submit" value="Pas aan" />
+</form>
+{% endblock %}

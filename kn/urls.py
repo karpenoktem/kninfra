@@ -19,6 +19,7 @@ urlpatterns = patterns('',
 	(r'^base/', include('kn.base.urls')),
 	(r'^admin/(.*)', admin.site.root),
 	(r'^smoelen/', include('kn.leden.urls')),
+	(r'^poll/', include('kn.poll.urls')),
 	(r'^accounts/login/$', auth.views.login),
 	(r'^accounts/logout/$', auth.views.logout_then_login),
 )
