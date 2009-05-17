@@ -2,6 +2,7 @@ import _import
 
 from django.contrib.auth.models import Permission, User, Group
 from kn.leden.models import KnUser, KnGroup, Seat, Alias
+from kn.poll.models import Filling
 from django.db.models import FieldDoesNotExist
 
 import datetime
@@ -61,4 +62,4 @@ def dump_all(models, ignore=[]):
 	return ret
 
 if __name__ == '__main__':
-	 print json.dumps(dump_all((Alias, Seat), (User, Group)))
+	 print json.dumps(dump_all((Alias, Seat, Filling), (User, Group)))
