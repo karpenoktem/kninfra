@@ -20,6 +20,13 @@
 		{% block wrapper %}
 		<div id="main">
 			<div id="body">
+			{% if messages %}
+			<ul id="messages">
+				{% for message in messages %}
+				<li>{{ message }}</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
 			{% block body %}
 			{% endblock %}
 			</div>
