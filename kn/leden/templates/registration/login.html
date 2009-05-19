@@ -1,11 +1,17 @@
 {% extends "leden/base.html" %}
 
+{% load base %}
 {% block body %}
 {% if form.errors %}
 <div class="error">
-	Your username and password didn't match. Please try again.
+	Je gebruikersnaam en wachtwoord zijn fout.  Probeer eens opnieuw.
 </div>
 {% endif %}
+
+<p>Voor deze pagina moet je inloggen met je Karpe Noktem gebruikersnaam
+en wachtwoord.  Weet je die niet meer?  E-Mail even naar
+{% filter email %}webcie@karpenoktem.nl{% endfilter %}.
+</p>
 
 <form method="post" action=".">
 	<table>
