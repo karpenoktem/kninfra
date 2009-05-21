@@ -29,6 +29,26 @@
 			{% endif %}
 			{% block body %}
 			{% endblock %}
+			{% if debug %}
+			<table>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>SQL</th>
+						<th>Time</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for query in sql_queries %}
+					<tr>
+						<td>{{ forloop.counter }}</td>
+						<td>{{ query.sql|escape }}</td>
+						<td>{{ query.time }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% endif %}
 			</div>
 		</div>
 		{% endblock %}
