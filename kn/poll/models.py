@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class Poll(models.Model):
 	name = models.CharField(max_length=80, primary_key=True)
 	description = models.TextField()
+	isOpen = models.BooleanField()
 
 	def __unicode__(self):
 		return unicode(self.name)

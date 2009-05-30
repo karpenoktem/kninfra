@@ -52,7 +52,10 @@ def vote(request, name):
 			form = as_lut[q.answers.pk](q,
 						    **form_kwargs)
 		qfs.append((q, form))
-	if allValid and request.method == 'POST':
+	if request.method == 'POST' and not poll.isOpen:
+		request.user.message_set.create(
+				message="De enquete is gesloten")
+	elif allValid and request.method == 'POST':
 		request.user.message_set.create(
 				message='Veranderingen opgeslagen!')
 		for fi in fillings:
