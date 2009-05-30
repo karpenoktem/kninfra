@@ -1,12 +1,15 @@
 {% extends "base/base.html" %}
 
 {% block body %}
+{{ poll.description }}
 <form action="?" method="post">
 <table>
 {% for form in forms %}
 {{ form }}
 {% endfor %}
 </table>
+{% if poll.isOpen %}
 <input type="submit" value="Pas aan" />
+{% endif %}
 </form>
 {% endblock %}

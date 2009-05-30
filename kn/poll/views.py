@@ -68,6 +68,7 @@ def vote(request, name):
 					       answer=answer,
 					       question=q)
 	return render_to_response('poll/vote.html',
-			{'forms': map(lambda x: x[1], qfs)},
+			{'forms': map(lambda x: x[1], qfs),
+			 'poll': poll},
 			context_instance=RequestContext(request))
 
