@@ -59,3 +59,5 @@ GCAL_UIT = '56ndj4j9iei03ahqa7fkrl566s@group.calendar.google.com'
 GCAL_BD = '3p6k3ge8476t1bs5c20khat1uc@group.calendar.google.com'
 
 MEMBER_GROUP = 'leden5'
+DAYS_IN_YEAR = 365.242199
+
