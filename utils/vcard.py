@@ -2,10 +2,11 @@ import _import
 import vobject
 import sys
 
+from common import *
+
 from kn.leden.models import KnUser
 
-def vcard(user):
-	u = KnUser.objects.get(username=user)
+def vcard(u):
 	c = vobject.vCard()
 	c.add('n')
 	ln = ' '.join(reversed(map(lambda x: x.strip(),
@@ -37,7 +38,5 @@ def vcard(user):
 	return c.serialize()
 
 if __name__ == '__main__':
-	if not len(sys.argv) == 2:
-		print "Usage: python vcard.py <username>"
-		sys.exit(-1)
-	print vcard(sys.argv[1])
+	for u in args_to_users(sys.argv[1:]):
+		print vcard(u)
