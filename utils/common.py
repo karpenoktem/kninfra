@@ -22,6 +22,24 @@ def pseudo_randstr(l=12, cs=ALPHANUMUL):
 		ret += cs[random.randint(0, len(cs)-1)]
 	return ret
 
+def args_to_users(args):
+	from kn.leden.models import KnUser, KnGroup
+	ret = set()
+	had = set()
+	for arg in args:
+		tmp = KnGroup.objects.filter(name=arg)
+		if len(tmp) != 0:
+			for u in tmp[0].user_set.all():
+				if u.pk in had:
+					continue
+				ret.add(u.knuser)
+				had.add(u.pk)
+			continue
+		tmp = KnUser.objects.get(username=arg)
+		if not tmp.pk in had:
+			ret.add(tmp)
+	return tuple(ret)
+
 MAILDOMAIN = kn.leden.settings.MAILDOMAIN
 LISTDOMAIN = 'lists.'+MAILDOMAIN
 
