@@ -3,9 +3,13 @@ from common import *
 import MySQLdb
 from kn.leden.models import KnUser, KnGroup, Seat, Alias
 import Mailman
+import unicodedata
 import Mailman.Utils
 
 def emailfy_name(first, last):
+	first, last = map(lambda x: unicodedata.normalize(
+				'NFKD', x).encode('ASCII', 'ignore'),
+				(first, last))
 	if ',' in last:
 		bits = last.split(',', 1)
 		last = bits[1] + ' ' + bits[0]
