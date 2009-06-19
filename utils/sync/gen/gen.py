@@ -25,4 +25,7 @@ def sync_all():
 if __name__ == '__main__':
 	p = os.path.dirname(sys.argv[0])
 	if p != '': os.chdir(p)
+	if sys.stdout.encoding is None:
+		reload(sys)
+		sys.setdefaultencoding('utf-8')
 	sync_all()
