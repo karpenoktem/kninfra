@@ -1,9 +1,16 @@
 import _import
 
+import sys
+from common import *
 from kn.leden.models import KnUser, KnGroup
 
 users = dict()
-for m in KnUser.objects.all():
+if len(sys.argv) == 1:
+	_users = KnUser.objects.all()
+else:
+	_users = args_to_users(sys.argv[1:])
+
+for m in _users:
 	users[m.username] = set()
 
 i = 0
@@ -14,7 +21,8 @@ while True:
 	except KnGroup.DoesNotExist:
 		break
 	for m in g.user_set.all():
-		users[m.username].add(i)
+		if m.username in users:
+			users[m.username].add(i)
 nyears = i - 1
 
 for m, ys in users.iteritems():
