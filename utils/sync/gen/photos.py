@@ -69,7 +69,7 @@ def checkDatabaseAdmin(adm, members):
 		return
 	member = members[user]
 	member_name = member.get_full_name()
-	if member_name!=name:
+	if member_name!=unicode(name, 'utf-8'):
 		print "# %s's name, %s, is outdated," % (user,name) 
 		print "photos adm-update %s name %s" % (user,sesc(member_name))	
 	
