@@ -4,6 +4,7 @@ from common import *
 from kn.leden.models import KnUser, KnGroup
 from datetime import date, datetime
 import sys
+import re
 
 def check_members(members):
 	ledeng = dict()
@@ -50,7 +51,9 @@ def check_members(members):
 		if m.addr_street == '':
 			print "%s: no empty addr_street" % m.username
 		if m.addr_zipCode == '':
-			print "%s: no empty addr_zipcode" % m.username
+			print "%s: no empty addr_zipCode" % m.username
+		elif not re.match("^[0-9]{4} [A-Z]{2}$", m.addr_zipCode):
+			print "%s: strange addr_zipCode" % m.username
 		if m.addr_number == '':
 			print "%s: no empty addr_number" % m.username
 		if m.addr_city == '':
