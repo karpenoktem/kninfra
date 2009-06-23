@@ -61,3 +61,5 @@ GCAL_BD = '3p6k3ge8476t1bs5c20khat1uc@group.calendar.google.com'
 MEMBER_GROUP = 'leden5'
 DAYS_IN_YEAR = 365.242199
 
+INST_RU = 2
+INST_HAN = 1

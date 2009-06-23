@@ -66,11 +66,15 @@ def check_members(members):
 			print "%s: empty telephone" % m.username
 		elif not m.telephone[0:1] == '+':
 			print "%s: un-normalised telephone" % m.username
-		if m.studentNumber is None:
+		if m.institute_id in [INST_RU, INST_HAN] and \
+				m.studentNumber is None:
 			print "%s: studentNumber is None" % m.username
-		elif len(m.studentNumber) != 7:
-			print "%s: student number of incorrect length" \
+		else:
+			if (m.institute_id == INST_RU and len(m.studentNumber) != 7) or \
+			   (m.institute_id == INST_HAN and len(m.studentNumber) != 6):
+				print "%s: student number of incorrect length" \
 					% m.username
+			
 		if (not m.is_active and
 				len(m.groups.filter(name=MEMBER_GROUP)) > 0):
 			print "%s: not active" % m.username
