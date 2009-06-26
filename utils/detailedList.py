@@ -1,14 +1,21 @@
 import _import
 
 import sys
+from optparse import OptionParser
 from common import *
 from kn.leden.models import KnUser, KnGroup
+
+op = OptionParser()
+op.add_option('-s', '--separator', dest='separator', default=' ',
+		metavar='CHAR', type=str,
+		help="The seoarator between spaces")
+options, args = op.parse_args()
 
 if sys.stdout.encoding is None:
 	reload(sys)
 	sys.setdefaultencoding('utf-8')
 data = []
-for u in args_to_users(sys.argv[1:]):
+for u in args_to_users(args):
 	data.append((
 		u.first_name,
 		u.last_name,
@@ -25,4 +32,4 @@ for u in args_to_users(sys.argv[1:]):
 		u.addr_city,
 		u.telephone))
 data = map(lambda r: map(lambda x: unicode(x), r), data)
-print_table(data)
+print_table(data, separator=options.separator)
