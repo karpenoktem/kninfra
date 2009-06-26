@@ -40,6 +40,16 @@ def args_to_users(args):
 			ret.add(tmp)
 	return tuple(ret)
 
+def print_table(data):
+	ls = map(lambda x: max(map(lambda y: len(data[y][x]),
+				   xrange(len(data)))),
+		 xrange(len(data[0])))
+	for d in data:
+		l = ''
+		for i, b in enumerate(d):
+			l += b + (' ' * (ls[i] - len(b) + 1))
+		print l
+
 MAILDOMAIN = kn.leden.settings.MAILDOMAIN
 LISTDOMAIN = 'lists.'+MAILDOMAIN
 
