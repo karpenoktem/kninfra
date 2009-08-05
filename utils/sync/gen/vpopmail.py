@@ -3,24 +3,7 @@ from common import *
 import MySQLdb
 from kn.leden.models import KnUser, KnGroup, Seat, Alias
 import Mailman
-import unicodedata
 import Mailman.Utils
-
-def emailfy_name(first, last):
-	first, last = map(lambda x: unicodedata.normalize(
-				'NFKD', x).encode('ASCII', 'ignore'),
-				(first, last))
-	if ',' in last:
-		bits = last.split(',', 1)
-		last = bits[1] + ' ' + bits[0]
-	n = first + ' ' + last
-	while '  ' in n:
-		n = n.replace('  ', ' ')
-	n = n.replace(' ', '.').lower()
-	for c in n:
-		if not c in EMAIL_ALLOWED:
-			raise "Invalid character %s found" % c
-	return n
 
 def sync_vpopmail():
 	login = read_ssv_file('vpopmail.login')
