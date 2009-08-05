@@ -1,10 +1,13 @@
 import _import
+
 import vobject
+import tarfile
 import sys
 
 from common import *
 
 from kn.leden.models import KnUser
+from cStringIO import StringIO
 
 def vcard(u):
 	c = vobject.vCard()
@@ -38,5 +41,13 @@ def vcard(u):
 	return c.serialize()
 
 if __name__ == '__main__':
+	tb = StringIO()
+	tf = tarfile.open(mode='w', fileobj=tb)
 	for u in args_to_users(sys.argv[1:]):
-		print vcard(u)
+		ti = tarfile.TarInfo(u.username + ".vcf")
+		td = vcard(u)
+		ti.size = len(td)
+		tf.addfile(ti, StringIO(td))
+	tf.close()
+	print tb.getvalue()
+	
