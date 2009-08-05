@@ -5,74 +5,67 @@ from kn.leden.models import KnUser, KnGroup, Seat, Alias
 import Mailman
 import Mailman.Utils
 
-def sync_vpopmail():
+def get_current_map():
 	login = read_ssv_file('vpopmail.login')
 	db = MySQLdb.connect(host='localhost', user=login[0],
 		passwd=login[2], db=login[1])
 	c = db.cursor()
 	c.execute("SELECT alias, valias_line FROM valias WHERE domain=%s",
 		(MAILDOMAIN, ))
-	map = dict()
-	claimed = set()
+	_map = dict()
 	for alias, target in c.fetchall():
 		assert target[0] == '&'
 		target = target[1:]
-		map[alias] = target
+		if not alias in _map:
+			_map[alias] = set()
+		_map[alias].add(target)
+	return _map
 
+def get_desired_map():
+	_map = dict()
+	def claim(name, email, reason):
+		if not name in _map:
+			_map[name] = set()
+		_map[name].add((email, reason))
 	for user in KnUser.objects.all():
-		claimed.add(user.username)
-		if not user.username in map:
-			print "vpopmail add %s %s" % (user.username, user.email)
-		elif map[user.username] != user.email:
-			print "vpopmail alter %s %s # was %s" % (
-				user.username, user.email, map[user.username])
+		claim(user.username, user.email, 'user.name')
 		fn = emailfy_name(user.first_name, user.last_name)
-		claimed.add(fn)
-		if not fn in map:
-			print "vpopmail add %s %s" % (fn, user.primary_email)
-		elif map[fn] != user.primary_email:
-			print "vpopmail alter %s %s # was %s" % (
-				fn, user.primary_email, map[fn])
-
+		claim(fn, user.primary_email, 'user.fullname')
 	for list in Mailman.Utils.list_names():
-		if list in claimed:
-			print "warn CONFLICT %s already claimed (Mailman)" % list
-			continue
-		claimed.add(list)
-		if not list in map:
-			print "vpopmail add %s %s@%s" % (list, list, LISTDOMAIN)
-			continue
-		if map[list] != "%s@%s" % (list, LISTDOMAIN):
-			print "vpopmail alter %s %s@%s # was %s" % (
-					list, list, LISTDOMAIN, map[list])
-
+		claim(list, list + '@' + LISTDOMAIN, 'mailinglist')
 	for seat in Seat.objects.select_related('group', 'user').all():
 		name, email = seat.primary_name, seat.primary_email
 		temail = seat.user.primary_email		
-		if name in claimed:
-			print "warn CONFLICT %s already claimed (Seat)" % email
-			continue
-		claimed.add(name)
-		if not name in map:
-			print "vpopmail add %s %s" % (name, temail)
-			continue
-		if map[name] != temail:
-			print "vpopmail alter %s %s # was %s" % (
-					name, temail, map[name])
-
+		claim(name, temail, 'seat')
 	for alias in Alias.objects.all():
-		if alias.source in claimed:
-			print "warn CONFLICT %s already claimed (Alias)" % alias.source
-			continue
-		claimed.add(alias.source)
-		if not alias.source in map:
-			print "vpopmail add %s %s@%s" % (alias.source, alias.target, MAILDOMAIN)
-			continue
-		if map[alias.source] != "%s@%s" % (alias.target, MAILDOMAIN):
-			print "vpopmail alter %s %s@%s # was %s" % (
-					alias.source, alias.target, MAILDOMAIN, map[alias.source])
+		claim(alias.source, alias.target + '@' + MAILDOMAIN, 'alias')
+	return _map
 
-	for alias, target in map.iteritems():
-		if not alias in claimed:
-			print "warn STRAY %s -> %s" % (alias, target)
+def check_desired_map(dmap):
+	for name, targets in dmap.iteritems():
+		if len(set(map(lambda x: x[1], targets))) != 1:
+			print "# vpopmail, multiclaim with distinct reasons:"
+			print "# %s ->" % name
+			for target, reason in targets:
+				print "#    %s (%s)" % (target, reason)
 
+def sync_vpopmail():
+	cmap = get_current_map()
+	dmap = get_desired_map()
+	check_desired_map(dmap)
+	clut = set()
+	dlut = set()
+	for name, targets in cmap.iteritems():
+		for target in targets:
+			clut.add("%s\0%s" % (name, target))
+	for name, targets in dmap.iteritems():
+		for target, reason in targets:
+			dlut.add("%s\0%s" % (name, target))
+			if not "%s\0%s" % (name, target) in clut:
+				print "vpopmail add %s %s # %s" % (
+						name, target, reason)
+	for name, targets in cmap.iteritems():
+		for target in targets:
+			if not "%s\0%s" % (name, target) in dlut:
+				print "# vpopmail STRAY %s -> %s" % (
+						name, target)

@@ -25,16 +25,6 @@ def execute(args):
 		c = db.cursor()
 		c.execute("INSERT INTO valias(`alias`, `valias_line`, `domain`) "+
 			  "VALUES (%s, %s, %s)", (source, '&'+target, MAILDOMAIN))
-	elif cmd == 'alter':
-		if len(args) != 3:
-			print "Expecting 3 arguments"
-			return -3
-		source = args[1]
-		target = args[2]
-		c = db.cursor()
-		c.execute("UPDATE valias SET `valias_line`=%s "+
-			  "WHERE `domain`=%s and `alias`=%s", 
-			  ('&'+target, MAILDOMAIN, source))
 	else:
 		print "Unknown command"
 		return -4
