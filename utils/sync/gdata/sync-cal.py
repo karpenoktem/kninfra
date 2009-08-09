@@ -3,7 +3,7 @@ import _import
 from common import *
 from cal_common import *
 
-from kn.leden.models import OldKnUser, KnGroup
+from kn.leden.models import OldKnUser, OldKnGroup
 from iso8601 import parse_date
 import gdata.calendar.service
 import datetime
@@ -17,7 +17,7 @@ def acl_sync_cal(cs, cal, initial_role):
 	acc = set()
 	for a_rule in feed.entry:
 		cur.add(a_rule.scope.value)
-	for m in KnGroup.objects.get(name=MEMBER_GROUP).user_set.all():
+	for m in OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all():
 		acc.add(m.email.lower())
 		if m.email.lower() in cur: continue
 		rule = gdata.calendar.CalendarAclEntry()

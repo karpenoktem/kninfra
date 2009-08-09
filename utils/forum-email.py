@@ -3,7 +3,7 @@ from __future__ import with_statement
 import _import
 import MySQLdb
 from common import *
-from kn.leden.models import KnGroup, OldKnUser
+from kn.leden.models import OldKnGroup, OldKnUser
 
 def forum_email():
 	with open('forum-email.template', 'r') as f:
@@ -16,7 +16,7 @@ def forum_email():
 			l = l[:-1]
 			usr, pwd = l.split(' ')
 			pwd_lut[usr] = pwd
-	l5 = frozenset(map(lambda x: x.username, KnGroup.objects.get(
+	l5 = frozenset(map(lambda x: x.username, OldKnGroup.objects.get(
 		name=MEMBER_GROUP).user_set.all()))
 	login = read_ssv_file('forum.login')
 	db = MySQLdb.connect(host='localhost',

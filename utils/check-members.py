@@ -1,7 +1,7 @@
 import _import
 from common import *
 
-from kn.leden.models import OldKnUser, KnGroup
+from kn.leden.models import OldKnUser, OldKnGroup
 from datetime import date, datetime
 import sys
 import re
@@ -14,7 +14,7 @@ def check_members(members):
 		ms = date(2004 + c, 8, 1)
 		if datetime.now().date() < ms:
 			break
-		ledeng[c] = KnGroup.objects.get(name='leden%s' % c)
+		ledeng[c] = OldKnGroup.objects.get(name='leden%s' % c)
 
 	for m in members:
 		if m.dateJoined is None:

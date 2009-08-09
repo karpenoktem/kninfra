@@ -2,12 +2,12 @@ from __future__ import with_statement
 
 import _import
 from common import *
-from kn.leden.models import KnGroup, OldKnUser
+from kn.leden.models import OldKnGroup, OldKnUser
 
 def forum_email():
 	with open('fools-email.template', 'r') as f:
 		templ = f.read()
-	l5 = KnGroup.objects.get(name=MEMBER_GROUP).user_set.all()
+	l5 = OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all()
 	for m in l5:
 		txt = templ % ({'username': m.username})
 		m.email_user(

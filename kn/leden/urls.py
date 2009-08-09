@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from kn.leden.models import OldKnUser, KnGroup, Seat, Study
+from kn.leden.models import OldKnUser, OldKnGroup, Seat, Study
 import django.views.generic.list_detail
 import django.views.generic.simple
 import django.views.generic.date_based
@@ -38,7 +38,7 @@ urlpatterns = patterns('',
 	     'template_name':'leden/jaar.html',
 	     'make_object_list':True}, name='jaar'),
 	url(r'^groep/(?P<name>[^/]+)/$',
-	    views.kngroup_detail, name='kngroup-detail'),
+	    views.oldkngroup_detail, name='oldkngroup-detail'),
 	url(r'^studie/(?P<object_id>[0-9]+)/$',
 	    login_required(generic.list_detail.object_detail),
 	    {'queryset':Study.objects.all()}, name='study-detail'),

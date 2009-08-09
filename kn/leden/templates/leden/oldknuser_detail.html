@@ -32,8 +32,8 @@
 	<h2>Groepen</h2>
 	<ul>
 	{% for comm in comms %}
-	<li><a href="{{ comm.kngroup.get_absolute_url }}"
-		>{{ comm.kngroup.humanName }}</a></li>
+	<li><a href="{{ comm.oldkngroup.get_absolute_url }}"
+		>{{ comm.oldkngroup.humanName }}</a></li>
 	{% endfor %}
 	</ul>
 {% endif %}

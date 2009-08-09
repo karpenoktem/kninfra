@@ -8,7 +8,7 @@ import django.db as db
 from django.db.models import Model
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from kn.leden.models import OldKnUser, KnGroup, Seat, Alias, EduInstitute,\
+from kn.leden.models import OldKnUser, OldKnGroup, Seat, Alias, EduInstitute,\
 			    Study, CertificateOwnership, Certificate
 from kn.poll.models import Answer, AnswerSet, Question, Filling, Poll
 

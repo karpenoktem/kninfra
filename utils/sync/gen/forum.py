@@ -1,7 +1,7 @@
 from common import *
 
 import MySQLdb
-from kn.leden.models import OldKnUser, KnGroup, Seat, Alias
+from kn.leden.models import OldKnUser, OldKnGroup, Seat, Alias
 
 def sync_forum(loginFile):
 	login = read_ssv_file(loginFile)

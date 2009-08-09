@@ -1,6 +1,6 @@
 import _import
 import Mailman.MailList
-from kn.leden.models import Seat, KnGroup, OldKnUser, Alias
+from kn.leden.models import Seat, OldKnGroup, OldKnUser, Alias
 
 #
 # Very short helper functions for trivial tasks
@@ -8,14 +8,14 @@ from kn.leden.models import Seat, KnGroup, OldKnUser, Alias
 
 def cadd(commission, user):
 	""" Add <user> to <commission> """
-	KnGroup.objects.get(name=commission).user_set.add(OldKnUser.objects.get(username=user))
+	OldKnGroup.objects.get(name=commission).user_set.add(OldKnUser.objects.get(username=user))
 
 def sadd(commission, seat, user):
 	""" Creates the seat <seat> for <commission> with <user> """
 	s = Seat(name=seat,
 		 humanName=seat.capitalize(),
 		 user=OldKnUser.objects.get(username=user),
-		 group=KnGroup.objects.get(name=commission),
+		 group=OldKnGroup.objects.get(name=commission),
 		 description=seat)
 	s.save()
 
@@ -29,8 +29,8 @@ def u(username):
 	return OldKnUser.objects.get(username=username)
 
 def g(name):
-	""" Gets the <KnGroup> with name <name> """
-	return KnGroup.objects.get(name=name)
+	""" Gets the <OldKnGroup> with name <name> """
+	return OldKnGroup.objects.get(name=name)
 
 def ml(name):
 	""" Gets the Mailman.MailList.MailList object for the list

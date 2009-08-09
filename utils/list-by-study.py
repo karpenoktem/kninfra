@@ -1,10 +1,10 @@
 import _import
 from common import *
 
-from kn.leden.models import Study, KnGroup
+from kn.leden.models import Study, OldKnGroup
 
 leden = frozenset(map(lambda x: x.oldknuser,
-	          KnGroup.objects.get(name=MEMBER_GROUP).user_set.all()))
+	          OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all()))
 
 for s in Study.objects.all():
 	sm = frozenset(s.oldknuser_set.all()).intersection(leden)

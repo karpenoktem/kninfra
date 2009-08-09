@@ -3,7 +3,7 @@ import _import
 import sys
 from optparse import OptionParser
 from common import *
-from kn.leden.models import OldKnUser, KnGroup
+from kn.leden.models import OldKnUser, OldKnGroup
 
 op = OptionParser()
 op.add_option('-s', '--separator', dest='separator', default=' ',

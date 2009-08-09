@@ -24,11 +24,11 @@ def pseudo_randstr(l=12, cs=ALPHANUMUL):
 	return ret
 
 def args_to_users(args):
-	from kn.leden.models import OldKnUser, KnGroup
+	from kn.leden.models import OldKnUser, OldKnGroup
 	ret = set()
 	had = set()
 	for arg in args:
-		tmp = KnGroup.objects.filter(name=arg)
+		tmp = OldKnGroup.objects.filter(name=arg)
 		if len(tmp) != 0:
 			for u in tmp[0].user_set.all():
 				if u.pk in had:

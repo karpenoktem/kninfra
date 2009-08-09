@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from models import (Study, OldKnUser, EduInstitute, KnGroup, Seat, Alias,
+from models import (Study, OldKnUser, EduInstitute, OldKnGroup, Seat, Alias,
 		    Transaction, TransactionType, Certificate,
 		    CertificateOwnership)
 from django.template import RequestContext
@@ -25,7 +25,7 @@ class OldKnUserAdmin(admin.ModelAdmin):
 					url.split('/')[0])
 		return super(OldKnUserAdmin, self).__call__(request, url)
 
-class KnGroupAdmin(admin.ModelAdmin):
+class OldKnGroupAdmin(admin.ModelAdmin):
 	search_fields = ('name', 'description')
 	ordering = ('name', )
 	filter_horizontal = ('permissions', )
@@ -34,7 +34,7 @@ class KnGroupAdmin(admin.ModelAdmin):
 admin.site.register(Study)
 admin.site.register(OldKnUser, OldKnUserAdmin)
 admin.site.register(EduInstitute)
-admin.site.register(KnGroup, KnGroupAdmin)
+admin.site.register(OldKnGroup, OldKnGroupAdmin)
 admin.site.register(Seat)
 admin.site.register(Alias)
 admin.site.register(Transaction)

@@ -1,8 +1,8 @@
 from common import *
-from kn.leden.models import OldKnUser, KnGroup, Seat, Alias
+from kn.leden.models import OldKnUser, OldKnGroup, Seat, Alias
 
 def sync_commissions():
-	mg = KnGroup.objects.get(name=MEMBER_GROUP)
+	mg = OldKnGroup.objects.get(name=MEMBER_GROUP)
 	for user in OldKnUser.objects.all():
 		if (not user.groups.filter(pk=mg.pk) and
 			user.is_active):
@@ -10,9 +10,9 @@ def sync_commissions():
 					user.username, MEMBER_GROUP)
 			user.is_active = False
 			user.save()
-	omg = KnGroup.objects.get(name='leden-oud')
-	mgs = set(KnGroup.objects.filter(
-			parent=KnGroup.objects.get(name='leden')))
+	omg = OldKnGroup.objects.get(name='leden-oud')
+	mgs = set(OldKnGroup.objects.filter(
+			parent=OldKnGroup.objects.get(name='leden')))
 	mgs.remove(omg)
 	mgs.remove(mg)
 	accounted = set()
@@ -31,7 +31,7 @@ def sync_commissions():
 	for user in seen - accounted:
 		print "notice %s added to leden-oud" % user
 		OldKnUser.objects.get(username=user).groups.add(omg)
-	mannen = KnGroup.objects.get(name='mannen')
+	mannen = OldKnGroup.objects.get(name='mannen')
 	accounted = set()
 	seen = set()
 	for user in mannen.user_set.all():
@@ -46,7 +46,7 @@ def sync_commissions():
 		OldKnUser.objects.get(username=unacc).groups.remove(mannen)
 		print "notice Removed %s from mannen" % unacc
 
-	vrouwen = KnGroup.objects.get(name='vrouwen')
+	vrouwen = OldKnGroup.objects.get(name='vrouwen')
 	accounted = set()
 	seen = set()
 	for user in vrouwen.user_set.all():
@@ -61,7 +61,7 @@ def sync_commissions():
 		OldKnUser.objects.get(username=unacc).groups.remove(vrouwen)
 		print "notice Removed %s from vrouwen" % unacc
 	
-	choofden = KnGroup.objects.get(name='hoofden')
+	choofden = OldKnGroup.objects.get(name='hoofden')
 	accounted = set()
 	seen = set()
 	for user in choofden.user_set.all():
@@ -69,7 +69,7 @@ def sync_commissions():
 	todo = list()
 	for seat in Seat.objects.select_related('user').filter(name='hoofd'):
 		todo.append(seat)
-	for seat in KnGroup.objects.get(name='hoofden').seat_set.all():
+	for seat in OldKnGroup.objects.get(name='hoofden').seat_set.all():
 		todo.append(seat)
 	for seat in todo:
 		seen.add(seat.user.username)

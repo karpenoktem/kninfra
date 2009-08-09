@@ -2,7 +2,7 @@ import _import
 
 import sys
 from common import *
-from kn.leden.models import OldKnUser, KnGroup
+from kn.leden.models import OldKnUser, OldKnGroup
 
 users = dict()
 if len(sys.argv) == 1:
@@ -17,8 +17,8 @@ i = 0
 while True:
 	i += 1
 	try:
-		g = KnGroup.objects.get(name='leden%s'%i)
-	except KnGroup.DoesNotExist:
+		g = OldKnGroup.objects.get(name='leden%s'%i)
+	except OldKnGroup.DoesNotExist:
 		break
 	for m in g.user_set.all():
 		if m.username in users:

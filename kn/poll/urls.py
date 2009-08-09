@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from kn.leden.models import OldKnUser, KnGroup, Seat, Study
+from kn.leden.models import OldKnUser, OldKnGroup, Seat, Study
 import django.views.generic.list_detail
 import django.views.generic.simple
 import django.views.generic.date_based

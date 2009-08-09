@@ -5,12 +5,12 @@ from common import *
 from datetime import datetime, date
 from Mailman.MailList import MailList
 
-from kn.leden.models import OldKnUser, KnGroup, Seat, Alias
+from kn.leden.models import OldKnUser, OldKnGroup, Seat, Alias
 
 def check_geinteresseerden():
 	print "GEINTERESSEERDEN"
 	es = frozenset(map(lambda m: m.email.lower(),
-		KnGroup.objects.get(name=MEMBER_GROUP).user_set.all()))
+		OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all()))
 	ml = MailList('geinteresseerden', False)
 	for m in ml.members:
 		if m.lower() in es:
@@ -19,7 +19,7 @@ def check_geinteresseerden():
 def check_namespace():
 	print "NAMESPACE"
 	cn = set(map(lambda c: c.name, 
-		filter(lambda c: not c.isVirtual, KnGroup.objects.all())))
+		filter(lambda c: not c.isVirtual, OldKnGroup.objects.all())))
 	un = set(map(lambda m: m.username, OldKnUser.objects.all()))
 	sn = set(map(lambda s: s.name if s.isGlobal else s.group.name \
 					+ '-' + s.name, Seat.objects.all()))
@@ -41,7 +41,7 @@ def check_namespace():
 
 def check_commissions():
 	print "COMMISSIONS"
-	for c in KnGroup.objects.all():
+	for c in OldKnGroup.objects.all():
 		if len(c.description) < 15:
 			print "%s: description too short (<15)" % c.name
 		if c.isVirtual:

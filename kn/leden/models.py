@@ -67,8 +67,8 @@ class OldKnUser(User, NamedMixin):
 	def get_absolute_url(self):
 		return ('oldknuser-detail', (), {'name': self.username})
 
-class KnGroup(Group, NamedMixin):
-	parent = models.ForeignKey('KnGroup')
+class OldKnGroup(Group, NamedMixin):
+	parent = models.ForeignKey('OldKnGroup')
 	humanName = models.CharField(max_length=120)
 	genitive_prefix = models.CharField(max_length=20,
 					   default='van de')
@@ -82,13 +82,13 @@ class KnGroup(Group, NamedMixin):
 
 	@models.permalink
 	def get_absolute_url(self):
-		return ('kngroup-detail', (), {'name': self.name})
+		return ('oldkngroup-detail', (), {'name': self.name})
 
 class Seat(models.Model, NamedMixin):
 	name = models.CharField(max_length=80)
 	humanName = models.CharField(max_length=120)
 	description = models.TextField()
-	group = models.ForeignKey('KnGroup')
+	group = models.ForeignKey('OldKnGroup')
 	user = models.ForeignKey('OldKnUser')
 	isGlobal = models.BooleanField()
 

@@ -4,14 +4,14 @@ import _import
 import datetime
 
 from common import *
-from kn.leden.models import KnGroup
+from kn.leden.models import OldKnGroup
 from django.core.mail import EmailMessage
 
 def birthday_email():
 	with open('birthday-email.template') as f:
 		templ = f.read()
 	now = datetime.datetime.now().date()
-	for _user in KnGroup.objects.get(name=MEMBER_GROUP
+	for _user in OldKnGroup.objects.get(name=MEMBER_GROUP
 				).user_set.select_related('oldknuser').all():
 		user = _user.oldknuser
 		if user.dateOfBirth is None:

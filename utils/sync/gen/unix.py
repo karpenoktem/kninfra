@@ -4,14 +4,14 @@ import os
 import grp
 import pwd
 import os.path
-from kn.leden.models import OldKnUser, KnGroup, Seat, Alias
+from kn.leden.models import OldKnUser, OldKnGroup, Seat, Alias
 
 def sync_unix():
 	gr_accounted = set()
 	usr_accounted = set()
 	fmap = dict()
 	rmap = dict()
-	for c in KnGroup.objects.filter(isVirtual=False):
+	for c in OldKnGroup.objects.filter(isVirtual=False):
 		gr_accounted.add('kn-'+c.name)
 		fmap[c.name] = set()
 		try:
