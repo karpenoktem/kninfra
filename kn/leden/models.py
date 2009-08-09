@@ -8,8 +8,31 @@ class Entity(models.Model):
 
 	children = models.ManyToManyField('Entity', blank=True)
 
+	@property
+	def description(self):
+		return ''
+
+	@property
+	def humanName(self):
+		return self.name
+
 	def __unicode__(self):
 		return self.name
+
+class Seat(Entity):
+	humanName = models.CharField(max_length=120)
+	description = models.TextField()
+	group = models.ForeignKey('KnGroup')
+	isGlobal = models.BooleanField()
+
+	@property
+	def primary_name(self):
+		return (self.name if self.isGlobal else
+			self.group.name + '-' + self.name)
+
+	def __unicode__(self):
+		return unicode(self.humanName) + " (" + \
+				unicode(self.group) + ")"
 
 class KnUser(Entity):
 	user = models.OneToOneField(User)
@@ -40,11 +63,14 @@ class KnUser(Entity):
 	def primary_name(self):
 		return self.username
 
-	def get_full_name(self):
+	@property
+	def full_name(self):
 		bits = self.last_name.split(',', 1)
 		if len(bits) == 1:
 			return self.first_name + ' ' + self.last_name
 		return self.first_name + bits[1] + ' ' + bits[0]
+
+	humanName = full_name
 
 	@models.permalink
 	def get_absolute_url(self):
