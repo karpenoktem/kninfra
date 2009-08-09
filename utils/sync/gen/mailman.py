@@ -2,7 +2,7 @@ import Mailman
 from common import *
 import Mailman.Utils
 import Mailman.MailList
-from kn.leden.models import KnUser, KnGroup, Seat, Alias
+from kn.leden.models import OldKnUser, KnGroup, Seat, Alias
 
 
 def sync_mailman():

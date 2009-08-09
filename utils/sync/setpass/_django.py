@@ -1,7 +1,7 @@
 import _import
-from kn.leden.models import KnUser
+from kn.leden.models import OldKnUser
 
 def setpass(user, passwd):
-	m = KnUser.objects.get(username=user)
+	m = OldKnUser.objects.get(username=user)
 	m.set_password(passwd)
 	m.save()

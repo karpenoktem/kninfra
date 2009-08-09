@@ -2,11 +2,11 @@ import _import
 
 import sys
 from common import *
-from kn.leden.models import KnUser, KnGroup
+from kn.leden.models import OldKnUser, KnGroup
 
 users = dict()
 if len(sys.argv) == 1:
-	_users = KnUser.objects.all()
+	_users = OldKnUser.objects.all()
 else:
 	_users = args_to_users(sys.argv[1:])
 

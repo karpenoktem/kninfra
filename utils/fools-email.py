@@ -2,7 +2,7 @@ from __future__ import with_statement
 
 import _import
 from common import *
-from kn.leden.models import KnGroup, KnUser
+from kn.leden.models import KnGroup, OldKnUser
 
 def forum_email():
 	with open('fools-email.template', 'r') as f:

@@ -24,7 +24,7 @@ def pseudo_randstr(l=12, cs=ALPHANUMUL):
 	return ret
 
 def args_to_users(args):
-	from kn.leden.models import KnUser, KnGroup
+	from kn.leden.models import OldKnUser, KnGroup
 	ret = set()
 	had = set()
 	for arg in args:
@@ -33,10 +33,10 @@ def args_to_users(args):
 			for u in tmp[0].user_set.all():
 				if u.pk in had:
 					continue
-				ret.add(u.knuser)
+				ret.add(u.oldknuser)
 				had.add(u.pk)
 			continue
-		tmp = KnUser.objects.get(username=arg)
+		tmp = OldKnUser.objects.get(username=arg)
 		if not tmp.pk in had:
 			ret.add(tmp)
 	return tuple(ret)

@@ -31,11 +31,11 @@ class Certificate(models.Model):
 
 class CertificateOwnership(models.Model):
 	certificate = models.ForeignKey('Certificate')
-	user = models.ForeignKey('KnUser')
+	user = models.ForeignKey('OldKnUser')
 	start = models.DateField(null=True, blank=True)
 	end = models.DateField(null=True, blank=True)
 
-class KnUser(User, NamedMixin):
+class OldKnUser(User, NamedMixin):
 	dateOfBirth = models.DateField(null=True, blank=True)
 	dateJoined = models.DateField(null=True, blank=True)
 	
@@ -65,7 +65,7 @@ class KnUser(User, NamedMixin):
 
 	@models.permalink
 	def get_absolute_url(self):
-		return ('knuser-detail', (), {'name': self.username})
+		return ('oldknuser-detail', (), {'name': self.username})
 
 class KnGroup(Group, NamedMixin):
 	parent = models.ForeignKey('KnGroup')
@@ -89,7 +89,7 @@ class Seat(models.Model, NamedMixin):
 	humanName = models.CharField(max_length=120)
 	description = models.TextField()
 	group = models.ForeignKey('KnGroup')
-	user = models.ForeignKey('KnUser')
+	user = models.ForeignKey('OldKnUser')
 	isGlobal = models.BooleanField()
 
 	@property
@@ -109,7 +109,7 @@ class Alias(models.Model):
 		return unicode(self.source + " -> " + self.target)
 
 class Transaction(models.Model):
-	user = models.ForeignKey('KnUser')
+	user = models.ForeignKey('OldKnUser')
 	value = models.DecimalField(max_digits=11, decimal_places=2)
 	date = models.DateField()
 	type = models.ForeignKey('TransactionType')

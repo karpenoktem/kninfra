@@ -1,7 +1,7 @@
 import _import
 
 from django.contrib.auth.models import Permission, User, Group
-from kn.leden.models import KnUser, KnGroup, Seat, Alias, CertificateOwnership
+from kn.leden.models import OldKnUser, KnGroup, Seat, Alias, CertificateOwnership
 from kn.poll.models import Filling
 from django.db.models import FieldDoesNotExist
 

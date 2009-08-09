@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from models import (Study, KnUser, EduInstitute, KnGroup, Seat, Alias,
+from models import (Study, OldKnUser, EduInstitute, KnGroup, Seat, Alias,
 		    Transaction, TransactionType, Certificate,
 		    CertificateOwnership)
 from django.template import RequestContext
@@ -9,7 +9,7 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-class KnUserAdmin(admin.ModelAdmin):
+class OldKnUserAdmin(admin.ModelAdmin):
 	change_password_form = AdminPasswordChangeForm
 	list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
 	list_filter = ('is_staff', 'is_superuser')
@@ -23,7 +23,7 @@ class KnUserAdmin(admin.ModelAdmin):
 		if url.endswith('password'):
 			return HttpResponseRedirect('../../../../auth/user/%s/password' %
 					url.split('/')[0])
-		return super(KnUserAdmin, self).__call__(request, url)
+		return super(OldKnUserAdmin, self).__call__(request, url)
 
 class KnGroupAdmin(admin.ModelAdmin):
 	search_fields = ('name', 'description')
@@ -32,7 +32,7 @@ class KnGroupAdmin(admin.ModelAdmin):
 	list_display = ('name', 'humanName')
 
 admin.site.register(Study)
-admin.site.register(KnUser, KnUserAdmin)
+admin.site.register(OldKnUser, OldKnUserAdmin)
 admin.site.register(EduInstitute)
 admin.site.register(KnGroup, KnGroupAdmin)
 admin.site.register(Seat)

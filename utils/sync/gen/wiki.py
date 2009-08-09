@@ -1,11 +1,11 @@
 from common import * #settings
 import MySQLdb
 
-from kn.leden.models import KnUser
+from kn.leden.models import OldKnUser
 import os
 
 def sync_wiki():
-	members = dict([(m.username,m) for m in KnUser.objects.all()])
+	members = dict([(m.username,m) for m in OldKnUser.objects.all()])
 	users = set()
 
 	dbuser, dbname, dbpasswd = read_ssv_file('wiki.login')

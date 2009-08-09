@@ -6,7 +6,7 @@ import sys
 
 from common import *
 
-from kn.leden.models import KnUser
+from kn.leden.models import OldKnUser
 from cStringIO import StringIO
 
 def vcard(u):

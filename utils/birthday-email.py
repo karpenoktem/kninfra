@@ -12,8 +12,8 @@ def birthday_email():
 		templ = f.read()
 	now = datetime.datetime.now().date()
 	for _user in KnGroup.objects.get(name=MEMBER_GROUP
-				).user_set.select_related('knuser').all():
-		user = _user.knuser
+				).user_set.select_related('oldknuser').all():
+		user = _user.oldknuser
 		if user.dateOfBirth is None:
 			continue
 		if (user.dateOfBirth.day != now.day or

@@ -1,7 +1,7 @@
 from common import *
 
 import MySQLdb
-from kn.leden.models import KnUser, KnGroup, Seat, Alias
+from kn.leden.models import OldKnUser, KnGroup, Seat, Alias
 import Mailman
 import Mailman.Utils
 
@@ -27,7 +27,7 @@ def get_desired_map():
 		if not name in _map:
 			_map[name] = set()
 		_map[name].add((email, reason))
-	for user in KnUser.objects.all():
+	for user in OldKnUser.objects.all():
 		claim(user.username, user.email, 'user.name')
 		fn = emailfy_name(user.first_name, user.last_name)
 		claim(fn, user.primary_email, 'user.fullname')

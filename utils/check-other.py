@@ -5,7 +5,7 @@ from common import *
 from datetime import datetime, date
 from Mailman.MailList import MailList
 
-from kn.leden.models import KnUser, KnGroup, Seat, Alias
+from kn.leden.models import OldKnUser, KnGroup, Seat, Alias
 
 def check_geinteresseerden():
 	print "GEINTERESSEERDEN"
@@ -20,7 +20,7 @@ def check_namespace():
 	print "NAMESPACE"
 	cn = set(map(lambda c: c.name, 
 		filter(lambda c: not c.isVirtual, KnGroup.objects.all())))
-	un = set(map(lambda m: m.username, KnUser.objects.all()))
+	un = set(map(lambda m: m.username, OldKnUser.objects.all()))
 	sn = set(map(lambda s: s.name if s.isGlobal else s.group.name \
 					+ '-' + s.name, Seat.objects.all()))
 	an = set(map(lambda a: a.source, Alias.objects.all()))

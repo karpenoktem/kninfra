@@ -3,7 +3,7 @@ import _import
 from common import *
 from cal_common import *
 
-from kn.leden.models import KnUser, KnGroup
+from kn.leden.models import OldKnUser, KnGroup
 from iso8601 import parse_date
 import gdata.calendar.service
 import datetime
@@ -45,7 +45,7 @@ def sync_bd(cs, cal):
 	query.start_min = str(now)
 	query.start_max = str(now2)
 	todo = set(filter(lambda x: not x.dateOfBirth is None,
-			  KnUser.objects.all()))
+			  OldKnUser.objects.all()))
 	fn_lut = dict()
 	rd_lut = dict()
 	for m in todo:

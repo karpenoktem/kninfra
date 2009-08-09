@@ -43,8 +43,8 @@
 	<h2>Algemeen leden</h2>
 	<ul>
 	{% for user in otherMembers %}
-	<li><a href="{{ user.knuser.get_absolute_url }}"
-		>{{ user.knuser.get_full_name }}</a></li>
+	<li><a href="{{ user.oldknuser.get_absolute_url }}"
+		>{{ user.oldknuser.get_full_name }}</a></li>
 	{% endfor %}
 	</ul>
 {% endif %}

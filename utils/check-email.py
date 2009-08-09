@@ -2,14 +2,14 @@ from __future__ import with_statement
 
 import _import
 from datetime import date, datetime
-from kn.leden.models import KnUser
+from kn.leden.models import OldKnUser
 
 DAYS_IN_YEAR = 365.242199
 
 def check_email():
 	with open('check-email.template', 'r') as f:
 		templ = f.read()
-	for m in KnUser.objects.all():
+	for m in OldKnUser.objects.all():
 		msgs = list()
 		if m.dateJoined is None:
 			msgs.append("de datum van toetreden is onbekend")

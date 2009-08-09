@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*
 import _import
 
-from kn.leden.models import KnUser, Transaction
+from kn.leden.models import OldKnUser, Transaction
 
 def main():
 	u2t = dict()

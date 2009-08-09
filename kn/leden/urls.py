@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from kn.leden.models import KnUser, KnGroup, Seat, Study
+from kn.leden.models import OldKnUser, KnGroup, Seat, Study
 import django.views.generic.list_detail
 import django.views.generic.simple
 import django.views.generic.date_based
@@ -11,29 +11,29 @@ from kn.leden import views
 urlpatterns = patterns('',
 	url(r'^(?:p/(?P<page>[0-9]+)/)?$',
 	    login_required(generic.list_detail.object_list),
-	    {'queryset':KnUser.objects.order_by('first_name').all(),
+	    {'queryset':OldKnUser.objects.order_by('first_name').all(),
 	     'paginate_by':20}, name='leden-list'),
 	url(r'^gebruiker/(?P<name>[^/]+)/$',
-	    views.knuser_detail, name='knuser-detail'),
+	    views.oldknuser_detail, name='oldknuser-detail'),
 	url(r'^bouwjaar/$',
 	    login_required(generic.date_based.archive_index),
-	    {'queryset':KnUser.objects.all(),
+	    {'queryset':OldKnUser.objects.all(),
 	     'date_field':'dateOfBirth',
 	     'template_name':'leden/bouwjaar_index.html'}, 'bouwjaar-index'),
 	url(r'^bouwjaar/(?P<year>[0-9]+)/$',
 	    login_required(generic.date_based.archive_year),
-	    {'queryset':KnUser.objects.all(),
+	    {'queryset':OldKnUser.objects.all(),
 	     'date_field':'dateOfBirth',
 	     'template_name':'leden/bouwjaar.html',
 	     'make_object_list':True}, name='bouwjaar'),
 	url(r'^jaar/$',
 	    login_required(generic.date_based.archive_index),
-	    {'queryset':KnUser.objects.all(),
+	    {'queryset':OldKnUser.objects.all(),
 	     'date_field':'dateJoined',
 	     'template_name':'leden/jaar_index.html'}, 'jaar-index'),
 	url(r'^jaar/(?P<year>[0-9]+)/$',
 	    login_required(generic.date_based.archive_year),
-	    {'queryset':KnUser.objects.all(),
+	    {'queryset':OldKnUser.objects.all(),
 	     'date_field':'dateJoined',
 	     'template_name':'leden/jaar.html',
 	     'make_object_list':True}, name='jaar'),

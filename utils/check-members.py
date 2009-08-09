@@ -1,7 +1,7 @@
 import _import
 from common import *
 
-from kn.leden.models import KnUser, KnGroup
+from kn.leden.models import OldKnUser, KnGroup
 from datetime import date, datetime
 import sys
 import re

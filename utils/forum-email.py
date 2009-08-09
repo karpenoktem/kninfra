@@ -3,7 +3,7 @@ from __future__ import with_statement
 import _import
 import MySQLdb
 from common import *
-from kn.leden.models import KnGroup, KnUser
+from kn.leden.models import KnGroup, OldKnUser
 
 def forum_email():
 	with open('forum-email.template', 'r') as f:
@@ -31,7 +31,7 @@ def forum_email():
 			continue
 		toEmail.add(username)
 	for username in toEmail:
-		m = KnUser.objects.get(username=username)
+		m = OldKnUser.objects.get(username=username)
 		txt = templ % ({'fullName': m.get_full_name(),
 				'password': pwd_lut[m.username],
 				'userName': username})

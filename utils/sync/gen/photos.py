@@ -1,11 +1,11 @@
 from common import * #settings
 import MySQLdb
 
-from kn.leden.models import KnUser
+from kn.leden.models import OldKnUser
 import os
 
 def sync_photos():
-	members = dict([(m.username,m) for m in KnUser.objects.all()])
+	members = dict([(m.username,m) for m in OldKnUser.objects.all()])
 	
 	sync_members_album(members)
 	sync_database(members)
@@ -82,17 +82,17 @@ def sync_members_album(members):
 		print "photos mkdir %s " % sesc(msa)
 	else:
 		for name in os.listdir(msa):
-			checkKnUserAlbum(msa, members, name)
+			checkOldKnUserAlbum(msa, members, name)
 
 	for member in members.values():
-		checkKnUserPhotoDir(msa, member.username)
+		checkOldKnUserPhotoDir(msa, member.username)
 
 def memberPhotoDir(username):
 	mh = os.path.expanduser('~%s'%username)
 	mf = os.path.join(mh, MEMBER_PHOTO_DIR)
 	return mf
 
-def checkKnUserPhotoDir(msa, name):
+def checkOldKnUserPhotoDir(msa, name):
 	mf = memberPhotoDir(name)
 	if not os.path.exists(mf):
 		return
@@ -107,7 +107,7 @@ def checkKnUserPhotoDir(msa, name):
 	# Since the album exists, it should have been checked.
 	# Ah, the smell of race conditions.
 
-def checkKnUserAlbum(msa, members, name):
+def checkOldKnUserAlbum(msa, members, name):
 	ma = os.path.join(msa,name)
 	if name not in members:
 		print "# %s is not a member, so," % name
