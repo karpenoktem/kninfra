@@ -4,17 +4,11 @@ from django.contrib.auth.models import User, Group
 from kn.leden.settings import MAILDOMAIN
 
 class Entity(models.Model):
+	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=30, unique=True)
 
 	children = models.ManyToManyField('Entity', blank=True)
 
-	@property
-	def description(self):
-		return ''
-
-	@property
-	def humanName(self):
-		return self.name
 
 	def __unicode__(self):
 		return self.name
