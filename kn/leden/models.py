@@ -3,6 +3,71 @@ from django.contrib.auth.models import User, Group
 
 from kn.leden.settings import MAILDOMAIN
 
+class Entity(models.Model):
+	name = models.CharField(max_length=30, unique=True)
+
+	children = models.ManyToManyField('Entity', blank=True)
+
+	def __unicode__(self):
+		return self.name
+
+class KnUser(Entity):
+	user = models.OneToOneField(User)
+
+	first_name = models.CharField(max_length=30, blank=True)
+	last_name = models.CharField(max_length=30, blank=True)
+	
+	email = models.EmailField(blank=True)
+
+	dateOfBirth = models.DateField(null=True, blank=True)
+	dateJoined = models.DateField(null=True, blank=True)
+	
+	addr_street = models.CharField(max_length=100, blank=True)
+	addr_number = models.CharField(max_length=20, blank=True)
+	addr_zipCode = models.CharField(max_length=10, blank=True)
+	addr_city = models.CharField(max_length=80, blank=True)
+	
+	gender = models.CharField(max_length=1, blank=True)
+	telephone = models.CharField(max_length=20, null=True)
+	studentNumber = models.CharField(max_length=20,
+					 unique=True,
+					 null=True,
+					 blank=True)
+	institute = models.ForeignKey('EduInstitute', null=True)
+	study = models.ForeignKey('Study', null=True)
+
+	@property
+	def primary_name(self):
+		return self.username
+
+	def get_full_name(self):
+		bits = self.last_name.split(',', 1)
+		if len(bits) == 1:
+			return self.first_name + ' ' + self.last_name
+		return self.first_name + bits[1] + ' ' + bits[0]
+
+	@models.permalink
+	def get_absolute_url(self):
+		return ('knuser-detail', (), {'name': self.username})
+
+class KnGroup(Entity):
+	group = models.OneToOneField(Group)
+
+	humanName = models.CharField(max_length=120)
+	genitive_prefix = models.CharField(max_length=20,
+					   default='van de')
+	description = models.TextField()
+	isVirtual = models.BooleanField()
+	subscribeParentToML = models.BooleanField()
+	
+	@property
+	def primary_name(self):
+		return self.name
+
+	@models.permalink
+	def get_absolute_url(self):
+		return ('kngroup-detail', (), {'name': self.name})
+
 class NamedMixin(object):
 	@property
 	def primary_email(self):
