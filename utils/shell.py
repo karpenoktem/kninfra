@@ -1,6 +1,7 @@
 import _import
 import Mailman.MailList
-from kn.leden.models import OldSeat, OldKnGroup, OldKnUser, Alias
+from kn.leden.models import (OldSeat, OldKnGroup, OldKnUser, Alias,
+				Seat, KnGroup, KnUser)	
 
 #
 # Very short helper functions for trivial tasks
