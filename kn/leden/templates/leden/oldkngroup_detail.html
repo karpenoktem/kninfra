@@ -29,13 +29,13 @@
 	{% endfor %}
 	</ul>
 {% endif %}
-{% if seats %}
+{% if oldseats %}
 	<h2>Zetels</h2>
 	<dl>
-	{% for seat in seats %}
-	<dt>{{ seat.humanName }}</dt>
-	<dd><a href="{{ seat.user.get_absolute_url }}"
-		>{{ seat.user.get_full_name }}</a></dd>
+	{% for oldseat in oldseats %}
+	<dt>{{ oldseat.humanName }}</dt>
+	<dd><a href="{{ oldseat.user.get_absolute_url }}"
+		>{{ oldseat.user.get_full_name }}</a></dd>
 	{% endfor %}
 	</dl>
 {% endif %}

@@ -4,7 +4,7 @@ import os
 import grp
 import pwd
 import os.path
-from kn.leden.models import OldKnUser, OldKnGroup, Seat, Alias
+from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias
 
 def sync_unix():
 	gr_accounted = set()

@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from models import (Study, OldKnUser, EduInstitute, OldKnGroup, Seat, Alias,
+from models import (Study, OldKnUser, EduInstitute, OldKnGroup, OldSeat, Alias,
 		    Transaction, TransactionType, Certificate,
 		    CertificateOwnership)
 from django.template import RequestContext
@@ -35,7 +35,7 @@ admin.site.register(Study)
 admin.site.register(OldKnUser, OldKnUserAdmin)
 admin.site.register(EduInstitute)
 admin.site.register(OldKnGroup, OldKnGroupAdmin)
-admin.site.register(Seat)
+admin.site.register(OldSeat)
 admin.site.register(Alias)
 admin.site.register(Transaction)
 admin.site.register(TransactionType)

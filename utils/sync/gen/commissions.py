@@ -1,5 +1,5 @@
 from common import *
-from kn.leden.models import OldKnUser, OldKnGroup, Seat, Alias
+from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias
 
 def sync_commissions():
 	mg = OldKnGroup.objects.get(name=MEMBER_GROUP)
@@ -67,18 +67,18 @@ def sync_commissions():
 	for user in choofden.user_set.all():
 		accounted.add(user.username)
 	todo = list()
-	for seat in Seat.objects.select_related('user').filter(name='hoofd'):
-		todo.append(seat)
-	for seat in OldKnGroup.objects.get(name='hoofden').seat_set.all():
-		todo.append(seat)
-	for seat in todo:
-		seen.add(seat.user.username)
-		if not seat.user.username in accounted:
-			seat.user.groups.add(choofden)
-			seat.user.save()
-			accounted.add(seat.user.username)
+	for oldseat in OldSeat.objects.select_related('user').filter(name='hoofd'):
+		todo.append(oldseat)
+	for oldseat in OldKnGroup.objects.get(name='hoofden').oldseat_set.all():
+		todo.append(oldseat)
+	for oldseat in todo:
+		seen.add(oldseat.user.username)
+		if not oldseat.user.username in accounted:
+			oldseat.user.groups.add(choofden)
+			oldseat.user.save()
+			accounted.add(oldseat.user.username)
 			print "notice Added %s to hoofden for %s" % (
-					seat.user.username, seat)
+					oldseat.user.username, oldseat)
 	for unacc in accounted - seen:
 		OldKnUser.objects.get(username=unacc).groups.remove(choofden)
 		print "notice Removed %s from hoofden" % unacc

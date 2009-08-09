@@ -1,7 +1,7 @@
 from common import *
 
 import MySQLdb
-from kn.leden.models import OldKnUser, OldKnGroup, Seat, Alias
+from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias
 import Mailman
 import Mailman.Utils
 
@@ -33,10 +33,10 @@ def get_desired_map():
 		claim(fn, user.primary_email, 'user.fullname')
 	for list in Mailman.Utils.list_names():
 		claim(list, list + '@' + LISTDOMAIN, 'mailinglist')
-	for seat in Seat.objects.select_related('group', 'user').all():
-		name, email = seat.primary_name, seat.primary_email
-		temail = seat.user.primary_email		
-		claim(name, temail, 'seat')
+	for oldseat in OldSeat.objects.select_related('group', 'user').all():
+		name, email = oldseat.primary_name, oldseat.primary_email
+		temail = oldseat.user.primary_email		
+		claim(name, temail, 'oldseat')
 	for alias in Alias.objects.all():
 		claim(alias.source, alias.target + '@' + MAILDOMAIN, 'alias')
 	return _map

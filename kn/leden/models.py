@@ -149,7 +149,7 @@ class OldKnGroup(Group, NamedMixin):
 	def get_absolute_url(self):
 		return ('oldkngroup-detail', (), {'name': self.name})
 
-class Seat(models.Model, NamedMixin):
+class OldSeat(models.Model, NamedMixin):
 	name = models.CharField(max_length=80)
 	humanName = models.CharField(max_length=120)
 	description = models.TextField()

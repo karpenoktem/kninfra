@@ -37,13 +37,13 @@
 	{% endfor %}
 	</ul>
 {% endif %}
-{% if seats %}
+{% if oldseats %}
 	<h2>Zetels</h2>
 	<ul>
-		{% for seat in seats %}
-		<li>{{ seat.humanName }} {{ seat.group.genitive_prefix }}
-		<a href="{{ seat.group.get_absolute_url }}"
-			>{{ seat.group.humanName }}</a></li>
+		{% for oldseat in oldseats %}
+		<li>{{ oldseat.humanName }} {{ oldseat.group.genitive_prefix }}
+		<a href="{{ oldseat.group.get_absolute_url }}"
+			>{{ oldseat.group.humanName }}</a></li>
 		{% endfor %}
 	</ul>
 {% endif %}
