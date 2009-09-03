@@ -1,8 +1,27 @@
 from common import *
 from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias
 
+def change_comm_membership(cname, desired):
+	comm = OldKnGroup.objects.get(name=cname)
+	accounted = set()
+	seen = set()
+	for user in comm.user_set.all():
+		accounted.add(user.username)
+	for user in desired:
+		seen.add(user.username)
+		if not user.username in accounted:
+			user.groups.add(comm)
+			user.save()
+			print "notice Added %s to %s" % (user.username, comm)
+	for unacc in accounted - seen:
+		OldKnUser.objects.get(username=unacc).groups.remove(comm)
+		print "notice Removed %s from %s" % (unacc, comm)
+
+
 def sync_commissions():
 	mg = OldKnGroup.objects.get(name=MEMBER_GROUP)
+	leden = set()
+	eerstejaars = set()
 	for user in OldKnUser.objects.all():
 		if (not user.groups.filter(pk=mg.pk) and
 			user.is_active):
@@ -10,75 +29,28 @@ def sync_commissions():
 					user.username, MEMBER_GROUP)
 			user.is_active = False
 			user.save()
-	omg = OldKnGroup.objects.get(name='leden-oud')
-	mgs = set(OldKnGroup.objects.filter(
-			parent=OldKnGroup.objects.get(name='leden')))
-	mgs.remove(omg)
-	mgs.remove(mg)
-	accounted = set()
-	seen = set()
-	for user in omg.user_set.all():
-		accounted.add(user.username)
-	for amg in mgs:
-		for user in amg.user_set.all():
-			seen.add(user.username)
-	for user in mg.user_set.all():
-		if user.username in seen:
-			seen.remove(user.username)
-	for user in accounted - seen:
-		print "notice %s removes from leden-oud" % user
-		OldKnUser.objects.get(username=user).groups.remove(omg)
-	for user in seen - accounted:
-		print "notice %s added to leden-oud" % user
-		OldKnUser.objects.get(username=user).groups.add(omg)
-	mannen = OldKnGroup.objects.get(name='mannen')
-	accounted = set()
-	seen = set()
-	for user in mannen.user_set.all():
-		accounted.add(user.username)
-	for user in OldKnUser.objects.filter(gender='m'):
-		seen.add(user.username)
-		if not user.username in accounted:
-			user.groups.add(mannen)
-			user.save()
-			print "notice Added %s to mannen" % user.username
-	for unacc in accounted - seen:
-		OldKnUser.objects.get(username=unacc).groups.remove(mannen)
-		print "notice Removed %s from mannen" % unacc
+		groupNames = map(lambda x: x.name, user.groups.all())
+		if any(map(lambda x: (x[:5] == 'leden' and x != 'leden'),
+				groupNames)):
+			leden.add(user)
+			if not any(map(lambda x: (x[:5] == 'leden'
+					and x != 'leden'
+					and x != MEMBER_GROUP), groupNames)):
+				eerstejaars.add(user)
+	change_comm_membership('leden', leden)
+	change_comm_membership('eersteJaars', eerstejaars)
+	change_comm_membership('leden-oud',
+		set(OldKnGroup.objects.get(name='leden').user_set.all()) -
+		set(mg.user_set.all()))
+	change_comm_membership('mannen',
+		OldKnUser.objects.filter(gender='m'))
+	change_comm_membership('vrouwen',
+		OldKnUser.objects.filter(gender='v'))
+	change_comm_membership('hoofden',
+		map(lambda x: x.user,
+			OldSeat.objects.select_related('user').filter(
+				name='hoofd')) +
+		map(lambda x: x.user,
+			OldSeat.objects.select_related('user').filter(
+				group=OldKnGroup.objects.get(name='hoofden'))))
 
-	vrouwen = OldKnGroup.objects.get(name='vrouwen')
-	accounted = set()
-	seen = set()
-	for user in vrouwen.user_set.all():
-		accounted.add(user.username)
-	for user in OldKnUser.objects.filter(gender='v'):
-		seen.add(user.username)
-		if not user.username in accounted:
-			user.groups.add(vrouwen)
-			user.save()
-			print "notice Added %s to vrouwen" % user.username
-	for unacc in accounted - seen:
-		OldKnUser.objects.get(username=unacc).groups.remove(vrouwen)
-		print "notice Removed %s from vrouwen" % unacc
-	
-	choofden = OldKnGroup.objects.get(name='hoofden')
-	accounted = set()
-	seen = set()
-	for user in choofden.user_set.all():
-		accounted.add(user.username)
-	todo = list()
-	for oldseat in OldSeat.objects.select_related('user').filter(name='hoofd'):
-		todo.append(oldseat)
-	for oldseat in OldKnGroup.objects.get(name='hoofden').oldseat_set.all():
-		todo.append(oldseat)
-	for oldseat in todo:
-		seen.add(oldseat.user.username)
-		if not oldseat.user.username in accounted:
-			oldseat.user.groups.add(choofden)
-			oldseat.user.save()
-			accounted.add(oldseat.user.username)
-			print "notice Added %s to hoofden for %s" % (
-					oldseat.user.username, oldseat)
-	for unacc in accounted - seen:
-		OldKnUser.objects.get(username=unacc).groups.remove(choofden)
-		print "notice Removed %s from hoofden" % unacc
