@@ -152,6 +152,14 @@ class OldKnUser(User, NamedMixin):
 	def get_absolute_url(self):
 		return ('oldknuser-detail', (), {'name': self.username})
 
+	def __hash__(self):
+		return self.pk.__hash__()
+
+	def __eq__(self, other):
+		if not isinstance(other, (OldKnUser, User)):
+			return False
+		return self.pk == other.pk
+
 class OldKnGroup(Group, NamedMixin):
 	parent = models.ForeignKey('OldKnGroup')
 	humanName = models.CharField(max_length=120)
@@ -168,6 +176,11 @@ class OldKnGroup(Group, NamedMixin):
 	@models.permalink
 	def get_absolute_url(self):
 		return ('oldkngroup-detail', (), {'name': self.name})
+
+	def __eq__(self, other):
+		if not isinstance(other, (OldKnGroup, Group)):
+			return False
+		return self.pk == other.pk
 
 class OldSeat(models.Model, NamedMixin):
 	name = models.CharField(max_length=80)
