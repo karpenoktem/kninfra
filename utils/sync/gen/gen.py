@@ -17,7 +17,7 @@ def sync_all():
 	sync_vpopmail()
 	sync_mailman()
 	sync_unix()
-	sync_photos()
+#	sync_photos()
 	sync_wiki()
 	sync_forum('zeusForum.login')
 	sync_forum('forum.login')
