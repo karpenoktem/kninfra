@@ -1,6 +1,7 @@
 Beste %(fullName)s,
 
-In de ledenadministratie van Karpe Noktem is van jou het volgende opgenomen:
+Aan het begin van elk acedemisch jaar, controleren wij de ledenadministratie.
+Daarin is over jou opgenomen
 
  voornaam              %(firstName)s
  achternaam            %(lastName)s
@@ -23,7 +24,7 @@ In de ledenadministratie van Karpe Noktem is van jou het volgende opgenomen:
   student-nummer       %(studentNumber)s
 
 Kun je terugmailen of deze informatie klopt en deze zo nodig aanvullen of 
-corrigeren?
+verbeteren?
 
 %(extra)s
 Bij voorbaat dank.
@@ -31,5 +32,5 @@ Bij voorbaat dank.
 Met vriendelijke groet,
 
 
-  Rik Sprenkels
+  Bas Westerbaan
   Secretaris

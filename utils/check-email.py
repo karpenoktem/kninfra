@@ -1,15 +1,18 @@
 from __future__ import with_statement
 
 import _import
+import sys
 from datetime import date, datetime
 from kn.leden.models import OldKnUser
+from common import *
 
 DAYS_IN_YEAR = 365.242199
 
 def check_email():
 	with open('check-email.template', 'r') as f:
 		templ = f.read()
-	for m in OldKnUser.objects.all():
+
+	for m in args_to_users(sys.argv[1:]):
 		msgs = list()
 		if m.dateJoined is None:
 			msgs.append("de datum van toetreden is onbekend")
@@ -57,7 +60,7 @@ def check_email():
 			 'fullName': m.get_full_name(),
 			 'gender': ('onbekend' if m.gender is None
 				else {'m': 'man',
-				      'v': 'vrouw'}[m.gender]),
+				      'v': 'vrouw'}.get(m.gender, '?')),
 			 'dateOfBirth': ('onbekend' if m.dateOfBirth is None
 				else str(m.dateOfBirth)),
 			 'dateJoined': ('onbekend' if m.dateJoined is None
@@ -82,7 +85,7 @@ def check_email():
 			 'extra': extra
 			})
 		print m
-		m.email_user('Karpe Noktem ledenadministratie',
+		m.email_user('Controle Karpe Noktem ledenadministratie',
 		     em, from_email='secretaris@karpenoktem.nl') 
 
 if __name__ == '__main__':
