@@ -137,6 +137,7 @@ class OldKnUser(User, NamedMixin):
 					 blank=True)
 	institute = models.ForeignKey('EduInstitute', null=True)
 	study = models.ForeignKey('Study', null=True)
+	got_incasso = models.BooleanField()
 
 	@property
 	def primary_name(self):
