@@ -38,14 +38,13 @@ def sync_commissions():
 					and x != MEMBER_GROUP), groupNames)):
 				eerstejaars.add(user)
 	change_comm_membership('leden', leden)
-	change_comm_membership('eersteJaars', eerstejaars)
+	change_comm_membership('eerstejaars', eerstejaars)
 	change_comm_membership('leden-oud',
-		set(OldKnGroup.objects.get(name='leden').user_set.all()) -
-		set(mg.user_set.all()))
+		leden - set(mg.user_set.all()))
 	change_comm_membership('mannen',
-		OldKnUser.objects.filter(gender='m'))
+		filter(lambda x: x.gender == 'm', leden))
 	change_comm_membership('vrouwen',
-		OldKnUser.objects.filter(gender='v'))
+		filter(lambda x: x.gender == 'v', leden))
 	change_comm_membership('hoofden',
 		map(lambda x: x.user,
 			OldSeat.objects.select_related('user').filter(
