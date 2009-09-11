@@ -41,6 +41,10 @@ def sync_commissions():
 	change_comm_membership('eerstejaars', eerstejaars)
 	change_comm_membership('leden-oud',
 		leden - set(mg.user_set.all()))
+	change_comm_membership('incasso',
+		filter(lambda x: x.got_incasso, leden))
+	change_comm_membership('geen-incasso',
+		filter(lambda x: not x.got_incasso, leden))
 	change_comm_membership('mannen',
 		filter(lambda x: x.gender == 'm', leden))
 	change_comm_membership('vrouwen',
