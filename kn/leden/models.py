@@ -168,6 +168,7 @@ class OldKnGroup(Group, NamedMixin):
 					   default='van de')
 	description = models.TextField()
 	isVirtual = models.BooleanField()
+	isHidden = models.BooleanField()
 	subscribeParentToML = models.BooleanField()
 	
 	@property
