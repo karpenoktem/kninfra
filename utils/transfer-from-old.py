@@ -30,6 +30,8 @@ def main():
 			   telephone=o.telephone,
 			   studentNumber=o.studentNumber,
 			   institute=o.institute,
+			   in_aan=o.in_aan,
+			   got_incasso=o.got_incasso,
 			   study=o.study,
 			   name=o.username)
 		entlut[o.username] = n
@@ -42,6 +44,7 @@ def main():
 			    genitive_prefix=o.genitive_prefix,
 			    description=o.description,
 			    isVirtual=o.isVirtual,
+			    isHidden=o.isHidden,
 			    subscribeParentToML=o.subscribeParentToML)
 		n.save()
 		entlut[o.name] = n

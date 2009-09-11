@@ -52,6 +52,8 @@ class KnUser(Entity):
 					 blank=True)
 	institute = models.ForeignKey('EduInstitute', null=True)
 	study = models.ForeignKey('Study', null=True)
+	got_incasso = models.BooleanField()
+	in_aan = models.BooleanField(default=True)
 
 	@property
 	def primary_name(self):
@@ -78,6 +80,7 @@ class KnGroup(Entity):
 					   default='van de')
 	description = models.TextField()
 	isVirtual = models.BooleanField()
+	isHidden = models.BooleanField()
 	subscribeParentToML = models.BooleanField()
 	
 	@property
