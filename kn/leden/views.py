@@ -14,7 +14,8 @@ def oldknuser_detail(request, name):
 		raise Http404
 	oldseats = list(user.oldseat_set.select_related('group').all())
 	oldseats.sort(lambda x,y: cmp(x.humanName, y.humanName))
-	comms = map(lambda x: x.oldkngroup, user.groups.all())
+	comms = filter(lambda x: not x.isHidden,
+			map(lambda x: x.oldkngroup, user.groups.all()))
 	comms.sort(lambda x,y: cmp(x.humanName, y.humanName))
 	return render_to_response('leden/oldknuser_detail.html',
 			{'object': user,
@@ -30,7 +31,8 @@ def oldkngroup_detail(request, name):
 	except OldKnGroup.DoesNotExist:
 		raise Http404
 	otherMembers = list()
-	subGroups = list(group.oldkngroup_set.order_by('humanName').all())
+	subGroups = filter(lambda x: not x.isHidden,
+			group.oldkngroup_set.order_by('humanName').all())
 	oldseats = list(group.oldseat_set.order_by('humanName').all())
 	oldseat_ids = frozenset(map(lambda x: x.user_id, oldseats))
 	for user in group.user_set.select_related('oldknuser'
