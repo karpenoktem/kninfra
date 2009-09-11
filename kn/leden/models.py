@@ -9,9 +9,11 @@ class Entity(models.Model):
 
 	children = models.ManyToManyField('Entity', blank=True)
 
-
 	def __unicode__(self):
 		return self.name
+
+	def __eq__(self, other):
+		return isinstance(other, Entity) and other.pk == self.pk
 
 class Seat(Entity):
 	humanName = models.CharField(max_length=120)
