@@ -39,7 +39,7 @@ def execute(args):
 			return -1
 		c = getDbCursor()
 		c.execute("INSERT INTO zp_administrators (user,name,email,"+
-				"rights,password) VALUES (%s,%s,%s,%s,%s)",
+				"rights,pass) VALUES (%s,%s,%s,%s,%s)",
 				(args[1],args[2],args[3],args[4],"37"))
 		c.close()
 	elif cmd == "adm-update":

@@ -15,7 +15,7 @@ def sync_database(members):
 	user, db, passwd = read_ssv_file('photos.login')
 	dc = MySQLdb.connect(host='localhost', user=user, db=db, passwd=passwd)
 	c = dc.cursor()
-	c.execute('SELECT id, user, password, name, email, rights '+
+	c.execute('SELECT id, user, pass, name, email, rights '+
 			'FROM zp_administrators')
 	
 	uid = set()

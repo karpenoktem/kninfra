@@ -10,5 +10,5 @@ def setpass(user, passwd):
 			db=dbname)
 	c = dc.cursor()
 	c.execute("""	UPDATE zp_administrators 
-			SET password=%s 
+			SET pass=%s 
 			WHERE user=%s""", (hashed_passwd, user))
