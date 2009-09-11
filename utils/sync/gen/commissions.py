@@ -38,6 +38,8 @@ def sync_commissions():
 					and x != MEMBER_GROUP), groupNames)):
 				eerstejaars.add(user)
 	change_comm_membership('leden', leden)
+	change_comm_membership('aan',
+		filter(lambda x: x.in_aan, leden))
 	change_comm_membership('eerstejaars', eerstejaars)
 	change_comm_membership('leden-oud',
 		leden - set(mg.user_set.all()))
