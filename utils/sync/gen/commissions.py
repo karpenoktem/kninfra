@@ -1,7 +1,20 @@
 from common import *
 from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias
 
+seat_comm_lut = None
+
+def seat_users_for(cname):
+	global seat_comm_lut
+	if seat_comm_lut is None:
+		seat_comm_lut = dict()
+		for s in OldSeat.objects.all():
+			if not s.group.name in seat_comm_lut:
+				seat_comm_lut[s.group.name] = set()
+			seat_comm_lut[s.group.name].add(s.user)
+	return seat_comm_lut[cname] if cname in seat_comm_lut else set()
+
 def change_comm_membership(cname, desired):
+	desired = frozenset(desired).union(seat_users_for(cname))
 	comm = OldKnGroup.objects.get(name=cname)
 	accounted = set()
 	seen = set()
@@ -20,7 +33,8 @@ def change_comm_membership(cname, desired):
 
 def sync_commissions():
 	mg = OldKnGroup.objects.get(name=MEMBER_GROUP)
-	leden = set()
+	on_leden = set()
+	leden = set(map(lambda x: x.oldknuser, mg.user_set.all()))
 	eerstejaars = set()
 	for user in OldKnUser.objects.all():
 		if (not user.groups.filter(pk=mg.pk) and
@@ -32,7 +46,7 @@ def sync_commissions():
 		groupNames = map(lambda x: x.name, user.groups.all())
 		if any(map(lambda x: (x[:5] == 'leden' and x != 'leden'),
 				groupNames)):
-			leden.add(user)
+			on_leden.add(user)
 			if not any(map(lambda x: (x[:5] == 'leden'
 					and x != 'leden'
 					and x != MEMBER_GROUP), groupNames)):
@@ -42,7 +56,7 @@ def sync_commissions():
 		filter(lambda x: x.in_aan, leden))
 	change_comm_membership('eerstejaars', eerstejaars)
 	change_comm_membership('leden-oud',
-		leden - set(mg.user_set.all()))
+		on_leden - leden)
 	change_comm_membership('incasso',
 		filter(lambda x: x.got_incasso, leden))
 	change_comm_membership('geen-incasso',
@@ -58,4 +72,5 @@ def sync_commissions():
 		map(lambda x: x.user,
 			OldSeat.objects.select_related('user').filter(
 				group=OldKnGroup.objects.get(name='hoofden'))))
-
+	for group in OldKnGroup.objects.all():
+		change_comm_membership(group.name, group.user_set.all())
