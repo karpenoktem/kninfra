@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from kn.leden import views
 
 urlpatterns = patterns('',
-	url(r'^(?:p/(?P<page>[0-9]+)/)?$',
+	url(r'^gebruikers/(?:p/(?P<page>[0-9]+)/)?$',
 	    login_required(generic.list_detail.object_list),
 	    {'queryset':OldKnUser.objects.order_by('first_name').all(),
 	     'paginate_by':20}, name='leden-list'),
