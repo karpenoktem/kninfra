@@ -9,6 +9,14 @@
 {% block wrapper %}
 <div id="logo"></div>
 {{ block.super }}
+{% endblock %}
+
+{% block main %}
+{{ block.super }}
 <ul id="menu">
+	{% block menu %}
+	<li><a href="/">Terug</a></li>
+	<li><a href="{% url logout %}">Uitloggen</a></li>
+	{% endblock %}
 </ul>
 {% endblock %}

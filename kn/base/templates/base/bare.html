@@ -19,6 +19,7 @@
 	<body><div id="wrapper">
 		{% block wrapper %}
 		<div id="main">
+			{% block main %}
 			<div id="body">
 			{% if messages %}
 			<ul id="messages">
@@ -50,6 +51,7 @@
 			</table>
 			{% endif %}
 			</div>
+			{% endblock %}
 		</div>
 		{% endblock %}
 		<div id="footer">
