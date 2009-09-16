@@ -11,7 +11,7 @@ from kn.leden import views
 urlpatterns = patterns('',
 	url(r'^$',
 	    login_required(generic.simple.direct_to_template),
-	    {'template': 'leden/home.html'}),
+	    {'template': 'leden/home.html'}, name='smoelen-home'),
 	url(r'^gebruikers/(?:p/(?P<page>[0-9]+)/)?$',
 	    login_required(generic.list_detail.object_list),
 	    {'queryset':OldKnUser.objects.order_by('first_name').all(),
