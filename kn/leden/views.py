@@ -1,8 +1,9 @@
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.template import RequestContext
 from kn.leden.models import OldKnGroup, OldKnUser
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
+from os import path
 
 # Create your views here.
 @login_required
@@ -17,10 +18,12 @@ def oldknuser_detail(request, name):
 	comms = filter(lambda x: not x.isHidden,
 			map(lambda x: x.oldkngroup, user.groups.all()))
 	comms.sort(lambda x,y: cmp(x.humanName, y.humanName))
+	hasPhoto = path.exists('/home/kn/jille/user-photos/%s.jpg' % user.username)
 	return render_to_response('leden/oldknuser_detail.html',
 			{'object': user,
 			 'oldseats': oldseats,
-			 'comms': comms},
+			 'comms': comms,
+			 'hasPhoto': hasPhoto},
 			context_instance=RequestContext(request))
 
 @login_required
@@ -46,3 +49,17 @@ def oldkngroup_detail(request, name):
 			 'subGroups': subGroups,
 			 'otherMembers': otherMembers},
 			context_instance=RequestContext(request))
+
+@login_required
+def oldknuser_photo(request, name):
+	try:
+		user = OldKnUser.objects.get(username=name)
+	except OldKnUser.DoesNotExist:
+		raise Http404
+	try:
+		img = open('/home/kn/jille/user-photos/%s.jpg' % user.username, 'rb')
+		imgdata = img.read()
+		img.close()
+	except IOError:
+		raise Http404
+	return HttpResponse(imgdata, mimetype="image/jpeg")
