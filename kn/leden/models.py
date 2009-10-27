@@ -3,6 +3,11 @@ from django.contrib.auth.models import User, Group
 
 from kn.leden.settings import MAILDOMAIN
 
+GENDER_CHOICES = (
+	('m', 'Man'),
+	('f', 'Vrouw'),
+)
+
 class Entity(models.Model):
 	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=30, unique=True)
@@ -46,7 +51,7 @@ class KnUser(Entity):
 	addr_zipCode = models.CharField(max_length=10, blank=True)
 	addr_city = models.CharField(max_length=80, blank=True)
 	
-	gender = models.CharField(max_length=1, blank=True)
+	gender = models.CharField(max_length=1, blank=True, choices=GENDER_CHOICES)
 	telephone = models.CharField(max_length=20, null=True)
 	studentNumber = models.CharField(max_length=20,
 					 unique=True,
@@ -134,7 +139,7 @@ class OldKnUser(User, NamedMixin):
 	addr_zipCode = models.CharField(max_length=10, blank=True)
 	addr_city = models.CharField(max_length=80, blank=True)
 	
-	gender = models.CharField(max_length=1, blank=True)
+	gender = models.CharField(max_length=1, blank=True, choices=GENDER_CHOICES)
 	telephone = models.CharField(max_length=20, null=True)
 	studentNumber = models.CharField(max_length=20,
 					 unique=True,
