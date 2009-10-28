@@ -57,7 +57,7 @@ def oldkngroup_detail(request, name):
 			context_instance=RequestContext(request))
 
 @login_required
-def oldknuser_photo(request, name):
+def oldknuser_smoel(request, name):
 	try:
 		user = OldKnUser.objects.get(username=name)
 	except OldKnUser.DoesNotExist:
