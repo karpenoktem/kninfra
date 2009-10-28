@@ -1,9 +1,15 @@
 {% extends "leden/base.html" %}
 {% load base %}
 
+{% block head %}
+{{ block.super }}
+<link href="{{ MEDIA_URL }}/leden/oldknuser_detail.css"
+	rel="stylesheet" type="text/css" />
+{% endblock %}
+
 {% block body %}
 {% if hasPhoto %}
-<div style="float: right; width: 200px"><img width="200" src="{% url oldknuser-photo object.username %}" /></div>
+<div class="smoel"><img src="{% url oldknuser-photo object.username %}" /></div>
 {% endif %}
 <h1>{{ object.get_full_name }}</h1>
 <dl>
