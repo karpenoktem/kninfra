@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response
 from django.core.files.storage import default_storage
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
+from django.core.servers.basehttp import FileWrapper
 from os import path
 
 # Create your views here.
@@ -65,8 +66,6 @@ def oldknuser_photo(request, name):
 		img = default_storage.open(path.join(
 			settings.SMOELEN_PHOTOS_PATH,
 			user.username) + ".jpg")
-		imgdata = img.read()
-		img.close()
 	except IOError:
 		raise Http404
-	return HttpResponse(imgdata, mimetype="image/jpeg")
+	return HttpResponse(FileWrapper(img), mimetype="image/jpeg")
