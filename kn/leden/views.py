@@ -1,8 +1,11 @@
 from django.http import Http404, HttpResponse
 from django.template import RequestContext
 from kn.leden.models import OldKnGroup, OldKnUser
+from kn import settings
 from django.shortcuts import render_to_response
+from django.core.files.storage import default_storage
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import default_storage
 from os import path
 
 # Create your views here.
@@ -18,7 +21,9 @@ def oldknuser_detail(request, name):
 	comms = filter(lambda x: not x.isHidden,
 			map(lambda x: x.oldkngroup, user.groups.all()))
 	comms.sort(lambda x,y: cmp(x.humanName, y.humanName))
-	hasPhoto = path.exists('/home/kn/jille/user-photos/%s.jpg' % user.username)
+	hasPhoto = default_storage.exists('%s.jpg' % 
+			path.join(settings.SMOELEN_PHOTOS_PATH,
+					user.username))
 	return render_to_response('leden/oldknuser_detail.html',
 			{'object': user,
 			 'oldseats': oldseats,
@@ -57,7 +62,9 @@ def oldknuser_photo(request, name):
 	except OldKnUser.DoesNotExist:
 		raise Http404
 	try:
-		img = open('/home/kn/jille/user-photos/%s.jpg' % user.username, 'rb')
+		img = default_storage.open(path.join(
+			settings.SMOELEN_PHOTOS_PATH,
+			user.username) + ".jpg")
 		imgdata = img.read()
 		img.close()
 	except IOError:
