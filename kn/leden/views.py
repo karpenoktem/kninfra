@@ -1,7 +1,11 @@
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
+from kn.base.text import humanized_enum
 from kn.leden.models import OldKnGroup, OldKnUser
+from kn.leden.forms import ChangePasswordForm
+from kn.leden.utils import change_password, ChangePasswordError
 from kn import settings
+
 from django.shortcuts import render_to_response
 from django.core.files.storage import default_storage
 from django.contrib.auth.decorators import login_required
@@ -70,3 +74,26 @@ def oldknuser_photo(request, name):
 	except IOError:
 		raise Http404
 	return HttpResponse(imgdata, mimetype="image/jpeg")
+
+@login_required
+def ik_chpasswd(request):
+	done = False
+	errl = []
+	user = request.user
+	if request.method == 'POST':
+		form = ChangePasswordForm(request.POST) 
+		if form.is_valid():
+			oldpw = form.cleaned_data['old_password']
+			newpw = form.cleaned_data['new_password']
+			try:
+				change_password(user.username, oldpw, newpw)
+				done = True
+			except ChangePasswordError as e:
+				errl.extend(e.args)
+	else:
+		form = ChangePasswordForm()
+	errl.extend(form.non_field_errors())
+	errstr = humanized_enum(errl) 
+	return render_to_response('leden/ik_chpasswd.html', 
+			{ 'form':form, 'errors':errstr, 
+				'done':done, 'user':user })
