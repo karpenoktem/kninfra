@@ -5,12 +5,12 @@ from kn.leden.models import OldKnGroup, OldKnUser
 from kn.leden.forms import ChangePasswordForm
 from kn.leden.utils import change_password, ChangePasswordError
 from kn import settings
-
 from django.shortcuts import render_to_response
 from django.core.files.storage import default_storage
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.servers.basehttp import FileWrapper
+from django.core.urlresolvers import reverse
 from os import path
 
 # Create your views here.
@@ -74,19 +74,23 @@ def oldknuser_smoel(request, name):
 		raise Http404
 	return HttpResponse(FileWrapper(img), mimetype="image/jpeg")
 
+def ik_chpasswd_handle_valid_form(request, form):
+	oldpw = form.cleaned_data['old_password']
+	newpw = form.cleaned_data['new_password']
+	change_password(request.user.username, oldpw, newpw)
+	t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd.""" 
+	request.user.message_set.create(message=(t % request.user.first_name))
+	return HttpResponseRedirect(reverse('smoelen-home'))
+
 @login_required
 def ik_chpasswd(request):
-	done = False
 	errl = []
-	user = request.user
 	if request.method == 'POST':
 		form = ChangePasswordForm(request.POST) 
 		if form.is_valid():
-			oldpw = form.cleaned_data['old_password']
-			newpw = form.cleaned_data['new_password']
 			try:
-				change_password(user.username, oldpw, newpw)
-				done = True
+				return ik_chpasswd_handle_valid_form(request, 
+						form)
 			except ChangePasswordError as e:
 				errl.extend(e.args)
 	else:
@@ -95,4 +99,4 @@ def ik_chpasswd(request):
 	errstr = humanized_enum(errl) 
 	return render_to_response('leden/ik_chpasswd.html', 
 			{ 'form':form, 'errors':errstr, 
-				'done':done, 'user':user })
+				'user':request.user })

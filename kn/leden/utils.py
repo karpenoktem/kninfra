@@ -9,7 +9,7 @@ def change_password(username, oldpassword, newpassword):
 			stdin=PIPE, stdout=PIPE, stderr=PIPE)
 	try:
 		out, err = pipe.communicate("%s\n%s\n"
-				% (oldpassword,newpassword))	
+				% (oldpassword,newpassword))
 	except Exception as e:
 		raise ChangePasswordError("te maken met een interne fout"
 				"en wel met het openen van exec_autsetpass")
