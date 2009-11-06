@@ -5,7 +5,7 @@ from kn.leden.settings import MAILDOMAIN
 
 GENDER_CHOICES = (
 	('m', 'Man'),
-	('f', 'Vrouw'),
+	('v', 'Vrouw'),
 )
 
 class Entity(models.Model):
