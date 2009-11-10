@@ -12,6 +12,10 @@ from django.core.files.storage import default_storage
 from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse
 from os import path
+from django.contrib.auth.views import redirect_to_login
+from kn import settings
+from hashlib import sha256
+from datetime import date
 
 # Create your views here.
 @login_required
@@ -100,3 +104,24 @@ def ik_chpasswd(request):
 	return render_to_response('leden/ik_chpasswd.html', 
 			{ 'form':form, 'errors':errstr, 
 				'user':request.user })
+
+
+def rauth(request):
+	if request.REQUEST.get('url', None) is None:
+		raise Http404
+
+	if request.REQUEST.get('validate', None) is not None and request.REQUEST.get('user') is not None:
+		token = sha256('%s|%s|%s|%s' % (request.REQUEST.get('user'), date.today(), request.REQUEST.get('url'), settings.SECRET_KEY)).hexdigest()
+		if request.REQUEST.get('validate') == token:
+			return HttpResponse("OK")
+		else:
+			return HttpResponse("INVALID")
+
+	if not request.user.is_authenticated():
+		# De replace() is een workaround voor http://code.djangoproject.com/ticket/11457
+		return redirect_to_login('/accounts/rauth/?url=%s' % request.REQUEST.get('url').replace('/', '%2F'))
+
+	token = sha256('%s|%s|%s|%s' % (request.user.username, date.today(), request.REQUEST.get('url'), settings.SECRET_KEY)).hexdigest()
+	if request.REQUEST.get('url').find('?') == -1:
+		return HttpResponseRedirect('%s?user=%s&token=%s' % (request.REQUEST.get('url'), request.user.username, token))
+	return HttpResponseRedirect('%s&user=%s&token=%s' % (request.REQUEST.get('url'), request.user.username, token))

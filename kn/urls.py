@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from kn.leden import views
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin, auth
@@ -22,4 +23,5 @@ urlpatterns = patterns('',
 	(r'^poll/', include('kn.poll.urls')),
 	url(r'^accounts/login/$', auth.views.login, name='login'),
 	url(r'^accounts/logout/$', auth.views.logout_then_login, name='logout'),
+	url(r'^accounts/rauth/$', 'kn.leden.views.rauth', name='rauth'),
 )
