@@ -105,23 +105,31 @@ def ik_chpasswd(request):
 			{ 'form':form, 'errors':errstr, 
 				'user':request.user })
 
-
 def rauth(request):
-	if request.REQUEST.get('url', None) is None:
+	""" An implementation of Jille Timmerman's rauth scheme """
+	if request.REQUEST.get('url') is None:
 		raise Http404
-
-	if request.REQUEST.get('validate', None) is not None and request.REQUEST.get('user') is not None:
-		token = sha256('%s|%s|%s|%s' % (request.REQUEST.get('user'), date.today(), request.REQUEST.get('url'), settings.SECRET_KEY)).hexdigest()
-		if request.REQUEST.get('validate') == token:
+	if (request.REQUEST.get('validate') is not None and
+			request.REQUEST.get('user') is not None):
+		token = sha256('%s|%s|%s|%s' % (
+			request.REQUEST['user'],
+			date.today(),
+			request.REQUEST['url'],
+			settings.SECRET_KEY)).hexdigest()
+		if request.REQUEST['validate'] == token:
 			return HttpResponse("OK")
-		else:
-			return HttpResponse("INVALID")
-
+		return HttpResponse("INVALID")
 	if not request.user.is_authenticated():
-		# De replace() is een workaround voor http://code.djangoproject.com/ticket/11457
-		return redirect_to_login('/accounts/rauth/?url=%s' % request.REQUEST.get('url').replace('/', '%2F'))
-
-	token = sha256('%s|%s|%s|%s' % (request.user.username, date.today(), request.REQUEST.get('url'), settings.SECRET_KEY)).hexdigest()
-	if request.REQUEST.get('url').find('?') == -1:
-		return HttpResponseRedirect('%s?user=%s&token=%s' % (request.REQUEST.get('url'), request.user.username, token))
-	return HttpResponseRedirect('%s&user=%s&token=%s' % (request.REQUEST.get('url'), request.user.username, token))
+		# De replace() is een workaround voor
+		#	http://code.djangoproject.com/ticket/11457
+		return redirect_to_login('%s?url=%s' % (
+				reverse('rauth'),
+				request.REQUEST['url'].replace('/', '%2F')))
+	token = sha256('%s|%s|%s|%s' % (request.user.username,
+					date.today(),
+					request.REQUEST['url'],
+					settings.SECRET_KEY)).hexdigest()
+	return HttpResponseRedirect('%s%suser=%s&token=%s' % (
+		'?' if request.REQUEST['url'].find('?') == -1 else '&',
+		request.REQUEST['url'],
+		request.user.username, token))
