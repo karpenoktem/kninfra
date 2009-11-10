@@ -130,6 +130,6 @@ def rauth(request):
 					request.REQUEST['url'],
 					settings.SECRET_KEY)).hexdigest()
 	return HttpResponseRedirect('%s%suser=%s&token=%s' % (
-		'?' if request.REQUEST['url'].find('?') == -1 else '&',
 		request.REQUEST['url'],
+		'?' if request.REQUEST['url'].find('?') == -1 else '&',
 		request.user.username, token))
