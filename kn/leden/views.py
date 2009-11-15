@@ -106,7 +106,7 @@ def ik_chpasswd(request):
 				'user':request.user })
 
 def rauth(request):
-	""" An implementation of Jille Timmerman's rauth scheme """
+	""" An implementation of Jille Timmermans' rauth scheme """
 	if request.REQUEST.get('url') is None:
 		raise Http404
 	if (request.REQUEST.get('validate') is not None and
