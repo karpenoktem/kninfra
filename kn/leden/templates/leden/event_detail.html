@@ -1,0 +1,37 @@
+{% extends "leden/base.html" %}
+{% load base %}
+
+{% block body %}
+<h1>{{ object.humanName }}</h1>
+<p>{{ object.description }}</p>
+<dl>
+	{% if object.owner %}
+	<dt>Georganiseerd door</dt>
+	<dd><a href="{{ object.owner.get_absolute_url }}"
+		>{{ object.owner.humanName }}</a></dd>
+	{% endif %}
+	{% if object.cost %}
+	<dt>Kosten</dt>
+	<dd>&euro; {{ object.cost }}</dd>
+	{% endif %}
+</dl>
+
+{% if message %}
+	<p>{{ message }}</p>
+{% endif %}
+{% if not subscription %}
+<form method="post" action="">
+	<input type="submit" value="Aanmelden!" /> 
+</form>
+{% endif %}
+
+{% if subscrlist %}
+	<h2>Aanmeldingen</h2>
+	<i>Je ziet deze lijst omdat je lid bent {{ object.owner.genitive_prefix }} {{ object.owner.humanName }}.</i>
+	<ul>
+	{% for subscr in subscrlist %}
+	<li><a href="{{ subscr.user.get_absolute_url }}">{{ subscr.user.get_full_name }} (debet: &euro; {{ subscr.debit }})</a></li>
+	{% endfor %}
+	</ul>
+{% endif %}
+{% endblock %}

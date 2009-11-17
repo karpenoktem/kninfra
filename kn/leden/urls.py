@@ -52,5 +52,7 @@ urlpatterns = patterns('',
 	    {'queryset':Study.objects.order_by('name').all(),
 	     'paginate_by':20}, name='study-list'),
 	url(r'^ik/wachtwoord$', views.ik_chpasswd, name="chpasswd"),
+	url(r'^event/(?P<name>[^/]+)/$',
+	    views.event_detail, name='event-detail'),
 )
 

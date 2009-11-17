@@ -1,7 +1,8 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from kn.base.text import humanized_enum
-from kn.leden.models import OldKnGroup, OldKnUser
+from django.contrib.auth.models import Group
+from kn.leden.models import OldKnGroup, OldKnUser, Event, EventSubscription
 from kn.leden.forms import ChangePasswordForm
 from kn.leden.utils import change_password, ChangePasswordError
 from kn import settings
@@ -133,3 +134,43 @@ def rauth(request):
 		request.REQUEST['url'],
 		'?' if request.REQUEST['url'].find('?') == -1 else '&',
 		request.user.username, token))
+
+@login_required
+def event_detail(request, name):
+	try:
+		event = Event.objects.get(name=name)
+	except Event.DoesNotExist:
+		raise Http404
+	try:
+		subscription = EventSubscription.objects.get(event=event, user=request.user)
+	except EventSubscription.DoesNotExist:
+		subscription = False
+
+	message = ""
+	if subscription:
+		if subscription.debit > 0:
+			# XXX euroteken ?
+			message = "Je bent al aangemeld, maar moet nog wel " + str(subscription.debit) + " euro betalen."
+		else:
+			message = "Je bent al aangemeld!"
+	elif request.method == 'POST':
+		subscription = EventSubscription()
+		subscription.event = event
+		subscription.user = OldKnUser.objects.get(username=request.user.username)
+		subscription.debit = event.cost
+		subscription.save()
+		message = "Je bent aangemeld!"
+
+	try:
+		request.user.groups.get(name=event.owner)
+		# An exception would have been triggered, if we weren't in the group as specified by owner
+		subscrlist = EventSubscription.objects.filter(event=event)
+	except Group.DoesNotExist:
+		subscrlist = None
+
+	return render_to_response('leden/event_detail.html',
+			{'object': event,
+			 'message': message, 
+			 'subscrlist': subscrlist, 
+			 'subscription': subscription},
+			context_instance=RequestContext(request))

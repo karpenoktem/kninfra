@@ -1,7 +1,8 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from models import (Study, OldKnUser, EduInstitute, OldKnGroup, OldSeat, Alias,
 		    Transaction, TransactionType, Certificate,
-		    CertificateOwnership, KnUser, KnGroup, Entity, Seat)
+		    CertificateOwnership, KnUser, KnGroup, Entity, Seat,
+				Event, EventSubscription)
 from django.template import RequestContext
 from django.contrib.auth.admin import AdminPasswordChangeForm, UserAdmin
 from django.utils.html import escape
@@ -45,3 +46,5 @@ admin.site.register(KnUser)
 admin.site.register(KnGroup)
 admin.site.register(Entity)
 admin.site.register(Seat)
+admin.site.register(Event)
+admin.site.register(EventSubscription)
