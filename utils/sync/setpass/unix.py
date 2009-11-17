@@ -1,9 +1,8 @@
-from subprocess import Popen, PIPE, call
+from subprocess import call
+import crypt
+from common import pseudo_randstr
+from kn.settings import SYSTEM_USERMOD_PATH
 
 def setpass(user, password):
-	makepassword = Popen(['makepasswd', '--clearfrom=-', '--crypt'],
-			stdin=PIPE, stdout=PIPE)
-	makepassword.stdin.write(password)
-	makepassword.stdin.close()
-	crypthash = makepassword.stdout.read().split(' ')[-1][:-1]
-	call(['usermod', '-p', crypthash, user])
+	crypthash = crypt.crypt(password, pseudo_randstr(2))
+	call([SYSTEM_USERMOD_PATH, '-p', crypthash, user])
