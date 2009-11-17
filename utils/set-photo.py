@@ -2,15 +2,20 @@ import _import
 
 from common import *
 from kn.leden.models import OldKnUser
+from django.core.files.storage import default_storage
+from kn.settings import SMOELEN_PHOTOS_PATH
+from os import path
 import sys
 import subprocess
 
-def main():
-	user = OldKnUser.objects.get(username=sys.argv[1])
-
-	subprocess.call(['convert', '-resize', '200x', sys.argv[2],
-			 'jpg:/var/django/kn/storage/smoelen/%s.jpg' % \
-					 user.username])
+def main(username, photo):
+	user = OldKnUser.objects.get(username=username)
+	subprocess.call(['convert', '-resize', '200x', photo,
+			"jpg:%s.jpg" % (path.join(SMOELEN_PHOTOS_PATH,
+					user.username))])
 
 if __name__ == '__main__':
-	main()
+	if not len(sys.argv) == 3:
+		print "python set-photo.py <username> <path-to-photo>"
+		sys.exit(-1)
+	main(*sys.argv[1:3])
