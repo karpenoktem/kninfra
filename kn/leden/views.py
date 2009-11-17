@@ -6,7 +6,6 @@ from kn.leden.forms import ChangePasswordForm
 from kn.leden.utils import change_password, ChangePasswordError
 from kn import settings
 from django.shortcuts import render_to_response
-from django.core.files.storage import default_storage
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.servers.basehttp import FileWrapper
