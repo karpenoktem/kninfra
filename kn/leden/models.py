@@ -238,25 +238,3 @@ class TransactionType(models.Model):
 
 	def __unicode__(self):
 		return unicode(self.name)
-
-class Event(models.Model):
-	name = models.CharField(max_length=32)
-	humanName = models.CharField(max_length=120)
-	description = models.TextField()
-	owner = models.ForeignKey('OldKnGroup')
-	cost = models.DecimalField(max_digits=11, decimal_places=2)
-
-	def __unicode__(self):
-		return unicode('%s (%s)' % (self.humanName, self.owner))
-
-class EventSubscription(models.Model):
-	event = models.ForeignKey('Event')
-	user = models.ForeignKey('OldKnUser')
-	debit = models.DecimalField(max_digits=11, decimal_places=2)
-
-	class Meta:
-		unique_together = (("event", "user"), )
-		ordering = ['id']
-
-	def __unicode__(self):
-		return unicode(self.user.username + " for " + self.event.humanName)

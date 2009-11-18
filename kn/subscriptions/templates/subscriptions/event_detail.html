@@ -16,9 +16,6 @@
 	{% endif %}
 </dl>
 
-{% if message %}
-	<p>{{ message }}</p>
-{% endif %}
 {% if not subscription %}
 <form method="post" action="">
 	<input type="submit" value="Aanmelden!" /> 
@@ -27,10 +24,13 @@
 
 {% if subscrlist %}
 	<h2>Aanmeldingen</h2>
-	<i>Je ziet deze lijst omdat je lid bent {{ object.owner.genitive_prefix }} {{ object.owner.humanName }}.</i>
+	<em>Je ziet deze lijst omdat je lid bent
+	{{ object.owner.genitive_prefix }} {{ object.owner.humanName }}.</em>
 	<ul>
 	{% for subscr in subscrlist %}
-	<li><a href="{{ subscr.user.get_absolute_url }}">{{ subscr.user.get_full_name }} (debet: &euro; {{ subscr.debit }})</a></li>
+	<li><a href="{{ subscr.user.get_absolute_url }}"
+		>{{ subscr.user.get_full_name }} (debet: &euro;
+		{{ subscr.debit }})</a></li>
 	{% endfor %}
 	</ul>
 {% endif %}
