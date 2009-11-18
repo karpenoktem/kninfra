@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.models import Group
 from kn.subscriptions.models import Event, EventSubscription
@@ -39,9 +40,8 @@ def event_detail(request, name):
 		subscrlist = EventSubscription.objects.filter(event=event)
 	except Group.DoesNotExist:
 		subscrlist = None
-	return render_to_response('leden/event_detail.html',
+	return render_to_response('subscriptions/event_detail.html',
 			{'object': event,
-			 'message': message, 
 			 'subscrlist': subscrlist, 
 			 'subscription': subscription},
 			context_instance=RequestContext(request))
