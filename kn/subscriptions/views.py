@@ -19,7 +19,7 @@ def event_detail(request, name):
 	if subscription:
 		if subscription.debit > 0:
 			request.user.message_set.create(message=(
-				"Je bent al aangemeld, maar moet nog wel €%s"+
+				"Je bent al aangemeld, maar moet nog wel %s"+
 				" euro betalen.")) % subscription.debit
 		else:
 			request.user.message_set.create(
