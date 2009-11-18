@@ -23,7 +23,7 @@ def event_detail(request, name):
 				" euro betalen.")) % subscription.debit
 		else:
 			request.user.message_set.create(
-					message="Je bent aangemeld!"
+					message="Je bent aangemeld!")
 	elif request.method == 'POST':
 		subscription = EventSubscription(
 			event=event,
