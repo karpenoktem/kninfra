@@ -3,7 +3,7 @@ from __future__ import with_statement
 import _import
 import random
 import unicodedata
-import kn.leden.settings
+import kn.settings
 
 ALPHA = 'qwertyuiopasdfghjklzxcvbnm'
 NUM = '1234567890'
@@ -69,7 +69,7 @@ def emailfy_name(first, last):
 			raise "Invalid character %s found" % c
 	return n
 
-MAILDOMAIN = kn.leden.settings.MAILDOMAIN
+MAILDOMAIN = kn.settings.MAILDOMAIN
 LISTDOMAIN = 'lists.'+MAILDOMAIN
 
 EMAIL_ALLOWED = frozenset(
