@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 
-from kn.leden.settings import MAILDOMAIN
+from kn.settings import MAILDOMAIN
 
 GENDER_CHOICES = (
 	('m', 'Man'),
