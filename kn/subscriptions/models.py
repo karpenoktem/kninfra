@@ -5,6 +5,7 @@ class Event(models.Model):
 	name = models.CharField(max_length=32)
 	humanName = models.CharField(max_length=120)
 	description = models.TextField()
+	mailBody = models.TextField()
 	owner = models.ForeignKey(OldKnGroup)
 	cost = models.DecimalField(max_digits=11, decimal_places=2)
 
