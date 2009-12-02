@@ -26,7 +26,7 @@ def event_detail(request, name):
 				" euro betalen.") % subscription.debit)
 		else:
 			request.user.message_set.create(
-					message="Je bent aangemeld!")
+					message="Je bent aangemeld en je betaling is verwerkt!")
 	elif request.method == 'POST':
 		subscription = EventSubscription(
 			event=event,
@@ -42,7 +42,7 @@ def event_detail(request, name):
 				     ['%s@%s' % (event.owner.name, MAILDOMAIN)],
 						 headers={'Cc': full_owner_address, 'Reply-To': full_owner_address})
 		email.send()
-		request.user.message_set.create(message="Je bent aangemeld!")
+		request.user.message_set.create(message="Je bent aangemeld en moet nu %s euro betalen" % event.cost)
 	try:
 		request.user.groups.get(name=event.owner)
 		# An exception would have been triggered,
