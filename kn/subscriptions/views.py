@@ -6,7 +6,6 @@ from kn.subscriptions.models import Event, EventSubscription
 from kn.leden.models import OldKnUser, OldKnGroup
 from django.http import Http404
 from django.core.mail import EmailMessage
-from kn.settings import MAILDOMAIN
 
 @login_required
 def event_detail(request, name):
@@ -26,7 +25,8 @@ def event_detail(request, name):
 				" euro betalen.") % subscription.debit)
 		else:
 			request.user.message_set.create(
-					message="Je bent aangemeld en je betaling is verwerkt!")
+				message="Je bent aangemeld en je"+\
+						" betaling is verwerkt!")
 	elif request.method == 'POST':
 		subscription = EventSubscription(
 			event=event,
@@ -34,15 +34,23 @@ def event_detail(request, name):
 				username=request.user.username),
 			debit=event.cost)
 		subscription.save()
-		full_owner_address = '%s <%s@%s>' % (event.owner.humanName, event.owner.name, MAILDOMAIN)
-		email = EmailMessage("Aanmelding %s" % event.humanName,
-				     event.mailBody % {'firstName': request.user.first_name},
-				     'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-				     ['%s@%s' % (request.user.username, MAILDOMAIN)],
-				     ['%s@%s' % (event.owner.name, MAILDOMAIN)],
-						 headers={'Cc': full_owner_address, 'Reply-To': full_owner_address})
+		full_owner_address = '%s <%s>' % (
+				event.owner.humanName,
+				event.owner.primary_email)
+		email = EmailMessage(
+				"Aanmelding %s" % event.humanName,
+				 event.mailBody % {
+					'firstName': request.user.first_name},
+				'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
+				[request.user.oldknuser.email],
+				[event.owner.primary_email],
+				headers={
+					'Cc': full_owner_address,
+					'Reply-To': full_owner_address})
 		email.send()
-		request.user.message_set.create(message="Je bent aangemeld en moet nu %s euro betalen" % event.cost)
+		request.user.message_set.create(
+			message="Je bent aangemeld en moet "+\
+					"nu %s euro betalen" % event.cost)
 	try:
 		request.user.groups.get(name=event.owner)
 		# An exception would have been triggered,
