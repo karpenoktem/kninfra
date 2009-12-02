@@ -150,6 +150,8 @@ class OldKnUser(User, NamedMixin):
 	got_incasso = models.BooleanField()
 	in_aan = models.BooleanField(default=True)
 
+	remarks = models.TextField(blank=True)
+
 	@property
 	def primary_name(self):
 		return self.username
