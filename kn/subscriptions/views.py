@@ -42,7 +42,7 @@ def event_detail(request, name):
 				 event.mailBody % {
 					'firstName': request.user.first_name},
 				'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-				[request.user.oldknuser.email],
+				[request.user.oldknuser.primary_email],
 				[event.owner.primary_email],
 				headers={
 					'Cc': full_owner_address,
