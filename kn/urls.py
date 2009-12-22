@@ -19,6 +19,8 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
 	(r'^base/', include('kn.base.urls')),
 	(r'^admin/(.*)', admin.site.root),
+	(r'^groups/(?P<subdir>[^/]+)/(?P<path>.*)',
+		'kn.browser.views.homedir', {'root':'/groups/kn'}),
 	(r'^smoelen/', include('kn.leden.urls')),
 	(r'^activiteit/', include('kn.subscriptions.urls')),
 	(r'^poll/', include('kn.poll.urls')),
