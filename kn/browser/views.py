@@ -2,6 +2,7 @@ from django.core.servers.basehttp import FileWrapper
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.conf import settings
+import mimetypes
 import os.path
 
 def homedir(request, root, subdir, path):
@@ -19,5 +20,6 @@ def homedir(request, root, subdir, path):
 		p = p2
 	else:
 		raise Http404
-	return HttpResponse(FileWrapper(open(p)))
+	return HttpResponse(FileWrapper(open(p)),
+			mimetype=mimetypes.guess_type(p)[0])
 
