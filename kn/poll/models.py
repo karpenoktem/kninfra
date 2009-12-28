@@ -12,6 +12,9 @@ class Poll(models.Model):
 class AnswerSet(models.Model):
 	description = models.TextField()
 
+	def __unicode__(self):
+		return self.description
+
 class Answer(models.Model):
 	answerSet = models.ForeignKey('AnswerSet')
 	text = models.TextField()
