@@ -3,6 +3,8 @@
 import _import
 
 import sys
+from subprocess import call, Popen, PIPE
+from os import path
 from Mailman import Utils, MailList, UserDesc
 
 def execute(args):
@@ -33,6 +35,33 @@ def execute(args):
 			m.Save()
 		finally:
 			m.Unlock()
+	elif cmd == "create":
+		if len(args) != 2:
+			print "Expected 1 parameter"
+			return -4
+		list_name = args[1]
+		
+		# First, create an unpopulated unconfigured mailing list
+		#  using one of the mailman scripts.
+		#
+		# $ ~mailman/bin/newlist --help
+		# Usage: ./newlist [options] [listname [listadmin-addr 
+		#					[admin-password]]]
+		#  [...]
+		#
+		# Note that newlist will wait for a newline.
+		expath = path.expanduser("~mailman/bin/newlist")
+		pwd = Popen("/root/bin/passgen", stdout=PIPE
+				).communicate()[0].strip()
+		cmd = [expath, list_name, "wortel@karpenoktem.nl", pwd]
+		Popen(cmd, stdin=PIPE, stdout=PIPE).communicate()
+		
+		raise NotImplementedError()
+
+		call(["cp", "--recursive", "--no-target-directory",
+			"--force",
+			"/var/lib/mailman/lists/skel",
+			"/var/lib/mailman/lists/%s" % list_name])
 	else:
 		print 'Unknown command'
-		return -4
+		return -5
