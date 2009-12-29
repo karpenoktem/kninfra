@@ -76,26 +76,23 @@ def sync_bd(cs, cal):
 	feed = cs.CalendarQuery(query)
 	while True:
 		for event in feed.entry:
-			if not event.title.text in fn_lut:
-				print "Deleting stray event: %s" % \
-						event.title.text
+			fn = unicode(event.title.text, 'UTF-8')
+			if not fn in fn_lut:
+				print "Deleting stray event: %s" % fn
 				cs.DeleteEvent(event.GetEditLink().href)
 				continue
-			if not fn_lut[event.title.text] in todo:
-				print "Deleting double event: %s" % \
-						event.title.text
+			if not fn_lut[fn] in todo:
+				print "Deleting double event: %s" % fn
 				cs.DeleteEvent(event.GetEditLink().href)
 				continue
-			todo.remove(fn_lut[event.title.text])
+			todo.remove(fn_lut[fn])
 			if not hasattr(event, 'recurrence'):
-				print 'Deleting RECC-less EVENT: %s' % \
-						event.title.text
+				print 'Deleting RECC-less EVENT: %s' % fn
 				cs.DeleteEvent(event.GetEditLink().href)
 				continue
-			if event.recurrence.text != rd_lut[event.title.text]:
+			if event.recurrence.text != rd_lut[fn]:
 				print "RECC: %s %s != %s; deleting" % (
-						event.title.text,
-						rd_lut[event.title.text],
+						fn, rd_lut[fn],
 						event.recurrence.text)
 				cs.DeleteEvent(event.GetEditLink().href)
 				continue
