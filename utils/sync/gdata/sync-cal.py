@@ -18,6 +18,7 @@ def acl_sync_cal(cs, cal, initial_role):
 	feed = cs.GetCalendarAclFeed(acl_url)
 	cur = dict()
 	acc = set()
+	todo = set()
 	for a_rule in feed.entry:
 		if not a_rule.role.value == GCAL_SCHEME + initial_role:
 			print "%s: unknown role: %s" % (a_rule.scope.value,
@@ -27,6 +28,11 @@ def acl_sync_cal(cs, cal, initial_role):
 	for m in OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all():
 		acc.add(m.email.lower())
 		if m.email.lower() in cur: continue
+		todo.add(m)	
+	for n in frozenset(cur.iterkeys()) - acc:
+		print "Deleting stray %s" % n
+		cs.DeleteAclEntry(cur[n])
+	for m in todo:
 		rule = gdata.calendar.CalendarAclEntry()
 		rule.scope = gdata.calendar.Scope(value=m.email)
 		rule.scope.type = 'user'
@@ -41,9 +47,6 @@ def acl_sync_cal(cs, cal, initial_role):
 				print 'Warning: Version Conflict -- skipped'
 			else:
 				raise
-	for n in frozenset(cur.iterkeys()) - acc:
-		print "Deleting stray %s" % n
-		cs.DeleteAclEntry(cur[n])
 
 def icaldate(d):
 	return "%s%s%s" % (d.year,
