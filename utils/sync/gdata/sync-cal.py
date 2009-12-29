@@ -10,22 +10,27 @@ from gdata.service import RequestError
 import datetime
 import atom
 
+GCAL_SCHEME = 'http://schemas.google.com/gCal/2005#'
+
 def acl_sync_cal(cs, cal, initial_role):
 	acl_url = 'http://www.google.com/calendar'+ \
 				     '/feeds/%s/acl/full' % cal
 	feed = cs.GetCalendarAclFeed(acl_url)
-	cur = set()
+	cur = dict()
 	acc = set()
 	for a_rule in feed.entry:
-		cur.add(a_rule.scope.value)
+		if not a_rule.role.value == GCAL_SCHEME + initial_role:
+			print "%s: unknown role: %s" % (a_rule.scope.value,
+							a_rule.role.value)
+			continue
+		cur[a_rule.scope.value] = a_rule.GetEditLink().href
 	for m in OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all():
 		acc.add(m.email.lower())
 		if m.email.lower() in cur: continue
 		rule = gdata.calendar.CalendarAclEntry()
 		rule.scope = gdata.calendar.Scope(value=m.email)
 		rule.scope.type = 'user'
-		rv = 'http://schemas.google.com/gCal/2005#' + \
-				initial_role
+		rv = GCAL_SCHEME + initial_role
 		rule.role = gdata.calendar.Role(value=rv)
 		print 'Adding %s' % m.email
 		try:
@@ -36,8 +41,9 @@ def acl_sync_cal(cs, cal, initial_role):
 				print 'Warning: Version Conflict -- skipped'
 			else:
 				raise
-	for n in cur - acc:
-		print 'WARN Stray %s' % n
+	for n in frozenset(cur.iterkeys()) - acc:
+		print "Deleting stray %s" % n
+		cs.DeleteAclEntry(cur[n])
 
 def icaldate(d):
 	return "%s%s%s" % (d.year,
