@@ -77,20 +77,27 @@ def sync_bd(cs, cal):
 	while True:
 		for event in feed.entry:
 			if not event.title.text in fn_lut:
-				print "STRAY EVENT: %s" % event.title.text
+				print "Deleting stray event: %s" % \
+						event.title.text
+				cs.DeleteEvent(event.GetEditLink().href)
 				continue
 			if not fn_lut[event.title.text] in todo:
-				print 'DOUBLE EVENT: %s' % event.title.text
+				print "Deleting double event: %s" % \
+						event.title.text
+				cs.DeleteEvent(event.GetEditLink().href)
 				continue
 			todo.remove(fn_lut[event.title.text])
 			if not hasattr(event, 'recurrence'):
-				print 'RECC-less EVENT: %s' % event.title.text
+				print 'Deleting RECC-less EVENT: %s' % \
+						event.title.text
+				cs.DeleteEvent(event.GetEditLink().href)
 				continue
 			if event.recurrence.text != rd_lut[event.title.text]:
-				print "RECC: %s %s != %s" % (
+				print "RECC: %s %s != %s; deleting" % (
 						event.title.text,
 						rd_lut[event.title.text],
 						event.recurrence.text)
+				cs.DeleteEvent(event.GetEditLink().href)
 				continue
 		if feed.GetNextLink() is None:
 			break
