@@ -6,6 +6,7 @@ from cal_common import *
 from kn.leden.models import OldKnUser, OldKnGroup
 from iso8601 import parse_date
 import gdata.calendar.service
+from gdata.service import RequestError
 import datetime
 import atom
 
@@ -27,7 +28,14 @@ def acl_sync_cal(cs, cal, initial_role):
 				initial_role
 		rule.role = gdata.calendar.Role(value=rv)
 		print 'Adding %s' % m.email
-		cs.InsertAclEntry(rule, acl_url)
+		try:
+			cs.InsertAclEntry(rule, acl_url)
+		except RequestError, e:
+			if (e.args[0]['status'] == 409 and
+			    e.args[0]['reason'] == 'Conflict'):
+				print 'Warning: Version Conflict -- skipped'
+			else:
+				raise
 	for n in cur - acc:
 		print 'WARN Stray %s' % n
 
