@@ -12,6 +12,10 @@ class Event(models.Model):
 	def __unicode__(self):
 		return unicode('%s (%s)' % (self.humanName, self.owner))
 
+	@models.permalink
+	def get_absolute_url(self):
+		return ('event-detail', (), {'name': self.name})
+
 class EventSubscription(models.Model):
 	event = models.ForeignKey('Event')
 	user = models.ForeignKey(OldKnUser)
