@@ -56,14 +56,12 @@ def event_detail(request, name):
 		# An exception would have been triggered,
 		# if we weren't in the group as specified by owner
 		subscrlist = EventSubscription.objects.filter(event=event)
-		subscrcount = subscrlist.count()
 		subscrcount_debit = subscrlist.exclude(debit=0).count()
 	except Group.DoesNotExist:
 		subscrlist = None
 	return render_to_response('subscriptions/event_detail.html',
 			{'object': event,
 			 'subscrlist': subscrlist,
-			 'subscrcount': subscrcount,
 			 'subscrcount_debit': subscrcount_debit,
 			 'subscription': subscription},
 			context_instance=RequestContext(request))
