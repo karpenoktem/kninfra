@@ -1,6 +1,6 @@
 from common import *
 import MySQLdb
-import md5
+from hashlib import md5
 
 def setpass(user, passwd):
 	hashed_passwd = md5.new(user+passwd).hexdigest()
