@@ -59,6 +59,7 @@ def event_detail(request, name):
 		subscrcount_debit = subscrlist.exclude(debit=0).count()
 	except Group.DoesNotExist:
 		subscrlist = None
+		subscrcount_debit = None
 	return render_to_response('subscriptions/event_detail.html',
 			{'object': event,
 			 'subscrlist': subscrlist,
