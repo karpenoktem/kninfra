@@ -13,7 +13,7 @@ def sync_forum(loginFile):
 	for username, in c.fetchall():
 		forum_users.add(username)
 	forum_users_unaccounted = set(forum_users)
-	for m in OldKngroup.objects.all():
+	for m in OldKnGroup.objects.all():
 		if not m.name in forum_users:
 			print "forum %s user-add %s %s" % (
 						loginFile,
