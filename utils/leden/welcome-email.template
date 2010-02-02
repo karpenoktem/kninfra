@@ -1,0 +1,46 @@
+Beste %(fullName)s,
+
+Welkom bij Karpe Noktem!
+
+Van jouw inschrijfformulier hebben wij het volgende overgenomen.
+
+ voornaam              %(firstName)s
+ achternaam            %(lastName)s
+ geslacht              %(gender)s
+ geboortedatum         %(dateOfBirth)s
+ datum van toetreding  %(dateJoined)s
+
+ e-mail adres          %(email)s
+ telefoonnummer        %(telephone)s
+
+ adres
+  straat               %(addr_street)s
+  huisnummer           %(addr_number)s
+  postcode             %(addr_zipCode)s
+  woonplaats           %(addr_city)s
+ 
+ studie
+  instituut            %(institute)s
+  studie               %(study)s
+  student-nummer       %(studentNumber)s
+
+Kun je terugmailen of deze informatie klopt en deze zo nodig aanvullen of 
+verbeteren?
+
+Een keer in de week ontvang je op dit e-mailadres een ledenmail.
+In de ledenmail staat de agenda met de komende activiteiten en andere
+mededelingen.  De agenda is ook te vinden op onze website:
+
+	http://karpenoktem.nl/agenda
+
+Onze Webcie stuurt een afzonderlijke e-mail met daarin een gebruikersnaam
+en wachtwoord voor onder andere het forum en het smoelenboek en onze
+penningmeester stuurt een over de betaling van de contributie.
+
+Wederom hartelijk welkom bij Karpe Noktem en tot op een van onze activiteiten.
+
+namens het bestuur,
+
+
+  Bas Westerbaan
+  Secretaris
