@@ -9,8 +9,9 @@ import os.path
 def homedir(request, root, subdir, path):
 	original_root = root
 	root = os.path.abspath(root)
-	p1 = os.path.abspath(os.path.join(root, subdir, 'public_html', path))
-	p2 = os.path.abspath(os.path.join(root, subdir, 'protected_html', path))
+	p1 = os.path.realpath(os.path.join(root, subdir, 'public_html', path))
+	p2 = os.path.realpath(os.path.join(root, subdir,
+		'protected_html', path))
 	if (not p1[:len(root)] == root or not p2[:len(root)] == root):
 		raise ValueError, "Going outside of the root"
 	if os.path.exists(p1):
