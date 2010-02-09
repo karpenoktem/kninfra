@@ -5,6 +5,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.conf import settings
 import mimetypes
 import os.path 
+import os
 
 def homedir(request, root, subdir, path):
 	original_root = root
@@ -24,6 +25,9 @@ def homedir(request, root, subdir, path):
 	else:
 		raise Http404
 	if os.path.isfile(p):
+		# world read access?
+		if os.stat(p).st_mode & 4 != 4:
+			raise Http404
 		return HttpResponse(FileWrapper(open(p)),
 				mimetype=mimetypes.guess_type(p)[0])
 	l = set()
