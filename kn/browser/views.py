@@ -1,11 +1,13 @@
+from django.shortcuts import render_to_response
 from django.core.servers.basehttp import FileWrapper
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.conf import settings
 import mimetypes
-import os.path
+import os.path 
 
 def homedir(request, root, subdir, path):
+	original_root = root
 	root = os.path.abspath(root)
 	p1 = os.path.abspath(os.path.join(root, subdir, 'public_html', path))
 	p2 = os.path.abspath(os.path.join(root, subdir, 'protected_html', path))
@@ -20,6 +22,20 @@ def homedir(request, root, subdir, path):
 		p = p2
 	else:
 		raise Http404
-	return HttpResponse(FileWrapper(open(p)),
-			mimetype=mimetypes.guess_type(p)[0])
+	if os.path.isfile(p):
+		return HttpResponse(FileWrapper(open(p)),
+				mimetype=mimetypes.guess_type(p)[0])
+	l = set()
+	if os.path.isdir(p1):
+		l.update(os.listdir(p1))
+	if os.path.isdir(p2):
+		l.update(os.listdir(p2))
+	_p = os.path.join(root, subdir, '...', path)
+	return render_to_response('browser/dirlist.html',
+			{'list': [(c, os.path.join(path, c),
+				   os.path.isdir(os.path.join(p1, c)) or
+				   os.path.isdir(os.path.join(p2, c)))
+					for c in sorted(l)],
+			 'subdir': subdir, 'root': original_root,
+			 'path': _p})
 
