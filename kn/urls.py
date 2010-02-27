@@ -11,14 +11,6 @@ from kn.base.views import direct_to_folder
 from django.conf import settings
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^kn/', include('kn.foo.urls')),
-
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
 	(r'^base/', include('kn.base.urls')),
 	(r'^admin/(.*)', admin.site.root),
 	(r'^groups/(?P<subdir>[^/]+)/(?P<path>.*)',
