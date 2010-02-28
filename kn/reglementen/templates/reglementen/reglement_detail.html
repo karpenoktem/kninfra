@@ -1,0 +1,23 @@
+{% extends "base/base.html" %}
+
+{% block body %}
+<h1>{{ reglement.humanName }}</h1>
+<p>{{ reglement.description }}</p>
+<ul>
+{% for version in versions %}
+	<li><a href="{{ version.get_absolute_url }}"
+		>{{ version.humanName }}</a>
+	{% if version.validFrom %}
+	Aangenomen op {{ version.validFrom }}.
+		{% if version.validUntil %}
+		Was van kracht tot {{ version.validUntil }}.
+		{% else %}
+		Nog steeds van kracht.
+		{% endif %}
+	{% else %}
+	(Nog) niet aangenomen.
+	{% endif %}
+	</li>
+{% endfor %}
+</ul>
+{% endblock %}

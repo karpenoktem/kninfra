@@ -1,0 +1,22 @@
+{% extends "base/base.html" %}
+{% load base %}
+
+{% block body %}
+<h1>{{ version.reglement.humanName }}</h1>
+<h2>{{ version.humanName }}</h2>
+<p>{{ version.description }}</p>
+<p>
+{% if not version.validFrom %}
+	Deze versie is (nog) niet aangenomen en daarmee niet van kracht.
+{% else %}
+	{% if version.validUntil %}
+	Deze versie was aangenomen op {{ version.validFrom }} en van kracht
+	tot {{ version.validUntil }}.
+	{% else %}
+	Deze versie was aangenomen op {{ version.validFrom }} en nog steeds
+	van kracht.
+	{% endif %}
+	{{content|mark_safe}}
+{% endif %}
+</p>
+{% endblock %}
