@@ -14,3 +14,8 @@ def email_filter(value):
 		"'%s', '%s', '%s')</script><noscript>X@Y.Z waar Z=%s,"+
 		" Y=%s, X=%s</noscript>") % (\
 		e, d, n, e, d, n))
+
+@stringfilter
+@register.filter(name='mark_safe')
+def mark_safe_filter(value):
+	return mark_safe(value)
