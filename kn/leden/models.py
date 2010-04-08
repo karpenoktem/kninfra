@@ -61,6 +61,7 @@ class KnUser(Entity):
 	study = models.ForeignKey('Study', null=True)
 	got_incasso = models.BooleanField()
 	in_aan = models.BooleanField(default=True)
+	in_oud = models.BooleanField(default=True)
 
 	@property
 	def primary_name(self):
@@ -149,6 +150,7 @@ class OldKnUser(User, NamedMixin):
 	study = models.ForeignKey('Study', null=True)
 	got_incasso = models.BooleanField()
 	in_aan = models.BooleanField(default=True)
+	in_oud = models.BooleanField(default=True)
 
 	remarks = models.TextField(blank=True)
 
