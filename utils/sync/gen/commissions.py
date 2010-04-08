@@ -57,6 +57,8 @@ def sync_commissions():
 	change_comm_membership('eerstejaars', eerstejaars)
 	change_comm_membership('leden-oud',
 		on_leden - leden)
+	change_comm_membership('oud',
+		filter(lambda x: x.in_oud, on_leden - leden))
 	change_comm_membership('incasso',
 		filter(lambda x: x.got_incasso, leden))
 	change_comm_membership('geen-incasso',
