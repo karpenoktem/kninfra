@@ -6,6 +6,7 @@ from kn.poll.models import Filling
 from kn.subscriptions.models import Event, EventSubscription
 from django.db.models import FieldDoesNotExist
 
+import decimal
 import datetime
 import django.db as db
 import simplejson as json
@@ -38,7 +39,8 @@ def dump(model):
 				continue
 			v = getattr(item, f.name)
 			if isinstance(v, datetime.datetime) or \
-			   isinstance(v, datetime.date):
+			   isinstance(v, datetime.date) or \
+			   isinstance(v, decimal.Decimal):
 				dumped[f.name] = f.value_to_string(
 							item)
 				continue
