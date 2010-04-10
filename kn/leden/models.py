@@ -119,18 +119,6 @@ class Study(models.Model):
 	def __unicode__(self):
 		return self.name
 
-class Certificate(models.Model):
-	name = models.CharField(max_length=80)
-
-	def __unicode__(self):
-		return self.name
-
-class CertificateOwnership(models.Model):
-	certificate = models.ForeignKey('Certificate')
-	user = models.ForeignKey('OldKnUser')
-	start = models.DateField(null=True, blank=True)
-	end = models.DateField(null=True, blank=True)
-
 class OldKnUser(User, NamedMixin):
 	dateOfBirth = models.DateField(null=True, blank=True)
 	dateJoined = models.DateField(null=True, blank=True)
