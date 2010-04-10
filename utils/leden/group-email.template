@@ -1,0 +1,46 @@
+Beste %(fullName)s,
+
+Karpe Noktem kent vele commissies, groepen en e-maillijsten.  Deze zijn allemaal
+te vinden op het smoelenboek[1].  Voor het gemak sturen wij hierbij een
+overzicht.
+
+Er zijn twee soorten commissies.  Activiteiten commissies en faciliterende
+commissies.  Bijna alle activiteiten buiten borrels en feesten worden
+georganiseerd door activiteiten commissies, zoals de naam al doet vermoeden.
+(De meeste) faciliterende commissies organiseren niet direct activiteiten, maar
+maken Karpe Noktem wel mogelijk door een taak op zich op zich te nemen.  De 
+BarCo draait bijvoorbeeld de bar en de Disco de platen.
+
+Commissies moeten aangenomen worden op een ALV.  Er zijn een heleboel andere
+groepen leden, die activiteiten organiseren, die geen commissie zijn.  Deze
+vallen onder de groepen.  Elke groep wordt genoemd op het smoelenboek en heeft
+eigen digitale voorzieningen zoals een e-maillijst.  Elk lid kan een groep
+oprichten door dit te vragen aan de secretaris.
+
+Naast de e-maillijsten voor groepen en commissies zijn er nog een paar die los
+staan.  Een deel daarvan zijn automatische e-maillijsten -- dat zijn
+e-maillijsten waar het lidmaatschap automatisch wordt geregeld.  Naast deze
+automatische e-maillijsten zijn er ook een aantal e-maillijsten, waar elk lid
+zich voor kan aanmelden.  Voorbeelden daarvan zijn de bekende uit@karpenoktem.nl
+en de nieuwe discussie@karpenoktem.nl.
+
+Hier is een lijst van al deze groepen.  Staat er een * achter een groep, dan
+ben je daar lid van.
+
+%(tree)s
+
+Verder bekleed jij de volgende posten:
+
+%(seats)s
+
+Klopt er iets niet, heb je een vraag of wil je een groep oprichten?  Ik help
+je graag!
+
+Met vriendelijke groet,
+
+
+  Bas
+  Secretaris
+
+--
+[1] http://karpenoktem.nl/smoelen
