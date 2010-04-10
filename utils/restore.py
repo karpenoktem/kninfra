@@ -11,6 +11,7 @@ from django.contrib.contenttypes.models import ContentType
 from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias,
 		EduInstitute, Study
 from kn.poll.models import Answer, AnswerSet, Question, Filling, Poll
+from kn.reglementen.models import Version
 from kn.subscriptions.models import Event, EventSubscription
 
 def restore(d):
