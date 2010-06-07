@@ -2,7 +2,8 @@
 
 {% block body %}
 <h1>Smoelenboek</h1>
-<p>Je kunt hier onder andere</p>
+<p>Hallo {{user.get_full_name }},</p>
+<p>je kunt hier onder andere</p>
 <ul>
 	<li><a href="{% url leden-list %}"
 		>alle gebruikers</a> met onder andere leden en oud-leden;</li>
