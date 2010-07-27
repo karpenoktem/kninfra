@@ -1,5 +1,8 @@
 import _import
-import Mailman.MailList
+try:
+	import Mailman.MailList
+except ImportError:
+	pass
 from kn.leden.models import (OldSeat, OldKnGroup, OldKnUser, Alias,
 				Seat, KnGroup, KnUser)	
 
