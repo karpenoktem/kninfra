@@ -3,6 +3,7 @@
 {% block body %}
 {{ poll.description }}
 <form action="?" method="post">
+{% csrf_token %}
 <table>
 {% for form in forms %}
 {{ form }}

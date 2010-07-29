@@ -19,6 +19,7 @@ en wachtwoord.  Weet je die niet meer?  E-Mail even naar
 			<td>{{ form.username }}</td></tr>
 		<tr><td>{{ form.password.label_tag }}</td>
 			<td>{{ form.password }}</td></tr>
+		{% csrf_token %}
 	</table>
 
 	<input type="submit" value="login" />

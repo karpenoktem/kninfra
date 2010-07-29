@@ -3,6 +3,7 @@
 {% block body %}
 <h1>Wachtwoord veranderen</h1>
 <form method="post" action="">
+	{% csrf_token %}
 	{% if errors %}
 	<p>Lieve {{ user.first_name }}, dit zou ik wel willen, maar je hebt 
 	{{errors}}.</p>
