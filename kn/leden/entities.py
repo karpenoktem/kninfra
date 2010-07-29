@@ -6,13 +6,13 @@ from django.contrib.auth.models import get_hexdigest
 ecol = db['entities']
 
 def entity(d):
-	return TYPE_MAP(d['types'][0])
+	return TYPE_MAP[d['types'][0]](d)
 
 def by_name(n):
-	return entity(ecol.findOne({'names': n}))
+	return entity(ecol.find_one({'names': n}))
 
 def by_id(n):
-	return entity(ecol.findOne({'_id': n}))
+	return entity(ecol.find_one({'_id': n}))
 
 def all():
 	for m in ecol.find():
@@ -30,6 +30,9 @@ class Entity(object):
 	def names(self):
 		for n in self.data['names']:
 			yield(n['human'], n['name'])
+	def save(self):
+		ecol.update({'_id': self.data['_id']},
+			    self.data)
 
 class Group(Entity):
 	pass
@@ -37,11 +40,22 @@ class User(Entity):
 	def check_password(self, pwd):
 		dg = get_hexdigest(self.password['algorithm'],
 				   self.password['salt'], pwd)
-		return dg == self.password['hash']:
-	
+		return dg == self.password['hash']
 	@property
 	def password(self):
 		return self.data['password']
+	@property
+	def id(self):
+		return str(self.data['_id'])
+	@property
+	def is_active(self):
+		return self.data['is_active']
+	def is_authenticated(self):
+		# required by django's auth
+		return True
+	def get_and_delete_messages(self):
+		# TODO stub
+		return []
 class Tag(Entity):
 	pass
 class Study(Entity):

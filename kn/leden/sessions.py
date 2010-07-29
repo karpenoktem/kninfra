@@ -35,7 +35,7 @@ class SessionStore(SessionBase):
 			'data': self.encode(self._get_session(
 					no_load=must_create)),
 			'expire_dt': self.get_expiry_date()}
-		scol.insert(n)
+		scol.update({'_id': self.session_key}, n, True)
 		# TODO handle errors
 	def delete(self, session_key=None):
 		if session_key is None:

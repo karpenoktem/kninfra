@@ -1,9 +1,13 @@
 import kn.leden.entities as Es
+from pymongo.objectid import ObjectId
 
 class MongoBackend(object):
 	def authenticate(self, username=None, password=None):
-		return Es.by_name(username).check_password(password)
+		user = Es.by_name(username)
+		if user is None or not user.check_password(password):
+			return None
+		return user
 
 	def get_user(self, pk):
-		return Es.by_id(pk)
+		return Es.by_id(ObjectId(pk))
 
