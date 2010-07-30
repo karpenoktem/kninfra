@@ -7,8 +7,6 @@ import sys
 import kn.leden.entities as Es
 from kn.settings import DT_MIN, DT_MAX
 
-DT_MIN = datetime(1990, 1,1)
-
 def main(f):
 	data = json.load(f)
 	Es.ecol.drop()
