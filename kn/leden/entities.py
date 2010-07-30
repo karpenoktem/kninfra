@@ -184,6 +184,6 @@ def ensure_indices():
 	ecol.ensure_index('types')
 	ecol.ensure_index('relations.how')
 	ecol.ensure_index('relations.with')
-	ecol.ensure_index([('relations.from',1),
-			   ('relations.until',-1)])
+	ecol.ensure_index([('relations.until',1),
+			   ('relations.from',-1)])
 	ecol.ensure_index('humanNames.human')
