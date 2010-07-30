@@ -162,6 +162,12 @@ class User(Entity):
 			return self.data['person']['nick'] + ' ' \
 					+ self.data['person']['family']
 		return self.data['person']['nick'] + bits[1] + ' ' + bits[0]
+	@property
+	def first_name(self):
+		return self.data['person']['nick']
+	@property
+	def last_name(self):
+		return self.data['person']['family']
 class Tag(Entity):
 	def get_bearers(self):
 		return [entity(m) for m in ecol.find({
