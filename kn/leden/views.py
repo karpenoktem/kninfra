@@ -19,6 +19,7 @@ from datetime import date
 
 import kn.leden.entities as Es
 
+@login_required
 def user_list(request, page):
 	pr = Paginator(Es.ecol.find({'types': 'user'}).sort(
 			'humanNames.human', 1), 20)
@@ -31,6 +32,7 @@ def user_list(request, page):
 			 'page_obj': p, 'paginator': pr},
 			context_instance=RequestContext(request))
 
+@login_required
 def entity_detail(request, name=None, _id=None):
 	if name is not None:
 		e = Es.by_name(name)
