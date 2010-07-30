@@ -70,6 +70,12 @@ class Entity(object):
 			if rel['until'] == DT_MAX:
 				rel['until'] = None
 			yield rel
+	
+	def get_tags(self):
+		for m in ecol.find({'_id': {'$in': self.data['tags']}}
+				).sort('humanNames.human', 1):
+			yield Tag(m)
+
 	@property
 	def related_ids(self):
 		for x in self.data['relations']:
@@ -151,7 +157,11 @@ class User(Entity):
 					+ self.data['person']['family']
 		return self.data['person']['nick'] + bits[1] + ' ' + bits[0]
 class Tag(Entity):
-	pass
+	def get_bearers(self):
+		return [entity(m) for m in ecol.find({
+				'tags': self.data['_id']}).sort(
+						'humanNames.human')]
+
 class Study(Entity):
 	pass
 class Institute(Entity):
