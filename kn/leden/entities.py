@@ -1,7 +1,9 @@
 import functools
 
-from kn.leden.mongo import db
 from django.contrib.auth.models import get_hexdigest
+from pymongo.objectid import ObjectId
+
+from kn.leden.mongo import db
 
 ecol = db['entities']
 
@@ -14,6 +16,8 @@ def by_name(n):
 	return entity(ecol.find_one({'names': n}))
 
 def by_id(n):
+	if isinstance(n, basestr):
+		n = ObjectId(n)
 	return entity(ecol.find_one({'_id': n}))
 
 def all():
