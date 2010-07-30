@@ -6,6 +6,8 @@ from django.contrib.auth.models import get_hexdigest
 ecol = db['entities']
 
 def entity(d):
+	if d is None:
+		return None
 	return TYPE_MAP[d['types'][0]](d)
 
 def by_name(n):
