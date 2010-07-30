@@ -56,6 +56,13 @@ class User(Entity):
 	def get_and_delete_messages(self):
 		# TODO stub
 		return []
+	@property
+	def full_name(self):
+		bits = self.data['person']['family'].split(',', 1)
+		if len(bits) == 1:
+			return self.data['person']['nick'] + ' ' \
+					+ self.data['person']['family']
+		return self.data['person']['nick'] + bits[1] + ' ' + bits[0]
 class Tag(Entity):
 	pass
 class Study(Entity):
