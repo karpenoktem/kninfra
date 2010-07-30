@@ -62,6 +62,7 @@ class Entity(object):
 		for m in ecol.find({'_id': {'$in': rel_ids}}):
 			e_lut[m['_id']] = entity(m)
 		for rel in self.data['relations']:
+			rel = dict(rel)
 			rel['how'] = e_lut.get(rel['how'])
 			rel['with'] = e_lut.get(rel['with'])
 			if rel['from'] == DT_MIN:
