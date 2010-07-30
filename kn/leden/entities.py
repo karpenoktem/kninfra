@@ -114,6 +114,9 @@ class User(Entity):
 		# TODO stub
 		return []
 	@property
+	def primary_email(self):
+		return self.data['emails'][0]
+	@property
 	def full_name(self):
 		bits = self.data['person']['family'].split(',', 1)
 		if len(bits) == 1:
