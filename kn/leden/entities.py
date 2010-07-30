@@ -29,6 +29,9 @@ class Entity(object):
 	def __init__(self, data=None):
 		self.data = data
 	@property
+	def type(self):
+		return self.data['types'][0]
+	@property
 	def id(self):
 		return str(self.data['_id'])
 	@property
@@ -52,6 +55,9 @@ class Entity(object):
 			return ('entity-by-name', (),
 					{'name': self.primary_name})
 		return ('entity-by-id', (), {'_id': self.id})
+
+	def __repr__(self):
+		return "<Entity %s (%s)>" % (self.id, self.type)
 
 class Group(Entity):
 	pass
