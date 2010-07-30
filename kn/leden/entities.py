@@ -182,6 +182,7 @@ seats = functools.partial(of_type, 'seat')
 def ensure_indices():
 	ecol.ensure_index('names', unique=True)
 	ecol.ensure_index('types')
+	ecol.ensure_index('tags')
 	ecol.ensure_index('relations.how')
 	ecol.ensure_index('relations.with')
 	ecol.ensure_index([('relations.until',1),
