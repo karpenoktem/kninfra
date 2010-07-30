@@ -31,7 +31,7 @@ def main(f):
 			'names': [m['name']],
 			'humanNames': [{
 				'name': m['name'],
-				'humanName': m['humanName'],
+				'human': m['humanName'],
 				'genitive_prefix': m['genitive_prefix']
 				}],
 			'description': m['description'],
@@ -111,7 +111,7 @@ def main(f):
 		     'humanNames': [{
 			     	'name': conv_group[m['group']]['name'] +
 			     		'-' + m['name'],
-				'humanName': m['humanName']}]}
+				'human': m['humanName']}]}
 		i = Es.ecol.insert(n)
 		Es.ecol.update({'_id': conv_user[m['user']]},
 				{'$push': {'relations': {
