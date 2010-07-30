@@ -72,8 +72,10 @@ def _entity_detail(request, e):
 		return cmp(x['from'], y['from'])
 	related = sorted(e.get_related(), cmp=_cmp)
 	rrelated = sorted(e.get_rrelated(), cmp=_rcmp)
+	tags = list(e.get_tags())
 	return {'related': related,
 		'rrelated': rrelated,
+		'tags': tags,
 		'object': e}
 
 def _user_detail(request, user):

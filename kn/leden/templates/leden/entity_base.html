@@ -52,4 +52,12 @@ tot {{ r.until.date }}
 </ul>
 {% endif %}
 
+{% if tags %}
+<h3>Stempels</h3>
+<ul>
+{% for t in tags %}
+<li><a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
 {% endblock %}
