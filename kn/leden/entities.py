@@ -71,6 +71,12 @@ class Entity(object):
 	def save(self):
 		ecol.update({'_id': self.data['_id']},
 			    self.data)
+	@property
+	def humanName(self):
+		return self.data['humanNames'][0]['human']
+	@property
+	def genitive_prefix(self):
+		return self.data['humanNames'][0]['genitive_prefix']
 	@permalink
 	def get_absolute_url(self):
 		if self.primary_name:
