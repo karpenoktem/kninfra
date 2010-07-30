@@ -1,0 +1,34 @@
+{% extends "leden/base.html" %}
+
+
+{% block body %}
+
+<ul>
+{% for r in related %}
+<li>
+{% if r.how %}
+<a href="{{ r.how.get_absolute_url }}">{{ r.how.humanName }}</a>
+{% else %}
+lid
+{% endif %}
+
+{{ r.with.genitive_prefix }}
+
+<a href="{{ r.with.get_absolute_url }}">{{ r.with.humanName }}</a>
+
+{% if r.from or r.until %}
+(
+{% if r.from %}
+van {{ r.from.date }}
+{% endif %}
+
+{% if r.until %}
+tot {{ r.until.date }}
+{% endif %}
+)
+{% endif %}
+
+{% endfor %}
+</ul>
+
+{% endblock %}
