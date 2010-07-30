@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 from kn.leden import views
 
 urlpatterns = patterns('',
+	# Converted
+
+	# Not yet converted
 	url(r'^$',
 	    login_required(generic.simple.direct_to_template),
 	    {'template': 'leden/home.html'}, name='smoelen-home'),
