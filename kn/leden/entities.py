@@ -1,5 +1,6 @@
 import functools
 
+from django.db.models import permalink
 from django.contrib.auth.models import get_hexdigest
 from pymongo.objectid import ObjectId
 
@@ -27,18 +28,30 @@ def all():
 class Entity(object):
 	def __init__(self, data=None):
 		self.data = data
-
+	@property
+	def id(self):
+		return str(self.data['_id'])
 	@property
 	def tags(self):
 		for m in ecol.find({'_id': {'$in': self.data['tags']}}):
 			yield Tag(m)
 	@property
+	def primary_name(self):
+		if self.data['names']:
+			return self.data['names'][0]
+		return None
+	@property
 	def names(self):
-		for n in self.data['names']:
-			yield(n['human'], n['name'])
+		return self.data['names']
 	def save(self):
 		ecol.update({'_id': self.data['_id']},
 			    self.data)
+	@permalink
+	def get_absolute_url(self):
+		if self.primary_name:
+			return ('entity-by-name', (),
+					{'name': self.primary_name})
+		return ('entity-by-id', (), {'_id': self.id})
 
 class Group(Entity):
 	pass
@@ -50,9 +63,6 @@ class User(Entity):
 	@property
 	def password(self):
 		return self.data['password']
-	@property
-	def id(self):
-		return str(self.data['_id'])
 	@property
 	def is_active(self):
 		return self.data['is_active']
