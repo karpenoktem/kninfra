@@ -1,5 +1,4 @@
 import kn.leden.entities as Es
-from pymongo.objectid import ObjectId
 
 class MongoBackend(object):
 	def authenticate(self, username=None, password=None):
@@ -9,5 +8,5 @@ class MongoBackend(object):
 		return user
 
 	def get_user(self, pk):
-		return Es.by_id(ObjectId(pk))
+		return Es.by_id(pk)
 
