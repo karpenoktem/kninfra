@@ -120,15 +120,10 @@ def user_smoel(request, name):
 		raise Http404
 	return HttpResponse(FileWrapper(img), mimetype="image/jpeg")
 
-# ----------------
-# Unconverted
-# ----------------
-
-
-def ik_chpasswd_handle_valid_form(request, form):
+def _ik_chpasswd_handle_valid_form(request, form):
 	oldpw = form.cleaned_data['old_password']
 	newpw = form.cleaned_data['new_password']
-	change_password(request.user.username, oldpw, newpw)
+	change_password(request.user.primary_name, oldpw, newpw)
 	t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd.""" 
 	request.user.push_message(t % request.user.first_name)
 	return HttpResponseRedirect(reverse('smoelen-home'))
@@ -140,7 +135,7 @@ def ik_chpasswd(request):
 		form = ChangePasswordForm(request.POST) 
 		if form.is_valid():
 			try:
-				return ik_chpasswd_handle_valid_form(request, 
+				return _ik_chpasswd_handle_valid_form(request, 
 						form)
 			except ChangePasswordError as e:
 				errl.extend(e.args)
@@ -151,6 +146,10 @@ def ik_chpasswd(request):
 	return render_to_response('leden/ik_chpasswd.html', 
 			{ 'form':form, 'errors':errstr, 
 				'user':request.user })
+
+# ----------------
+# Unconverted
+# ----------------
 
 def rauth(request):
 	""" An implementation of Jille Timmermans' rauth scheme """
