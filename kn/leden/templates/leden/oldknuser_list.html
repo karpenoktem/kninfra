@@ -9,10 +9,10 @@
 </ul>
 
 {% if page_obj.has_previous %}
-<a href="{% url leden-list page=page_obj.previous_page_number %}">vorige</a>
+<a href="{% url user-list page=page_obj.previous_page_number %}">vorige</a>
 {% endif %}
 pagina {{ page_obj.number }} van de {{ paginator.num_pages }}
 {% if page_obj.has_next %}
-<a href="{% url leden-list page=page_obj.next_page_number %}">volgende</a>
+<a href="{% url user-list page=page_obj.next_page_number %}">volgende</a>
 {% endif %}
 {% endblock %}
