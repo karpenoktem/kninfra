@@ -76,6 +76,13 @@ class Entity(object):
 	def __repr__(self):
 		return "<Entity %s (%s)>" % (self.id, self.type)
 
+	def as_user(self): return User(self.data)
+	def as_group(self): return Group(self.data)
+	def as_seat(self): return Seat(self.data)
+	def as_tag(self): return Tag(self.data)
+	def as_study(self): return Study(self.data)
+	def as_institute(self): return Institute(self.data)
+
 class Group(Entity):
 	pass
 class User(Entity):
