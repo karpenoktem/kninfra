@@ -39,17 +39,17 @@ def entity_detail(request, name=None, _id=None):
 	else:
 		e = Es.by_id(_id)
 	if e.type == 'user':
-		return _user_detail(request, Es.User(e))
+		return _user_detail(request, e.as_user())
 	elif e.type == 'group':
-		return _group_detail(request, Es.Group(e))
+		return _group_detail(request, e.as_group())
 	elif e.type == 'tag':
-		return _tag_detail(request, Es.Tag(e))
+		return _tag_detail(request, e.as_tag())
 	elif e.type == 'seat':
-		return _seat_detail(request, Es.Seat(e))
+		return _seat_detail(request, e.as_seat())
 	elif e.type == 'study':
-		return _study_detail(request, Es.Study(e))
+		return _study_detail(request, e.as_study())
 	elif e.type == 'institute':
-		return _institute_detail(request, Es.Institute(e))
+		return _institute_detail(request, e.as_institute())
 	raise ValueError, "Unknown entity type"
 
 def _user_detail(request, user):
