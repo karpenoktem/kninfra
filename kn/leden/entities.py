@@ -29,6 +29,29 @@ def all():
 class Entity(object):
 	def __init__(self, data=None):
 		self.data = data
+	def get_rrelated(self):
+		how_ids = list()
+		h_lut = dict()
+		rrelated = list()
+		for m in ecol.find({'relations.with': self.data['_id']}):
+			for n in m['relations']:
+				if n['with'] != self.data['_id']:
+					continue
+				n = dict(n)
+				if n['how']:
+					how_ids.append(n['how'])
+				if n['from'] == DT_MIN:
+					n['from'] = None
+				if n['until'] == DT_MAX:
+					n['until'] = None
+				n['who'] = entity(m)
+				rrelated.append(n)
+		for m in ecol.find({'_id': {'$in': how_ids}}):
+			h_lut[m['_id']] = entity(m)
+		for m in rrelated:
+			m['how'] = h_lut.get(m['how'])
+		return rrelated
+
 	def get_related(self):
 		rel_ids = list()
 		e_lut = dict()
