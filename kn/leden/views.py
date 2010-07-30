@@ -86,8 +86,9 @@ def _user_detail(request, user):
 			context_instance=RequestContext(request))
 
 def _group_detail(request, group):
-	# TODO stub
-	return HttpResponse("")
+	ctx = _entity_detail(request, group)
+	return render_to_response('leden/group_detail.html', ctx,
+			context_instance=RequestContext(request))
 def _tag_detail(request, tag):
 	# TODO stub
 	return HttpResponse("")
