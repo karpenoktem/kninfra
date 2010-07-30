@@ -3,6 +3,8 @@
 
 {% block body %}
 
+{% if related %}
+<h3>Leden</h3>
 <ul>
 {% for r in related %}
 <li>
@@ -11,24 +13,43 @@
 {% else %}
 lid
 {% endif %}
-
 {{ r.with.genitive_prefix }}
-
 <a href="{{ r.with.get_absolute_url }}">{{ r.with.humanName }}</a>
-
 {% if r.from or r.until %}
-(
-{% if r.from %}
+({% if r.from %}
 van {{ r.from.date }}
 {% endif %}
-
 {% if r.until %}
 tot {{ r.until.date }}
+{% endif %})
 {% endif %}
-)
-{% endif %}
-
+</li>
 {% endfor %}
 </ul>
+{% endif %}
+
+{% if rrelated %}
+<h3>Lidmaatschap</h3>
+<ul>
+{% for r in rrelated %}
+<li>
+<a href="{{ r.who.get_absolute_url }}">{{ r.who.humanName }}</a>, 
+{% if r.how %}
+<a href="{{ r.how.get_absolute_url }}">{{ r.how.humanName }}</a>
+{% else %}
+lid
+{% endif %}
+{% if r.from or r.until %}
+({% if r.from %}
+van {{ r.from.date }}
+{% endif %}
+{% if r.until %}
+tot {{ r.until.date }}
+{% endif %})
+{% endif %}
+{% endfor %}
+</li>
+</ul>
+{% endif %}
 
 {% endblock %}
