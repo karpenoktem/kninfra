@@ -8,6 +8,7 @@ from kn.leden.mongo import db
 from kn.settings import DT_MIN, DT_MAX
 
 ecol = db['entities']
+mcol = db['messages']
 
 def entity(d):
 	if d is None:
@@ -143,9 +144,14 @@ class User(Entity):
 	def is_authenticated(self):
 		# required by django's auth
 		return True
-	def get_and_delete_messages(self):
-		# TODO stub
-		return []
+	def push_message(self, msg):
+		mcol.insert({'entity': self.data['_id'],
+			     'data': msg})
+	def pop_messages(self):
+		msgs = list(mcol.find({'entity': self.data['_id']}))
+		mcol.remove({'_id': {'$in': [m['_id'] for m in msgs]}})
+		return [m['data'] for m in msgs]
+	get_and_delete_messages = pop_messages
 	@property
 	def primary_email(self):
 		return self.data['emails'][0]
@@ -198,3 +204,4 @@ def ensure_indices():
 	ecol.ensure_index([('relations.until',1),
 			   ('relations.from',-1)])
 	ecol.ensure_index('humanNames.human')
+	mcol.ensure_index('entity')
