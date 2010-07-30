@@ -66,8 +66,14 @@ def _entity_detail(request, e):
 		'object': e}
 
 def _user_detail(request, user):
-	# TODO stub
-	return HttpResponse("")
+	hasPhoto = default_storage.exists('%s.jpg' % 
+			path.join(settings.SMOELEN_PHOTOS_PATH,
+					user.primary_name))
+	ctx = _entity_detail(request, user)
+	ctx.update({'hasPhoto': hasPhoto})
+	return render_to_response('leden/user_detail.html', ctx,
+			context_instance=RequestContext(request))
+
 def _group_detail(request, group):
 	# TODO stub
 	return HttpResponse("")
@@ -88,29 +94,6 @@ def _institute_detail(request, institute):
 # ----------------
 # Unconverted
 # ----------------
-@login_required
-def oldknuser_detail(request, name):
-	try:
-		user = OldKnUser.objects.select_related('oldseat_set',
-				'groups').get(username=name)
-	except OldKnUser.DoesNotExist:
-		raise Http404
-	oldseats = list(user.oldseat_set.select_related('group').all())
-	oldseats.sort(lambda x,y: cmp(x.humanName, y.humanName))
-	comms = filter(lambda x: not x.isHidden,
-			map(lambda x: x.oldkngroup, user.groups.all()))
-	comms.sort(lambda x,y: cmp(x.humanName, y.humanName))
-	hasPhoto = default_storage.exists('%s.jpg' % 
-			path.join(settings.SMOELEN_PHOTOS_PATH,
-					user.username))
-	return render_to_response('leden/oldknuser_detail.html',
-			{'object': user,
-			 'oldseats': oldseats,
-			 'comms': comms,
-			 'photosUrl': settings.USER_PHOTOS_URL % name,
-			 'hasPhoto': hasPhoto},
-			context_instance=RequestContext(request))
-
 @login_required
 def oldkngroup_detail(request, name):
 	try:
