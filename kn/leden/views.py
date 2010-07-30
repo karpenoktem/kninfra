@@ -61,8 +61,19 @@ def _entity_detail(request, e):
 		r = cmp(x['with'].humanName, y['with'].humanName)
 		if r: return r
 		return cmp(x['from'], y['from'])
+	def _rcmp(x,y):
+		r = cmp(x['until'], y['until'])
+		if r: return r
+		r = cmp(x['how'].humanName if x['how'] else None,
+			y['how'].humanName if y['how'] else None)
+		if r: return r
+		r = cmp(x['who'].humanName, y['who'].humanName)
+		if r: return r
+		return cmp(x['from'], y['from'])
 	related = sorted(e.get_related(), cmp=_cmp)
+	rrelated = sorted(e.get_rrelated(), cmp=_rcmp)
 	return {'related': related,
+		'rrelated': rrelated,
 		'object': e}
 
 def _user_detail(request, user):
