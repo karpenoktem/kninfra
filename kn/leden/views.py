@@ -38,6 +38,8 @@ def entity_detail(request, name=None, _id=None):
 		e = Es.by_name(name)
 	else:
 		e = Es.by_id(_id)
+	if e is None:
+		raise Http404
 	if e.type == 'user':
 		return _user_detail(request, e.as_user())
 	elif e.type == 'group':
