@@ -54,6 +54,17 @@ def entity_detail(request, name=None, _id=None):
 		return _institute_detail(request, e.as_institute())
 	raise ValueError, "Unknown entity type"
 
+def _entity_detail(request, e):
+	def _cmp(x,y):
+		r = cmp(x['until'], y['until'])
+		if r: return r
+		r = cmp(x['with'].humanName, y['with'].humanName)
+		if r: return r
+		return cmp(x['from'], y['from'])
+	related = sorted(e.get_related(), cmp=_cmp)
+	return {'related': related,
+		'object': e}
+
 def _user_detail(request, user):
 	# TODO stub
 	return HttpResponse("")
