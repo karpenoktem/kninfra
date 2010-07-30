@@ -92,4 +92,4 @@ def ensure_indices():
 	ecol.ensure_index('relations.with')
 	ecol.ensure_index([('relations.from',1),
 			   ('relations.until',-1)])
-
+	ecol.ensure_index('humanNames.human')

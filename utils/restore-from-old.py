@@ -54,7 +54,8 @@ def main(f):
 		n = {
 			'types': ['user'],
 			'names': [m['username']],
-			'humanNames': [],
+			'humanNames': [{'human': m['first_name'] + ' ' +
+						 m['last_name']}],
 			'person': {
 				'titles': [],
 				'nick': m['first_name'],
