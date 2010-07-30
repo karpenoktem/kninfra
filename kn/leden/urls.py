@@ -10,15 +10,13 @@ from kn.leden import views
 
 urlpatterns = patterns('',
 	# Converted
+	url(r'^gebruikers/(?:p/(?P<page>[0-9]+)/)?$',
+	    views.user_list, name='user-list'),
 
 	# Not yet converted
 	url(r'^$',
 	    login_required(generic.simple.direct_to_template),
 	    {'template': 'leden/home.html'}, name='smoelen-home'),
-	url(r'^gebruikers/(?:p/(?P<page>[0-9]+)/)?$',
-	    login_required(generic.list_detail.object_list),
-	    {'queryset':OldKnUser.objects.order_by('first_name').all(),
-	     'paginate_by':20}, name='leden-list'),
 	url(r'^gebruiker/(?P<name>[^/]+)/$',
 	    views.oldknuser_detail, name='oldknuser-detail'),
 	url(r'^smoel/(?P<name>[^.]+).jpg$',

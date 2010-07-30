@@ -9,6 +9,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.servers.basehttp import FileWrapper
+from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
 from os import path
 from django.contrib.auth.views import redirect_to_login
@@ -17,6 +18,19 @@ from hashlib import sha256
 from datetime import date
 
 # Create your views here.
+import kn.leden.entities as Es
+
+def user_list(request, page):
+	pr = Paginator(Es.ecol.find({'types': 'user'}).sort(
+			'humanNames.human', 1), 20)
+	try:
+		p = pr.page(1 if page is None else page)
+	except EmptyPage:
+		raise Http404
+	return render_to_response('leden/user_list.html',
+			{'users': [Es.User(m) for m in p.object_list],
+			 'page_obj': p, 'paginator': pr},
+			context_instance=RequestContext(request))
 @login_required
 def oldknuser_detail(request, name):
 	try:
