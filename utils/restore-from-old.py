@@ -18,6 +18,7 @@ def main(f):
 	for m in data['EduInstitute']:
 		n = {	'types': ['institute'],
 			'names': [],
+			'tags': [],
 			'humanNames': [{'human': m['name']}],
 			'relations': [],
 			'names': []}
@@ -25,6 +26,7 @@ def main(f):
 	for m in data['Study']:
 		n = {	'types': ['study'],
 			'names': [],
+			'tags': [],
 			'relations': [],
 			'humanNames': [{'human': m['name']}]}
 		conv_study[m['id']] = Es.ecol.insert(n)
@@ -32,6 +34,7 @@ def main(f):
 		n = {	'types': ['group'],
 			'names': [m['name']],
 			'relations': [],
+			'tags': [],
 			'humanNames': [{
 				'name': m['name'],
 				'human': m['humanName'],
@@ -55,6 +58,7 @@ def main(f):
 		n = {
 			'types': ['user'],
 			'names': [m['username']],
+			'tags': [],
 			'humanNames': [{'human': m['first_name'] + ' ' +
 						 m['last_name']}],
 			'person': {
@@ -112,6 +116,7 @@ def main(f):
 				'-' + m['name']],
 		     'description': [m['description']],
 		     'relations': [],
+		     'tags': [],
 		     'humanNames': [{
 			     	'name': conv_group[m['group']]['name'] +
 			     		'-' + m['name'],
