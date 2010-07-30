@@ -125,6 +125,9 @@ class User(Entity):
 				   self.password['salt'], pwd)
 		return dg == self.password['hash']
 	@property
+	def humanName(self):
+		return self.full_name
+	@property
 	def password(self):
 		return self.data['password']
 	@property
