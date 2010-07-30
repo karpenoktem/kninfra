@@ -31,7 +31,7 @@ def main(f):
 			'humanNames': [{'human': m['name']}]}
 		conv_study[m['id']] = Es.ecol.insert(n)
 	for m in data['OldKnGroup']:
-		n = {	'types': ['group'],
+		n = {	'types': ['tag' if m['isVirtual'] else 'group'],
 			'names': [m['name']],
 			'relations': [],
 			'tags': [],
@@ -47,6 +47,11 @@ def main(f):
 			}
 		conv_group[m['id']] = {'id': Es.ecol.insert(n),
 				       'name': m['name']}
+	for m in data['OldKnGroup']:
+		if m['parent'] is not None:
+			Es.ecol.update({'_id': conv_group[m['id']]['id']},
+				{'$push': {'tags': conv_group[
+							m['parent']]['id']}})
 	for m in data['OldKnUser']:
 		bits = m['password'].split('$')
 		if len(bits) == 3:
@@ -129,7 +134,7 @@ def main(f):
 					'how': i,
 					'with': conv_group[m['group']]['id']
 				}}})
-
+	
 if __name__ == '__main__':
 	if len(sys.argv) == 1:
 		sys.argv.append('old.json')
