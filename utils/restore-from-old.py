@@ -106,7 +106,8 @@ def main(f):
 				'how': None})
 		conv_user[m['id']] = Es.ecol.insert(n)
 	for m in data['OldSeat']:
-		n = {'names': [conv_group[m['group']]['name'] + 
+		n = {'types': ['seat'],
+		     'names': [conv_group[m['group']]['name'] + 
 				'-' + m['name']],
 		     'description': [m['description']],
 		     'humanNames': [{
