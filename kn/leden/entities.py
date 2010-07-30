@@ -5,6 +5,7 @@ from django.contrib.auth.models import get_hexdigest
 from pymongo.objectid import ObjectId
 
 from kn.leden.mongo import db
+from kn.settings import DT_MIN, DT_MAX
 
 ecol = db['entities']
 
@@ -40,6 +41,10 @@ class Entity(object):
 		for rel in self.data['relations']:
 			rel['how'] = e_lut.get(rel['how'])
 			rel['with'] = e_lut.get(rel['with'])
+			if rel['from'] == DT_MIN:
+				rel['from'] = None
+			if rel['until'] == DT_MAX:
+				rel['until'] = None
 			yield rel
 	@property
 	def related_ids(self):
