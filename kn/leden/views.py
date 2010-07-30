@@ -107,23 +107,23 @@ def _institute_detail(request, institute):
 	# TODO stub
 	return HttpResponse("")
 
-
-# ----------------
-# Unconverted
-# ----------------
 @login_required
-def oldknuser_smoel(request, name):
-	try:
-		user = OldKnUser.objects.get(username=name)
-	except OldKnUser.DoesNotExist:
+def user_smoel(request, name):
+	user = Es.by_name(name)
+	if not user or not 'user' in user.types:
 		raise Http404
 	try:
 		img = default_storage.open(path.join(
 			settings.SMOELEN_PHOTOS_PATH,
-			user.username) + ".jpg")
+			user.primary_name) + ".jpg")
 	except IOError:
 		raise Http404
 	return HttpResponse(FileWrapper(img), mimetype="image/jpeg")
+
+# ----------------
+# Unconverted
+# ----------------
+
 
 def ik_chpasswd_handle_valid_form(request, form):
 	oldpw = form.cleaned_data['old_password']
