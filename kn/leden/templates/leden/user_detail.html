@@ -1,9 +1,9 @@
-{% extends "leden/base.html" %}
+{% extends "leden/entity_base.html" %}
 {% load base %}
 
 {% block head %}
 {{ block.super }}
-<link href="{{ MEDIA_URL }}/leden/oldknuser_detail.css"
+<link href="{{ MEDIA_URL }}/leden/user_detail.css"
 	rel="stylesheet" type="text/css" />
 {% endblock %}
 
@@ -19,7 +19,6 @@
 	<dt>Gebruikersnaam</dt>
 	<dd>{{ object.username }}</dd>
 	<dt>E-Mail</dt>
-	<dd>{{ object.primary_email|email }}</dd>
 	{% if object.study %}
 	<dt>Studie</dt>
 	<dd><a href="{% url study-detail object_id=object.study.id %}"
@@ -59,4 +58,5 @@
 		{% endfor %}
 	</ul>
 {% endif %}
+{{ block.super }}
 {% endblock %}
