@@ -28,6 +28,23 @@ def all():
 class Entity(object):
 	def __init__(self, data=None):
 		self.data = data
+	def get_related(self):
+		rel_ids = list()
+		e_lut = dict()
+		for rel in self.data['relations']:
+			rel_ids.append(rel['with'])
+			if rel['how']:
+				rel_ids.append(rel['how'])
+		for m in ecol.find({'_id': {'$in': rel_ids}}):
+			e_lut[m['_id']] = entity(m)
+		for rel in self.data['relations']:
+			rel['how'] = e_lut.get(rel['how'])
+			rel['with'] = e_lut.get(rel['with'])
+			yield rel
+	@property
+	def related_ids(self):
+		for x in self.data['relations']:
+			yield x['with']
 	@property
 	def type(self):
 		return self.data['types'][0]
