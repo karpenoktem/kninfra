@@ -19,16 +19,19 @@ def main(f):
 		n = {	'types': ['institute'],
 			'names': [],
 			'humanNames': [{'human': m['name']}],
+			'relations': [],
 			'names': []}
 		conv_inst[m['id']] = Es.ecol.insert(n)
 	for m in data['Study']:
 		n = {	'types': ['study'],
 			'names': [],
+			'relations': [],
 			'humanNames': [{'human': m['name']}]}
 		conv_study[m['id']] = Es.ecol.insert(n)
 	for m in data['OldKnGroup']:
 		n = {	'types': ['group'],
 			'names': [m['name']],
+			'relations': [],
 			'humanNames': [{
 				'name': m['name'],
 				'human': m['humanName'],
@@ -108,6 +111,7 @@ def main(f):
 		     'names': [conv_group[m['group']]['name'] + 
 				'-' + m['name']],
 		     'description': [m['description']],
+		     'relations': [],
 		     'humanNames': [{
 			     	'name': conv_group[m['group']]['name'] +
 			     		'-' + m['name'],
