@@ -1,7 +1,6 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from kn.base.text import humanized_enum
-from kn.leden.models import OldKnGroup, OldKnUser
 from kn.leden.forms import ChangePasswordForm
 from kn.leden.utils import change_password, ChangePasswordError
 from kn import settings
@@ -147,10 +146,6 @@ def ik_chpasswd(request):
 			{ 'form':form, 'errors':errstr, 
 				'user':request.user })
 
-# ----------------
-# Unconverted
-# ----------------
-
 def rauth(request):
 	""" An implementation of Jille Timmermans' rauth scheme """
 	if request.REQUEST.get('url') is None:
@@ -171,11 +166,11 @@ def rauth(request):
 		return redirect_to_login('%s?url=%s' % (
 				reverse('rauth'),
 				request.REQUEST['url'].replace('/', '%2F')))
-	token = sha256('%s|%s|%s|%s' % (request.user.username,
+	token = sha256('%s|%s|%s|%s' % (request.user.primary_name,
 					date.today(),
 					request.REQUEST['url'],
 					settings.SECRET_KEY)).hexdigest()
 	return HttpResponseRedirect('%s%suser=%s&token=%s' % (
 		request.REQUEST['url'],
 		'?' if request.REQUEST['url'].find('?') == -1 else '&',
-		request.user.username, token))
+		request.user.primary_name, token))
