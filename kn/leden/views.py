@@ -130,7 +130,7 @@ def ik_chpasswd_handle_valid_form(request, form):
 	newpw = form.cleaned_data['new_password']
 	change_password(request.user.username, oldpw, newpw)
 	t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd.""" 
-	request.user.message_set.create(message=(t % request.user.first_name))
+	request.user.push_message(t % request.user.first_name)
 	return HttpResponseRedirect(reverse('smoelen-home'))
 
 @login_required

@@ -20,12 +20,11 @@ def event_detail(request, name):
 		subscription = None
 	if subscription:
 		if subscription.debit > 0:
-			request.user.message_set.create(message=(
+			request.user.push_message(
 				"Je bent al aangemeld, maar moet nog wel %s"+
 				" euro betalen.") % subscription.debit)
 		else:
-			request.user.message_set.create(
-				message="Je bent aangemeld en je"+\
+			request.user.push_message("Je bent aangemeld en je"+\
 						" betaling is verwerkt!")
 	elif request.method == 'POST' and event.is_open:
                 notes = request.POST['notes']
@@ -51,8 +50,8 @@ def event_detail(request, name):
 					'Cc': full_owner_address,
 					'Reply-To': full_owner_address})
 		email.send()
-		request.user.message_set.create(
-			message="Je bent aangemeld en moet "+\
+		request.user.push_message(
+				"Je bent aangemeld en moet "+\
 					"nu %s euro betalen" % event.cost)
 	try:
 		request.user.groups.get(name=event.owner)
