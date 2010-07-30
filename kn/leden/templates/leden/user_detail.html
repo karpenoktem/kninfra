@@ -1,5 +1,6 @@
 {% extends "leden/entity_base.html" %}
 {% load base %}
+<!-- TODO stub -->
 
 {% block head %}
 {{ block.super }}
@@ -16,8 +17,8 @@
 {% endif %}
 <h1>{{ object.full_name }}</h1>
 <dl>
-	<dt>Gebruikersnaam</dt>
-	<dd>{{ object.username }}</dd>
+	<dt>Gebruikersnamen</dt>
+	<dd>{{ object.names }}</dd>
 	<dt>E-Mail</dt>
 	{% if object.study %}
 	<dt>Studie</dt>
