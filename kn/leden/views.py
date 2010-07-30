@@ -17,7 +17,6 @@ from kn import settings
 from hashlib import sha256
 from datetime import date
 
-# Create your views here.
 import kn.leden.entities as Es
 
 def user_list(request, page):
@@ -31,6 +30,49 @@ def user_list(request, page):
 			{'users': [Es.User(m) for m in p.object_list],
 			 'page_obj': p, 'paginator': pr},
 			context_instance=RequestContext(request))
+
+def entity_detail(request, name=None, _id=None):
+	if name is not None:
+		e = Es.by_name(name)
+	else:
+		e = Es.by_id(_id)
+	if e.type == 'user':
+		return _user_detail(request, Es.User(e))
+	elif e.type == 'group':
+		return _group_detail(request, Es.Group(e))
+	elif e.type == 'tag':
+		return _tag_detail(request, Es.Tag(e))
+	elif e.type == 'seat':
+		return _seat_detail(request, Es.Seat(e))
+	elif e.type == 'study':
+		return _study_detail(request, Es.Study(e))
+	elif e.type == 'institute':
+		return _institute_detail(request, Es.Institute(e))
+	raise ValueError, "Unknown entity type"
+
+def _user_detail(request, user):
+	# TODO stub
+	return HttpResponse("")
+def _group_detail(request, group):
+	# TODO stub
+	return HttpResponse("")
+def _tag_detail(request, tag):
+	# TODO stub
+	return HttpResponse("")
+def _seat_detail(request, seat):
+	# TODO stub
+	return HttpResponse("")
+def _study_detail(request, study):
+	# TODO stub
+	return HttpResponse("")
+def _institute_detail(request, institute):
+	# TODO stub
+	return HttpResponse("")
+
+
+# ----------------
+# Unconverted
+# ----------------
 @login_required
 def oldknuser_detail(request, name):
 	try:

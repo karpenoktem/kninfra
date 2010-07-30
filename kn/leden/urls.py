@@ -12,6 +12,10 @@ urlpatterns = patterns('',
 	# Converted
 	url(r'^gebruikers/(?:p/(?P<page>[0-9]+)/)?$',
 	    views.user_list, name='user-list'),
+	url(r'^n/(?P<name>[^/]+)/$',
+	    views.entity_detail, name='entity-by-name'),
+	url(r'^i/(?P<_id>[^/]+)/$',
+	    views.entity_detail, name='entity-by-id'),
 
 	# Not yet converted
 	url(r'^$',
