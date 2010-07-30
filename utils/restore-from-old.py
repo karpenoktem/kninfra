@@ -21,7 +21,7 @@ def main(f):
 		n = {	'types': ['institute'],
 			'names': [],
 			'humanNames': [{'human': m['name']}],
-			'names': [{'human': m['name']}]}
+			'names': []}
 		conv_inst[m['id']] = Es.ecol.insert(n)
 	for m in data['Study']:
 		n = {	'types': ['study'],
