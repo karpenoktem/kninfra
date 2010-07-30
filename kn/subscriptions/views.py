@@ -20,7 +20,7 @@ def event_detail(request, name):
 		subscription = None
 	if subscription:
 		if subscription.debit > 0:
-			request.user.push_message(
+			request.user.push_message((
 				"Je bent al aangemeld, maar moet nog wel %s"+
 				" euro betalen.") % subscription.debit)
 		else:
