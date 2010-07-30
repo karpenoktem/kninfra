@@ -19,7 +19,7 @@ def main():
 				lastZero_index = i
 			cs += t.value
 
-		print '  %s' % u.get_full_name()
+		print '  %s' % u.full_name()
 		for i in xrange(lastZero_index, len(u2t[u])):
 			t = u2t[u][i]
 			print u' %s €%s %s %s' % (t.date,

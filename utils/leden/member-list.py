@@ -17,7 +17,7 @@ def main():
 		if not m.username in members:
 			continue
 		N += 1
-		print '%-4s%-30s%s' % (N, m.get_full_name(), m.dateJoined)
+		print '%-4s%-30s%s' % (N, m.full_name(), m.dateJoined)
 
 if __name__ == '__main__':
 	if sys.stdout.encoding is None:

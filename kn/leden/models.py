@@ -150,7 +150,7 @@ class OldKnUser(User, NamedMixin):
 	def primary_name(self):
 		return self.username
 
-	def get_full_name(self):
+	def full_name(self):
 		bits = self.last_name.split(',', 1)
 		if len(bits) == 1:
 			return self.first_name + ' ' + self.last_name

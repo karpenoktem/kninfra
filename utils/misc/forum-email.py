@@ -32,7 +32,7 @@ def forum_email():
 		toEmail.add(username)
 	for username in toEmail:
 		m = OldKnUser.objects.get(username=username)
-		txt = templ % ({'fullName': m.get_full_name(),
+		txt = templ % ({'fullName': m.full_name(),
 				'password': pwd_lut[m.username],
 				'userName': username})
 		m.email_user(

@@ -66,8 +66,8 @@ def sync_bd(cs, cal):
 	fn_lut = dict()
 	rd_lut = dict()
 	for m in todo:
-		fn_lut[m.get_full_name()] = m
-		rd_lut[m.get_full_name()] = ('DTSTART;VALUE=DATE:%s\n'+
+		fn_lut[m.full_name()] = m
+		rd_lut[m.full_name()] = ('DTSTART;VALUE=DATE:%s\n'+
 			 		     'DTEND;VALUE=DATE:%s\n'+
 					     'RRULE:FREQ=YEARLY\n') % (
 						icaldate(m.dateOfBirth),
@@ -104,13 +104,13 @@ def sync_bd(cs, cal):
 		if m.dateOfBirth is None:
 			continue
 		event = gdata.calendar.CalendarEventEntry()
-		event.title = atom.Title(text=m.get_full_name())
+		event.title = atom.Title(text=m.full_name())
 		event.content = atom.Content(
-			text='Verjaardag van %s'%m.get_full_name())
+			text='Verjaardag van %s'%m.full_name())
 		event.recurrence = gdata.calendar.Recurrence(
-					text=rd_lut[m.get_full_name()])
+					text=rd_lut[m.full_name()])
 		cs.InsertEvent(event, cal_uri)
-		print 'Added %s' % m.get_full_name()
+		print 'Added %s' % m.full_name()
 
 if __name__ == '__main__':
 	cs = get_cs()

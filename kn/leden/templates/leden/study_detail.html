@@ -6,7 +6,7 @@
 <ul>
 {% for m in object.oldknuser_set.all %}
 <li><a href="{{ m.get_absolute_url }}"
-	>{{ m.get_full_name }}</a></li>
+	>{{ m.full_name }}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}

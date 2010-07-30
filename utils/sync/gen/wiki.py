@@ -23,7 +23,7 @@ def sync_wiki():
 		if name.capitalize() in users:
 			continue
 		print "wiki user-add %s %s" % (name, 
-				sesc(member.get_full_name()))
+				sesc(member.full_name()))
 	c.close()
 	dc.close()
 

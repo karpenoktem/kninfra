@@ -26,7 +26,7 @@ def sync_forum(loginFile):
 			print "forum %s user-add %s %s" % (
 						loginFile,
 						m.username,
-						sesc(m.get_full_name()))
+						sesc(m.full_name()))
 			continue
 		forum_users_unaccounted.remove(m.username)
 	for m in forum_users_unaccounted:

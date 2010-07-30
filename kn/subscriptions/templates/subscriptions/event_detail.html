@@ -50,12 +50,11 @@ $(function(){
 	<ul>
 	{% for subscr in subscrlist %}
 	<li><a href="{{ subscr.user.get_absolute_url }}"
-		>{{ subscr.user.oldknuser.get_full_name }}</a>
-	(debet: &euro; {{ subscr.debit }})
-	{% if subscr.userNotes %}
-	<blockquote>{{ subscr.userNotes }}</blockquote>
-	{% endif %}
-	</li>
+		>{{ subscr.user.full_name }} (debet: &euro;
+		{{ subscr.debit }})</a></li>
+                {% if subscr.userNotes %}
+                <blockquote>{{ subscr.userNotes }}</blockquote>
+                {% endif %}
 	{% endfor %}
 	</ul>
 {% endif %}

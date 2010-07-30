@@ -57,7 +57,7 @@ def check_email():
 			{'username': m.username,
 			 'firstName': m.first_name,
 			 'lastName': m.last_name,
-			 'fullName': m.get_full_name(),
+			 'fullName': m.full_name(),
 			 'gender': ('onbekend' if m.gender is None
 				else {'m': 'man',
 				      'v': 'vrouw'}.get(m.gender, '?')),

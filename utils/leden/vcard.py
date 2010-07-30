@@ -17,7 +17,7 @@ def vcard(u):
 	c.n.value = vobject.vcard.Name(ln,
 				       given=u.first_name)
 	c.add('fn')
-	c.fn.value = u.get_full_name()
+	c.fn.value = u.full_name()
 	l = c.add('email', 'kn')
 	l.value = u.primary_email
 	l.type_paramlist = ['INTERNET']

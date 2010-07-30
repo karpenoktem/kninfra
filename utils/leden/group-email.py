@@ -54,7 +54,7 @@ def group_email():
 						 _s.group.humanName))
 		stext = s2.getvalue()
 		stext = '(geen)' if stext == '' else stext
-		em = templ % {'fullName': m.get_full_name(),
+		em = templ % {'fullName': m.full_name(),
 			      'seats': stext,
 			      'tree': s.getvalue()}
 		m.email_user('Overzicht groepen, commissies en e-maillijsten',

@@ -35,7 +35,7 @@
 	{% for oldseat in oldseats %}
 	<dt>{{ oldseat.humanName }}</dt>
 	<dd><a href="{{ oldseat.user.get_absolute_url }}"
-		>{{ oldseat.user.get_full_name }}</a></dd>
+		>{{ oldseat.user.full_name }}</a></dd>
 	{% endfor %}
 	</dl>
 {% endif %}
@@ -44,7 +44,7 @@
 	<ul>
 	{% for user in otherMembers %}
 	<li><a href="{{ user.oldknuser.get_absolute_url }}"
-		>{{ user.oldknuser.get_full_name }}</a></li>
+		>{{ user.oldknuser.full_name }}</a></li>
 	{% endfor %}
 	</ul>
 {% endif %}

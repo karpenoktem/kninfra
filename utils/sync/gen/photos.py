@@ -54,7 +54,7 @@ def sync_database(members):
 		if member.username in uid:
 			continue
 		user = member.username
-		name = member.get_full_name()
+		name = member.full_name()
 		email = member.username+"@"+MAILDOMAIN
 		rights = 258
 
@@ -68,7 +68,7 @@ def checkDatabaseAdmin(adm, members):
 		print "warn gallery admin %s is not a member." % user
 		return
 	member = members[user]
-	member_name = member.get_full_name()
+	member_name = member.full_name()
 	if member_name!=unicode(name, 'utf-8'):
 		print "# %s's name, %s, is outdated," % (user,name) 
 		print "photos adm-update %s name %s" % (user,sesc(member_name))	
