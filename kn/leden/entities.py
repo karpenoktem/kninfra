@@ -17,7 +17,7 @@ def by_name(n):
 	return entity(ecol.find_one({'names': n}))
 
 def by_id(n):
-	if isinstance(n, basestr):
+	if isinstance(n, basestring):
 		n = ObjectId(n)
 	return entity(ecol.find_one({'_id': n}))
 
