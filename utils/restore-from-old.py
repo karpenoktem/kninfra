@@ -10,6 +10,8 @@ from kn.settings import DT_MIN, DT_MAX
 def main(f):
 	data = json.load(f)
 	Es.ecol.drop()
+	Es.rcol.drop()
+	Es.mcol.drop()
 	Es.ensure_indices()
 	conv_inst = dict()
 	conv_study = dict()
@@ -20,20 +22,17 @@ def main(f):
 			'names': [],
 			'tags': [],
 			'humanNames': [{'human': m['name']}],
-			'relations': [],
 			'names': []}
 		conv_inst[m['id']] = Es.ecol.insert(n)
 	for m in data['Study']:
 		n = {	'types': ['study'],
 			'names': [],
 			'tags': [],
-			'relations': [],
 			'humanNames': [{'human': m['name']}]}
 		conv_study[m['id']] = Es.ecol.insert(n)
 	for m in data['OldKnGroup']:
 		n = {	'types': ['tag' if m['isVirtual'] else 'group'],
 			'names': [m['name']],
-			'relations': [],
 			'tags': [],
 			'humanNames': [{
 				'name': m['name'],
@@ -97,7 +96,6 @@ def main(f):
 				 'until': DT_MAX,
 				 'number': m['studentNumber']}
 			],
-			'relations': [],
 			'temp': {
 				'oud': m['in_oud'],
 				'aan': m['in_aan'],
@@ -108,19 +106,19 @@ def main(f):
 			'is_active': m['is_active'],
 			'password': pwd
 			}
+		conv_user[m['id']] = Es.ecol.insert(n)
 		for g in m['groups']:
-			n['relations'].append({
+			Es.rcol.insert({
 				'with': conv_group[g]['id'],
+				'who': conv_user[m['id']],
 				'from': DT_MIN,
 				'until': DT_MAX,
 				'how': None})
-		conv_user[m['id']] = Es.ecol.insert(n)
 	for m in data['OldSeat']:
 		n = {'types': ['seat'],
 		     'names': [conv_group[m['group']]['name'] + 
 				'-' + m['name']],
 		     'description': [m['description']],
-		     'relations': [],
 		     'tags': [],
 		     'humanNames': [{
 			     	'name': conv_group[m['group']]['name'] +

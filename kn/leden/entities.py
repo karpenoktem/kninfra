@@ -9,6 +9,7 @@ from kn.settings import DT_MIN, DT_MAX
 
 ecol = db['entities']
 mcol = db['messages']
+rcol = db['relations']
 
 def entity(d):
 	if d is None:
@@ -30,40 +31,39 @@ def all():
 class Entity(object):
 	def __init__(self, data=None):
 		self.data = data
+
 	def get_rrelated(self):
-		how_ids = list()
-		h_lut = dict()
-		rrelated = list()
-		for m in ecol.find({'relations.with': self.data['_id']}):
-			for n in m['relations']:
-				if n['with'] != self.data['_id']:
-					continue
-				n = dict(n)
-				if n['how']:
-					how_ids.append(n['how'])
-				if n['from'] == DT_MIN:
-					n['from'] = None
-				if n['until'] == DT_MAX:
-					n['until'] = None
-				n['who'] = entity(m)
-				rrelated.append(n)
-		for m in ecol.find({'_id': {'$in': how_ids}}):
-			h_lut[m['_id']] = entity(m)
-		for m in rrelated:
-			m['how'] = h_lut.get(m['how'])
-		return rrelated
+		rel_ids = list()
+		e_lut = dict()
+		rels = list(rcol.find({'with': self.data['_id']}))
+		for rel in rels:
+			rel_ids.append(rel['who'])
+			if rel['how']:
+				rel_ids.append(rel['how'])
+		for m in ecol.find({'_id': {'$in': rel_ids}}):
+			e_lut[m['_id']] = entity(m)
+		for rel in rels:
+			rel['with'] = self
+			rel['how'] = e_lut.get(rel['how'])
+			rel['who'] = e_lut.get(rel['who'])
+			if rel['from'] == DT_MIN:
+				rel['from'] = None
+			if rel['until'] == DT_MAX:
+				rel['until'] = None
+			yield rel
 
 	def get_related(self):
 		rel_ids = list()
 		e_lut = dict()
-		for rel in self.data['relations']:
+		rels = list(rcol.find({'who': self.data['_id']}))
+		for rel in rels:
 			rel_ids.append(rel['with'])
 			if rel['how']:
 				rel_ids.append(rel['how'])
 		for m in ecol.find({'_id': {'$in': rel_ids}}):
 			e_lut[m['_id']] = entity(m)
-		for rel in self.data['relations']:
-			rel = dict(rel)
+		for rel in rels:
+			rel['who'] = self
 			rel['how'] = e_lut.get(rel['how'])
 			rel['with'] = e_lut.get(rel['with'])
 			if rel['from'] == DT_MIN:
@@ -77,10 +77,6 @@ class Entity(object):
 				).sort('humanNames.human', 1):
 			yield Tag(m)
 
-	@property
-	def related_ids(self):
-		for x in self.data['relations']:
-			yield x['with']
 	@property
 	def type(self):
 		return self.data['types'][0]
@@ -240,9 +236,10 @@ def ensure_indices():
 	ecol.ensure_index('names', unique=True)
 	ecol.ensure_index('types')
 	ecol.ensure_index('tags')
-	ecol.ensure_index('relations.how')
-	ecol.ensure_index('relations.with')
-	ecol.ensure_index([('relations.until',1),
-			   ('relations.from',-1)])
+	rcol.ensure_index('how')
+	rcol.ensure_index('with')
+	rcol.ensure_index('who')
+	rcol.ensure_index([('until',1),
+			   ('from',-1)])
 	ecol.ensure_index('humanNames.human')
 	mcol.ensure_index('entity')
