@@ -32,24 +32,28 @@ def user_list(request, page):
 			context_instance=RequestContext(request))
 
 @login_required
-def entity_detail(request, name=None, _id=None):
+def entity_detail(request, name=None, _id=None, type=None):
 	if name is not None:
 		e = Es.by_name(name)
 	else:
 		e = Es.by_id(_id)
 	if e is None:
 		raise Http404
-	if e.type == 'user':
+	if type and not type in e.types:
+		raise ValueError, "Entity is not a %s" % type
+	if not type:
+		type = e.type
+	if type == 'user':
 		return _user_detail(request, e.as_user())
-	elif e.type == 'group':
+	elif type == 'group':
 		return _group_detail(request, e.as_group())
-	elif e.type == 'tag':
+	elif type == 'tag':
 		return _tag_detail(request, e.as_tag())
-	elif e.type == 'seat':
+	elif type == 'seat':
 		return _seat_detail(request, e.as_seat())
-	elif e.type == 'study':
+	elif type == 'study':
 		return _study_detail(request, e.as_study())
-	elif e.type == 'institute':
+	elif type == 'institute':
 		return _institute_detail(request, e.as_institute())
 	raise ValueError, "Unknown entity type"
 

@@ -129,8 +129,19 @@ class Entity(object):
 	def as_institute(self): return Institute(self.data)
 
 class Group(Entity):
-	pass
+	@permalink
+	def get_absolute_url(self):
+		if self.primary_name:
+			return ('group-by-name', (),
+					{'name': self.primary_name})
+		return ('group-by-id', (), {'_id': self.id})
 class User(Entity):
+	@permalink
+	def get_absolute_url(self):
+		if self.primary_name:
+			return ('user-by-name', (),
+					{'name': self.primary_name})
+		return ('user-by-id', (), {'_id': self.id})
 	def check_password(self, pwd):
 		dg = get_hexdigest(self.password['algorithm'],
 				   self.password['salt'], pwd)
@@ -172,17 +183,38 @@ class User(Entity):
 	def last_name(self):
 		return self.data['person']['family']
 class Tag(Entity):
+	@permalink
+	def get_absolute_url(self):
+		if self.primary_name:
+			return ('tag-by-name', (),
+					{'name': self.primary_name})
+		return ('tag-by-id', (), {'_id': self.id})
 	def get_bearers(self):
 		return [entity(m) for m in ecol.find({
 				'tags': self.data['_id']}).sort(
 						'humanNames.human')]
 
 class Study(Entity):
-	pass
+	@permalink
+	def get_absolute_url(self):
+		if self.primary_name:
+			return ('study-by-name', (),
+					{'name': self.primary_name})
+		return ('study-by-id', (), {'_id': self.id})
 class Institute(Entity):
-	pass
+	@permalink
+	def get_absolute_url(self):
+		if self.primary_name:
+			return ('institute-by-name', (),
+					{'name': self.primary_name})
+		return ('institute-by-id', (), {'_id': self.id})
 class Seat(Entity):
-	pass
+	@permalink
+	def get_absolute_url(self):
+		if self.primary_name:
+			return ('seat-by-name', (),
+					{'name': self.primary_name})
+		return ('seat-by-id', (), {'_id': self.id})
 
 TYPE_MAP = {
 	'group': Group,
