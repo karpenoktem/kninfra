@@ -114,6 +114,9 @@ class Entity(object):
 			return ('entity-by-name', (),
 					{'name': self.primary_name})
 		return ('entity-by-id', (), {'_id': self.id})
+	@property
+	def types(self):
+		return set(self.data['types'])
 
 	def __repr__(self):
 		return "<Entity %s (%s)>" % (self.id, self.type)
