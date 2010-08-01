@@ -43,19 +43,9 @@ def entity_detail(request, name=None, _id=None, type=None):
 		raise ValueError, "Entity is not a %s" % type
 	if not type:
 		type = e.type
-	if type == 'user':
-		return _user_detail(request, e.as_user())
-	elif type == 'group':
-		return _group_detail(request, e.as_group())
-	elif type == 'tag':
-		return _tag_detail(request, e.as_tag())
-	elif type == 'seat':
-		return _seat_detail(request, e.as_seat())
-	elif type == 'study':
-		return _study_detail(request, e.as_study())
-	elif type == 'institute':
-		return _institute_detail(request, e.as_institute())
-	raise ValueError, "Unknown entity type"
+	if not type in Es.TYPE_MAP:
+		raise ValueError, "Unknown entity type"
+	return globals()['_'+type+'_detail'](request, getattr(e, 'as_'+type)())
 
 def _entity_detail(request, e):
 	def _cmp(x,y):
