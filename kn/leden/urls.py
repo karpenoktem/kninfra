@@ -1,8 +1,15 @@
 from django.conf.urls.defaults import *
 
+import django.views.generic.simple
+import django.views.generic as generic
+from django.contrib.auth.decorators import login_required
+
 from kn.leden import views
 
 urlpatterns = patterns('',
+	url(r'^$',
+	login_required(generic.simple.direct_to_template),
+	   {'template': 'leden/home.html'}, name='smoelen-home'),
 	url(r'^gebruikers/(?:p/(?P<page>[0-9]+)/)?$',
 	    views.user_list, name='user-list'),
 	url(r'^naamdrager/(?P<name>[^/]+)/$',
