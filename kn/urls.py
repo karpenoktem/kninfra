@@ -1,10 +1,7 @@
 from django.conf.urls.defaults import *
 from kn.leden import views
 
-# Uncomment the next two lines to enable the admin:
-from django.contrib import admin, auth
-
-admin.autodiscover()
+from django.contrib import auth
 
 import django.contrib.auth.views
 from kn.base.views import direct_to_folder
@@ -12,7 +9,6 @@ from django.conf import settings
 
 urlpatterns = patterns('',
 	(r'^base/', include('kn.base.urls')),
-	(r'^admin/(.*)', admin.site.root),
 	(r'^groups/(?P<subdir>[^/]+)/(?P<path>.*)',
 		'kn.browser.views.homedir', {'root':'/groups/kn'}),
 	(r'^smoelen/', include('kn.leden.urls')),
