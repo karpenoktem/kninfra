@@ -125,13 +125,11 @@ def main(f):
 			     		'-' + m['name'],
 				'human': m['humanName']}]}
 		i = Es.ecol.insert(n)
-		Es.ecol.update({'_id': conv_user[m['user']]},
-				{'$push': {'relations': {
-					'from': DT_MIN,
-					'until': DT_MAX,
-					'how': i,
-					'with': conv_group[m['group']]['id']
-				}}})
+		Es.rcol.insert({'who': conv_user[m['user']],
+				'from': DT_MIN,
+				'until': DT_MAX,
+				'how': i,
+				'with': conv_group[m['group']]['id']})
 	
 if __name__ == '__main__':
 	if len(sys.argv) == 1:
