@@ -94,11 +94,15 @@ def _seat_detail(request, seat):
 	# TODO stub
 	return HttpResponse("")
 def _study_detail(request, study):
-	# TODO stub
-	return HttpResponse("")
+	ctx = _entity_detail(request, study)
+	# TODO add followers in ctx
+	return render_to_response('leden/study_detail.html', ctx,
+			context_instance=RequestContext(request))
 def _institute_detail(request, institute):
-	# TODO stub
-	return HttpResponse("")
+	ctx = _entity_detail(request, institute)
+	# TODO add followers in ctx
+	return render_to_response('leden/institute_detail.html', ctx,
+			context_instance=RequestContext(request))
 
 @login_required
 def user_smoel(request, name):

@@ -1,0 +1,8 @@
+{% extends "leden/entity_base.html" %}
+{% load base %}
+
+{% block body %}
+<h2>{{ object.humanName }}</h2>
+<p>{{ object.description }}</p>
+{{ block.super }}
+{% endblock %}
