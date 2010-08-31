@@ -87,7 +87,7 @@ GCAL_MAIN = 'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com'
 GCAL_UIT = '56ndj4j9iei03ahqa7fkrl566s@group.calendar.google.com'
 GCAL_BD = '3p6k3ge8476t1bs5c20khat1uc@group.calendar.google.com'
 
-MEMBER_GROUP = 'leden6'
+MEMBER_GROUP = 'leden7'
 DAYS_IN_YEAR = 365.242199
 
 INST_RU = 2
