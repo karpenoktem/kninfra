@@ -38,7 +38,7 @@ def sync_commissions():
 	eerstejaars = set()
 	for user in OldKnUser.objects.all():
 		if (not user.groups.filter(pk=mg.pk) and
-			user.is_active):
+			user.is_active and not user.force_is_active):
 			print "notice %s not in %s, deactivated" % (
 					user.username, MEMBER_GROUP)
 			user.is_active = False

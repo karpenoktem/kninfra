@@ -139,6 +139,7 @@ class OldKnUser(User, NamedMixin):
 	got_incasso = models.BooleanField()
 	in_aan = models.BooleanField(default=True)
 	in_oud = models.BooleanField(default=True)
+	force_is_active = models.BooleanField(default=False)
 
 	remarks = models.TextField(blank=True)
 
