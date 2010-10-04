@@ -35,6 +35,11 @@ class OldSeatAdmin(admin.ModelAdmin):
 	list_filter = ('name',)
 	search_fields = ('name', 'humanName', 'description')
 	ordering = ('group', 'name')
+
+class AliasAdmin(admin.ModelAdmin):
+	list_display = ('source', 'target')
+	search_fields = ('source',)
+	ordering = ('source',)
 	
 
 admin.site.register(Study)
@@ -42,7 +47,7 @@ admin.site.register(OldKnUser, OldKnUserAdmin)
 admin.site.register(EduInstitute)
 admin.site.register(OldKnGroup, OldKnGroupAdmin)
 admin.site.register(OldSeat, OldSeatAdmin)
-admin.site.register(Alias)
+admin.site.register(Alias, AliasAdmin)
 admin.site.register(Transaction)
 admin.site.register(TransactionType)
 admin.site.register(KnUser)
