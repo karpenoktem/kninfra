@@ -30,11 +30,18 @@ class OldKnGroupAdmin(admin.ModelAdmin):
 	filter_horizontal = ('permissions', )
 	list_display = ('name', 'humanName')
 
+class OldSeatAdmin(admin.ModelAdmin):
+	list_display = ('name', 'group', 'user')
+	list_filter = ('name',)
+	search_fields = ('name', 'humanName', 'description')
+	ordering = ('group', 'name')
+	
+
 admin.site.register(Study)
 admin.site.register(OldKnUser, OldKnUserAdmin)
 admin.site.register(EduInstitute)
 admin.site.register(OldKnGroup, OldKnGroupAdmin)
-admin.site.register(OldSeat)
+admin.site.register(OldSeat, OldSeatAdmin)
 admin.site.register(Alias)
 admin.site.register(Transaction)
 admin.site.register(TransactionType)
