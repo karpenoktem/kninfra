@@ -53,13 +53,20 @@ def _deactivate_mm(ml, name, user, record, moderators):
 	ml.Save()
 	if not record is None:
 		record.delete()
-	EmailMessage(
-		"Moderatiemodus op %s is uitgezet door %s" % (name,
-							user.username),
-		("De moderatiemodus op %s is uitgezet door %s.") % (
-			name, user.username),
-		'<wortel@karpenoktem.nl>',
-		[moderators.primary_email]).send()
+	if user is None:
+		EmailMessage(
+			"Moderatiemodus op %s is verlopen" % name,
+			("De moderatiemodus op %s is verlopen.") % name,
+			'<wortel@karpenoktem.nl>',
+			[moderators.primary_email]).send()
+	else:
+		EmailMessage(
+			"Moderatiemodus op %s is uitgezet door %s" % (name,
+								user.username),
+			("De moderatiemodus op %s is uitgezet door %s.") % (
+				name, user.username),
+			'<wortel@karpenoktem.nl>',
+			[moderators.primary_email]).send()
 
 def _renew_mm(ml, name, user, record, moderators):
 	if not ml.emergency:
