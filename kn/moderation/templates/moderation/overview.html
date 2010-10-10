@@ -1,0 +1,25 @@
+{% extends "leden/base.html" %}
+
+{% block body %}
+<h1>Moderatie</h1>
+<table>
+	<thead>
+		<tr><th>Naam</th><th>Moderatie-modus</th></tr>
+	</thead>
+	<tbody>
+{% for l in lists %}
+<tr>
+	<td><a href="{% url oldkngroup-detail l.name %}"
+			>{{ l.real_name }}</a></td>
+	<td>
+		{% if l.modmode %}
+		actief ({{ l.queue }} in wachtrij)
+		{% else %}
+		inactief
+		{% endif %}
+	</td>
+</tr>
+{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
