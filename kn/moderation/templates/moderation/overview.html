@@ -17,9 +17,18 @@
 			>{{ l.real_name }}</a></td>
 	<td>
 		{% if l.modmode %}
-		actief ({{ l.queue }} in wachtrij)
+		actief
 		{% else %}
 		inactief
+		{% endif %}
+		{% if l.queue %}
+		{% if is_moderator %}
+		<a href="{% url moderation-redirect l.name %}">
+		{% endif %}
+		({{ l.queue }} in wachtrij)
+		{% if is_moderator %}
+		</a>
+		{% endif %}
 		{% endif %}
 	</td>
 	{% if is_moderator %}

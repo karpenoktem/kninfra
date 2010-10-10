@@ -4,4 +4,5 @@ import kn.moderation.views as views
 
 urlpatterns = patterns('',
 	url(r'^$', views.overview, name='moderation-home'),
+	url(r'^(?P<name>[^/]+)/$', views.redirect, name='moderation-redirect'),
 )
