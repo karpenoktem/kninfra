@@ -18,6 +18,9 @@
 	<td>
 		{% if l.modmode %}
 		actief
+		{% if l.by %}
+		door {{ l.by }}
+		{% endif %}
 		{% else %}
 		inactief
 		{% endif %}
@@ -34,7 +37,8 @@
 	{% if is_moderator %}
 	<td>
 		<form action="?" method="POST">
-			<input type="hidden" name="name" value="{{ l.name }}" />
+			<input type="hidden" name="toggle"
+						value="{{ l.name }}" />
 			<input type="submit"
 			{% if l.modmode %}
 				value="deactiveer"
@@ -43,6 +47,14 @@
 			{% endif %}
 				/>
 		</form>
+		{% if l.modmode %}
+		<form action="?" method="POST">
+			<input type="hidden" name="renew"
+						value="{{ l.name }}" />
+			<input type="submit"
+				value="verleng (-{{l.remaining}})" />
+		</form>
+		{% endif %}
 	</td>
 	{% endif %}
 </tr>
