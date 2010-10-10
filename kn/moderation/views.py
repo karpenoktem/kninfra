@@ -50,9 +50,11 @@ def _deactivate_mm(ml, name, user, record, moderators):
 	if not ml.emergency:
 		return
 	ml.emergency = False
-	ml.Save()
 	if not record is None:
 		record.delete()
+	for id in ml.GetHeldMessageIds():
+		ml.HandleRequest(id, mm_cfg.APPROVE)
+	ml.Save()
 	if user is None:
 		EmailMessage(
 			"Moderatiemodus op %s is verlopen" % name,
