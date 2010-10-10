@@ -4,7 +4,11 @@
 <h1>Moderatie</h1>
 <table>
 	<thead>
-		<tr><th>Naam</th><th>Moderatie-modus</th></tr>
+		<tr><th>Naam</th><th>Moderatie-modus</th>
+			{% if is_moderator %}
+			<th></th>
+			{% endif %}
+		</tr>
 	</thead>
 	<tbody>
 {% for l in lists %}
@@ -18,6 +22,20 @@
 		inactief
 		{% endif %}
 	</td>
+	{% if is_moderator %}
+	<td>
+		<form action="?" method="POST">
+			<input type="hidden" name="name" value="{{ l.name }}" />
+			<input type="submit"
+			{% if l.modmode %}
+				value="deactiveer"
+			{% else %}
+				value="activeer"
+			{% endif %}
+				/>
+		</form>
+	</td>
+	{% endif %}
 </tr>
 {% endfor %}
 	</tbody>
