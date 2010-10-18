@@ -26,6 +26,10 @@ from Mailman import mm_cfg
 
 @login_required
 def redirect(request, name):
+	if not request.build_absolute_uri().startswith(
+			settings.MOD_DESIRED_URI_PREFIX):
+		return HttpResponseRedirect(settings.MOD_DESIRED_URI_PREFIX +
+						request.get_full_path())
 	name = str(name)
 	if (request.user.groups.filter(
 			name=settings.MODERATORS_GROUP).count() == 0):
