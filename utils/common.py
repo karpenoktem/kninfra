@@ -70,7 +70,7 @@ def emailfy_name(first, last):
 	return n
 
 MAILDOMAIN = kn.settings.MAILDOMAIN
-LISTDOMAIN = 'lists.'+MAILDOMAIN
+LISTDOMAIN = 'pre-lists.'+MAILDOMAIN
 
 EMAIL_ALLOWED = frozenset(
 		    map(lambda x: chr(ord('a') + x), xrange(26)) +
