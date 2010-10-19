@@ -28,8 +28,10 @@ def homedir(request, root, subdir, path):
 		# world read access?
 		if os.stat(p).st_mode & 4 != 4:
 			raise Http404
-		return HttpResponse(FileWrapper(open(p)),
+		response = HttpResponse(FileWrapper(open(p)),
 				mimetype=mimetypes.guess_type(p)[0])
+		response['Content-Length'] = os.path.getsize(p)
+		return response
 	l = set()
 	if os.path.isdir(p1):
 		l.update(os.listdir(p1))
