@@ -8,6 +8,7 @@ class Event(models.Model):
 	mailBody = models.TextField()
 	owner = models.ForeignKey(OldKnGroup)
 	cost = models.DecimalField(max_digits=11, decimal_places=2)
+	is_open = models.BooleanField(default=True)
 
 	def __unicode__(self):
 		return unicode('%s (%s)' % (self.humanName, self.owner))

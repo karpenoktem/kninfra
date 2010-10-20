@@ -17,9 +17,13 @@
 </dl>
 
 {% if not subscription %}
+{% if object.is_open %}
 <form method="post" action="">
 	<input type="submit" value="Aanmelden!" /> 
 </form>
+{% else %}
+<i>Je kunt je niet meer aanmelden.</i>
+{% endif %}
 {% endif %}
 
 {% if subscrlist %}

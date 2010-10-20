@@ -27,7 +27,7 @@ def event_detail(request, name):
 			request.user.message_set.create(
 				message="Je bent aangemeld en je"+\
 						" betaling is verwerkt!")
-	elif request.method == 'POST':
+	elif request.method == 'POST' and event.is_open:
 		subscription = EventSubscription(
 			event=event,
 			user=OldKnUser.objects.get(
