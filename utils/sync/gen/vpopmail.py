@@ -34,7 +34,7 @@ def get_desired_map():
 	for list in Mailman.Utils.list_names():
 		claim(list, list + '@' + LISTDOMAIN, 'mailinglist')
 	for oldseat in OldSeat.objects.select_related('group', 'user').all():
-		name, email = oldseat.primary_name, oldseat.primary_email
+		name, email = oldseat.name, oldseat.primary_email
 		temail = oldseat.user.primary_email		
 		claim(name, temail, 'oldseat')
 	for alias in Alias.objects.all():

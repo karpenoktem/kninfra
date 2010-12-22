@@ -74,7 +74,7 @@ def _entity_detail(request, e):
 def _user_detail(request, user):
 	hasPhoto = default_storage.exists('%s.jpg' % 
 			path.join(settings.SMOELEN_PHOTOS_PATH,
-					user.primary_name))
+					str(user.name)))
 	ctx = _entity_detail(request, user)
 	ctx.update({'hasPhoto': hasPhoto})
 	return render_to_response('leden/user_detail.html', ctx,
@@ -112,7 +112,7 @@ def user_smoel(request, name):
 	try:
 		img = default_storage.open(path.join(
 			settings.SMOELEN_PHOTOS_PATH,
-			user.primary_name) + ".jpg")
+			user.name) + ".jpg")
 	except IOError:
 		raise Http404
 	return HttpResponse(FileWrapper(img), mimetype="image/jpeg")
@@ -120,7 +120,7 @@ def user_smoel(request, name):
 def _ik_chpasswd_handle_valid_form(request, form):
 	oldpw = form.cleaned_data['old_password']
 	newpw = form.cleaned_data['new_password']
-	change_password(request.user.primary_name, oldpw, newpw)
+	change_password(request.user.name, oldpw, newpw)
 	t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd.""" 
 	request.user.push_message(t % request.user.first_name)
 	return HttpResponseRedirect(reverse('smoelen-home'))
@@ -164,11 +164,11 @@ def rauth(request):
 		return redirect_to_login('%s?url=%s' % (
 				reverse('rauth'),
 				request.REQUEST['url'].replace('/', '%2F')))
-	token = sha256('%s|%s|%s|%s' % (request.user.primary_name,
+	token = sha256('%s|%s|%s|%s' % (request.user.name,
 					date.today(),
 					request.REQUEST['url'],
 					settings.SECRET_KEY)).hexdigest()
 	return HttpResponseRedirect('%s%suser=%s&token=%s' % (
 		request.REQUEST['url'],
 		'?' if request.REQUEST['url'].find('?') == -1 else '&',
-		request.user.primary_name, token))
+		request.user.name, token))

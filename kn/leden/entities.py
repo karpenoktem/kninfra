@@ -4,7 +4,7 @@ from django.db.models import permalink
 from django.contrib.auth.models import get_hexdigest
 from pymongo.objectid import ObjectId
 
-from kn.leden.mongo import db
+from kn.leden.mongo import db, SONWrapper
 from kn.settings import DT_MIN, DT_MAX
 
 ecol = db['entities']
@@ -28,14 +28,49 @@ def all():
 	for m in ecol.find():
 		yield entity(m)
 
-class Entity(object):
-	def __init__(self, data=None):
-		self.data = data
+class EntityName(object):
+	def __init__(self, entity, name):
+		self._entity = entity
+		self._name = name
+	@property
+	def humanNames(self):
+		for n in self.entity._data['humanNames']:
+			if n['name'] == self.name:
+				yield EntityHumanName(self._entity, n)
+	@property
+	def primary_humanName(self):
+		try:
+			return next(self.humanNames)
+		except StopIteration:
+			return None
+	def __str__(self):
+		return self._name
+	def __repr__(self):
+		return "<EntityName %s of %s>" % (self._name, self._entity)
 
+class EntityHumanName(object):
+	def __init__(self, entity, data):
+		self._entity = entity
+		self._data = data
+	@property
+	def name(self):
+		return EntityName(self._entity, self._data.get('name'))
+	@property
+	def humanName(self):
+		return self._data['human']
+	def __str__(self):
+		return self.humanName
+	def __repr__(self):
+		return "<EntityHumanName %s of %s>" % (
+				self._data, self._entity)
+
+class Entity(SONWrapper):
+	def __init__(self, data):
+		super(Entity, self).__init__(data, ecol)
 	def get_rrelated(self):
 		rel_ids = list()
 		e_lut = dict()
-		rels = list(rcol.find({'with': self.data['_id']}))
+		rels = list(rcol.find({'with': self._id}))
 		for rel in rels:
 			rel_ids.append(rel['who'])
 			if rel['how']:
@@ -55,7 +90,7 @@ class Entity(object):
 	def get_related(self):
 		rel_ids = list()
 		e_lut = dict()
-		rels = list(rcol.find({'who': self.data['_id']}))
+		rels = list(rcol.find({'who': self._id}))
 		for rel in rels:
 			rel_ids.append(rel['with'])
 			if rel['how']:
@@ -73,70 +108,73 @@ class Entity(object):
 			yield rel
 	
 	def get_tags(self):
-		for m in ecol.find({'_id': {'$in': self.data['tags']}}
+		for m in ecol.find({'_id': {'$in': self._data['tags']}}
 				).sort('humanNames.human', 1):
 			yield Tag(m)
 
 	@property
 	def type(self):
-		return self.data['types'][0]
+		return self._data['types'][0]
 	@property
 	def id(self):
-		return str(self.data['_id'])
+		return str(self._id)
 	@property
 	def tags(self):
-		for m in ecol.find({'_id': {'$in': self.data['tags']}}):
+		for m in ecol.find({'_id': {'$in': self._data['tags']}}):
 			yield Tag(m)
 	@property
-	def primary_name(self):
-		if self.data['names']:
-			return self.data['names'][0]
-		return None
-	@property
 	def names(self):
-		return self.data['names']
-	def save(self):
-		ecol.update({'_id': self.data['_id']},
-			    self.data)
+		for n in self._data['names']:
+			yield EntityName(self, n)
+	@property
+	def name(self):
+		try:
+			return next(self.names)
+		except StopIteration:
+			return None
+	@property
+	def humanNames(self):
+		for n in self._data['humanNames']:
+			yield EntityHumanName(self, n)
 	@property
 	def humanName(self):
-		return self.data['humanNames'][0]['human']
-	@property
-	def genitive_prefix(self):
-		return self.data['humanNames'][0]['genitive_prefix']
+		try:
+			return next(self.humanNames)
+		except StopIteration:
+			return None
 	@permalink
 	def get_absolute_url(self):
-		if self.primary_name:
+		if self.name:
 			return ('entity-by-name', (),
-					{'name': self.primary_name})
+					{'name': self.name})
 		return ('entity-by-id', (), {'_id': self.id})
 	@property
 	def types(self):
-		return set(self.data['types'])
+		return set(self._data['types'])
 
 	def __repr__(self):
 		return "<Entity %s (%s)>" % (self.id, self.type)
 
-	def as_user(self): return User(self.data)
-	def as_group(self): return Group(self.data)
-	def as_seat(self): return Seat(self.data)
-	def as_tag(self): return Tag(self.data)
-	def as_study(self): return Study(self.data)
-	def as_institute(self): return Institute(self.data)
+	def as_user(self): return User(self._data)
+	def as_group(self): return Group(self._data)
+	def as_seat(self): return Seat(self._data)
+	def as_tag(self): return Tag(self._data)
+	def as_study(self): return Study(self._data)
+	def as_institute(self): return Institute(self._data)
 
 class Group(Entity):
 	@permalink
 	def get_absolute_url(self):
-		if self.primary_name:
+		if self.name:
 			return ('group-by-name', (),
-					{'name': self.primary_name})
+					{'name': self.name})
 		return ('group-by-id', (), {'_id': self.id})
 class User(Entity):
 	@permalink
 	def get_absolute_url(self):
-		if self.primary_name:
+		if self.name:
 			return ('user-by-name', (),
-					{'name': self.primary_name})
+					{'name': self.name})
 		return ('user-by-id', (), {'_id': self.id})
 	def check_password(self, pwd):
 		dg = get_hexdigest(self.password['algorithm'],
@@ -147,69 +185,69 @@ class User(Entity):
 		return self.full_name
 	@property
 	def password(self):
-		return self.data['password']
+		return self._data['password']
 	@property
 	def is_active(self):
-		return self.data['is_active']
+		return self._data['is_active']
 	def is_authenticated(self):
 		# required by django's auth
 		return True
 	def push_message(self, msg):
-		mcol.insert({'entity': self.data['_id'],
+		mcol.insert({'entity': self._id,
 			     'data': msg})
 	def pop_messages(self):
-		msgs = list(mcol.find({'entity': self.data['_id']}))
+		msgs = list(mcol.find({'entity': self._id}))
 		mcol.remove({'_id': {'$in': [m['_id'] for m in msgs]}})
 		return [m['data'] for m in msgs]
 	get_and_delete_messages = pop_messages
 	@property
 	def primary_email(self):
-		return self.data['emails'][0]
+		return self._data['emails'][0]
 	@property
 	def full_name(self):
-		bits = self.data['person']['family'].split(',', 1)
+		bits = self._data['person']['family'].split(',', 1)
 		if len(bits) == 1:
-			return self.data['person']['nick'] + ' ' \
-					+ self.data['person']['family']
-		return self.data['person']['nick'] + bits[1] + ' ' + bits[0]
+			return self._data['person']['nick'] + ' ' \
+					+ self._data['person']['family']
+		return self._data['person']['nick'] + bits[1] + ' ' + bits[0]
 	@property
 	def first_name(self):
-		return self.data['person']['nick']
+		return self._data['person']['nick']
 	@property
 	def last_name(self):
-		return self.data['person']['family']
+		return self._data['person']['family']
 class Tag(Entity):
 	@permalink
 	def get_absolute_url(self):
-		if self.primary_name:
+		if self.name:
 			return ('tag-by-name', (),
-					{'name': self.primary_name})
+					{'name': self.name})
 		return ('tag-by-id', (), {'_id': self.id})
 	def get_bearers(self):
 		return [entity(m) for m in ecol.find({
-				'tags': self.data['_id']}).sort(
+				'tags': self._id}).sort(
 						'humanNames.human')]
 
 class Study(Entity):
 	@permalink
 	def get_absolute_url(self):
-		if self.primary_name:
+		if self.name:
 			return ('study-by-name', (),
-					{'name': self.primary_name})
+					{'name': self.name})
 		return ('study-by-id', (), {'_id': self.id})
 class Institute(Entity):
 	@permalink
 	def get_absolute_url(self):
-		if self.primary_name:
+		if self.name:
 			return ('institute-by-name', (),
-					{'name': self.primary_name})
+					{'name': self.name})
 		return ('institute-by-id', (), {'_id': self.id})
 class Seat(Entity):
 	@permalink
 	def get_absolute_url(self):
-		if self.primary_name:
+		if self.name:
 			return ('seat-by-name', (),
-					{'name': self.primary_name})
+					{'name': self.name})
 		return ('seat-by-id', (), {'_id': self.id})
 
 TYPE_MAP = {
