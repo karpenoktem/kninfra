@@ -61,6 +61,7 @@ class KnUser(Entity):
 	study = models.ForeignKey('Study', null=True)
 	got_incasso = models.BooleanField()
 	in_aan = models.BooleanField(default=True)
+	in_naast = models.BooleanField(default=True)
 	in_oud = models.BooleanField(default=True)
 
 	@property
@@ -138,6 +139,7 @@ class OldKnUser(User, NamedMixin):
 	study = models.ForeignKey('Study', null=True)
 	got_incasso = models.BooleanField()
 	in_aan = models.BooleanField(default=True)
+	in_naast = models.BooleanField(default=True)
 	in_oud = models.BooleanField(default=True)
 	force_is_active = models.BooleanField(default=False)
 

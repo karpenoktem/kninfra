@@ -31,6 +31,7 @@ def main():
 			   studentNumber=o.studentNumber,
 			   institute=o.institute,
 			   in_aan=o.in_aan,
+			   in_naast=o.in_naast,
 			   got_incasso=o.got_incasso,
 			   study=o.study,
 			   name=o.username)
