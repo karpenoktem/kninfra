@@ -63,6 +63,7 @@ class KnUser(Entity):
 	in_aan = models.BooleanField(default=True)
 	in_naast = models.BooleanField(default=True)
 	in_oud = models.BooleanField(default=True)
+	force_is_active = models.BooleanField(default=False)
 
 	@property
 	def primary_name(self):
