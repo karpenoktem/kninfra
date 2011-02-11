@@ -22,6 +22,8 @@ def main():
 		ulut[u.pk] = u
 	for poll in Poll.objects.all():
 		print poll
+		if not poll.pk in plut:
+			continue
 		for q in plut[poll.pk]:
 			lut = dict()
 			if not q.id in qlut:
