@@ -25,6 +25,14 @@ def execute(args):
 		c = db.cursor()
 		c.execute("INSERT INTO valias(`alias`, `valias_line`, `domain`) "+
 			  "VALUES (%s, %s, %s)", (source, '&'+target, MAILDOMAIN))
+	elif cmd == 'rm':
+		if len(args) != 3:
+			print "Expecting 3 arguments"
+			return -2
+		source = args[1]
+		target = args[2]
+		c = db.cursor()
+		c.execute("DELETE FROM valias WHERE `alias` = %s AND `valias_line` = %s AND `domain` = %s", (source, '&'+target, MAILDOMAIN))
 	else:
 		print "Unknown command"
 		return -4
