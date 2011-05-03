@@ -21,6 +21,7 @@ class EventSubscription(models.Model):
 	event = models.ForeignKey('Event')
 	user = models.ForeignKey(OldKnUser)
 	debit = models.DecimalField(max_digits=11, decimal_places=2)
+        userNotes = models.TextField()
 
 	class Meta:
 		unique_together = (("event", "user"), )

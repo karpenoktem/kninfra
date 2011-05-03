@@ -28,10 +28,12 @@ def event_detail(request, name):
 				message="Je bent aangemeld en je"+\
 						" betaling is verwerkt!")
 	elif request.method == 'POST' and event.is_open:
+                notes = request.POST['notes']
 		subscription = EventSubscription(
 			event=event,
 			user=OldKnUser.objects.get(
 				username=request.user.username),
+                        userNotes=notes,
 			debit=event.cost)
 		subscription.save()
 		full_owner_address = '%s <%s>' % (
@@ -40,7 +42,8 @@ def event_detail(request, name):
 		email = EmailMessage(
 				"Aanmelding %s" % event.humanName,
 				 event.mailBody % {
-					'firstName': request.user.first_name},
+					'firstName': request.user.first_name,
+                                        'notes': notes},
 				'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
 				[request.user.oldknuser.primary_email],
 				[event.owner.primary_email],
