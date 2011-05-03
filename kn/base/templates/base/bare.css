@@ -62,3 +62,7 @@ h2 {
 address {
 	padding-left: 3em;
 }
+
+textarea.default, input.default {
+        color: gray;
+}
