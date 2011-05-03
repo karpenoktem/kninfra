@@ -41,7 +41,7 @@
  */
 (function($){
     $.defaultText = function(opts) {
-        var selector = 'input:text[title]',
+        var selector = 'input:text[title],textarea[title]',
             ctx = opts && opts.context ? opts.context : 'body',
             css = opts && opts.css ? opts.css : 'default',
             form_clear = [{selector: 'form', type:'submit'}];
