@@ -1,6 +1,15 @@
 {% extends "leden/base.html" %}
 {% load base %}
 
+{% block head %}
+{{ block.super }}
+<script type="text/javascript">
+$(function(){
+        $.defaultText();
+});
+</script>
+{% endblock %}
+
 {% block body %}
 <h1>{{ object.humanName }}</h1>
 <p>{{ object.description }}</p>
@@ -19,6 +28,9 @@
 {% if not subscription %}
 {% if object.is_open %}
 <form method="post" action="">
+        <textarea class="default" name="notes"
+                style="width: 200px; height: 70px;"
+                title="Opmerkingen"></textarea><br/>
 	<input type="submit" value="Aanmelden!" /> 
 </form>
 {% else %}
