@@ -36,6 +36,7 @@ def oldknuser_detail(request, name):
 			{'object': user,
 			 'oldseats': oldseats,
 			 'comms': comms,
+			 'photosUrl': settings.USER_PHOTOS_URL % name,
 			 'hasPhoto': hasPhoto},
 			context_instance=RequestContext(request))
 

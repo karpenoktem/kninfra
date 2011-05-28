@@ -9,7 +9,10 @@
 
 {% block body %}
 {% if hasPhoto %}
-<div class="smoel"><img src="{% url oldknuser-smoel object.username %}" /></div>
+<div class="smoel"><a href="{{ photosUrl }}">
+	<img src="{% url oldknuser-smoel object.username %}" /></a></div>
+{% else %}
+<div class="nosmoel"><a href="{{ photosUrl }}">Foto's</a></div>
 {% endif %}
 <h1>{{ object.get_full_name }}</h1>
 <dl>
