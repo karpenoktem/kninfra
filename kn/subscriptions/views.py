@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.models import Group
-from kn.subscriptions.models import Event, EventSubscription
-from kn.leden.models import OldKnUser, OldKnGroup
+#from kn.subscriptions.models import Event, EventSubscription
+#from kn.leden.models import OldKnUser, OldKnGroup
 from django.http import Http404
 from django.core.mail import EmailMessage
 
