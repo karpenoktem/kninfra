@@ -31,7 +31,7 @@ $(function(){
         <textarea class="default" name="notes"
                 style="width: 200px; height: 70px;"
                 title="Opmerkingen"></textarea><br/>
-	<input type="submit" value="Aanmelden!" /> 
+	<input type="submit" value="{{ user.oldknuser.get_full_name }} aanmelden!" /> 
 </form>
 {% else %}
 <p><em>Je kunt je niet meer aanmelden.</em></p>

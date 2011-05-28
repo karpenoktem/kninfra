@@ -65,6 +65,7 @@ def event_detail(request, name):
 		subscrcount_debit = None
 	return render_to_response('subscriptions/event_detail.html',
 			{'object': event,
+			 'user': request.user,
 			 'subscrlist': subscrlist,
 			 'subscrcount_debit': subscrcount_debit,
 			 'subscription': subscription},
