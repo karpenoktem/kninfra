@@ -58,7 +58,7 @@ class EntityHumanName(object):
 	@property
 	def humanName(self):
 		return self._data['human']
-	def __str__(self):
+	def __unicode__(self):
 		return self.humanName
 	def __repr__(self):
 		return "<EntityHumanName %s of %s>" % (
