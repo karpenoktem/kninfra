@@ -118,7 +118,7 @@ def user_smoel(request, name):
 	try:
 		img = default_storage.open(path.join(
 			settings.SMOELEN_PHOTOS_PATH,
-			user.name) + ".jpg")
+			str(user.name)) + ".jpg")
 	except IOError:
 		raise Http404
 	return HttpResponse(FileWrapper(img), mimetype="image/jpeg")
@@ -126,7 +126,7 @@ def user_smoel(request, name):
 def _ik_chpasswd_handle_valid_form(request, form):
 	oldpw = form.cleaned_data['old_password']
 	newpw = form.cleaned_data['new_password']
-	change_password(request.user.name, oldpw, newpw)
+	change_password(str(request.user.name), oldpw, newpw)
 	t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd.""" 
 	request.user.push_message(t % request.user.first_name)
 	return HttpResponseRedirect(reverse('smoelen-home'))
@@ -170,11 +170,11 @@ def rauth(request):
 		return redirect_to_login('%s?url=%s' % (
 				reverse('rauth'),
 				request.REQUEST['url'].replace('/', '%2F')))
-	token = sha256('%s|%s|%s|%s' % (request.user.name,
+	token = sha256('%s|%s|%s|%s' % (str(request.user.name),
 					date.today(),
 					request.REQUEST['url'],
 					settings.SECRET_KEY)).hexdigest()
 	return HttpResponseRedirect('%s%suser=%s&token=%s' % (
 		request.REQUEST['url'],
 		'?' if request.REQUEST['url'].find('?') == -1 else '&',
-		request.user.name, token))
+		str(request.user.name), token))
