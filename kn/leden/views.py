@@ -53,6 +53,9 @@ def _entity_detail(request, e):
 		if r: return r
 		r = cmp(x['with'].humanName, y['with'].humanName)
 		if r: return r
+		r = cmp(x['how'].humanName if x['how'] else None,
+			y['how'].humanName if y['how'] else None)
+		if r: return r
 		return cmp(x['from'], y['from'])
 	def _rcmp(x,y):
 		r = cmp(x['until'], y['until'])
@@ -90,7 +93,10 @@ def _tag_detail(request, tag):
 	ctx.update({'bearers': tag.get_bearers()})
 	return render_to_response('leden/tag_detail.html', ctx,
 			context_instance=RequestContext(request))
-def _seat_detail(request, seat):
+def _brand_detail(request, brand):
+	# TODO stub
+	return HttpResponse("")
+def _sofa_detail(request, sofa):
 	# TODO stub
 	return HttpResponse("")
 def _study_detail(request, study):

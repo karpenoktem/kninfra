@@ -16,6 +16,7 @@ def main(f):
 	conv_inst = dict()
 	conv_study = dict()
 	conv_group = dict()
+        conv_seat = dict()
 	conv_user = dict()
 	for m in data['EduInstitute']:
 		n = {	'types': ['institute'],
@@ -114,12 +115,23 @@ def main(f):
 				'from': DT_MIN,
 				'until': DT_MAX,
 				'how': None})
+        for m in data['OldSeat']:
+                if m['name'] in conv_seat:
+                        continue
+                n = {'types': ['brand'],
+                     'tags': [],
+                     'names': [m['name']],
+                     'humanNames': [{'name': m['name'],
+                                     'human': m['humanName']}]}
+                conv_seat[m['name']] = {'id': Es.ecol.insert(n)}
 	for m in data['OldSeat']:
-		n = {'types': ['seat'],
+		n = {'types': ['sofa'],
 		     'names': [conv_group[m['group']]['name'] + 
 				'-' + m['name']],
 		     'description': [m['description']],
 		     'tags': [],
+                     'with': conv_group[m['group']]['id'],
+                     'how': conv_seat[m['name']]['id'],
 		     'humanNames': [{
 			     	'name': conv_group[m['group']]['name'] +
 			     		'-' + m['name'],
@@ -128,7 +140,7 @@ def main(f):
 		Es.rcol.insert({'who': conv_user[m['user']],
 				'from': DT_MIN,
 				'until': DT_MAX,
-				'how': i,
+				'how': conv_seat[m['name']]['id'],
 				'with': conv_group[m['group']]['id']})
 	
 if __name__ == '__main__':
