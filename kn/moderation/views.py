@@ -11,18 +11,18 @@ from django.conf import settings
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 
 from kn.base.runtime import setup_virtual_package
-from kn.leden.models import OldKnGroup
+#from kn.leden.models import OldKnGroup
 
 from kn.moderation.models import ModerationRecord
 
-try:
-	import Mailman
-except ImportError:
-	setup_virtual_package('Mailman', os.path.expanduser(
-					'~mailman/Mailman'))
-import Mailman.MailList
-import Mailman.Utils
-from Mailman import mm_cfg
+#try:
+#	import Mailman
+#except ImportError:
+#	setup_virtual_package('Mailman', os.path.expanduser(
+#					'~list/Mailman'))
+#import Mailman.MailList
+#import Mailman.Utils
+#from Mailman import mm_cfg
 
 @login_required
 def redirect(request, name):
