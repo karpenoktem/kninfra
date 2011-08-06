@@ -5,6 +5,7 @@ import json
 import sys
 
 import kn.leden.entities as Es
+import kn.subscriptions.entities as subscr_Es
 from kn.settings import DT_MIN, DT_MAX
 
 def main(f):
@@ -21,16 +22,18 @@ def main(f):
 	Es.ecol.drop()
 	Es.rcol.drop()
 	Es.mcol.drop()
+        subscr_Es.ecol.drop()
+        subscr_Es.scol.drop()
         print 'creating indices'
 	Es.ensure_indices()
-	conv_inst = dict()
+	subscr_Es.ensure_indices()
+        conv_inst = dict()
 	conv_study = dict()
 	conv_group = dict()
         conv_group_byname = dict()
-        missing_group = set()
+        conv_event = dict()
         conv_seat = dict()
 	conv_user = dict()
-        year_tag = [None]
         pyear_tag = [None]
         nyear_tag = [None]
         ignore_groups = frozenset('leden-oud')
@@ -43,10 +46,8 @@ def main(f):
         year_groups_lut = {}
         print 'initial tags'
         system_tag = create_tag('!system')
-        years_tag = create_tag('!years', [system_tag])
         year_overrides_tag = create_tag('!year-overrides', [system_tag])
         for i in xrange(1,9):
-                year_tag.append(create_tag('!y'+str(i), [years_tag]))
                 pyear_tag.append(create_tag('!+y'+str(i), [year_overrides_tag]))
                 nyear_tag.append(create_tag('!-y'+str(i), [year_overrides_tag]))
         print 'institutes'
@@ -205,12 +206,14 @@ def main(f):
 	for m in data['OldSeat']:
                 if m['group'] not in conv_group:
                         continue
-		n = {'types': ['sofa'],
+		n = {'types': ['group'],
 		     'names': [conv_group[m['group']]['name'] + 
 				'-' + m['name']],
 		     'description': [m['description']],
-                     'with': conv_group[m['group']]['id'],
-                     'how': conv_seat[m['name']]['id'],
+                     'virtual': {
+                             'type': 'sofa',
+                             'with': conv_group[m['group']]['id'],
+                             'how': conv_seat[m['name']]['id']},
 		     'humanNames': [{
 			     	'name': conv_group[m['group']]['name'] +
 			     		'-' + m['name'],
@@ -251,6 +254,27 @@ def main(f):
                 Es.rcol.remove({'_id': r})
         for k,v in plan_changes.iteritems():
                 Es.rcol.update({'_id': k}, {'$set': {'until': v[0]}})
+        print 'event'
+        for m in data['Event']:
+                if m['owner'] not in conv_group:
+                        gname = year_groups_lut[m['owner']][0]
+                        gid = conv_group_byname[gname]
+                else:
+                        gid = conv_group[m['owner']]
+                conv_event[m['id']] = subscr_Es.ecol.insert({
+                        'mailBody': m['mailBody'],
+                        'humanName': m['humanName'],
+                        'cost': m['cost'],
+                        'is_open': m['is_open'],
+                        'owner': gid,
+                        'name': m['name']})
+        print 'event subscriptions'
+        for m in data['EventSubscription']:
+                subscr_Es.scol.insert({
+                        'event': conv_event[m['event']],
+                        'userNotes': m['userNotes'],
+                        'debit': m['debit'],
+                        'user': conv_user[m['user']]})
 if __name__ == '__main__':
 	if len(sys.argv) == 1:
 		sys.argv.append('old.json')
