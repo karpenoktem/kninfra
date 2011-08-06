@@ -12,9 +12,12 @@ def main(f):
         def year_to_dates(year):
                 return (datetime(2003+year,9,1),
                         datetime(2004+year,8,31))
-        def create_tag(name, tags=[]):
+        def create_tag(name, humanName, tags=[]):
                 return Es.ecol.insert({'types': ['tag'],
                                        'names': [name],
+                                       'humanNames': [{
+                                               'name': name,
+                                               'human': humanName}],
                                        'tags': tags})
         print 'loading json'
 	data = json.load(f)
@@ -45,12 +48,18 @@ def main(f):
         year_groups_ids = dict()
         year_groups_lut = {}
         print 'initial tags'
-        system_tag = create_tag('!system')
-        year_overrides_tag = create_tag('!year-overrides', [system_tag])
-        virtual_group_tag = create_tag("!virtual-group", [system_tag])
+        system_tag = create_tag('!system', 'Systeemstempels')
+        year_overrides_tag = create_tag('!year-overrides',
+                        'Jaarlidmaatschapstempels', [system_tag])
+        virtual_group_tag = create_tag("!virtual-group",
+                        'Virtuele groep', [system_tag])
+        year_group_tag = create_tag("!year-group", 'Jaargroep', 
+                        [system_tag])
         for i in xrange(1,9):
-                pyear_tag.append(create_tag('!+y'+str(i), [year_overrides_tag]))
-                nyear_tag.append(create_tag('!-y'+str(i), [year_overrides_tag]))
+                pyear_tag.append(create_tag('!+y'+str(i), 'Wel jaar %s' % i,
+                        [year_overrides_tag]))
+                nyear_tag.append(create_tag('!-y'+str(i), 'Niet jaar %s' % i,
+                        [year_overrides_tag]))
         print 'institutes'
 	for m in data['EduInstitute']:
 		n = {	'types': ['institute'],
@@ -66,6 +75,7 @@ def main(f):
                 'id': Es.ecol.insert({
                         'types': ['group'],
                         'names': ['bestuur'],
+                        'tags': [year_group_tag],
                         'humanNames': [{
                                 'name': 'bestuur',
                                 'human': 'Bestuur',
@@ -76,6 +86,7 @@ def main(f):
                 'id': Es.ecol.insert({
                         'types': ['group'],
                         'names': ['kasco'],
+                        'tags': [year_group_tag],
                         'humanNames': [{
                                 'name': 'kasco',
                                 'human': 'Kascontrolecommissie',
@@ -213,7 +224,7 @@ def main(f):
                         gdat = conv_group[m['group']]
                         _from, until = DT_MIN, DT_MAX
 		n = {'types': ['group'],
-		     'names': gdat['name'] + '-' + m['name'],
+		     'names': [gdat['name'] + '-' + m['name']],
 		     'description': [m['description']],
                      'tags': [virtual_group_tag],
                      'virtual': {
@@ -245,6 +256,8 @@ def main(f):
                 plan_changes[lut[n]] = (r['until'], r['_id'])
                 plan_remove.add(r['_id'])
         print ' transitive closure of plan'
+        print 'small final tweaks to groups'
+        Es.ecol.update({'names': 'leden'}, {'$push': {'tags': year_group_tag}})
         done = False
         while not done:
                 done = True
