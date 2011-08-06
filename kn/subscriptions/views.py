@@ -2,22 +2,17 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.models import Group
-#from kn.subscriptions.models import Event, EventSubscription
-#from kn.leden.models import OldKnUser, OldKnGroup
+import kn.subscriptions.entities as subscr_Es
+import kn.leden.entities as Es
 from django.http import Http404
 from django.core.mail import EmailMessage
 
 @login_required
 def event_detail(request, name):
-	try:
-		event = Event.objects.get(name=name)
-	except Event.DoesNotExist:
-		raise Http404
-	try:
-		subscription = EventSubscription.objects.get(
-				event=event, user=request.user)
-	except EventSubscription.DoesNotExist:
-		subscription = None
+        event = subscr_Es.event_by_name(name)
+        if event is None:
+                raise Http404
+        subscription = event.get_subscription_of(request.user)
 	if subscription:
 		if subscription.debit > 0:
 			request.user.push_message((
@@ -28,12 +23,11 @@ def event_detail(request, name):
 						" betaling is verwerkt!")
 	elif request.method == 'POST' and event.is_open:
                 notes = request.POST['notes']
-		subscription = EventSubscription(
-			event=event,
-			user=OldKnUser.objects.get(
-				username=request.user.username),
-                        userNotes=notes,
-			debit=event.cost)
+		subscription = subscr_Es.Subscription({
+                        'event': event._id,
+                        'user': request.user._id,
+                        'userNotes': notes,
+                        'debit': event.cost})
 		subscription.save()
 		full_owner_address = '%s <%s>' % (
 				event.owner.humanName,
@@ -44,7 +38,7 @@ def event_detail(request, name):
 					'firstName': request.user.first_name,
                                         'notes': notes},
 				'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-				[request.user.oldknuser.primary_email],
+				[request.user.primary_email],
 				[event.owner.primary_email],
 				headers={
 					'Cc': full_owner_address,
