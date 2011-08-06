@@ -269,7 +269,7 @@ TYPE_MAP = {
 }
 
 def of_type(t):
-	for m in ecol.find({'type': t}):
+	for m in ecol.find({'types': t}):
 		yield TYPE_MAP[t](m)
 
 groups = functools.partial(of_type, 'group')
