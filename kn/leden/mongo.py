@@ -1,8 +1,18 @@
 import pymongo
+from pymongo.objectid import ObjectId
 from kn.settings import MONGO_DB, MONGO_HOST
 
 conn = pymongo.Connection(MONGO_HOST)
 db = conn[MONGO_DB]
+
+def _id(obj):
+        if isinstance(obj, ObjectId):
+                return obj
+	if isinstance(obj, basestring):
+		return ObjectId(obj)
+        if hasattr(obj, '_id'):
+                return obj._id
+        raise ValueError
 
 class SONWrapper(object):
 	def __init__(self, data, collection, parent=None):

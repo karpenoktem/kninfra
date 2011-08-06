@@ -2,9 +2,8 @@ import functools
 
 from django.db.models import permalink
 from django.contrib.auth.models import get_hexdigest
-from pymongo.objectid import ObjectId
 
-from kn.leden.mongo import db, SONWrapper
+from kn.leden.mongo import db, SONWrapper, _id
 from kn.settings import DT_MIN, DT_MAX
 
 ecol = db['entities']
@@ -20,9 +19,7 @@ def by_name(n):
 	return entity(ecol.find_one({'names': n}))
 
 def by_id(n):
-	if isinstance(n, basestring):
-		n = ObjectId(n)
-	return entity(ecol.find_one({'_id': n}))
+	return entity(ecol.find_one({'_id': _id(n)}))
 
 def all():
 	for m in ecol.find():
@@ -67,6 +64,10 @@ class EntityHumanName(object):
 class Entity(SONWrapper):
 	def __init__(self, data):
 		super(Entity, self).__init__(data, ecol)
+        def is_related_with(self, whom, how=None):
+                return rcol.exists({'who': _id(self),
+                                    'how': _id(how),
+                                    'with': _id(whom)})
 	def get_rrelated(self):
 		rel_ids = list()
 		e_lut = dict()
