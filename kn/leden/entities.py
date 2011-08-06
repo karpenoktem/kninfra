@@ -205,7 +205,11 @@ class User(Entity):
 	get_and_delete_messages = pop_messages
 	@property
 	def primary_email(self):
-		return self._data['emails'][0]
+		# the primary email address is always the first one;
+		# we ignore the until field.
+		if len(self._data['emailAddresses'])==0:
+			return None
+		return self._data['emailAddresses'][0]['email']
 	@property
 	def full_name(self):
 		bits = self._data['person']['family'].split(',', 1)
