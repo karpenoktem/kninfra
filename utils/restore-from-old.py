@@ -47,6 +47,7 @@ def main(f):
         print 'initial tags'
         system_tag = create_tag('!system')
         year_overrides_tag = create_tag('!year-overrides', [system_tag])
+        virtual_group_tag = create_tag("!virtual-group", [system_tag])
         for i in xrange(1,9):
                 pyear_tag.append(create_tag('!+y'+str(i), [year_overrides_tag]))
                 nyear_tag.append(create_tag('!-y'+str(i), [year_overrides_tag]))
@@ -204,26 +205,30 @@ def main(f):
                 conv_seat[m['name']] = {'id': Es.ecol.insert(n)}
         print 'seats'
 	for m in data['OldSeat']:
-                if m['group'] not in conv_group:
-                        continue
+                if m['group'] in year_groups_ids:
+                        gname = year_groups_ids[m['group']]
+                        gdat = conv_group_byname[gname[:-1]]
+                        _from, until = year_to_dates(int(gname[-1:]))
+                else:
+                        gdat = conv_group[m['group']]
+                        _from, until = DT_MIN, DT_MAX
 		n = {'types': ['group'],
-		     'names': [conv_group[m['group']]['name'] + 
-				'-' + m['name']],
+		     'names': gdat['name'] + '-' + m['name'],
 		     'description': [m['description']],
+                     'tags': [virtual_group_tag],
                      'virtual': {
                              'type': 'sofa',
-                             'with': conv_group[m['group']]['id'],
+                             'with': gdat['id'],
                              'how': conv_seat[m['name']]['id']},
 		     'humanNames': [{
-			     	'name': conv_group[m['group']]['name'] +
-			     		'-' + m['name'],
+			     	'name': gdat['name'] + '-' + m['name'],
 				'human': m['humanName']}]}
 		i = Es.ecol.insert(n)
 		Es.rcol.insert({'who': conv_user[m['user']],
-				'from': DT_MIN,
-				'until': DT_MAX,
+				'from': _from,
+				'until': until,
 				'how': conv_seat[m['name']]['id'],
-				'with': conv_group[m['group']]['id']})
+				'with': gdat['id']})
         print 'merging relations'
         print ' list until'
         lut = dict()
