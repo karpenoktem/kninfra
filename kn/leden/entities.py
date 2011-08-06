@@ -34,7 +34,7 @@ class EntityName(object):
 		self._name = name
 	@property
 	def humanNames(self):
-		for n in self.entity._data['humanNames']:
+		for n in self.entity._data.get('humanNames',()):
 			if n['name'] == self.name:
 				yield EntityHumanName(self._entity, n)
 	@property
@@ -108,7 +108,7 @@ class Entity(SONWrapper):
 			yield rel
 	
 	def get_tags(self):
-		for m in ecol.find({'_id': {'$in': self._data['tags']}}
+		for m in ecol.find({'_id': {'$in': self._data.get('tags', ())}}
 				).sort('humanNames.human', 1):
 			yield Tag(m)
 
@@ -120,11 +120,12 @@ class Entity(SONWrapper):
 		return str(self._id)
 	@property
 	def tags(self):
-		for m in ecol.find({'_id': {'$in': self._data['tags']}}):
+		for m in ecol.find({'_id': {
+                                '$in': self._data.get('tags',())}}):
 			yield Tag(m)
 	@property
 	def names(self):
-		for n in self._data['names']:
+		for n in self._data.get('names',()):
 			yield EntityName(self, n)
 	@property
 	def name(self):
@@ -134,7 +135,7 @@ class Entity(SONWrapper):
 			return None
 	@property
 	def humanNames(self):
-		for n in self._data['humanNames']:
+		for n in self._data.get('humanNames',()):
 			yield EntityHumanName(self, n)
 	@property
 	def humanName(self):
