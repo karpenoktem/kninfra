@@ -258,6 +258,13 @@ class Brand(Entity):
                                         {'name': self.name})
                 return ('brand-by-id', (), {'_id': self.id})
 
+def relation_cmp_until(x, y):
+        return cmp(DT_MAX if x['until'] is None else x['until'],
+                   DT_MAX if y['until'] is None else y['until'])
+def relation_cmp_from(x, y):
+        return cmp(DT_MIN if x['from'] is None else x['from'],
+                   DT_MIN if y['from'] is None else y['from'])
+
 TYPE_MAP = {
 	'group': Group,
 	'user': User,
