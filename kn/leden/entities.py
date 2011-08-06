@@ -288,12 +288,13 @@ sofas = functools.partial(of_type, 'sofa')
 brands = functools.partial(of_type, 'brand')
 
 def ensure_indices():
-	ecol.ensure_index('names', unique=True)
+	ecol.ensure_index('names', unique=True, sparse=True)
 	ecol.ensure_index('types')
-	ecol.ensure_index('tags')
-	rcol.ensure_index('how')
+	ecol.ensure_index('tags', sparse=True)
+	rcol.ensure_index('how', sparse=True)
 	rcol.ensure_index('with')
 	rcol.ensure_index('who')
+	rcol.ensure_index('tags', spare=True)
 	rcol.ensure_index([('until',1),
 			   ('from',-1)])
 	ecol.ensure_index('humanNames.human')
