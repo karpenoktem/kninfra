@@ -159,7 +159,6 @@ class Entity(SONWrapper):
 
 	def as_user(self): return User(self._data)
 	def as_group(self): return Group(self._data)
-	def as_sofa(self): return Sofa(self._data)
 	def as_brand(self): return Brand(self._data)
 	def as_tag(self): return Tag(self._data)
 	def as_study(self): return Study(self._data)
@@ -249,13 +248,6 @@ class Institute(Entity):
 			return ('institute-by-name', (),
 					{'name': self.name})
 		return ('institute-by-id', (), {'_id': self.id})
-class Sofa(Entity):
-	@permalink
-	def get_absolute_url(self):
-		if self.name:
-			return ('sofa-by-name', (),
-					{'name': self.name})
-		return ('sofa-by-id', (), {'_id': self.id})
 class Brand(Entity):
         @permalink
         def get_absolute_url(self):
@@ -277,7 +269,6 @@ TYPE_MAP = {
 	'study': Study,
 	'institute': Institute,
 	'tag': Tag,
-	'sofa': Sofa,
 	'brand': Brand
 }
 
@@ -290,7 +281,6 @@ users = functools.partial(of_type, 'user')
 studies = functools.partial(of_type, 'study')
 institutes = functools.partial(of_type, 'institute')
 tags = functools.partial(of_type, 'tag')
-sofas = functools.partial(of_type, 'sofa')
 brands = functools.partial(of_type, 'brand')
 
 def ensure_indices():

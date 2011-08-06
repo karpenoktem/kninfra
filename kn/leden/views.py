@@ -96,9 +96,6 @@ def _tag_detail(request, tag):
 def _brand_detail(request, brand):
 	# TODO stub
 	return HttpResponse("")
-def _sofa_detail(request, sofa):
-	# TODO stub
-	return HttpResponse("")
 def _study_detail(request, study):
 	ctx = _entity_detail(request, study)
 	# TODO add followers in ctx
