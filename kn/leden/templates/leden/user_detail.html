@@ -25,10 +25,10 @@
 	<dd>
 	
 	</dd>
-	{% if object.study %}
+	{% if object.primary_study %}
 	<dt>Studie</dt>
-	<dd><a href="{% url study-detail object_id=object.study.id %}"
-		>{{ object.study }}</a></dd>
+        <dd><a href="{{ object.primary_study.get_absolute_url }}"
+		>{{ object.primary_study.humanName }}</a></dd>
 	{% endif %}
 	{% if object.dateOfBirth %}
 	<dt>Geboortedatum</dt>

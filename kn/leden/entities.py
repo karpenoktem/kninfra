@@ -172,6 +172,9 @@ class Group(Entity):
 					{'name': self.name})
 		return ('group-by-id', (), {'_id': self.id})
 class User(Entity):
+        def __init__(self, data):
+                super(User,self).__init__(data)
+                self._primary_study = None
 	@permalink
 	def get_absolute_url(self):
 		if self.name:
@@ -222,6 +225,14 @@ class User(Entity):
 	@property
 	def last_name(self):
 		return self._data['person']['family']
+        @property
+        def primary_study(self):
+                if self._primary_study==None:
+                        self._primary_study = None \
+                                if len(self._data['studies'])==0 \
+                                else by_id(self._data['studies'][0]['study'])\
+                                                        .as_study()
+                return self._primary_study
 class Tag(Entity):
 	@permalink
 	def get_absolute_url(self):
