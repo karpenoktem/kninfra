@@ -16,6 +16,32 @@ def entity(d):
 		return None
 	return TYPE_MAP[d['types'][0]](d)
 
+def by_ids(ns):
+        ret = {}
+        for m in ecol.find({'_id': {'$in': ns}}):
+                ret[m['_id']] = entity(m)
+        return ret
+
+def ids_by_names(ns):
+        ret = {}
+        nss = frozenset(ns)
+        for m in ecol.find({'names': {'$in': ns}}, {'names':1}):
+                for n in m['names']:
+                        if n in nss:
+                                ret[n] = m['_id']
+                                continue
+        return ret
+
+def by_names(ns):
+        ret = {}
+        nss = frozenset(ns)
+        for m in ecol.find({'names': {'$in': ns}}):
+                for n in m['names']:
+                        if n in nss:
+                                ret[n] = entity(m)
+                                continue
+        return ret
+
 def by_name(n):
 	return entity(ecol.find_one({'names': n}))
 
@@ -132,8 +158,7 @@ def __derefence_relations(cursor, where, who, _with, how, deref_who, deref_with,
                         ids.add(rel['how'])
                 if deref_who and who == -1:
                         ids.add(rel['who'])
-        for m in ecol.find({'_id': {'$in': list(ids)}}):
-                e_lut[m['_id']] = entity(m)
+        e_lut = by_ids(tuple(ids))
         for rel in ret:
                 if deref_who:
                         rel['who'] = e_lut[rel['who']]
