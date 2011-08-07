@@ -3,6 +3,7 @@ import functools
 from django.db.models import permalink
 from django.contrib.auth.models import get_hexdigest
 
+from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id
 from kn.settings import DT_MIN, DT_MAX
 
@@ -61,6 +62,91 @@ class EntityHumanName(object):
 		return "<EntityHumanName %s of %s>" % (
 				self._data, self._entity)
 
+def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
+                        deref_who=False, deref_with=False, deref_how=False):
+        """ Find matching relations.
+        
+        For each of {who, _with, how}:
+                when left on default, it will match all.
+                when a tuple or list, it will match on any of those.
+                when a single element, it will match that element.
+        """
+        # construct the basic query
+        query = {}
+        where = {'who': who,
+                 'with': _with,
+                 'how': how}
+        for attr in where:
+                if where[attr] == -1:
+                        pass
+                elif isinstance(where[attr], (list, tuple)):
+                        query[attr] = {'$in': map(_id, where[attr])}
+                elif where[attr] is not None:
+                        query[attr] = _id(where[attr])
+                else:
+                        query[attr] = None
+        # mix in _from and until
+        if _from is None: _from = DT_MIN
+        if until is None: until = DT_MAX
+        if _from == DT_MIN and until == DT_MAX:
+                pass
+        elif _from == until:
+                query['from'] = {'$lte': _from}
+                query['until'] = {'$gte': _from}
+        else:
+                qa, qb, qc = dict(query), dict(query), dict(query)
+                qa['until'] = {'$gte': _from, '$lte': until }
+                # NOTE we have to set these void conditions, otherwise mongo
+                #      will not use its indeces.
+                qa['from'] = {'$gte': DT_MIN}
+                qb['until'] = {'$gte': DT_MIN}
+                qb['from'] = {'$gte': _from, '$lte': until }
+                qc['until'] = {'$gte': until}
+                qc['from'] = {'$lte': _from}
+                query = {'$or': [qa, qb, qc]}
+        cursor = rcol.find(query)
+        if not deref_how and not deref_who and not deref_with:
+                return cursor
+        return __derefence_relations(cursor, where, who, _with, how, deref_who,
+                        deref_with, deref_how)
+def __derefence_relations(cursor, where, who, _with, how, deref_who, deref_with,
+                deref_how):
+        # Dereference.  First collect the ids of the entities we want to
+        # dereference
+        e_lut = dict()
+        ids = set()
+        ret = list()
+        # NOTE we assume how, with and who are not very large
+        for attr in where:
+                if where[attr] == -1:
+                        continue
+                if isinstance(where[attr], (list, tuple)):
+                        ids.extend(map(_id, where[attr]))
+                elif where[attr] is not None:
+                        ids.add(_id(where[attr]))
+        for rel in cursor:
+                ret.append(rel)
+                if deref_with and _with == -1:
+                        ids.add(rel['with'])
+                if deref_how and how == -1 and rel['how']:
+                        ids.add(rel['how'])
+                if deref_who and who == -1:
+                        ids.add(rel['who'])
+        for m in ecol.find({'_id': {'$in': list(ids)}}):
+                e_lut[m['_id']] = entity(m)
+        for rel in ret:
+                if deref_who:
+                        rel['who'] = e_lut[rel['who']]
+                if deref_how and rel['how']:
+                        rel['how'] = e_lut[rel['how']]
+                if deref_with:
+                        rel['with'] = e_lut[rel['with']]
+                if rel['from'] == DT_MIN:
+                        rel['from'] = None
+                if rel['until'] == DT_MAX:
+                        rel['until'] = None
+                yield rel
+
 class Entity(SONWrapper):
 	def __init__(self, data):
 		super(Entity, self).__init__(data, ecol)
@@ -68,45 +154,16 @@ class Entity(SONWrapper):
                 return rcol.exists({'who': _id(self),
                                     'how': _id(how),
                                     'with': _id(whom)})
-	def get_rrelated(self):
-		rel_ids = list()
-		e_lut = dict()
-		rels = list(rcol.find({'with': self._id}))
-		for rel in rels:
-			rel_ids.append(rel['who'])
-			if rel['how']:
-				rel_ids.append(rel['how'])
-		for m in ecol.find({'_id': {'$in': rel_ids}}):
-			e_lut[m['_id']] = entity(m)
-		for rel in rels:
-			rel['with'] = self
-			rel['how'] = e_lut.get(rel['how'])
-			rel['who'] = e_lut.get(rel['who'])
-			if rel['from'] == DT_MIN:
-				rel['from'] = None
-			if rel['until'] == DT_MAX:
-				rel['until'] = None
-			yield rel
 
-	def get_related(self):
-		rel_ids = list()
-		e_lut = dict()
-		rels = list(rcol.find({'who': self._id}))
-		for rel in rels:
-			rel_ids.append(rel['with'])
-			if rel['how']:
-				rel_ids.append(rel['how'])
-		for m in ecol.find({'_id': {'$in': rel_ids}}):
-			e_lut[m['_id']] = entity(m)
-		for rel in rels:
-			rel['who'] = self
-			rel['how'] = e_lut.get(rel['how'])
-			rel['with'] = e_lut.get(rel['with'])
-			if rel['from'] == DT_MIN:
-				rel['from'] = None
-			if rel['until'] == DT_MAX:
-				rel['until'] = None
-			yield rel
+	def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
+                                deref_with=True, deref_how=True):
+                return query_relations(-1, self, how, _from, until, deref_who,
+                                deref_with, deref_how)
+
+	def get_related(self, how=-1, _from=None, until=None, deref_who=True,
+                                deref_with=True, deref_how=True):
+                return query_relations(self, -1, how, _from, until, deref_who,
+                                deref_with, deref_how)
 	
 	def get_tags(self):
 		for m in ecol.find({'_id': {'$in': self._data.get('tags', ())}}
@@ -174,6 +231,10 @@ class Group(Entity):
 			return ('group-by-name', (),
 					{'name': self.name})
 		return ('group-by-id', (), {'_id': self.id})
+        def get_members(self):
+                dt = now()
+                return [r['who'] for r in self.get_rrelated(
+                                how=None, _from=dt, until=dt)]
 class User(Entity):
         def __init__(self, data):
                 super(User,self).__init__(data)
