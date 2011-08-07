@@ -119,6 +119,9 @@ class Entity(SONWrapper):
 	@property
 	def id(self):
 		return str(self._id)
+        @property
+        def tag_ids(self):
+                return self._data.get('tags', ())
 	@property
 	def tags(self):
 		for m in ecol.find({'_id': {
