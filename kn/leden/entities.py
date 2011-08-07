@@ -7,22 +7,60 @@ from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id
 from kn.settings import DT_MIN, DT_MAX
 
-ecol = db['entities']
-mcol = db['messages']
-rcol = db['relations']
+# The collections
+# ###################################################################### 
+ecol = db['entities']   # entities: users, group, tags, studies, ...
+rcol = db['relations']  # relations: "giedo is chairman of bestuur from
+                        #             date A until date B"
+mcol = db['messages']   # message: used for old code
 
+def ensure_indices():
+        """ Ensures that the indices we need on the collections are set """
+        # entities
+	ecol.ensure_index('names', unique=True, sparse=True)
+	ecol.ensure_index('types')
+	ecol.ensure_index('tags', sparse=True)
+	ecol.ensure_index('humanNames.human')
+        # relations
+	rcol.ensure_index('how', sparse=True)
+	rcol.ensure_index('with')
+	rcol.ensure_index('who')
+	rcol.ensure_index('tags', spare=True)
+	rcol.ensure_index([('until',1),
+			   ('from',-1)])
+	# messages
+        mcol.ensure_index('entity')
+
+
+# Functions to work with entities
+# ###################################################################### 
 def entity(d):
+        """ Given a dictionary, returns an Entity object wrapping it """
 	if d is None:
 		return None
 	return TYPE_MAP[d['types'][0]](d)
 
+def of_type(t):
+        """ Returns all entities of type @t """
+	for m in ecol.find({'types': t}):
+		yield TYPE_MAP[t](m)
+
+groups = functools.partial(of_type, 'group')
+users = functools.partial(of_type, 'user')
+studies = functools.partial(of_type, 'study')
+institutes = functools.partial(of_type, 'institute')
+tags = functools.partial(of_type, 'tag')
+brands = functools.partial(of_type, 'brand')
+
 def by_ids(ns):
+        """ Find entities by a list of _ids """
         ret = {}
         for m in ecol.find({'_id': {'$in': ns}}):
                 ret[m['_id']] = entity(m)
         return ret
 
 def ids_by_names(ns):
+        """ Finds _ids of entities by a list of names """
         ret = {}
         nss = frozenset(ns)
         for m in ecol.find({'names': {'$in': ns}}, {'names':1}):
@@ -33,6 +71,7 @@ def ids_by_names(ns):
         return ret
 
 def by_names(ns):
+        """ Finds entities by a list of names """
         ret = {}
         nss = frozenset(ns)
         for m in ecol.find({'names': {'$in': ns}}):
@@ -43,50 +82,20 @@ def by_names(ns):
         return ret
 
 def by_name(n):
+        """ Finds an entity by name """
 	return entity(ecol.find_one({'names': n}))
 
 def by_id(n):
+        """ Finds an entity by id """
 	return entity(ecol.find_one({'_id': _id(n)}))
 
 def all():
+        """ Finds all entities """
 	for m in ecol.find():
 		yield entity(m)
 
-class EntityName(object):
-	def __init__(self, entity, name):
-		self._entity = entity
-		self._name = name
-	@property
-	def humanNames(self):
-		for n in self.entity._data.get('humanNames',()):
-			if n['name'] == self.name:
-				yield EntityHumanName(self._entity, n)
-	@property
-	def primary_humanName(self):
-		try:
-			return next(self.humanNames)
-		except StopIteration:
-			return None
-	def __str__(self):
-		return self._name
-	def __repr__(self):
-		return "<EntityName %s of %s>" % (self._name, self._entity)
-
-class EntityHumanName(object):
-	def __init__(self, entity, data):
-		self._entity = entity
-		self._data = data
-	@property
-	def name(self):
-		return EntityName(self._entity, self._data.get('name'))
-	@property
-	def humanName(self):
-		return self._data['human']
-	def __unicode__(self):
-		return self.humanName
-	def __repr__(self):
-		return "<EntityHumanName %s of %s>" % (
-				self._data, self._entity)
+# Functions to work with relations
+# ###################################################################### 
 
 def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
                         deref_who=False, deref_with=False, deref_how=False):
@@ -172,7 +181,58 @@ def __derefence_relations(cursor, where, who, _with, how, deref_who, deref_with,
                         rel['until'] = None
                 yield rel
 
+def relation_cmp_until(x, y):
+        return cmp(DT_MAX if x['until'] is None else x['until'],
+                   DT_MAX if y['until'] is None else y['until'])
+
+def relation_cmp_from(x, y):
+        return cmp(DT_MIN if x['from'] is None else x['from'],
+                   DT_MIN if y['from'] is None else y['from'])
+
+
+
+# Models
+# ###################################################################### 
+class EntityName(object):
+        """ Wrapper object for a name of an entity """
+	def __init__(self, entity, name):
+		self._entity = entity
+		self._name = name
+	@property
+	def humanNames(self):
+		for n in self.entity._data.get('humanNames',()):
+			if n['name'] == self.name:
+				yield EntityHumanName(self._entity, n)
+	@property
+	def primary_humanName(self):
+		try:
+			return next(self.humanNames)
+		except StopIteration:
+			return None
+	def __str__(self):
+		return self._name
+	def __repr__(self):
+		return "<EntityName %s of %s>" % (self._name, self._entity)
+
+class EntityHumanName(object):
+        """ Wrapper object for a humanName of an entity """
+	def __init__(self, entity, data):
+		self._entity = entity
+		self._data = data
+	@property
+	def name(self):
+		return EntityName(self._entity, self._data.get('name'))
+	@property
+	def humanName(self):
+		return self._data['human']
+	def __unicode__(self):
+		return self.humanName
+	def __repr__(self):
+		return "<EntityHumanName %s of %s>" % (
+				self._data, self._entity)
+
 class Entity(SONWrapper):
+        """ Base object for every Entity """
 	def __init__(self, data):
 		super(Entity, self).__init__(data, ecol)
         def is_related_with(self, whom, how=None):
@@ -356,42 +416,14 @@ class Brand(Entity):
                                         {'name': self.name})
                 return ('brand-by-id', (), {'_id': self.id})
 
-def relation_cmp_until(x, y):
-        return cmp(DT_MAX if x['until'] is None else x['until'],
-                   DT_MAX if y['until'] is None else y['until'])
-def relation_cmp_from(x, y):
-        return cmp(DT_MIN if x['from'] is None else x['from'],
-                   DT_MIN if y['from'] is None else y['from'])
 
+# List of type of entities
+# ###################################################################### 
 TYPE_MAP = {
-	'group': Group,
-	'user': User,
-	'study': Study,
-	'institute': Institute,
-	'tag': Tag,
-	'brand': Brand
+	'group':        Group,
+	'user':         User,
+	'study':        Study,
+	'institute':    Institute,
+	'tag':          Tag,
+	'brand':        Brand
 }
-
-def of_type(t):
-	for m in ecol.find({'types': t}):
-		yield TYPE_MAP[t](m)
-
-groups = functools.partial(of_type, 'group')
-users = functools.partial(of_type, 'user')
-studies = functools.partial(of_type, 'study')
-institutes = functools.partial(of_type, 'institute')
-tags = functools.partial(of_type, 'tag')
-brands = functools.partial(of_type, 'brand')
-
-def ensure_indices():
-	ecol.ensure_index('names', unique=True, sparse=True)
-	ecol.ensure_index('types')
-	ecol.ensure_index('tags', sparse=True)
-	rcol.ensure_index('how', sparse=True)
-	rcol.ensure_index('with')
-	rcol.ensure_index('who')
-	rcol.ensure_index('tags', spare=True)
-	rcol.ensure_index([('until',1),
-			   ('from',-1)])
-	ecol.ensure_index('humanNames.human')
-	mcol.ensure_index('entity')
