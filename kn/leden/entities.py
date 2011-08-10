@@ -120,6 +120,51 @@ def date_to_year(dt):
 # Functions to work with relations
 # ###################################################################### 
 
+def disj_query_relations(queries, deref_who=False, deref_with=False,
+                deref_how=False):
+        """ Find relations matching any one of @queries.
+            See @query_relations. """
+        bits = []
+        for query in queries:
+                for attr in ('with', 'how', 'who'):
+                        if attr not in query:
+                                continue
+                        elif isinstance(query[attr], (list, tuple)):
+                                query[attr] = {'$in': map(_id, query[attr])}
+                        elif query[attr] is not None:
+                                query[attr] = _id(query[attr])
+                        else:
+                                query[attr] = None
+                if query.get('from') is None: query['from'] = DT_MIN
+                if query.get('until') is None: query['until'] = DT_MAX
+                if query['from'] == DT_MIN and query['until'] == DT_MAX:
+                        del query['from']
+                        del query['until']
+                        bits.append(query)
+                elif query['from'] == query['until']:
+                        query['from'] = {'$lte': query['from']}
+                        query['until'] = {'$gte': query['from']}
+                        bits.append(query)
+                else:
+                        qa, qb, qc = dict(query), dict(query), dict(query)
+                        qa['until'] = {'$gte': query['from'],
+                                       '$lte': query['until']}
+                        # NOTE we have to set these void conditions, otherwise
+                        #      mongo will not use its indeces.
+                        qa['from'] = {'$gte': DT_MIN}
+                        bits.append(qa)
+                        qb['until'] = {'$gte': DT_MIN}
+                        qb['from'] = {'$gte': query['from'],
+                                      '$lte': query['until']}
+                        bits.append(qb)
+                        qc['until'] = {'$gte': query['until']}
+                        qc['from'] = {'$lte': query['from']}
+                        bits.append(qc)
+        cursor = rcol.find({'$or': bits})
+        if not deref_how and not deref_who and not deref_with:
+                return cursor
+        return __derefence_relations(cursor, deref_who, deref_with, deref_how)
+
 def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
                         deref_who=False, deref_with=False, deref_how=False):
         """ Find matching relations.
@@ -129,68 +174,30 @@ def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
                 when a tuple or list, it will match on any of those.
                 when a single element, it will match that element.
         """
-        # construct the basic query
         query = {}
-        where = {'who': who,
-                 'with': _with,
-                 'how': how}
-        for attr in where:
-                if where[attr] == -1:
-                        pass
-                elif isinstance(where[attr], (list, tuple)):
-                        query[attr] = {'$in': map(_id, where[attr])}
-                elif where[attr] is not None:
-                        query[attr] = _id(where[attr])
-                else:
-                        query[attr] = None
-        # mix in _from and until
-        if _from is None: _from = DT_MIN
-        if until is None: until = DT_MAX
-        if _from == DT_MIN and until == DT_MAX:
-                pass
-        elif _from == until:
-                query['from'] = {'$lte': _from}
-                query['until'] = {'$gte': _from}
-        else:
-                qa, qb, qc = dict(query), dict(query), dict(query)
-                qa['until'] = {'$gte': _from, '$lte': until }
-                # NOTE we have to set these void conditions, otherwise mongo
-                #      will not use its indeces.
-                qa['from'] = {'$gte': DT_MIN}
-                qb['until'] = {'$gte': DT_MIN}
-                qb['from'] = {'$gte': _from, '$lte': until }
-                qc['until'] = {'$gte': until}
-                qc['from'] = {'$lte': _from}
-                query = {'$or': [qa, qb, qc]}
-        cursor = rcol.find(query)
-        if not deref_how and not deref_who and not deref_with:
-                return cursor
-        return __derefence_relations(cursor, where, who, _with, how, deref_who,
-                        deref_with, deref_how)
-def __derefence_relations(cursor, where, who, _with, how, deref_who, deref_with,
-                deref_how):
+        if who != -1: query['who'] = who
+        if _with != -1: query['with'] = _with
+        if how != -1: query['how'] = how
+        if _from is not None: query['from']  = _from
+        if until is not None: query['until'] = until
+        return disj_query_relations([query], deref_who, deref_with, deref_how)
+
+def __derefence_relations(cursor, deref_who, deref_with, deref_how):
         # Dereference.  First collect the ids of the entities we want to
         # dereference
         e_lut = dict()
         ids = set()
         ret = list()
-        # NOTE we assume how, with and who are not very large
-        for attr in where:
-                if where[attr] == -1:
-                        continue
-                if isinstance(where[attr], (list, tuple)):
-                        ids.extend(map(_id, where[attr]))
-                elif where[attr] is not None:
-                        ids.add(_id(where[attr]))
         for rel in cursor:
                 ret.append(rel)
-                if deref_with and _with == -1:
+                if deref_with:
                         ids.add(rel['with'])
-                if deref_how and how == -1 and rel['how']:
+                if deref_how and rel['how']:
                         ids.add(rel['how'])
-                if deref_who and who == -1:
+                if deref_who:
                         ids.add(rel['who'])
         e_lut = by_ids(tuple(ids))
+        # Dereference!
         for rel in ret:
                 if deref_who:
                         rel['who'] = e_lut[rel['who']]
