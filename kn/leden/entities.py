@@ -32,7 +32,7 @@ def ensure_indices():
         mcol.ensure_index('entity')
 
 
-# Functions to work with entities
+# Basic functions to work with entities
 # ###################################################################### 
 def entity(d):
         """ Given a dictionary, returns an Entity object wrapping it """
@@ -103,6 +103,19 @@ def all():
         """ Finds all entities """
 	for m in ecol.find():
 		yield entity(m)
+
+# Specialized functions to work with entities.
+# ###################################################################### 
+def bearers_by_tag_id(tag_id, _as=entity):
+        """ Find the bearers of the tag with @tag_id """
+        return map(_as, ecol.find({'tags': tag_id}))
+
+def date_to_year(dt):
+        """ Returns the `verenigingsjaar' at the date """
+        year =  dt.year - 2004
+        if dt.month >= 9:
+                year += 1
+        return year
 
 # Functions to work with relations
 # ###################################################################### 
