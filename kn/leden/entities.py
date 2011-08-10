@@ -45,6 +45,16 @@ def of_type(t):
 	for m in ecol.find({'types': t}):
 		yield TYPE_MAP[t](m)
 
+def of_type_by_name(t):
+        """ Returns a `name -> entity' dictionary for the
+            entities of tyoe @t """
+        ret = {}
+        for m in ecol.find({'types': t}):
+                e = entity(m)
+                for n in m['names']:
+                        ret[n] = e
+        return ret
+
 groups = functools.partial(of_type, 'group')
 users = functools.partial(of_type, 'user')
 studies = functools.partial(of_type, 'study')
