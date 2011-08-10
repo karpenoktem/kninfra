@@ -37,8 +37,6 @@ def main(f):
         conv_event = dict()
         conv_seat = dict()
 	conv_user = dict()
-        pyear_tag = [None]
-        nyear_tag = [None]
         ignore_groups = frozenset('leden-oud')
         ignore_groups_ids = set()
         year_groups = frozenset(
@@ -56,10 +54,16 @@ def main(f):
         year_group_tag = create_tag("!year-group", 'Jaargroep', 
                         [system_tag])
         for i in xrange(1,9):
-                pyear_tag.append(create_tag('!+y'+str(i), 'Wel jaar %s' % i,
-                        [year_overrides_tag]))
-                nyear_tag.append(create_tag('!-y'+str(i), 'Niet jaar %s' % i,
-                        [year_overrides_tag]))
+                Es.ecol.insert({'types': ['tag'],
+                                'humanNames': [{'human': 'Wel jaar %s' % i}],
+                                'year-override': {'year': i,
+                                                  'type': True},
+                                'tags': [year_overrides_tag]})
+                Es.ecol.insert({'types': ['tag'],
+                                'humanNames': [{'human': 'Niet jaar %s' % i}],
+                                'year-override': {'year': i,
+                                                  'type': False},
+                                'tags': [year_overrides_tag]})
         print 'institutes'
 	for m in data['EduInstitute']:
 		n = {	'types': ['institute'],
@@ -81,7 +85,8 @@ def main(f):
                                 'human': 'Bestuur',
                                 'genitive_prefix': 'van het'}],
                         'description': "Het bestuur"}),
-                'name': 'bestuur'}
+                'name': 'bestuur',
+                'humanName': 'Bestuur'}
         conv_group_byname['kasco'] = {
                 'id': Es.ecol.insert({
                         'types': ['group'],
@@ -92,7 +97,8 @@ def main(f):
                                 'human': 'Kascontrolecommissie',
                                 'genitive_prefix': 'van de'}],
                         'description': "De kascontrolecommissie"}),
-                'name': 'kasco'}
+                'name': 'kasco',
+                'humanName': 'Bestuur'}
         print 'groups'
 	for m in data['OldKnGroup']:
                 if m['name'] in ignore_groups:
@@ -104,6 +110,7 @@ def main(f):
                         year = int(m['name'][-1:])
                         year_groups_lut[m['id']] = (group, year)
                         continue
+                if m['name'] == 'leden': m['isVirtual'] = False # fix for leden
 		n = {	'types': ['tag' if m['isVirtual'] else 'group'],
 			'names': [m['name']],
 			'humanNames': [{
@@ -117,7 +124,8 @@ def main(f):
 			}
 			}
 		conv_group[m['id']] = {'id': Es.ecol.insert(n),
-				       'name': m['name']}
+				       'name': m['name'],
+                                       'humanName': m['humanName']}
                 conv_group_byname[m['name']] = conv_group[m['id']]
         print 'group hierarchy'
 	for m in data['OldKnGroup']:
@@ -233,7 +241,8 @@ def main(f):
                              'how': conv_seat[m['name']]['id']},
 		     'humanNames': [{
 			     	'name': gdat['name'] + '-' + m['name'],
-				'human': m['humanName']}]}
+				'human': m['humanName'] +
+                                        ' ' + gdat['humanName']}]}
 		i = Es.ecol.insert(n)
 		Es.rcol.insert({'who': conv_user[m['user']],
 				'from': _from,
