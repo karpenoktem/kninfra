@@ -5,7 +5,7 @@ from django.contrib.auth.models import get_hexdigest
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id
-from kn.settings import DT_MIN, DT_MAX
+from kn.settings import DT_MIN, DT_MAX, MAILDOMAIN
 
 # The collections
 # ###################################################################### 
@@ -352,6 +352,22 @@ class Entity(SONWrapper):
 	def as_tag(self): return Tag(self._data)
 	def as_study(self): return Study(self._data)
 	def as_institute(self): return Institute(self._data)
+
+        @property
+        def canonical_email(self):
+                if self.type in ('institute', 'study', 'brand', 'tag'):
+                        return None
+                return "%s@%s" % (self.name, MAILDOMAIN)
+
+        @property
+        def got_mailman_list(self):
+                if 'use_mailman_list' in self._data:
+                        return self._data['use_mailman_list']
+                elif 'virtual' in self._data and \
+                                'type' in self._data['virtual']:
+                        if self._data['virtual']['type'] == 'sofa':
+                                return False
+                return True 
 
 class Group(Entity):
 	@permalink
