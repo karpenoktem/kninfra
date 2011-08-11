@@ -317,10 +317,12 @@ class Entity(SONWrapper):
 			yield EntityName(self, n)
 	@property
 	def name(self):
-		try:
-			return next(self.names)
-		except StopIteration:
-			return None
+                nm = self._data.get('names', (None,))[0]
+                return nm if nm is None else EntityName(self, nm)
+        @property
+        def other_names(self):
+                for n in self._data.get('names',())[1:]:
+                        yield EntityName(self, n)
 	@property
 	def humanNames(self):
 		for n in self._data.get('humanNames',()):
