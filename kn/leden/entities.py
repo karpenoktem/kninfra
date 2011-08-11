@@ -155,7 +155,7 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
                         bits.append(query)
                 elif query['from'] == query['until']:
                         query['from'] = {'$lte': query['from']}
-                        query['until'] = {'$gte': query['from']}
+                        query['until'] = {'$gte': query['until']}
                         bits.append(query)
                 else:
                         qa, qb, qc = dict(query), dict(query), dict(query)
