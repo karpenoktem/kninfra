@@ -104,6 +104,18 @@ def all():
 	for m in ecol.find():
 		yield entity(m)
 
+def names_by_ids(ids=None):
+        """ Returns an `_id => primary name' dictionary for entities with
+            _id in @ids or all if @ids is None """
+        ret = {}
+        query = {} if ids is None else {'_id': {'$in': ids}}
+        for e in ecol.find(query, {'names': True}):
+                if e.get('names'):
+                        ret[e['_id']] = e['names'][0]
+                else:
+                        ret[e['_id']] = None
+        return ret
+
 # Specialized functions to work with entities.
 # ###################################################################### 
 def bearers_by_tag_id(tag_id, _as=entity):
