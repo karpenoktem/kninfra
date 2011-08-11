@@ -37,8 +37,10 @@ def main(f):
         conv_event = dict()
         conv_seat = dict()
 	conv_user = dict()
-        ignore_groups = frozenset('leden-oud')
+        ignore_groups = frozenset(['leden-oud'])
+        ignore_groups_members = frozenset(['leden'])
         ignore_groups_ids = set()
+        ignore_groups_members_ids = set()
         year_groups = frozenset(
                 ['leden'+str(x) for x in range(1,9)]+
                 ['kasco'+str(x) for x in range(1,9)]+
@@ -51,6 +53,8 @@ def main(f):
                         'Jaarlidmaatschapstempels', [system_tag])
         virtual_group_tag = create_tag("!virtual-group",
                         'Virtuele groep', [system_tag])
+        sofa_brand_tag = create_tag("!sofa-brand",
+                        'Sofa merk', [system_tag])
         year_group_tag = create_tag("!year-group", 'Jaargroep', 
                         [system_tag])
         for i in xrange(1,9):
@@ -104,6 +108,8 @@ def main(f):
                 if m['name'] in ignore_groups:
                         ignore_groups_ids.add(m['id'])
                         continue
+                if m['name'] in ignore_groups_members:
+                        ignore_groups_members_ids.add(m['id'])
                 if m['name'] in year_groups:
                         year_groups_ids[m['id']] = m['name']
                         group = m['name'][:-1]
@@ -195,7 +201,8 @@ def main(f):
 			}
 		conv_user[m['id']] = Es.ecol.insert(n)
 		for g in m['groups']:
-                        if g in ignore_groups_ids:
+                        if g in ignore_groups_ids or \
+                                        g in ignore_groups_members_ids:
                                 continue
                         if g in year_groups_ids:
                                 gname, year = year_groups_lut[g]
@@ -215,10 +222,13 @@ def main(f):
 				'how': None})
         print 'brands'
         for m in data['OldSeat']:
+                if m['name'] == 'deelhoofd':
+                        m['name'] = 'graficideelhoofd'
                 if m['name'] in conv_seat:
                         continue
                 n = {'types': ['brand'],
                      'names': [m['name']],
+                     'tags': [sofa_brand_tag],
                      'humanNames': [{'name': m['name'],
                                      'human': m['humanName']}]}
                 conv_seat[m['name']] = {'id': Es.ecol.insert(n)}
