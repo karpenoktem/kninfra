@@ -5,9 +5,31 @@ import select
 import json
 import os
 
-class JSONDaemon(object):
-        """ Simple synchronous daemon that  for
-            JSON objects.  Used by the Giedo and Daan daemons."""
+""" Whim is a very simple server/client protocol.
+
+    A client connects to the server and sends a JSON document.  The server
+    handles that message and returns by sending a JSON document of its own.
+
+    Whim is used internally by the sync daemons Giedo, Daan and Cilia """
+
+
+class WhimClient(object):
+        def __init__(self, address, family='unix'):
+                if self.family == 'tcp':
+                        sf = socket.AF_INET
+                elif self.family == 'unix':
+                        sf = socket.AF_UNIX
+                else:
+                        raise ValueError, 'unknown family'
+                self.s = socket.socket(sf, socket.SOCK_STREAM)
+                self.s.connect(address)
+                self.f = self.s.makefile()
+        def send(self, d):
+                self.f.write(json.dumps(d))
+                self.f.write("\n")
+                return json.loads(self.f.readline())
+
+class WhimDaemon(object):
         def __init__(self, address, family='unix'):
                 self.sockets = []
                 self.address = address
@@ -51,10 +73,8 @@ class JSONDaemon(object):
                         else:
                                 d = json.loads(raw)
                                 ret = self.handle(d)
-                                if ret is not None:
-                                        self.sock_to_file[s].write(
-                                                        json.dumps(ret))
-                                        self.sock_to_file[s].write("\n")
+                                self.sock_to_file[s].write(json.dumps(ret))
+                                self.sock_to_file[s].write("\n")
                 except Exception, e:
                         logging.exception("Uncaught exception")
 
