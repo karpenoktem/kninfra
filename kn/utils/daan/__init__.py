@@ -7,6 +7,7 @@ import os
 
 from kn.utils.whim import WhimDaemon
 from kn.utils.daan.postfix import set_postfix_map
+from kn.utils.daan.mailman import apply_mailman_changes
 
 from kn import settings
 
@@ -21,3 +22,5 @@ class Daan(WhimDaemon):
         def handle(self, d):
                 if d['type'] == 'postfix':
                         return set_postfix_map(self, d['map'])
+                elif d['type'] == 'mailman':
+                        return apply_mailman_changes(self, d['changes'])
