@@ -7,22 +7,18 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.mail import EmailMessage
-from django.conf import settings
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 
-from kn.base.runtime import setup_virtual_package
 #from kn.leden.models import OldKnGroup
 
 from kn.moderation.models import ModerationRecord
+from kn.utils.mailman import import_mailman
 
-#try:
-#	import Mailman
-#except ImportError:
-#	setup_virtual_package('Mailman', os.path.expanduser(
-#					'~list/Mailman'))
-#import Mailman.MailList
-#import Mailman.Utils
-#from Mailman import mm_cfg
+import_mailman()
+
+import Mailman.MailList
+import Mailman.Utils
+from Mailman import mm_cfg
 
 @login_required
 def redirect(request, name):

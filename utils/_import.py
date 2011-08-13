@@ -25,9 +25,3 @@ if __name__ != '__main__':
 		os.path.realpath(__file__[:-1] if __file__[-4:] in 
 			('.pyc', '.pyo') else __file__))), '../kn'))
 	setup_virtual_package('kn', path)
-	try:
-		setup_virtual_package('Mailman', 
-				os.path.expanduser('~mailman/Mailman'))
-		import Mailman
-	except ImportError:
-		warnings.warn("Could not import Mailman package")
