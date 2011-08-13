@@ -3,7 +3,7 @@ import kn.leden.entities as Es
 from kn.settings import LISTS_MAILDOMAIN
 from kn.leden.date import now
 
-def update_postfix(giedo):
+def generate_postfix_map(giedo):
         tbl = dict() # the virtual map
         non_mailman_groups = {}
         dt_now = now()
@@ -33,3 +33,4 @@ def update_postfix(giedo):
                 email = id2email.get(rel['who'])
                 if email is not None:
                         tbl[e.canonical_email].append(email)
+        return tbl

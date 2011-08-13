@@ -10,7 +10,7 @@ from kn.utils.whim import WhimDaemon, WhimClient
 from kn import settings
 
 from kn.utils.giedo.db import update_db
-from kn.utils.giedo.postfix import update_postfix
+from kn.utils.giedo.postfix import generate_postfix_map
 
 class Giedo(WhimDaemon):
         def __init__(self):
@@ -20,4 +20,5 @@ class Giedo(WhimDaemon):
         def handle(self, d):
                 # For now, be stupid, and always update everything
                 update_db(self)
-                update_postfix(self)
+                self.daan.send({'type': 'postfix',
+                                'map': generate_postfix_map(self)})
