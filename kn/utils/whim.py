@@ -15,9 +15,9 @@ import os
 
 class WhimClient(object):
         def __init__(self, address, family='unix'):
-                if self.family == 'tcp':
+                if family == 'tcp':
                         sf = socket.AF_INET
-                elif self.family == 'unix':
+                elif family == 'unix':
                         sf = socket.AF_UNIX
                 else:
                         raise ValueError, 'unknown family'
@@ -45,11 +45,11 @@ class WhimDaemon(object):
                 else:
                         raise ValueError, 'unknown family'
                 ls = self.ls = socket.socket(sf, socket.SOCK_STREAM)
-                if sf == 'unix':
+                if self.family == 'unix':
                         if os.path.exists(self.address):
                                 os.unlink(self.address)
                 ls.bind(self.address)
-                if sf == 'unix':
+                if self.family == 'unix':
                         os.chmod(self.address, 0600)
                 ls.listen(8)
                 while True:
