@@ -5,7 +5,7 @@ import select
 import json
 import os
 
-from kn.utils.whim import WhimDaemon
+from kn.utils.whim import WhimDaemon, WhimClient
 
 from kn import settings
 
@@ -15,6 +15,7 @@ from kn.utils.giedo.postfix import update_postfix
 class Giedo(WhimDaemon):
         def __init__(self):
                 super(Giedo, self).__init__(settings.GIEDO_SOCKET)
+                self.daan = WhimClient(settings.DAAN_SOCKET)
 
         def handle(self, d):
                 # For now, be stupid, and always update everything
