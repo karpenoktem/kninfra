@@ -3,7 +3,7 @@ import kn.leden.entities as Es
 from kn.leden.date import now
 from kn.settings import DT_MIN, DT_MAX
 
-def update_db():
+def update_db(giedo):
         dt_now = now()
         # Load tags
         # TODO cache this
