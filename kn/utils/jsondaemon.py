@@ -5,21 +5,30 @@ import select
 import json
 import os
 
-class UnixJSONDaemon(object):
-        """ Simple synchronous daemon that listens on a UNIX socket for
+class JSONDaemon(object):
+        """ Simple synchronous daemon that  for
             JSON objects.  Used by the Giedo and Daan daemons."""
-        def __init__(self, path):
+        def __init__(self, address, family='unix'):
                 self.sockets = []
-                self.path = path
+                self.address = address
+                self.family = family
                 self.sock_to_file = dict()
                 self.ls = None
 
         def run(self):
-                ls = self.ls = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-                if os.path.exists(self.path):
-                        os.unlink(self.path)
-                ls.bind(self.path)
-                os.chmod(self.path, 0600)
+                if self.family == 'tcp':
+                        sf = socket.AF_INET
+                elif self.family == 'unix':
+                        sf = socket.AF_UNIX
+                else:
+                        raise ValueError, 'unknown family'
+                ls = self.ls = socket.socket(sf, socket.SOCK_STREAM)
+                if sf == 'unix':
+                        if os.path.exists(self.address):
+                                os.unlink(self.address)
+                ls.bind(self.address)
+                if sf == 'unix':
+                        os.chmod(self.address, 0600)
                 ls.listen(8)
                 while True:
                         rs, ws, xs = select.select(self.sockets + [ls], [], [])
@@ -41,7 +50,11 @@ class UnixJSONDaemon(object):
                                 del self.sock_to_file[s]
                         else:
                                 d = json.loads(raw)
-                                self.handle(d)
+                                ret = self.handle(d)
+                                if ret is not None:
+                                        self.sock_to_file[s].write(
+                                                        json.dumps(ret))
+                                        self.sock_to_file[s].write("\n")
                 except Exception, e:
                         logging.exception("Uncaught exception")
 
