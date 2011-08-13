@@ -27,6 +27,7 @@ class WhimClient(object):
         def send(self, d):
                 self.f.write(json.dumps(d))
                 self.f.write("\n")
+                self.f.flush()
                 return json.loads(self.f.readline())
 
 class WhimDaemon(object):
@@ -36,6 +37,9 @@ class WhimDaemon(object):
                 self.family = family
                 self.sock_to_file = dict()
                 self.ls = None
+
+        def pre_mainloop(self):
+                pass
 
         def run(self):
                 if self.family == 'tcp':
@@ -51,6 +55,7 @@ class WhimDaemon(object):
                 ls.bind(self.address)
                 if self.family == 'unix':
                         os.chmod(self.address, 0600)
+                self.pre_mainloop()
                 ls.listen(8)
                 while True:
                         rs, ws, xs = select.select(self.sockets + [ls], [], [])
@@ -75,6 +80,7 @@ class WhimDaemon(object):
                                 ret = self.handle(d)
                                 self.sock_to_file[s].write(json.dumps(ret))
                                 self.sock_to_file[s].write("\n")
+                                self.sock_to_file[s].flush()
                 except Exception, e:
                         logging.exception("Uncaught exception")
 
