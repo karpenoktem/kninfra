@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ipython $HOME/repo/utils/shell.py
