@@ -376,6 +376,14 @@ class Group(Entity):
 			return ('group-by-name', (),
 					{'name': self.name})
 		return ('group-by-id', (), {'_id': self.id})
+        def get_current_and_old_members(self):
+                dt = now()
+                cur, _all = set(), set()
+                for rel in self.get_rrelated(how=None, deref_with=False):
+                        _all.add(rel['who'])
+                        if rel['until'] >= dt:
+                                cur.add(rel['who'])
+                return (cur, _all - cur)
         def get_members(self):
                 dt = now()
                 return [r['who'] for r in self.get_rrelated(
