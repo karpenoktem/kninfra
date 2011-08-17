@@ -12,7 +12,7 @@ def apply_mailman_changes(daan, changes):
         mlo = {}
         def ensure_opened(l):
                 if l in mlo:
-                        return
+                        return True
                 try:
                         mlo[l] = MailList.MailList(l)
                         return True
