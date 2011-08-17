@@ -9,6 +9,7 @@ from kn.utils.whim import WhimDaemon
 from kn.utils.daan.postfix import set_postfix_map
 from kn.utils.daan.mailman import apply_mailman_changes
 from kn.utils.daan.wiki import apply_wiki_changes
+from kn.utils.daan.forum import apply_forum_changes
 
 from kn import settings
 
@@ -27,3 +28,5 @@ class Daan(WhimDaemon):
                         return apply_mailman_changes(self, d['changes'])
                 elif d['type'] == 'wiki':
                         return apply_wiki_changes(self, d['changes'])
+                elif d['type'] == 'forum':
+                        return apply_forum_changes(self, d['changes'])
