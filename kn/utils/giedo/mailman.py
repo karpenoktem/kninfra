@@ -8,7 +8,7 @@ import Mailman
 import Mailman.Utils
 import Mailman.MailList
 
-def generate_mailman_changes():
+def generate_mailman_changes(giedo):
         todo = {'create': [], 'add': {}, 'remove': {}}
         # TODO mm_groups and mm_rels
         # Get the groups that need a mailing list and the members of those
