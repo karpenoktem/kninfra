@@ -49,7 +49,7 @@ def sync_commissions():
 			on_leden.add(user)
 			if not any(map(lambda x: (x[:5] == 'leden'
 					and x != 'leden'
-					and x != MEMBER_GROUP), groupNames)):
+					and x < MEMBER_GROUP), groupNames)):
 				eerstejaars.add(user)
 	change_comm_membership('leden', leden)
 	change_comm_membership('aan',
