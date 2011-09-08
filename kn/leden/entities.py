@@ -302,9 +302,14 @@ class Entity(SONWrapper):
 	def __init__(self, data):
 		super(Entity, self).__init__(data, ecol)
         def is_related_with(self, whom, how=None):
-                return rcol.exists({'who': _id(self),
-                                    'how': _id(how),
-                                    'with': _id(whom)})
+                dt = now()
+                how = None if how is None else _id(how)
+                return rcol.find_one(
+                        {'who': _id(self),
+                         'how': how,
+                         'from': {'$lte': dt},
+                         'until': {'$gte': dt},
+                         'with': _id(whom)}, {'_id': True}) is not None
 
 	def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                                 deref_with=True, deref_how=True):
