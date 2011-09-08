@@ -65,4 +65,18 @@ def apply_wiki_changes(daan, changes):
                                 user.capitalize())
                 c.execute("COMMIT;")
                 c.close()
+        for user in changes['activate']:
+                c = dc.cursor()
+                c.execute("""INSERT INTO `user_groups` (ug_user, ug_group)
+			SELECT user_id, %s FROM `user` WHERE user_name=%s""",
+				'leden', user)
+                c.execute("COMMIT;")
+                c.close()
+        for user in changes['deactivate']:
+                c = dc.cursor()
+                c.execute("""DELETE FROM `user_groups` WHERE ug_group=%s AND
+			ug_user = (SELECT user_id FROM `user` WHERE
+			user_name=%s""", 'leden', user)
+                c.execute("COMMIT;")
+                c.close()
         dc.close()
