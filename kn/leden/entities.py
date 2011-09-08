@@ -6,6 +6,7 @@ from django.contrib.auth.models import get_hexdigest
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id
 from kn.settings import DT_MIN, DT_MAX, MAILDOMAIN
+from kn.base._random import pseudo_randstr
 
 # The collections
 # ###################################################################### 
@@ -441,6 +442,15 @@ class User(Entity):
 			return ('user-by-name', (),
 					{'name': self.name})
 		return ('user-by-id', (), {'_id': self.id})
+        def set_password(self, pwd, save=True):
+                salt = pseudo_randstr()
+                alg = 'sha1'
+                self._data['password'] = {
+                                'algorithm': alg,
+                                'salt': salt,
+                                'hash': get_hexdigest(alg, salt, pwd)}
+                if save:
+                        self.save()
 	def check_password(self, pwd):
 		dg = get_hexdigest(self.password['algorithm'],
 				   self.password['salt'], pwd)
