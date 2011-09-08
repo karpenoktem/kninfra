@@ -3,6 +3,8 @@ import kn.leden.entities as Es
 from kn.settings import LISTS_MAILDOMAIN
 from kn.leden.date import now
 
+# TODO (issue #7) handle cycles properly.
+
 def generate_postfix_map(giedo):
         tbl = dict() # the virtual map
         non_mailman_groups = {}
