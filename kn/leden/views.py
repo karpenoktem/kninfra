@@ -2,7 +2,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from kn.base.text import humanized_enum
 from kn.leden.forms import ChangePasswordForm
-from kn.leden.utils import change_password, ChangePasswordError
+from kn.leden.giedo import change_password, ChangePasswordError
 from kn import settings
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
