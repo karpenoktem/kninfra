@@ -21,7 +21,12 @@ class SONWrapper(object):
 		self._parent = parent
 	def save(self):
 		if self._parent is None:
-			self._collection.update({'_id': self._id}, self._data)
+                        if '_id' in self._data:
+                                self._collection.update({
+                                        '_id': self._data['id']}, self._data)
+                        else:
+                                self._data['_id'] = self._collection.insert(
+                                                self._data)
 		else:
 			self._parent.save()
 	@property
