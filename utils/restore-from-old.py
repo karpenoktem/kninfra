@@ -295,12 +295,13 @@ def main(f):
         for m in data['Event']:
                 if m['owner'] not in conv_group:
                         gname = year_groups_lut[m['owner']][0]
-                        gid = conv_group_byname[gname]
+                        gid = conv_group_byname[gname]['id']
                 else:
-                        gid = conv_group[m['owner']]
+                        gid = conv_group[m['owner']]['id']
                 conv_event[m['id']] = subscr_Es.ecol.insert({
                         'mailBody': m['mailBody'],
                         'humanName': m['humanName'],
+                        'description': m['description'],
                         'cost': m['cost'],
                         'is_open': m['is_open'],
                         'owner': gid,
