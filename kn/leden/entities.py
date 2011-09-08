@@ -405,6 +405,13 @@ class Entity(SONWrapper):
                                 return False
                 return True 
 
+        @property
+        def got_unix_group(self):
+                if 'has_unix_group' in self._data:
+                        return self._data['has_unix_group']
+                else:
+                        return True
+
 class Group(Entity):
 	@permalink
 	def get_absolute_url(self):
@@ -486,6 +493,13 @@ class User(Entity):
                                 else by_id(self._data['studies'][0]['study'])\
                                                         .as_study()
                 return self._primary_study
+        @property
+        def got_unix_user(self):
+                if 'has_unix_user' in self._data:
+                        return self._data['has_unix_user']
+                else:
+                        return True
+
 class Tag(Entity):
 	@permalink
 	def get_absolute_url(self):
