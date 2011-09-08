@@ -35,7 +35,7 @@ def set_unix_map(cilia, _map):
         # Synchronise membership
         glut = dict()
         for g in gs:
-                assert g.gr_name not in glut # issue #3
+                assert g.gr_name not in glut # issue #5
                 glut[g.gr_name] = g
         for g in _map['groups']: 
                 gname = ('kn-'+g)[:32]
