@@ -369,6 +369,19 @@ class Entity(SONWrapper):
 	def __repr__(self):
 		return "<Entity %s (%s)>" % (self.id, self.type)
 
+        @property
+        def is_user(self): return 'user' in self._data['types']
+        @property
+        def is_group(self): return 'group' in self._data['types']
+        @property
+        def is_brand(self): return 'brand' in self._data['types']
+        @property
+        def is_tag(self): return 'tag' in self._data['types']
+        @property
+        def is_study(self): return 'study' in self._data['types']
+        @property
+        def is_institute(self): return 'institute' in self._data['types']
+
 	def as_user(self): return User(self._data)
 	def as_group(self): return Group(self._data)
 	def as_brand(self): return Brand(self._data)
