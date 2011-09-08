@@ -69,14 +69,37 @@ def by_ids(ns):
                 ret[m['_id']] = entity(m)
         return ret
 
-def ids_by_names(ns):
+__id2name_cache = {}
+
+def id_by_name(n, use_cache=False):
+        """ Find the _id of entity with name @n """
+        ret = None
+        if use_cache:
+                if n in __id2name_cache:
+                        ret =  __id2name_cache[n]
+        if ret is None:
+                ret = ecol.find_one({'names': n}, {'names':1})['_id']
+                if use_cache:
+                        __id2name_cache[n] = ret
+        return ret
+
+def ids_by_names(ns, use_cache=False):
         """ Finds _ids of entities by a list of names """
         ret = {}
         nss = frozenset(ns)
-        for m in ecol.find({'names': {'$in': ns}}, {'names':1}):
+        if use_cache:
+                nss2 = set(nss)
+                for n in nss:
+                        if n in __id2name_cache:
+                                ret[n] = __id2name_cache[n]
+                                nss2.remove(n)
+                nss = frozenset(nss2)
+        for m in ecol.find({'names': {'$in': tuple(nss)}}, {'names':1}):
                 for n in m['names']:
                         if n in nss:
                                 ret[n] = m['_id']
+                                if use_cache:
+                                        __id2name_cache[n] = m['_id']
                                 continue
         return ret
 
@@ -346,6 +369,19 @@ class Entity(SONWrapper):
 	def __repr__(self):
 		return "<Entity %s (%s)>" % (self.id, self.type)
 
+        @property
+        def is_user(self): return 'user' in self._data['types']
+        @property
+        def is_group(self): return 'group' in self._data['types']
+        @property
+        def is_brand(self): return 'brand' in self._data['types']
+        @property
+        def is_tag(self): return 'tag' in self._data['types']
+        @property
+        def is_study(self): return 'study' in self._data['types']
+        @property
+        def is_institute(self): return 'institute' in self._data['types']
+
 	def as_user(self): return User(self._data)
 	def as_group(self): return Group(self._data)
 	def as_brand(self): return Brand(self._data)
@@ -368,6 +404,13 @@ class Entity(SONWrapper):
                         if self._data['virtual']['type'] == 'sofa':
                                 return False
                 return True 
+
+        @property
+        def got_unix_group(self):
+                if 'has_unix_group' in self._data:
+                        return self._data['has_unix_group']
+                else:
+                        return True
 
 class Group(Entity):
 	@permalink
@@ -450,6 +493,13 @@ class User(Entity):
                                 else by_id(self._data['studies'][0]['study'])\
                                                         .as_study()
                 return self._primary_study
+        @property
+        def got_unix_user(self):
+                if 'has_unix_user' in self._data:
+                        return self._data['has_unix_user']
+                else:
+                        return True
+
 class Tag(Entity):
 	@permalink
 	def get_absolute_url(self):
