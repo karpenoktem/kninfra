@@ -33,15 +33,34 @@ class Event(SONWrapper):
                 super(Event, self).__init__(data, ecol)
         @property
         def owner(self):
-                return es.by_id(self._data['owner'])
+                return Es.by_id(self._data['owner'])
 
         def get_subscriptions(self):
                 for s in scol.find({ 'event': self._data['_id']}):
                         yield Subscription(s)
         def get_subscription_of(self, user):
-                return Subscription(scol.find_one({
+                d = scol.find_one({
                         'event': self._data['_id'],
-                        'user': user._id}))
+                        'user': user._id})
+                if d is None:
+                        return None
+                return Subscription(d)
+        @property
+        def description(self):
+                return self._data['description']
+        @property
+        def mailBody(self):
+                return self._data['mailBody']
+        @property
+        def humanName(self):
+                return self._data['humanName']
+        @property
+        def cost(self):
+                return self._data['cost']
+        @property
+        def is_open(self):
+                return self._data['is_open']
+
 	def __unicode__(self):
 		return unicode('%s (%s)' % (self.humanName, self.owner))
 
@@ -58,7 +77,7 @@ class Subscription(SONWrapper):
                 return Event(event_by_id(self._data['event']))
         @property
         def user(self):
-                return es.by_id(self._data['user'])
+                return Es.by_id(self._data['user'])
 
 	def __unicode__(self):
 		return unicode(u"%s for %s" % (self.user.humanName,
@@ -66,3 +85,6 @@ class Subscription(SONWrapper):
         @property
         def debit(self):
                 return self._data['debit']
+        @property
+        def userNotes(self):
+                return self._data['userNotes']

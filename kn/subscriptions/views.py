@@ -13,7 +13,7 @@ def event_detail(request, name):
         if event is None:
                 raise Http404
         subscription = event.get_subscription_of(request.user)
-	if subscription:
+	if subscription is not None:
 		if subscription.debit > 0:
 			request.user.push_message((
 				"Je bent al aangemeld, maar moet nog wel %s"+
@@ -31,15 +31,15 @@ def event_detail(request, name):
 		subscription.save()
 		full_owner_address = '%s <%s>' % (
 				event.owner.humanName,
-				event.owner.primary_email)
+				event.owner.canonical_email)
 		email = EmailMessage(
 				"Aanmelding %s" % event.humanName,
 				 event.mailBody % {
 					'firstName': request.user.first_name,
                                         'notes': notes},
 				'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-				[request.user.primary_email],
-				[event.owner.primary_email],
+				[request.user.canonical_email],
+				[event.owner.canonical_email],
 				headers={
 					'Cc': full_owner_address,
 					'Reply-To': full_owner_address})
@@ -47,13 +47,10 @@ def event_detail(request, name):
 		request.user.push_message(
 				"Je bent aangemeld en moet "+\
 					"nu %s euro betalen" % event.cost)
-	try:
-		request.user.groups.get(name=event.owner)
-		# An exception would have been triggered,
-		# if we weren't in the group as specified by owner
-		subscrlist = EventSubscription.objects.filter(event=event)
-		subscrcount_debit = subscrlist.exclude(debit=0).count()
-	except Group.DoesNotExist:
+	if request.user.is_related_with(event.owner):
+		subscrlist = tuple(event.get_subscriptions())
+		subscrcount_debit = len([s for s in subscrlist if s.debit != 0])
+        else:
 		subscrlist = None
 		subscrcount_debit = None
 	return render_to_response('subscriptions/event_detail.html',
