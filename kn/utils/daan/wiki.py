@@ -1,7 +1,24 @@
+import hashlib
 import logging
 import MySQLdb
 
 from kn import settings
+from kn.base._random import pseudo_randstr
+
+def wiki_setpass(daan, user, password):
+        creds = settings.WIKI_MYSQL_CREDS
+        dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
+                                db=creds[3])
+        user = user.capitalize()
+        c = dc.cursor()
+        salt = pseudo_randstr(8)
+        h = hashlib.md5(password).hexdigest()
+        h = hashlib.md5("%s-%s" % (salt, h)).hexdigest()
+        h = ':B:%s:%s' % (salt, h)
+        c.execute("UPDATE user SET user_password=%s WHERE user_name=%s;",
+                        (h, user))
+        c.execute("COMMIT;")
+        dc.close()
 
 def apply_wiki_changes(daan, changes):
         creds = settings.WIKI_MYSQL_CREDS
