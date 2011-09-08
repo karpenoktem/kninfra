@@ -1,8 +1,15 @@
 import pwd
 import grp
+import crypt
 import string
 import logging
 import subprocess
+
+from kn.base._random import pseudo_randstr
+
+def unix_setpass(cilia, user, password):
+        crypthash = crypt.crypt(password, pseudo_randstr(2))
+        subprocess.call(['usermod', '-p', crypthash, user])
 
 def set_unix_map(cilia, _map):
         # First get the list of all current users
