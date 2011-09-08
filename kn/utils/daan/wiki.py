@@ -5,6 +5,8 @@ import MySQLdb
 from kn import settings
 from kn.base._random import pseudo_randstr
 
+# NOTE see issue #6 -- MediaWiki's caching can cause confusion
+
 def wiki_setpass(daan, user, password):
         creds = settings.WIKI_MYSQL_CREDS
         dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
