@@ -23,7 +23,7 @@ class SONWrapper(object):
 		if self._parent is None:
                         if '_id' in self._data:
                                 self._collection.update({
-                                        '_id': self._data['id']}, self._data)
+                                        '_id': self._data['_id']}, self._data)
                         else:
                                 self._data['_id'] = self._collection.insert(
                                                 self._data)
