@@ -1,6 +1,7 @@
 import _import
 
 from datetime import datetime, timedelta
+from time import strptime
 import json
 import sys
 
@@ -9,6 +10,10 @@ import kn.subscriptions.entities as subscr_Es
 from kn.settings import DT_MIN, DT_MAX
 
 def main(f):
+        def str_to_date(s):
+                if s is None:
+                        return None
+                return datetime(*strptime(s,'%Y-%m-%d')[:3])
         def year_to_dates(year):
                 return (datetime(2003+year,9,1),
                         datetime(2004+year,8,31))
@@ -163,7 +168,8 @@ def main(f):
 				'nick': m['first_name'],
 				'given': None,
 				'family': m['last_name'],
-				'gender': m['gender']
+				'gender': m['gender'],
+                                'dateOfBirth': str_to_date(m['dateOfBirth'])
 			},
 			'emailAddresses': [
 				{'email': m['email'],
