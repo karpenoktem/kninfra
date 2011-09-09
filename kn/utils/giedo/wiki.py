@@ -43,7 +43,7 @@ def generate_wiki_changes(self):
                 else:
                         del ausers[user]
 
-        for name, in users.iteritems():
+        for name in ausers:
                 todo['activate'].append(name)
 
         c.close()
