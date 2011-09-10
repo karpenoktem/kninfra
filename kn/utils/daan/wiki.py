@@ -70,7 +70,7 @@ def apply_wiki_changes(daan, changes):
                 # Issue #11: .capitalize() is required due to binary-charset
                 c.execute("""INSERT INTO `user_groups` (ug_user, ug_group)
                         SELECT user_id, %s FROM `user` WHERE user_name=%s""",
-                        'leden', user.capitalize())
+                        ('leden', user.capitalize()))
                 c.execute("COMMIT;")
                 c.close()
         for user in changes['deactivate']:
@@ -78,7 +78,7 @@ def apply_wiki_changes(daan, changes):
                 # Issue #11: .capitalize() is required due to binary-charset
                 c.execute("""DELETE FROM `user_groups` WHERE ug_group=%s AND
                         ug_user = (SELECT user_id FROM `user` WHERE
-                        user_name=%s""", 'leden', user.capitalize())
+                        user_name=%s""", ('leden', user.capitalize()))
                 c.execute("COMMIT;")
                 c.close()
         dc.close()
