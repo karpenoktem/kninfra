@@ -1,6 +1,6 @@
 import logging
 import kn.leden.entities as Es
-from kn.settings import LISTS_MAILDOMAIN
+from kn.settings import LISTS_MAILDOMAIN, MAILDOMAIN
 from kn.leden.date import now
 
 # TODO (issue #7) handle cycles properly.
