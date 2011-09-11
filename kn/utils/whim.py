@@ -77,7 +77,10 @@ class WhimDaemon(object):
                                 del self.sock_to_file[s]
                         else:
                                 d = json.loads(raw)
-                                ret = self.handle(d)
+                                if d is None:
+                                        ret = None
+                                else:
+                                        ret = self.handle(d)
                                 self.sock_to_file[s].write(json.dumps(ret))
                                 self.sock_to_file[s].write("\n")
                                 self.sock_to_file[s].flush()
