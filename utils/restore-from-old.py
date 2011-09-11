@@ -2,12 +2,16 @@ import _import
 
 from datetime import datetime, timedelta
 from time import strptime
+import logging
 import json
 import sys
+
+from tarjan import tarjan
 
 import kn.leden.entities as Es
 import kn.subscriptions.entities as subscr_Es
 from kn.settings import DT_MIN, DT_MAX
+from kn.utils.giedo.db import update_db
 
 def main(f):
         def str_to_date(s):
@@ -319,7 +323,32 @@ def main(f):
                         'userNotes': m['userNotes'],
                         'debit': m['debit'],
                         'user': conv_user[m['user']]})
+        print 'giedo updatedb'
+        update_db(None)
+        print 'alias'
+        print ' ids_by_names'
+        name2id = Es.ids_by_names()
+        print ' to graph'
+        alias_graph = {}
+        for m in data['Alias']:
+                alias_graph[m['source']] = m['target']
+        print ' tarjan'
+        for scc in tarjan(alias_graph):
+                assert len(scc) == 1
+                src = scc[0]
+                if src in name2id:
+                        continue
+                if not src in alias_graph:
+                        continue
+                if not alias_graph[src] in name2id:
+                        print '  ? %s -> %s' % (src, alias_graph[src])
+                        continue
+                name2id[src] = name2id[alias_graph[src]]
+                Es.ecol.update({'names': alias_graph[src]},
+                               {'$push': {'names': src}})
+
 if __name__ == '__main__':
+        logging.basicConfig(level=logging.DEBUG)
 	if len(sys.argv) == 1:
 		sys.argv.append('old.json')
 	with open(sys.argv[1]) as f:
