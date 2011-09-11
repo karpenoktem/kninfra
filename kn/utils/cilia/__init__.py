@@ -13,8 +13,7 @@ from kn.utils.cilia.unix import set_unix_map, unix_setpass
 
 class Cilia(WhimDaemon):
         def __init__(self):
-                super(Cilia, self).__init__(settings.CILIA_BIND_ADDR,
-                                family='tcp')
+                super(Cilia, self).__init__(settings.CILIA_SOCKET)
 
         def handle(self, d):
                 if d['type'] == 'unix':
