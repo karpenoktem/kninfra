@@ -136,7 +136,6 @@ def update_db(giedo):
                              'human': unicode(g.humanName) + ' ' +
                                 unicode(sofa_brands[rel['how']].humanName)}]}
                 n['_id'] = Es.ecol.insert(n)
-                print n['_id']
                 groups[nm] = Es.Group(n)
                 id2name[n['_id']] = nm
                 sofa_vgroups.append(g)
