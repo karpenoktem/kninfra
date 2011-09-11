@@ -105,7 +105,7 @@ def update_db(giedo):
                                 'from': DT_MIN,
                                 'until': DT_MAX}
                         if not relkey(rrel) in vgroup_rlut:
-                                logging.info("ygroup: adding %s -> %s (%s)" % (
+                                logging.info("vgroup: adding %s -> %s (%s)" % (
                                                 id2name[mrel['who']], yg.name,
                                                 id2name.get(mrel['how'])))
                                 Es.rcol.insert(rrel)
