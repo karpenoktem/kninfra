@@ -6,6 +6,7 @@ from django.contrib.auth.models import get_hexdigest
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id
 from kn.settings import DT_MIN, DT_MAX, MAILDOMAIN
+from kn.base._random import pseudo_randstr
 
 # The collections
 # ###################################################################### 
@@ -83,22 +84,23 @@ def id_by_name(n, use_cache=False):
                         __id2name_cache[n] = ret
         return ret
 
-def ids_by_names(ns, use_cache=False):
+def ids_by_names(ns=None, use_cache=False):
         """ Finds _ids of entities by a list of names """
         ret = {}
-        nss = frozenset(ns)
-        if use_cache:
+        nss = None if ns is None else frozenset(ns)
+        if use_cache and ns is not None:
                 nss2 = set(nss)
                 for n in nss:
                         if n in __id2name_cache:
                                 ret[n] = __id2name_cache[n]
                                 nss2.remove(n)
                 nss = frozenset(nss2)
-        for m in ecol.find({'names': {'$in': tuple(nss)}}, {'names':1}):
-                for n in m['names']:
-                        if n in nss:
+        for m in ecol.find({} if ns is None else
+                        {'names': {'$in': tuple(nss)}}, {'names':1}):
+                for n in m.get('names',()):
+                        if ns is None or n in nss:
                                 ret[n] = m['_id']
-                                if use_cache:
+                                if use_cache and ns is not None:
                                         __id2name_cache[n] = m['_id']
                                 continue
         return ret
@@ -301,9 +303,14 @@ class Entity(SONWrapper):
 	def __init__(self, data):
 		super(Entity, self).__init__(data, ecol)
         def is_related_with(self, whom, how=None):
-                return rcol.exists({'who': _id(self),
-                                    'how': _id(how),
-                                    'with': _id(whom)})
+                dt = now()
+                how = None if how is None else _id(how)
+                return rcol.find_one(
+                        {'who': _id(self),
+                         'how': how,
+                         'from': {'$lte': dt},
+                         'until': {'$gte': dt},
+                         'with': _id(whom)}, {'_id': True}) is not None
 
 	def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                                 deref_with=True, deref_how=True):
@@ -441,6 +448,15 @@ class User(Entity):
 			return ('user-by-name', (),
 					{'name': self.name})
 		return ('user-by-id', (), {'_id': self.id})
+        def set_password(self, pwd, save=True):
+                salt = pseudo_randstr()
+                alg = 'sha1'
+                self._data['password'] = {
+                                'algorithm': alg,
+                                'salt': salt,
+                                'hash': get_hexdigest(alg, salt, pwd)}
+                if save:
+                        self.save()
 	def check_password(self, pwd):
 		dg = get_hexdigest(self.password['algorithm'],
 				   self.password['salt'], pwd)
@@ -493,6 +509,9 @@ class User(Entity):
                                 else by_id(self._data['studies'][0]['study'])\
                                                         .as_study()
                 return self._primary_study
+        @property
+        def dateOfBirth(self):
+                return self._data.get('person',{}).get('dateOfBirth')
         @property
         def got_unix_user(self):
                 if 'has_unix_user' in self._data:

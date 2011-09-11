@@ -2,7 +2,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from kn.base.text import humanized_enum
 from kn.leden.forms import ChangePasswordForm
-from kn.leden.utils import change_password, ChangePasswordError
+from kn.leden.giedo import change_password, ChangePasswordError
 from kn import settings
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
@@ -15,6 +15,7 @@ from django.contrib.auth.views import redirect_to_login
 from kn import settings
 from hashlib import sha256
 from datetime import date
+import json
 
 import kn.leden.entities as Es
 
@@ -175,3 +176,11 @@ def rauth(request):
 		request.REQUEST['url'],
 		'?' if request.REQUEST['url'].find('?') == -1 else '&',
 		str(request.user.name), token))
+
+def api_users(request):
+        if not request.REQUEST['key'] in settings.ALLOWED_API_KEYS:
+                raise Http403
+        ret = {}
+        for m in Es.users():
+                ret[str(m.name)] = m.full_name
+        return HttpResponse(json.dumps(ret), mimetype="text/json")

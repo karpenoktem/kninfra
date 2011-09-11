@@ -1,1 +1,0 @@
-/var/django/kn/repo/utils/common.py

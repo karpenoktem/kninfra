@@ -45,5 +45,6 @@ urlpatterns = patterns('',
 	url(r'^smoel/(?P<name>[^.]+).jpg$',
 	    views.user_smoel, name='user-smoel'),
 	url(r'^ik/wachtwoord$', views.ik_chpasswd, name="chpasswd"),
+        url(r'^api/users$', views.api_users),
 )
 
