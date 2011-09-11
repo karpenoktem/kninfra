@@ -23,20 +23,19 @@
 	</dd>
 	<dt>E-Mail</dt>
 	<dd>
-	
+        {{ object.canonical_email }}
 	</dd>
 	{% if object.primary_study %}
 	<dt>Studie</dt>
         <dd><a href="{{ object.primary_study.get_absolute_url }}"
 		>{{ object.primary_study.humanName }}</a></dd>
 	{% endif %}
-	{% if object.dateOfBirth %}
+        {% if object.dateOfBirth %}
 	<dt>Geboortedatum</dt>
 	<dd>
-	<a href="{% url bouwjaar year=object.dateOfBirth.year %}"
-		>{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth.month }}-{{ object.dateOfBirth.day }}
+                {{ object.dateOfBirth.year }}-{{ object.dateOfBirth.month }}-{{ object.dateOfBirth.day }}
 	</dd>
-	{% endif %}
+        {% endif %}
 	{% if object.dateJoined %}
 	<dt>Lid sinds</dt>
 	<dd>

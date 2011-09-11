@@ -509,6 +509,9 @@ class User(Entity):
                                                         .as_study()
                 return self._primary_study
         @property
+        def dateOfBirth(self):
+                return self._data.get('person',{}).get('dateOfBirth')
+        @property
         def got_unix_user(self):
                 if 'has_unix_user' in self._data:
                         return self._data['has_unix_user']
