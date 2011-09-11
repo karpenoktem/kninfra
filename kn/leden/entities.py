@@ -84,22 +84,23 @@ def id_by_name(n, use_cache=False):
                         __id2name_cache[n] = ret
         return ret
 
-def ids_by_names(ns, use_cache=False):
+def ids_by_names(ns=None, use_cache=False):
         """ Finds _ids of entities by a list of names """
         ret = {}
-        nss = frozenset(ns)
-        if use_cache:
+        nss = None if ns is None else frozenset(ns)
+        if use_cache and ns is not None:
                 nss2 = set(nss)
                 for n in nss:
                         if n in __id2name_cache:
                                 ret[n] = __id2name_cache[n]
                                 nss2.remove(n)
                 nss = frozenset(nss2)
-        for m in ecol.find({'names': {'$in': tuple(nss)}}, {'names':1}):
-                for n in m['names']:
-                        if n in nss:
+        for m in ecol.find({} if ns is None else
+                        {'names': {'$in': tuple(nss)}}, {'names':1}):
+                for n in m.get('names',()):
+                        if ns is None or n in nss:
                                 ret[n] = m['_id']
-                                if use_cache:
+                                if use_cache and ns is not None:
                                         __id2name_cache[n] = m['_id']
                                 continue
         return ret
