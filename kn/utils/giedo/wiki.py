@@ -19,7 +19,7 @@ def generate_wiki_changes(self):
         cur, old = Es.by_name('leden').get_current_and_old_members()
         for m in itertools.chain(cur, old):
                 users[str(m.name)] = m
-        ausers = [u for u in users if users[u].is_active]
+        ausers = set([u for u in users if users[u].is_active])
 
         for uid, user in c.fetchall():
                 user = user.lower()
@@ -41,7 +41,7 @@ def generate_wiki_changes(self):
                 if user not in ausers:
                         todo['deactivate'].append(user)
                 else:
-                        del ausers[user]
+                        ausers.remove(user)
 
         for name in ausers:
                 todo['activate'].append(name)
