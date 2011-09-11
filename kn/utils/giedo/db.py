@@ -18,6 +18,7 @@ def update_db(giedo):
         id2name = Es.names_by_ids()
         # Load groups and brands
         groups = Es.of_type_by_name('group')
+        groups_set = frozenset(groups.values())
         # Find groups that have a virtual group for each year
         year_groups = [g for g in groups.itervalues()
                         if tags['!year-group'] in g.tag_ids]
@@ -64,7 +65,7 @@ def update_db(giedo):
                                 _create_yeargroup(g, year, n, tags, groups,
                                                id2name)
         # Find all virtual groups
-        virtual_groups = [g for g in groups.values()
+        virtual_groups = [g for g in groups_set
                         if tags['!virtual-group'] in g.tag_ids]
         sofa_vgroups = []
         yeargroup_vgroups = []
