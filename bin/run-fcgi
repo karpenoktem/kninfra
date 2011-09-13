@@ -1,0 +1,9 @@
+#!/bin/bash
+
+pushd $HOME/repo/kn &> /dev/null
+
+rm -f $HOME/fcgi.sock
+./manage.py runfcgi socket=$HOME/fcgi.sock umask=002
+chown :interinfra $HOME/fcgi.sock
+
+popd &> /dev/null
