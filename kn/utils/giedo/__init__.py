@@ -26,18 +26,30 @@ class Giedo(WhimDaemon):
 
         def handle(self, d):
                 if d['type'] == 'sync':
-                        print 'updatedb'
+                        logging.info("update_db")
                         update_db(self)
-                        self.daan.send({'type': 'postfix',
+                        daan_msgs, cilia_msgs = [], []
+                        logging.info("generate: postfix")
+                        daan_msgs.append({'type': 'postfix',
                                 'map': generate_postfix_map(self)})
-                        self.daan.send({'type': 'mailman',
+                        logging.info("generate: mailman")
+                        daan_msgs.append({'type': 'mailman',
                                 'changes': generate_mailman_changes(self)})
-                        self.daan.send({'type': 'wiki',
+                        logging.info("generate: wiki")
+                        daan_msgs.append({'type': 'wiki',
                                 'changes': generate_wiki_changes(self)})
-                        self.daan.send({'type': 'forum',
+                        logging.info("generate: forum")
+                        daan_msgs.append({'type': 'forum',
                                 'changes': generate_forum_changes(self)})
-                        self.cilia.send({'type': 'unix',
+                        logging.info("generate: unix")
+                        cilia_msgs.append({'type': 'unix',
                                  'map': generate_unix_map(self)})
+                        for msg in daan_msgs:
+                                logging.info("daan %s" % msg['type'])
+                                self.daan.send(msg)
+                        for msg in cilia_msgs:
+                                logging.info("cilia %s" % msg['type'])
+                                self.cilia.send(msg)
                 elif d['type'] == 'setpass':
                         u = Es.by_name(d['user'])
                         if u is None:
