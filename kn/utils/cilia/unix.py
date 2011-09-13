@@ -31,6 +31,7 @@ def set_unix_map(cilia, _map):
         c_groups = set([g.gr_name for g in gs
                         if g.gr_name.startswith('kn-')])
         # Determine which are missing
+        created_group = False
         for g in _map['groups']:
                 gname = ('kn-%s'%g)[:32]
                 if gname not in c_groups:
@@ -39,6 +40,9 @@ def set_unix_map(cilia, _map):
                         subprocess.call(['groupadd', gname])
                         subprocess.call(['chown', 'root:%s'%gname, home])
                         subprocess.call(['chmod', '770', home])
+                        created_group = True
+        if created_group:
+                gs = grp.getgrall()
         # Synchronise membership
         glut = dict()
         for g in gs:
