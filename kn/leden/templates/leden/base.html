@@ -5,9 +5,11 @@
 <li><a href="{% url smoelen-home %}"
 	>Smoelenboek</a></li>
 <ul>
-<li><a href="{% url user-list %}"
-	>Gebruikers</a></li>
-<li><a href="{% url entity-by-name name="root" %}"
+<li><a href="{% url entity-by-name name="leden" %}"
+	>Leden</a></li>
+<li><a href="{% url entity-by-name name="groepen" %}"
 	>Groepen</a></li>
+<li><a href="{% url entity-by-name name="comms" %}"
+	>Commissies</a></li>
 </ul>
 {% endblock %}
