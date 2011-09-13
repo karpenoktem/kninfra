@@ -14,7 +14,7 @@ import kn.moderation.entities as mod_Es
 from kn.settings import DT_MIN, DT_MAX
 from kn.utils.giedo.db import update_db
 
-def main(f):
+def main(data):
         def str_to_date(s):
                 if s is None:
                         return None
@@ -29,8 +29,6 @@ def main(f):
                                                'name': name,
                                                'human': humanName}],
                                        'tags': tags})
-        print 'loading json'
-	data = json.load(f)
         print 'dropping'
 	Es.ecol.drop()
 	Es.rcol.drop()
@@ -353,5 +351,14 @@ if __name__ == '__main__':
         logging.basicConfig(level=logging.DEBUG)
 	if len(sys.argv) == 1:
 		sys.argv.append('old.json')
-	with open(sys.argv[1]) as f:
-		main(f)	
+        print 'loading json'
+        d = {}
+        for fn in sys.argv[1:]:
+                print ' %s'%fn
+                with open(fn) as f:
+                        d_bit = json.load(f)
+                        for k, v in d_bit.iteritems():
+                                if k not in d:
+                                        d[k] = []
+                                d[k].extend(v)
+        main(d)
