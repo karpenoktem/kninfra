@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+import _import
+
+import sys
+import json
+
+from kn.utils.whim import WhimClient
+
+def main():
+        if len(sys.argv) not in (2,3):
+                print "whim-client <socket> [<message>]"
+                return -1
+        if len(sys.argv) == 3:
+                msg = sys.argv[2]
+        else:
+                msg = sys.stdin.read()
+        wc = WhimClient(sys.argv[1])
+        print json.dumps(wc.send(json.loads(msg)))
+        return 0
+
+if __name__ == '__main__':
+        sys.exit(main())
