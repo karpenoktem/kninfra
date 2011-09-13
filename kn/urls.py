@@ -10,7 +10,7 @@ from django.conf import settings
 urlpatterns = patterns('',
 	(r'^base/', include('kn.base.urls')),
 	(r'^groups/(?P<subdir>[^/]+)/(?P<path>.*)',
-		'kn.browser.views.homedir', {'root':'/groups/kn'}),
+		'kn.browser.views.homedir', {'root':'/mnt/phassa/groups/'}),
 	(r'^smoelen/', include('kn.leden.urls')),
 	(r'^activiteit/', include('kn.subscriptions.urls')),
 	(r'^reglementen/', include('kn.reglementen.urls')),
