@@ -35,6 +35,11 @@ def apply_forum_changes(daan, changes):
                 c.execute(q, user, '37', email, realname, int(time.time()))
                 c.execute("COMMIT;")
                 c.close()
+        for user, realname in changes['update-realname']:
+                c = dc.cursor()
+                c.execute("UPDATE users SET realname=%s WHERE username=%s", realname, user)
+                c.execute("COMMIT;")
+                c.close()
         for user in changes['remove']:
                 c = dc.cursor()
                 c.execute("DELETE FROM `users` WHERE `username`=%s", user)
