@@ -312,6 +312,18 @@ class Entity(SONWrapper):
                          'until': {'$gte': dt},
                          'with': _id(whom)}, {'_id': True}) is not None
 
+        @property
+        def cached_groups(self):
+                """ The list of entities this user is None-related with.
+
+                This field is cached. """
+                if not hasattr(self, '__groups_cache'):
+                        dt = now()
+                        self.__groups_cache = [rel['with']
+                                for rel in self.get_related(
+                                        None, dt, dt, False, True, False)]
+                return self.__groups_cache
+
 	def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                                 deref_with=True, deref_how=True):
                 return query_relations(-1, self, how, _from, until, deref_who,
