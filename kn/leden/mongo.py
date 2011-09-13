@@ -19,6 +19,10 @@ class SONWrapper(object):
 		self._data = data
 		self._collection = collection
 		self._parent = parent
+        def delete(self):
+                assert self._data['_id'] is not None
+                self._collection.remove({
+                        '_id': self._data['_id']})
 	def save(self):
 		if self._parent is None:
                         if '_id' in self._data:
