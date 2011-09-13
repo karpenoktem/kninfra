@@ -1,0 +1,3 @@
+#!/bin/sh
+
+echo '{ "type" : "sync" }' | socat - UNIX-CONNECT:/var/run/infra/S-giedo
