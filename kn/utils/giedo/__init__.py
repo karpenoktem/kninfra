@@ -22,7 +22,7 @@ class Giedo(WhimDaemon):
         def __init__(self):
                 super(Giedo, self).__init__(settings.GIEDO_SOCKET)
                 self.daan = WhimClient(settings.DAAN_SOCKET)
-                self.cilia = WhimClient(settings.CILIA_CONN_ADDR, family='tcp')
+                self.cilia = WhimClient(settings.CILIA_SOCKET)
 
         def handle(self, d):
                 if d['type'] == 'sync':
