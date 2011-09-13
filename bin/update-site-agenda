@@ -1,0 +1,14 @@
+#!/bin/bash
+
+pushd /srv/karpenoktem.nl/htdocs/site > /dev/null
+
+TMP=`tempfile`
+
+python -Wignore::DeprecationWarning utils/fetch-agenda.py > $TMP
+if [ $? ] ; then
+        cp $TMP config.agenda.php
+fi
+
+rm -f $TMP
+
+popd > /dev/null
