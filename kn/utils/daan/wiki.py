@@ -56,7 +56,7 @@ def apply_wiki_changes(daan, changes):
                                 NULL,
                                 '20081102154303',
                                 0);"""
-                c.execute(q, user.capitalize(), realname, email)
+                c.execute(q, (user.capitalize(), realname, email))
                 c.execute("COMMIT;")
                 c.close()
         for user in changes['remove']:
