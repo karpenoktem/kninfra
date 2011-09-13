@@ -9,10 +9,10 @@ from django.template import RequestContext
 from django.core.mail import EmailMessage
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 
-#from kn.leden.models import OldKnGroup
-
-from kn.moderation.models import ModerationRecord
+import kn.leden.entities as Es
+import kn.moderation.entities as mod_Es
 from kn.utils.mailman import import_mailman
+from kn import settings
 
 import_mailman()
 
@@ -60,15 +60,15 @@ def _deactivate_mm(ml, name, user, record, moderators):
 			"Moderatiemodus op %s is verlopen" % name,
 			("De moderatiemodus op %s is verlopen.") % name,
 			'<wortel@karpenoktem.nl>',
-			[moderators.primary_email]).send()
+			[moderators.canonical_email]).send()
 	else:
 		EmailMessage(
 			"Moderatiemodus op %s is uitgezet door %s" % (name,
-								user.username),
+                                                        str(user.name)),
 			("De moderatiemodus op %s is uitgezet door %s.") % (
-				name, user.username),
+				name, str(user.name)),
 			'<wortel@karpenoktem.nl>',
-			[moderators.primary_email]).send()
+			[moderators.canonical_email]).send()
 
 def _renew_mm(ml, name, user, record, moderators):
 	if not ml.emergency:
@@ -76,18 +76,18 @@ def _renew_mm(ml, name, user, record, moderators):
 	now = datetime.datetime.now()
 	until = now + settings.MOD_RENEW_INTERVAL
 	if record is None:
-		record = ModerationRecord(list=name)
+                record = mod_Es.ModerationRecord({'list': name})
 	record.by = user
 	record.at = now
 	record.save()
 	EmailMessage(
 		"Moderatiemodus op %s is verlengd door %s" % (name,
-							user.username),
+							str(user.name)),
 		("De moderatiemodus op %s is verlengd door %s.  Deze loopt, "+
 		 "indien niet verder verlengd, af om %s.") % (
-			name, user.username, until.time()),
+			name, str(user.name), until.time()),
 		'<wortel@karpenoktem.nl>',
-		[moderators.primary_email]).send()
+		[moderators.canonical_email]).send()
 	return record
 
 
@@ -99,29 +99,28 @@ def _activate_mm(ml, name, user, record, moderators):
 	now = datetime.datetime.now()
 	until = now + settings.MOD_RENEW_INTERVAL
 	if record is None:
-		record = ModerationRecord(list=name)
+                record = mod_Es.ModerationRecord({'list':name})
 	record.by = user
 	record.at = now
 	record.save()
 	EmailMessage(
 		"Moderatiemodus op %s is aangezet door %s" % (name,
-							user.username),
+							str(user.name)),
 		("%s is op moderatiemodus gezet door %s.  Deze loopt, indien "+
 		 "niet verlengd, af om %s.") % (
-			name, user.username, until.time()),
+			name, str(user.name), until.time()),
 		'<wortel@karpenoktem.nl>',
-		[moderators.primary_email]).send()
+		[moderators.canonical_email]).send()
 	return record
 
 @login_required
 def overview(request):
 	toggle_with_name = None
 	renew_with_name = None
-	if (request.user.groups.filter(
-			name=settings.MODERATORS_GROUP).count() != 0):
+        moderators = Es.by_name(settings.MODERATORS_GROUP)
+        if (request.user.is_related_with(Es.by_name(
+                        settings.MODERATORS_GROUP))):
 		is_moderator = True
-		moderators = OldKnGroup.objects.get(
-				name=settings.MODERATORS_GROUP)
 		if request.method == 'POST':
 			if 'toggle' in request.POST:
 				toggle_with_name = request.POST['toggle']
@@ -131,10 +130,7 @@ def overview(request):
 		is_moderator = False
 	lists = []
 	for name in settings.MODED_MAILINGLISTS:
-		try:
-			r = ModerationRecord.objects.get(list=name)
-		except ModerationRecord.DoesNotExist:
-			r = None
+                r = mod_Es.by_name(name)
 		ml = Mailman.MailList.MailList(name, True)
 		try:
 			if toggle_with_name == name:

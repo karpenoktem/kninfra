@@ -13,13 +13,13 @@
 	<tbody>
 {% for l in lists %}
 <tr>
-	<td><a href="{% url oldkngroup-detail l.name %}"
+	<td><a href="{% url entity-by-name l.name %}"
 			>{{ l.real_name }}</a></td>
 	<td>
 		{% if l.modmode %}
 		actief
 		{% if l.by %}
-		door {{ l.by }}
+		door {{ l.by.humanName }}
 		{% endif %}
 		{% else %}
 		inactief
