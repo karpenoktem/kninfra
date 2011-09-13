@@ -41,3 +41,20 @@ class SONWrapper(object):
 	def __repr__(self):
 		return "<SONWrapper for %s>" % self._id
 
+def son_property(path, default=None):
+        """ A convenience shortcut to create properties on SONWrapper
+            subclasses.  Will return a getter/setter property that
+            gets/sets self._data[path[0]]...[path[-1]] verbatim. """
+        def __getter(self):
+                obj = self._data
+                for bit in path[:-1]:
+                        obj = obj.get(bit, {})
+                return obj.get(path[-1], default)
+        def __setter(self, x):
+                obj = self._data
+                for bit in path[:-1]:
+                        if not bit in obj:
+                                obj[bit] = {}
+                        obj = obj[bit]
+                obj[path[-1]] = x
+        return property(__getter, __setter)
