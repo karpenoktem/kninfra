@@ -80,7 +80,8 @@ def _user_detail(request, user):
 			path.join(settings.SMOELEN_PHOTOS_PATH,
 					str(user.name)))
 	ctx = _entity_detail(request, user)
-	ctx.update({'hasPhoto': hasPhoto})
+	ctx.update({'hasPhoto': hasPhoto,
+                    'photosUrl': settings.USER_PHOTOS_URL % str(user.name)})
 	return render_to_response('leden/user_detail.html', ctx,
 			context_instance=RequestContext(request))
 
