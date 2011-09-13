@@ -10,6 +10,7 @@ from tarjan import tarjan
 
 import kn.leden.entities as Es
 import kn.subscriptions.entities as subscr_Es
+import kn.moderation.entities as mod_Es
 from kn.settings import DT_MIN, DT_MAX
 from kn.utils.giedo.db import update_db
 
@@ -39,6 +40,7 @@ def main(f):
         print 'creating indices'
 	Es.ensure_indices()
 	subscr_Es.ensure_indices()
+	mod_Es.ensure_indices()
         conv_inst = dict()
 	conv_study = dict()
 	conv_group = dict()
