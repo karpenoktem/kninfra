@@ -20,14 +20,17 @@ def generate_forum_changes(self):
                 users[str(m.name)] = m
         for user, realname in c.fetchall():
                 user = user.lower()
+                if realname is not None:
+                        realname = realname.decode('latin1')
                 if user not in users:
                         if user == 'guest':
                                 continue
                         todo['remove'].append(user)
                         logging.info("forum: removing user %s", user)
                 else:
-                        if users[user].humanName != realname: # XXX unicode?
-                                todo['update-realname'].append((user, unicode(users[user].humanName)))
+                        if users[user].humanName != realname:
+                                todo['update-realname'].append((user,
+                                        unicode(users[user].humanName)))
                         del users[user]
         for name, user in users.iteritems():
                 todo['add'].append((name, unicode(user.humanName),
