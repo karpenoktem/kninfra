@@ -32,7 +32,7 @@ def apply_forum_changes(daan, changes):
                                           `realname`,
                                           `registered`)
                         VALUES (%s, %s, %s, %s, %s);"""
-                c.execute(q, user, '37', email, realname, int(time.time()))
+                c.execute(q, (user, '37', email, realname, int(time.time())))
                 c.execute("COMMIT;")
                 c.close()
         for user in changes['remove']:
