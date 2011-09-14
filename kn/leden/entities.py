@@ -359,7 +359,8 @@ class Entity(SONWrapper):
 			yield EntityName(self, n)
 	@property
 	def name(self):
-                nm = self._data.get('names', (None,))[0]
+                nms = self._data.get('names', ())
+                nm = nms[0] if len(nms) >= 1 else None
                 return nm if nm is None else EntityName(self, nm)
         @property
         def other_names(self):
