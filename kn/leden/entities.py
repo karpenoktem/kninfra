@@ -565,6 +565,9 @@ class Brand(Entity):
                         return ('brand-by-name', (),
                                         {'name': self.name})
                 return ('brand-by-id', (), {'_id': self.id})
+        @property
+        def sofa_suffix(self):
+                return self._data.get('sofa_suffix', None)
 
 
 # List of type of entities
