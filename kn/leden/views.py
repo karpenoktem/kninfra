@@ -10,6 +10,7 @@ from django.core.files.storage import default_storage
 from django.core.servers.basehttp import FileWrapper
 from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
+from django.core.exceptions import PermissionDenied
 from os import path
 from django.contrib.auth.views import redirect_to_login
 from kn import settings
@@ -183,7 +184,7 @@ def rauth(request):
 
 def api_users(request):
         if not request.REQUEST['key'] in settings.ALLOWED_API_KEYS:
-                raise Http403
+                raise PermissionDenied
         ret = {}
         for m in Es.users():
                 ret[str(m.name)] = m.full_name
