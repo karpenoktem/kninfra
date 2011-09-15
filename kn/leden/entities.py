@@ -331,6 +331,15 @@ class Entity(SONWrapper):
                                         None, dt, dt, False, True, False)]
                 return self.__groups_cache
 
+        @property
+        def cached_groups_names(self):
+                if not hasattr(self, '__groups_names_cache'):
+                        self.__groups_names_cache = set()
+                        for g in self.cached_groups:
+                                self.__groups_names_cache.update([
+                                        str(n) for n in g.names])
+                return self.__groups_names_cache
+
 	def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                                 deref_with=True, deref_how=True):
                 return query_relations(-1, self, how, _from, until, deref_who,
