@@ -16,8 +16,11 @@ from kn import settings
 from hashlib import sha256
 from datetime import date
 import json
+import logging
 
 import kn.leden.entities as Es
+
+logger = logging.getLogger(__name__)
 
 @login_required
 def user_list(request, page):
