@@ -21,3 +21,6 @@ def change_password(user, old, new):
                           'newpass': new})
         if 'error' in ret:
                 raise ChangePasswordError(ret['error'])
+
+def sync():
+        get_giedo_connection().send({'type': 'sync'})
