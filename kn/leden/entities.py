@@ -141,6 +141,13 @@ def names_by_ids(ids=None):
                         ret[e['_id']] = None
         return ret
 
+def names():
+        """ Returns a set of all names """
+        ret = set()
+        for e in ecol.find({}, {'names':True}):
+                ret.update(e.get('names', ()))
+        return ret
+
 # Specialized functions to work with entities.
 # ###################################################################### 
 def bearers_by_tag_id(tag_id, _as=entity):
