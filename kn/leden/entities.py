@@ -164,6 +164,17 @@ def date_to_year(dt):
 # Functions to work with relations
 # ###################################################################### 
 
+def add_relation(who, _with, how=None, _from=None, until=None):
+        if _from is None:
+                _from = DT_MIN
+        if until is None:
+                until = DT_MAX
+        rcol.insert({'who': _id(who),
+                     'with': _id(_with),
+                     'how': None if how is None else _id(how),
+                     'from': _from,
+                     'until': until})
+
 def disj_query_relations(queries, deref_who=False, deref_with=False,
                 deref_how=False):
         """ Find relations matching any one of @queries.
