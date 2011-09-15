@@ -60,7 +60,7 @@ def entity_detail(request, name=None, _id=None, type=None):
 
 def _entity_detail(request, e):
 	def _cmp(x,y):
-		r = Es.relation_cmp_until(x,y)
+		r = Es.relation_cmp_until(y,x)
 		if r: return r
 		r = cmp(x['with'].humanName, y['with'].humanName)
 		if r: return r
@@ -69,7 +69,7 @@ def _entity_detail(request, e):
 		if r: return r
 		return Es.relation_cmp_from(x,y)
 	def _rcmp(x,y):
-		r = Es.relation_cmp_until(x,y)
+		r = Es.relation_cmp_until(y,x)
 		if r: return r
 		r = cmp(x['how'].humanName if x['how'] else None,
 			y['how'].humanName if y['how'] else None)
@@ -82,6 +82,8 @@ def _entity_detail(request, e):
         for r in chain(related, rrelated):
                 r['may_end'] = Es.user_may_end_relation(request.user, r)
                 r['id'] = r['_id']
+                r['until_year'] = (None if r['until'] is None else
+                                        Es.date_to_year(r['until']))
 	tags = list(e.get_tags())
 	return {'related': related,
 		'rrelated': rrelated,

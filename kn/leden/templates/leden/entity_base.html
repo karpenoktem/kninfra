@@ -7,6 +7,11 @@
 <h3>Lidmaatschap</h3>
 <ul>
 {% for r in related %}
+{% ifchanged r.until_year %}
+{% if r.until_year %}
+</ul><h4>Tot jaar {{ r.until_year }}</h4><ul>
+{% endif %}
+{% endifchanged %}
 <li>
 {% if r.how %}
 <a href="{{ r.how.get_absolute_url }}">{{ r.how.humanName }}</a>
@@ -37,6 +42,11 @@ tot {{ r.until.date }}
 <h3>Leden</h3>
 <ul>
 {% for r in rrelated %}
+{% ifchanged r.until_year %}
+{% if r.until_year %}
+</ul><h4>Tot jaar {{ r.until_year }}</h4><ul>
+{% endif %}
+{% endifchanged %}
 <li>
 <a href="{{ r.who.get_absolute_url }}">{{ r.who.humanName }}</a>, 
 {% if r.how %}
