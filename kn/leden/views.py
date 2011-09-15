@@ -203,6 +203,7 @@ def api_users(request):
                 ret[str(m.name)] = m.full_name
         return HttpResponse(json.dumps(ret), mimetype="text/json")
 
+@login_required
 def secr_add_user(request):
         if 'secretariaat' not in request.user.cached_groups_names:
                 raise PermissionDenied
