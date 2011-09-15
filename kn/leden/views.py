@@ -84,6 +84,7 @@ def _entity_detail(request, e):
                 r['id'] = r['_id']
                 r['until_year'] = (None if r['until'] is None else
                                         Es.date_to_year(r['until']))
+                r['virtual'] = Es.relation_is_virtual(r)
 	tags = list(e.get_tags())
 	return {'related': related,
 		'rrelated': rrelated,

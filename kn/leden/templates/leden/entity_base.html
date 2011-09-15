@@ -7,6 +7,7 @@
 <h3>Lidmaatschap</h3>
 <ul>
 {% for r in related %}
+{% if not r.virtual %}
 {% ifchanged r.until_year %}
 {% if r.until_year %}
 </ul><h4>Tot jaar {{ r.until_year }}</h4><ul>
@@ -34,6 +35,7 @@ tot {{ r.until.date }}
 </form>
 {% endif %}
 </li>
+{% endif %}
 {% endfor %}
 </ul>
 {% endif %}
