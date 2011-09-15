@@ -37,6 +37,8 @@ def generate_wiki_changes(self):
 
         c.execute("SELECT ug_user FROM user_groups WHERE ug_group=%s", 'leden')
         for uid, in c.fetchall():
+                if uid not in id2name:
+                        continue
                 user = id2name[uid]
                 if user not in ausers:
                         todo['deactivate'].append(user)
