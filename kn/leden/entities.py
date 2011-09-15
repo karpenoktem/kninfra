@@ -487,6 +487,8 @@ class User(Entity):
                 if save:
                         self.save()
 	def check_password(self, pwd):
+                if self.password is None:
+                        return False
 		dg = get_hexdigest(self.password['algorithm'],
 				   self.password['salt'], pwd)
 		return dg == self.password['hash']
@@ -495,7 +497,7 @@ class User(Entity):
 		return self.full_name
 	@property
 	def password(self):
-		return self._data['password']
+		return self._data.get('password', None)
 	@property
 	def is_active(self):
 		return self._data['is_active']
