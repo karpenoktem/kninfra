@@ -46,5 +46,7 @@ urlpatterns = patterns('',
 	    views.user_smoel, name='user-smoel'),
 	url(r'^ik/wachtwoord$', views.ik_chpasswd, name="chpasswd"),
         url(r'^api/users$', views.api_users),
+	url(r'^secretariaat/inschrijven$',
+	    views.secr_add_user, name='secr-add-user'),
 )
 

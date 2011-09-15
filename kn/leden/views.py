@@ -1,9 +1,13 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from kn.base.text import humanized_enum
-from kn.leden.forms import ChangePasswordForm
-from kn.leden.giedo import change_password, ChangePasswordError
+from kn.leden.forms import ChangePasswordForm, AddUserForm
+from kn.leden.utils import find_name_for_user
+from kn.leden import giedo
+from kn.leden.mongo import _id
+from kn.leden.date import now, date_to_dt
 from kn import settings
+from kn.settings import DT_MIN, DT_MAX
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
@@ -129,7 +133,7 @@ def user_smoel(request, name):
 def _ik_chpasswd_handle_valid_form(request, form):
 	oldpw = form.cleaned_data['old_password']
 	newpw = form.cleaned_data['new_password']
-	change_password(str(request.user.name), oldpw, newpw)
+	giedo.change_password(str(request.user.name), oldpw, newpw)
 	t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd.""" 
 	request.user.push_message(t % request.user.first_name)
 	return HttpResponseRedirect(reverse('smoelen-home'))
@@ -143,7 +147,7 @@ def ik_chpasswd(request):
 			try:
 				return _ik_chpasswd_handle_valid_form(request, 
 						form)
-			except ChangePasswordError as e:
+			except giedo.ChangePasswordError as e:
 				errl.extend(e.args)
 	else:
 		form = ChangePasswordForm()
@@ -189,3 +193,69 @@ def api_users(request):
         for m in Es.users():
                 ret[str(m.name)] = m.full_name
         return HttpResponse(json.dumps(ret), mimetype="text/json")
+
+def secr_add_user(request):
+        if 'secretariaat' not in request.user.cached_groups_names:
+                raise PermissionDenied
+        if request.method == 'POST':
+                form = AddUserForm(request.POST)
+                if form.is_valid():
+                        fd = form.cleaned_data
+                        nm = find_name_for_user(fd['first_name'],
+                                                fd['last_name'])
+                        u = Es.User({
+                                'types': ['user'],
+                                'names': [nm],
+                                'humanNames': [{'human': fd['first_name']+' '+
+                                                         fd['last_name']}],
+                                'person': {
+                                        'titles': [],
+                                        'nick': fd['first_name'],
+                                        'given': None,
+                                        'family': fd['last_name'],
+                                        'gender': fd['sex'],
+                                        'dateOfBirth': date_to_dt(
+                                                fd['dateOfBirth'])
+                                },
+                                'emailAddresses': [
+                                        {'email': fd['email'],
+                                         'from': DT_MIN,
+                                         'until': DT_MAX}],
+                                'addresses': [
+                                        {'street': fd['addr_street'],
+                                         'number': fd['addr_number'],
+                                         'zip': fd['addr_zip'],
+                                         'city': fd['addr_city'],
+                                         'from': DT_MIN,
+                                         'until': DT_MAX}],
+                                'telephones': [
+                                        {'number': fd['telephone'],
+                                         'from': DT_MIN,
+                                         'until': DT_MAX}],
+                                'studies': [
+                                        {'institute': _id(fd['study_inst']),
+                                         'study': _id(fd['study']),
+                                         'from': DT_MIN,
+                                         'until': DT_MAX,
+                                         'number': fd['study_number']}],
+                                'is_active': True,
+                                'password': None
+                                })
+                        logging.info("Added user %s" % nm)
+                        u.save()
+                        Es.add_relation(u, Es.id_by_name('leden',
+                                                        use_cache=True),
+                                        _from=date_to_dt(fd['dateJoined']))
+                        Es.add_relation(u, Es.id_by_name('aan', use_cache=True),
+                                        _from=now())
+                        giedo.sync()
+                        request.user.push_message("Gebruiker toegevoegd. "+
+                                "Let op: hij heeft geen wachtwoord "+
+                                "en hij moet nog gemaild worden.")
+                        return HttpResponseRedirect(reverse('user-by-name',
+                                        args=(nm,)))
+        else:
+                form = AddUserForm()
+	return render_to_response('leden/secr_add_user.html',
+                        {'form': form},
+			context_instance=RequestContext(request))
