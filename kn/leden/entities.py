@@ -480,6 +480,9 @@ class Group(Entity):
                 dt = now()
                 return [r['who'] for r in self.get_rrelated(
                                 how=None, _from=dt, until=dt)]
+        @property
+        def is_virtual(self):
+                return 'virtual' in self._data
 class User(Entity):
         def __init__(self, data):
                 super(User,self).__init__(data)
