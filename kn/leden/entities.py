@@ -164,6 +164,33 @@ def date_to_year(dt):
 # Functions to work with relations
 # ###################################################################### 
 
+def relation_is_active_at(rel, dt):
+        """ Returns whether @rel is active at @dt """
+        return ((rel['until'] is None or rel['until'] >= dt)
+                        and (rel['from'] is None or rel['from'] <= dt))
+
+def relation_is_active(rel):
+        """ Returns whether @rel is active now """
+        return relation_is_active_at(rel, now())
+
+def relation_is_virtual(rel):
+        """ Returns whether @rel is "virtual".
+
+            Requires rel['with'] to be deref'd """
+        return rel['with'].is_group and rel['with'].as_group().is_virtual
+
+def user_may_end_relation(user, rel):
+        """ Returns whether @user may end @rel """
+        if relation_is_virtual(rel):
+                return False
+        if not relation_is_active(rel):
+                return False
+        return 'secretariaat' in user.cached_groups_names
+
+def end_relation(__id):
+        dt = now()
+        rcol.update({'_id': _id(__id)}, {'$set': {'until': dt}})
+
 def add_relation(who, _with, how=None, _from=None, until=None):
         if _from is None:
                 _from = DT_MIN
@@ -265,6 +292,16 @@ def __derefence_relations(cursor, deref_who, deref_with, deref_how):
                 if rel['until'] == DT_MAX:
                         rel['until'] = None
                 yield rel
+
+def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
+        cursor = rcol.find({'_id': _id(__id)})
+        try:
+                if not deref_how and not deref_who and not deref_with:
+                        return next(cursor)
+                return next(__derefence_relations(cursor, deref_who,
+                        deref_with, deref_how))
+        except StopIteration:
+                return None
 
 def relation_cmp_until(x, y):
         return cmp(DT_MAX if x['until'] is None else x['until'],
