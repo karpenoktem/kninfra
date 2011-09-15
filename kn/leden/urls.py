@@ -48,5 +48,7 @@ urlpatterns = patterns('',
         url(r'^api/users$', views.api_users),
 	url(r'^secretariaat/inschrijven$',
 	    views.secr_add_user, name='secr-add-user'),
+	url(r'^relaties/(?P<_id>[^/]+)/beindig$',
+	    views.relation_end, name='relation-end'),
 )
 

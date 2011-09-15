@@ -23,6 +23,11 @@ van {{ r.from.date }}
 tot {{ r.until.date }}
 {% endif %})
 {% endif %}
+{% if r.may_end %}
+<form action="{% url relation-end _id=r.id %}" style="display:inline">
+<input type="submit" value="be&euml;indig" />
+</form>
+{% endif %}
 </li>
 {% endfor %}
 </ul>
@@ -46,6 +51,11 @@ van {{ r.from.date }}
 {% if r.until %}
 tot {{ r.until.date }}
 {% endif %})
+{% endif %}
+{% if r.may_end %}
+<form action="{% url relation-end _id=r.id %}" style="display:inline">
+<input type="submit" value="be&euml;indig" />
+</form>
 {% endif %}
 {% endfor %}
 </li>

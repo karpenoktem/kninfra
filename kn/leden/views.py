@@ -6,6 +6,7 @@ from kn.leden.utils import find_name_for_user
 from kn.leden import giedo
 from kn.leden.mongo import _id
 from kn.leden.date import now, date_to_dt
+from kn.leden.http import redirect_to_referer
 from kn import settings
 from kn.settings import DT_MIN, DT_MAX
 from django.shortcuts import render_to_response
@@ -16,6 +17,7 @@ from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 from os import path
+from itertools import chain
 from django.contrib.auth.views import redirect_to_login
 from kn import settings
 from hashlib import sha256
@@ -77,9 +79,13 @@ def _entity_detail(request, e):
 		return Es.relation_cmp_from(x,y)
 	related = sorted(e.get_related(), cmp=_cmp)
 	rrelated = sorted(e.get_rrelated(), cmp=_rcmp)
+        for r in chain(related, rrelated):
+                r['may_end'] = Es.user_may_end_relation(request.user, r)
+                r['id'] = r['_id']
 	tags = list(e.get_tags())
 	return {'related': related,
 		'rrelated': rrelated,
+                'now': now(),
 		'tags': tags,
 		'object': e}
 
@@ -259,3 +265,13 @@ def secr_add_user(request):
 	return render_to_response('leden/secr_add_user.html',
                         {'form': form},
 			context_instance=RequestContext(request))
+
+def relation_end(request, _id):
+        rel = Es.relation_by_id(_id)
+        if rel is None:
+                raise Http404
+        if not Es.user_may_end_relation(request.user, rel):
+                raise PermissionDenied
+        Es.end_relation(_id)
+        giedo.sync()
+        return redirect_to_referer(request)
