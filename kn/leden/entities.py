@@ -303,6 +303,9 @@ def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
         except StopIteration:
                 return None
 
+def entity_cmp_humanName(x, y):
+        return cmp(unicode(x.humanName), unicode(y.humanName))
+
 def relation_cmp_until(x, y):
         return cmp(DT_MAX if x['until'] is None else x['until'],
                    DT_MAX if y['until'] is None else y['until'])
