@@ -89,7 +89,7 @@ def _entity_detail(request, e):
 	ctx = {'related': related,
 	       'rrelated': rrelated,
                'now': now(),
-	       'tags': tags,
+	       'tags': sorted(tags, Es.entity_cmp_humanName),
 	       'object': e}
         # Is request.user allowed to add (r)relations?
         if ('secretariaat' in request.user.cached_groups_names
