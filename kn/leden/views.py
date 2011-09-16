@@ -131,8 +131,18 @@ def _tag_detail(request, tag):
 			context_instance=RequestContext(request))
 def _brand_detail(request, brand):
         ctx = _entity_detail(request, brand)
-        ctx['rels'] = tuple(Es.query_relations(how=brand, deref_who=True,
-                                deref_with=True))
+	def _cmp(x,y):
+		r = Es.relation_cmp_until(y,x)
+		if r: return r
+		r = cmp(unicode(x['with'].humanName),
+                                unicode(y['with'].humanName))
+		if r: return r
+		r = cmp(unicode(x['who'].humanName),
+                                unicode(y['who'].humanName))
+		if r: return r
+		return Es.relation_cmp_from(x,y)
+        ctx['rels'] = sorted(Es.query_relations(how=brand, deref_who=True,
+                                deref_with=True), cmp=_cmp)
         for r in ctx['rels']:
                 r['id'] = r['_id']
                 r['until_year'] = (None if r['until'] is None else

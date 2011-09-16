@@ -13,9 +13,8 @@
 {% endif %}
 {% endifchanged %}
 <li>
+<a href="{{ r.with.get_absolute_url }}">{{ r.with.humanName }}</a>: 
 <a href="{{ r.who.get_absolute_url }}">{{ r.who.humanName }}</a>
-van de
-<a href="{{ r.with.get_absolute_url }}">{{ r.with.humanName }}</a>
 {% if r.from or r.until %}
 ({% if r.from %}
 van {{ r.from.date }}
