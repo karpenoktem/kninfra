@@ -50,5 +50,7 @@ urlpatterns = patterns('',
 	    views.secr_add_user, name='secr-add-user'),
 	url(r'^relaties/(?P<_id>[^/]+)/beindig$',
 	    views.relation_end, name='relation-end'),
+	url(r'^relaties/begin$',
+	    views.relation_begin, name='relation-begin'),
 )
 

@@ -282,3 +282,31 @@ def relation_end(request, _id):
         Es.end_relation(_id)
         giedo.sync()
         return redirect_to_referer(request)
+
+@login_required
+def relation_begin(request):
+        # TODO We should use Django forms, or better: use sweet Ajax
+        if not 'secretariaat' in request.user.cached_groups_names:
+                raise PermissionDenied
+        d = {}
+        for t in ('who', 'with', 'how'):
+                if t not in request.POST:
+                        raise ValueError, "Missing attr %s" % t
+                if t == 'how' and request.POST[t] == 'null':
+                        d[t] = None
+                else:
+                        d[t] = _id(request.POST[t])
+        # Check whether such a relation already exists
+        dt = now()
+        ok = False
+        try:
+                next(Es.query_relations(who=d['who'], _with=d['with'],
+                        how=d['how'], _from=dt, until=DT_MAX))
+        except StopIteration:
+                ok = True
+        if not ok:
+                raise ValueError, "This relation already exists"
+        # Add the relation!
+        Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
+        giedo.sync()
+        return redirect_to_referer(request)
