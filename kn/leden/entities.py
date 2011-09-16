@@ -618,8 +618,7 @@ class Tag(Entity):
 		return ('tag-by-id', (), {'_id': self.id})
 	def get_bearers(self):
 		return [entity(m) for m in ecol.find({
-				'tags': self._id}).sort(
-						'humanNames.human')]
+				'tags': self._id})]
 
 class Study(Entity):
 	@permalink
