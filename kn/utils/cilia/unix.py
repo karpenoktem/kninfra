@@ -1,13 +1,16 @@
 import pwd
+import spwd
 import grp
 import crypt
 import string
 import logging
 import subprocess
+import datetime
 
 from kn.base._random import pseudo_randstr
 
 def unix_setpass(cilia, user, password):
+        # XXX Prevent changing root's password. Allow only users with group kn?
         crypthash = crypt.crypt(password, pseudo_randstr(2))
         subprocess.call(['usermod', '-p', crypthash, user])
 
@@ -17,15 +20,27 @@ def set_unix_map(cilia, _map):
         c_users = set([u.pw_name for u in pwd.getpwall() if u.pw_gid == kn_gid])
         # Determine which are missing
         for user in _map['users']:
+                # This filters accents
+                fn = filter(lambda x: x in string.printable,
+                                _map['users'][user]['full_name'])
+                expire_date = _map['users'][user]['expire_date']
                 if user not in c_users:
                         home = '/home/%s' % user
-                        fn = filter(lambda x: x in string.printable,
-                                        _map['users'][user])
                         subprocess.call(['mkdir', home])
                         subprocess.call(['useradd', '-d', home, '-g', 'kn',
-                                '-c', fn, user])
+                                '-c', fn, '-e', expire_date, user])
                         subprocess.call(['chown', '%s:kn' % user, home])
                         subprocess.call(['chmod', '750', home])
+                else:
+                        pwent = pwd.getpwnam(user)
+                        if fn != pwent.pw_gecos:
+                                subprocess.call(['usermod', '-c', fn, user])
+												# The +1 is due to our timezone being GMT +01:00, so the unix Epoch starts at
+												# 01:00 instead of 00:00. This will give an off-by-one in the date, so let's correct it.
+                        expday = int(datetime.datetime.strptime(expire_date, '%Y-%m-%d').strftime('%s')) / 86400 + 1
+                        spwent = spwd.getspnam(user)
+                        if expday != spwent.sp_expire:
+                                subprocess.call(['usermod', '-e', expire_date, user])
         # Get list of all groups
         gs = grp.getgrall()
         c_groups = set([g.gr_name for g in gs
