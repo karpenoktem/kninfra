@@ -105,7 +105,8 @@ def _entity_detail(request, e):
                             'may_add_related': True,
                             'may_add_rrelated': True})
         if e.is_tag:
-                ctx.update({'tag_bearers': e.as_tag().get_bearers()})
+                ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
+                                                cmp=Es.entity_cmp_humanName)})
         return ctx
 
 def _user_detail(request, user):
