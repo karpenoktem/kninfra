@@ -592,6 +592,23 @@ class User(Entity):
 	def last_name(self):
 		return self._data['person']['family']
         @property
+        def studies(self):
+                ids = set()
+                studies = self._data.get('studies', ())
+                for s in studies:
+                        if s['institute']:
+                                ids.add(s['institute'])
+                        if s['study']:
+                                ids.add(s['study'])
+                lut = by_ids(tuple(ids))
+                for s in studies:
+                        yield {'from': None if s['from'] == DT_MIN
+                                                else s['from'],
+                               'until': None if s['until'] == DT_MAX
+                                                else s['until'],
+                               'study': lut.get(s['study']),
+                               'institute': lut.get(s['institute'])}
+        @property
         def primary_study(self):
                 if self._primary_study==None:
                         self._primary_study = None \
