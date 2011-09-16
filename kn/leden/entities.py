@@ -473,6 +473,9 @@ class Entity(SONWrapper):
 	def as_study(self): return Study(self._data)
 	def as_institute(self): return Institute(self._data)
 
+        def as_primary_type(self):
+                return TYPE_MAP[self.type](self._data)
+
         @property
         def canonical_email(self):
                 if self.type in ('institute', 'study', 'brand', 'tag'):
