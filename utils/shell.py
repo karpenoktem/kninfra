@@ -8,6 +8,7 @@ import time
 import datetime
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
+from kn.settings import DT_MIN, DT_MAX
 
 def del_rel(who, _with, how):
         """ Removes a relation given by names.
@@ -30,8 +31,8 @@ def add_rel(who, _with, how, _from, until):
         _with = Es.id_by_name(_with)
         how = Es.ecol.find_one({'sofa_suffix': how})['_id'] \
                         if how is not None else None
-        _from = str_to_date(_from) if _from is not None else None
-        until = str_to_date(until) if until is not None else None
+        _from = str_to_date(_from) if _from is not None else DT_MIN
+        until = str_to_date(until) if until is not None else DT_MAX
         Es.rcol.insert({'who': who,
                         'with': _with,
                         'how': how,
