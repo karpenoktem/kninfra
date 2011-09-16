@@ -255,6 +255,8 @@ def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
                 when left on default, it will match all.
                 when a tuple or list, it will match on any of those.
                 when a single element, it will match that element.
+				The "from" and "until" should be datetime.datetime's and form an interval.
+				Only relations intersecting this interval are matched.
         """
         query = {}
         if who != -1: query['who'] = who
