@@ -305,6 +305,9 @@ def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
         except StopIteration:
                 return None
 
+def entity_cmp_humanName(x, y):
+        return cmp(unicode(x.humanName), unicode(y.humanName))
+
 def relation_cmp_until(x, y):
         return cmp(DT_MAX if x['until'] is None else x['until'],
                    DT_MAX if y['until'] is None else y['until'])
@@ -475,6 +478,9 @@ class Entity(SONWrapper):
 	def as_study(self): return Study(self._data)
 	def as_institute(self): return Institute(self._data)
 
+        def as_primary_type(self):
+                return TYPE_MAP[self.type](self._data)
+
         @property
         def canonical_email(self):
                 if self.type in ('institute', 'study', 'brand', 'tag'):
@@ -614,8 +620,7 @@ class Tag(Entity):
 		return ('tag-by-id', (), {'_id': self.id})
 	def get_bearers(self):
 		return [entity(m) for m in ecol.find({
-				'tags': self._id}).sort(
-						'humanNames.human')]
+				'tags': self._id})]
 
 class Study(Entity):
 	@permalink

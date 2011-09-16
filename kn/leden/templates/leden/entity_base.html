@@ -35,10 +35,31 @@ tot {{ r.until.date }}
 </form>
 {% endif %}
 </li>
-{% endif %}
-{% endfor %}
+{% endif %}{# not r.virtual #}
+{% endfor %}{# r.related #}
 </ul>
 {% endif %}
+{% if may_add_related %}
+{% if related or object.is_user %}
+<form action="{% url relation-begin %}" method="post" style="display: inline">
+        <input type="hidden" name="who" value="{{ object.id }}" />
+        Voeg als
+        <select name="how">
+        <option value="null">Lid</option>
+        {% for b in brands %}
+        <option value="{{ b.id }}">{{ b.humanName }}</option>
+        {% endfor %}{# b in brands #}
+        </select>
+        toe aan
+        <select name="with">
+        {% for e in groups %}
+        <option value="{{ e.id }}">{{ e.humanName }}</option>
+        {% endfor %}{# e in groups #}
+        </select>
+        <input type="submit" value="verstuur" />
+</form>{# relation-begin #}
+{% endif %}{# related or object.is_user #}
+{% endif %}{# may_add_related #}
 
 {% if rrelated %}
 <h3>Leden</h3>
@@ -73,11 +94,49 @@ tot {{ r.until.date }}
 </li>
 </ul>
 {% endif %}
+{% if may_add_rrelated %}
+{% if rrelated or object.is_group %}
+<form action="{% url relation-begin %}" method="post" style="display: inline">
+        <input type="hidden" name="with" value="{{ object.id }}" />
+        Voeg
+        <select name="who">
+        <optgroup label="Gebruikers">
+        {% for e in users %}
+        <option value="{{ e.id }}">{{ e.full_name }}</option>
+        {% endfor %}{# e in users #}
+        </optgroup>
+        <optgroup label="Groepen">
+        {% for e in groups %}
+        <option value="{{ e.id }}">{{ e.humanName }}</option>
+        {% endfor %}{# e in groups #}
+        </optgroup>
+        </select>
+        als
+        <select name="how">
+        <option value="null">Lid</option>
+        {% for b in brands %}
+        <option value="{{ b.id }}">{{ b.humanName }}</option>
+        {% endfor %}{# b in brands #}
+        </select>
+        toe
+        <input type="submit" value="verstuur" />
+</form>{# relation-begin #}
+{% endif %}{# rrelated or object.is_group #}
+{% endif %}{# may_add_rrelated #}
 
 {% if tags %}
 <h3>Stempels</h3>
 <ul>
 {% for t in tags %}
+<li><a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if tag_bearers %}
+<h3>Dragers van deze stempel</h3>
+<ul>
+{% for t in tag_bearers %}
 <li><a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a></li>
 {% endfor %}
 </ul>

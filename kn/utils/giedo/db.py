@@ -124,7 +124,7 @@ def update_db(giedo):
                 nm = str(g.name) + '-' + sofa_brands[rel['how']].sofa_suffix
                 logging.info("creating sofa %s" % nm)
                 g = groups[id2name[rel['with']]]
-                n = {'types': ['group'],
+                n = {'types': ['group','tag'],
                      'names': [nm],
                      'tags': [tags['!virtual-group']],
                      'virtual': {
@@ -165,7 +165,7 @@ def update_db(giedo):
                         id2name.get(relkey[1])))
 
 def _create_yeargroup(g, year, name, tags, groups, id2name):
-        n = {'types': ['group'],
+        n = {'types': ['group','tag'],
              'tags': [tags['!virtual-group']],
              'virtual': {
                      'type': 'year-group',

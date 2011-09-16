@@ -85,12 +85,29 @@ def _entity_detail(request, e):
                 r['until_year'] = (None if r['until'] is None else
                                         Es.date_to_year(r['until']))
                 r['virtual'] = Es.relation_is_virtual(r)
-	tags = list(e.get_tags())
-	return {'related': related,
-		'rrelated': rrelated,
-                'now': now(),
-		'tags': tags,
-		'object': e}
+	tags = [t.as_primary_type() for t in e.get_tags()]
+	ctx = {'related': related,
+	       'rrelated': rrelated,
+               'now': now(),
+	       'tags': sorted(tags, Es.entity_cmp_humanName),
+	       'object': e}
+        # Is request.user allowed to add (r)relations?
+        if ('secretariaat' in request.user.cached_groups_names
+                        and (e.is_group or e.is_user)):
+                groups = [g for g in Es.groups() if not g.is_virtual]
+                groups.sort(cmp=lambda x,y: cmp(unicode(x.humanName),
+                                                unicode(y.humanName)))
+                users = sorted(Es.users(), cmp=Es.entity_cmp_humanName)
+                brands = sorted(Es.brands(), cmp=Es.entity_cmp_humanName)
+                ctx.update({'users': users,
+                            'brands': brands,
+                            'groups': groups,
+                            'may_add_related': True,
+                            'may_add_rrelated': True})
+        if e.is_tag:
+                ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
+                                                cmp=Es.entity_cmp_humanName)})
+        return ctx
 
 def _user_detail(request, user):
 	hasPhoto = default_storage.exists('%s.jpg' % 
@@ -109,7 +126,6 @@ def _group_detail(request, group):
 
 def _tag_detail(request, tag):
 	ctx = _entity_detail(request, tag)
-	ctx.update({'bearers': tag.get_bearers()})
 	return render_to_response('leden/tag_detail.html', ctx,
 			context_instance=RequestContext(request))
 def _brand_detail(request, brand):
@@ -203,6 +219,7 @@ def api_users(request):
                 ret[str(m.name)] = m.full_name
         return HttpResponse(json.dumps(ret), mimetype="text/json")
 
+@login_required
 def secr_add_user(request):
         if 'secretariaat' not in request.user.cached_groups_names:
                 raise PermissionDenied
@@ -269,6 +286,7 @@ def secr_add_user(request):
                         {'form': form},
 			context_instance=RequestContext(request))
 
+@login_required
 def relation_end(request, _id):
         rel = Es.relation_by_id(_id)
         if rel is None:
@@ -276,5 +294,33 @@ def relation_end(request, _id):
         if not Es.user_may_end_relation(request.user, rel):
                 raise PermissionDenied
         Es.end_relation(_id)
+        giedo.sync()
+        return redirect_to_referer(request)
+
+@login_required
+def relation_begin(request):
+        # TODO We should use Django forms, or better: use sweet Ajax
+        if not 'secretariaat' in request.user.cached_groups_names:
+                raise PermissionDenied
+        d = {}
+        for t in ('who', 'with', 'how'):
+                if t not in request.POST:
+                        raise ValueError, "Missing attr %s" % t
+                if t == 'how' and request.POST[t] == 'null':
+                        d[t] = None
+                else:
+                        d[t] = _id(request.POST[t])
+        # Check whether such a relation already exists
+        dt = now()
+        ok = False
+        try:
+                next(Es.query_relations(who=d['who'], _with=d['with'],
+                        how=d['how'], _from=dt, until=DT_MAX))
+        except StopIteration:
+                ok = True
+        if not ok:
+                raise ValueError, "This relation already exists"
+        # Add the relation!
+        Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
         giedo.sync()
         return redirect_to_referer(request)
