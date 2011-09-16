@@ -239,7 +239,7 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
                         qa['until'] = {'$gte': query['from'],
                                        '$lte': query['until']}
                         # NOTE we have to set these void conditions, otherwise
-                        #      mongo will not use its indeces.
+                        #      mongo will not use its indices.
                         qa['from'] = {'$gte': DT_MIN}
                         bits.append(qa)
                         qb['until'] = {'$gte': DT_MIN}
