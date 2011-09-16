@@ -270,6 +270,7 @@ def secr_add_user(request):
                         {'form': form},
 			context_instance=RequestContext(request))
 
+@login_required
 def relation_end(request, _id):
         rel = Es.relation_by_id(_id)
         if rel is None:
