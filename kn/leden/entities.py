@@ -141,6 +141,13 @@ def names_by_ids(ids=None):
                         ret[e['_id']] = None
         return ret
 
+def ids():
+        """ Returns a set of all ids """
+        ret = set()
+        for e in ecol.find({}, {'_id':True}):
+                ret.add(e['_id'])
+        return ret
+
 def names():
         """ Returns a set of all names """
         ret = set()
