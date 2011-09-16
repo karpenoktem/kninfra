@@ -72,10 +72,11 @@ def _entity_detail(request, e):
 	def _rcmp(x,y):
 		r = Es.relation_cmp_until(y,x)
 		if r: return r
-		r = cmp(x['how'].humanName if x['how'] else None,
-			y['how'].humanName if y['how'] else None)
+		r = cmp(unicode(x['how'].humanName) if x['how'] else None,
+			unicode(y['how'].humanName) if y['how'] else None)
 		if r: return r
-		r = cmp(x['who'].humanName, y['who'].humanName)
+		r = cmp(unicode(x['who'].humanName),
+                                unicode(y['who'].humanName))
 		if r: return r
 		return Es.relation_cmp_from(x,y)
 	related = sorted(e.get_related(), cmp=_cmp)
