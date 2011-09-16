@@ -129,8 +129,16 @@ def _tag_detail(request, tag):
 	return render_to_response('leden/tag_detail.html', ctx,
 			context_instance=RequestContext(request))
 def _brand_detail(request, brand):
-	# TODO stub
-	return HttpResponse("")
+        ctx = _entity_detail(request, brand)
+        ctx['rels'] = tuple(Es.query_relations(how=brand, deref_who=True,
+                                deref_with=True))
+        for r in ctx['rels']:
+                r['id'] = r['_id']
+                r['until_year'] = (None if r['until'] is None else
+                                        Es.date_to_year(r['until']))
+                r['virtual'] = Es.relation_is_virtual(r)
+        return render_to_response('leden/brand_detail.html', ctx,
+                        context_instance=RequestContext(request))
 def _study_detail(request, study):
 	ctx = _entity_detail(request, study)
 	# TODO add followers in ctx
