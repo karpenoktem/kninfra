@@ -91,6 +91,19 @@ def _entity_detail(request, e):
                'now': now(),
 	       'tags': tags,
 	       'object': e}
+        # Is request.user allowed to add (r)relations?
+        if ('secretariaat' in request.user.cached_groups_names
+                        and (e.is_group or e.is_user)):
+                groups = [g for g in Es.groups() if not g.is_virtual]
+                groups.sort(cmp=lambda x,y: cmp(unicode(x.humanName),
+                                                unicode(y.humanName)))
+                users = sorted(Es.users(), cmp=Es.entity_cmp_humanName)
+                brands = sorted(Es.brands(), cmp=Es.entity_cmp_humanName)
+                ctx.update({'users': users,
+                            'brands': brands,
+                            'groups': groups,
+                            'may_add_related': True,
+                            'may_add_rrelated': True})
         if e.is_tag:
                 ctx.update({'tag_bearers': e.as_tag().get_bearers()})
         return ctx
