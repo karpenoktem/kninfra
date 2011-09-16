@@ -86,11 +86,14 @@ def _entity_detail(request, e):
                                         Es.date_to_year(r['until']))
                 r['virtual'] = Es.relation_is_virtual(r)
 	tags = [t.as_primary_type() for t in e.get_tags()]
-	return {'related': related,
-		'rrelated': rrelated,
-                'now': now(),
-		'tags': tags,
-		'object': e}
+	ctx = {'related': related,
+	       'rrelated': rrelated,
+               'now': now(),
+	       'tags': tags,
+	       'object': e}
+        if e.is_tag:
+                ctx.update({'tag_bearers': e.as_tag().get_bearers()})
+        return ctx
 
 def _user_detail(request, user):
 	hasPhoto = default_storage.exists('%s.jpg' % 
@@ -109,7 +112,6 @@ def _group_detail(request, group):
 
 def _tag_detail(request, tag):
 	ctx = _entity_detail(request, tag)
-	ctx.update({'bearers': tag.get_bearers()})
 	return render_to_response('leden/tag_detail.html', ctx,
 			context_instance=RequestContext(request))
 def _brand_detail(request, brand):

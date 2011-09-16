@@ -82,4 +82,13 @@ tot {{ r.until.date }}
 {% endfor %}
 </ul>
 {% endif %}
+
+{% if tag_bearers %}
+<h3>Dragers van deze stempel</h3>
+<ul>
+{% for t in tag_bearers %}
+<li><a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
 {% endblock %}

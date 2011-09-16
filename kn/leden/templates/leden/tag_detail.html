@@ -4,11 +4,5 @@
 {% block body %}
 <h2>{{ object.humanName }}</h2>
 <p>{{ object.description }}</p>
-<h3>Dragers van deze stempel</h3>
-<ul>
-{% for t in bearers %}
-<li><a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a></li>
-{% endfor %}
-</ul>
 {{ block.super }}
 {% endblock %}
