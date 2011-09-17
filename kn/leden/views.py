@@ -9,6 +9,7 @@ from kn.leden.date import now, date_to_dt
 from kn.leden.http import redirect_to_referer
 from kn import settings
 from kn.settings import DT_MIN, DT_MAX
+from kn.base._random import pseudo_randstr
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
@@ -16,6 +17,7 @@ from django.core.servers.basehttp import FileWrapper
 from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
+from django.core.mail import EmailMessage
 from os import path
 from itertools import chain
 from django.contrib.auth.views import redirect_to_login
@@ -343,4 +345,31 @@ def relation_begin(request):
         # Add the relation!
         Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
         giedo.sync()
+        return redirect_to_referer(request)
+
+@login_required
+def user_reset_password(request, _id):
+        if not 'secretariaat' in request.user.cached_groups_names:
+                raise PermissionDenied
+        u = Es.by_id(_id).as_user()
+        pwd = pseudo_randstr()
+        u.set_password(pwd)
+        giedo.change_password(str(u.name), pwd, pwd)
+        email = EmailMessage(
+                "[KN] Nieuw wachtwoord",
+                """ Beste %s,
+
+                Jouw wachtwoord is gereset.  Je kunt inloggen met:
+
+                  gebruikersnaam     %s
+                  wachtwoord         %s
+
+                Met een vriendelijke groet,
+
+                  Het Karpe Noktem Smoelenboek """ % (
+                          u.first_name, str(u.name), pwd),
+                'Karpe Noktem Smoelenboek <root@karpenoktem.nl>',
+                [u.canonical_email])
+        email.send()
+        request.user.push_message("Wachtwoord gereset!")
         return redirect_to_referer(request)
