@@ -8,6 +8,6 @@ fi
 
 rm -f $HOME/fcgi.sock $HOME/fcgi.pid
 ./manage.py runfcgi socket=$HOME/fcgi.sock umask=002 pidfile=$HOME/fcgi.pid
-chown :interinfra $HOME/fcgi.sock
+chgrp interinfra $HOME/fcgi.sock
 
 popd &> /dev/null
