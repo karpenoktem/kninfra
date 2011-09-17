@@ -357,16 +357,12 @@ def user_reset_password(request, _id):
         giedo.change_password(str(u.name), pwd, pwd)
         email = EmailMessage(
                 "[KN] Nieuw wachtwoord",
-                """ Beste %s,
-
-                Jouw wachtwoord is gereset.  Je kunt inloggen met:
-
-                  gebruikersnaam     %s
-                  wachtwoord         %s
-
-                Met een vriendelijke groet,
-
-                  Het Karpe Noktem Smoelenboek """ % (
+                ("Beste %s,\n\n"+
+                 "Jouw wachtwoord is gereset.  Je kunt inloggen met:\n"+
+                 "  gebruikersnaam     %s\n"+
+                 "  wachtwoord         %s\n\n"+
+                 "Met een vriendelijke groet,\n\n"+
+                 "  Het Karpe Noktem Smoelenboek") % (
                           u.first_name, str(u.name), pwd),
                 'Karpe Noktem Smoelenboek <root@karpenoktem.nl>',
                 [u.canonical_email])
