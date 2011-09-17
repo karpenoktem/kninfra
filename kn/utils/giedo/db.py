@@ -121,9 +121,9 @@ def update_db(giedo):
         for rel in Es.query_relations(how=sofa_brands.values()):
                 if (rel['how'], rel['with']) in sofa_lut:
                         continue
+                g = groups[id2name[rel['with']]]
                 nm = str(g.name) + '-' + sofa_brands[rel['how']].sofa_suffix
                 logging.info("creating sofa %s" % nm)
-                g = groups[id2name[rel['with']]]
                 n = {'types': ['group','tag'],
                      'names': [nm],
                      'tags': [tags['!virtual-group']],
