@@ -4,16 +4,14 @@ import _import
 import datetime
 
 from common import *
-from kn.leden.models import OldKnGroup
+import kn.leden.entities as Es
 from django.core.mail import EmailMessage
 
 def birthday_email():
 	with open('birthday-email.template') as f:
 		templ = f.read()
 	now = datetime.datetime.now().date()
-	for _user in OldKnGroup.objects.get(name=MEMBER_GROUP
-				).user_set.select_related('oldknuser').all():
-		user = _user.oldknuser
+        for user in Es.by_name('leden').get_members():
 		if user.dateOfBirth is None:
 			continue
 		if (user.dateOfBirth.day != now.day or
@@ -22,7 +20,7 @@ def birthday_email():
 		email = EmailMessage("Hartelijk gefeliciteerd!",
 				     templ % {'firstName': user.first_name},
 				     'webcie@karpenoktem.nl',
-				     [user.email],
+				     [user.canonical_email],
 				     ['webcie@karpenoktem.nl'])
 		email.send()
 
