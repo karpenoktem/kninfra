@@ -41,3 +41,8 @@ def add_rel(who, _with, how, _from, until):
 
 def str_to_date(s):
         return datetime.datetime(*time.strptime(s, '%Y-%m-%d')[:3])
+
+def add_name(name, extra_name):
+        e = Es.by_name(name)
+        e._data['names'].append(extra_name)
+        e.save()
