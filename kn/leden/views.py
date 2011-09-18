@@ -364,7 +364,7 @@ def user_reset_password(request, _id):
                  "Met een vriendelijke groet,\n\n"+
                  "  Het Karpe Noktem Smoelenboek") % (
                           u.first_name, str(u.name), pwd),
-                'Karpe Noktem Smoelenboek <root@karpenoktem.nl>',
+                'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
                 [u.canonical_email])
         email.send()
         request.user.push_message("Wachtwoord gereset!")
