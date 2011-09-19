@@ -1,9 +1,12 @@
+import threading
 import os.path
 import logging
 import socket
 import select
 import json
 import os
+
+import mirte # github.com/bwesterb/mirte
 
 import kn.leden.entities as Es
 
@@ -22,34 +25,72 @@ class Giedo(WhimDaemon):
         def __init__(self):
                 super(Giedo, self).__init__(settings.GIEDO_SOCKET)
                 self.daan = WhimClient(settings.DAAN_SOCKET)
+                self.daan_lock = threading.Lock()
                 self.cilia = WhimClient(settings.CILIA_SOCKET)
+                self.cilia_lock = threading.Lock()
+                self.mirte = mirte.get_a_manager()
+                self.threadPool = self.mirte.get_a('threadPool')
+
+        def sync_postfix(self):
+                logging.info("postfix: generate")
+                msg = {'type': 'postfix',
+                        'map': generate_postfix_map(self)}
+                logging.info("postfix: daan")
+                with self.daan_lock:
+                        self.daan.send(msg)
+                logging.info("postfix: done")
+        def sync_mailman(self):
+                logging.info("mailman: generate")
+                msg = {'type': 'mailman',
+                        'changes': generate_mailman_changes(
+                                                self)}
+                logging.info("mailman: daan")
+                with self.daan_lock:
+                        self.daan.send(msg)
+                logging.info("mailman: done")
+        def sync_wiki(self):
+                logging.info("wiki: generate")
+                msg = {'type': 'wiki',
+                        'changes': generate_wiki_changes(self)}
+                logging.info("wiki: daan")
+                with self.daan_lock:
+                        self.daan.send(msg)
+                logging.info("wiki: done")
+        def sync_forum(self):
+                logging.info("forum: generate")
+                msg = {'type': 'forum',
+                        'changes': generate_forum_changes(self)}
+                logging.info("forum: daan")
+                with self.daan_lock:
+                        self.daan.send(msg)
+                logging.info("forum: done")
+        def sync_unix(self):
+                logging.info("unix: generate")
+                msg = {'type': 'unix',
+                         'map': generate_unix_map(self)}
+                logging.info("unix: cilia")
+                with self.cilia_lock:
+                        self.cilia.send(msg)
+                logging.info("unix: done")
 
         def handle(self, d):
                 if d['type'] == 'sync':
                         logging.info("update_db")
                         update_db(self)
-                        daan_msgs, cilia_msgs = [], []
-                        logging.info("generate: postfix")
-                        daan_msgs.append({'type': 'postfix',
-                                'map': generate_postfix_map(self)})
-                        logging.info("generate: mailman")
-                        daan_msgs.append({'type': 'mailman',
-                                'changes': generate_mailman_changes(self)})
-                        logging.info("generate: wiki")
-                        daan_msgs.append({'type': 'wiki',
-                                'changes': generate_wiki_changes(self)})
-                        logging.info("generate: forum")
-                        daan_msgs.append({'type': 'forum',
-                                'changes': generate_forum_changes(self)})
-                        logging.info("generate: unix")
-                        cilia_msgs.append({'type': 'unix',
-                                 'map': generate_unix_map(self)})
-                        for msg in daan_msgs:
-                                logging.info("daan %s" % msg['type'])
-                                self.daan.send(msg)
-                        for msg in cilia_msgs:
-                                logging.info("cilia %s" % msg['type'])
-                                self.cilia.send(msg)
+                        actions = (self.sync_mailman, self.sync_unix,
+                                        self.sync_postfix, self.sync_forum)
+                        todo = [len(actions)]
+                        todo_lock = threading.Lock()
+                        todo_event = threading.Event()
+                        def _entry(act):
+                                act()
+                                with todo_lock:
+                                        todo[0] -= 1
+                                        if todo[0] == 0:
+                                                todo_event.set()
+                        for act in actions:
+                                self.threadPool.execute(_entry, act)
+                        todo_event.wait()
                 elif d['type'] == 'setpass':
                         u = Es.by_name(d['user'])
                         if u is None:
