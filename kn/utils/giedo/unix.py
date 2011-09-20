@@ -17,11 +17,15 @@ def generate_unix_map(giedo):
                 if not u.got_unix_user:
                         continue
                 ulut[u._id] = u
-                ret['users'][str(u.name)] = {'full_name': u.full_name, 'expire_date': DT_MIN.strftime('%Y-%m-%d')}
-        member_relations = itertools.groupby(Es.query_relations(_with=Es.by_name('leden'), until=dt_now), lambda x: x['who'])
+                ret['users'][str(u.name)] = {
+                                'full_name': u.full_name,
+                                'expire_date': DT_MIN.strftime('%Y-%m-%d')}
+        member_relations = itertools.groupby(Es.query_relations(
+                _with=Es.by_name('leden'), until=dt_now), lambda x: x['who'])
         for user_id, relations in member_relations:
                 latest = max(relations, key=lambda x: x['until'])
-                ret['users'][str(ulut[user_id].name)]['expire_date'] = latest['until'].strftime('%Y-%m-%d')
+                ret['users'][str(ulut[user_id].name)]['expire_date'] \
+                                = latest['until'].strftime('%Y-%m-%d')
 
         # Get all groups and create a look-up-table for group membership
         gs = tuple(Es.groups())
