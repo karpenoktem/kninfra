@@ -40,7 +40,7 @@ $(function(){
 {% endif %}
 
 {% if subscrlist %}
-	<h2>Aanmeldingen ({{ subscrlist.count }})</h2>
+	<h2>Aanmeldingen ({{ subscrlist_count }})</h2>
 	<em>Je ziet deze lijst omdat je lid bent
 	{{ object.owner.genitive_prefix }} {{ object.owner.humanName }}.</em>
 {% if subscrcount_debit %}
