@@ -1,26 +1,16 @@
 import hashlib
 import logging
 import MySQLdb
+import subprocess
 
 from kn import settings
 from kn.base._random import pseudo_randstr
 
-# NOTE see issue #6 -- MediaWiki's caching can cause confusion
-
 def wiki_setpass(daan, user, password):
-        creds = settings.WIKI_MYSQL_CREDS
-        dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
-                                db=creds[3])
-        user = user.capitalize()
-        c = dc.cursor()
-        salt = pseudo_randstr(8)
-        h = hashlib.md5(password).hexdigest()
-        h = hashlib.md5("%s-%s" % (salt, h)).hexdigest()
-        h = ':B:%s:%s' % (salt, h)
-        c.execute("UPDATE user SET user_password=%s WHERE user_name=%s;",
-                        (h, user))
-        c.execute("COMMIT;")
-        dc.close()
+        subprocess.call(['php', 'maintenance/changePassword.php',
+                                '--user', user,
+                                '--password', password],
+                cwd=settings.MEDIAWIKI_PATH)
 
 def apply_wiki_changes(daan, changes):
         creds = settings.WIKI_MYSQL_CREDS
