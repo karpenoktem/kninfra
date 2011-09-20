@@ -52,6 +52,9 @@ class Event(SONWrapper):
         def mailBody(self):
                 return self._data['mailBody']
         @property
+        def name(self):
+                return self._data['name']
+        @property
         def humanName(self):
                 return self._data['humanName']
         @property
