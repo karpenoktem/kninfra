@@ -70,6 +70,13 @@ class Event(SONWrapper):
 	@permalink
 	def get_absolute_url(self):
 		return ('event-detail', (), {'name': self.name})
+        def has_read_access(self, user):
+                return str(self.owner.name) in user.cached_groups_names or \
+                       'secretariaat' in user.cached_groups_names or \
+                       'admlezers' in user.cached_groups_names
+        def has_write_access(self, user):
+                return str(self.owner.name) in user.cached_groups_names or \
+                       'secretariaat' in user.cached_groups_names
 
 class Subscription(SONWrapper):
         def __init__(self, data):
