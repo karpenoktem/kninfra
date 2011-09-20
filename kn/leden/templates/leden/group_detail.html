@@ -6,16 +6,13 @@
 <h1>{{ object.humanName }}</h1>
 <p>{{ object.description }}</p>
 <dl>
-	{% if object.parent %}
-	{% ifnotequal object.parent object %}
-	<dt>Onder</dt>
-	<dd><a href="{{ object.parent.get_absolute_url }}"
-		>{{ object.parent.humanName }}</a></dd>
-	{% endifnotequal %}
-	{% endif %}
-	{% if not object.isVirtual %}
+	<dt>Korte namen</dt>
+	<dd>
+        {% for name in object.names %}{% if not forloop.first %}, {% endif %}
+        {{ name  }}{% endfor %}
+	</dd>
 	<dt>E-Mail lijst</dt>
-	{% endif %}
+        <dd>{{ object.canonical_email }}</dd>
 </dl>
 {% if subGroups %}
 	<ul>

@@ -15,6 +15,11 @@
 <div class="nosmoel"><a href="{{ photosUrl }}">Foto's</a></div>
 {% endif %}
 <h1>{{ object.full_name }}</h1>
+{% if "secretariaat" in user.cached_groups_names %}
+<form method="port" action="{% url user-reset-password _id=object.id %}">
+<input type="submit" value="stuur nieuw wachtwoord" />
+</form>
+{% endif %}{# "secretariaat" in user.cached_groups_names #}
 <dl>
 	<dt>Gebruikersnamen</dt>
 	<dd>
@@ -27,8 +32,25 @@
 	</dd>
 	{% if object.primary_study %}
 	<dt>Studie</dt>
-        <dd><a href="{{ object.primary_study.get_absolute_url }}"
-		>{{ object.primary_study.humanName }}</a></dd>
+        <dd>
+        <ul>
+        {% for s in object.studies %}
+        <li><a href="{{ s.study.get_absolute_url }}"
+                >{{ s.study.humanName }}</a>
+        op <a href="{{ s.institute.get_absolute_url }}"
+                >{{ s.institute.humanName}}</a>
+        {% if s.from or s.until %}
+        ({% if s.from %}
+        van {{ s.from.date }}
+        {% endif %}
+        {% if s.until %}
+        tot {{ s.until.date }}
+        {% endif %})
+        {% endif %}
+        </li>
+        {% endfor %}{# s in object.studies #}
+        </ul>
+        </dd>
 	{% endif %}
         {% if object.dateOfBirth %}
 	<dt>Geboortedatum</dt>

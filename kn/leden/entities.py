@@ -141,6 +141,13 @@ def names_by_ids(ids=None):
                         ret[e['_id']] = None
         return ret
 
+def ids():
+        """ Returns a set of all ids """
+        ret = set()
+        for e in ecol.find({}, {'_id':True}):
+                ret.add(e['_id'])
+        return ret
+
 def names():
         """ Returns a set of all names """
         ret = set()
@@ -593,6 +600,23 @@ class User(Entity):
 	@property
 	def last_name(self):
 		return self._data['person']['family']
+        @property
+        def studies(self):
+                ids = set()
+                studies = self._data.get('studies', ())
+                for s in studies:
+                        if s['institute']:
+                                ids.add(s['institute'])
+                        if s['study']:
+                                ids.add(s['study'])
+                lut = by_ids(tuple(ids))
+                for s in studies:
+                        yield {'from': None if s['from'] == DT_MIN
+                                                else s['from'],
+                               'until': None if s['until'] == DT_MAX
+                                                else s['until'],
+                               'study': lut.get(s['study']),
+                               'institute': lut.get(s['institute'])}
         @property
         def primary_study(self):
                 if self._primary_study==None:

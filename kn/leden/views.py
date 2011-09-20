@@ -6,9 +6,10 @@ from kn.leden.utils import find_name_for_user
 from kn.leden import giedo
 from kn.leden.mongo import _id
 from kn.leden.date import now, date_to_dt
-from kn.leden.http import redirect_to_referer
+from kn.base.http import redirect_to_referer
 from kn import settings
 from kn.settings import DT_MIN, DT_MAX
+from kn.base._random import pseudo_randstr
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
@@ -16,6 +17,7 @@ from django.core.servers.basehttp import FileWrapper
 from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
+from django.core.mail import EmailMessage
 from os import path
 from itertools import chain
 from django.contrib.auth.views import redirect_to_login
@@ -62,19 +64,21 @@ def _entity_detail(request, e):
 	def _cmp(x,y):
 		r = Es.relation_cmp_until(y,x)
 		if r: return r
-		r = cmp(x['with'].humanName, y['with'].humanName)
+		r = cmp(unicode(x['with'].humanName),
+                                unicode(y['with'].humanName))
 		if r: return r
-		r = cmp(x['how'].humanName if x['how'] else None,
-			y['how'].humanName if y['how'] else None)
+		r = cmp(unicode(x['how'].humanName) if x['how'] else None,
+			unicode(y['how'].humanName) if y['how'] else None)
 		if r: return r
 		return Es.relation_cmp_from(x,y)
 	def _rcmp(x,y):
 		r = Es.relation_cmp_until(y,x)
 		if r: return r
-		r = cmp(x['how'].humanName if x['how'] else None,
-			y['how'].humanName if y['how'] else None)
+		r = cmp(unicode(x['how'].humanName) if x['how'] else None,
+			unicode(y['how'].humanName) if y['how'] else None)
 		if r: return r
-		r = cmp(x['who'].humanName, y['who'].humanName)
+		r = cmp(unicode(x['who'].humanName),
+                                unicode(y['who'].humanName))
 		if r: return r
 		return Es.relation_cmp_from(x,y)
 	related = sorted(e.get_related(), cmp=_cmp)
@@ -129,8 +133,26 @@ def _tag_detail(request, tag):
 	return render_to_response('leden/tag_detail.html', ctx,
 			context_instance=RequestContext(request))
 def _brand_detail(request, brand):
-	# TODO stub
-	return HttpResponse("")
+        ctx = _entity_detail(request, brand)
+	def _cmp(x,y):
+		r = Es.relation_cmp_until(y,x)
+		if r: return r
+		r = cmp(unicode(x['with'].humanName),
+                                unicode(y['with'].humanName))
+		if r: return r
+		r = cmp(unicode(x['who'].humanName),
+                                unicode(y['who'].humanName))
+		if r: return r
+		return Es.relation_cmp_from(x,y)
+        ctx['rels'] = sorted(Es.query_relations(how=brand, deref_who=True,
+                                deref_with=True), cmp=_cmp)
+        for r in ctx['rels']:
+                r['id'] = r['_id']
+                r['until_year'] = (None if r['until'] is None else
+                                        Es.date_to_year(r['until']))
+                r['virtual'] = Es.relation_is_virtual(r)
+        return render_to_response('leden/brand_detail.html', ctx,
+                        context_instance=RequestContext(request))
 def _study_detail(request, study):
 	ctx = _entity_detail(request, study)
 	# TODO add followers in ctx
@@ -323,4 +345,27 @@ def relation_begin(request):
         # Add the relation!
         Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
         giedo.sync()
+        return redirect_to_referer(request)
+
+@login_required
+def user_reset_password(request, _id):
+        if not 'secretariaat' in request.user.cached_groups_names:
+                raise PermissionDenied
+        u = Es.by_id(_id).as_user()
+        pwd = pseudo_randstr()
+        u.set_password(pwd)
+        giedo.change_password(str(u.name), pwd, pwd)
+        email = EmailMessage(
+                "[KN] Nieuw wachtwoord",
+                ("Beste %s,\n\n"+
+                 "Jouw wachtwoord is gereset.  Je kunt inloggen met:\n"+
+                 "  gebruikersnaam     %s\n"+
+                 "  wachtwoord         %s\n\n"+
+                 "Met een vriendelijke groet,\n\n"+
+                 "  Het Karpe Noktem Smoelenboek") % (
+                          u.first_name, str(u.name), pwd),
+                'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
+                [u.canonical_email])
+        email.send()
+        request.user.push_message("Wachtwoord gereset!")
         return redirect_to_referer(request)
