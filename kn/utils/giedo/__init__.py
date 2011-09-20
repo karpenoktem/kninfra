@@ -25,9 +25,7 @@ class Giedo(WhimDaemon):
         def __init__(self):
                 super(Giedo, self).__init__(settings.GIEDO_SOCKET)
                 self.daan = WhimClient(settings.DAAN_SOCKET)
-                self.daan_lock = threading.Lock()
                 self.cilia = WhimClient(settings.CILIA_SOCKET)
-                self.cilia_lock = threading.Lock()
                 self.mirte = mirte.get_a_manager()
                 self.threadPool = self.mirte.get_a('threadPool')
                 self.operation_lock = threading.Lock()
@@ -37,8 +35,7 @@ class Giedo(WhimDaemon):
                 msg = {'type': 'postfix',
                         'map': generate_postfix_map(self)}
                 logging.info("postfix: daan")
-                with self.daan_lock:
-                        self.daan.send(msg)
+                self.daan.send(msg)
                 logging.info("postfix: done")
         def sync_mailman(self):
                 logging.info("mailman: generate")
@@ -46,32 +43,28 @@ class Giedo(WhimDaemon):
                         'changes': generate_mailman_changes(
                                                 self)}
                 logging.info("mailman: daan")
-                with self.daan_lock:
-                        self.daan.send(msg)
+                self.daan.send(msg)
                 logging.info("mailman: done")
         def sync_wiki(self):
                 logging.info("wiki: generate")
                 msg = {'type': 'wiki',
                         'changes': generate_wiki_changes(self)}
                 logging.info("wiki: daan")
-                with self.daan_lock:
-                        self.daan.send(msg)
+                self.daan.send(msg)
                 logging.info("wiki: done")
         def sync_forum(self):
                 logging.info("forum: generate")
                 msg = {'type': 'forum',
                         'changes': generate_forum_changes(self)}
                 logging.info("forum: daan")
-                with self.daan_lock:
-                        self.daan.send(msg)
+                self.daan.send(msg)
                 logging.info("forum: done")
         def sync_unix(self):
                 logging.info("unix: generate")
                 msg = {'type': 'unix',
                          'map': generate_unix_map(self)}
                 logging.info("unix: cilia")
-                with self.cilia_lock:
-                        self.cilia.send(msg)
+                self.cilia.send(msg)
                 logging.info("unix: done")
 
         def sync(self):
