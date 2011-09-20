@@ -1,3 +1,4 @@
+import threading
 import os.path
 import logging
 import socket
@@ -16,6 +17,10 @@ from kn import settings
 class Daan(WhimDaemon):
         def __init__(self):
                 super(Daan, self).__init__(settings.DAAN_SOCKET)
+                self.postfix_lock = threading.Lock()
+                self.mailman_lock = threading.Lock()
+                self.wiki_lock = threading.Lock()
+                self.forum_lock = threading.Lock()
 
         def pre_mainloop(self):
                 super(Daan, self).pre_mainloop()
@@ -23,14 +28,21 @@ class Daan(WhimDaemon):
 
         def handle(self, d):
                 if d['type'] == 'postfix':
-                        return set_postfix_map(self, d['map'])
+                        with self.postfix_lock:
+                                return set_postfix_map(self, d['map'])
                 elif d['type'] == 'mailman':
-                        return apply_mailman_changes(self, d['changes'])
+                        with self.mailman_lock:
+                                return apply_mailman_changes(self,
+                                                d['changes'])
                 elif d['type'] == 'wiki':
-                        return apply_wiki_changes(self, d['changes'])
+                        with self.wiki_lock:
+                                return apply_wiki_changes(self, d['changes'])
                 elif d['type'] == 'forum':
-                        return apply_forum_changes(self, d['changes'])
+                        with self.forum_lock:
+                                return apply_forum_changes(self, d['changes'])
                 elif d['type'] == 'setpass':
-                        wiki_setpass(self, d['user'], d['pass'])
-                        forum_setpass(self, d['user'], d['pass'])
+                        with self.wiki_lock:
+                                wiki_setpass(self, d['user'], d['pass'])
+                        with self.forum_lock:
+                                forum_setpass(self, d['user'], d['pass'])
 

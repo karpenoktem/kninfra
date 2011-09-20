@@ -1,3 +1,4 @@
+import threading
 import os.path
 import logging
 import socket
@@ -14,9 +15,12 @@ from kn.utils.cilia.unix import set_unix_map, unix_setpass
 class Cilia(WhimDaemon):
         def __init__(self):
                 super(Cilia, self).__init__(settings.CILIA_SOCKET)
+                self.unix_lock = threading.Lock()
 
         def handle(self, d):
                 if d['type'] == 'unix':
-                        return set_unix_map(self, d['map'])
+                        with self.unix_lock:
+                                return set_unix_map(self, d['map'])
                 elif d['type'] == 'setpass':
-                        return unix_setpass(self, d['user'], d['pass'])
+                        with self.unix_lock:
+                                return unix_setpass(self, d['user'], d['pass'])

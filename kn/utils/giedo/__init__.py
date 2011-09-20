@@ -30,6 +30,7 @@ class Giedo(WhimDaemon):
                 self.cilia_lock = threading.Lock()
                 self.mirte = mirte.get_a_manager()
                 self.threadPool = self.mirte.get_a('threadPool')
+                self.operation_lock = threading.Lock()
 
         def sync_postfix(self):
                 logging.info("postfix: generate")
@@ -73,35 +74,39 @@ class Giedo(WhimDaemon):
                         self.cilia.send(msg)
                 logging.info("unix: done")
 
+        def sync(self):
+                logging.info("update_db")
+                update_db(self)
+                actions = (self.sync_mailman, self.sync_unix,
+                                self.sync_postfix, self.sync_forum)
+                todo = [len(actions)]
+                todo_lock = threading.Lock()
+                todo_event = threading.Event()
+                def _entry(act):
+                        act()
+                        with todo_lock:
+                                todo[0] -= 1
+                                if todo[0] == 0:
+                                        todo_event.set()
+                for act in actions:
+                        self.threadPool.execute(_entry, act)
+                todo_event.wait()
+
         def handle(self, d):
-                if d['type'] == 'sync':
-                        logging.info("update_db")
-                        update_db(self)
-                        actions = (self.sync_mailman, self.sync_unix,
-                                        self.sync_postfix, self.sync_forum)
-                        todo = [len(actions)]
-                        todo_lock = threading.Lock()
-                        todo_event = threading.Event()
-                        def _entry(act):
-                                act()
-                                with todo_lock:
-                                        todo[0] -= 1
-                                        if todo[0] == 0:
-                                                todo_event.set()
-                        for act in actions:
-                                self.threadPool.execute(_entry, act)
-                        todo_event.wait()
-                elif d['type'] == 'setpass':
-                        u = Es.by_name(d['user'])
-                        if u is None:
-                                return {'error': 'no such user'}
-                        u = u.as_user()
-                        if not u.check_password(d['oldpass']):
-                                return {'error': 'wrong old password'}
-                        u.set_password(d['newpass'])
-                        d2 = {'type': 'setpass',
-                              'user': d['user'],
-                              'pass': d['newpass']}
-                        self.daan.send(d2)
-                        self.cilia.send(d2)
-                        return {'success': True}
+                with self.operation_lock:
+                        if d['type'] == 'sync':
+                                return self.sync()
+                        elif d['type'] == 'setpass':
+                                u = Es.by_name(d['user'])
+                                if u is None:
+                                        return {'error': 'no such user'}
+                                u = u.as_user()
+                                if not u.check_password(d['oldpass']):
+                                        return {'error': 'wrong old password'}
+                                u.set_password(d['newpass'])
+                                d2 = {'type': 'setpass',
+                                      'user': d['user'],
+                                      'pass': d['newpass']}
+                                self.daan.send(d2)
+                                self.cilia.send(d2)
+                                return {'success': True}
