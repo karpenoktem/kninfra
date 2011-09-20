@@ -6,7 +6,7 @@ from kn.leden.utils import find_name_for_user
 from kn.leden import giedo
 from kn.leden.mongo import _id
 from kn.leden.date import now, date_to_dt
-from kn.leden.http import redirect_to_referer
+from kn.base.http import redirect_to_referer
 from kn import settings
 from kn.settings import DT_MIN, DT_MAX
 from kn.base._random import pseudo_randstr
