@@ -76,6 +76,7 @@ MOD_UI_URI = '/mailman/admindb/%s'
 MOD_RENEW_INTERVAL = datetime.timedelta(0, 15*60)
 MOD_DESIRED_URI_PREFIX = 'https://www.karpenoktem.nl'
 MAILMAN_PATH = '/var/lib/mailman'
+MEDIAWIKI_PATH = '/srv/karpenoktem.nl/htdocs/mediawiki'
 MAILMAN_DEFAULT_OWNER = 'wortel@karpenoktem.nl'
 
 # db
