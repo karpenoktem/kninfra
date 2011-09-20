@@ -8,6 +8,17 @@ from django.http import Http404
 from django.core.mail import EmailMessage
 
 @login_required
+def event_list(request):
+        events = tuple(subscr_Es.all_events())
+        open_events = [e for e in reversed(events) if e.is_open]
+        closed_events = [e for e in reversed(events) if not e.is_open]
+	return render_to_response('subscriptions/event_list.html',
+                        {'open_events': open_events,
+                         'closed_events': closed_events},
+			context_instance=RequestContext(request))
+
+
+@login_required
 def event_detail(request, name):
         event = subscr_Es.event_by_name(name)
         if event is None:
