@@ -3,6 +3,7 @@ import os.path
 import logging
 import socket
 import select
+import time
 import json
 import os
 
@@ -29,60 +30,53 @@ class Giedo(WhimDaemon):
                 self.mirte = mirte.get_a_manager()
                 self.threadPool = self.mirte.get_a('threadPool')
                 self.operation_lock = threading.Lock()
+                self.ss_actions = (
+                              ('postfix', self.daan, self._gen_postfix),
+                              ('mailman', self.daan, self._gen_mailman),
+                              ('forum', self.daan, self._gen_forum),
+                              ('unix', self.cilia, self._gen_unix),
+                              ('wiki', self.daan, self._gen_wiki))
 
-        def sync_postfix(self):
-                logging.info("postfix: generate")
-                msg = {'type': 'postfix',
+
+        def _gen_postfix(self):
+                return {'type': 'postfix',
                         'map': generate_postfix_map(self)}
-                logging.info("postfix: daan")
-                self.daan.send(msg)
-                logging.info("postfix: done")
-        def sync_mailman(self):
-                logging.info("mailman: generate")
-                msg = {'type': 'mailman',
+        def _gen_mailman(self):
+                return {'type': 'mailman',
                         'changes': generate_mailman_changes(
                                                 self)}
-                logging.info("mailman: daan")
-                self.daan.send(msg)
-                logging.info("mailman: done")
-        def sync_wiki(self):
-                logging.info("wiki: generate")
-                msg = {'type': 'wiki',
+        def _gen_wiki(self):
+                return {'type': 'wiki',
                         'changes': generate_wiki_changes(self)}
-                logging.info("wiki: daan")
-                self.daan.send(msg)
-                logging.info("wiki: done")
-        def sync_forum(self):
-                logging.info("forum: generate")
-                msg = {'type': 'forum',
+        def _gen_forum(self):
+                return {'type': 'forum',
                         'changes': generate_forum_changes(self)}
-                logging.info("forum: daan")
-                self.daan.send(msg)
-                logging.info("forum: done")
-        def sync_unix(self):
-                logging.info("unix: generate")
-                msg = {'type': 'unix',
+        def _gen_unix(self):
+                return  {'type': 'unix',
                          'map': generate_unix_map(self)}
-                logging.info("unix: cilia")
-                self.cilia.send(msg)
-                logging.info("unix: done")
 
         def sync(self):
-                logging.info("update_db")
+                update_db_start = time.time()
                 update_db(self)
-                actions = (self.sync_mailman, self.sync_unix,
-                                self.sync_postfix, self.sync_forum)
-                todo = [len(actions)]
+                logging.info("update_db %s" % (time.time() - update_db_start))
+                todo = [len(self.ss_actions)]
                 todo_lock = threading.Lock()
                 todo_event = threading.Event()
-                def _entry(act):
-                        act()
+                def _entry(name, daemon, action):
+                        start = time.time()
+                        msg = action()
+                        elapsed = time.time() - start
+                        logging.info("generate %s %s" % (name, elapsed))
+                        start = time.time()
+                        daemon.send(msg)
+                        elapsed = time.time() - start
+                        logging.info("send %s %s" % (name, elapsed))
                         with todo_lock:
                                 todo[0] -= 1
                                 if todo[0] == 0:
                                         todo_event.set()
-                for act in actions:
-                        self.threadPool.execute(_entry, act)
+                for act in self.ss_actions:
+                        self.threadPool.execute(_entry, *act)
                 todo_event.wait()
 
         def handle(self, d):
