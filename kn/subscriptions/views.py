@@ -1,11 +1,15 @@
+import decimal
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.models import Group
 import kn.subscriptions.entities as subscr_Es
 import kn.leden.entities as Es
+from kn.leden.mongo import _id
+from kn.base.http import JsonHttpResponse
 from django.http import Http404
 from django.core.mail import EmailMessage
+from django.core.exceptions import PermissionDenied
 
 @login_required
 def event_list(request):
@@ -74,3 +78,29 @@ def event_detail(request, name):
                         'subscrlist_count': len(subscrlist)})
 	return render_to_response('subscriptions/event_detail.html', ctx,
 			context_instance=RequestContext(request))
+
+
+def _api_change_debit(request):
+        if not 'debit' in request.REQUEST or not 'id' in request.REQUEST:
+                return JsonHttpResponse({'error': 'missing arguments'})
+        subscr = subscr_Es.subscription_by_id(request.REQUEST['id'])
+        if not subscr:
+                raise Http404
+        try:
+                d = decimal.Decimal(request.REQUEST['debit'])
+        except decimal.InvalidOperation:
+                return JsonHttpResponse({'error': 'not a decimal'})
+        event = subscr.event
+        if not event.has_debit_access(request.user):
+                raise PermissionDenied
+        subscr.debit = d
+        subscr.save()
+        return JsonHttpResponse({'success': True})
+
+@login_required
+def api(request):
+        action = request.REQUEST.get('action')
+        if action == 'change-debit':
+                return _api_change_debit(request)
+        else:
+                return JsonHttpResponse({'error': 'unknown action'})
