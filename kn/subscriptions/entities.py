@@ -1,7 +1,9 @@
+import decimal
+
 from django.db.models import permalink
 from pymongo.objectid import ObjectId
 
-from kn.leden.mongo import db, SONWrapper
+from kn.leden.mongo import db, SONWrapper, _id
 
 import kn.leden.entities as Es
 
@@ -25,12 +27,15 @@ def event_by_name(name):
         return Event(ecol.find_one({'name': name}))
 def event_by_id(_id):
         return Event(ecol.find_one({'_id': _id}))
-def subscription_by_id(_id):
-        return Subscription(scol.find_one({'_id': _id}))
+def subscription_by_id(__id):
+        return Subscription(scol.find_one({'_id': _id(__id)}))
 
 class Event(SONWrapper):
         def __init__(self, data):
                 super(Event, self).__init__(data, ecol)
+        @property
+        def id(self):
+                return str(self._data['_id'])
         @property
         def owner(self):
                 return Es.by_id(self._data['owner'])
@@ -77,11 +82,16 @@ class Event(SONWrapper):
         def has_write_access(self, user):
                 return str(self.owner.name) in user.cached_groups_names or \
                        'secretariaat' in user.cached_groups_names
+        def has_debit_access(self, user):
+                return 'penningmeester' in user.cached_groups_names or \
+                       'secretariaat' in user.cached_groups_names
 
 class Subscription(SONWrapper):
         def __init__(self, data):
                 super(Subscription, self).__init__(data, scol)
-
+        @property
+        def id(self):
+                return str(self._data['_id'])
         @property
         def event(self):
                 return Event(event_by_id(self._data['event']))
@@ -92,9 +102,11 @@ class Subscription(SONWrapper):
 	def __unicode__(self):
 		return unicode(u"%s for %s" % (self.user.humanName,
 						self.event.humanName))
-        @property
-        def debit(self):
-                return self._data['debit']
+        def get_debit(self):
+                return decimal.Decimal(self._data['debit'])
+        def set_debit(self, v):
+                self._data['debit'] = str(v)
+        debit = property(get_debit, set_debit)
         @property
         def userNotes(self):
                 return self._data['userNotes']
