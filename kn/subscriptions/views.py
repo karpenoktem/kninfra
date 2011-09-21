@@ -60,8 +60,12 @@ def event_detail(request, name):
 					"nu %s euro betalen" % event.cost)
         ctx = {'object': event,
                'user': request.user,
-               'subscription': subscription}
-        if event.has_read_access(request.user):
+               'subscription': subscription,
+               'has_debit_access': event.has_debit_access(request.user),
+               'has_read_access': event.has_read_access(request.user),
+               'has_write_access': event.has_write_access(request.user)}
+        if event.has_read_access(request.user) or \
+                        event.has_debit_access(request.user):
                 subscrlist = tuple(event.get_subscriptions())
 	        ctx.update({
                         'subscrlist': subscrlist,
