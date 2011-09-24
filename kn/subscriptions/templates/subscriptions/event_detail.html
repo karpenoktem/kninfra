@@ -76,13 +76,15 @@ change_debit = function(id) {
 	<ul>
 	{% for subscr in subscrlist %}
 	<li><a href="{{ subscr.user.get_absolute_url }}"
-                >{{ subscr.user.full_name }}</a> (debet: &euro;
+                >{{ subscr.user.full_name }}</a> [debet: &euro;
                 {{ subscr.debit }}
                 {% if has_debit_access %}
                 <button onclick="change_debit('{{ subscr.id }}')"
-                                >wijzig</button>
-                {% endif %}{# has_debit_access #} 
-                )</li>
+                        >wijzig</button
+                >{% endif %}{# has_debit_access #}]
+                {% if subscr.date %}
+                        <small>{{ subscr.date.date }}</small>
+                {% endif %}{# subscr.date #}</li>
                 {% if subscr.userNotes %}
                 <blockquote>{{ subscr.userNotes }}</blockquote>
                 {% endif %}

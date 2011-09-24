@@ -1,4 +1,5 @@
 import decimal
+import datetime
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -41,6 +42,7 @@ def event_detail(request, name):
                         'event': event._id,
                         'user': request.user._id,
                         'userNotes': notes,
+                        'date': datetime.datetime.now(),
                         'debit': event.cost})
 		subscription.save()
 		full_owner_address = '%s <%s>' % (
