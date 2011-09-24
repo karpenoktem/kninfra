@@ -25,11 +25,14 @@ def all_subscriptions():
                 yield Subscription(m)
 
 def event_by_name(name):
-        return Event(ecol.find_one({'name': name}))
+        tmp = ecol.find_one({'name': name})
+        return None if tmp is None else Event(tmp)
 def event_by_id(__id):
-        return Event(ecol.find_one({'_id': _id(__id)}))
+        tmp = ecol.find_one({'_id': _id(__id)})
+        return None if tmp is None else Event(tmp)
 def subscription_by_id(__id):
-        return Subscription(scol.find_one({'_id': _id(__id)}))
+        tmp =  scol.find_one({'_id': _id(__id)})
+        return None if tmp is None else Subscription(tmp)
 
 class Event(SONWrapper):
         def __init__(self, data):
