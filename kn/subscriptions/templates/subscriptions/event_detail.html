@@ -25,6 +25,10 @@ change_debit = function(id) {
 <h1>{{ object.humanName }}</h1>
 <p>{{ object.description }}</p>
 <dl>
+        {% if object.date %}
+        <dt>Datum</dt>
+        <dd>{{ object.date.date }}</dd>
+        {% endif %}{# object.date #}
 	{% if object.owner %}
 	<dt>Georganiseerd door</dt>
 	<dd><a href="{{ object.owner.get_absolute_url }}"

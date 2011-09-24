@@ -5,13 +5,21 @@
 <h1>Activiteiten</h1>
 <ul>
 {% for e in open_events %}
-<li><a href={{ e.get_absolute_url }}>{{ e.humanName }}</a></li>
+<li><a href={{ e.get_absolute_url }}>{{ e.humanName }}</a>
+{% if e.date %}
+<small>{{ e.date.date }}</small>
+{% endif %}{# e.date #}
+</li>
 {% endfor %}{# e in open_events #}
 </ul>
 <h2>Oude activiteiten</h2>
 <ul>
 {% for e in closed_events %}
-<li><a href={{ e.get_absolute_url }}>{{ e.humanName }}</a></li>
+<li><a href={{ e.get_absolute_url }}>{{ e.humanName }}</a>
+{% if e.date %}
+<small>{{ e.date.date }}</small>
+{% endif %}{# e.date #}
+</li>
 {% endfor %}{# e in closd_events #}
 </ul>
 {% endblock %}

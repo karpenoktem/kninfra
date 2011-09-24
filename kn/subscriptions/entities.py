@@ -13,11 +13,12 @@ scol = db['event_subscriptions']
 def ensure_indices():
 	ecol.ensure_index('name', unique=True)
 	ecol.ensure_index('owner')
+	ecol.ensure_index('date')
         scol.ensure_index('user')
         scol.ensure_index('event')
 
 def all_events():
-        for m in ecol.find():
+        for m in ecol.find().sort('date'):
                 yield Event(m)
 def all_subscriptions():
         for m in scol.find():
@@ -36,6 +37,9 @@ class Event(SONWrapper):
         @property
         def id(self):
                 return str(self._data['_id'])
+        @property
+        def date(self):
+                return self._data.get('date', None)
         @property
         def owner(self):
                 return Es.by_id(self._data['owner'])
