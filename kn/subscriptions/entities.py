@@ -3,7 +3,7 @@ import decimal
 from django.db.models import permalink
 from pymongo.objectid import ObjectId
 
-from kn.leden.mongo import db, SONWrapper, _id
+from kn.leden.mongo import db, SONWrapper, _id, son_property
 
 import kn.leden.entities as Es
 
@@ -26,8 +26,8 @@ def all_subscriptions():
 
 def event_by_name(name):
         return Event(ecol.find_one({'name': name}))
-def event_by_id(_id):
-        return Event(ecol.find_one({'_id': _id}))
+def event_by_id(__id):
+        return Event(ecol.find_one({'_id': _id(__id)}))
 def subscription_by_id(__id):
         return Subscription(scol.find_one({'_id': _id(__id)}))
 
@@ -69,9 +69,8 @@ class Event(SONWrapper):
         @property
         def cost(self):
                 return self._data['cost']
-        @property
-        def is_open(self):
-                return self._data['is_open']
+
+        is_open = son_property(('is_open',))
 
 	def __unicode__(self):
 		return unicode('%s (%s)' % (self.humanName, self.owner))

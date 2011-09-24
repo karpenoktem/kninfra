@@ -8,6 +8,16 @@ $(function(){
         $.defaultText();
 });
 
+close_event = function() {
+        $.getJSON("{% url api %}", {
+                        'action': 'close-event',
+                        'id': '{{ object.id }}' },
+                        function(d) {
+                if(d.success) window.location.reload();
+                if(d.error) alert(d.error);
+        });
+};
+
 change_debit = function(id) {
         $.getJSON("{% url api %}", {
                         'action': 'change-debit',
@@ -17,7 +27,7 @@ change_debit = function(id) {
                 if(d.success) window.location.reload();
                 if(d.error) alert(d.error);
         });
-}
+};
 </script>
 {% endblock %}
 
@@ -40,6 +50,10 @@ change_debit = function(id) {
 	{% endif %}
 </dl>
 
+{% if object.is_open and has_write_access %}
+<button onclick="close_event()">Sluit inschrijvingen</button>
+{% endif %}{# object.is_open and has_write_access #}
+
 {% if not subscription %}
 {% if object.is_open %}
 <form method="post" action="">
@@ -49,9 +63,9 @@ change_debit = function(id) {
 	<input type="submit" value="{{ user.full_name }} aanmelden!" /> 
 	{% csrf_token %}
 </form>
-{% else %}
+{% else %}{# object.is_open #}
 <p><em>Je kunt je niet meer aanmelden.</em></p>
-{% endif %}
+{% endif %}{# object.is_open #}
 {% endif %}
 
 {% if subscrlist %}
@@ -66,7 +80,7 @@ change_debit = function(id) {
                 {{ subscr.debit }}
                 {% if has_debit_access %}
                 <button onclick="change_debit('{{ subscr.id }}')"
-                        >wijzig</button>
+                                >wijzig</button>
                 {% endif %}{# has_debit_access #} 
                 )</li>
                 {% if subscr.userNotes %}

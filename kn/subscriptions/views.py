@@ -82,6 +82,17 @@ def event_detail(request, name):
 	return render_to_response('subscriptions/event_detail.html', ctx,
 			context_instance=RequestContext(request))
 
+def _api_close_event(request):
+        if not 'id' in request.REQUEST:
+                return JsonHttpResponse({'error': 'missing argument'})
+        e = subscr_Es.event_by_id(request.REQUEST['id'])
+        if not e:
+                raise Http404
+        if not e.has_write_access(request.user):
+                raise PermissionDenied
+        e.is_open = False
+        e.save()
+        return JsonHttpResponse({'success': True})
 
 def _api_change_debit(request):
         if not 'debit' in request.REQUEST or not 'id' in request.REQUEST:
@@ -105,5 +116,7 @@ def api(request):
         action = request.REQUEST.get('action')
         if action == 'change-debit':
                 return _api_change_debit(request)
+        elif action == 'close-event':
+                return _api_close_event(request)
         else:
                 return JsonHttpResponse({'error': 'unknown action'})
