@@ -11,5 +11,7 @@ urlpatterns = patterns('',
 	    views.event_detail, name='event-detail'),
 	url(r'^!api/?$',
 	    views.api, name='api'),
+	url(r'^!nieuwe/?$',
+	    views.event_new, name='event-new'),
 )
 

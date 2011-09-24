@@ -3,12 +3,15 @@ import datetime
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group
 import kn.subscriptions.entities as subscr_Es
+from kn.subscriptions.forms import get_add_event_form
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
+from kn.leden.date import date_to_dt
 from kn.base.http import JsonHttpResponse
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.core.mail import EmailMessage
 from django.core.exceptions import PermissionDenied
 
@@ -52,6 +55,7 @@ def event_detail(request, name):
 				"Aanmelding %s" % event.humanName,
 				 event.mailBody % {
 					'firstName': request.user.first_name,
+                                        'eventName': event.humanName,
                                         'notes': notes},
 				'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
 				[request.user.canonical_email],
@@ -122,3 +126,30 @@ def api(request):
                 return _api_close_event(request)
         else:
                 return JsonHttpResponse({'error': 'unknown action'})
+
+@login_required
+def event_new(request):
+        AddEventForm = get_add_event_form(request.user)
+        if request.method == 'POST':
+                form = AddEventForm(request.POST)
+                if form.is_valid():
+                        fd = form.cleaned_data
+                        if not request.user.is_related_with(fd['owner']):
+                                raise PermissionDenied
+                        e = subscr_Es.Event({
+                                'date': date_to_dt(fd['date']),
+                                'owner': _id(fd['owner']),
+                                'description': fd['description'],
+                                'mailBody': fd['mailBody'],
+                                'humanName': fd['humanName'],
+                                'name': fd['name'],
+                                'cost': str(fd['cost']),
+                                'is_open': True})
+                        e.save()
+                        return HttpResponseRedirect(reverse('event-detail',
+                                                args=(e.name,)))
+        else:
+                form = AddEventForm()
+        ctx = {'form': form}
+	return render_to_response('subscriptions/event_new.html', ctx,
+			context_instance=RequestContext(request))
