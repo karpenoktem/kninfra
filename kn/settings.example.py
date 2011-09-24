@@ -44,6 +44,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	"django.core.context_processors.i18n",
 	"django.core.context_processors.media",
         "django.contrib.messages.context_processors.messages",
+        "kn.base.context_processors.bg",
 )
 TEMPLATE_DIRS = ()
 AUTHENTICATION_BACKENDS = (
@@ -63,6 +64,9 @@ DEFAULT_FILE_STORAGE = 'kn.base.storage.OurFileSystemStorage'
 
 # Application settings
 # ############################################################
+# base theme
+BASE_BGS = ['antal', 'park', 'band', 'weekend']
+
 # smoelen
 SMOELEN_PHOTOS_PATH = 'smoelen'
 USER_PHOTOS_URL = 'http://karpenoktem.nl/fotos/?search_tag=%s'
