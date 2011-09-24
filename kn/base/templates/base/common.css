@@ -58,3 +58,7 @@ a:hover {
 #footer, #main {
         border-top: 1px solid #800100;
 }
+
+small {
+        color: gray;
+}
