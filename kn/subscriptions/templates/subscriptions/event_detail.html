@@ -52,8 +52,6 @@ change_debit = function(id) {
 
 {% if subscrlist %}
 	<h2>Aanmeldingen ({{ subscrlist_count }})</h2>
-	<em>Je ziet deze lijst omdat je lid bent
-	{{ object.owner.genitive_prefix }} {{ object.owner.humanName }}.</em>
 {% if subscrcount_debit %}
 	<p>Er staan nog {{ subscrcount_debit }} betalingen open.</p>
 {% endif %}
