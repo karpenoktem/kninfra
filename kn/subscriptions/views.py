@@ -34,8 +34,7 @@ def event_detail(request, name):
 				"Je bent al aangemeld, maar moet nog wel %s"+
 				" euro betalen.") % subscription.debit)
 		else:
-			request.user.push_message("Je bent aangemeld en je"+\
-						" betaling is verwerkt!")
+			request.user.push_message("Je bent aangemeld!")
 	elif request.method == 'POST' and event.is_open:
                 notes = request.POST['notes']
 		subscription = subscr_Es.Subscription({
@@ -59,9 +58,13 @@ def event_detail(request, name):
 					'Cc': full_owner_address,
 					'Reply-To': full_owner_address})
 		email.send()
-		request.user.push_message(
-				"Je bent aangemeld en moet "+\
-					"nu %s euro betalen" % event.cost)
+                if event.cost > 0:
+                        request.user.push_message(
+                                        "Je bent aangemeld en moet "+\
+                                        "nu %s euro betalen" % event.cost)
+                else:
+                        request.user.push_message(
+                                        "Je bent aangemeld")
         ctx = {'object': event,
                'user': request.user,
                'subscription': subscription,
