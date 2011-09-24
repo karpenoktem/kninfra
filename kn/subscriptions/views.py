@@ -142,6 +142,7 @@ def event_new(request):
                                 'description': fd['description'],
                                 'mailBody': fd['mailBody'],
                                 'humanName': fd['humanName'],
+                                'createdBy': request.user._id,
                                 'name': fd['name'],
                                 'cost': str(fd['cost']),
                                 'is_open': True})
