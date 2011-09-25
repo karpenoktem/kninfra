@@ -18,5 +18,7 @@ def get_add_event_form(user):
                 cost = forms.DecimalField(label='Kosten')
                 date = forms.DateField(label='Datum')
                 owner = EntityChoiceField(label="Eigenaar",
-                                choices=[user]+user.cached_groups)
+                        choices=[user]+sorted(user.cached_groups,
+                                cmp=lambda x,y: cmp(unicode(x.humanName),
+                                                unicode(y.humanName))))
         return AddEventForm
