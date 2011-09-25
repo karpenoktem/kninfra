@@ -512,6 +512,17 @@ class Entity(SONWrapper):
                 else:
                         return True
 
+        def __eq__(self, other):
+                if not isinstance(other, Entity):
+                        return False
+                return other._id == self._id
+        def __ne__(self, other):
+                if not isinstance(other, Entity):
+                        return True
+                return other._id != self._id
+        def __hash__(self):
+                return hash(self._id)
+
 class Group(Entity):
 	@permalink
 	def get_absolute_url(self):
