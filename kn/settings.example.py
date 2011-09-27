@@ -101,6 +101,8 @@ USERNAME_CHARS = 'qwertyuiopasdfghjklzxcvbnm123456789-'
 POSTFIX_VIRTUAL_MAP = '/etc/postfix/virtual/kninfra_maps'
 INFRA_UID = 1002
 
+PHOTOS_DIR = '/var/fotos'
+
 # Debug settings
 # ############################################################
 DEBUG = True
