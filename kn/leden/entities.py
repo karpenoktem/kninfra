@@ -239,7 +239,7 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
                         qa['until'] = {'$gte': query['from'],
                                        '$lte': query['until']}
                         # NOTE we have to set these void conditions, otherwise
-                        #      mongo will not use its indeces.
+                        #      mongo will not use its indices.
                         qa['from'] = {'$gte': DT_MIN}
                         bits.append(qa)
                         qb['until'] = {'$gte': DT_MIN}
@@ -262,6 +262,8 @@ def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
                 when left on default, it will match all.
                 when a tuple or list, it will match on any of those.
                 when a single element, it will match that element.
+				The "from" and "until" should be datetime.datetime's and form an interval.
+				Only relations intersecting this interval are matched.
         """
         query = {}
         if who != -1: query['who'] = who
