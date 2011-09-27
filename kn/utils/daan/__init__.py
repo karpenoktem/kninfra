@@ -5,6 +5,7 @@ import socket
 import select
 import json
 import os
+import subprocess
 
 from kn.utils.whim import WhimDaemon
 from kn.utils.daan.postfix import set_postfix_map
@@ -21,6 +22,9 @@ class Daan(WhimDaemon):
                 self.mailman_lock = threading.Lock()
                 self.wiki_lock = threading.Lock()
                 self.forum_lock = threading.Lock()
+                self.update_knsite_lock = threading.Lock()
+                self.update_knforum_lock = threading.Lock()
+                self.fotoadmin_lock = threading.Lock()
 
         def pre_mainloop(self):
                 super(Daan, self).pre_mainloop()
@@ -45,4 +49,32 @@ class Daan(WhimDaemon):
                                 wiki_setpass(self, d['user'], d['pass'])
                         with self.forum_lock:
                                 forum_setpass(self, d['user'], d['pass'])
+                elif d['type'] == 'update-knsite':
+                        with self.update_knsite_lock:
+                                return start_external(['update-knsite.sh'],
+                                        cwd=path.dirname(__file__))
+                elif d['type'] == 'update-knfotos':
+                        with self.update_knfotos_lock:
+                                return start_external(
+                                        ['update-knfotos.sh'],
+                                        cwd=path.dirname(__file__))
+                elif d['type'] == 'fotoadmin-create-event':
+                        with self.fotoadmin_lock:
+                                return start_external(
+                                        ['fotoadmin-create-event.php',
+                                        d['date'], d['name'], d['humanname']],
+                                        cwd=path.dirname(__file__))
+                elif d['type'] == 'fotoadmin-move-fotos':
+                        with self.fotoadmin_lock:
+                                return start_external(
+                                        ['fotoadmin-move-fotos.php', d['event'],
+                                        d['user'], d['dir']],
+                                        cwd=path.dirname(__file__))
 
+def start_external(args, cwd=None):
+        ph = subprocess.Popen(args, cwd=cwd, stdin=subprocess.PIPE,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT, close_fds=True)
+        ph.stdin.close()
+        (output, ) = ph.communicate()
+        return output
