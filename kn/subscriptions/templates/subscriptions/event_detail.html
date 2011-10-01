@@ -7,6 +7,27 @@
 $(function(){
         $.defaultText();
 });
+
+close_event = function() {
+        $.getJSON("{% url api %}", {
+                        'action': 'close-event',
+                        'id': '{{ object.id }}' },
+                        function(d) {
+                if(d.success) window.location.reload();
+                if(d.error) alert(d.error);
+        });
+};
+
+change_debit = function(id) {
+        $.getJSON("{% url api %}", {
+                        'action': 'change-debit',
+                        'id': id,
+                        'debit': prompt("Nieuw debet")},
+                        function(d) {
+                if(d.success) window.location.reload();
+                if(d.error) alert(d.error);
+        });
+};
 </script>
 {% endblock %}
 
@@ -14,6 +35,10 @@ $(function(){
 <h1>{{ object.humanName }}</h1>
 <p>{{ object.description }}</p>
 <dl>
+        {% if object.date %}
+        <dt>Datum</dt>
+        <dd>{{ object.date.date }}</dd>
+        {% endif %}{# object.date #}
 	{% if object.owner %}
 	<dt>Georganiseerd door</dt>
 	<dd><a href="{{ object.owner.get_absolute_url }}"
@@ -25,6 +50,10 @@ $(function(){
 	{% endif %}
 </dl>
 
+{% if object.is_open and has_write_access %}
+<button onclick="close_event()">Sluit inschrijvingen</button>
+{% endif %}{# object.is_open and has_write_access #}
+
 {% if not subscription %}
 {% if object.is_open %}
 <form method="post" action="">
@@ -34,23 +63,28 @@ $(function(){
 	<input type="submit" value="{{ user.full_name }} aanmelden!" /> 
 	{% csrf_token %}
 </form>
-{% else %}
+{% else %}{# object.is_open #}
 <p><em>Je kunt je niet meer aanmelden.</em></p>
-{% endif %}
+{% endif %}{# object.is_open #}
 {% endif %}
 
 {% if subscrlist %}
-	<h2>Aanmeldingen ({{ subscrlist.count }})</h2>
-	<em>Je ziet deze lijst omdat je lid bent
-	{{ object.owner.genitive_prefix }} {{ object.owner.humanName }}.</em>
+	<h2>Aanmeldingen ({{ subscrlist_count }})</h2>
 {% if subscrcount_debit %}
 	<p>Er staan nog {{ subscrcount_debit }} betalingen open.</p>
 {% endif %}
 	<ul>
 	{% for subscr in subscrlist %}
 	<li><a href="{{ subscr.user.get_absolute_url }}"
-		>{{ subscr.user.full_name }} (debet: &euro;
-		{{ subscr.debit }})</a></li>
+                >{{ subscr.user.full_name }}</a> [debet: &euro;
+                {{ subscr.debit }}
+                {% if has_debit_access %}
+                <button onclick="change_debit('{{ subscr.id }}')"
+                        >wijzig</button
+                >{% endif %}{# has_debit_access #}]
+                {% if subscr.date %}
+                        <small>{{ subscr.date.date }}</small>
+                {% endif %}{# subscr.date #}</li>
                 {% if subscr.userNotes %}
                 <blockquote>{{ subscr.userNotes }}</blockquote>
                 {% endif %}

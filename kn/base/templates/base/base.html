@@ -4,6 +4,10 @@
 {{ block.super }}
 <link href="{% url style-common %}"
 	rel="stylesheet" type="text/css" />
+<style type="text/css">
+        #main { background-image:
+                url({{ MEDIA_URL }}/base/bgs/rest.{{ BASE_BACKGROUND }}.jpg); }
+</style>
 {% endblock %}
 
 {% block wrapper %}

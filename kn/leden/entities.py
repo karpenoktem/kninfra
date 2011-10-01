@@ -439,6 +439,9 @@ class Entity(SONWrapper):
                 nm = nms[0] if len(nms) >= 1 else None
                 return nm if nm is None else EntityName(self, nm)
         @property
+        def description(self):
+                return self._data.get('description', None)
+        @property
         def other_names(self):
                 for n in self._data.get('names',())[1:]:
                         yield EntityName(self, n)
@@ -488,6 +491,20 @@ class Entity(SONWrapper):
         def as_primary_type(self):
                 return TYPE_MAP[self.type](self._data)
 
+        def update_primary_email(self, new, save=True):
+                """ Adds @new as new and primary e-mail address. """
+                if 'emailAddresses' not in self._data:
+                        self._data['emailAddresses'] = []
+                addrs = self._data['emailAddresses']
+                dt = now()
+                if addrs:
+                        addrs[0]['until'] = dt
+                addrs.insert(0, {'email': new,
+                                 'from': dt,
+                                 'until': DT_MAX})
+                if save:
+                        self.save()
+
         @property
         def canonical_email(self):
                 if self.type in ('institute', 'study', 'brand', 'tag'):
@@ -510,6 +527,17 @@ class Entity(SONWrapper):
                         return self._data['has_unix_group']
                 else:
                         return True
+
+        def __eq__(self, other):
+                if not isinstance(other, Entity):
+                        return False
+                return other._id == self._id
+        def __ne__(self, other):
+                if not isinstance(other, Entity):
+                        return True
+                return other._id != self._id
+        def __hash__(self):
+                return hash(self._id)
 
 class Group(Entity):
 	@permalink

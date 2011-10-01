@@ -8,7 +8,7 @@ class EntityChoiceField(forms.ChoiceField):
                                         for e in  kwargs['choices']]
                 if kwargs.get('sort_choices', False):
                         kwargs['choices'].sort(cmp=lambda x,y: cmp(x[1],y[1]))
-                del kwargs['sort_choices']
+                        del kwargs['sort_choices']
                 super(EntityChoiceField, self).__init__(*args, **kwargs)
 
 class AddUserForm(forms.Form):

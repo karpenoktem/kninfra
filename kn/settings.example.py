@@ -44,6 +44,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	"django.core.context_processors.i18n",
 	"django.core.context_processors.media",
         "django.contrib.messages.context_processors.messages",
+        "kn.base.context_processors.bg",
 )
 TEMPLATE_DIRS = ()
 AUTHENTICATION_BACKENDS = (
@@ -63,6 +64,9 @@ DEFAULT_FILE_STORAGE = 'kn.base.storage.OurFileSystemStorage'
 
 # Application settings
 # ############################################################
+# base theme
+BASE_BGS = ['antal', 'park', 'band', 'weekend']
+
 # smoelen
 SMOELEN_PHOTOS_PATH = 'smoelen'
 USER_PHOTOS_URL = 'http://karpenoktem.nl/fotos/?search_tag=%s'
@@ -76,6 +80,7 @@ MOD_UI_URI = '/mailman/admindb/%s'
 MOD_RENEW_INTERVAL = datetime.timedelta(0, 15*60)
 MOD_DESIRED_URI_PREFIX = 'https://www.karpenoktem.nl'
 MAILMAN_PATH = '/var/lib/mailman'
+MEDIAWIKI_PATH = '/srv/karpenoktem.nl/htdocs/mediawiki'
 MAILMAN_DEFAULT_OWNER = 'wortel@karpenoktem.nl'
 
 # db
@@ -95,6 +100,8 @@ USERNAME_CHARS = 'qwertyuiopasdfghjklzxcvbnm123456789-'
 
 POSTFIX_VIRTUAL_MAP = '/etc/postfix/virtual/kninfra_maps'
 INFRA_UID = 1002
+
+PHOTOS_DIR = '/var/fotos'
 
 # Debug settings
 # ############################################################

@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response
 from django.core.servers.basehttp import FileWrapper
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.template import RequestContext
 from django.conf import settings
 import mimetypes
 import os.path 
@@ -44,5 +45,6 @@ def homedir(request, root, subdir, path):
 				   os.path.isdir(os.path.join(p2, c)))
 					for c in sorted(l)],
 			 'subdir': subdir, 'root': original_root,
-			 'path': _p})
+			 'path': _p},
+                                context_instance=RequestContext(request))
 
