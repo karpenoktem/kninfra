@@ -163,6 +163,8 @@ def update_db(giedo):
                 logging.info("removing superfluous %s -> %s (%s)" % (
                         id2name[relkey[0]], id2name.get(relkey[2]),
                         id2name.get(relkey[1])))
+                Es.remove_relation(relkey[0], relkey[2], relkey[1], relkey[3],
+                                relkey[4])
 
 def _create_yeargroup(g, year, name, tags, groups, id2name):
         n = {'types': ['group','tag'],
