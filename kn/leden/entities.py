@@ -498,6 +498,22 @@ class Entity(SONWrapper):
         def as_primary_type(self):
                 return TYPE_MAP[self.type](self._data)
 
+        def update_study(self, study, institute, number, save=True):
+                """ Adds (study, institute, number) as new and primary. """
+                if 'studies' not in self._data:
+                        self._data['studies'] = []
+                studies = self._data['studies']
+                dt = now()
+                if studies:
+                        studies[0]['until'] = dt
+                studies.insert(0, {'study': _id(study),
+                                   'institute': _id(institute),
+                                   'number': number,
+                                   'from': dt,
+                                   'until': DT_MAX})
+                if save:
+                        self.save()
+
         def update_primary_email(self, new, save=True):
                 """ Adds @new as new and primary e-mail address. """
                 if 'emailAddresses' not in self._data:
