@@ -323,7 +323,14 @@ def relation_cmp_from(x, y):
         return cmp(DT_MIN if x['from'] is None else x['from'],
                    DT_MIN if y['from'] is None else y['from'])
 
-
+def remove_relation(who, _with, how,  _from, until):
+        if _from is None: _from = DT_MIN
+        if until is None: until = DT_MAX
+        rcol.remove({'who': _id(who),
+                     'with': _id(_with),
+                     'how': None if how is None else _id(how),
+                     'from': _from,
+                     'until': until})
 
 # Models
 # ###################################################################### 
