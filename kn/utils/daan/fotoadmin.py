@@ -16,8 +16,8 @@ def fotoadmin_create_event(daan, date, name, humanName):
         if os.path.isdir(path):
                 return {'error': 'Event already exists'}
         os.mkdir(path, 0775)
-        os.chown(path, pwd.getpwnam('root').pw_uid,
-                       pwd.getgrnam('kn').gr_gid)
+        os.chown(path, pwd.getpwnam('fotos').pw_uid,
+                       pwd.getgrnam('fotos').gr_gid)
         creds = settings.PHOTOS_MYSQL_CREDS
         dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
                                 db=creds[3])
