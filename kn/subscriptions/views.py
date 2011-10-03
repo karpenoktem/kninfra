@@ -136,7 +136,8 @@ def event_new(request):
                 if form.is_valid():
                         fd = form.cleaned_data
                         if not superuser and not request.user.is_related_with(
-                                                        fd['owner']):
+                                        fd['owner']) and \
+                                        not fd['owner'] == request.user:
                                 raise PermissionDenied
                         e = subscr_Es.Event({
                                 'date': date_to_dt(fd['date']),
