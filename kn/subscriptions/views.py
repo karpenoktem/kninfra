@@ -129,12 +129,14 @@ def api(request):
 
 @login_required
 def event_new(request):
-        AddEventForm = get_add_event_form(request.user)
+        superuser = 'secretariaat' in request.user.cached_groups_names
+        AddEventForm = get_add_event_form(request.user, superuser)
         if request.method == 'POST':
                 form = AddEventForm(request.POST)
                 if form.is_valid():
                         fd = form.cleaned_data
-                        if not request.user.is_related_with(fd['owner']):
+                        if not superuser and not request.user.is_related_with(
+                                                        fd['owner']):
                                 raise PermissionDenied
                         e = subscr_Es.Event({
                                 'date': date_to_dt(fd['date']),
