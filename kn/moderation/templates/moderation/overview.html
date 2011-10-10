@@ -37,6 +37,7 @@
 	{% if is_moderator %}
 	<td>
 		<form action="?" method="POST">
+                        {% csrf_token %}
 			<input type="hidden" name="toggle"
 						value="{{ l.name }}" />
 			<input type="submit"
@@ -49,6 +50,7 @@
 		</form>
 		{% if l.modmode %}
 		<form action="?" method="POST">
+                        {% csrf_token %}
 			<input type="hidden" name="renew"
 						value="{{ l.name }}" />
 			<input type="submit"

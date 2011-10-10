@@ -30,7 +30,9 @@ tot {{ r.until.date }}
 {% endif %})
 {% endif %}
 {% if r.may_end %}
-<form action="{% url relation-end _id=r.id %}" style="display:inline">
+<form action="{% url relation-end _id=r.id %}" style="display:inline"
+                method="post">
+{% csrf_token %}
 <input type="submit" value="be&euml;indig" />
 </form>
 {% endif %}
@@ -42,6 +44,7 @@ tot {{ r.until.date }}
 {% if may_add_related %}
 {% if related or object.is_user %}
 <form action="{% url relation-begin %}" method="post" style="display: inline">
+        {% csrf_token %}
         <input type="hidden" name="who" value="{{ object.id }}" />
         Voeg als
         <select name="how">
@@ -86,7 +89,9 @@ tot {{ r.until.date }}
 {% endif %})
 {% endif %}
 {% if r.may_end %}
-<form action="{% url relation-end _id=r.id %}" style="display:inline">
+<form action="{% url relation-end _id=r.id %}" style="display:inline"
+                method="post">
+{% csrf_token %}
 <input type="submit" value="be&euml;indig" />
 </form>
 {% endif %}

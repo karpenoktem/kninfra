@@ -201,8 +201,8 @@ def ik_chpasswd(request):
 	errl.extend(form.non_field_errors())
 	errstr = humanized_enum(errl) 
 	return render_to_response('leden/ik_chpasswd.html', 
-			{ 'form':form, 'errors':errstr, 
-				'user':request.user })
+			{ 'form':form, 'errors':errstr},
+			context_instance=RequestContext(request))
 
 def rauth(request):
 	""" An implementation of Jille Timmermans' rauth scheme """

@@ -8,10 +8,14 @@ $(function(){
         $.defaultText();
 });
 
+debit_api = function(data, cb) {
+        data.csrfmiddlewaretoken = "{{ csrf_token }}";
+        $.post("{% url api %}", data, cb, "json");
+};
+
 close_event = function() {
-        $.getJSON("{% url api %}", {
-                        'action': 'close-event',
-                        'id': '{{ object.id }}' },
+        debit_api({'action': 'close-event',
+                   'id': '{{ object.id }}' },
                         function(d) {
                 if(d.success) window.location.reload();
                 if(d.error) alert(d.error);
@@ -19,10 +23,9 @@ close_event = function() {
 };
 
 change_debit = function(id) {
-        $.getJSON("{% url api %}", {
-                        'action': 'change-debit',
-                        'id': id,
-                        'debit': prompt("Nieuw debet")},
+        debit_api({'action': 'change-debit',
+                   'id': id,
+                   'debit': prompt("Nieuw debet")},
                         function(d) {
                 if(d.success) window.location.reload();
                 if(d.error) alert(d.error);

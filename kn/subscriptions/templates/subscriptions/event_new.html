@@ -3,6 +3,7 @@
 {% block body %}
 <h1>Nieuwe activiteit</h1>
 <form method="post" action="?">
+        {% csrf_token %}
         <table>
         <tbody>
         {{ form.as_table }}

@@ -16,7 +16,8 @@
 {% endif %}
 <h1>{{ object.full_name }}</h1>
 {% if "secretariaat" in user.cached_groups_names %}
-<form method="port" action="{% url user-reset-password _id=object.id %}">
+<form method="post" action="{% url user-reset-password _id=object.id %}">
+{% csrf_token %}
 <input type="submit" value="stuur nieuw wachtwoord" />
 </form>
 {% endif %}{# "secretariaat" in user.cached_groups_names #}
