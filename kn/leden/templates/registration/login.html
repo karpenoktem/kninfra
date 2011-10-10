@@ -2,6 +2,22 @@
 
 {% load base %}
 {% block body %}
+<script type="text/javascript">
+$(function(){
+        $('#loginform').submit(function(){
+                var username = $('#id_username');
+                if (username.val() != username.val().toLowerCase()) {
+                        var orig = username.val();
+                        username.effect('shake', {}, 200, function() {
+                                username.effect('highlight', {color: 'red'}, 1000);
+                                username.val(orig.toLowerCase());
+                        });
+                        return false;
+                }
+                return true;
+        });
+});
+</script>
 {% if form.errors %}
 <div class="error">
 	Je gebruikersnaam en wachtwoord zijn fout.  Probeer eens opnieuw.
@@ -13,7 +29,7 @@ en wachtwoord.  Weet je die niet meer?  E-Mail even naar
 {% filter email %}webcie@karpenoktem.nl{% endfilter %}.
 </p>
 
-<form method="post" action=".">
+<form method="post" action="." id="loginform">
 	<table>
 		<tr><td>{{ form.username.label_tag }}</td>
 			<td>{{ form.username }}</td></tr>
