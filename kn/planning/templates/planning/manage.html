@@ -1,0 +1,27 @@
+{% extends "leden/base.html" %}
+{% load base %}
+
+{% block body %}
+{% for day in days %}
+<form method="post" action=".">
+	<table>
+		<tr>
+			<th>Shift</th>
+			<th>Wie</th>
+		</tr>
+{% for vacancy in day.vacancies %}
+		<tr>
+			<td>{{ vacancy.begin }} - {{ vacancy.end }}</td>
+			<td></td>
+		</tr>
+{% endfor %}
+		<tr>
+			<td colspan="2">
+				<input type="submit" value="Sla op" />
+			</td>
+		</tr>
+	</table>
+</form>
+{% endfor %}
+{{ block.super }}
+{% endblock %}
