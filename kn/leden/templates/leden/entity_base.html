@@ -102,6 +102,7 @@ tot {{ r.until.date }}
 {% if may_add_rrelated %}
 {% if rrelated or object.is_group %}
 <form action="{% url relation-begin %}" method="post" style="display: inline">
+        {% csrf_token %}
         <input type="hidden" name="with" value="{{ object.id }}" />
         Voeg
         <select name="who">
