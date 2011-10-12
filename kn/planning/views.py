@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.template import RequestContext
+from kn.leden.mongo import _id
 from kn.planning.forms import *
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
@@ -31,7 +32,7 @@ def planning_manage(request, poolname):
 			print days[day]['form'].cleaned_data
 			for vacancy in days[day]['vacancies']:
 				worker = request.POST['shift_%s' % vacancy._id]
-				vacancy.assignee_id = worker
+				vacancy.assignee_id = _id(worker)
 				vacancy.save()
 
 	print days

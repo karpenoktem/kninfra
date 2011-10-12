@@ -2,6 +2,7 @@ from kn.leden.mongo import  db, SONWrapper, son_property, _id
 
 import kn.leden.entities as Es
 from kn.leden.date import now
+import datetime
 
 wcol = db['planning_workers']
 pcol = db['planning_pools']
@@ -36,6 +37,10 @@ class Worker(SONWrapper):
 	def all_in_pool(cls, p):
 		for m in wcol.find({'pools':  _id(p)}):
 			yield cls.from_data(m)
+
+	@classmethod
+	def by_id(cls, id):
+		return cls.from_data(wcol.find_one({'_id':  _id(id)}))
 
 	def get_user(self):
 		return Es.by_id(self.user_id)
@@ -76,21 +81,23 @@ class Pool(SONWrapper):
 class Vacancy(SONWrapper):
 	formField = None
 
-	def __init__(self, data):
-		super(Vacancy, self).__init__(data, vcol)
-
-	@classmethod
-	def from_data(cls, data):
-		if data==None:
-			return None
-		return cls(data)
-
 	name = son_property(('name',))
 	date = son_property(('date',))
 	begin = son_property(('begin',))
 	end = son_property(('end',))
 	pool_id = son_property(('pool',))
 	assignee_id = son_property(('assignee',))
+	reminder_sent = son_property(('reminder_sent',))
+
+	def __init__(self, data):
+		super(Vacancy, self).__init__(data, vcol)
+		self.reminder_sent = False
+
+	@classmethod
+	def from_data(cls, data):
+		if data==None:
+			return None
+		return cls(data)
 
 	def get_assignee(self):
 		aid = self.assignee_id
@@ -122,6 +129,12 @@ class Vacancy(SONWrapper):
 	@classmethod
 	def all_in_pool(cls, p):
 		for v in vcol.find({'pool': _id(p)}):
+			yield cls.from_data(v)
+
+	@classmethod
+	def all_needing_reminder(cls):
+		dt = now() + datetime.timedelta(days=7)
+		for v in vcol.find({'reminder_sent': False, 'date': {'$lte': dt}}):
 			yield cls.from_data(v)
 
 
