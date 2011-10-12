@@ -14,21 +14,27 @@ def planning_manage(request, poolname):
 	workers = Worker.all_in_pool(pool)
 	days = dict()
 	for vacancy in upcoming_vacancies:
-		if not vacancy.date in days:
-			days[vacancy.date] = {'vacancies': list()}
-		days[vacancy.date]['vacancies'].append(vacancy)
+		date = vacancy.date.date().__str__()
+		if not date in days:
+			days[date] = {'vacancies': list()}
+		days[date]['vacancies'].append(vacancy)
 
 	for day in days:
 		posted = False
 		days[day]['vacancies'].sort(key=lambda v: v.begin)
 		if request.method == 'POST' and request.POST['date'] == day:
-			days[day]['form'] = ManagePlanningForm(request.POST)
+			days[day]['form'] = ManagePlanningForm(request.POST, vacancies=days[day]['vacancies'])
 			posted = True
 		else:
-			days[day]['form'] = ManagePlanningForm()
-		for vacancy in days[day]['vacancies']:
-			days[day]['form'].__setattr__('shift_%s' % vacancy._id, EntityChoiceField(label="Wie", choices=Es.users(), sort_choices=True))
+			days[day]['form'] = ManagePlanningForm(vacancies=days[day]['vacancies'])
 		if posted and days[day]['form'].is_valid():
-			print "XXX"
+			print days[day]['form'].cleaned_data
+			for vacancy in days[day]['vacancies']:
+				worker = request.POST['shift_%s' % vacancy._id]
+				worker = Es.by_id(worker)
+				print list(worker.names)
+				vacancy.assignee = worker
+				vacancy.save()
 
+	print days
 	return render_to_response('planning/manage.html', {'days': days}, context_instance=RequestContext(request))

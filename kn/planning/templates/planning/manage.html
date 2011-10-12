@@ -2,17 +2,20 @@
 {% load base %}
 
 {% block body %}
-{% for day in days %}
+{% for date, day in days.items %}
 <form method="post" action=".">
+	{% csrf_token %}
+	<input type="hidden" name="date" value="{{ date }}">
+	{{ day.form.non_field_errors }}
 	<table>
 		<tr>
-			<th>Shift</th>
+			<th>{{ date }}</th>
 			<th>Wie</th>
 		</tr>
 {% for vacancy in day.vacancies %}
 		<tr>
-			<td>{{ vacancy.begin }} - {{ vacancy.end }}</td>
-			<td></td>
+			<td>{{ vacancy.formField.label }}</td>
+			<td>{{ vacancy.formField }}</td>
 		</tr>
 {% endfor %}
 		<tr>
