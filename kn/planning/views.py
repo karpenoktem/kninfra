@@ -23,17 +23,15 @@ def planning_manage(request, poolname):
 		posted = False
 		days[day]['vacancies'].sort(key=lambda v: v.begin)
 		if request.method == 'POST' and request.POST['date'] == day:
-			days[day]['form'] = ManagePlanningForm(request.POST, vacancies=days[day]['vacancies'])
+			days[day]['form'] = ManagePlanningForm(request.POST, pool=pool, vacancies=days[day]['vacancies'])
 			posted = True
 		else:
-			days[day]['form'] = ManagePlanningForm(vacancies=days[day]['vacancies'])
+			days[day]['form'] = ManagePlanningForm(pool=pool, vacancies=days[day]['vacancies'])
 		if posted and days[day]['form'].is_valid():
 			print days[day]['form'].cleaned_data
 			for vacancy in days[day]['vacancies']:
 				worker = request.POST['shift_%s' % vacancy._id]
-				worker = Es.by_id(worker)
-				print list(worker.names)
-				vacancy.assignee = worker
+				vacancy.assignee_id = worker
 				vacancy.save()
 
 	print days

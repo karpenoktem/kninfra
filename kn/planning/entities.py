@@ -1,6 +1,7 @@
 from kn.leden.mongo import  db, SONWrapper, son_property, _id
 
 import kn.leden.entities as Es
+from kn.leden.date import now
 
 wcol = db['planning_workers']
 pcol = db['planning_pools']
@@ -41,6 +42,13 @@ class Worker(SONWrapper):
 	def set_user(self, x):
 		self.user_id = _id(x)
 	user = property(get_user, set_user)
+
+	@property
+	def is_active(self):
+		return self.is_active_at(now())
+
+	def is_active_at(self, dt):
+		return self.get_user().get_related(None, dt, dt, False, False, False).count() > 0
 
 
 class Pool(SONWrapper):
