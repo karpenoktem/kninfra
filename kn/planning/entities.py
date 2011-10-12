@@ -27,6 +27,11 @@ class Worker(SONWrapper):
 	user_id = son_property(('user',))
 
 	@classmethod
+	def all(cls):
+		for m in wcol.find():
+			yield cls.from_data(m)
+
+	@classmethod
 	def all_in_pool(cls, p):
 		for m in wcol.find({'pools':  _id(p)}):
 			yield cls.from_data(m)
