@@ -24,8 +24,11 @@ def get_add_event_form(user, superuser=False):
                         initial="Hallo %(firstName)s,\n\n"+
                                 "Je hebt je aangemeld voor %(eventName)s.\n"+
                                 "\n"+
+                                "Je opmerkingen waren:\n"+
+																"%(notes)s\n"+
+                                "\n"+
                                 "Met een vriendelijke groet,\n\n"+
-                                "   Iemand")
+                                "Karpe Noktems activiteitenadministratie")
                 cost = forms.DecimalField(label='Kosten')
                 date = forms.DateField(label='Datum')
                 owner = EntityChoiceField(label="Eigenaar", choices=choices)
