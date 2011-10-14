@@ -16,9 +16,10 @@ def planning_manage(request, poolname):
 		raise PermissionDenied
 	upcoming_vacancies = pool.vacancies()
 	workers = Worker.all_in_pool(pool)
+	# XXX groeperen op Event ipv op datum
 	days = dict()
 	for vacancy in upcoming_vacancies:
-		date = vacancy.date.date().__str__()
+		date = vacancy.event.date.date().__str__()
 		if not date in days:
 			days[date] = {'vacancies': list()}
 		days[date]['vacancies'].append(vacancy)

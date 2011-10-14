@@ -6,6 +6,7 @@ import datetime
 
 wcol = db['planning_workers']
 pcol = db['planning_pools']
+ecol = db['planning_events']
 vcol = db['planning_vacancies']
 
 
@@ -56,6 +57,31 @@ class Worker(SONWrapper):
 		return self.get_user().get_related(None, dt, dt, False, False, False).count() > 0
 
 
+class Event(SONWrapper):
+	def __init__(self, data):
+		super(Event, self).__init__(data, ecol)
+
+	@classmethod
+	def from_data(cls, data):
+		if data==None:
+			return None
+		return cls(data)
+
+	name = son_property(('name',))
+	date = son_property(('date',))
+
+	@classmethod
+	def all(cls):
+		for c in ecol.find():
+			yield cls.from_data(c)
+
+	@classmethod
+	def by_id(cls, id):
+		return cls.from_data(ecol.find_one({'_id': _id(id)}))
+
+	def vacancies(self):
+		return Vacancy.all_by_event(self)
+
 class Pool(SONWrapper):
 	def __init__(self, data):
 		super(Pool, self).__init__(data, pcol)
@@ -84,7 +110,7 @@ class Vacancy(SONWrapper):
 	formField = None
 
 	name = son_property(('name',))
-	date = son_property(('date',))
+	event_id = son_property(('event',))
 	begin = son_property(('begin',))
 	end = son_property(('end',))
 	pool_id = son_property(('pool',))
@@ -94,6 +120,12 @@ class Vacancy(SONWrapper):
 	def __init__(self, data):
 		super(Vacancy, self).__init__(data, vcol)
 		self.reminder_sent = False
+
+	def get_event(self):
+		return Event.by_id(self.event_id)
+	def set_event(self, x):
+		self.event_id = _id(x)
+	event = property(get_event, set_event)
 
 	@classmethod
 	def from_data(cls, data):
@@ -134,9 +166,17 @@ class Vacancy(SONWrapper):
 			yield cls.from_data(v)
 
 	@classmethod
+	def all_by_event(cls, e):
+		for v in vcol.find({'event': _id(e)}):
+			yield cls.from_data(v)
+
+	@classmethod
 	def all_needing_reminder(cls):
 		dt = now() + datetime.timedelta(days=7)
-		for v in vcol.find({'reminder_sent': False, 'date': {'$lte': dt}}):
+		events = list()
+		for e in ecol.find({'date': {'$lte': dt}}):
+			events.append(e)
+		for v in vcol.find({'reminder_sent': False, 'event': {'$in': events}}):
 			yield cls.from_data(v)
 
 
