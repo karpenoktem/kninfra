@@ -21,5 +21,6 @@ urlpatterns = patterns('',
 	url(r'^accounts/logout/$', auth.views.logout_then_login, name='logout'),
 	url(r'^accounts/rauth/$', 'kn.leden.views.rauth', name='rauth'),
 	(r'^moderatie/', include('kn.moderation.urls')),
-	(r'^planning/(?P<poolname>[^/]+)/', 'kn.planning.views.planning_manage'),
+	(r'^planning/$', 'kn.planning.views.planning_poollist'),
+	url(r'^planning/(?P<poolname>[^/]+)/$', 'kn.planning.views.planning_manage', name='planning_manage'),
 )

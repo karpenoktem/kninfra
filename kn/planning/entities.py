@@ -59,6 +59,7 @@ class Worker(SONWrapper):
 class Pool(SONWrapper):
 	def __init__(self, data):
 		super(Pool, self).__init__(data, pcol)
+
 	@classmethod
 	def from_data(cls, data):
 		if data==None:
@@ -66,6 +67,7 @@ class Pool(SONWrapper):
 		return cls(data)
 
 	name = son_property(('name',))
+	administrator = son_property(('administrator',))
 
 	@classmethod
 	def all(cls):
