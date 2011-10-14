@@ -1,0 +1,28 @@
+{% extends "leden/base.html" %}
+{% load base %}
+
+{% block body %}
+<table style="width: 100%">
+	<tr>
+{% for pool in pools %}
+		<th>{{ pool.name }}</th>
+{% endfor %}
+	</tr>
+{% for event in events %}
+	<tr>
+		<td colspan="{{ poolcount }}" style="text-align: center; font-weight: bold; border-bottom: 2px solid white">{{ event.name }} {{ event.date }}</td>
+	</tr>
+	<tr>
+{% for poolidx, vacancies in event.vacancies.items %}
+		<td style="vertical-align: top; text-align: center">
+{% for vacancy in vacancies %}
+		<b>{{ vacancy.begin_time }} - {{ vacancy.end_time }}</b><br>
+		{{ vacancy.assignee }}<br>
+{% endfor %}
+		</td>
+{% endfor %}
+	</tr>
+{% endfor %}
+</table>
+{{ block.super }}
+{% endblock %}

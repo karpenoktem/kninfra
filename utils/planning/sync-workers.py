@@ -17,7 +17,7 @@ for w in Worker.all():
 	workers[w.get_user()] = w
 
 dt = now()
-for type in ['tappers', 'bestuur', 'barco']:
+for type in ['tappers', 'bestuur', 'barco', 'draai']:
 	poolid = _id(pools[type])
 	group = Es.by_name(type)
 	relations = group.get_rrelated(None, dt, dt, True, None, None)

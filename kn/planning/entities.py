@@ -76,6 +76,11 @@ class Event(SONWrapper):
 			yield cls.from_data(c)
 
 	@classmethod
+	def all_in_future(cls):
+		for c in ecol.find({'date': {'$gte': now() - datetime.timedelta(days=1)}}):
+			yield cls.from_data(c)
+
+	@classmethod
 	def by_id(cls, id):
 		return cls.from_data(ecol.find_one({'_id': _id(id)}))
 

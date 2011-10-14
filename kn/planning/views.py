@@ -5,7 +5,37 @@ from kn.leden.mongo import _id
 from kn.planning.forms import *
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
-from kn.planning.entities import Pool, Worker, Vacancy
+from kn.planning.entities import Pool, Worker, Event, Vacancy
+
+@login_required
+def planning_view(request):
+	pools = list(Pool.all())
+	poolid2idx = dict()
+	i = 0
+	for pool in pools:
+		poolid2idx[pool._id] = i
+		i += 1
+	events = list()
+	for e in Event.all_in_future():
+		ei = {
+			'name': e.name,
+			'date': e.date.date().__str__(),
+			'vacancies': dict()
+		}
+		for idx in poolid2idx.values():
+			ei['vacancies'][idx] = list()
+		for v in e.vacancies():
+			ei['vacancies'][poolid2idx[v.pool_id]].append({
+				'begin_time': v.begin_time,
+				'end_time': v.end_time,
+				'assignee': v.assignee.get_user().humanName if v.assignee else "?"
+			})
+		for idx in poolid2idx.values():
+			ei['vacancies'][idx].sort()
+		events.append(ei)
+	events.sort(key=lambda x: x['date'])
+	print events
+	return render_to_response('planning/overview.html', {'events': events, 'pools': pools, 'poolcount': pools.__len__()}, context_instance=RequestContext(request))
 
 @login_required
 def planning_manage(request, poolname):
