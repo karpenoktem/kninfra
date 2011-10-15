@@ -59,6 +59,28 @@
         </dd>
 	{% endif %}
         {% if "secretariaat" in user.cached_groups_names %}
+	{% if object.telephones %}
+	<dt>Telefoonnummer</dt>
+        <dd>
+        <ul>
+        {% for t in object.telephones %}
+        <li>
+        {{ t.number }}
+        {% if t.from or t.until %}
+        ({% if t.from %}
+        van {{ t.from.date }}
+        {% endif %}
+        {% if t.until %}
+        tot {{ t.until.date }}
+        {% endif %})
+        {% endif %}
+        </li>
+        {% endfor %}{# t in object.telephones #}
+        </ul>
+        </dd>
+        {% endif %}{# object.telephones #}
+        {% endif %}{# "secretariaat" in user.cached_groups_names #}
+        {% if "secretariaat" in user.cached_groups_names %}
 	{% if object.addresses %}
 	<dt>Adres</dt>
         <dd>
