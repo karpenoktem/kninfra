@@ -14,6 +14,7 @@ ecol = db['entities']   # entities: users, group, tags, studies, ...
 rcol = db['relations']  # relations: "giedo is chairman of bestuur from
                         #             date A until date B"
 mcol = db['messages']   # message: used for old code
+ncol = db['notes']      # notes on entities by the secretaris
 
 def ensure_indices():
         """ Ensures that the indices we need on the collections are set """
@@ -31,6 +32,8 @@ def ensure_indices():
 			   ('from',-1)])
 	# messages
         mcol.ensure_index('entity')
+        # notes
+        ncol.ensure_index('on')
 
 
 # Basic functions to work with entities
@@ -551,6 +554,19 @@ class Entity(SONWrapper):
                 else:
                         return True
 
+        def add_note(self, what, by=None):
+                dt = now()
+                Note({'note': what,
+                      'on': self._id,
+                      'by': None if by is None else _id(by),
+                      'at': dt}).save()
+        def get_notes(self):
+                ds = ncol.find({'on': self._id})
+                lut = by_ids([d['by'] for d in ds if d['by'] is not None])
+                lut[None] = None
+                for d in ncol.find({'on': self._id}):
+                        yield Note(d, lut[d['by']])
+
         def __eq__(self, other):
                 if not isinstance(other, Entity):
                         return False
@@ -750,6 +766,27 @@ class Brand(Entity):
         @property
         def sofa_suffix(self):
                 return self._data.get('sofa_suffix', None)
+
+class Note(SONWrapper):
+        def __init__(self, data, prefetched_by=None):
+                super(Note, self).__init__(data, ncol)
+                self._cached_by = prefetched_by
+        @property
+        def at(self):
+                return self._data['at']
+        @property
+        def note(self):
+                return self._data['note']
+        @property
+        def by_id(self):
+                return self._data['by']
+        @property
+        def by(self):
+                if self._cached_by is not None:
+                        return self._cached_by
+                if self._data['by'] is None:
+                        return None
+                return by_id(self._data['by'])
 
 
 # List of type of entities
