@@ -662,12 +662,15 @@ class User(Entity):
                                 ids.add(s['study'])
                 lut = by_ids(tuple(ids))
                 for s in studies:
-                        yield {'from': None if s['from'] == DT_MIN
+                        tmp = {'from': None if s['from'] == DT_MIN
                                                 else s['from'],
                                'until': None if s['until'] == DT_MAX
                                                 else s['until'],
                                'study': lut.get(s['study']),
                                'institute': lut.get(s['institute'])}
+                        if 'number' in s:
+                                tmp['number'] = s['number']
+                        yield tmp
         @property
         def primary_study(self):
                 if self._primary_study==None:

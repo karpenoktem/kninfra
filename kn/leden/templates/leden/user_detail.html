@@ -40,6 +40,11 @@
                 >{{ s.study.humanName }}</a>
         op <a href="{{ s.institute.get_absolute_url }}"
                 >{{ s.institute.humanName}}</a>
+        {% if "secretariaat" in user.cached_groups_names %}
+        {% if s.number %}
+        studentnummer {{ s.number }}
+        {% endif %}
+        {% endif %}{# "secretariaat" in user.cached_groups_names #}
         {% if s.from or s.until %}
         ({% if s.from %}
         van {{ s.from.date }}
