@@ -58,6 +58,30 @@
         </ul>
         </dd>
 	{% endif %}
+        {% if "secretariaat" in user.cached_groups_names %}
+	{% if object.addresses %}
+	<dt>Adres</dt>
+        <dd>
+        <ul>
+        {% for a in object.addresses %}
+        <li>
+        <address>{{ a.street }} {{ a.number }}<br/>
+                {{ a.zip }} {{ a.city }}
+        </address>
+        {% if a.from or a.until %}
+        ({% if a.from %}
+        van {{ a.from.date }}
+        {% endif %}
+        {% if a.until %}
+        tot {{ a.until.date }}
+        {% endif %})
+        {% endif %}
+        </li>
+        {% endfor %}{# a in object.addresses #}
+        </ul>
+        </dd>
+        {% endif %}{# object.addresses #}
+        {% endif %}{# "secretariaat" in user.cached_groups_names #}
         {% if object.dateOfBirth %}
 	<dt>Geboortedatum</dt>
 	<dd>
