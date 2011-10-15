@@ -380,4 +380,11 @@ def note_add(request):
         if on is None:
                 raise Http404
         on.add_note(request.POST['note'], request.user)
+        email = EmailMessage(
+                "Nieuwe notitie",
+                "Door %s is de volgende notitie geplaatst op %s:\r\n\r\n%s" % (
+                        request.user.full_name, unicode(on.humanName),
+                        request.POST['note']),
+                'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
+                [Es.by_name('secretariaat').canonical_email]).send()
         return redirect_to_referer(request)
