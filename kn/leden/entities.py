@@ -653,6 +653,7 @@ class User(Entity):
 		return self._data['person']['family']
         @property
         def studies(self):
+                ret = []
                 ids = set()
                 studies = self._data.get('studies', ())
                 for s in studies:
@@ -670,7 +671,8 @@ class User(Entity):
                                'institute': lut.get(s['institute'])}
                         if 'number' in s:
                                 tmp['number'] = s['number']
-                        yield tmp
+                        ret.append(tmp)
+                return ret
         @property
         def primary_study(self):
                 if self._primary_study==None:
