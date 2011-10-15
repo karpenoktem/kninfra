@@ -54,5 +54,7 @@ urlpatterns = patterns('',
 	    views.relation_end, name='relation-end'),
 	url(r'^relaties/begin$',
 	    views.relation_begin, name='relation-begin'),
+	url(r'^noteer$',
+	    views.note_add, name='add-note'),
 )
 

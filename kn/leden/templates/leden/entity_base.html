@@ -147,4 +147,26 @@ tot {{ r.until.date }}
 {% endfor %}
 </ul>
 {% endif %}
+
+{% if "secretariaat" in user.cached_groups_names %}
+<h3>Notitites</h3>
+<ul>
+{% for n in object.get_notes %}
+<li>{{ n.at.date }}
+{% if n.by %}
+<a href="{{ n.by.get_absolute_url }}">{{ n.by.humanName }}</a>
+{% endif %}{# n.by #}
+<blockquote>{{ n.note }}</blockquote>
+</li>
+{% endfor %}{# n in object.get_notes #}
+</ul>
+<form method="post" action="{% url add-note %}">
+{% csrf_token %}
+<input type="hidden" name="on" value="{{ object.id }}" />
+<textarea name="note">
+</textarea><br/>
+<input type="submit" value="Voeg notitie toe" />
+</form>
+{% endif %}{# "secretariaat" in user.cached_groups_names #}
+
 {% endblock %}

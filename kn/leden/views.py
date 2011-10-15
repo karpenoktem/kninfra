@@ -369,3 +369,15 @@ def user_reset_password(request, _id):
         email.send()
         request.user.push_message("Wachtwoord gereset!")
         return redirect_to_referer(request)
+
+@login_required
+def note_add(request):
+        if not 'secretariaat' in request.user.cached_groups_names:
+                raise PermissionDenied
+        if 'on' not in request.POST or 'note' not in request.POST:
+                raise ValueError, "missing `on' or `note'"
+        on = Es.by_id(_id(request.POST['on']))
+        if on is None:
+                raise Http404
+        on.add_note(request.POST['note'], request.user)
+        return redirect_to_referer(request)
