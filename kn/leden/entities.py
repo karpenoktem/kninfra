@@ -652,6 +652,16 @@ class User(Entity):
 	def last_name(self):
 		return self._data['person']['family']
         @property
+        def telephones(self):
+                ret = []
+                for t in self._data.get('telephones', ()):
+                        ret.append({'from': None if t['from'] == DT_MIN
+                                                else t['from'],
+                                    'until': None if t['until'] == DT_MAX
+                                                else t['until'],
+                                    'number': t['number']})
+                return ret
+        @property
         def addresses(self):
                 ret = []
                 addresses = self._data.get('addresses', ())
