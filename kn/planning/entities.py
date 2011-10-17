@@ -1,5 +1,6 @@
 from kn.leden.mongo import  db, SONWrapper, son_property, _id
 
+from pymongo import DESCENDING
 import kn.leden.entities as Es
 from kn.leden.date import now
 import datetime
@@ -43,6 +44,10 @@ class Worker(SONWrapper):
 	def by_id(cls, id):
 		return cls.from_data(wcol.find_one({'_id':  _id(id)}))
 
+	@property
+	def id(self):
+		return self._id
+
 	def get_user(self):
 		return Es.by_id(self.user_id)
 	def set_user(self, x):
@@ -55,6 +60,11 @@ class Worker(SONWrapper):
 
 	def is_active_at(self, dt):
 		return self.get_user().get_related(None, dt, dt, False, False, False).count() > 0
+
+	def gather_last_shift(self):
+		self.last_shift = None
+		for v in vcol.find({'assignee': _id(self)}, sort=[('begin', DESCENDING)], limit=1):
+			self.last_shift = v
 
 
 class Event(SONWrapper):

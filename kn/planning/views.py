@@ -6,6 +6,10 @@ from kn.planning.forms import *
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from kn.planning.entities import Pool, Worker, Event, Vacancy
+from random import shuffle
+
+def planning_vacancy_worker_score(vacancy, worker):
+	return 50
 
 @login_required
 def planning_view(request):
@@ -71,6 +75,31 @@ def planning_manage(request, poolname):
 				else:
 					vacancy.assignee_id = _id(worker)
 				vacancy.save()
+
+	workers = list(Worker.all_in_pool(pool))
+	print "Workers:"
+	print workers
+	for worker in workers:
+		# XXX het is cooler de shift dichtstbijzijnd aan de vacancy te zoeken
+		# Stel dat iemand over een half-jaar al is ingepland dan is dat niet zo boeiend
+		# Terwijl hij nu geen enkele bardienst meer zou krijgen
+		worker.gather_last_shift()
+
+	for day in days:
+		for vacancy in days[day]['vacancies']:
+			print vacancy.event.date
+			vacancy.suggestions = list()
+			workers_by_score = dict()
+			for worker in workers:
+				score = planning_vacancy_worker_score(vacancy, worker)
+				if score not in workers_by_score:
+					workers_by_score[score] = list()
+				workers_by_score[score].append(worker)
+			for score, scorers in workers_by_score.items():
+				shuffle(scorers)
+				scorers.sort(key=lambda x: x.last_shift)
+				vacancy.suggestions.extend(scorers)
+			print vacancy.suggestions
 
 	return render_to_response('planning/manage.html', {'days': days}, context_instance=RequestContext(request))
 
