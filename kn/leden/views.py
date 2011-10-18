@@ -26,6 +26,7 @@ from hashlib import sha256
 from datetime import date
 import json
 import logging
+import Image
 
 import kn.leden.entities as Es
 
@@ -163,6 +164,23 @@ def _institute_detail(request, institute):
 	# TODO add followers in ctx
 	return render_to_response('leden/institute_detail.html', ctx,
 			context_instance=RequestContext(request))
+
+@login_required
+def ik_chsmoel(request):
+        if not 'secretariaat' in request.user.cached_groups_names:
+                raise PermissionDenied
+        if not 'id' in request.POST:
+                raise ValueError, "Missing `id' in POST"
+        if not 'smoel' in request.FILES:
+                raise ValueError, "Missing `smoel' in FILES"
+        user = Es.by_id(request.POST['id'])
+        img = Image.open(request.FILES['smoel'])
+        img = img.resize((settings.SMOELEN_WIDTH,
+                int(float(settings.SMOELEN_WIDTH) / img.size[0] * img.size[1])),
+                        Image.ANTIALIAS)
+        img.save(default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
+                        str(user.name)) + ".jpg", 'w'), "JPEG")
+        return redirect_to_referer(request)
 
 @login_required
 def user_smoel(request, name):
