@@ -18,11 +18,11 @@ def set_samba_map(cilia, _map):
 		config.append("")
 	group_config = join(config, "\n")
 	print group_config
-	with open("/etc/samba/groups.conf") as gc:
+	with open("/etc/samba/groups.conf", "w") as gc:
 		gc.write(group_config)
 	with open("/etc/samba/base.conf") as bc:
 		base = bf.read()
-	with open("/etc/samba/smb.conf") as fc:
+	with open("/etc/samba/smb.conf", "w") as fc:
 		gc.write(base)
 		gc.write(group_config)
 	# We could SIGHUP samba but it picks up new configurations each minute anyway
