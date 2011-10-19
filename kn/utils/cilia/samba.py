@@ -17,7 +17,6 @@ def set_samba_map(cilia, _map):
 		config.append("valid users = %s" % join(_map['groups'][g], ' '))
 		config.append("")
 	group_config = join(config, "\n")
-	print group_config
 	with open("/etc/samba/groups.conf", "w") as gc:
 		gc.write(group_config)
 	with open("/etc/samba/base.conf") as bc:
