@@ -56,6 +56,7 @@ def event_detail(request, name):
 				 event.mailBody % {
 					'firstName': request.user.first_name,
                                         'eventName': event.humanName,
+                                        'owner': event.owner.humanName,
                                         'notes': notes},
 				'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
 				[request.user.canonical_email],
