@@ -21,14 +21,14 @@ class Cilia(WhimDaemon):
 
         def handle(self, d):
                 if d['type'] == 'unix':
+                        with self.unix_lock:
+                                set_unix_map(self, d['map'])
                         # XXX decide where we will call this as this is a bit
                         # ugly
                         with self.samba_lock:
                                 set_samba_map(self, d['map'])
-                        with self.unix_lock:
-                                return set_unix_map(self, d['map'])
                 elif d['type'] == 'setpass':
-                        with self.samba_lock:
-                                return samba_setpass(self, d['user'], d['pass'])
                         with self.unix_lock:
-                                return unix_setpass(self, d['user'], d['pass'])
+                                unix_setpass(self, d['user'], d['pass'])
+                        with self.samba_lock:
+                                samba_setpass(self, d['user'], d['pass'])
