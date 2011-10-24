@@ -4,7 +4,7 @@ import datetime
 import cStringIO as StringIO
 
 def samba_setpass(cilia, user, password):
-	ph = subprocess.Popen(['smbpasswd', '-as', user],r
+	ph = subprocess.Popen(['smbpasswd', '-as', user],
                         stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT, close_fds=True)
 	(output, ) = ph.communicate("%s\n" % password)
