@@ -24,3 +24,15 @@ def change_password(user, old, new):
 
 def sync():
         get_giedo_connection().send({'type': 'sync'})
+
+def fotoadmin_create_event(date, name, humanName):
+        return get_giedo_connection().send({'type': 'fotoadmin-create-event',
+                'date': date,
+                'name': name,
+                'humanname': humanName})
+
+def fotoadmin_move_fotos(event, user, dir):
+        return get_giedo_connection().send({'type': 'fotoadmin-move-fotos',
+                'event': event,
+                'user': user,
+                'dir': dir})

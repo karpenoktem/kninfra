@@ -5,6 +5,7 @@ import grp
 import pwd
 import os
 import re
+import MySQLdb
 
 def fotoadmin_create_event(daan, date, name, humanName):
         if not re.match('^20\d{2}-\d{2}-\d{2}$', date):
@@ -12,12 +13,12 @@ def fotoadmin_create_event(daan, date, name, humanName):
         if not re.match('^[a-z0-9-]{3,64}$', name):
                 return {'error': 'Invalid name'}
         event = date + '-' + name
-        path = os.path.join(settings.PHOTO_DIR, event)
+        path = os.path.join(settings.PHOTOS_DIR, event)
         if os.path.isdir(path):
                 return {'error': 'Event already exists'}
         os.mkdir(path, 0775)
         os.chown(path, pwd.getpwnam('fotos').pw_uid,
-                       pwd.getgrnam('fotos').gr_gid)
+                       grp.getgrnam('fotos').gr_gid)
         creds = settings.PHOTOS_MYSQL_CREDS
         dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
                                 db=creds[3])
@@ -53,26 +54,29 @@ def fotoadmin_move_fotos(daan, event, user, directory):
         while os.path.isdir(target_path):
                 i += 1
                 target_path = base_target_path + str(i)
-        if subprocess.call(['mv', fotos_path, target_path]) != 0:
-                return {'error': 'mv failed'}
+        if subprocess.call(['cp', '-r', fotos_path, target_path]) != 0:
+                return {'error': 'cp -r failed'}
         if subprocess.call(['chown', '-R', 'fotos:fotos', target_path]) != 0:
                 return {'error': 'chown failed'}
-        if subprocess.call(['chmod', '644', 'fotos:fotos', target_path]) != 0:
+        if subprocess.call(['chmod', '-R', '644', target_path]) != 0:
                 return {'error': 'chmod failed'}
         if subprocess.call(['find', target_path, '-type', 'd', '-exec',
                         'chmod', '755', '{}', '+']) != 0:
                 return {'error': 'chmod (dirs) failed'}
         visibility = 'hidden'
+        creds = settings.PHOTOS_MYSQL_CREDS
         dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
                                 db=creds[3])
         c = dc.cursor()
         c.execute("SELECT visibility FROM fa_albums WHERE name=%s AND path=''",
                         (event,))
         row = c.fetchone()
-        if row and row['visibility' == 'hidden':
-                        visibility = 'world'
+        if row and row[0] == 'hidden':
+                visibility = 'world'
         c.execute("INSERT INTO fa_albums (name, path, visibility) "+
-                  "VALUE (%s, %s, %s)", (user, event, visibility))
+                  "VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE visibility=%s",
+                  (os.path.basename(target_path), event, visibility,
+                                                                visibility))
         c.execute("COMMIT;")
         c.close()
         dc.close()
