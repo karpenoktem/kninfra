@@ -1,0 +1,12 @@
+{% extends "leden/base.html" %}
+{% load base %}
+
+{% block body %}
+Planning overview
+<ul>
+{% for pool in pools %}
+<li><a href="{% url planning_manage pool.name %}">{{ pool.name }}</a> ({{ pool.administrator }})</li>
+{% endfor %}
+</ul>
+{{ block.super }}
+{% endblock %}

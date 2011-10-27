@@ -22,4 +22,5 @@ urlpatterns = patterns('',
 	url(r'^accounts/rauth/$', 'kn.leden.views.rauth', name='rauth'),
 	(r'^moderatie/', include('kn.moderation.urls')),
 	(r'^fotos/', include('kn.fotos.urls')),
+	(r'^planning/', include('kn.planning.urls')),
 )

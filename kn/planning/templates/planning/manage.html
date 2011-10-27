@@ -1,0 +1,50 @@
+{% extends "leden/base.html" %}
+{% load base %}
+
+{% block body %}
+<script type="text/javascript">
+	function set_select_by_id(fieldid, value) {
+		var el = document.getElementById(fieldid);
+		el.value = value;
+	}
+
+	function show_more_suggestions(id) {
+		var el = document.getElementById('more_'+ id);
+		el.style.display = 'inline';
+		el = document.getElementById('more_element_'+ id);
+		el.parentNode.removeChild(el);
+	}
+</script>
+{% for date, day in days.items %}
+<form method="post" action=".">
+	{% csrf_token %}
+	<input type="hidden" name="date" value="{{ date }}">
+	{{ day.form.non_field_errors }}
+	<table>
+		<tr>
+			<th>{{ date }}</th>
+			<th>Wie</th>
+		</tr>
+{% for vacancy in day.vacancies %}
+		<tr>
+			<td nowrap>{{ vacancy.formField.label }}</td>
+			<td>{{ vacancy.formField }}</td>
+			<td style="font-size: 10pt">
+{% for suggestion in vacancy.suggestions %}
+{% if forloop.counter == 5 %}<a href="javascript:show_more_suggestions('{{ vacancy.formField.name }}');" id="more_element_{{ vacancy.formField.name }}">more...</a><span style="display: none" id="more_{{ vacancy.formField.name }}">{% endif %}
+				<a href="javascript:set_select_by_id('id_{{ vacancy.formField.name }}', '{{ suggestion.id }}');">{{ suggestion.get_user.name }}</a>{% if not forloop.last %},{% endif %}
+{% if forloop.last and forloop.counter > 5 %}</span>{% endif %}
+{% endfor %}
+			</td>
+		</tr>
+{% endfor %}
+		<tr>
+			<td colspan="2">
+				<input type="submit" value="Sla op" />
+			</td>
+		</tr>
+	</table>
+</form>
+{% endfor %}
+{{ block.super }}
+{% endblock %}
