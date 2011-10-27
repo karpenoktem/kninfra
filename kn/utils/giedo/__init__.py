@@ -23,6 +23,7 @@ from kn.utils.giedo.wiki import generate_wiki_changes
 from kn.utils.giedo.forum import generate_forum_changes
 from kn.utils.giedo.unix import generate_unix_map
 from kn.utils.giedo.openvpn import create_openvpn_installer, create_openvpn_zip
+from kn.utils.giedo.siteagenda import update_site_agenda
 
 class Giedo(WhimDaemon):
         def __init__(self):
@@ -118,6 +119,8 @@ class Giedo(WhimDaemon):
                                         create_openvpn_installer(self, u)
                                 else:
                                         create_openvpn_zip(self, u)
+                        elif d['type'] == 'update-site-agenda':
+                                return update_site_agenda(self)
                         elif d['type'] in ['update-knsite', 'update-knfotos',
                                         'fotoadmin-create-event']:
                                 return self.daan.send(d)

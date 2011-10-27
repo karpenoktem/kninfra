@@ -1,14 +1,3 @@
-#!/bin/bash
+#!/bin/sh
 
-pushd /srv/karpenoktem.nl/htdocs/site > /dev/null
-
-TMP=`tempfile`
-
-python -Wignore::DeprecationWarning utils/fetch-agenda.py > $TMP
-if [ $? ] ; then
-        cp $TMP config.agenda.php
-fi
-
-rm -f $TMP
-
-popd > /dev/null
+echo '{"type":"update-site-agenda"}' | $HOME/bin/whim-client /var/run/infra/S-giedo
