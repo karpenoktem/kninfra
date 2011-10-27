@@ -27,8 +27,8 @@ for vacancy in vacancies:
 	msg = msgfmt % {
 		'firstName': to.first_name,
 		'date': vacancy.date.strftime('%A %m %B'),
-		'time': vacancy.begin_time
-	}
+		'time': vacancy.begin_time}
 	print msg
 	vacancy.reminder_sent = True
 #	vacancy.save()
+        # XXX this is unfinished?

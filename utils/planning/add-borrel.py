@@ -1,6 +1,7 @@
 import _import
-import datetime
+
 import sys
+import datetime
 
 import kn.leden.entities as Es
 from kn.settings import DT_MIN, DT_MAX
@@ -11,22 +12,24 @@ def hm2s(hours, minutes=0):
 	return (hours * 60 + minutes) * 60
 
 typePeriods = {
-	'tappers': [[hm2s(20, 30), hm2s(23), 'eerste dienst'], [hm2s(23), hm2s(25), 'tweede dienst'], [hm2s(25), hm2s(28), 'derde dienst']],
-	'bestuur': [[hm2s(20, 30), hm2s(24), 'openen'], [hm2s(24), hm2s(28), 'sluiten']],
-	'draai': [[hm2s(20, 45), hm2s(23), 'openen'], [hm2s(23), hm2s(24), 'prime-time'], [hm2s(24), hm2s(25), 'sluiten']],
-}
+	'tappers': [[hm2s(20, 30), hm2s(23), 'eerste dienst'],
+                [hm2s(23), hm2s(25), 'tweede dienst'],
+                [hm2s(25), hm2s(28), 'derde dienst']],
+	'bestuur': [[hm2s(20, 30), hm2s(24), 'openen'],
+                [hm2s(24), hm2s(28), 'sluiten']],
+	'draai': [[hm2s(20, 45), hm2s(23), 'openen'],
+                [hm2s(23), hm2s(24), 'prime-time'],
+                [hm2s(24), hm2s(25), 'sluiten']]}
 
 day = datetime.datetime.strptime(sys.argv[1], '%Y-%m-%d')
 
 e = Event({
 	'name': 'Borrel',
-	'date': day
-})
+	'date': day })
 e.save()
 
-for type, periods in typePeriods.items():
-	pool = Pool.by_name(type)
-
+for _type, periods in typePeriods.items():
+	pool = Pool.by_name(_type)
 	for period in periods:
 		v = Vacancy({
 			'name': period[2],

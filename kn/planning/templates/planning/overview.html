@@ -10,6 +10,7 @@
 	</tr>
 {% for event in events %}
 	<tr>
+                {# TODO move into stylesheet #}
 		<td colspan="{{ poolcount }}" style="text-align: center; font-weight: bold; border-bottom: 2px solid white">{{ event.name }} {{ event.date }}</td>
 	</tr>
 	<tr>

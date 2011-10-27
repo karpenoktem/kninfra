@@ -31,6 +31,5 @@ for type in ['tappers', 'bestuur', 'barco', 'draai']:
 			print '%s -> %s' % (gm['who'].name, type)
 			workers[gm['who']] = Worker({
 				'pools': [ poolid ],
-				'user': _id(gm['who'])
-			})
+				'user': _id(gm['who'])})
 			workers[gm['who']].save()

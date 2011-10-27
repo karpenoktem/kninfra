@@ -1,22 +1,28 @@
 from kn.leden.mongo import  db, SONWrapper, son_property, _id
-
-from pymongo import DESCENDING
 import kn.leden.entities as Es
 from kn.leden.date import now
+
 import datetime
+
+from pymongo import DESCENDING
 
 wcol = db['planning_workers']
 pcol = db['planning_pools']
 ecol = db['planning_events']
 vcol = db['planning_vacancies']
 
+# TODO save vacancies in events
 
 # ---
 def ensure_indices():
 	wcol.ensure_index('user')
 	wcol.ensure_index('pools')
 	vcol.ensure_index('pool')
+	vcol.ensure_index('begin')
+	vcol.ensure_index('event')
+	vcol.ensure_index((('reminder_sent',1), ('event',1)))
 	pcol.ensure_index('name')
+	ecol.ensure_index('date')
 
 
 class Worker(SONWrapper):
@@ -24,7 +30,7 @@ class Worker(SONWrapper):
 		super(Worker, self).__init__(data, wcol)
 	@classmethod
 	def from_data(cls, data):
-		if data==None:
+                if data is None:
 			return None
 		return cls(data)
 	pools = son_property(('pools',))
@@ -59,11 +65,14 @@ class Worker(SONWrapper):
 		return self.is_active_at(now())
 
 	def is_active_at(self, dt):
-		return self.get_user().get_related(None, dt, dt, False, False, False).count() > 0
+                # TODO ?!
+		return self.get_user().get_related(None, dt, dt, False,
+                                False, False).count() > 0
 
 	def gather_last_shift(self):
 		self.last_shift = None
-		for v in vcol.find({'assignee': _id(self)}, sort=[('begin', DESCENDING)], limit=1):
+		for v in vcol.find({'assignee': _id(self)},
+                                sort=[('begin', DESCENDING)], limit=1):
 			self.last_shift = v
 
 
@@ -73,7 +82,7 @@ class Event(SONWrapper):
 
 	@classmethod
 	def from_data(cls, data):
-		if data==None:
+                if data is None:
 			return None
 		return cls(data)
 
@@ -87,7 +96,8 @@ class Event(SONWrapper):
 
 	@classmethod
 	def all_in_future(cls):
-		for c in ecol.find({'date': {'$gte': now() - datetime.timedelta(days=1)}}):
+		for c in ecol.find({'date': 
+                                {'$gte': now() - datetime.timedelta(days=1)}}):
 			yield cls.from_data(c)
 
 	@classmethod
@@ -103,7 +113,7 @@ class Pool(SONWrapper):
 
 	@classmethod
 	def from_data(cls, data):
-		if data==None:
+                if data is None:
 			return None
 		return cls(data)
 
@@ -144,18 +154,18 @@ class Vacancy(SONWrapper):
 
 	@classmethod
 	def from_data(cls, data):
-		if data==None:
+                if data is None:
 			return None
 		return cls(data)
 
 	def get_assignee(self):
 		aid = self.assignee_id
-		if (aid==None):
+                if aid is None:
 			return None
 		return Worker.by_id(self.assignee_id)
 
 	def set_assignee(self, value):
-		if (value==None):
+                if value is None:
 			self.assignee_id = None
 		else:
 			self.assignee_id = _id(value)
@@ -191,7 +201,8 @@ class Vacancy(SONWrapper):
 		events = list()
 		for e in ecol.find({'date': {'$lte': dt}}):
 			events.append(e)
-		for v in vcol.find({'reminder_sent': False, 'event': {'$in': events}}):
+		for v in vcol.find({'reminder_sent': False,
+                                        'event': {'$in': events}}):
 			yield cls.from_data(v)
 
 
