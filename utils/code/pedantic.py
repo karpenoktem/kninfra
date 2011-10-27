@@ -45,10 +45,10 @@ def check_tabs(path):
 def check_stray_whitespace(path):
     try:
         with open(path) as f:
-            lines = map(lambda x: x[:-1], f.readlines())
+            lines = f.readlines()
     except IOError:
         return
-    stripped_lines = filter(lambda x: x.rstrip(), lines)
+    stripped_lines = map(lambda x: x.rstrip(), lines)
     if lines != stripped_lines:
         with open(path, 'w') as f:
             f.write("\n".join(stripped_lines))
@@ -94,9 +94,9 @@ def main(rpath):
                 continue
             if child.endswith('.py'):
                 #check_spaces(cpath)
-                #check_tabs(cpath)
+                check_tabs(cpath)
                 check_modeline(cpath)
-                #check_stray_whitespace(cpath)
+                check_stray_whitespace(cpath)
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
