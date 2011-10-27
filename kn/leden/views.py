@@ -2,7 +2,7 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from kn.base.text import humanized_enum
-from kn.leden.forms import ChangePasswordForm, AddUserForm
+from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
 from kn.leden.utils import find_name_for_user
 from kn.leden import giedo
 from kn.leden.mongo import _id
@@ -331,6 +331,32 @@ def secr_add_user(request):
             context_instance=RequestContext(request))
 
 @login_required
+def secr_add_group(request):
+    if 'wortel' not in request.user.cached_groups_names:
+        raise PermissionDenied
+    if request.method == 'POST':
+        form = AddGroupForm(request.POST)
+        if form.is_valid():
+            fd = form.cleaned_data
+            nm = fd['name']
+            g = Es.Group({
+                'types': ['group', 'tag'],
+                'names': [nm],
+                'humanNames': [{'name': nm,
+                    'human': fd['humanName'],
+                    'genitive_prefix': fd['genitive_prefix']}],
+                'tags': [_id(fd['parent'])]})
+            logging.info("Added group %s" % nm)
+            g.save()
+            giedo.sync()
+            request.user.push_message("Groep toegevoegd.")
+            return HttpResponseRedirect(reverse('group-by-name', args=(nm,)))
+    else:
+        form = AddGroupForm()
+    return render_to_response('leden/secr_add_group.html', {'form': form},
+            context_instance=RequestContext(request))
+
+@login_required
 def relation_end(request, _id):
     rel = Es.relation_by_id(_id)
     if rel is None:
@@ -410,6 +436,14 @@ def note_add(request):
         'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
         [Es.by_name('secretariaat').canonical_email]).send()
     return redirect_to_referer(request)
+
+@login_required
+def secr_update_site_agenda(request):
+        if 'secretariaat' not in request.user.cached_groups_names:
+                raise PermissionDenied
+        giedo.update_site_agenda()
+        request.user.push_message("Agenda geupdate!")
+        return redirect_to_referer(request)
 
 @login_required
 def ik_openvpn(request):
