@@ -414,29 +414,34 @@ def note_add(request):
 def ik_openvpn(request):
         password_incorrect = False
 	if 'want' in request.POST and 'password' in request.POST:
+                # TODO password versions
                 if request.user.check_password(request.POST['password']):
-                        giedo.change_password(str(request.user.name), request.POST['password'], request.POST['password'])
-                        giedo.openvpn_create(str(request.user.name), request.POST['want'])
-                        request.user.push_message(t % request.user.first_name)
+                        giedo.change_password(str(request.user.name),r
+                                        request.POST['password'],
+                                        request.POST['password'])
+                        giedo.openvpn_create(str(request.user.name),
+                                        request.POST['want'])
+                        request.user.push_message("Je verzoek wordt verwerkt. "+
+                                "Verwacht binnen 5 minuten een e-mail.")
                         return HttpResponseRedirect(reverse('smoelen-home'))
                 else:
                         password_incorrect = True
-
 	return render_to_response('leden/ik_openvpn.html',
                         {'password_incorrect': password_incorrect},
 			context_instance=RequestContext(request))
 
 @login_required
-def ik_openvpn_download(request, file):
-        m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', file)
-        m2 = re.match('^openvpn-config-([^.]+)\.zip$', file)
+def ik_openvpn_download(request, _file):
+        m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', _file)
+        m2 = re.match('^openvpn-config-([^.]+)\.zip$', _file)
         if not m1 and not m2:
                 raise Http404
         if m1 and m1.group(2) != str(request.user.name):
                 raise PermissionDenied
         if m2 and m2.group(1) != str(request.user.name):
                 raise PermissionDenied
-        p = path.join(settings.VPN_INSTALLER_STORAGE, file)
+        # TODO #55 Use storage properly
+        p = path.join(settings.VPN_INSTALLER_STORAGE, _file)
         if not path.exists(p):
                 raise Http404
         response = HttpResponse(FileWrapper(open(p)),
