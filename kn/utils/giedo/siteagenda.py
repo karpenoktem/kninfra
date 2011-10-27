@@ -104,12 +104,12 @@ def to_config_agenda_php(events):
 	return o.getvalue()
 
 def update_site_agenda(giedo):
-        events = retreive(default_cid)
-        php = to_config_agenda_php(events)
-        with open("/srv/karpenoktem.nl/htdocs/site/config.agenda.php", "w") \
-             as fh:
-                fh.write(php)
-        return {'success': True}
+    events = retreive(default_cid)
+    php = to_config_agenda_php(events)
+    with open("/srv/karpenoktem.nl/htdocs/site/config.agenda.php", "w") \
+         as fh:
+        fh.write(php)
+    return {'success': True}
 
 if __name__ == '__main__':
 	if len(sys.argv) >= 2: cid = sys.argv[1]

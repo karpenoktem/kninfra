@@ -17,9 +17,9 @@ for m in _users:
 i = 0
 while True:
 	i += 1
-        g = Es.by_name('leden%s' % i)
-        if g is None:
-                break
+    g = Es.by_name('leden%s' % i)
+    if g is None:
+        break
 	for m in g.get_members():
 		if str(m.name) in users:
 			users[str(m.name)].add(i)
@@ -27,12 +27,12 @@ nyears = i - 1
 N = 0
 
 for m, ys in users.iteritems():
-        N += 1
-        if N % 20 == 0:
-                print "%15s" % '',
-                for y in xrange(1, nyears + 1):
-                        print y,
-                print
+    N += 1
+    if N % 20 == 0:
+        print "%15s" % '',
+        for y in xrange(1, nyears + 1):
+            print y,
+        print
 	print "%15s" % m,
 	for y in xrange(1, nyears + 1):
 		print '*' if y in ys else ' ',

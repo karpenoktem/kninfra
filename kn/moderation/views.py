@@ -65,7 +65,7 @@ def _deactivate_mm(ml, name, user, record, moderators):
 	else:
 		EmailMessage(
 			"Moderatiemodus op %s is uitgezet door %s" % (name,
-                                                        str(user.name)),
+                            str(user.name)),
 			("De moderatiemodus op %s is uitgezet door %s.") % (
 				name, str(user.name)),
 			'<wortel@karpenoktem.nl>',
@@ -77,7 +77,7 @@ def _renew_mm(ml, name, user, record, moderators):
 	now = datetime.datetime.now()
 	until = now + settings.MOD_RENEW_INTERVAL
 	if record is None:
-                record = mod_Es.ModerationRecord({'list': name})
+        record = mod_Es.ModerationRecord({'list': name})
 	record.by = user
 	record.at = now
 	record.save()
@@ -100,7 +100,7 @@ def _activate_mm(ml, name, user, record, moderators):
 	now = datetime.datetime.now()
 	until = now + settings.MOD_RENEW_INTERVAL
 	if record is None:
-                record = mod_Es.ModerationRecord({'list':name})
+        record = mod_Es.ModerationRecord({'list':name})
 	record.by = user
 	record.at = now
 	record.save()
@@ -118,9 +118,9 @@ def _activate_mm(ml, name, user, record, moderators):
 def overview(request):
 	toggle_with_name = None
 	renew_with_name = None
-        moderators = Es.by_name(settings.MODERATORS_GROUP)
-        if (request.user.is_related_with(Es.by_name(
-                        settings.MODERATORS_GROUP))):
+    moderators = Es.by_name(settings.MODERATORS_GROUP)
+    if (request.user.is_related_with(Es.by_name(
+            settings.MODERATORS_GROUP))):
 		is_moderator = True
 		if request.method == 'POST':
 			if 'toggle' in request.POST:
@@ -131,7 +131,7 @@ def overview(request):
 		is_moderator = False
 	lists = []
 	for name in settings.MODED_MAILINGLISTS:
-                r = mod_Es.by_name(name)
+        r = mod_Es.by_name(name)
 		ml = Mailman.MailList.MailList(name, True)
 		try:
 			if toggle_with_name == name:

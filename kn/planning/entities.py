@@ -31,7 +31,7 @@ class Worker(SONWrapper):
 		super(Worker, self).__init__(data, wcol)
 	@classmethod
 	def from_data(cls, data):
-                if data is None:
+    if data is None:
 			return None
 		return cls(data)
 	pools = son_property(('pools',))
@@ -66,14 +66,14 @@ class Worker(SONWrapper):
 		return self.is_active_at(now())
 
 	def is_active_at(self, dt):
-                # TODO ?!
+    # TODO ?!
 		return self.get_user().get_related(None, dt, dt, False,
-                                False, False).count() > 0
+        False, False).count() > 0
 
 	def gather_last_shift(self):
 		self.last_shift = None
 		for v in vcol.find({'assignee': _id(self)},
-                                sort=[('begin', DESCENDING)], limit=1):
+        sort=[('begin', DESCENDING)], limit=1):
 			self.last_shift = v
 
 
@@ -83,7 +83,7 @@ class Event(SONWrapper):
 
 	@classmethod
 	def from_data(cls, data):
-                if data is None:
+    if data is None:
 			return None
 		return cls(data)
 
@@ -98,7 +98,7 @@ class Event(SONWrapper):
 	@classmethod
 	def all_in_future(cls):
 		for c in ecol.find({'date':
-                                {'$gte': now() - datetime.timedelta(days=1)}}):
+        {'$gte': now() - datetime.timedelta(days=1)}}):
 			yield cls.from_data(c)
 
 	@classmethod
@@ -114,7 +114,7 @@ class Pool(SONWrapper):
 
 	@classmethod
 	def from_data(cls, data):
-                if data is None:
+    if data is None:
 			return None
 		return cls(data)
 
@@ -155,18 +155,18 @@ class Vacancy(SONWrapper):
 
 	@classmethod
 	def from_data(cls, data):
-                if data is None:
+    if data is None:
 			return None
 		return cls(data)
 
 	def get_assignee(self):
 		aid = self.assignee_id
-                if aid is None:
+    if aid is None:
 			return None
 		return Worker.by_id(self.assignee_id)
 
 	def set_assignee(self, value):
-                if value is None:
+    if value is None:
 			self.assignee_id = None
 		else:
 			self.assignee_id = _id(value)
@@ -203,7 +203,7 @@ class Vacancy(SONWrapper):
 		for e in ecol.find({'date': {'$lte': dt}}):
 			events.append(e)
 		for v in vcol.find({'reminder_sent': False,
-                                        'event': {'$in': events}}):
+            'event': {'$in': events}}):
 			yield cls.from_data(v)
 
 

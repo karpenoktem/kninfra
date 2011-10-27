@@ -24,45 +24,45 @@ leden = Es.by_name('leden').get_members()
 leden_lut = {}
 comms_lut = {}
 for c in comms:
-        comms_lut[_id(c)] = c
+    comms_lut[_id(c)] = c
 for l in leden:
-        clut[l] = (DT_MAX, None)
-        llut[l] = DT_MAX
-        leden_lut[_id(l)] = l
+    clut[l] = (DT_MAX, None)
+    llut[l] = DT_MAX
+    leden_lut[_id(l)] = l
 
 for rel in Es.query_relations(who=leden, _with=Es.by_name('leden'), how=None):
-        w = leden_lut[rel['who']]
-        llut[w] = min(llut[w], rel['from'])
+    w = leden_lut[rel['who']]
+    llut[w] = min(llut[w], rel['from'])
 
 for rel in Es.query_relations(who=leden, _with=comms, how=None):
-        w = leden_lut[rel['who']]
-        if rel['from'] < clut[w][0]:
-                clut[w] = (rel['from'], comms_lut[rel['with']])
+    w = leden_lut[rel['who']]
+    if rel['from'] < clut[w][0]:
+        clut[w] = (rel['from'], comms_lut[rel['with']])
 
 had = set()
 for y in range(4,9):
-        print
-        print 'Jaar', y
-        nnever = 0
-        nalways = 0
-        navg = 0
-        avg_sum = datetime.timedelta(0)
-        for l in Es.by_name('leden'+str(y)).get_members():
-                if l not in llut:
-                        continue
-                if l in had:
-                        continue
-                had.add(l)
-                if clut[l][0] == DT_MIN:
-                        nalways += 1
-                        continue
-                if clut[l][0] == DT_MAX:
-                        nnever += 1
-                        continue
-                avg_sum += clut[l][0] - llut[l]
-                navg += 1
+    print
+    print 'Jaar', y
+    nnever = 0
+    nalways = 0
+    navg = 0
+    avg_sum = datetime.timedelta(0)
+    for l in Es.by_name('leden'+str(y)).get_members():
+        if l not in llut:
+            continue
+        if l in had:
+            continue
+        had.add(l)
+        if clut[l][0] == DT_MIN:
+            nalways += 1
+            continue
+        if clut[l][0] == DT_MAX:
+            nnever += 1
+            continue
+        avg_sum += clut[l][0] - llut[l]
+        navg += 1
 
-        print "Onbekend (actief)     %s" % nalways
-        print "Nooit actief geweest  %s" % nnever
-        print "Actief                %s" % navg
-        print "Actief gem. na        %s" % (avg_sum / navg)
+    print "Onbekend (actief)     %s" % nalways
+    print "Nooit actief geweest  %s" % nnever
+    print "Actief                %s" % navg
+    print "Actief gem. na        %s" % (avg_sum / navg)
