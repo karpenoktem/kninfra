@@ -467,20 +467,19 @@ def ik_openvpn(request):
             context_instance=RequestContext(request))
 
 @login_required
-def ik_openvpn_download(request, _file):
-    m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', _file)
-    m2 = re.match('^openvpn-config-([^.]+)\.zip$', _file)
+def ik_openvpn_download(request, filename):
+    m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', filename)
+    m2 = re.match('^openvpn-config-([^.]+)\.zip$', filename)
     if not m1 and not m2:
         raise Http404
     if m1 and m1.group(2) != str(request.user.name):
         raise PermissionDenied
     if m2 and m2.group(1) != str(request.user.name):
         raise PermissionDenied
-    # TODO #55 Use storage properly
-    p = path.join(settings.VPN_INSTALLER_STORAGE, _file)
-    if not path.exists(p):
+    p = path.join(settings.VPN_INSTALLER_PATH, filename)
+    if not default_storage.exists(p):
         raise Http404
-    response = HttpResponse(FileWrapper(open(p)),
-            mimetype=mimetypes.guess_type(p)[0])
-    response['Content-Length'] = path.getsize(p)
+    response = HttpResponse(FileWrapper(default_storage.open(p)),
+            mimetype=mimetypes.guess_type(default_storage.path(p))[0])
+    response['Content-Length'] = default_storage.size(p)
     return response
