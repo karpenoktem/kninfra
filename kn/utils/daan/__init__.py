@@ -13,7 +13,7 @@ from kn.utils.daan.mailman import apply_mailman_changes
 from kn.utils.daan.wiki import apply_wiki_changes, wiki_setpass
 from kn.utils.daan.forum import apply_forum_changes, forum_setpass
 from kn.utils.daan.live import live_update_knsite, live_update_knfotos
-from kn.utils.fotoadmin import fotoadmin_create_event, fotoadmin_move_fotos
+from kn.utils.daan.fotoadmin import fotoadmin_create_event, fotoadmin_move_fotos
 
 from kn import settings
 
@@ -63,5 +63,5 @@ class Daan(WhimDaemon):
                                                 d['name'], d['humanname'])
                 elif d['type'] == 'fotoadmin-move-fotos':
                         with self.fotoadmin_lock:
-                                return fotoadmin_move_fotos(d['event'],
+                                return fotoadmin_move_fotos(self, d['event'],
                                                 d['user'], d['dir'])
