@@ -11,6 +11,21 @@ import kn.leden.entities as Es
 from kn.leden.mongo import _id
 from kn.settings import DT_MIN, DT_MAX
 
+def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
+    """ Queries relations """
+    if who not in (None, -1):
+        who = Es.id_by_name(who)
+    if _with not in (None, -1):
+        _with = Es.id_by_name(_with)
+    if how not in (None, -1):
+        how = Es.ecol.find_one({'sofa_suffix': how})['_id']
+    if _from not in (None, -1):
+        _from = str_to_date(_from)
+    if until not in (None, -1):
+        until = str_to_date(until)
+    return list(Es.query_relations(who, _with, how, _from, until, True,
+                    True, True))
+
 def del_rel(who, _with, how):
     """ Removes a relation given by names.
 
