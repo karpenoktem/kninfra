@@ -82,7 +82,7 @@ def event_detail(request, name):
     if event.has_read_access(request.user) or \
             event.has_debit_access(request.user):
         subscrlist = tuple(event.get_subscriptions())
-            ctx.update({
+        ctx.update({
             'subscrlist': subscrlist,
             'subscrcount_debit': len([s for s in subscrlist
                             if s.debit != 0]),

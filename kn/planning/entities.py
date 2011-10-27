@@ -31,7 +31,7 @@ class Worker(SONWrapper):
         super(Worker, self).__init__(data, wcol)
     @classmethod
     def from_data(cls, data):
-    if data is None:
+        if data is None:
             return None
         return cls(data)
     pools = son_property(('pools',))
@@ -83,7 +83,7 @@ class Event(SONWrapper):
 
     @classmethod
     def from_data(cls, data):
-    if data is None:
+        if data is None:
             return None
         return cls(data)
 
@@ -98,7 +98,7 @@ class Event(SONWrapper):
     @classmethod
     def all_in_future(cls):
         for c in ecol.find({'date':
-        {'$gte': now() - datetime.timedelta(days=1)}}):
+                {'$gte': now() - datetime.timedelta(days=1)}}):
             yield cls.from_data(c)
 
     @classmethod
@@ -114,7 +114,7 @@ class Pool(SONWrapper):
 
     @classmethod
     def from_data(cls, data):
-    if data is None:
+        if data is None:
             return None
         return cls(data)
 
@@ -155,18 +155,18 @@ class Vacancy(SONWrapper):
 
     @classmethod
     def from_data(cls, data):
-    if data is None:
+        if data is None:
             return None
         return cls(data)
 
     def get_assignee(self):
         aid = self.assignee_id
-    if aid is None:
+        if aid is None:
             return None
         return Worker.by_id(self.assignee_id)
 
     def set_assignee(self, value):
-    if value is None:
+        if value is None:
             self.assignee_id = None
         else:
             self.assignee_id = _id(value)
