@@ -416,7 +416,7 @@ def ik_openvpn(request):
 	if 'want' in request.POST and 'password' in request.POST:
                 # TODO password versions
                 if request.user.check_password(request.POST['password']):
-                        giedo.change_password(str(request.user.name),r
+                        giedo.change_password(str(request.user.name),
                                         request.POST['password'],
                                         request.POST['password'])
                         giedo.openvpn_create(str(request.user.name),
