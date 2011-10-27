@@ -1,1 +1,1 @@
-/var/django/kn/repo/utils/_import.py
+../../_import.py
