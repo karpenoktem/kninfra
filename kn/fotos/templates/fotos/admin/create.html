@@ -2,95 +2,80 @@
 {% load base %}
 
 {% block body %}
-		<script type="text/javascript">
-			var lasttechname = '';
-			var lastfullname = '';
+<script type="text/javascript">
+        var lasttechname = '';
+        var lastfullname = '';
 
-			function createTechName() {
-				var hn = document.getElementById('id_humanName');
-				var tn = document.getElementById('id_name');
-				if(tn.value != lasttechname) {
-					lasttechname = '';
-					return;
-				}
+        function createTechName() {
+                var hn = document.getElementById('id_humanName');
+                var tn = document.getElementById('id_name');
+                if(tn.value != lasttechname) {
+                        lasttechname = '';
+                        return;
+                }
 
-				tn.value = hn.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
-				lasttechname = tn.value;
-			}
+                tn.value = hn.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                lasttechname = tn.value;
+        }
 
-			function createFullHumanname() {
-				var hn = document.getElementById('id_humanName');
-				var dt = document.getElementById('id_date');
-				var fn = document.getElementById('id_fullHumanName');
-				if(fn.value != lastfullname) {
-					lastfullname = '';
-					return;
-				}
+        function createFullHumanname() {
+                var hn = document.getElementById('id_humanName');
+                var dt = document.getElementById('id_date');
+                var fn = document.getElementById('id_fullHumanName');
+                if(fn.value != lastfullname) {
+                        lastfullname = '';
+                        return;
+                }
 
-				if(hn.value == '') {
-					fn.value = lastfullname = '';
-					return;
-				}
+                if(hn.value == '') {
+                        fn.value = lastfullname = '';
+                        return;
+                }
 
-				var d = new Date(dt.value);
-                                if(isNaN(d.getTime())) {
-					fn.value = lastfullname = '';
-                                        return;
-                                }
+                var d = new Date(dt.value);
+                if(isNaN(d.getTime())) {
+                        fn.value = lastfullname = '';
+                        return;
+                }
 
-				lastfullname = hn.value +' '+ d.getDate() +' ';
-				switch(d.getMonth()) {
-					case 0: lastfullname += 'jan'; break;
-					case 1: lastfullname += 'feb'; break;
-					case 2: lastfullname += 'mrt'; break;
-					case 3: lastfullname += 'apr'; break;
-					case 4: lastfullname += 'mei'; break;
-					case 5: lastfullname += 'jun'; break;
-					case 6: lastfullname += 'jul'; break;
-					case 7: lastfullname += 'aug'; break;
-					case 8: lastfullname += 'sep'; break;
-					case 9: lastfullname += 'okt'; break;
-					case 10: lastfullname += 'nov'; break;
-					case 11: lastfullname += 'dec'; break;
-				}
-				lastfullname += ' '+ d.getFullYear();
-				fn.value = lastfullname;
-			}
-		</script>
-		<p>
-			Hier kun je een map maken voor een nog niet bestaande activiteit.
-		</p>
-                {{ form.errors }}
-                <form method="POST">
-                {% csrf_token %}
-		<table style="width: 100%">
-			<tr>
-				<th colspan="2">Maak activiteit aan</th>
-			</tr>
-			<tr>
-                                <td>{{ form.humanName.label }}</td>
-                                <td>{{ form.humanName }}</td>
-			</tr>
-			<tr>
-                                <td>{{ form.date.label }}</td>
-                                <td>{{ form.date }}</td>
-			</tr>
-			<tr>
-                                <td>{{ form.name.label }}</td>
-                                <td>{{ form.name }}</td>
-			</tr>
-			<tr>
-                                <td>{{ form.fullHumanName.label }}</td>
-                                <td>{{ form.fullHumanName }}</td>
-			</tr>
-			<tr>
-				<td></td>
-                                <td><input type="submit" value="Maak activiteit"></td>
-			</tr>
-		</table>
-                </form>
-		Lijst van bestaande activiteiten:
-		<ul>
+                lastfullname = hn.value +' '+ d.getDate() +' ';
+                switch(d.getMonth()) {
+                        case 0: lastfullname += 'jan'; break;
+                        case 1: lastfullname += 'feb'; break;
+                        case 2: lastfullname += 'mrt'; break;
+                        case 3: lastfullname += 'apr'; break;
+                        case 4: lastfullname += 'mei'; break;
+                        case 5: lastfullname += 'jun'; break;
+                        case 6: lastfullname += 'jul'; break;
+                        case 7: lastfullname += 'aug'; break;
+                        case 8: lastfullname += 'sep'; break;
+                        case 9: lastfullname += 'okt'; break;
+                        case 10: lastfullname += 'nov'; break;
+                        case 11: lastfullname += 'dec'; break;
+                }
+                lastfullname += ' '+ d.getFullYear();
+                fn.value = lastfullname;
+        }
+</script>
+<p>
+        Hier kun je een map maken voor een nog niet bestaande activiteit.
+</p>
+{{ form.errors }}
+<form method="POST">
+{% csrf_token %}
+<table style="width: 100%">
+        <tr>
+                <th colspan="2">Maak activiteit aan</th>
+        </tr>
+        {{ form.as_table }}
+        <tr>
+                <td></td>
+                <td><input type="submit" value="Maak activiteit"></td>
+        </tr>
+</table>
+</form>
+Lijst van bestaande activiteiten:
+<ul>
 {% for dir in events %}
                         <li>{{ dir }}</li>
 {% endfor %}

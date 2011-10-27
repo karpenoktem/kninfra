@@ -98,14 +98,14 @@ class Giedo(WhimDaemon):
                                 self.cilia.send(d2)
                                 return {'success': True}
                         elif d['type'] == 'fotoadmin-move-fotos':
+                                # TODO should this block Giedo?
                                 ret = self.daan.send(d)
                                 if 'success' not in ret:
                                         return ret
                                 return self.cilia.send({
                                         'type': 'fotoadmin-remove-moved-fotos',
                                         'user': d['user'],
-                                        'dir': d['dir'],
-                                        })
+                                        'dir': d['dir']})
                         elif d['type'] in ['update-knsite', 'update-knfotos',
                                         'fotoadmin-create-event']:
                                 return self.daan.send(d)

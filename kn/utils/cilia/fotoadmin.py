@@ -1,8 +1,8 @@
 from kn import settings
-import logging
+
 import subprocess
-import re
 import os.path
+import re
 
 def fotoadmin_remove_moved_fotos(cilia, user, directory):
         if not re.match('^[a-z0-9]{3,32}$', user):
