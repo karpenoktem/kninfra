@@ -11,22 +11,22 @@ years = list()
 
 i = 1
 while True:
-	try:
-		g = OldKnGroup.objects.get(name='leden%s' % i)
-	except OldKnGroup.DoesNotExist:
-		break
-	years.append(frozenset(g.user_set.all()))
-	i += 1
+    try:
+        g = OldKnGroup.objects.get(name='leden%s' % i)
+    except OldKnGroup.DoesNotExist:
+        break
+    years.append(frozenset(g.user_set.all()))
+    i += 1
 
 firstnames = dict()
 for l in leden:
-	if not l.first_name in firstnames:
-		firstnames[l.first_name] = 0
-	firstnames[l.first_name] += 1
+    if not l.first_name in firstnames:
+        firstnames[l.first_name] = 0
+    firstnames[l.first_name] += 1
 
 for l in leden:
-	if l.username != l.first_name.lower() \
-			or firstnames[l.first_name] > 1:
-		memb = ' '.join(['*' if l in year else ' ' for year in years])
-		print "%-12s %-15s  %-20s %-20s" % (l.username, l.first_name,
-							l.last_name, memb)
+    if l.username != l.first_name.lower() \
+            or firstnames[l.first_name] > 1:
+        memb = ' '.join(['*' if l in year else ' ' for year in years])
+        print "%-12s %-15s  %-20s %-20s" % (l.username, l.first_name,
+                            l.last_name, memb)

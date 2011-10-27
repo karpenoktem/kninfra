@@ -10,6 +10,6 @@ from django.contrib.auth.decorators import login_required
 from kn.poll import views
 
 urlpatterns = patterns('',
-	url(r'^vote/(?P<name>[^/]+)/$',
-	    views.vote, name='poll-vote'),
+    url(r'^vote/(?P<name>[^/]+)/$',
+        views.vote, name='poll-vote'),
 )

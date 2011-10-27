@@ -12,9 +12,9 @@ ecol = db['events']
 scol = db['event_subscriptions']
 
 def ensure_indices():
-	ecol.ensure_index('name', unique=True)
-	ecol.ensure_index('owner')
-	ecol.ensure_index('date')
+    ecol.ensure_index('name', unique=True)
+    ecol.ensure_index('owner')
+    ecol.ensure_index('date')
     scol.ensure_index('user')
     scol.ensure_index('date')
     scol.ensure_index('event')
@@ -77,12 +77,12 @@ class Event(SONWrapper):
 
     is_open = son_property(('is_open',))
 
-	def __unicode__(self):
-		return unicode('%s (%s)' % (self.humanName, self.owner))
+    def __unicode__(self):
+        return unicode('%s (%s)' % (self.humanName, self.owner))
 
-	@permalink
-	def get_absolute_url(self):
-		return ('event-detail', (), {'name': self.name})
+    @permalink
+    def get_absolute_url(self):
+        return ('event-detail', (), {'name': self.name})
     def has_read_access(self, user):
         return  self.owner == user or \
             str(self.owner.name) in user.cached_groups_names or \
@@ -112,9 +112,9 @@ class Subscription(SONWrapper):
     def user(self):
         return Es.by_id(self._data['user'])
 
-	def __unicode__(self):
-		return unicode(u"%s for %s" % (self.user.humanName,
-						self.event.humanName))
+    def __unicode__(self):
+        return unicode(u"%s for %s" % (self.user.humanName,
+                        self.event.humanName))
     def get_debit(self):
         return decimal.Decimal(self._data['debit'])
     def set_debit(self, v):

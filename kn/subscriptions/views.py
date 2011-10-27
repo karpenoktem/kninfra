@@ -21,10 +21,10 @@ def event_list(request):
     events = tuple(subscr_Es.all_events())
     open_events = [e for e in reversed(events) if e.is_open]
     closed_events = [e for e in reversed(events) if not e.is_open]
-	return render_to_response('subscriptions/event_list.html',
+    return render_to_response('subscriptions/event_list.html',
             {'open_events': open_events,
              'closed_events': closed_events},
-			context_instance=RequestContext(request))
+            context_instance=RequestContext(request))
 
 
 @login_required
@@ -33,39 +33,39 @@ def event_detail(request, name):
     if event is None:
         raise Http404
     subscription = event.get_subscription_of(request.user)
-	if subscription is not None:
-		if subscription.debit > 0:
-			request.user.push_message((
-				"Je bent al aangemeld, maar moet nog wel %s"+
-				" euro betalen.") % subscription.debit)
-		else:
-			request.user.push_message("Je bent aangemeld!")
-	elif request.method == 'POST' and event.is_open:
+    if subscription is not None:
+        if subscription.debit > 0:
+            request.user.push_message((
+                "Je bent al aangemeld, maar moet nog wel %s"+
+                " euro betalen.") % subscription.debit)
+        else:
+            request.user.push_message("Je bent aangemeld!")
+    elif request.method == 'POST' and event.is_open:
         notes = request.POST['notes']
-		subscription = subscr_Es.Subscription({
+        subscription = subscr_Es.Subscription({
             'event': event._id,
             'user': request.user._id,
             'userNotes': notes,
             'date': datetime.datetime.now(),
             'debit': event.cost})
-		subscription.save()
-		full_owner_address = '%s <%s>' % (
-				event.owner.humanName,
-				event.owner.canonical_email)
-		email = EmailMessage(
-				"Aanmelding %s" % event.humanName,
-				 event.mailBody % {
-					'firstName': request.user.first_name,
+        subscription.save()
+        full_owner_address = '%s <%s>' % (
+                event.owner.humanName,
+                event.owner.canonical_email)
+        email = EmailMessage(
+                "Aanmelding %s" % event.humanName,
+                 event.mailBody % {
+                    'firstName': request.user.first_name,
                     'eventName': event.humanName,
                     'owner': event.owner.humanName,
                     'notes': notes},
-				'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-				[request.user.canonical_email],
-				[event.owner.canonical_email],
-				headers={
-					'Cc': full_owner_address,
-					'Reply-To': full_owner_address})
-		email.send()
+                'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
+                [request.user.canonical_email],
+                [event.owner.canonical_email],
+                headers={
+                    'Cc': full_owner_address,
+                    'Reply-To': full_owner_address})
+        email.send()
         if event.cost > 0:
             request.user.push_message(
                     "Je bent aangemeld en moet "+\
@@ -82,13 +82,13 @@ def event_detail(request, name):
     if event.has_read_access(request.user) or \
             event.has_debit_access(request.user):
         subscrlist = tuple(event.get_subscriptions())
-	        ctx.update({
+            ctx.update({
             'subscrlist': subscrlist,
             'subscrcount_debit': len([s for s in subscrlist
                             if s.debit != 0]),
             'subscrlist_count': len(subscrlist)})
-	return render_to_response('subscriptions/event_detail.html', ctx,
-			context_instance=RequestContext(request))
+    return render_to_response('subscriptions/event_detail.html', ctx,
+            context_instance=RequestContext(request))
 
 def _api_close_event(request):
     if not 'id' in request.REQUEST:
@@ -157,5 +157,5 @@ def event_new(request):
     else:
         form = AddEventForm()
     ctx = {'form': form}
-	return render_to_response('subscriptions/event_new.html', ctx,
-			context_instance=RequestContext(request))
+    return render_to_response('subscriptions/event_new.html', ctx,
+            context_instance=RequestContext(request))

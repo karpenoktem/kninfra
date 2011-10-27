@@ -12,7 +12,7 @@ def get_giedo_connection():
     return __GIEDO
 
 class ChangePasswordError(Exception):
-	pass
+    pass
 
 def change_password(user, old, new):
     giedo = get_giedo_connection()

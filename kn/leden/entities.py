@@ -20,18 +20,18 @@ ncol = db['notes']      # notes on entities by the secretaris
 def ensure_indices():
     """ Ensures that the indices we need on the collections are set """
     # entities
-	ecol.ensure_index('names', unique=True, sparse=True)
-	ecol.ensure_index('types')
-	ecol.ensure_index('tags', sparse=True)
-	ecol.ensure_index('humanNames.human')
+    ecol.ensure_index('names', unique=True, sparse=True)
+    ecol.ensure_index('types')
+    ecol.ensure_index('tags', sparse=True)
+    ecol.ensure_index('humanNames.human')
     # relations
-	rcol.ensure_index('how', sparse=True)
-	rcol.ensure_index('with')
-	rcol.ensure_index('who')
-	rcol.ensure_index('tags', spare=True)
-	rcol.ensure_index([('until',1),
-			   ('from',-1)])
-	# messages
+    rcol.ensure_index('how', sparse=True)
+    rcol.ensure_index('with')
+    rcol.ensure_index('who')
+    rcol.ensure_index('tags', spare=True)
+    rcol.ensure_index([('until',1),
+               ('from',-1)])
+    # messages
     mcol.ensure_index('entity')
     # notes
     ncol.ensure_index('on')
@@ -41,14 +41,14 @@ def ensure_indices():
 # ######################################################################
 def entity(d):
     """ Given a dictionary, returns an Entity object wrapping it """
-	if d is None:
-		return None
-	return TYPE_MAP[d['types'][0]](d)
+    if d is None:
+        return None
+    return TYPE_MAP[d['types'][0]](d)
 
 def of_type(t):
     """ Returns all entities of type @t """
-	for m in ecol.find({'types': t}):
-		yield TYPE_MAP[t](m)
+    for m in ecol.find({'types': t}):
+        yield TYPE_MAP[t](m)
 
 def of_type_by_name(t):
     """ Returns a `name -> entity' dictionary for the
@@ -122,16 +122,16 @@ def by_names(ns):
 
 def by_name(n):
     """ Finds an entity by name """
-	return entity(ecol.find_one({'names': n}))
+    return entity(ecol.find_one({'names': n}))
 
 def by_id(n):
     """ Finds an entity by id """
-	return entity(ecol.find_one({'_id': _id(n)}))
+    return entity(ecol.find_one({'_id': _id(n)}))
 
 def all():
     """ Finds all entities """
-	for m in ecol.find():
-		yield entity(m)
+    for m in ecol.find():
+        yield entity(m)
 
 def names_by_ids(ids=None):
     """ Returns an `_id => primary name' dictionary for entities with
@@ -266,8 +266,8 @@ def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
         when left on default, it will match all.
         when a tuple or list, it will match on any of those.
         when a single element, it will match that element.
-				The "from" and "until" should be datetime.datetime's and form an interval.
-				Only relations intersecting this interval are matched.
+                The "from" and "until" should be datetime.datetime's and form an interval.
+                Only relations intersecting this interval are matched.
     """
     query = {}
     if who != -1: query['who'] = who
@@ -340,46 +340,46 @@ def remove_relation(who, _with, how,  _from, until):
 # ######################################################################
 class EntityName(object):
     """ Wrapper object for a name of an entity """
-	def __init__(self, entity, name):
-		self._entity = entity
-		self._name = name
-	@property
-	def humanNames(self):
-		for n in self.entity._data.get('humanNames',()):
-			if n['name'] == self.name:
-				yield EntityHumanName(self._entity, n)
-	@property
-	def primary_humanName(self):
-		try:
-			return next(self.humanNames)
-		except StopIteration:
-			return None
-	def __str__(self):
-		return self._name
-	def __repr__(self):
-		return "<EntityName %s of %s>" % (self._name, self._entity)
+    def __init__(self, entity, name):
+        self._entity = entity
+        self._name = name
+    @property
+    def humanNames(self):
+        for n in self.entity._data.get('humanNames',()):
+            if n['name'] == self.name:
+                yield EntityHumanName(self._entity, n)
+    @property
+    def primary_humanName(self):
+        try:
+            return next(self.humanNames)
+        except StopIteration:
+            return None
+    def __str__(self):
+        return self._name
+    def __repr__(self):
+        return "<EntityName %s of %s>" % (self._name, self._entity)
 
 class EntityHumanName(object):
     """ Wrapper object for a humanName of an entity """
-	def __init__(self, entity, data):
-		self._entity = entity
-		self._data = data
-	@property
-	def name(self):
-		return EntityName(self._entity, self._data.get('name'))
-	@property
-	def humanName(self):
-		return self._data['human']
-	def __unicode__(self):
-		return self.humanName
-	def __repr__(self):
-		return "<EntityHumanName %s of %s>" % (
-				self._data, self._entity)
+    def __init__(self, entity, data):
+        self._entity = entity
+        self._data = data
+    @property
+    def name(self):
+        return EntityName(self._entity, self._data.get('name'))
+    @property
+    def humanName(self):
+        return self._data['human']
+    def __unicode__(self):
+        return self.humanName
+    def __repr__(self):
+        return "<EntityHumanName %s of %s>" % (
+                self._data, self._entity)
 
 class Entity(SONWrapper):
     """ Base object for every Entity """
-	def __init__(self, data):
-		super(Entity, self).__init__(data, ecol)
+    def __init__(self, data):
+        super(Entity, self).__init__(data, ecol)
     def is_related_with(self, whom, how=None):
         dt = now()
         how = None if how is None else _id(how)
@@ -411,41 +411,41 @@ class Entity(SONWrapper):
                     str(n) for n in g.names])
         return self.__groups_names_cache
 
-	def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
+    def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                 deref_with=True, deref_how=True):
         return query_relations(-1, self, how, _from, until, deref_who,
                 deref_with, deref_how)
 
-	def get_related(self, how=-1, _from=None, until=None, deref_who=True,
+    def get_related(self, how=-1, _from=None, until=None, deref_who=True,
                 deref_with=True, deref_how=True):
         return query_relations(self, -1, how, _from, until, deref_who,
                 deref_with, deref_how)
 
-	def get_tags(self):
-		for m in ecol.find({'_id': {'$in': self._data.get('tags', ())}}
-				).sort('humanNames.human', 1):
-			yield Tag(m)
+    def get_tags(self):
+        for m in ecol.find({'_id': {'$in': self._data.get('tags', ())}}
+                ).sort('humanNames.human', 1):
+            yield Tag(m)
 
-	@property
-	def type(self):
-		return self._data['types'][0]
-	@property
-	def id(self):
-		return str(self._id)
+    @property
+    def type(self):
+        return self._data['types'][0]
+    @property
+    def id(self):
+        return str(self._id)
     @property
     def tag_ids(self):
         return self._data.get('tags', ())
-	@property
-	def tags(self):
-		for m in ecol.find({'_id': {
+    @property
+    def tags(self):
+        for m in ecol.find({'_id': {
                 '$in': self._data.get('tags',())}}):
-			yield Tag(m)
-	@property
-	def names(self):
-		for n in self._data.get('names',()):
-			yield EntityName(self, n)
-	@property
-	def name(self):
+            yield Tag(m)
+    @property
+    def names(self):
+        for n in self._data.get('names',()):
+            yield EntityName(self, n)
+    @property
+    def name(self):
         nms = self._data.get('names', ())
         nm = nms[0] if len(nms) >= 1 else None
         return nm if nm is None else EntityName(self, nm)
@@ -456,28 +456,28 @@ class Entity(SONWrapper):
     def other_names(self):
         for n in self._data.get('names',())[1:]:
             yield EntityName(self, n)
-	@property
-	def humanNames(self):
-		for n in self._data.get('humanNames',()):
-			yield EntityHumanName(self, n)
-	@property
-	def humanName(self):
-		try:
-			return next(self.humanNames)
-		except StopIteration:
-			return None
-	@permalink
-	def get_absolute_url(self):
-		if self.name:
-			return ('entity-by-name', (),
-					{'name': self.name})
-		return ('entity-by-id', (), {'_id': self.id})
-	@property
-	def types(self):
-		return set(self._data['types'])
+    @property
+    def humanNames(self):
+        for n in self._data.get('humanNames',()):
+            yield EntityHumanName(self, n)
+    @property
+    def humanName(self):
+        try:
+            return next(self.humanNames)
+        except StopIteration:
+            return None
+    @permalink
+    def get_absolute_url(self):
+        if self.name:
+            return ('entity-by-name', (),
+                    {'name': self.name})
+        return ('entity-by-id', (), {'_id': self.id})
+    @property
+    def types(self):
+        return set(self._data['types'])
 
-	def __repr__(self):
-		return "<Entity %s (%s)>" % (self.id, self.type)
+    def __repr__(self):
+        return "<Entity %s (%s)>" % (self.id, self.type)
 
     @property
     def is_user(self): return 'user' in self._data['types']
@@ -492,12 +492,12 @@ class Entity(SONWrapper):
     @property
     def is_institute(self): return 'institute' in self._data['types']
 
-	def as_user(self): return User(self._data)
-	def as_group(self): return Group(self._data)
-	def as_brand(self): return Brand(self._data)
-	def as_tag(self): return Tag(self._data)
-	def as_study(self): return Study(self._data)
-	def as_institute(self): return Institute(self._data)
+    def as_user(self): return User(self._data)
+    def as_group(self): return Group(self._data)
+    def as_brand(self): return Brand(self._data)
+    def as_tag(self): return Tag(self._data)
+    def as_study(self): return Study(self._data)
+    def as_institute(self): return Institute(self._data)
 
     def as_primary_type(self):
         return TYPE_MAP[self.type](self._data)
@@ -580,12 +580,12 @@ class Entity(SONWrapper):
         return hash(self._id)
 
 class Group(Entity):
-	@permalink
-	def get_absolute_url(self):
-		if self.name:
-			return ('group-by-name', (),
-					{'name': self.name})
-		return ('group-by-id', (), {'_id': self.id})
+    @permalink
+    def get_absolute_url(self):
+        if self.name:
+            return ('group-by-name', (),
+                    {'name': self.name})
+        return ('group-by-id', (), {'_id': self.id})
     def get_current_and_old_members(self):
         dt = now()
         cur, _all = set(), set()
@@ -607,12 +607,12 @@ class User(Entity):
     def __init__(self, data):
         super(User,self).__init__(data)
         self._primary_study = None
-	@permalink
-	def get_absolute_url(self):
-		if self.name:
-			return ('user-by-name', (),
-					{'name': self.name})
-		return ('user-by-id', (), {'_id': self.id})
+    @permalink
+    def get_absolute_url(self):
+        if self.name:
+            return ('user-by-name', (),
+                    {'name': self.name})
+        return ('user-by-id', (), {'_id': self.id})
     def set_password(self, pwd, save=True):
         salt = pseudo_randstr()
         alg = 'sha1'
@@ -622,52 +622,52 @@ class User(Entity):
                 'hash': get_hexdigest(alg, salt, pwd)}
         if save:
             self.save()
-	def check_password(self, pwd):
+    def check_password(self, pwd):
         if self.password is None:
             return False
-		dg = get_hexdigest(self.password['algorithm'],
-				   self.password['salt'], pwd)
-		return dg == self.password['hash']
-	@property
-	def humanName(self):
-		return self.full_name
-	@property
-	def password(self):
-		return self._data.get('password', None)
-	@property
-	def is_active(self):
-		return self._data['is_active']
-	def is_authenticated(self):
-		# required by django's auth
-		return True
-	def push_message(self, msg):
-		mcol.insert({'entity': self._id,
-			     'data': msg})
-	def pop_messages(self):
-		msgs = list(mcol.find({'entity': self._id}))
-		mcol.remove({'_id': {'$in': [m['_id'] for m in msgs]}})
-		return [m['data'] for m in msgs]
-	get_and_delete_messages = pop_messages
-	@property
-	def primary_email(self):
-		# the primary email address is always the first one;
-		# we ignore the until field.
-		if len(self._data['emailAddresses'])==0:
-			return None
-		return self._data['emailAddresses'][0]['email']
-	@property
-	def full_name(self):
-		bits = self._data['person']['family'].split(',', 1)
-		if len(bits) == 1:
-			return self._data['person']['nick'] + ' ' \
-					+ self._data['person']['family']
-		return self._data['person']['nick'] + bits[1] + ' ' + bits[0]
-	@property
-	def first_name(self):
-		return self._data['person']['nick']
-	@property
-	def last_name(self):
-		return self._data['person']['family']
+        dg = get_hexdigest(self.password['algorithm'],
+                   self.password['salt'], pwd)
+        return dg == self.password['hash']
+    @property
+    def humanName(self):
+        return self.full_name
+    @property
+    def password(self):
+        return self._data.get('password', None)
+    @property
+    def is_active(self):
+        return self._data['is_active']
+    def is_authenticated(self):
+        # required by django's auth
+        return True
+    def push_message(self, msg):
+        mcol.insert({'entity': self._id,
+                 'data': msg})
+    def pop_messages(self):
+        msgs = list(mcol.find({'entity': self._id}))
+        mcol.remove({'_id': {'$in': [m['_id'] for m in msgs]}})
+        return [m['data'] for m in msgs]
+    get_and_delete_messages = pop_messages
+    @property
+    def primary_email(self):
+        # the primary email address is always the first one;
+        # we ignore the until field.
+        if len(self._data['emailAddresses'])==0:
+            return None
+        return self._data['emailAddresses'][0]['email']
+    @property
+    def full_name(self):
+        bits = self._data['person']['family'].split(',', 1)
+        if len(bits) == 1:
+            return self._data['person']['nick'] + ' ' \
+                    + self._data['person']['family']
+        return self._data['person']['nick'] + bits[1] + ' ' + bits[0]
+    @property
+    def first_name(self):
+        return self._data['person']['nick']
+    @property
+    def last_name(self):
+        return self._data['person']['family']
     @property
     def telephones(self):
         ret = []
@@ -733,30 +733,30 @@ class User(Entity):
             return True
 
 class Tag(Entity):
-	@permalink
-	def get_absolute_url(self):
-		if self.name:
-			return ('tag-by-name', (),
-					{'name': self.name})
-		return ('tag-by-id', (), {'_id': self.id})
-	def get_bearers(self):
-		return [entity(m) for m in ecol.find({
-				'tags': self._id})]
+    @permalink
+    def get_absolute_url(self):
+        if self.name:
+            return ('tag-by-name', (),
+                    {'name': self.name})
+        return ('tag-by-id', (), {'_id': self.id})
+    def get_bearers(self):
+        return [entity(m) for m in ecol.find({
+                'tags': self._id})]
 
 class Study(Entity):
-	@permalink
-	def get_absolute_url(self):
-		if self.name:
-			return ('study-by-name', (),
-					{'name': self.name})
-		return ('study-by-id', (), {'_id': self.id})
+    @permalink
+    def get_absolute_url(self):
+        if self.name:
+            return ('study-by-name', (),
+                    {'name': self.name})
+        return ('study-by-id', (), {'_id': self.id})
 class Institute(Entity):
-	@permalink
-	def get_absolute_url(self):
-		if self.name:
-			return ('institute-by-name', (),
-					{'name': self.name})
-		return ('institute-by-id', (), {'_id': self.id})
+    @permalink
+    def get_absolute_url(self):
+        if self.name:
+            return ('institute-by-name', (),
+                    {'name': self.name})
+        return ('institute-by-id', (), {'_id': self.id})
 class Brand(Entity):
     @permalink
     def get_absolute_url(self):
@@ -793,10 +793,10 @@ class Note(SONWrapper):
 # List of type of entities
 # ######################################################################
 TYPE_MAP = {
-	'group':        Group,
-	'user':         User,
-	'study':        Study,
-	'institute':    Institute,
-	'tag':          Tag,
-	'brand':        Brand
+    'group':        Group,
+    'user':         User,
+    'study':        Study,
+    'institute':    Institute,
+    'tag':          Tag,
+    'brand':        Brand
 }

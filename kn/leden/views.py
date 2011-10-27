@@ -38,68 +38,68 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def user_list(request, page):
-	pr = Paginator(Es.ecol.find({'types': 'user'}).sort(
-			'humanNames.human', 1), 20)
-	try:
-		p = pr.page(1 if page is None else page)
-	except EmptyPage:
-		raise Http404
-	return render_to_response('leden/user_list.html',
-			{'users': [Es.User(m) for m in p.object_list],
-			 'page_obj': p, 'paginator': pr},
-			context_instance=RequestContext(request))
+    pr = Paginator(Es.ecol.find({'types': 'user'}).sort(
+            'humanNames.human', 1), 20)
+    try:
+        p = pr.page(1 if page is None else page)
+    except EmptyPage:
+        raise Http404
+    return render_to_response('leden/user_list.html',
+            {'users': [Es.User(m) for m in p.object_list],
+             'page_obj': p, 'paginator': pr},
+            context_instance=RequestContext(request))
 
 @login_required
 def entity_detail(request, name=None, _id=None, type=None):
-	if name is not None:
-		e = Es.by_name(name)
-	else:
-		e = Es.by_id(_id)
-	if e is None:
-		raise Http404
-	if type and not type in e.types:
-		raise ValueError, "Entity is not a %s" % type
-	if not type:
-		type = e.type
-	if not type in Es.TYPE_MAP:
-		raise ValueError, "Unknown entity type"
-	return globals()['_'+type+'_detail'](request, getattr(e, 'as_'+type)())
+    if name is not None:
+        e = Es.by_name(name)
+    else:
+        e = Es.by_id(_id)
+    if e is None:
+        raise Http404
+    if type and not type in e.types:
+        raise ValueError, "Entity is not a %s" % type
+    if not type:
+        type = e.type
+    if not type in Es.TYPE_MAP:
+        raise ValueError, "Unknown entity type"
+    return globals()['_'+type+'_detail'](request, getattr(e, 'as_'+type)())
 
 def _entity_detail(request, e):
-	def _cmp(x,y):
-		r = Es.relation_cmp_until(y,x)
-		if r: return r
-		r = cmp(unicode(x['with'].humanName),
+    def _cmp(x,y):
+        r = Es.relation_cmp_until(y,x)
+        if r: return r
+        r = cmp(unicode(x['with'].humanName),
                 unicode(y['with'].humanName))
-		if r: return r
-		r = cmp(unicode(x['how'].humanName) if x['how'] else None,
-			unicode(y['how'].humanName) if y['how'] else None)
-		if r: return r
-		return Es.relation_cmp_from(x,y)
-	def _rcmp(x,y):
-		r = Es.relation_cmp_until(y,x)
-		if r: return r
-		r = cmp(unicode(x['how'].humanName) if x['how'] else None,
-			unicode(y['how'].humanName) if y['how'] else None)
-		if r: return r
-		r = cmp(unicode(x['who'].humanName),
+        if r: return r
+        r = cmp(unicode(x['how'].humanName) if x['how'] else None,
+            unicode(y['how'].humanName) if y['how'] else None)
+        if r: return r
+        return Es.relation_cmp_from(x,y)
+    def _rcmp(x,y):
+        r = Es.relation_cmp_until(y,x)
+        if r: return r
+        r = cmp(unicode(x['how'].humanName) if x['how'] else None,
+            unicode(y['how'].humanName) if y['how'] else None)
+        if r: return r
+        r = cmp(unicode(x['who'].humanName),
                 unicode(y['who'].humanName))
-		if r: return r
-		return Es.relation_cmp_from(x,y)
-	related = sorted(e.get_related(), cmp=_cmp)
-	rrelated = sorted(e.get_rrelated(), cmp=_rcmp)
+        if r: return r
+        return Es.relation_cmp_from(x,y)
+    related = sorted(e.get_related(), cmp=_cmp)
+    rrelated = sorted(e.get_rrelated(), cmp=_rcmp)
     for r in chain(related, rrelated):
         r['may_end'] = Es.user_may_end_relation(request.user, r)
         r['id'] = r['_id']
         r['until_year'] = (None if r['until'] is None else
                     Es.date_to_year(r['until']))
         r['virtual'] = Es.relation_is_virtual(r)
-	tags = [t.as_primary_type() for t in e.get_tags()]
-	ctx = {'related': related,
-	       'rrelated': rrelated,
+    tags = [t.as_primary_type() for t in e.get_tags()]
+    ctx = {'related': related,
+           'rrelated': rrelated,
            'now': now(),
-	       'tags': sorted(tags, Es.entity_cmp_humanName),
-	       'object': e}
+           'tags': sorted(tags, Es.entity_cmp_humanName),
+           'object': e}
     # Is request.user allowed to add (r)relations?
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):
@@ -119,36 +119,36 @@ def _entity_detail(request, e):
     return ctx
 
 def _user_detail(request, user):
-	hasPhoto = default_storage.exists('%s.jpg' %
-			path.join(settings.SMOELEN_PHOTOS_PATH,
-					str(user.name)))
-	ctx = _entity_detail(request, user)
-	ctx.update({'hasPhoto': hasPhoto,
+    hasPhoto = default_storage.exists('%s.jpg' %
+            path.join(settings.SMOELEN_PHOTOS_PATH,
+                    str(user.name)))
+    ctx = _entity_detail(request, user)
+    ctx.update({'hasPhoto': hasPhoto,
             'photosUrl': settings.USER_PHOTOS_URL % str(user.name)})
-	return render_to_response('leden/user_detail.html', ctx,
-			context_instance=RequestContext(request))
+    return render_to_response('leden/user_detail.html', ctx,
+            context_instance=RequestContext(request))
 
 def _group_detail(request, group):
-	ctx = _entity_detail(request, group)
-	return render_to_response('leden/group_detail.html', ctx,
-			context_instance=RequestContext(request))
+    ctx = _entity_detail(request, group)
+    return render_to_response('leden/group_detail.html', ctx,
+            context_instance=RequestContext(request))
 
 def _tag_detail(request, tag):
-	ctx = _entity_detail(request, tag)
-	return render_to_response('leden/tag_detail.html', ctx,
-			context_instance=RequestContext(request))
+    ctx = _entity_detail(request, tag)
+    return render_to_response('leden/tag_detail.html', ctx,
+            context_instance=RequestContext(request))
 def _brand_detail(request, brand):
     ctx = _entity_detail(request, brand)
-	def _cmp(x,y):
-		r = Es.relation_cmp_until(y,x)
-		if r: return r
-		r = cmp(unicode(x['with'].humanName),
+    def _cmp(x,y):
+        r = Es.relation_cmp_until(y,x)
+        if r: return r
+        r = cmp(unicode(x['with'].humanName),
                 unicode(y['with'].humanName))
-		if r: return r
-		r = cmp(unicode(x['who'].humanName),
+        if r: return r
+        r = cmp(unicode(x['who'].humanName),
                 unicode(y['who'].humanName))
-		if r: return r
-		return Es.relation_cmp_from(x,y)
+        if r: return r
+        return Es.relation_cmp_from(x,y)
     ctx['rels'] = sorted(Es.query_relations(how=brand, deref_who=True,
                 deref_with=True), cmp=_cmp)
     for r in ctx['rels']:
@@ -159,15 +159,15 @@ def _brand_detail(request, brand):
     return render_to_response('leden/brand_detail.html', ctx,
             context_instance=RequestContext(request))
 def _study_detail(request, study):
-	ctx = _entity_detail(request, study)
-	# TODO add followers in ctx
-	return render_to_response('leden/study_detail.html', ctx,
-			context_instance=RequestContext(request))
+    ctx = _entity_detail(request, study)
+    # TODO add followers in ctx
+    return render_to_response('leden/study_detail.html', ctx,
+            context_instance=RequestContext(request))
 def _institute_detail(request, institute):
-	ctx = _entity_detail(request, institute)
-	# TODO add followers in ctx
-	return render_to_response('leden/institute_detail.html', ctx,
-			context_instance=RequestContext(request))
+    ctx = _entity_detail(request, institute)
+    # TODO add followers in ctx
+    return render_to_response('leden/institute_detail.html', ctx,
+            context_instance=RequestContext(request))
 
 @login_required
 def ik_chsmoel(request):
@@ -188,72 +188,72 @@ def ik_chsmoel(request):
 
 @login_required
 def user_smoel(request, name):
-	user = Es.by_name(name)
-	if not user or not 'user' in user.types:
-		raise Http404
-	try:
-		img = default_storage.open(path.join(
-			settings.SMOELEN_PHOTOS_PATH,
-			str(user.name)) + ".jpg")
-	except IOError:
-		raise Http404
-	return HttpResponse(FileWrapper(img), mimetype="image/jpeg")
+    user = Es.by_name(name)
+    if not user or not 'user' in user.types:
+        raise Http404
+    try:
+        img = default_storage.open(path.join(
+            settings.SMOELEN_PHOTOS_PATH,
+            str(user.name)) + ".jpg")
+    except IOError:
+        raise Http404
+    return HttpResponse(FileWrapper(img), mimetype="image/jpeg")
 
 def _ik_chpasswd_handle_valid_form(request, form):
-	oldpw = form.cleaned_data['old_password']
-	newpw = form.cleaned_data['new_password']
-	giedo.change_password(str(request.user.name), oldpw, newpw)
-	t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."""
-	request.user.push_message(t % request.user.first_name)
-	return HttpResponseRedirect(reverse('smoelen-home'))
+    oldpw = form.cleaned_data['old_password']
+    newpw = form.cleaned_data['new_password']
+    giedo.change_password(str(request.user.name), oldpw, newpw)
+    t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."""
+    request.user.push_message(t % request.user.first_name)
+    return HttpResponseRedirect(reverse('smoelen-home'))
 
 @login_required
 def ik_chpasswd(request):
-	errl = []
-	if request.method == 'POST':
-		form = ChangePasswordForm(request.POST)
-		if form.is_valid():
-			try:
-				return _ik_chpasswd_handle_valid_form(request,
-						form)
-			except giedo.ChangePasswordError as e:
-				errl.extend(e.args)
-	else:
-		form = ChangePasswordForm()
-	errl.extend(form.non_field_errors())
-	errstr = humanized_enum(errl)
-	return render_to_response('leden/ik_chpasswd.html',
-			{ 'form':form, 'errors':errstr},
-			context_instance=RequestContext(request))
+    errl = []
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            try:
+                return _ik_chpasswd_handle_valid_form(request,
+                        form)
+            except giedo.ChangePasswordError as e:
+                errl.extend(e.args)
+    else:
+        form = ChangePasswordForm()
+    errl.extend(form.non_field_errors())
+    errstr = humanized_enum(errl)
+    return render_to_response('leden/ik_chpasswd.html',
+            { 'form':form, 'errors':errstr},
+            context_instance=RequestContext(request))
 
 def rauth(request):
-	""" An implementation of Jille Timmermans' rauth scheme """
-	if request.REQUEST.get('url') is None:
-		raise Http404
-	if (request.REQUEST.get('validate') is not None and
-			request.REQUEST.get('user') is not None):
-		token = sha256('%s|%s|%s|%s' % (
-			request.REQUEST['user'],
-			date.today(),
-			request.REQUEST['url'],
-			settings.SECRET_KEY)).hexdigest()
-		if request.REQUEST['validate'] == token:
-			return HttpResponse("OK")
-		return HttpResponse("INVALID")
-	if not request.user.is_authenticated():
-		# De replace() is een workaround voor
-		#	http://code.djangoproject.com/ticket/11457
-		return redirect_to_login('%s?url=%s' % (
-				reverse('rauth'),
-				request.REQUEST['url'].replace('/', '%2F')))
-	token = sha256('%s|%s|%s|%s' % (str(request.user.name),
-					date.today(),
-					request.REQUEST['url'],
-					settings.SECRET_KEY)).hexdigest()
-	return HttpResponseRedirect('%s%suser=%s&token=%s' % (
-		request.REQUEST['url'],
-		'?' if request.REQUEST['url'].find('?') == -1 else '&',
-		str(request.user.name), token))
+    """ An implementation of Jille Timmermans' rauth scheme """
+    if request.REQUEST.get('url') is None:
+        raise Http404
+    if (request.REQUEST.get('validate') is not None and
+            request.REQUEST.get('user') is not None):
+        token = sha256('%s|%s|%s|%s' % (
+            request.REQUEST['user'],
+            date.today(),
+            request.REQUEST['url'],
+            settings.SECRET_KEY)).hexdigest()
+        if request.REQUEST['validate'] == token:
+            return HttpResponse("OK")
+        return HttpResponse("INVALID")
+    if not request.user.is_authenticated():
+        # De replace() is een workaround voor
+        #   http://code.djangoproject.com/ticket/11457
+        return redirect_to_login('%s?url=%s' % (
+                reverse('rauth'),
+                request.REQUEST['url'].replace('/', '%2F')))
+    token = sha256('%s|%s|%s|%s' % (str(request.user.name),
+                    date.today(),
+                    request.REQUEST['url'],
+                    settings.SECRET_KEY)).hexdigest()
+    return HttpResponseRedirect('%s%suser=%s&token=%s' % (
+        request.REQUEST['url'],
+        '?' if request.REQUEST['url'].find('?') == -1 else '&',
+        str(request.user.name), token))
 
 def api_users(request):
     if not request.REQUEST['key'] in settings.ALLOWED_API_KEYS:
@@ -326,9 +326,9 @@ def secr_add_user(request):
                     args=(nm,)))
     else:
         form = AddUserForm()
-	return render_to_response('leden/secr_add_user.html',
+    return render_to_response('leden/secr_add_user.html',
             {'form': form},
-			context_instance=RequestContext(request))
+            context_instance=RequestContext(request))
 
 @login_required
 def relation_end(request, _id):
@@ -414,7 +414,7 @@ def note_add(request):
 @login_required
 def ik_openvpn(request):
     password_incorrect = False
-	if 'want' in request.POST and 'password' in request.POST:
+    if 'want' in request.POST and 'password' in request.POST:
         # TODO password versions
         if request.user.check_password(request.POST['password']):
             giedo.change_password(str(request.user.name),r
@@ -427,9 +427,9 @@ def ik_openvpn(request):
             return HttpResponseRedirect(reverse('smoelen-home'))
         else:
             password_incorrect = True
-	return render_to_response('leden/ik_openvpn.html',
+    return render_to_response('leden/ik_openvpn.html',
             {'password_incorrect': password_incorrect},
-			context_instance=RequestContext(request))
+            context_instance=RequestContext(request))
 
 @login_required
 def ik_openvpn_download(request, _file):

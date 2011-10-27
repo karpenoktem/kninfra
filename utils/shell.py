@@ -1,9 +1,9 @@
 # vim: et:sta:bs=2:sw=4:
 import _import
 try:
-	import Mailman.MailList
+    import Mailman.MailList
 except ImportError:
-	pass
+    pass
 
 import time
 import datetime
