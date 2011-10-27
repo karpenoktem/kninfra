@@ -2,7 +2,7 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from kn.base.text import humanized_enum
-from kn.leden.forms import ChangePasswordForm, AddUserForm
+from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
 from kn.leden.utils import find_name_for_user
 from kn.leden import giedo
 from kn.leden.mongo import _id
@@ -331,6 +331,32 @@ def secr_add_user(request):
             context_instance=RequestContext(request))
 
 @login_required
+def secr_add_group(request):
+    if 'wortel' not in request.user.cached_groups_names:
+        raise PermissionDenied
+    if request.method == 'POST':
+        form = AddGroupForm(request.POST)
+        if form.is_valid():
+            fd = form.cleaned_data
+            nm = fd['name']
+            g = Es.Group({
+                'types': ['group', 'tag'],
+                'names': [nm],
+                'humanNames': [{'name': nm,
+                    'human': fd['humanName'],
+                    'genitive_prefix': fd['genitive_prefix']}],
+                'tags': [_id(fd['parent'])]})
+            logging.info("Added group %s" % nm)
+            g.save()
+            giedo.sync()
+            request.user.push_message("Groep toegevoegd.")
+            return HttpResponseRedirect(reverse('group-by-name', args=(nm,)))
+    else:
+        form = AddGroupForm()
+    return render_to_response('leden/secr_add_group.html', {'form': form},
+            context_instance=RequestContext(request))
+
+@login_required
 def relation_end(request, _id):
     rel = Es.relation_by_id(_id)
     if rel is None:
@@ -412,6 +438,14 @@ def note_add(request):
     return redirect_to_referer(request)
 
 @login_required
+def secr_update_site_agenda(request):
+        if 'secretariaat' not in request.user.cached_groups_names:
+                raise PermissionDenied
+        giedo.update_site_agenda()
+        request.user.push_message("Agenda geupdate!")
+        return redirect_to_referer(request)
+
+@login_required
 def ik_openvpn(request):
     password_incorrect = False
     if 'want' in request.POST and 'password' in request.POST:
@@ -432,20 +466,19 @@ def ik_openvpn(request):
             context_instance=RequestContext(request))
 
 @login_required
-def ik_openvpn_download(request, _file):
-    m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', _file)
-    m2 = re.match('^openvpn-config-([^.]+)\.zip$', _file)
+def ik_openvpn_download(request, filename):
+    m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', filename)
+    m2 = re.match('^openvpn-config-([^.]+)\.zip$', filename)
     if not m1 and not m2:
         raise Http404
     if m1 and m1.group(2) != str(request.user.name):
         raise PermissionDenied
     if m2 and m2.group(1) != str(request.user.name):
         raise PermissionDenied
-    # TODO #55 Use storage properly
-    p = path.join(settings.VPN_INSTALLER_STORAGE, _file)
-    if not path.exists(p):
+    p = path.join(settings.VPN_INSTALLER_PATH, filename)
+    if not default_storage.exists(p):
         raise Http404
-    response = HttpResponse(FileWrapper(open(p)),
-            mimetype=mimetypes.guess_type(p)[0])
-    response['Content-Length'] = path.getsize(p)
+    response = HttpResponse(FileWrapper(default_storage.open(p)),
+            mimetype=mimetypes.guess_type(default_storage.path(p))[0])
+    response['Content-Length'] = default_storage.size(p)
     return response

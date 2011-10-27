@@ -113,7 +113,7 @@ PHOTOS_DIR = '/var/fotos'
 # ############################################################
 VPN_COMMONNAME_POSTFIX = '.vpn.karpenoktem.nl'
 VPN_KEYSTORE = '/home/infra/vpnkeys'
-VPN_INSTALLER_STORAGE = '/home/infra/storage/openvpn'
+VPN_INSTALLER_PATH = 'openvpn'
 VPN_INSTALLER_REPOS = '/home/infra/openvpn'
 
 # Debug settings
