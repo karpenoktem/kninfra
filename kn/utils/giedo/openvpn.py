@@ -26,15 +26,15 @@ def user_has_certificate(user):
     return os.path.isfile(os.path.join(settings.VPN_KEYSTORE,
         commonName + '.key'))
 
-def mail_result(user, _file):
+def mail_result(user, filename):
     msg = "Beste %s,\n\nOp\n  %s\nkun je je download vinden.\n\n" \
         "Karpe Noktems ledenadministratie"
     # TODO this crashes
-    # url = reverse('ik-openvpn-download', kwargs={'file': file})
-    url = 'http://karpenoktem.nl/smoelen/ik/openvpn/%s' % _file
+    # url = reverse('ik-openvpn-download', kwargs={'file': filename})
+    url = 'http://karpenoktem.nl/smoelen/ik/openvpn/%s' %_filename
     em = EmailMessage('OpenVPN', msg % (user.first_name, url),
                 to=[user.canonical_email])
-    # em.attach_file(os.path.join(settings.VPN_INSTALLER_STORAGE, file))
+    # em.attach_file(os.path.join(settings.VPN_INSTALLER_STORAGE, filename))
     em.send()
 
 def create_certificate(user):
@@ -68,8 +68,8 @@ def create_certificate(user):
 
 def create_openvpn_installer(giedo, user):
     # Remove old .exe's
-    for _file in glob('openvpn-install-*-%s.exe' % str(user.name)):
-        os.unlink(_file)
+    for filename in glob('openvpn-install-*-%s.exe' % str(user.name)):
+        os.unlink(filename)
     # Set up a clean export of the openvpn-installer-repos
     _dir = mkdtemp(prefix='openvpn-installer-')
     os.rmdir(_dir)
