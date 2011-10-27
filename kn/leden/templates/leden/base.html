@@ -13,10 +13,10 @@
 	>Commissies</a></li>
 </ul>
 <li><a href="{% url event-list %}">Activiteiten</a></li>
-{% if "secretariaat" in user.cached_groups_names %}
 <ul>
         <li><a href="{% url event-new  %}">Aanmaken</a></li>
 </ul>
+{% if "secretariaat" in user.cached_groups_names %}
 <li>Secretariaat</li>
 <ul>
         <li><a href="{% url secr-add-user  %}">Lid inschrijven</a></li>

@@ -139,8 +139,13 @@ def event_new(request):
             fd = form.cleaned_data
             if not superuser and not request.user.is_related_with(
                     fd['owner']) and \
-                    not fd['owner'] == request.user:
+                    not fd['owner'] == request.user.id:
                 raise PermissionDenied
+            name = fd['name']
+            # If not secretariaat, then prefix name with the username
+            prefix = str(request.user.name) + '-'
+            if not superuser and not name.startswith(prefix):
+                name = prefix + name
             e = subscr_Es.Event({
                 'date': date_to_dt(fd['date']),
                 'owner': _id(fd['owner']),
@@ -148,12 +153,19 @@ def event_new(request):
                 'mailBody': fd['mailBody'],
                 'humanName': fd['humanName'],
                 'createdBy': request.user._id,
-                'name': fd['name'],
+                'name': name,
                 'cost': str(fd['cost']),
                 'is_open': True})
             e.save()
-            return HttpResponseRedirect(reverse('event-detail',
-                        args=(e.name,)))
+            EmailMessage(
+                    "Activiteit %s aangemaakt door %s" % (fd['humanName'],
+                                            unicode(request.user.humanName)),
+                    "%s heeft een nieuwe activiteit aangemaakt:\n\n"\
+                    "    http://kn.cx%s" % (unicode(request.user.humanName),
+                            reverse('event-detail', args=(e.name,))),
+                    'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
+                    ['secretariaat@karpenoktem.nl']).send()
+            return HttpResponseRedirect(reverse('event-detail', args=(e.name,)))
     else:
         form = AddEventForm()
     ctx = {'form': form}
