@@ -1,12 +1,13 @@
+# vim: et:sta:bs=2:sw=4:
 import datetime
 
 # Base Django settings
 # ############################################################
 
 ADMINS = (
-	('Bas Westerbaan', 'bas@karpenoktem.nl'),
-	('Jille Timmermans', 'jille@karpenoktem.nl'),
-	('Bram Westerbaan', 'bramw@karpenoktem.nl'),
+    ('Bas Westerbaan', 'bas@karpenoktem.nl'),
+    ('Jille Timmermans', 'jille@karpenoktem.nl'),
+    ('Bram Westerbaan', 'bramw@karpenoktem.nl'),
 )
 
 DATABASES = {} # We do not use Django's DB abstraction
@@ -21,33 +22,33 @@ DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@karpenoktem.nl>'
 
 ROOT_URLCONF = 'kn.urls'
 TEMPLATE_LOADERS = (
-	'django.template.loaders.filesystem.load_template_source',
-	'django.template.loaders.app_directories.load_template_source',
+    'django.template.loaders.filesystem.load_template_source',
+    'django.template.loaders.app_directories.load_template_source',
 )
 MIDDLEWARE_CLASSES = (
-	'django.middleware.common.CommonMiddleware',
-	'django.contrib.sessions.middleware.SessionMiddleware',
-	'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
 )
 INSTALLED_APPS = (
-	'django.contrib.auth',
-	'django.contrib.contenttypes',
-	'django.contrib.sessions',
-	'kn.leden',
-	'kn.poll',
-	'kn.subscriptions',
-	'kn.browser',
-	'kn.reglementen',
-	'kn.base',
-	'kn.moderation',
-	'kn.fotos',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'kn.leden',
+    'kn.poll',
+    'kn.subscriptions',
+    'kn.browser',
+    'kn.reglementen',
+    'kn.base',
+    'kn.moderation',
+    'kn.fotos',
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
-	"django.core.context_processors.auth",
-	"django.core.context_processors.debug",
-	"django.core.context_processors.i18n",
-	"django.core.context_processors.media",
+    "django.core.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
         "django.contrib.messages.context_processors.messages",
         "kn.base.context_processors.bg",
 )

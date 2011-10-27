@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import datetime
 
 # TODO Cache this in a proper way

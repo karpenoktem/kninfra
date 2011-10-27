@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import _import
 
 from common import *
@@ -9,13 +10,13 @@ import sys
 import subprocess
 
 def main(username, photo):
-	user = OldKnUser.objects.get(username=username)
-	subprocess.call(['convert', '-resize', '200x', photo,
-			"jpg:%s.jpg" % (path.join(SMOELEN_PHOTOS_PATH,
-					user.username))])
+    user = OldKnUser.objects.get(username=username)
+    subprocess.call(['convert', '-resize', '200x', photo,
+            "jpg:%s.jpg" % (path.join(SMOELEN_PHOTOS_PATH,
+                    user.username))])
 
 if __name__ == '__main__':
-	if not len(sys.argv) == 3:
-		print "python set-photo.py <username> <path-to-photo>"
-		sys.exit(-1)
-	main(*sys.argv[1:3])
+    if not len(sys.argv) == 3:
+        print "python set-photo.py <username> <path-to-photo>"
+        sys.exit(-1)
+    main(*sys.argv[1:3])

@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from django.conf.urls.defaults import *
 
 # import django.views.generic.simple
@@ -7,8 +8,8 @@ from django.conf.urls.defaults import *
 from kn.planning import views
 
 urlpatterns = patterns('',
-	(r'^$', views.planning_view),
-	(r'^manage/$', views.planning_poollist),
-	url(r'^manage/(?P<poolname>[^/]+)/$', views.planning_manage,
+    (r'^$', views.planning_view),
+    (r'^manage/$', views.planning_poollist),
+    url(r'^manage/(?P<poolname>[^/]+)/$', views.planning_manage,
                         name='planning_manage'),
 )

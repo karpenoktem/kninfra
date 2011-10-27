@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import _import
 import datetime
 import sys
@@ -20,15 +21,15 @@ De BarCo"""
 
 vacancies = Vacancy.all_needing_reminder()
 for vacancy in vacancies:
-	if vacancy.assignee:
-		to = vacancy.assignee.get_user()
-	else: 
-		to = Es.by_name('jesper2')
-	msg = msgfmt % {
-		'firstName': to.first_name,
-		'date': vacancy.date.strftime('%A %m %B'),
-		'time': vacancy.begin_time}
-	print msg
-	vacancy.reminder_sent = True
-#	vacancy.save()
+    if vacancy.assignee:
+        to = vacancy.assignee.get_user()
+    else:
+        to = Es.by_name('jesper2')
+    msg = msgfmt % {
+        'firstName': to.first_name,
+        'date': vacancy.date.strftime('%A %m %B'),
+        'time': vacancy.begin_time}
+    print msg
+    vacancy.reminder_sent = True
+#   vacancy.save()
         # XXX this is unfinished?

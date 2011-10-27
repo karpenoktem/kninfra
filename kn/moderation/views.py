@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import os
 import sys
 import os.path
@@ -22,143 +23,143 @@ from Mailman import mm_cfg
 
 @login_required
 def redirect(request, name):
-	if not request.build_absolute_uri().startswith(
-			settings.MOD_DESIRED_URI_PREFIX):
-		return HttpResponseRedirect(settings.MOD_DESIRED_URI_PREFIX +
-						request.get_full_path())
-	name = str(name)
-	if (request.user.groups.filter(
-			name=settings.MODERATORS_GROUP).count() == 0):
-		return HttpReponse("Access denied")
-	if not name in settings.MODED_MAILINGLISTS:
-		raise Http404
-	ml = Mailman.MailList.MailList(name, True)
-	try:
-		if ml.mod_password is None:
-			ml.mod_password = Mailman.Utils.sha_new(
-					os.urandom(10)).hexdigest()
-			ml.Save()
-		c = ml.MakeCookie(mm_cfg.AuthListModerator)
-	finally:
-		ml.Unlock()
-	bits = str(c).split(': ')
-	r =  HttpResponseRedirect(settings.MOD_UI_URI % name)
-	r[str(bits[0])] = str(bits[1])
-	return r
+    if not request.build_absolute_uri().startswith(
+            settings.MOD_DESIRED_URI_PREFIX):
+        return HttpResponseRedirect(settings.MOD_DESIRED_URI_PREFIX +
+                        request.get_full_path())
+    name = str(name)
+    if (request.user.groups.filter(
+            name=settings.MODERATORS_GROUP).count() == 0):
+        return HttpReponse("Access denied")
+    if not name in settings.MODED_MAILINGLISTS:
+        raise Http404
+    ml = Mailman.MailList.MailList(name, True)
+    try:
+        if ml.mod_password is None:
+            ml.mod_password = Mailman.Utils.sha_new(
+                    os.urandom(10)).hexdigest()
+            ml.Save()
+        c = ml.MakeCookie(mm_cfg.AuthListModerator)
+    finally:
+        ml.Unlock()
+    bits = str(c).split(': ')
+    r =  HttpResponseRedirect(settings.MOD_UI_URI % name)
+    r[str(bits[0])] = str(bits[1])
+    return r
 
 def _deactivate_mm(ml, name, user, record, moderators):
-	if not ml.emergency:
-		return
-	ml.emergency = False
-	if not record is None:
-		record.delete()
-	for id in ml.GetHeldMessageIds():
-		ml.HandleRequest(id, mm_cfg.APPROVE)
-	ml.Save()
-	if user is None:
-		EmailMessage(
-			"Moderatiemodus op %s is verlopen" % name,
-			("De moderatiemodus op %s is verlopen.") % name,
-			'<wortel@karpenoktem.nl>',
-			[moderators.canonical_email]).send()
-	else:
-		EmailMessage(
-			"Moderatiemodus op %s is uitgezet door %s" % (name,
-                                                        str(user.name)),
-			("De moderatiemodus op %s is uitgezet door %s.") % (
-				name, str(user.name)),
-			'<wortel@karpenoktem.nl>',
-			[moderators.canonical_email]).send()
+    if not ml.emergency:
+        return
+    ml.emergency = False
+    if not record is None:
+        record.delete()
+    for id in ml.GetHeldMessageIds():
+        ml.HandleRequest(id, mm_cfg.APPROVE)
+    ml.Save()
+    if user is None:
+        EmailMessage(
+            "Moderatiemodus op %s is verlopen" % name,
+            ("De moderatiemodus op %s is verlopen.") % name,
+            '<wortel@karpenoktem.nl>',
+            [moderators.canonical_email]).send()
+    else:
+        EmailMessage(
+            "Moderatiemodus op %s is uitgezet door %s" % (name,
+                            str(user.name)),
+            ("De moderatiemodus op %s is uitgezet door %s.") % (
+                name, str(user.name)),
+            '<wortel@karpenoktem.nl>',
+            [moderators.canonical_email]).send()
 
 def _renew_mm(ml, name, user, record, moderators):
-	if not ml.emergency:
-		return
-	now = datetime.datetime.now()
-	until = now + settings.MOD_RENEW_INTERVAL
-	if record is None:
-                record = mod_Es.ModerationRecord({'list': name})
-	record.by = user
-	record.at = now
-	record.save()
-	EmailMessage(
-		"Moderatiemodus op %s is verlengd door %s" % (name,
-							str(user.name)),
-		("De moderatiemodus op %s is verlengd door %s.  Deze loopt, "+
-		 "indien niet verder verlengd, af om %s.") % (
-			name, str(user.name), until.time()),
-		'<wortel@karpenoktem.nl>',
-		[moderators.canonical_email]).send()
-	return record
+    if not ml.emergency:
+        return
+    now = datetime.datetime.now()
+    until = now + settings.MOD_RENEW_INTERVAL
+    if record is None:
+        record = mod_Es.ModerationRecord({'list': name})
+    record.by = user
+    record.at = now
+    record.save()
+    EmailMessage(
+        "Moderatiemodus op %s is verlengd door %s" % (name,
+                            str(user.name)),
+        ("De moderatiemodus op %s is verlengd door %s.  Deze loopt, "+
+         "indien niet verder verlengd, af om %s.") % (
+            name, str(user.name), until.time()),
+        '<wortel@karpenoktem.nl>',
+        [moderators.canonical_email]).send()
+    return record
 
 
 def _activate_mm(ml, name, user, record, moderators):
-	if ml.emergency:
-		return
-	ml.emergency = True
-	ml.Save()
-	now = datetime.datetime.now()
-	until = now + settings.MOD_RENEW_INTERVAL
-	if record is None:
-                record = mod_Es.ModerationRecord({'list':name})
-	record.by = user
-	record.at = now
-	record.save()
-	EmailMessage(
-		"Moderatiemodus op %s is aangezet door %s" % (name,
-							str(user.name)),
-		("%s is op moderatiemodus gezet door %s.  Deze loopt, indien "+
-		 "niet verlengd, af om %s.") % (
-			name, str(user.name), until.time()),
-		'<wortel@karpenoktem.nl>',
-		[moderators.canonical_email]).send()
-	return record
+    if ml.emergency:
+        return
+    ml.emergency = True
+    ml.Save()
+    now = datetime.datetime.now()
+    until = now + settings.MOD_RENEW_INTERVAL
+    if record is None:
+        record = mod_Es.ModerationRecord({'list':name})
+    record.by = user
+    record.at = now
+    record.save()
+    EmailMessage(
+        "Moderatiemodus op %s is aangezet door %s" % (name,
+                            str(user.name)),
+        ("%s is op moderatiemodus gezet door %s.  Deze loopt, indien "+
+         "niet verlengd, af om %s.") % (
+            name, str(user.name), until.time()),
+        '<wortel@karpenoktem.nl>',
+        [moderators.canonical_email]).send()
+    return record
 
 @login_required
 def overview(request):
-	toggle_with_name = None
-	renew_with_name = None
-        moderators = Es.by_name(settings.MODERATORS_GROUP)
-        if (request.user.is_related_with(Es.by_name(
-                        settings.MODERATORS_GROUP))):
-		is_moderator = True
-		if request.method == 'POST':
-			if 'toggle' in request.POST:
-				toggle_with_name = request.POST['toggle']
-			if 'renew' in request.POST:
-				renew_with_name = request.POST['renew']
-	else:
-		is_moderator = False
-	lists = []
-	for name in settings.MODED_MAILINGLISTS:
-                r = mod_Es.by_name(name)
-		ml = Mailman.MailList.MailList(name, True)
-		try:
-			if toggle_with_name == name:
-				if  ml.emergency:
-					_deactivate_mm(ml, name, request.user,
-							r, moderators)
-				else:
-					r = _activate_mm(ml, name, request.user,
-							r, moderators)
-			if renew_with_name == name:
-				r = _renew_mm(ml, name, request.user, r,
-						moderators)
-			by = None if r is None else r.by
-			remaining = (None if r is None else r.at +
-				settings.MOD_RENEW_INTERVAL -
-				datetime.datetime.now())
-			until = (None if r is None else r.at +
-					settings.MOD_RENEW_INTERVAL)
-			lists.append({'name': name,
-				      'real_name': ml.real_name,
-				      'modmode': ml.emergency,
-				      'by': by,
-				      'remaining': remaining,
-				      'description': ml.description,
-				      'queue': len(ml.GetHeldMessageIds())})
-		finally:
-			ml.Unlock()
-	return render_to_response('moderation/overview.html',
-			{'lists': lists,
-			 'is_moderator': is_moderator},
-			context_instance=RequestContext(request))
+    toggle_with_name = None
+    renew_with_name = None
+    moderators = Es.by_name(settings.MODERATORS_GROUP)
+    if (request.user.is_related_with(Es.by_name(
+            settings.MODERATORS_GROUP))):
+        is_moderator = True
+        if request.method == 'POST':
+            if 'toggle' in request.POST:
+                toggle_with_name = request.POST['toggle']
+            if 'renew' in request.POST:
+                renew_with_name = request.POST['renew']
+    else:
+        is_moderator = False
+    lists = []
+    for name in settings.MODED_MAILINGLISTS:
+        r = mod_Es.by_name(name)
+        ml = Mailman.MailList.MailList(name, True)
+        try:
+            if toggle_with_name == name:
+                if  ml.emergency:
+                    _deactivate_mm(ml, name, request.user,
+                            r, moderators)
+                else:
+                    r = _activate_mm(ml, name, request.user,
+                            r, moderators)
+            if renew_with_name == name:
+                r = _renew_mm(ml, name, request.user, r,
+                        moderators)
+            by = None if r is None else r.by
+            remaining = (None if r is None else r.at +
+                settings.MOD_RENEW_INTERVAL -
+                datetime.datetime.now())
+            until = (None if r is None else r.at +
+                    settings.MOD_RENEW_INTERVAL)
+            lists.append({'name': name,
+                      'real_name': ml.real_name,
+                      'modmode': ml.emergency,
+                      'by': by,
+                      'remaining': remaining,
+                      'description': ml.description,
+                      'queue': len(ml.GetHeldMessageIds())})
+        finally:
+            ml.Unlock()
+    return render_to_response('moderation/overview.html',
+            {'lists': lists,
+             'is_moderator': is_moderator},
+            context_instance=RequestContext(request))
