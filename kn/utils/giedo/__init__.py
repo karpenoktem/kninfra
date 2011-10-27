@@ -6,6 +6,7 @@ import select
 import time
 import json
 import os
+import subprocess
 
 import mirte # github.com/bwesterb/mirte
 
@@ -21,6 +22,7 @@ from kn.utils.giedo.mailman import generate_mailman_changes
 from kn.utils.giedo.wiki import generate_wiki_changes
 from kn.utils.giedo.forum import generate_forum_changes
 from kn.utils.giedo.unix import generate_unix_map
+from kn.utils.giedo.openvpn import create_openvpn_installer, create_openvpn_zip
 
 class Giedo(WhimDaemon):
         def __init__(self):
@@ -106,6 +108,16 @@ class Giedo(WhimDaemon):
                                         'type': 'fotoadmin-remove-moved-fotos',
                                         'user': d['user'],
                                         'dir': d['dir']})
+                        elif d['type'] == 'openvpn_create':
+                                # XXX hoeft niet onder de operation_lock
+                                u = Es.by_name(d['user'])
+                                if u is None:
+                                        return {'error': 'no such user'}
+                                u = u.as_user()
+                                if d['want'] == 'exe':
+                                        create_openvpn_installer(self, u)
+                                else:
+                                        create_openvpn_zip(self, u)
                         elif d['type'] in ['update-knsite', 'update-knfotos',
                                         'fotoadmin-create-event']:
                                 return self.daan.send(d)

@@ -19,11 +19,14 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 from django.core.mail import EmailMessage
 from os import path
+import re
 from itertools import chain
+import mimetypes
 from django.contrib.auth.views import redirect_to_login
 from kn import settings
 from hashlib import sha256
 from datetime import date
+from glob import glob
 import json
 import logging
 import Image
@@ -406,3 +409,37 @@ def note_add(request):
                 'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
                 [Es.by_name('secretariaat').canonical_email]).send()
         return redirect_to_referer(request)
+
+@login_required
+def ik_openvpn(request):
+        password_incorrect = False
+	if 'want' in request.POST and 'password' in request.POST:
+                if request.user.check_password(request.POST['password']):
+                        giedo.change_password(str(request.user.name), request.POST['password'], request.POST['password'])
+                        giedo.openvpn_create(str(request.user.name), request.POST['want'])
+                        request.user.push_message(t % request.user.first_name)
+                        return HttpResponseRedirect(reverse('smoelen-home'))
+                else:
+                        password_incorrect = True
+
+	return render_to_response('leden/ik_openvpn.html',
+                        {'password_incorrect': password_incorrect},
+			context_instance=RequestContext(request))
+
+@login_required
+def ik_openvpn_download(request, file):
+        m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', file)
+        m2 = re.match('^openvpn-config-([^.]+)\.zip$', file)
+        if not m1 and not m2:
+                raise Http404
+        if m1 and m1.group(2) != str(request.user.name):
+                raise PermissionDenied
+        if m2 and m2.group(1) != str(request.user.name):
+                raise PermissionDenied
+        p = path.join(settings.VPN_INSTALLER_STORAGE, file)
+        if not path.exists(p):
+                raise Http404
+        response = HttpResponse(FileWrapper(open(p)),
+                        mimetype=mimetypes.guess_type(p)[0])
+        response['Content-Length'] = path.getsize(p)
+        return response
