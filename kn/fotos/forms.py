@@ -29,7 +29,7 @@ def move_fotos_list_events():
 class CreateEventForm(forms.Form):
         humanName = forms.CharField(label='Naam voor mensen')
         date = forms.DateField(label='Datum', initial=date.today)
-        name = forms.RegexField(label='Naam voor computers', 
+        name = forms.RegexField(label='Naam voor computers',
                         regex=r'^[a-z0-9-]{3,64}$')
         fullHumanName = forms.CharField(label='Volledige naam voor mensen')
 

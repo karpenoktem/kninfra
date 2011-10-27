@@ -40,11 +40,11 @@ class ChangePasswordForm(forms.Form):
 	def clean(self):
 		errors = []
 		cleaned_data = self.cleaned_data
-		
+
 		old_password = cleaned_data.get("old_password")
 		new_password = cleaned_data.get("new_password")
 		new_password_again = cleaned_data.get("new_password_again")
-		
+
 		# todo: add proper and not hardcoded localization
 
 		if not old_password:
@@ -58,4 +58,3 @@ class ChangePasswordForm(forms.Form):
 			raise forms.ValidationError(errors)
 
 		return cleaned_data
-

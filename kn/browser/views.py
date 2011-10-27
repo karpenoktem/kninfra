@@ -6,7 +6,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.conf import settings
 import mimetypes
-import os.path 
+import os.path
 import os
 
 def homedir(request, root, subdir, path):
@@ -48,4 +48,3 @@ def homedir(request, root, subdir, path):
 			 'subdir': subdir, 'root': original_root,
 			 'path': _p},
                                 context_instance=RequestContext(request))
-

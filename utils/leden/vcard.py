@@ -51,4 +51,3 @@ if __name__ == '__main__':
 		tf.addfile(ti, StringIO(td))
 	tf.close()
 	print tb.getvalue()
-	

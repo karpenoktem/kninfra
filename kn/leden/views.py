@@ -119,7 +119,7 @@ def _entity_detail(request, e):
         return ctx
 
 def _user_detail(request, user):
-	hasPhoto = default_storage.exists('%s.jpg' % 
+	hasPhoto = default_storage.exists('%s.jpg' %
 			path.join(settings.SMOELEN_PHOTOS_PATH,
 					str(user.name)))
 	ctx = _entity_detail(request, user)
@@ -203,7 +203,7 @@ def _ik_chpasswd_handle_valid_form(request, form):
 	oldpw = form.cleaned_data['old_password']
 	newpw = form.cleaned_data['new_password']
 	giedo.change_password(str(request.user.name), oldpw, newpw)
-	t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd.""" 
+	t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."""
 	request.user.push_message(t % request.user.first_name)
 	return HttpResponseRedirect(reverse('smoelen-home'))
 
@@ -211,18 +211,18 @@ def _ik_chpasswd_handle_valid_form(request, form):
 def ik_chpasswd(request):
 	errl = []
 	if request.method == 'POST':
-		form = ChangePasswordForm(request.POST) 
+		form = ChangePasswordForm(request.POST)
 		if form.is_valid():
 			try:
-				return _ik_chpasswd_handle_valid_form(request, 
+				return _ik_chpasswd_handle_valid_form(request,
 						form)
 			except giedo.ChangePasswordError as e:
 				errl.extend(e.args)
 	else:
 		form = ChangePasswordForm()
 	errl.extend(form.non_field_errors())
-	errstr = humanized_enum(errl) 
-	return render_to_response('leden/ik_chpasswd.html', 
+	errstr = humanized_enum(errl)
+	return render_to_response('leden/ik_chpasswd.html',
 			{ 'form':form, 'errors':errstr},
 			context_instance=RequestContext(request))
 

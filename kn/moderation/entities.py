@@ -14,7 +14,7 @@ class ModerationRecord(SONWrapper):
         list = son_property(('list',))
         at = son_property(('at',))
         by_id = son_property(('by',))
-        
+
         def get_by(self):
                 return Es.by_id(self._data['by'])
         def set_by(self, x):

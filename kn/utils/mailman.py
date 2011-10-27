@@ -16,4 +16,3 @@ def import_mailman():
                 setup_virtual_package('Mailman', os.path.join(
                         settings.MAILMAN_PATH, 'Mailman'))
         __mailman_imported = True
-

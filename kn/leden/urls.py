@@ -51,7 +51,7 @@ urlpatterns = patterns('',
 	url(r'^ik/smoel$', views.ik_chsmoel, name="ik-chsmoel"),
 	url(r'^api/users$', views.api_users),
 	url(r'^ik/openvpn/$', views.ik_openvpn, name="ik-openvpn"),
-	url(r'^ik/openvpn/(?P<file>.+(exe|zip))$', views.ik_openvpn_download, 
+	url(r'^ik/openvpn/(?P<file>.+(exe|zip))$', views.ik_openvpn_download,
                 name="ik-openvpn-download"),
 	url(r'^secretariaat/inschrijven$',
 	    views.secr_add_user, name='secr-add-user'),
@@ -62,4 +62,3 @@ urlpatterns = patterns('',
 	url(r'^noteer$',
 	    views.note_add, name='add-note'),
 )
-

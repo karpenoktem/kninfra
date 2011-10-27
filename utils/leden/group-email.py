@@ -59,7 +59,7 @@ def group_email():
 			      'seats': stext,
 			      'tree': s.getvalue()}
 		m.email_user('Overzicht groepen, commissies en e-maillijsten',
-		     em, from_email='secretaris@karpenoktem.nl') 
+		     em, from_email='secretaris@karpenoktem.nl')
 
 if __name__ == '__main__':
 	group_email()

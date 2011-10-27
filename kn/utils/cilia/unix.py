@@ -73,7 +73,7 @@ def set_unix_map(cilia, _map):
         for g in gs:
                 assert g.gr_name not in glut # issue #5
                 glut[g.gr_name] = g
-        for g in _map['groups']: 
+        for g in _map['groups']:
                 gname = ('kn-'+g)[:32]
                 c_memb = set(glut[gname].gr_mem)
                 w_memb = set(_map['groups'][g])

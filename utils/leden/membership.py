@@ -37,4 +37,3 @@ for m, ys in users.iteritems():
 	for y in xrange(1, nyears + 1):
 		print '*' if y in ys else ' ',
 	print
-

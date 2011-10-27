@@ -42,7 +42,7 @@ def gen_php(cal, cs, target):
 		  ("//   on %s\n" % str(datetime.now())) +
 		  ("//   for %s\n" % cal_uri) +
 		  ("%s = array(\n" % target)))
-	query = gdata.calendar.service.CalendarEventQuery(cal, 
+	query = gdata.calendar.service.CalendarEventQuery(cal,
 			'private', 'full')
 	query.start_min = str(now)
 	feed = cs.CalendarQuery(query)

@@ -13,4 +13,3 @@ urlpatterns = patterns('',
 	url(r'^(?P<reglement_name>[^/]+)/(?P<version_name>[^/]+)/?$',
 	    views.version_detail, name='version-detail'),
 )
-

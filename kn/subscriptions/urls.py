@@ -15,4 +15,3 @@ urlpatterns = patterns('',
 	url(r'^!nieuwe/?$',
 	    views.event_new, name='event-new'),
 )
-

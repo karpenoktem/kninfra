@@ -65,7 +65,7 @@ def main(data):
                         'Virtuele groep', [system_tag])
         sofa_brand_tag = create_tag("!sofa-brand",
                         'Sofa merk', [system_tag])
-        year_group_tag = create_tag("!year-group", 'Jaargroep', 
+        year_group_tag = create_tag("!year-group", 'Jaargroep',
                         [system_tag])
         for i in xrange(1,9):
                 Es.ecol.insert({'types': ['tag'],
@@ -149,7 +149,7 @@ def main(data):
                         continue
 		if m['parent'] is not None:
                         if not m['parent'] in conv_group:
-                                print " %s was orphaned" % m['name'] 
+                                print " %s was orphaned" % m['name']
                                 continue
 			Es.ecol.update({'_id': conv_group[m['id']]['id']},
 				{'$push': {'tags': conv_group[

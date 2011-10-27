@@ -47,4 +47,3 @@ class SessionStore(SessionBase):
 
 def ensure_indices():
 	scol.ensure_index('expire_dt')
-

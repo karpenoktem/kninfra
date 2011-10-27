@@ -19,13 +19,13 @@ def check_geinteresseerden():
 
 def check_namespace():
 	print "NAMESPACE"
-	cn = set(map(lambda c: c.name, 
+	cn = set(map(lambda c: c.name,
 		filter(lambda c: not c.isVirtual, OldKnGroup.objects.all())))
 	un = set(map(lambda m: m.username, OldKnUser.objects.all()))
 	sn = set(map(lambda s: s.name if s.isGlobal else s.group.name \
 					+ '-' + s.name, OldSeat.objects.all()))
 	an = set(map(lambda a: a.source, Alias.objects.all()))
-	
+
 	n = set()
 	for o in (cn, un, sn, an):
 		inter = n.intersection(o)
@@ -33,7 +33,7 @@ def check_namespace():
 			for el in inter:
 				print '%s: namespace conflict' % el
 		n = n.union(o)
-	
+
 	for a in Alias.objects.all():
 		if not a.target in n:
 			print '%s -> %s, target doesn\'t exist' % \

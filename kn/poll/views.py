@@ -70,4 +70,3 @@ def vote(request, name):
 			{'forms': map(lambda x: x[1], qfs),
 			 'poll': poll},
 			context_instance=RequestContext(request))
-

@@ -10,7 +10,7 @@ from kn.settings import DT_MIN, DT_MAX, MAILDOMAIN
 from kn.base._random import pseudo_randstr
 
 # The collections
-# ###################################################################### 
+# ######################################################################
 ecol = db['entities']   # entities: users, group, tags, studies, ...
 rcol = db['relations']  # relations: "giedo is chairman of bestuur from
                         #             date A until date B"
@@ -38,7 +38,7 @@ def ensure_indices():
 
 
 # Basic functions to work with entities
-# ###################################################################### 
+# ######################################################################
 def entity(d):
         """ Given a dictionary, returns an Entity object wrapping it """
 	if d is None:
@@ -160,7 +160,7 @@ def names():
         return ret
 
 # Specialized functions to work with entities.
-# ###################################################################### 
+# ######################################################################
 def bearers_by_tag_id(tag_id, _as=entity):
         """ Find the bearers of the tag with @tag_id """
         return map(_as, ecol.find({'tags': tag_id}))
@@ -173,7 +173,7 @@ def date_to_year(dt):
         return year
 
 # Functions to work with relations
-# ###################################################################### 
+# ######################################################################
 
 def relation_is_active_at(rel, dt):
         """ Returns whether @rel is active at @dt """
@@ -261,7 +261,7 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
 def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
                         deref_who=False, deref_with=False, deref_how=False):
         """ Find matching relations.
-        
+
         For each of {who, _with, how}:
                 when left on default, it will match all.
                 when a tuple or list, it will match on any of those.
@@ -337,7 +337,7 @@ def remove_relation(who, _with, how,  _from, until):
                      'until': until})
 
 # Models
-# ###################################################################### 
+# ######################################################################
 class EntityName(object):
         """ Wrapper object for a name of an entity """
 	def __init__(self, entity, name):
@@ -420,7 +420,7 @@ class Entity(SONWrapper):
                                 deref_with=True, deref_how=True):
                 return query_relations(self, -1, how, _from, until, deref_who,
                                 deref_with, deref_how)
-	
+
 	def get_tags(self):
 		for m in ecol.find({'_id': {'$in': self._data.get('tags', ())}}
 				).sort('humanNames.human', 1):
@@ -546,7 +546,7 @@ class Entity(SONWrapper):
                                 'type' in self._data['virtual']:
                         if self._data['virtual']['type'] == 'sofa':
                                 return False
-                return True 
+                return True
 
         @property
         def got_unix_group(self):
@@ -791,7 +791,7 @@ class Note(SONWrapper):
 
 
 # List of type of entities
-# ###################################################################### 
+# ######################################################################
 TYPE_MAP = {
 	'group':        Group,
 	'user':         User,

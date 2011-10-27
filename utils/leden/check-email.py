@@ -87,7 +87,7 @@ def check_email():
 			})
 		print m
 		m.email_user('Controle Karpe Noktem ledenadministratie',
-		     em, from_email='secretaris@karpenoktem.nl') 
+		     em, from_email='secretaris@karpenoktem.nl')
 
 if __name__ == '__main__':
 	check_email()

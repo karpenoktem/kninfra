@@ -36,7 +36,7 @@ def check_members(members):
 						username=m.username)) == 0:
 					print "%s: should be in leden%s" \
 							% (m.username, c)
-				
+
 		if m.dateOfBirth is None:
 			print "%s: dateOfBirth is None" % m.username
 		else:
@@ -45,7 +45,7 @@ def check_members(members):
 			if age < 15:
 				print "%s: age < 15" % m.username
 			elif age > 40:
-				print "%s: age > 40" % m.username 
+				print "%s: age > 40" % m.username
 		if m.password == '$$' or \
 		   m.password == '':
 			print "%s: no empty password" % m.username
@@ -75,7 +75,7 @@ def check_members(members):
 			   (m.institute_id == INST_HAN and len(m.studentNumber) != 6):
 				print "%s: student number of incorrect length" \
 					% m.username
-			
+
 		if (not m.is_active and
 				len(m.groups.filter(name=MEMBER_GROUP)) > 0):
 			print "%s: not active" % m.username

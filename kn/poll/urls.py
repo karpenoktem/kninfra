@@ -13,4 +13,3 @@ urlpatterns = patterns('',
 	url(r'^vote/(?P<name>[^/]+)/$',
 	    views.vote, name='poll-vote'),
 )
-

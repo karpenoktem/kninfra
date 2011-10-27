@@ -10,4 +10,3 @@ class MongoBackend(object):
 
 	def get_user(self, pk):
 		return Es.by_id(pk)
-

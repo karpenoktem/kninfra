@@ -29,7 +29,7 @@ def acl_sync_cal(cs, cal, initial_role):
 	for m in OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all():
 		acc.add(m.email.lower())
 		if m.email.lower() in cur: continue
-		todo.add(m)	
+		todo.add(m)
 	for n in frozenset(cur.iterkeys()) - acc:
 		print "Deleting stray %s" % n
 		cs.DeleteAclEntry(cur[n])
@@ -58,7 +58,7 @@ def sync_bd(cs, cal):
 	cal_uri = '/calendar/feeds/%s/private/full' % cal
 	now = datetime.datetime.now().date()
 	now2 = datetime.date(now.year + 1, now.month, now.day)
-	query = gdata.calendar.service.CalendarEventQuery(cal, 
+	query = gdata.calendar.service.CalendarEventQuery(cal,
 			'private', 'full')
 	query.start_min = str(now)
 	query.start_max = str(now2)
@@ -121,4 +121,3 @@ if __name__ == '__main__':
 	acl_sync_cal(cs, GCAL_UIT, 'editor')
 	print 'BIRTHDAYS'
 	sync_bd(cs, GCAL_BD)
-

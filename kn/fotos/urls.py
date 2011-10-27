@@ -9,4 +9,3 @@ urlpatterns = patterns('',
         url(r'^admin/create/?$',
             views.fotoadmin_create_event, name='fotoadmin-create-event'),
 )
-
