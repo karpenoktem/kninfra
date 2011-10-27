@@ -411,6 +411,14 @@ def note_add(request):
         return redirect_to_referer(request)
 
 @login_required
+def secr_update_site_agenda(request):
+        if 'secretariaat' not in request.user.cached_groups_names:
+                raise PermissionDenied
+        giedo.update_site_agenda()
+        request.user.push_message("Agenda geupdate!")
+        return redirect_to_referer(request)
+
+@login_required
 def ik_openvpn(request):
         password_incorrect = False
 	if 'want' in request.POST and 'password' in request.POST:

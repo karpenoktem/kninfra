@@ -17,6 +17,7 @@
 <li>Secretariaat</li>
 <ul>
         <li><a href="{% url secr-add-user  %}">Lid inschrijven</a></li>
+        <li><a href="{% url secr-update-site-agenda  %}">Agenda updaten</a></li>
 </ul>
 {% endif %}
 {% if "fotocie" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
