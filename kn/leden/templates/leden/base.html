@@ -19,4 +19,10 @@
         <li><a href="{% url secr-add-user  %}">Lid inschrijven</a></li>
 </ul>
 {% endif %}
+{% if "fotocie" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
+<li>Foto's</li>
+<ul>
+        <li><a href="{% url fotoadmin-move %}">Foto's verplaatsen</a></li>
+</ul>
+{% endif %}
 {% endblock %}
