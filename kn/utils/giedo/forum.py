@@ -8,7 +8,7 @@ from kn import settings
 
 def generate_forum_changes(self):
         users = dict()
-        creds = settings.FORUM_MYSQL_CREDS
+        creds = settings.FORUM_MYSQL_SECRET
         dc = MySQLdb.connect(creds[0], user=creds[1],
                         passwd=creds[2], db=creds[3])
         c = dc.cursor()

@@ -22,7 +22,7 @@ def apply_mailman_changes(daan, changes):
         for name, humanName in changes['create']:
                 newlist = os.path.join(settings.MAILMAN_PATH, 'bin/newlist')
                 ret = call([newlist, '-q', name, settings.MAILMAN_DEFAULT_OWNER,
-                                        settings.MAILMAN_DEFAULT_PWD])
+                                        settings.MAILMAN_DEFAULT_PASSWORD])
                 if ret != 0:
                         logging.error("bin/newlist failed")
                         continue

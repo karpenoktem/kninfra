@@ -114,8 +114,8 @@ INTERNAL_IPS = ['195.169.216.49'] # bas
 # Secrets
 # ############################################################
 SECRET_KEY = 'CHANGE ME'
-MAILMAN_DEFAULT_PWD = 'CHANGE ME'
+MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 
-WIKI_MYSQL_CREDS = ('HOST', 'USER', 'PWD', 'DB')
-FORUM_MYSQL_CREDS = ('HOST', 'USER', 'PWD', 'DB')
+WIKI_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
+FORUM_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
 ALLOWED_API_KEYS = ('CHANGE ME',)

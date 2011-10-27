@@ -21,7 +21,7 @@ def fotoadmin_create_event(daan, date, name, humanName):
         os.mkdir(path, 0775)
         os.chown(path, pwd.getpwnam('fotos').pw_uid,
                        grp.getgrnam('fotos').gr_gid)
-        creds = settings.PHOTOS_MYSQL_CREDS
+        creds = settings.PHOTOS_MYSQL_SECRET
         dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
                                 db=creds[3])
         c = dc.cursor()
@@ -66,7 +66,7 @@ def fotoadmin_move_fotos(daan, event, user, directory):
                         'chmod', '755', '{}', '+']) != 0:
                 return {'error': 'chmod (dirs) failed'}
         visibility = 'hidden'
-        creds = settings.PHOTOS_MYSQL_CREDS
+        creds = settings.PHOTOS_MYSQL_SECRET
         dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
                                 db=creds[3])
         c = dc.cursor()
