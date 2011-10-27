@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe

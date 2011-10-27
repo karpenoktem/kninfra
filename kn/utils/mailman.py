@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import os.path
 
 from kn.base.runtime import setup_virtual_package

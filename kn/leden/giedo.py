@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from kn import settings
 
 from kn.utils.whim import WhimDaemon, WhimClient

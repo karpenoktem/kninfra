@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import subprocess
 
 def live_update_knsite(self):

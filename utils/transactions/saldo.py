@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 # -*- coding: utf-8 -*
 import _import
 

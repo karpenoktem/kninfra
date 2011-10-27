@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import _import
 import sys
 from kn.leden.models import OldKnUser, OldKnGroup

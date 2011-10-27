@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from django.http import Http404
 from django import forms
 from django.template import RequestContext

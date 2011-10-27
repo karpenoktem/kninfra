@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import decimal
 import datetime
 from django.contrib.auth.decorators import login_required

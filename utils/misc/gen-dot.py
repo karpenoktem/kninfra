@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 # Generates a graphviz dot file
 #  for the sheir fun of it
 

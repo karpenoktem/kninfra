@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 # Hey Bas,
 #
 # Ik heb je laatst op een borrel aangesproken over jou welbekende

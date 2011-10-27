@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import functools
 
 from django.db.models import permalink

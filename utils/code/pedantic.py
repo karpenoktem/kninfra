@@ -93,10 +93,10 @@ def main(rpath):
                 stack.append(os.path.join(spath, child))
                 continue
             if child.endswith('.py'):
-                check_spaces(cpath)
-                check_tabs(cpath)
+                #check_spaces(cpath)
+                #check_tabs(cpath)
                 check_modeline(cpath)
-                check_stray_whitespace(cpath)
+                #check_stray_whitespace(cpath)
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:

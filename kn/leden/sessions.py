@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import datetime
 
 from django.contrib.sessions.backends.base import SessionBase, CreateError

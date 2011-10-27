@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from django.conf.urls.defaults import *
 #from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Study
 import django.views.generic.list_detail

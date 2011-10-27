@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 # _import.py
 #   sets up the django environment and mailman for the utils
 #

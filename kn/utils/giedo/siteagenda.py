@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 # Genereert config.agenda.php van de Karpe Noktem google calendar.
 #  TODO  UTF?
 

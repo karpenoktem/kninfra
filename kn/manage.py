@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# vim: et:sta:bs=2:sw=4:
 from django.core.management import execute_manager
 try:
     import settings # Assumed to be in the same directory.

@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from django import forms
 
 import kn.leden.entities as Es

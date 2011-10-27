@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import _import
 from common import *
 

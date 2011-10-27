@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import logging
 import kn.leden.entities as Es
 from kn.settings import LISTS_MAILDOMAIN, MAILDOMAIN

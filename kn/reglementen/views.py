@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponse

@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from django.core.servers.basehttp import FileWrapper
 from django.http import Http404, HttpResponse
 import mimetypes

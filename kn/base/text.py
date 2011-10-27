@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 # todo: add localization
 def humanized_enum (it, normal_sep=u", ", final_sep=u" en "):
 	lst = list(it)

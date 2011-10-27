@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import iso8601
 
 def test_iso8601_regex():

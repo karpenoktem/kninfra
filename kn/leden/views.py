@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from kn.base.text import humanized_enum

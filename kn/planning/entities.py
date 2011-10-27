@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from kn.leden.mongo import  db, SONWrapper, son_property, _id
 import kn.leden.entities as Es
 from kn.leden.date import now

@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from common import *
 
 import gdata.calendar.service

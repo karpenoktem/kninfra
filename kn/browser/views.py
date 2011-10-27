@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 from django.shortcuts import render_to_response
 from django.core.servers.basehttp import FileWrapper
 from django.contrib.auth.decorators import login_required

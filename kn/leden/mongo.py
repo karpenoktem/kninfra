@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import pymongo
 from pymongo.objectid import ObjectId
 from kn.settings import MONGO_DB, MONGO_HOST

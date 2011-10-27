@@ -1,3 +1,4 @@
+# vim: et:sta:bs=2:sw=4:
 import logging
 import os
 from subprocess import call
