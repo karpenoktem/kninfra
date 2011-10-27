@@ -1,0 +1,33 @@
+{% extends "leden/base.html" %}
+
+{% block body %}
+<h1>OpenVPN installeren</h1>
+<form method="post" action="{% url ik-openvpn %}">
+	{% csrf_token %}
+{% if password_incorrect %}
+	<p>Wachtwoord incorrect.</p>
+{% endif %}
+
+        <p>Als je onderstaand formulier invult krijg je binnen een paar minuten
+        een e-mailtje met daarin een linkje.</p>
+
+	<table>
+		<tr>
+			<td>Wat</td>
+			<td>
+				<input type="radio" name="want" value="exe" id="want_exe" checked><label for="want_exe">Windows installer</label>
+				<input type="radio" name="want" value="zip" id="want_zip"><label for="want_zip">Configuratiebestanden</label>
+			</td>
+		</tr>
+		<tr>
+			<td>Wachtwoord</td>
+			<td><input type="password" name="password"></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="submit" value="Aanmaken"></td>
+		</tr>
+	</table>
+</form>
+
+{% endblock %}

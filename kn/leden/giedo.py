@@ -36,3 +36,8 @@ def fotoadmin_move_fotos(event, user, dir):
                 'event': event,
                 'user': user,
                 'dir': dir})
+
+def openvpn_create(user, want):
+        get_giedo_connection().send({'type': 'openvpn_create',
+                'user': user,
+                'want': want})

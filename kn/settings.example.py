@@ -108,6 +108,13 @@ INFRA_UID = 1002
 
 PHOTOS_DIR = '/var/fotos'
 
+# VPN related
+# ############################################################
+VPN_COMMONNAME_POSTFIX = '.vpn.karpenoktem.nl'
+VPN_KEYSTORE = '/home/infra/vpnkeys'
+VPN_INSTALLER_STORAGE = '/home/infra/storage/openvpn'
+VPN_INSTALLER_REPOS = '/home/infra/openvpn'
+
 # Debug settings
 # ############################################################
 DEBUG = True
