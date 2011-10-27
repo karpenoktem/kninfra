@@ -1,7 +1,7 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from kn.base.text import humanized_enum
-from kn.leden.forms import ChangePasswordForm, AddUserForm
+from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
 from kn.leden.utils import find_name_for_user
 from kn.leden import giedo
 from kn.leden.mongo import _id
@@ -326,6 +326,37 @@ def secr_add_user(request):
         else:
                 form = AddUserForm()
 	return render_to_response('leden/secr_add_user.html',
+                        {'form': form},
+			context_instance=RequestContext(request))
+
+@login_required
+def secr_add_group(request):
+        if 'wortel' not in request.user.cached_groups_names:
+                raise PermissionDenied
+        if request.method == 'POST':
+                form = AddGroupForm(request.POST)
+                if form.is_valid():
+                        fd = form.cleaned_data
+                        nm = fd['name']
+                        g = Es.Group({
+                                'types': ['group', 'tag'],
+                                'names': [nm],
+                                'humanNames': [{'name': nm,
+                                        'human': fd['humanName'],
+                                        'genitive_prefix': fd['genitive_prefix']
+                                        }],
+                                'temp': {'is_virtual': 0},
+                                'tags': [_id(fd['parent'])]
+                                })
+                        logging.info("Added group %s" % nm)
+                        g.save()
+                        giedo.sync()
+                        request.user.push_message("Groep toegevoegd.")
+                        return HttpResponseRedirect(reverse('group-by-name',
+                                        args=(nm,)))
+        else:
+                form = AddGroupForm()
+	return render_to_response('leden/secr_add_group.html',
                         {'form': form},
 			context_instance=RequestContext(request))
 

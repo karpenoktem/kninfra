@@ -31,6 +31,16 @@ class AddUserForm(forms.Form):
         dateJoined = forms.DateField(label="Datum van inschrijving",
                         initial=datetime.date.today())
 
+class AddGroupForm(forms.Form):
+        name = forms.RegexField(label="Naam", regex=r'^[a-z0-9-]{2,64}$')
+        humanName = forms.CharField(label="Naam voor mensen")
+        genitive_prefix = forms.CharField(label="Genitivus", initial="van de")
+        description = forms.CharField(label="Korte beschrijving")
+        parent = EntityChoiceField(label="Parent",
+                        choices=filter(lambda x: not x.is_virtual, Es.groups()),
+                        sort_choices=True, initial=str(
+                                Es.by_name('secretariaat')._id))
+
 class ChangePasswordForm(forms.Form):
 	old_password = forms.CharField(widget=forms.PasswordInput())
 	new_password = forms.CharField(widget=forms.PasswordInput())
