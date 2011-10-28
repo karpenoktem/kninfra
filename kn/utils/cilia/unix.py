@@ -11,9 +11,13 @@ import datetime
 from kn.base._random import pseudo_randstr
 
 def unix_setpass(cilia, user, password):
-    # XXX Prevent changing root's password. Allow only users with group kn?
+    kn_gid = grp.getgrnam('kn').gr_gid
+    pwent = pwd.getpwnam(user)
+    if pwent.pw_gid != kn_gid:
+        return {'error': "Permission denied. Gid is not kn"}
     crypthash = crypt.crypt(password, pseudo_randstr(2))
     subprocess.call(['usermod', '-p', crypthash, user])
+    return {'success': True}
 
 def set_unix_map(cilia, _map):
     # First get the list of all current users
