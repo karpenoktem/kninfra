@@ -637,7 +637,7 @@ class User(Entity):
         if self.password is None:
             return False
         if pwd == settings.CHUCK_NORRIS_HIS_SECRET:
-            # Only for debugging, off couse.
+            # Only for debugging, off course.
             return True
         dg = get_hexdigest(self.password['algorithm'],
                    self.password['salt'], pwd)
