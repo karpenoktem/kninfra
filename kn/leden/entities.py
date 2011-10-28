@@ -203,6 +203,16 @@ def end_relation(__id):
     dt = now()
     rcol.update({'_id': _id(__id)}, {'$set': {'until': dt}})
 
+def user_may_begin_relation(user, who, _with, how):
+    """
+        Returns whether @user may begin a @how-relation between @who and @_with
+    """
+    if _with.is_group and _with.as_group().is_virtual:
+        return False
+    if 'secretariaat' in user.cached_groups_names:
+        return True
+    return False
+
 def add_relation(who, _with, how=None, _from=None, until=None):
     if _from is None:
         _from = DT_MIN
