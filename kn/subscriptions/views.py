@@ -130,23 +130,29 @@ def api(request):
         return JsonHttpResponse({'error': 'unknown action'})
 
 @login_required
-def event_new(request):
+def event_new_or_edit(request, edit=None):
     superuser = 'secretariaat' in request.user.cached_groups_names
+    if edit is not None:
+        e = subscr_Es.event_by_name(edit)
+        if e is None:
+            raise Http404
+        if not superuser and not request.user.is_related_with(e.owner) and \
+                not _id(e.owner) == request.user.id:
+            raise PermissionDenied
     AddEventForm = get_add_event_form(request.user, superuser)
     if request.method == 'POST':
         form = AddEventForm(request.POST)
         if form.is_valid():
             fd = form.cleaned_data
             if not superuser and not request.user.is_related_with(
-                    fd['owner']) and \
-                    not fd['owner'] == request.user.id:
+                    fd['owner']) and not fd['owner'] == request.user.id:
                 raise PermissionDenied
             name = fd['name']
             # If not secretariaat, then prefix name with the username
             prefix = str(request.user.name) + '-'
             if not superuser and not name.startswith(prefix):
                 name = prefix + name
-            e = subscr_Es.Event({
+            d = {
                 'date': date_to_dt(fd['date']),
                 'owner': _id(fd['owner']),
                 'description': fd['description'],
@@ -155,19 +161,28 @@ def event_new(request):
                 'createdBy': request.user._id,
                 'name': name,
                 'cost': str(fd['cost']),
-                'is_open': True})
+                'is_open': True}
+            if edit is None:
+                e = subscr_Es.Event(d)
+            else:
+                e._data.update(d)
             e.save()
+            act = 'bewerkt' if edit else 'aangemaakt'
             EmailMessage(
-                    "Activiteit %s aangemaakt door %s" % (fd['humanName'],
-                                            unicode(request.user.humanName)),
-                    "%s heeft een nieuwe activiteit aangemaakt:\n\n"\
-                    "    http://kn.cx%s" % (unicode(request.user.humanName),
-                            reverse('event-detail', args=(e.name,))),
+                    "Activiteit %s %s door %s" % (fd['humanName'], act,
+                        unicode(request.user.humanName)),
+                    "%s heeft een activiteit %s:\n\n"\
+                    "    http://karpenoktem.nl%s" %
+                    (unicode(request.user.humanName), act,
+                        reverse('event-detail', args=(e.name,))),
                     'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
                     ['secretariaat@karpenoktem.nl']).send()
             return HttpResponseRedirect(reverse('event-detail', args=(e.name,)))
-    else:
+    elif edit is None:
         form = AddEventForm()
+    else:
+        d = e._data
+        form = AddEventForm(d)
     ctx = {'form': form}
-    return render_to_response('subscriptions/event_new.html', ctx,
+    return render_to_response('subscriptions/event_new_or_edit.html', ctx,
             context_instance=RequestContext(request))

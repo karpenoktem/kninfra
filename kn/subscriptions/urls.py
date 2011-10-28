@@ -13,5 +13,7 @@ urlpatterns = patterns('',
     url(r'^!api/?$',
         views.api, name='api'),
     url(r'^!nieuwe/?$',
-        views.event_new, name='event-new'),
+        views.event_new_or_edit, name='event-new'),
+    url(r'^(?P<edit>[a-zA-Z0-9\-.]+)/edit/?$',
+        views.event_new_or_edit, name='event-edit'),
 )
