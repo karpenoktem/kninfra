@@ -197,7 +197,12 @@ def user_may_end_relation(user, rel):
         return False
     if not relation_is_active(rel):
         return False
-    return 'secretariaat' in user.cached_groups_names
+    if 'secretariaat' in user.cached_groups_names:
+        return True
+    if _id(rel['who']) == _id(user) and \
+            by_id(rel['with']).has_tag(id_by_name('!free-to-join', True)):
+        return True
+    return False
 
 def end_relation(__id):
     dt = now()
@@ -211,6 +216,9 @@ def user_may_begin_relation(user, who, _with, how):
         return False
     if 'secretariaat' in user.cached_groups_names:
         return True
+    if _with.has_tag(Es.id_by_name('!free-to-join', True)):
+        if _id(user) == _id(who) and how is None:
+            return True
     return False
 
 def add_relation(who, _with, how=None, _from=None, until=None):
@@ -451,6 +459,8 @@ class Entity(SONWrapper):
         for m in ecol.find({'_id': {
                 '$in': self._data.get('tags',())}}):
             yield Tag(m)
+    def has_tag(self, tag):
+        return _id(tag) in self._data.get('tags', ())
     @property
     def names(self):
         for n in self._data.get('names',()):
