@@ -216,8 +216,3 @@ class Vacancy(SONWrapper):
         for v in vcol.find({'reminder_sent': False,
             'event': {'$in': events}}):
             yield cls.from_data(v)
-
-
-#def by_name(name):
-#   d = mcol.find_one({'list': name})
-#   return None if d is None else ModerationRecord(d)
