@@ -15,17 +15,17 @@
 		el.parentNode.removeChild(el);
 	}
 </script>
-{% for date, day in days.items %}
+{% for event in events %}
 <form method="post" action=".">
 	{% csrf_token %}
-	<input type="hidden" name="date" value="{{ date }}">
-	{{ day.form.non_field_errors }}
+	<input type="hidden" name="eid" value="{{ event.id }}">
+	{{ event.form.non_field_errors }}
 	<table>
 		<tr>
-			<th>{{ date }}</th>
-			<th>Wie</th>
+                        <th><a href="{% url planning-event-edit event.id %}">{{ event.date }}</a></th>
+                        <th><a href="{% url planning-event-edit event.id %}">{{ event.name }}</a></th>
 		</tr>
-{% for vacancy in day.vacancies %}
+{% for vacancy in event.vacancies %}
 		<tr>
 			<td nowrap>{{ vacancy.formField.label }}</td>
 			<td>{{ vacancy.formField }}</td>
