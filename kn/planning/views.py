@@ -10,6 +10,7 @@ from kn.leden.mongo import _id
 from kn.leden.date import date_to_dt
 from kn.planning.forms import *
 from kn.planning.entities import Pool, Worker, Event, Vacancy
+from kn.planning.score import planning_vacancy_worker_score
 
 from random import shuffle
 
@@ -59,9 +60,6 @@ templates = {
             [hm2s(10), hm2s(13), 'Persoon 2']]},
 }
 
-def planning_vacancy_worker_score(vacancy, worker):
-    return 50
-
 @login_required
 def planning_view(request):
     pools = list(Pool.all())
@@ -94,6 +92,14 @@ def planning_view(request):
              'pools': pools,
              'poolcount': len(pools)},
             context_instance=RequestContext(request))
+
+# extends cmp with None as bottom
+def cmp_None(x,y,cmp=cmp):
+    if x==None:
+        return -1
+    if y==None:
+        return 1
+    return cmp(x,y)
 
 @login_required
 def planning_manage(request, poolname):
@@ -147,10 +153,16 @@ def planning_manage(request, poolname):
                 if score not in workers_by_score:
                     workers_by_score[score] = list()
                 workers_by_score[score].append(worker)
-            for score, scorers in workers_by_score.items():
+            found_scores = list(workers_by_score.keys())
+            found_scores.sort(reverse=True)
+            for score in found_scores:
+                scorers = workers_by_score[score]
                 shuffle(scorers)
-                scorers.sort(key=lambda x: x.last_shift)
-                vacancy.suggestions.extend(scorers)
+                scorers.sort(key=lambda x: x.last_shift,
+                        cmp=cmp_None)
+                for scorer in scorers:
+                    vacancy.suggestions.append({'scorer': scorer, 'score': score})
+
     events = list(events.values())
     events.sort(key=lambda e: e['date'])
     return render_to_response('planning/manage.html',

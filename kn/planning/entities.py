@@ -62,6 +62,10 @@ class Worker(SONWrapper):
     user = property(get_user, set_user)
 
     @property
+    def username(self):
+        return str(self.user.name)
+
+    @property
     def is_active(self):
         return self.is_active_at(now())
 
@@ -74,7 +78,7 @@ class Worker(SONWrapper):
         self.last_shift = None
         for v in vcol.find({'assignee': _id(self)},
         sort=[('begin', DESCENDING)], limit=1):
-            self.last_shift = v
+            self.last_shift = v['begin'].date()
 
 
 class Event(SONWrapper):
