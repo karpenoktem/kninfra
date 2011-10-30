@@ -121,7 +121,7 @@ def planning_manage(request, poolname):
                 'name': e.name, 'id': eid}
         posted = False
         events[eid]['vacancies'].sort(key=lambda v: v.begin)
-        if request.method == 'POST' and request.POST['eid'] == eid:
+        if request.method == 'POST' and _id(request.POST['eid']) == eid:
             events[eid]['form'] = ManagePlanningForm(request.POST, pool=pool,
                     vacancies=events[eid]['vacancies'])
             posted = True
