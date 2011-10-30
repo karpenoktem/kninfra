@@ -123,7 +123,7 @@ def planning_manage(request, poolname):
         events[eid]['vacancies'].sort(key=lambda v: v.begin)
         if request.method == 'POST' and request.POST['eid'] == eid:
             events[eid]['form'] = ManagePlanningForm(request.POST, pool=pool,
-                    vacancies=events[day]['vacancies'])
+                    vacancies=events[eid]['vacancies'])
             posted = True
         else:
             events[eid]['form'] = ManagePlanningForm(pool=pool,
