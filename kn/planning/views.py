@@ -44,6 +44,14 @@ def planning_view(request):
              'poolcount': len(pools)},
             context_instance=RequestContext(request))
 
+# extends cmp with None as bottom
+def cmp_None(x,y,cmp=cmp):
+    if x==None:
+        return -1
+    if y==None:
+        return 1
+    return cmp(x,y)
+
 @login_required
 def planning_manage(request, poolname):
     pool = Pool.by_name(poolname)
@@ -102,7 +110,8 @@ def planning_manage(request, poolname):
             for score in found_scores:
                 scorers = workers_by_score[score]
                 shuffle(scorers)
-                scorers.sort(key=lambda x: x.last_shift)
+                scorers.sort(key=lambda x: x.last_shift,
+                        cmp=cmp_None)
                 for scorer in scorers:
                     vacancy.suggestions.append({'scorer': scorer, 'score': score})
 

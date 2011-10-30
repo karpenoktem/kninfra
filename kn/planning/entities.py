@@ -78,7 +78,7 @@ class Worker(SONWrapper):
         self.last_shift = None
         for v in vcol.find({'assignee': _id(self)},
         sort=[('begin', DESCENDING)], limit=1):
-            self.last_shift = v
+            self.last_shift = v['begin'].date()
 
 
 class Event(SONWrapper):
