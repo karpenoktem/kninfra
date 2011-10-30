@@ -62,6 +62,10 @@ class Worker(SONWrapper):
     user = property(get_user, set_user)
 
     @property
+    def username(self):
+        return str(self.user.name)
+
+    @property
     def is_active(self):
         return self.is_active_at(now())
 
