@@ -35,8 +35,8 @@
         href="javascript:show_more_suggestions('{{ vacancy.formField.name }}');"
         id="more_element_{{ vacancy.formField.name }}">more...</a><span
         style="display: none" id="more_{{ vacancy.formField.name }}">{% endif %}
-<a href="javascript:set_select_by_id('id_{{ vacancy.formField.name }}', '{{ suggestion.id }}');"
-                >{{ suggestion.get_user.name }}</a>{% if not forloop.last %},{% endif %}
+<a href="javascript:set_select_by_id('id_{{ vacancy.formField.name }}', '{{ suggestion.scorer.id }}');" title="{{ suggestion.score }}"
+                >{{ suggestion.scorer.get_user.name }}</a>{% if not forloop.last %},{% endif %}
 {% if forloop.last and forloop.counter > 5 %}</span>{% endif %}
 {% endfor %}
 			</td>
