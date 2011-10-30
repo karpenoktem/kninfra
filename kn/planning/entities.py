@@ -109,8 +109,8 @@ class Event(SONWrapper):
     def by_id(cls, id):
         return cls.from_data(ecol.find_one({'_id': _id(id)}))
 
-    def vacancies(self):
-        return Vacancy.all_by_event(self)
+    def vacancies(self, pool=None):
+        return Vacancy.all_by_event(self, pool)
 
 class Pool(SONWrapper):
     def __init__(self, data):
@@ -191,13 +191,20 @@ class Vacancy(SONWrapper):
         return self.end.strftime('%H:%M')
 
     @classmethod
+    def by_id(cls, id):
+        return cls.from_data(vcol.find_one({'_id':  _id(id)}))
+
+    @classmethod
     def all_in_pool(cls, p):
         for v in vcol.find({'pool': _id(p)}):
             yield cls.from_data(v)
 
     @classmethod
-    def all_by_event(cls, e):
-        for v in vcol.find({'event': _id(e)}):
+    def all_by_event(cls, e, pool=None):
+        f = {'event': _id(e)}
+        if pool is not None:
+            f['pool'] = _id(pool)
+        for v in vcol.find(f):
             yield cls.from_data(v)
 
     @classmethod
