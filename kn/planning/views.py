@@ -8,11 +8,9 @@ from django.contrib.auth.decorators import login_required
 from kn.leden.mongo import _id
 from kn.planning.forms import *
 from kn.planning.entities import Pool, Worker, Event, Vacancy
+from kn.planning.score import planning_vacancy_worker_score
 
 from random import shuffle
-
-def planning_vacancy_worker_score(vacancy, worker):
-    return 50
 
 @login_required
 def planning_view(request):
