@@ -1,6 +1,5 @@
 {% extends "leden/base.html" %}
 
-
 {% block body %}
 
 {% if related %}
@@ -10,7 +9,7 @@
 {% if not r.virtual %}
 {% ifchanged r.until_year %}
 {% if r.until_year %}
-</ul><h4>Tot jaar {{ r.until_year }}</h4><ul>
+</ul><h4>Tot in jaar {{ r.until_year }}</h4><ul>
 {% endif %}
 {% endifchanged %}
 <li>
