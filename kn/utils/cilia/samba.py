@@ -18,7 +18,7 @@ def pdbedit_list():
     ph = subprocess.Popen(['pdbedit', '-Lw'],
             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT, close_fds=True)
-    for line in output.communicate()[0].splitlines():
+    for line in ph.communicate()[0].splitlines():
         (username, uid, lanmanhash, nthash, flags,
                 lastchange, empty) = line.split(':')
         users[username].update({

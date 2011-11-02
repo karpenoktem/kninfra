@@ -11,9 +11,13 @@ import datetime
 from kn.base._random import pseudo_randstr
 
 def unix_setpass(cilia, user, password):
-    # XXX Prevent changing root's password. Allow only users with group kn?
+    kn_gid = grp.getgrnam('kn').gr_gid
+    pwent = pwd.getpwnam(user)
+    if pwent.pw_gid != kn_gid:
+        return {'error': "Permission denied. Gid is not kn"}
     crypthash = crypt.crypt(password, pseudo_randstr(2))
     subprocess.call(['usermod', '-p', crypthash, user])
+    return {'success': True}
 
 def set_unix_map(cilia, _map):
     # First get the list of all current users
@@ -58,7 +62,7 @@ def set_unix_map(cilia, _map):
     # Determine which are missing
     created_group = False
     for g in _map['groups']:
-        gname = ('kn-%s'%g)[:32]
+        gname = ('kn-%s'%g)[:128]
         if gname not in c_groups:
             home = '/groups/%s'%g
             subprocess.call(['mkdir', home])
@@ -71,10 +75,9 @@ def set_unix_map(cilia, _map):
     # Synchronise membership
     glut = dict()
     for g in gs:
-        assert g.gr_name not in glut # issue #5
         glut[g.gr_name] = g
     for g in _map['groups']:
-        gname = ('kn-'+g)[:32]
+        gname = ('kn-'+g)[:128]
         c_memb = set(glut[gname].gr_mem)
         w_memb = set(_map['groups'][g])
         for m in w_memb:

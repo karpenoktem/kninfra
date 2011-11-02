@@ -1,0 +1,65 @@
+{% extends "leden/base.html" %}
+{% load base %}
+
+{% block body %}
+<h1>Event bewerken: {{ name }} @ {{ date }}</h1>
+<table>
+    <tr>
+        <th>Naam</th>
+        <th>Time</th>
+        <th>Pool</th>
+        <th>Assignee</th>
+        <th></th>
+    </tr>
+{% for vacancy in vacancies %}
+    <tr>
+        <td>{{ vacancy.name }}</td>
+        <td>{{ vacancy.begin_time }} - {{ vacancy.end_time }}</td>
+        <td>{{ vacancy.poolname }}</td>
+        <td>{{ vacancy.assignee_text }}</td>
+        <td>
+            <form method="POST" style="display: inline">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="remove_vacancy">
+                <input type="hidden" name="vacancy_id" value="{{ vacancy.vid }}">
+                <input type="submit" value="Remove">
+            </form>
+        </td>
+    </tr>
+{% endfor %}
+</table>
+<h2>Dienst aanmaken</h2>
+<form method="POST">
+{% csrf_token %}
+<input type="hidden" name="action" value="add_vacancy">
+     {{avform.errors}}
+<table>
+    <tr>
+        <th>{{ avform.name.label }}:</th>
+        <td>{{ avform.name }}</td> 
+    </tr>
+    <tr>
+        <th>{{ avform.begin.label }}:</th>
+        <td>{{ avform.begin }} {{ avform.begin_is_approximate }}</td>
+    </tr>
+    <tr>
+        <th>{{ avform.end.label }}:</th>
+        <td>{{ avform.end }} {{ avform.end_is_approximate }}</td>
+    </tr>
+    <tr>
+        <th>{{ avform.pool.label }}:</th>
+        <td>{{ avform.pool }}</td> 
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="submit" value="Maak aan"></td>
+    </tr>
+</table>
+</form>
+<form method="POST" style="display: inline" onSubmit="return confirm('Weet je het zeker?')">
+{% csrf_token %}
+<input type="hidden" name="action" value="remove_event">
+<input type="submit" value="Verwijder event">
+</form>
+{{ block.super }}
+{% endblock %}
