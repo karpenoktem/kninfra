@@ -7,8 +7,48 @@ def hm2s(h,m=0):
 
 BORREL_START = hm2s(20,30)
 BORREL_FIRST_SWITCH = hm2s(23)
-BORREL_SECOND_SWITCH = hm2s(25)
-BORREL_END = hm2s(28)
+BORREL_SECOND_SWITCH = hm2s(25)  # 1.00 the next day
+BORREL_END = hm2s(28)            # 4.00 the next day
+
+# Listed below are the preferences of the workers.
+# These preferences determine for each vacancy and worker a score.
+# This score usually ranges from 0 to 100; the current interpretation is:
+#
+#   100 - The worker is OK with filling this vacancy
+#    50 - The worker is willing to fill this vacancy if need be
+#     0 - The worker is not willing to fill this vacancy
+# False - Not set
+#
+# An exceptional score is:
+#
+#   101 - The workers preference is unknown.  Determining it has priority.
+#
+# 
+# The score is computed using "preflets" for each worker.
+# A preflet is a function which takes a vacancy and returns a score.
+#
+#
+#   Example:
+#
+# The preflet  p_borrel(X,Y,Z)  takes a vacancy and determines
+# if it is (like) a borrel-shift.  If it is (like) the first borrel shift,
+# it returns the score X, if it is (like) the second Y 
+# and Z if it is like the third.  If the vacancy is not like a borrel-shift
+# (for instance, if it is a Karpe Rockt'em) it returns False.
+#
+#
+# Below is a tuple (p_1, ... , p_N) of preflets for each worker.
+# If  v  is some vacancy, then the score of the worker for v is determined
+# by calling p_1 on v.  If p_1(v) returns a sensible score (i.e. not False)
+# then this score is used, otherwise p_2 is consulted, and so on.
+#
+# If all p_i's return False, then the score is set to 0.
+# If there was no tuple of p_i's to begin with, the score is set to 101.
+#
+#
+# For examples,  see "preferences" below.
+#
+
 
 def timedelta_to_seconds(td):
     return td.days*hm2s(24)+td.seconds
