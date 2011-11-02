@@ -77,8 +77,8 @@ class Worker(SONWrapper):
     def gather_last_shift(self):
         self.last_shift = None
         for v in vcol.find({'assignee': _id(self)},
-        sort=[('begin', DESCENDING)], limit=1):
-            self.last_shift = v['begin'].date()
+                sort=[('begin', DESCENDING)], limit=1):
+            self.last_shift = Vacancy(v).begin.date()
 
 
 class Event(SONWrapper):
