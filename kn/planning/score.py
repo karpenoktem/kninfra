@@ -77,7 +77,7 @@ def planning_vacancy_worker_score(vacancy, worker):
         return 101
     for preflet in preferences[un]:
         score = preflet(vacancy)
-        if preflet!=False:
+        if score!=False:
             return score
     # If nothing has been set, assume the worker is not available
     return 0
