@@ -21,43 +21,43 @@ templates = {
     '': { },
     'borrel': {
         'tappers': [
-            [hm2s(20, 30), hm2s(23), 'eerste dienst'],
-            [hm2s(23), hm2s(25), 'tweede dienst'],
-            [hm2s(25), hm2s(28), 'derde dienst']],
+            [(hm2s(20, 30),False), (hm2s(23),False), 'eerste dienst'],
+            [(hm2s(23),False), (hm2s(25),False), 'tweede dienst'],
+            [(hm2s(25),False), (hm2s(28),True), 'derde dienst']],
         'bestuur': [
-            [hm2s(20, 30), hm2s(24), 'openen'],
-            [hm2s(24), hm2s(28), 'sluiten']],
+            [(hm2s(20, 30),False), (hm2s(24),False), 'openen'],
+            [(hm2s(24),False), (hm2s(28),True), 'sluiten']],
         'draai': [
-            [hm2s(20, 45), hm2s(23), 'openen'],
-            [hm2s(23), hm2s(24), 'prime-time'],
-            [hm2s(24), hm2s(25), 'sluiten']]},
+            [(hm2s(20, 45),False), (hm2s(23),False), 'openen'],
+            [(hm2s(23),False), (hm2s(24),False), 'prime-time'],
+            [(hm2s(24),False), (hm2s(25),True), 'sluiten']]},
     'kleinfeest': {
         'tappers': [
-            [hm2s(20, 30), hm2s(23), 'eerste dienst'],
-            [hm2s(23), hm2s(25), 'tweede dienst'],
-            [hm2s(25), hm2s(28), 'derde dienst']],
+            [(hm2s(20, 30),False), (hm2s(23),False), 'eerste dienst'],
+            [(hm2s(23),False), (hm2s(25),False), 'tweede dienst'],
+            [(hm2s(25),False), (hm2s(28),True), 'derde dienst']],
         'bestuur': [
-            [hm2s(20, 30), hm2s(24), 'openen'],
-            [hm2s(24), hm2s(28), 'sluiten']]},
+            [(hm2s(20, 30),False), (hm2s(24),False), 'openen'],
+            [(hm2s(24),False), (hm2s(28),True), 'sluiten']]},
     'grootfeest': {
         'tappers': [
-            [hm2s(20, 30), hm2s(23), 'eerste dienst, tapper 1'],
-            [hm2s(20, 30), hm2s(23), 'eerste dienst, tapper 2'],
-            [hm2s(23), hm2s(25), 'tweede dienst, tapper 1'],
-            [hm2s(23), hm2s(25), 'tweede dienst, tapper 2'],
-            [hm2s(25), hm2s(28), 'derde dienst, tapper 1'],
-            [hm2s(25), hm2s(28), 'derde dienst, tapper 2']],
+            [(hm2s(20, 30),False), (hm2s(23),False), 'eerste dienst, tapper 1'],
+            [(hm2s(20, 30),False), (hm2s(23),False), 'eerste dienst, tapper 2'],
+            [(hm2s(23),False), (hm2s(25),False), 'tweede dienst, tapper 1'],
+            [(hm2s(23),False), (hm2s(25),False), 'tweede dienst, tapper 2'],
+            [(hm2s(25),False), (hm2s(28),True), 'derde dienst, tapper 1'],
+            [(hm2s(25),False), (hm2s(28),True), 'derde dienst, tapper 2']],
         'bestuur': [
-            [hm2s(20, 30), hm2s(24), 'openen'],
-            [hm2s(24), hm2s(28), 'sluiten']]},
+            [(hm2s(20, 30),False), (hm2s(24),False), 'openen'],
+            [(hm2s(24),False), (hm2s(28),True), 'sluiten']]},
     'dranktelling': {
         'barco': [
-            [hm2s(20), hm2s(20, 30), 'Teller 1'],
-            [hm2s(20), hm2s(20, 30), 'Teller 2']]},
+            [(hm2s(20),True), (hm2s(20, 30),False), 'Teller 1'],
+            [(hm2s(20),True), (hm2s(20, 30),False), 'Teller 2']]},
     'dranklevering': {
         'barco': [
-            [hm2s(10), hm2s(13), 'Persoon 1'],
-            [hm2s(10), hm2s(13), 'Persoon 2']]},
+            [(hm2s(9),False), (hm2s(13),False), 'Persoon 1'],
+            [(hm2s(9),False), (hm2s(13),False), 'Persoon 2']]},
 }
 
 @login_required
@@ -190,11 +190,13 @@ def event_create(request):
             for poolname, periods in templates[fd['template']].items():
                 pool = Pool.by_name(poolname)
                 for period in periods:
+                    begin_date = day + datetime.timedelta(seconds=period[0][0])
+                    end_date = day + datetime.timedelta(seconds=period[1][0])
                     v = Vacancy({
                         'name': period[2],
                         'event': _id(e),
-                        'begin': day + datetime.timedelta(seconds=period[0]),
-                        'end': day + datetime.timedelta(seconds=period[1]),
+                        'begin': (begin_date, period[0][1]),
+                        'end': (end_date, period[1][1]) ,
                         'pool': _id(pool),
                         'assignee': None,
                     })
@@ -227,13 +229,15 @@ def event_edit(request, eventid):
                 day = e.date
                 (begin_hour, begin_minute) = map(int, fd['begin'].split(':'))
                 (end_hour, end_minute) = map(int, fd['end'].split(':'))
-                begin = hm2s(begin_hour, begin_minute)
-                end = hm2s(end_hour, end_minute)
+                begin_offset = hm2s(begin_hour, begin_minute)
+                end_offset = hm2s(end_hour, end_minute)
+                begin_date = e.date + datetime.timedelta(seconds=begin_offset)
+                end_date = e.date + datetime.timedelta(seconds=end_offset)
                 v = Vacancy({
                     'name': fd['name'],
                     'event': _id(e),
-                    'begin': e.date + datetime.timedelta(seconds=begin),
-                    'end': e.date + datetime.timedelta(seconds=end),
+                    'begin': (begin_date, fd['begin_is_approximate']=="True"),
+                    'end': (end_date, fd['end_is_approximate']=="True"),
                     'pool': _id(fd['pool']),
                     'assignee': None,
                 })

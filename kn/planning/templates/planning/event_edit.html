@@ -32,8 +32,24 @@
 <form method="POST">
 {% csrf_token %}
 <input type="hidden" name="action" value="add_vacancy">
+     {{avform.errors}}
 <table>
-    {{ avform.as_table }}
+    <tr>
+        <th>{{ avform.name.label }}:</th>
+        <td>{{ avform.name }}</td> 
+    </tr>
+    <tr>
+        <th>{{ avform.begin.label }}:</th>
+        <td>{{ avform.begin }} {{ avform.begin_is_approximate }}</td>
+    </tr>
+    <tr>
+        <th>{{ avform.end.label }}:</th>
+        <td>{{ avform.end }} {{ avform.end_is_approximate }}</td>
+    </tr>
+    <tr>
+        <th>{{ avform.pool.label }}:</th>
+        <td>{{ avform.pool }}</td> 
+    </tr>
     <tr>
         <td></td>
         <td><input type="submit" value="Maak aan"></td>

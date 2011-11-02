@@ -136,16 +136,49 @@ class Pool(SONWrapper):
     def vacancies(self):
         return Vacancy.all_in_pool(self)
 
+# Generic functions for Vacancy.begin and end.
+#
+# These fields are either a datetime d or a tuple (d,a),
+# where d is a datetime and l is a bool which indicated whether
+# d is an approximation.
+#
+# adt stands for Approximate DateTime.
+def adt_to_datetime(r):
+    if isinstance(r,datetime.datetime):
+        return r
+    return r[0]
+
+def adt_is_approximation(r):
+    if isinstance(r,datetime.datetime):
+        return False
+    return r[1]
+
 class Vacancy(SONWrapper):
     formField = None
 
     name = son_property(('name',))
     event_id = son_property(('event',))
-    begin = son_property(('begin',))
-    end = son_property(('end',))
+    begin_raw = son_property(('begin',))
+    end_raw = son_property(('end',))
     pool_id = son_property(('pool',))
     assignee_id = son_property(('assignee',))
     reminder_sent = son_property(('reminder_sent',))
+    
+    @property
+    def begin(self):
+        return adt_to_datetime(self.begin_raw)
+
+    @property
+    def begin_is_approximate(self):
+        return adt_is_approximation(self.begin_raw)
+    
+    @property
+    def end(self):
+        return adt_to_datetime(self.end_raw)
+
+    @property
+    def end_is_approximate(self):
+        return adt_is_approximation(self.end_raw)
 
     def __init__(self, data):
         super(Vacancy, self).__init__(data, vcol)
@@ -184,11 +217,13 @@ class Vacancy(SONWrapper):
 
     @property
     def begin_time(self):
-        return self.begin.strftime('%H:%M')
+        return ("~" if self.begin_is_approximate else "") \
+                + self.begin.strftime('%H:%M')
 
     @property
     def end_time(self):
-        return self.end.strftime('%H:%M')
+        return ("~" if self.end_is_approximate else "") \
+                + self.end.strftime('%H:%M')
 
     @classmethod
     def by_id(cls, id):
