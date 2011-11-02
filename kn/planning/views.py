@@ -212,6 +212,8 @@ def event_edit(request, eventid):
     e = Event.by_id(eventid)
     if request.method == 'POST':
         if request.POST['action'] == 'remove_event':
+            for vacancy in e.vacancies():
+                vacancy.delete()
             e.delete()
             return HttpResponseRedirect(reverse('planning-poollist'))
         elif request.POST['action'] == 'remove_vacancy':
