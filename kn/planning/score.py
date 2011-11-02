@@ -94,6 +94,7 @@ def p_temporary(begin, end, preflet):
 
 
 preferences = {
+"tappers": {
         # In words:  Bas prefers the first and second shift,
         # but not the last shift and not after 12.00 PM.
         "bas":      (p_borrel(100,100,0,hm2s(24)),),
@@ -127,15 +128,16 @@ preferences = {
         "shane":    (p_borrel(100,100, 50),),
         "steef":    (p_borrel(100,100,100),),
         "tijn":     (p_borrel(100,100,100),)
-}
+}}
 
 def planning_vacancy_worker_score(vacancy, worker):
     un = worker.username
-    if un not in preferences:
+    pn = vacancy.pool.name
+    if pn not in preferences or un not in preferences[pn]:
         # If the preferences of a worker have not been set,
         # asume (s)he is available so that we'll get his/her preferences asap.
         return 101
-    for preflet in preferences[un]:
+    for preflet in preferences[pn][un]:
         score = preflet(vacancy)
         if score!=False:
             return score
