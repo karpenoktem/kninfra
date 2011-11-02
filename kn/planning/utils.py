@@ -14,10 +14,10 @@ def send_reminder(vacancy, update=True):
         'time': vacancy.begin_time,
         'vacancyName': vacancy.name,
         'eventName': e.name}
+    ccs = map(lambda x: Es.by_name(x).canonical_email, p.reminder_cc)
     subj = '%s, %s' % (vacancy.name.capitalize(), edate)
     em = EmailMessage(subj, msg, to=[to.canonical_email], headers={'Reply-To':
-        Es.by_name(p.administrator).canonical_email})
-    # em = EmailMessage(subj, msg, to=['jille@karpenoktem.nl'])
+        Es.by_name(p.administrator).canonical_email, 'CC': ccs}, bcc=ccs)
     em.send()
     if update:
         vacancy.reminder_needed = False
