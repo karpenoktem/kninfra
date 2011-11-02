@@ -17,4 +17,6 @@ urlpatterns = patterns('',
                         name='planning-event-edit'),
     url(r'^manage/(?P<poolname>[^/]+)/$', views.planning_manage,
                         name='planning_manage'),
+    url(r'^manage/(?P<poolname>[^/]+)/template/?$', views.planning_template,
+                        name='planning_template'),
 )

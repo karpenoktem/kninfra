@@ -286,3 +286,36 @@ def planning_api(request):
         return _api_send_reminder(request)
     else:
         return JsonHttpResponse({'error': 'unknown action'})
+
+@login_required
+def planning_template(request, poolname):
+    locale.setlocale(locale.LC_ALL, 'nl_NL')
+    pool = Pool.by_name(poolname)
+    events = list()
+    # TODO reduce number of queries
+    for e in Event.all_in_future():
+        vacancies = list(e.vacancies(pool))
+        if not vacancies:
+            continue
+        ei = {  'name': e.name,
+                'date': str(e.date.date()),
+            'vacancies': list()}
+        ei['description'] = e.date.strftime('%A %m %B')
+        if e.name != 'Borrel':
+            ei['description'] = '%s (%s)' % (ei['description'], ei['name'])
+        shifts = dict()
+        for v in vacancies:
+            if not v.begin in shifts:
+                shifts[v.begin] = {
+                    'name': v.name,
+                    'begin': v.begin,
+                    'begin_time': v.begin_time,
+                    'end_time': v.end_time,
+                    'assignees': list()}
+            shifts[v.begin]['assignees'].append(v.assignee)
+        ei['vacancies'] = map(lambda x: x[1], sorted(shifts.items(),
+            key=lambda x: x[0]))
+        events.append(ei)
+    events.sort(key=lambda x: x['date'])
+    return render_to_response('planning/template.html', {'events': events},
+            context_instance=RequestContext(request))
