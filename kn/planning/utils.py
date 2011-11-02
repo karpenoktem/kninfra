@@ -17,7 +17,7 @@ def send_reminder(vacancy, update=True):
     ccs = map(lambda x: Es.by_name(x).canonical_email, p.reminder_cc)
     subj = '%s, %s' % (vacancy.name.capitalize(), edate)
     em = EmailMessage(subj, msg, to=[to.canonical_email], headers={'Reply-To':
-        Es.by_name(p.administrator).canonical_email, 'CC': ccs}, bcc=ccs)
+        Es.by_name(p.administrator).canonical_email, 'CC': ', '.join(ccs)}, bcc=ccs)
     em.send()
     if update:
         vacancy.reminder_needed = False
