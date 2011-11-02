@@ -21,7 +21,7 @@ def ensure_indices():
     vcol.ensure_index('pool')
     vcol.ensure_index('begin')
     vcol.ensure_index('event')
-    vcol.ensure_index((('reminder_sent',1), ('event',1)))
+    vcol.ensure_index((('reminder_needed',1), ('event',1)))
     pcol.ensure_index('name')
     ecol.ensure_index('date')
 
@@ -124,6 +124,7 @@ class Pool(SONWrapper):
 
     name = son_property(('name',))
     administrator = son_property(('administrator',))
+    reminder_format = son_property(('reminder_format',))
 
     @classmethod
     def all(cls):
@@ -132,6 +133,9 @@ class Pool(SONWrapper):
     @classmethod
     def by_name(cls, n):
         return cls.from_data(pcol.find_one({'name': n}))
+    @classmethod
+    def by_id(cls, id):
+        return cls.from_data(pcol.find_one({'_id': _id(id)}))
 
     def vacancies(self):
         return Vacancy.all_in_pool(self)
@@ -162,7 +166,7 @@ class Vacancy(SONWrapper):
     end_raw = son_property(('end',))
     pool_id = son_property(('pool',))
     assignee_id = son_property(('assignee',))
-    reminder_sent = son_property(('reminder_sent',))
+    reminder_needed = son_property(('reminder_needed',))
     
     @property
     def begin(self):
@@ -182,7 +186,12 @@ class Vacancy(SONWrapper):
 
     def __init__(self, data):
         super(Vacancy, self).__init__(data, vcol)
-        self.reminder_sent = False
+
+    @classmethod
+    def from_data(cls, data):
+        if data is None:
+            return None
+        return cls(data)
 
     def get_event(self):
         return Event.by_id(self.event_id)
@@ -190,11 +199,11 @@ class Vacancy(SONWrapper):
         self.event_id = _id(x)
     event = property(get_event, set_event)
 
-    @classmethod
-    def from_data(cls, data):
-        if data is None:
-            return None
-        return cls(data)
+    def get_pool(self):
+        return Pool.by_id(self.pool_id)
+    def set_pool(self, x):
+        self.pool_id = _id(x)
+    pool = property(get_pool, set_pool)
 
     def get_assignee(self):
         aid = self.assignee_id
@@ -225,9 +234,18 @@ class Vacancy(SONWrapper):
         return ("~" if self.end_is_approximate else "") \
                 + self.end.strftime('%H:%M')
 
+    @property
+    def id(self):
+        return self._id
+
     @classmethod
     def by_id(cls, id):
         return cls.from_data(vcol.find_one({'_id':  _id(id)}))
+
+    @classmethod
+    def all(cls):
+        for v in vcol.find():
+            yield cls.from_data(v)
 
     @classmethod
     def all_in_pool(cls, p):
@@ -245,9 +263,6 @@ class Vacancy(SONWrapper):
     @classmethod
     def all_needing_reminder(cls):
         dt = now() + datetime.timedelta(days=7)
-        events = list()
-        for e in ecol.find({'date': {'$lte': dt}}):
-            events.append(e)
-        for v in vcol.find({'reminder_sent': False,
-            'event': {'$in': events}}):
+        events = map(lambda e: e['_id'], ecol.find({'date': {'$lte': dt}}))
+        for v in vcol.find({'reminder_needed': True, 'event': {'$in': events}}):
             yield cls.from_data(v)

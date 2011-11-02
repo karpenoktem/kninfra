@@ -9,6 +9,7 @@ from kn.planning import views
 
 urlpatterns = patterns('',
     (r'^$', views.planning_view),
+    (r'^!api/?$', views.planning_api),
     url(r'^manage/$', views.planning_poollist, name='planning-poollist'),
     url(r'^manage/event/new/$', views.event_create,
                         name='planning-event-create'),
@@ -16,4 +17,6 @@ urlpatterns = patterns('',
                         name='planning-event-edit'),
     url(r'^manage/(?P<poolname>[^/]+)/$', views.planning_manage,
                         name='planning_manage'),
+    url(r'^manage/(?P<poolname>[^/]+)/template/?$', views.planning_template,
+                        name='planning_template'),
 )

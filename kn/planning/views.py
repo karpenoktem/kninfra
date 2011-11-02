@@ -1,4 +1,7 @@
 # vim: et:sta:bs=2:sw=4:
+import locale
+from random import shuffle
+
 from django.http import Http404, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
@@ -7,12 +10,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from kn.leden.mongo import _id
-from kn.leden.date import date_to_dt
+from kn.leden.date import date_to_dt, now
+from kn.base.http import JsonHttpResponse
 from kn.planning.forms import *
 from kn.planning.entities import Pool, Worker, Event, Vacancy
 from kn.planning.score import planning_vacancy_worker_score
-
-from random import shuffle
+from kn.planning.utils import send_reminder
 
 def hm2s(hours, minutes=0):
     return (hours * 60 + minutes) * 60
@@ -106,17 +109,14 @@ def planning_manage(request, poolname):
     pool = Pool.by_name(poolname)
     if pool is None:
         raise Http404
-    if (pool.administrator not in request.user.cached_groups_names
-        and 'secretariaat' not in request.user.cached_groups_names):
+    if not request.user.cached_groups_names & set(['secretariaat',
+        pool.administrator]):
         raise PermissionDenied
-    workers = Worker.all_in_pool(pool)
     # TODO reduce number of queries
     events = dict()
     for e in Event.all_in_future():
         eid = _id(e)
         vacancies = list(e.vacancies(pool=pool))
-        if not vacancies:
-            continue
         events[eid] = {'vacancies': vacancies, 'date': e.date.date(),
                 'name': e.name, 'id': eid}
         posted = False
@@ -133,8 +133,12 @@ def planning_manage(request, poolname):
                 worker = request.POST['shift_%s' % vacancy._id]
                 if worker == '':
                     vacancy.assignee = None
+                    vacancy.reminder_needed = True
                 else:
-                    vacancy.assignee_id = _id(worker)
+                    if _id(vacancy.assignee_id) != _id(worker):
+                        delta = datetime.timedelta(days=5)
+                        vacancy.reminder_needed = now() + delta < e.date
+                        vacancy.assignee_id = _id(worker)
                 vacancy.save()
     workers = list(Worker.all_in_pool(pool))
     for worker in workers:
@@ -199,6 +203,7 @@ def event_create(request):
                         'end': (end_date, period[1][1]) ,
                         'pool': _id(pool),
                         'assignee': None,
+                        'reminder_needed': True,
                     })
                     v.save()
             return HttpResponseRedirect(reverse('planning-event-edit',
@@ -240,6 +245,7 @@ def event_edit(request, eventid):
                     'end': (end_date, fd['end_is_approximate']=="True"),
                     'pool': _id(fd['pool']),
                     'assignee': None,
+                    'reminder_needed': True,
                 })
                 v.save()
                 return HttpResponseRedirect(reverse('planning-event-edit',
@@ -259,4 +265,61 @@ def event_edit(request, eventid):
     return render_to_response('planning/event_edit.html',
             {'name': e.name, 'date': str(e.date.date()),
             'avform': avform, 'vacancies': vacancies},
+            context_instance=RequestContext(request))
+
+def _api_send_reminder(request):
+    if not 'vacancy_id' in request.REQUEST:
+        return JsonHttpResponse({'error': 'missing argument'})
+    v = Vacancy.by_id(request.REQUEST['vacancy_id'])
+    if not v:
+        raise Http404
+    print v._data
+    print v.pool_id
+    print v.pool
+    if not request.user.cached_groups_names & set(['secretariaat',
+        v.pool.administrator]):
+        raise PermissionDenied
+    send_reminder(v, update=False)
+    return JsonHttpResponse({'success': True})
+
+@login_required
+def planning_api(request):
+    locale.setlocale(locale.LC_ALL, 'nl_NL')
+    action = request.REQUEST.get('action')
+    if action == 'send-reminder':
+        return _api_send_reminder(request)
+    else:
+        return JsonHttpResponse({'error': 'unknown action'})
+
+@login_required
+def planning_template(request, poolname):
+    locale.setlocale(locale.LC_ALL, 'nl_NL')
+    pool = Pool.by_name(poolname)
+    events = list()
+    # TODO reduce number of queries
+    for e in Event.all_in_future():
+        vacancies = list(e.vacancies(pool))
+        if not vacancies:
+            continue
+        ei = {  'name': e.name,
+                'date': str(e.date.date()),
+            'vacancies': list()}
+        ei['description'] = e.date.strftime('%A %m %B')
+        if e.name != 'Borrel':
+            ei['description'] = '%s (%s)' % (ei['description'], ei['name'])
+        shifts = dict()
+        for v in vacancies:
+            if not v.begin in shifts:
+                shifts[v.begin] = {
+                    'name': v.name,
+                    'begin': v.begin,
+                    'begin_time': v.begin_time,
+                    'end_time': v.end_time,
+                    'assignees': list()}
+            shifts[v.begin]['assignees'].append(v.assignee)
+        ei['vacancies'] = map(lambda x: x[1], sorted(shifts.items(),
+            key=lambda x: x[0]))
+        events.append(ei)
+    events.sort(key=lambda x: x['date'])
+    return render_to_response('planning/template.html', {'events': events},
             context_instance=RequestContext(request))
