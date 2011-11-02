@@ -6,7 +6,7 @@ def send_reminder(vacancy, update=True):
     to = vacancy.assignee.get_user()
     e = vacancy.event
     p = vacancy.pool
-    edate = e.date.strftime('%A %m %B')
+    edate = e.date.strftime('%A %d %B')
     msgfmt = p.reminder_format
     msg = msgfmt % {
         'firstName': to.first_name,

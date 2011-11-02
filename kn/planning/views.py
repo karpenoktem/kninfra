@@ -305,7 +305,7 @@ def planning_template(request, poolname):
         ei = {  'name': e.name,
                 'date': str(e.date.date()),
             'vacancies': list()}
-        ei['description'] = e.date.strftime('%A %m %B')
+        ei['description'] = e.date.strftime('%A %d %B')
         if e.name != 'Borrel':
             ei['description'] = '%s (%s)' % (ei['description'], ei['name'])
         shifts = dict()
