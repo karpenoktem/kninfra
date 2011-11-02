@@ -125,6 +125,7 @@ class Pool(SONWrapper):
     name = son_property(('name',))
     administrator = son_property(('administrator',))
     reminder_format = son_property(('reminder_format',))
+    reminder_cc = son_property(('reminder_cc',))
 
     @classmethod
     def all(cls):
