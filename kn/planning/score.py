@@ -1,4 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
+from datetime import datetime
 
 # Returns the amount of seconds in the fiven amount of hours and minutes
 def hm2s(h,m=0):
@@ -41,10 +42,29 @@ def p_borrel_uncurried(first, second, third, not_after, vacancy):
 def p_borrel(first, second, third, not_after=BORREL_END):
     return lambda v: p_borrel_uncurried(first, second, third, not_after, v)
 
+
+def p_temporary_uc(begin, end, preflet, vacancy):
+    event = vacancy.event
+    if begin <= event.date <= end:
+        return preflet(vacancy)
+    return False
+
+def p_temporary(begin, end, preflet):
+    return lambda v: p_temporary_uc(begin, end, preflet, v)
+
+
 preferences = {
+        # In words:  Bas prefers the first and second shift,
+        # but not the last shift and not after 12.00 PM.
         "bas":      (p_borrel(100,100,0,hm2s(24)),),
         "bente":    (p_borrel(100, 50, 50),),
-        "bramw":    (p_borrel(  0,  0,100),),
+        # In words:  Bram prefers the last shift,
+        # except (as an example) from november first to november seventh,
+        # in which period his prefers to do nothing.
+        "bramw":    (p_temporary(
+                        datetime(2011,11,1),datetime(2011,11,7), 
+                        p_borrel(0,0,0)), 
+                     p_borrel(  0,  0,100),),
         "chaim":    (p_borrel(100,100,100),),
         "dennisi":   (p_borrel(100,100,100),),
         "hugo":     (p_borrel(100,100,100),),
