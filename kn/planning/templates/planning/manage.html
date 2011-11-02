@@ -3,6 +3,11 @@
 
 {% block body %}
 <script type="text/javascript">
+    function planning_api(data, cb) {
+        data.csrfmiddlewaretoken = '{{ csrf_token }}';
+        $.post("/planning/!api", data, cb, "json");
+    }
+
 	function set_select_by_id(fieldid, value) {
 		var el = document.getElementById(fieldid);
 		el.value = value;
@@ -14,6 +19,20 @@
 		el = document.getElementById('more_element_'+ id);
 		el.parentNode.removeChild(el);
 	}
+
+    function reminder_sent(d) {
+        if(d.error) {
+            alert(d.error);
+        }
+        if(d.success) {
+            alert('Ok');
+        }
+    }
+
+    function send_reminder(vid) {
+        planning_api({'action': 'send-reminder',
+                'vacancy_id': vid}, reminder_sent);
+    }
 </script>
 {% for event in events %}
 <form method="post" action=".">
@@ -22,12 +41,19 @@
 	{{ event.form.non_field_errors }}
 	<table>
 		<tr>
-                        <th><a href="{% url planning-event-edit event.id %}">{{ event.date }}</a></th>
-                        <th><a href="{% url planning-event-edit event.id %}">{{ event.name }}</a></th>
+            <th colspan="2"><a href="{% url planning-event-edit event.id %}">{{ event.date }}</a></th>
+            <th colspan="2"><a href="{% url planning-event-edit event.id %}">{{ event.name }}</a></th>
 		</tr>
 {% for vacancy in event.vacancies %}
 		<tr>
-			<td nowrap>{{ vacancy.formField.label }}</td>
+            <td>{{ vacancy.formField.label }}</td>
+            <td>{% spaceless %}
+{% if vacancy.reminder_needed %}
+                y
+{% else %}
+                <input type="button" value="R" onClick="send_reminder('{{ vacancy.id }}');">
+{% endif %}
+            {% endspaceless %}</td>
 			<td>{{ vacancy.formField }}</td>
 			<td style="font-size: 10pt">
 {% for suggestion in vacancy.suggestions %}
@@ -43,11 +69,13 @@
 			</td>
 		</tr>
 {% endfor %}
+{% if event.vacancies %}
 		<tr>
 			<td colspan="2">
 				<input type="submit" value="Sla op" />
 			</td>
 		</tr>
+{% endif %}
 	</table>
 </form>
 {% endfor %}
