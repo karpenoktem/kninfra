@@ -135,7 +135,8 @@ def planning_manage(request, poolname):
                     vacancy.assignee = None
                     vacancy.reminder_needed = True
                 else:
-                    if _id(vacancy.assignee_id) != _id(worker):
+                    if vacancy.assignee_id == None or \
+                            _id(vacancy.assignee_id) != _id(worker):
                         delta = datetime.timedelta(days=5)
                         vacancy.reminder_needed = now() + delta < e.date
                         vacancy.assignee_id = _id(worker)
