@@ -38,7 +38,7 @@ class ManagePlanningForm(forms.Form):
 class EventCreateForm(forms.Form):
     name = forms.CharField(label="Naam", initial="Borrel")
     date = forms.DateField(label="Datum", initial=datetime.date.today())
-    template = forms.ChoiceField(label="Template", choices=(
+    template = forms.ChoiceField(label="Template", required=False, choices=(
         ('', 'Geen'),
         ('borrel', 'Borrel'),
         ('kleinfeest', 'Klein feest'),
