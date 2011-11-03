@@ -2,7 +2,7 @@
 from django import forms
 
 import kn.leden.entities as Es
-from kn.planning.entities import Worker
+from kn.planning.entities import Pool, Worker
 
 import datetime
 
@@ -34,3 +34,28 @@ class ManagePlanningForm(forms.Form):
             self.fields['shift_%s' % vacancy._id] = field
         for vacancy in vacancies:
             vacancy.set_form_field(self['shift_%s' % vacancy._id])
+
+class EventCreateForm(forms.Form):
+    name = forms.CharField(label="Naam", initial="Borrel")
+    date = forms.DateField(label="Datum", initial=datetime.date.today())
+    template = forms.ChoiceField(label="Template", required=False, choices=(
+        ('', 'Geen'),
+        ('borrel', 'Borrel'),
+        ('kleinfeest', 'Klein feest'),
+        ('grootfeest', 'Groot feest'),
+        ('dranktelling', 'Dranktelling'),
+        ('dranklevering', 'Dranklevering'),
+        ))
+
+class AddVacancyForm(forms.Form):
+    name = forms.CharField(label="Shiftnaam", initial="eerste dienst")
+    begin = forms.RegexField(label="Begintijd", initial="20:30",
+            regex=r'^[0123][0-9]:[0-5][0-9]$')
+    begin_is_approximate = forms.ChoiceField(initial=False,
+            choices=((True,"bij benadering"),(False, "exact")))
+    end = forms.RegexField(label="Eindtijd", initial="23:00",
+            regex=r'^[0123][0-9]:[0-5][0-9]$')
+    end_is_approximate = forms.ChoiceField(initial=False,
+            choices=((True,"bij benadering"),(False, "exact")))
+    pool = forms.ChoiceField(label="Type",
+            choices=map(lambda x: (x._id, x.name), Pool.all()))

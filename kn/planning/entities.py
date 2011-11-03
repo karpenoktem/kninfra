@@ -21,7 +21,7 @@ def ensure_indices():
     vcol.ensure_index('pool')
     vcol.ensure_index('begin')
     vcol.ensure_index('event')
-    vcol.ensure_index((('reminder_sent',1), ('event',1)))
+    vcol.ensure_index((('reminder_needed',1), ('event',1)))
     pcol.ensure_index('name')
     ecol.ensure_index('date')
 
@@ -62,6 +62,10 @@ class Worker(SONWrapper):
     user = property(get_user, set_user)
 
     @property
+    def username(self):
+        return str(self.user.name)
+
+    @property
     def is_active(self):
         return self.is_active_at(now())
 
@@ -73,8 +77,8 @@ class Worker(SONWrapper):
     def gather_last_shift(self):
         self.last_shift = None
         for v in vcol.find({'assignee': _id(self)},
-        sort=[('begin', DESCENDING)], limit=1):
-            self.last_shift = v
+                sort=[('begin', DESCENDING)], limit=1):
+            self.last_shift = Vacancy(v).begin.date()
 
 
 class Event(SONWrapper):
@@ -105,8 +109,8 @@ class Event(SONWrapper):
     def by_id(cls, id):
         return cls.from_data(ecol.find_one({'_id': _id(id)}))
 
-    def vacancies(self):
-        return Vacancy.all_by_event(self)
+    def vacancies(self, pool=None):
+        return Vacancy.all_by_event(self, pool)
 
 class Pool(SONWrapper):
     def __init__(self, data):
@@ -120,6 +124,8 @@ class Pool(SONWrapper):
 
     name = son_property(('name',))
     administrator = son_property(('administrator',))
+    reminder_format = son_property(('reminder_format',))
+    reminder_cc = son_property(('reminder_cc',))
 
     @classmethod
     def all(cls):
@@ -128,24 +134,65 @@ class Pool(SONWrapper):
     @classmethod
     def by_name(cls, n):
         return cls.from_data(pcol.find_one({'name': n}))
+    @classmethod
+    def by_id(cls, id):
+        return cls.from_data(pcol.find_one({'_id': _id(id)}))
 
     def vacancies(self):
         return Vacancy.all_in_pool(self)
+
+# Generic functions for Vacancy.begin and end.
+#
+# These fields are either a datetime d or a tuple (d,a),
+# where d is a datetime and l is a bool which indicated whether
+# d is an approximation.
+#
+# adt stands for Approximate DateTime.
+def adt_to_datetime(r):
+    if isinstance(r,datetime.datetime):
+        return r
+    return r[0]
+
+def adt_is_approximation(r):
+    if isinstance(r,datetime.datetime):
+        return False
+    return r[1]
 
 class Vacancy(SONWrapper):
     formField = None
 
     name = son_property(('name',))
     event_id = son_property(('event',))
-    begin = son_property(('begin',))
-    end = son_property(('end',))
+    begin_raw = son_property(('begin',))
+    end_raw = son_property(('end',))
     pool_id = son_property(('pool',))
     assignee_id = son_property(('assignee',))
-    reminder_sent = son_property(('reminder_sent',))
+    reminder_needed = son_property(('reminder_needed',))
+    
+    @property
+    def begin(self):
+        return adt_to_datetime(self.begin_raw)
+
+    @property
+    def begin_is_approximate(self):
+        return adt_is_approximation(self.begin_raw)
+    
+    @property
+    def end(self):
+        return adt_to_datetime(self.end_raw)
+
+    @property
+    def end_is_approximate(self):
+        return adt_is_approximation(self.end_raw)
 
     def __init__(self, data):
         super(Vacancy, self).__init__(data, vcol)
-        self.reminder_sent = False
+
+    @classmethod
+    def from_data(cls, data):
+        if data is None:
+            return None
+        return cls(data)
 
     def get_event(self):
         return Event.by_id(self.event_id)
@@ -153,11 +200,11 @@ class Vacancy(SONWrapper):
         self.event_id = _id(x)
     event = property(get_event, set_event)
 
-    @classmethod
-    def from_data(cls, data):
-        if data is None:
-            return None
-        return cls(data)
+    def get_pool(self):
+        return Pool.by_id(self.pool_id)
+    def set_pool(self, x):
+        self.pool_id = _id(x)
+    pool = property(get_pool, set_pool)
 
     def get_assignee(self):
         aid = self.assignee_id
@@ -180,11 +227,26 @@ class Vacancy(SONWrapper):
 
     @property
     def begin_time(self):
-        return self.begin.strftime('%H:%M')
+        return ("~" if self.begin_is_approximate else "") \
+                + self.begin.strftime('%H:%M')
 
     @property
     def end_time(self):
-        return self.end.strftime('%H:%M')
+        return ("~" if self.end_is_approximate else "") \
+                + self.end.strftime('%H:%M')
+
+    @property
+    def id(self):
+        return self._id
+
+    @classmethod
+    def by_id(cls, id):
+        return cls.from_data(vcol.find_one({'_id':  _id(id)}))
+
+    @classmethod
+    def all(cls):
+        for v in vcol.find():
+            yield cls.from_data(v)
 
     @classmethod
     def all_in_pool(cls, p):
@@ -192,21 +254,16 @@ class Vacancy(SONWrapper):
             yield cls.from_data(v)
 
     @classmethod
-    def all_by_event(cls, e):
-        for v in vcol.find({'event': _id(e)}):
+    def all_by_event(cls, e, pool=None):
+        f = {'event': _id(e)}
+        if pool is not None:
+            f['pool'] = _id(pool)
+        for v in vcol.find(f):
             yield cls.from_data(v)
 
     @classmethod
     def all_needing_reminder(cls):
         dt = now() + datetime.timedelta(days=7)
-        events = list()
-        for e in ecol.find({'date': {'$lte': dt}}):
-            events.append(e)
-        for v in vcol.find({'reminder_sent': False,
-            'event': {'$in': events}}):
+        events = map(lambda e: e['_id'], ecol.find({'date': {'$lte': dt}}))
+        for v in vcol.find({'reminder_needed': True, 'event': {'$in': events}}):
             yield cls.from_data(v)
-
-
-#def by_name(name):
-#   d = mcol.find_one({'list': name})
-#   return None if d is None else ModerationRecord(d)
