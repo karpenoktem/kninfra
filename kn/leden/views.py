@@ -134,9 +134,8 @@ def _group_detail(request, group):
     rel_id = None
     if isFreeToJoin:
         dt = now()
-        rel = list(Es.query_relations(request.user, group, None, dt, dt, False,
-                False, False))
-        print rel
+        rel = list(Es.query_relations(request.user, group, None,
+                                        dt, dt, False, False, False))
         assert len(rel) <= 1
         for r in rel:
             rel_id = r['_id']

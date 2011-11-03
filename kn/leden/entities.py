@@ -200,6 +200,7 @@ def user_may_end_relation(user, rel):
     if 'secretariaat' in user.cached_groups_names:
         return True
     if _id(rel['who']) == _id(user) and \
+            rel['how'] is None and \
             by_id(rel['with']).has_tag(id_by_name('!free-to-join', True)):
         return True
     return False
@@ -209,8 +210,7 @@ def end_relation(__id):
     rcol.update({'_id': _id(__id)}, {'$set': {'until': dt}})
 
 def user_may_begin_relation(user, who, _with, how):
-    """
-        Returns whether @user may begin a @how-relation between @who and @_with
+    """ Returns whether @user may begin a @how-relation between @who and @_with
     """
     if _with.is_group and _with.as_group().is_virtual:
         return False
