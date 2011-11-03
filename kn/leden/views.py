@@ -130,6 +130,19 @@ def _user_detail(request, user):
 
 def _group_detail(request, group):
     ctx = _entity_detail(request, group)
+    isFreeToJoin = group.has_tag(Es.id_by_name('!free-to-join', True))
+    rel_id = None
+    if isFreeToJoin:
+        dt = now()
+        rel = list(Es.query_relations(request.user, group, None, dt, dt, False,
+                False, False))
+        print rel
+        assert len(rel) <= 1
+        for r in rel:
+            rel_id = r['_id']
+    ctx.update({'isFreeToJoin': group.has_tag(Es.by_name('!free-to-join')),
+        'request': request,
+        'relation_with_group': rel_id})
     return render_to_response('leden/group_detail.html', ctx,
             context_instance=RequestContext(request))
 
@@ -370,8 +383,6 @@ def relation_end(request, _id):
 @login_required
 def relation_begin(request):
     # TODO We should use Django forms, or better: use sweet Ajax
-    if not 'secretariaat' in request.user.cached_groups_names:
-        raise PermissionDenied
     d = {}
     for t in ('who', 'with', 'how'):
         if t not in request.POST:
@@ -380,6 +391,8 @@ def relation_begin(request):
             d[t] = None
         else:
             d[t] = _id(request.POST[t])
+    if not user_may_begin_relation(request.user, d['who'], d['with'], d['how']):
+        raise PermissionDenied
     # Check whether such a relation already exists
     dt = now()
     ok = False
