@@ -37,8 +37,10 @@ class CreateEventForm(forms.Form):
     humanName.widget.attrs['onblur'] = ('createTechName(); '+
                         'createFullHumanname();')
 
-class MoveFotosForm(forms.Form):
-    move_src = forms.ChoiceField(label='Verplaats',
-            choices=move_fotos_scan_userdirs())
-    move_dst = forms.ChoiceField(label='naar',
-            choices=move_fotos_list_events())
+def getMoveFotosForm():
+    class MoveFotosForm(forms.Form):
+        move_src = forms.ChoiceField(label='Verplaats',
+                choices=move_fotos_scan_userdirs())
+        move_dst = forms.ChoiceField(label='naar',
+                choices=move_fotos_list_events())
+    return MoveFotosForm
