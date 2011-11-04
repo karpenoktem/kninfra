@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 
-from kn.fotos.forms import CreateEventForm, MoveFotosForm
+from kn.fotos.forms import CreateEventForm, getMoveFotosForm
 from kn.settings import PHOTOS_DIR
 from kn.leden import giedo
 
@@ -33,6 +33,7 @@ def fotoadmin_create_event(request):
 def fotoadmin_move(request):
     if not request.user.cached_groups_names & set(['fotocie', 'webcie']):
         raise PermissionDenied
+    MoveFotosForm = getMoveFotosForm()
     if request.method == 'POST':
         form = MoveFotosForm(request.POST)
         if form.is_valid():
