@@ -8,4 +8,6 @@ urlpatterns = patterns('',
             views.fotoadmin_move, name='fotoadmin-move'),
         url(r'^admin/create/?$',
             views.fotoadmin_create_event, name='fotoadmin-create-event'),
+        url(r'^admin/status/?$',
+            views.fotoadmin_status, name='fotoadmin-status'),
 )

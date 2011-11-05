@@ -1,0 +1,47 @@
+{% extends "leden/base.html" %}
+{% load base %}
+
+{% block body %}
+<p>
+Hier zie je van welke fotos nog een verkleinde afbeelding gemaakt moet worden.
+<em>Thumbnail</em>" is het kleine plaatje in het overzicht. <em>Large</em> is de foto zelf.
+</p>
+<table>
+        <tr>
+                <th>Foto</th>
+                <th>Thumbnail</th>
+                <th>Large</th>
+        </tr>
+{% for p in photos %}
+        <tr>
+                <td>{{ p.photo }}</td>
+                <td>
+{% if p.thumb %}
+        {% if p.invalidated %}
+                        verouderd
+        {% else %}
+                        OK
+        {% endif %}
+{% else %}
+                        Nee
+{% endif %}
+                </td>
+                <td>
+{% if p.large %}
+        {% if p.invalidated %}
+                        verouderd
+        {% else %}
+                        OK
+        {% endif %}
+{% else %}
+                        Nee
+{% endif %}
+                </td>
+        </tr>
+{% empty %}
+        <tr>
+                <td colspan="3">Alle foto's zijn geconverteerd.</td>
+        </tr>
+{% endfor %}
+</table>
+{% endblock %}
