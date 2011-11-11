@@ -4,18 +4,22 @@
 <h1>Wachtwoord veranderen</h1>
 <form method="post" action="">
 	{% csrf_token %}
-	{% if errors %}
-	<p>Lieve {{ user.first_name }}, dit zou ik wel willen, maar je hebt 
-	{{errors}}.</p>
-	<p> Probeer het nog eens? </p>
-	{% endif %}
+	
+	<table><tr>
+		<td>Huidig:</td><td>{{form.old_password}}</td>
+	</tr><tr>
+		<td>Nieuw:</td><td>{{form.new_password}}</td>
+	</tr><tr>
+		<td>Nogmaals nieuw:&nbsp;</td><td>{{form.new_password_again}}</td>
+	</tr><tr>
+		<td><input type="submit" value="Opslaan" /></td><td></td>
+	</tr></table>
 
-	<p>Lieve website, zou je mijn oude wachtwoord
-	 {{form.old_password}} naar
-	{{form.new_password}}, ik zeg het nogmaals 
-	{{form.new_password_again}}, kunnen 
-	<input type="submit" value="veranderen?" /> 
-	</p>
+
+{% if errors %}
+	<p>Je hebt {{errors}}.</p>
+	<p> Probeer het nog eens. </p>
+	{% endif %}
 
 </form>
 
