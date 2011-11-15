@@ -24,22 +24,35 @@ def pseudo_randstr(l=12, cs=ALPHANUMUL):
         ret += cs[random.randint(0, len(cs)-1)]
     return ret
 
+"""
+Given a list of names,
+returns the users which are 
+  0.  named in this list,
+  1.  members of groups named in this list,
+  2.  members of groups of members of groups named in this list,
+       ...
+
+and raises a NotImplemtedError when another type of
+Entity then "user" or "group" is encountered.
+
+Cycles are accounted for.
+"""
 def args_to_users(args):
-    from kn.leden.models import OldKnUser, OldKnGroup
-    ret = set()
-    had = set()
-    for arg in args:
-        tmp = OldKnGroup.objects.filter(name=arg)
-        if len(tmp) != 0:
-            for u in tmp[0].user_set.all():
-                if u.pk in had:
-                    continue
-                ret.add(u.oldknuser)
-                had.add(u.pk)
+    import kn.leden.entities as Es
+    ret = set()  # set of Entities found
+    had = set()  # set of Entities dealt with
+    todo = set() # set of Entities to be dealt with
+    todo.update(Es.by_names(args).itervalues())
+    while len(todo)>0:
+        e = todo.pop()
+        if e in had:
             continue
-        tmp = OldKnUser.objects.get(username=arg)
-        if not tmp.pk in had:
-            ret.add(tmp)
+        if e.type=="user":
+            ret.add(e)
+            continue
+        if e.type!="group":
+            raise NotImplementedError()
+        todo.update(e.get_members())
     return tuple(ret)
 
 def print_table(data, separator=' '):
