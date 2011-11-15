@@ -218,7 +218,7 @@ def user_may_begin_relation(user, who, _with, how):
         return False
     if 'secretariaat' in user_e.cached_groups_names:
         return True
-    if _with_e.has_tag(Es.id_by_name('!free-to-join', True)):
+    if _with_e.has_tag(id_by_name('!free-to-join', True)):
         if _id(user) == _id(who) and how is None:
             return True
     return False
