@@ -2,7 +2,7 @@
 import _import
 
 from common import *
-from kn.leden.models import OldKnGroup
+import kn.leden.entities as Es
 
-for m in OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all():
+for m in Es.by_name(MEMBER_GROUP).get_members():
     print m.first_name[0] + m.last_name[0]
