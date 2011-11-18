@@ -1,9 +1,9 @@
 # vim: et:sta:bs=2:sw=4:
 import datetime
+import time
 
-# TODO Cache this in a proper way
 def now():
-        return datetime.datetime.now()
+    return datetime.datetime.now()
 
 def date_to_dt(d):
-        return datetime.datetime.combine(d, datetime.time())
+    return datetime.datetime.combine(d, datetime.time())
