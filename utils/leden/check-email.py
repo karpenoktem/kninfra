@@ -4,7 +4,7 @@ from __future__ import with_statement
 import _import
 import sys
 from datetime import date, datetime
-from kn.leden.models import OldKnUser
+import kn.leden.entities as Es
 from common import *
 
 DAYS_IN_YEAR = 365.242199
@@ -15,30 +15,37 @@ def check_email():
 
     for m in args_to_users(sys.argv[1:]):
         msgs = list()
-        if m.dateJoined is None:
-            msgs.append("de datum van toetreden is onbekend")
-        else:
-            if m.dateJoined < date(2004, 4, 1):
-                msgs.append("je bent toegetreden voor "+
-                        "de constitutie")
+        ## ___ oud ___    
+        #if m.dateJoined is None:
+        #    msgs.append("de datum van toetreden is onbekend")
+        #else:
+        #    if m.dateJoined < date(2004, 4, 1):
+        #        msgs.append("je bent toegetreden voor "+
+        #                "de constitutie")
+        # 
+        ## Het moment van toetreding wordt niet meer bijgehouden
         if m.dateOfBirth is None:
             msgs.append("je geboortedatum is onbekend")
         else:
-            age = (datetime.now().date() - m.dateOfBirth).days \
+            age = (datetime.now() - m.dateOfBirth).days \
                     / DAYS_IN_YEAR
             if age < 15:
                 msgs.append("je bent jonger dan 15")
             elif age > 40:
                 msgs.append("je bent ouder dan 40")
-        if m.addr_street == '':
-            msgs.append("we missen de straat van je adres")
-        if m.addr_zipCode == '':
-            msgs.append("we missen de postcode van je adres")
-        if m.addr_number == '':
-            msgs.append("we missen het huisnummer van je adres")
-        if m.addr_city == '':
-            msgs.append("van adres is geen plaats bekend")
-        if m.telephone is None or m.telephone == '':
+        addr = m.primary_address
+        if addr == None:
+            msgs.append("we missen jouw adres")
+        else:
+            if not addr['street']:
+                msgs.append("we missen de straat van je adres")
+            if not addr['zip']:
+                msgs.append("we missen de postcode van je adres")
+            if not addr['number']:
+                msgs.append("we missen het huisnummer van je adres")
+            if not addr['city']:
+                msgs.append("van adres is geen plaats bekend")
+        if not m.primary_telephone:
             msgs.append("jouw telefoonnummer is onbekend")
         if m.studentNumber is None:
             msgs.append("jouw studentnummer is onbekend")
@@ -54,38 +61,38 @@ def check_email():
                 else: extra += ';\n'
         else:
             extra = ''
+        study = m.proper_primary_study
         em = templ % (
-            {'username': m.username,
+            {'username': str(m), # returns the (user)name
              'firstName': m.first_name,
              'lastName': m.last_name,
-             'fullName': m.full_name(),
+             'fullName': m.full_name,
              'gender': ('onbekend' if m.gender is None
                 else {'m': 'man',
                       'v': 'vrouw'}.get(m.gender, '?')),
              'dateOfBirth': ('onbekend' if m.dateOfBirth is None
-                else str(m.dateOfBirth)),
-             'dateJoined': ('onbekend' if m.dateJoined is None
-                else str(m.dateJoined)),
-             'email': m.email,
-             'telephone': ('onbekend' if m.telephone is None
-                else m.telephone),
-             'addr_street': ('onbekend' if m.telephone is None
-                else m.addr_street),
-             'addr_number': ('onbekend' if m.telephone is None
-                else m.addr_number),
-             'addr_city': ('onbekend' if m.telephone is None
-                else m.addr_city),
-             'addr_zipCode': ('onbekend' if m.telephone is None
-                else m.addr_zipCode),
-             'institute': ('onbekend' if m.telephone is None
-                else m.institute),
-             'study': ('onbekend' if m.telephone is None
-                else m.study),
-             'studentNumber': ('onbekend' if m.telephone is None
+                else str(m.dateOfBirth.date())),
+             'dateJoined': 'onbekend',  # TODO:  Fix of remove
+             'email': m.primary_email,
+             'telephone': ('onbekend' if m.primary_telephone is None
+                else m.primary_telephone),
+             'addr_street': ('onbekend' if not addr
+                else addr['street']),
+             'addr_number': ('onbekend' if not addr
+                else addr['number']),
+             'addr_city': ('onbekend' if not addr 
+                else addr['city']),
+             'addr_zipCode': ('onbekend' if not addr
+                else addr['zip']),
+             'institute': ('onbekend' if (not study or not study['institute'])
+                else study['institute'].humanName.humanName),
+             'study': ('onbekend' if (not study or not study['study'])
+                else study['study'].humanName.humanName), # ik verzin dit niet
+             'studentNumber': ('onbekend' if not m.studentNumber
                 else m.studentNumber),
              'extra': extra
             })
-        print m
+        print m.name
         m.email_user('Controle Karpe Noktem ledenadministratie',
              em, from_email='secretaris@karpenoktem.nl')
 

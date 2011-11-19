@@ -695,6 +695,9 @@ class User(Entity):
     def last_name(self):
         return self._data['person']['family']
     @property
+    def gender(self):
+        return self._data['person']['gender']
+    @property
     def telephones(self):
         ret = []
         for t in self._data.get('telephones', ()):
@@ -704,6 +707,13 @@ class User(Entity):
                         else t['until'],
                     'number': t['number']})
         return ret
+    @property
+    def primary_telephone(self):
+        telephones = self.telephones
+        if not telephones:
+            return None
+        return telephones[0]['number']
+
     @property
     def addresses(self):
         ret = []
@@ -718,6 +728,13 @@ class User(Entity):
                     'zip': a['zip'],
                     'city': a['city']})
         return ret
+    @property
+    def primary_address(self):
+        addresses = self.addresses
+        if not addresses:
+            return None
+        return addresses[0]
+
     @property
     def studies(self):
         ret = []
@@ -748,6 +765,16 @@ class User(Entity):
                 else by_id(self._data['studies'][0]['study'])\
                             .as_study()
         return self._primary_study
+    @property
+    def proper_primary_study(self):
+        studies = self.studies
+        if not studies:
+            return None
+        return studies[0]
+    @property
+    def studentNumber(self):
+        study = self.proper_primary_study
+        return study['number'] if self.proper_primary_study else None
     @property
     def dateOfBirth(self):
         return self._data.get('person',{}).get('dateOfBirth')
