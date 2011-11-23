@@ -390,7 +390,8 @@ def relation_begin(request):
             d[t] = None
         else:
             d[t] = _id(request.POST[t])
-    if not user_may_begin_relation(request.user, d['who'], d['with'], d['how']):
+    if not Es.user_may_begin_relation(request.user, d['who'], d['with'],
+                                                                d['how']):
         raise PermissionDenied
     # Check whether such a relation already exists
     dt = now()
