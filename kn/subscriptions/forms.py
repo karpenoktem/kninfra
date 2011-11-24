@@ -16,7 +16,7 @@ def get_add_event_form(user, superuser=False):
             cmp=lambda x,y: cmp(unicode(x.humanName),
                     unicode(y.humanName)))
     class AddEventForm(forms.Form):
-        name = forms.CharField(label='Korte naam')
+        name = forms.RegexField(label='Korte naam', regex=r'^[a-z0-9-]+$')
         humanName = forms.CharField(label='Naam')
         description = forms.CharField(label='Beschrijving',
                 widget=forms.Textarea)
