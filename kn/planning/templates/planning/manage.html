@@ -8,17 +8,17 @@
         $.post("/planning/!api", data, cb, "json");
     }
 
-	function set_select_by_id(fieldid, value) {
-		var el = document.getElementById(fieldid);
-		el.value = value;
-	}
+    function set_select_by_id(fieldid, value) {
+        var el = document.getElementById(fieldid);
+        el.value = value;
+    }
 
-	function show_more_suggestions(id) {
-		var el = document.getElementById('more_'+ id);
-		el.style.display = 'inline';
-		el = document.getElementById('more_element_'+ id);
-		el.parentNode.removeChild(el);
-	}
+    function show_more_suggestions(id) {
+        var el = document.getElementById('more_'+ id);
+        el.style.display = 'inline';
+        el = document.getElementById('more_element_'+ id);
+        el.parentNode.removeChild(el);
+    }
 
     function reminder_sent(d) {
         if(d.error) {
@@ -36,26 +36,24 @@
 </script>
 {% for event in events %}
 <form method="post" action=".">
-	{% csrf_token %}
-	<input type="hidden" name="eid" value="{{ event.id }}">
-	{{ event.form.non_field_errors }}
-	<table>
-		<tr>
+    {% csrf_token %}
+    <input type="hidden" name="eid" value="{{ event.id }}">
+    {{ event.form.non_field_errors }}
+    <table>
+        <tr>
             <th colspan="2"><a href="{% url planning-event-edit event.id %}">{{ event.date }}</a></th>
             <th colspan="2"><a href="{% url planning-event-edit event.id %}">{{ event.name }}</a></th>
-		</tr>
+        </tr>
 {% for vacancy in event.vacancies %}
-		<tr>
+        <tr>
             <td>{{ vacancy.formField.label }}</td>
-            <td>{% spaceless %}
 {% if vacancy.reminder_needed %}
-                y
+            <td title="Reminder wordt nog verzonden">y</td>
 {% else %}
-                <input type="button" value="R" onClick="send_reminder('{{ vacancy.id }}');">
+            <td><input type="button" value="R" onClick="send_reminder('{{ vacancy.id }}');" title="Stuur nu een reminder"></td>
 {% endif %}
-            {% endspaceless %}</td>
-			<td>{{ vacancy.formField }}</td>
-			<td style="font-size: 10pt">
+            <td>{{ vacancy.formField }}</td>
+            <td style="font-size: 10pt">
 {% for suggestion in vacancy.suggestions %}
 {% if forloop.counter == 5 %}<a
         href="javascript:show_more_suggestions('{{ vacancy.formField.name }}');"
@@ -66,17 +64,17 @@
                 >{{ suggestion.scorer.get_user.name }}</a>{% if not forloop.last %},{% endif %}
 {% if forloop.last and forloop.counter > 5 %}</span>{% endif %}
 {% endfor %}
-			</td>
-		</tr>
+            </td>
+        </tr>
 {% endfor %}
 {% if event.vacancies %}
-		<tr>
-			<td colspan="2">
-				<input type="submit" value="Sla op" />
-			</td>
-		</tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Sla op" />
+            </td>
+        </tr>
 {% endif %}
-	</table>
+    </table>
 </form>
 {% endfor %}
 {{ block.super }}
