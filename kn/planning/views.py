@@ -148,7 +148,7 @@ def planning_manage(request, poolname):
         # zoeken.  Stel dat iemand over een half-jaar al is ingepland
         # dan is dat niet zo boeiend.  Terwijl hij nu geen enkele
         # bardienst meer zou krijgen
-        worker.gather_last_shift()
+        worker.set_last_shift(pool)
     for eid in events:
         for vacancy in events[eid]['vacancies']:
             vacancy.suggestions = list()

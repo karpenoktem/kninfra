@@ -18,6 +18,8 @@ for w in Worker.all():
     workers[w.get_user()] = w
 
 dt = now()
+for w in workers.itervalues():
+    del w.pools[:]
 for type in ['tappers', 'bestuur', 'barco', 'draai']:
     poolid = _id(pools[type])
     group = Es.by_name(type)
@@ -27,10 +29,13 @@ for type in ['tappers', 'bestuur', 'barco', 'draai']:
             if poolid not in workers[gm['who']].pools:
                 print '%s -> %s' % (gm['who'].name, type)
                 workers[gm['who']].pools.append(poolid)
-                workers[gm['who']].save()
         else:
-            print '%s -> %s' % (gm['who'].name, type)
+            print '*%s -> %s' % (gm['who'].name, type)
             workers[gm['who']] = Worker({
                 'pools': [ poolid ],
                 'user': _id(gm['who'])})
-            workers[gm['who']].save()
+print "saving ..."
+for w in workers.itervalues():
+    w.save()
+print "done"
+

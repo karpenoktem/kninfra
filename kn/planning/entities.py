@@ -45,10 +45,7 @@ class Worker(SONWrapper):
     @classmethod
     def all_in_pool(cls, p):
         for m in wcol.find({'pools':  _id(p)}):
-            w = cls.from_data(m)
-            if not w.is_active_in(p):
-                continue
-            yield w
+            yield cls.from_data(m)
 
     @classmethod
     def by_id(cls, id):
@@ -68,14 +65,15 @@ class Worker(SONWrapper):
     def username(self):
         return str(self.user.name)
 
-    def is_active_in(self, pool):
-        return self.user in pool.group.get_members()
-
-    def gather_last_shift(self):
+    def last_shift_in(self, pool):
         self.last_shift = None
-        for v in vcol.find({'assignee': _id(self)},
+        for v in vcol.find({'assignee': _id(self), 'pool': _id(pool)},
                 sort=[('begin', DESCENDING)], limit=1):
-            self.last_shift = Vacancy(v).begin.date()
+            return Vacancy(v).begin.date()
+    
+    # last_shift is used in a template
+    def set_last_shift(self, pool):
+        self.last_shift = self.last_shift_in(pool)
 
 
 class Event(SONWrapper):
