@@ -11,7 +11,14 @@
 {% for event in events %}
 	<tr>
                 {# TODO move into stylesheet #}
-		<td colspan="{{ poolcount }}" style="text-align: center; font-weight: bold; border-bottom: 2px solid white">{{ event.name }} {{ event.date }}</td>
+                <td 
+                        colspan="{{ poolcount }}" 
+                        style="text-align: center;
+                        border-bottom: 2px solid white">
+                        <strong>{{ event.date }}</strong>
+                         - {{ event.name }}
+                        <small>{{ event.kind }}</small>
+                </td>
 	</tr>
 	<tr>
 {% for poolidx, vacancies in event.vacancies.items %}

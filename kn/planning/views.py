@@ -76,6 +76,7 @@ def planning_view(request):
     for e in Event.all_in_future():
         ei = {  'name': e.name,
                 'date': str(e.date.date()),
+                'kind': e.kind,
             'vacancies': dict()}
         for idx in poolid2idx.values():
             ei['vacancies'][idx] = list()
@@ -118,7 +119,7 @@ def planning_manage(request, poolname):
         eid = _id(e)
         vacancies = list(e.vacancies(pool=pool))
         events[eid] = {'vacancies': vacancies, 'date': e.date.date(),
-                'name': e.name, 'id': eid}
+                'name': e.name, 'kind': e.kind, 'id': eid}
         posted = False
         events[eid]['vacancies'].sort(key=lambda v: v.begin)
         if request.method == 'POST' and _id(request.POST['eid']) == eid:
@@ -190,7 +191,8 @@ def event_create(request):
             day = date_to_dt(fd['date'])
             e = Event({
                 'name': fd['name'],
-                'date': day})
+                'date': day,
+                'kind': fd['template']})
             e.save()
             for poolname, periods in templates[fd['template']].items():
                 pool = Pool.by_name(poolname)
@@ -264,7 +266,7 @@ def event_edit(request, eventid):
         vacancies.append(v)
     vacancies.sort(key=lambda x: str(x.pool_id) + str(x.begin))
     return render_to_response('planning/event_edit.html',
-            {'name': e.name, 'date': str(e.date.date()),
+            {'name': e.name, 'kind': e.kind, 'date': str(e.date.date()),
             'avform': avform, 'vacancies': vacancies},
             context_instance=RequestContext(request))
 
