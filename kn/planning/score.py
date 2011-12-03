@@ -55,8 +55,8 @@ def timedelta_to_seconds(td):
 
 def p_borrel_uncurried(first, second, third, not_after, vacancy):
     event = vacancy.event
-    # Only give a score on a monday
-    if event.date.weekday()!=0:
+    # Only give a score if this is a borrel
+    if event.kind!="borrel":
         return False
     # the moment the vacancy starts (ends) in seconds after the 
     # start of the monday.
