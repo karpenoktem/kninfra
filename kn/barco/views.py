@@ -30,13 +30,13 @@ def barco_barform(request, repos):
     prefill = {}
     if request.method == 'POST':
         form = BarFormMeta(request.POST)
+        prefill = json.loads(request.POST['jsondata'])
+        # The keys are unicode and that gives trouble when passing it to
+        # the template and |safe'ing it. This line maps all keys to
+        # non-unicode.
+        prefill = dict(map(lambda x: (str(x[0]), x[1]), prefill.items()))
         if form.is_valid():
             fd = form.cleaned_data
-            prefill = json.loads(fd['jsondata'])
-            # The keys are unicode and that gives trouble when passing it to
-            # the template and |safe'ing it. This line maps all keys to
-            # non-unicode.
-            prefill = dict(map(lambda x: (str(x[0]), x[1]), prefill.items()))
             csv = StringIO();
             csv.write("# Ingevoerd door "+ str(request.user.name) +"\n")
             csv.write("Bar;;;;\n\n")
@@ -51,6 +51,9 @@ def barco_barform(request, repos):
             csv.write(str(fd['beginkas']))
             csv.write(";")
             csv.write(str(fd['eindkas']))
+            if fd['comments'] != '':
+                csv.write("\n\n# XXX ")
+                csv.write(fd['comments'].replace("\n", "\n# "))
             csv.write("\n\n")
             emptyColumn = False
             column = 0
@@ -59,9 +62,9 @@ def barco_barform(request, repos):
                 for row in fields:
                     if column >= len(row):
                         continue
+                    emptyColumn = False
                     if row[column] == '':
                         continue
-                    emptyColumn = False
                     if row[column][0] == '!':
                         csv.write("# ");
                         csv.write(row[column][1:])
@@ -79,10 +82,13 @@ def barco_barform(request, repos):
             with open(repopath + fn, 'w') as fh:
                 fh.write(csv.getvalue())
             subprocess.call(['/usr/bin/git', 'add', fn], cwd=repopath)
-            msg = "Barform %s ingevoerd door %s" % (fd['formname'],
-                    str(request.user.name))
-            subprocess.call(['/usr/bin/git', 'commit', '-m', msg, fn],
-                    cwd=repopath)
+            msg = ("Barform %s ingevoerd via kninfra\n\n"
+                    "Signed-off-by: kninfra <root@karpenoktem.nl>" %
+                    fd['formname'])
+            author = "%s <%s>" % (str(request.user.humanName),
+                    request.user.canonical_email)
+            subprocess.call(['/usr/bin/git', 'commit', '--author', author,
+                '-m', msg, fn], cwd=repopath)
             subprocess.call(['/usr/bin/git', 'pull', '--rebase'], cwd=repopath)
             subprocess.call(['/usr/bin/git', 'push'], cwd=repopath)
     else:

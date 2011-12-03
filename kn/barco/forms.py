@@ -9,4 +9,6 @@ class BarFormMeta(forms.Form):
     dienst = forms.CharField(label="Dienst")
     beginkas = forms.DecimalField(label="Beginkas")
     eindkas = forms.DecimalField(label="Eindkas")
+    comments = forms.CharField(label="Opmerkingen",
+                    widget=forms.widgets.Textarea(), required=False)
     jsondata = forms.CharField(widget=forms.HiddenInput())
