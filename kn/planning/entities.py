@@ -93,6 +93,7 @@ class Event(SONWrapper):
 
     name = son_property(('name',))
     date = son_property(('date',))
+    kind = son_property(('kind',))
 
     @classmethod
     def all(cls):
