@@ -1,0 +1,87 @@
+{% extends "leden/base.html" %}
+{% load base %}
+
+{% block body %}
+<script type="text/javascript">
+var fields = {{ fields|safe }};
+var prefill = {{ prefill|safe }};
+var htmlFields = [];
+
+function build_structure(tbd) {
+    for(var i = 0; fields.length > i; i++) {
+        row = fields[i];
+        var tr = document.createElement('tr');
+        for(var j = 0; row.length > j; j++) {
+            if(row[j] == '') {
+                var td = document.createElement('td');
+                td.colSpan = 2;
+                tr.appendChild(td);
+            } else if(row[j][0] == '!') {
+                var td = document.createElement('td');
+                td.style.fontWeight = 'bold';
+                td.style.textDecoration = 'underline';
+                td.colSpan = 2;
+                td.appendChild(document.createTextNode(row[j].substring(1)));
+                tr.appendChild(td);
+            } else {
+                var td = document.createElement('td');
+                td.appendChild(document.createTextNode(row[j]));
+                tr.appendChild(td);
+                td = document.createElement('td');
+                var f = document.createElement('input');
+                f.type = 'text';
+                f.size = 3;
+                f.name = row[j];
+                if(prefill[f.name]) {
+                    f.value = prefill[f.name];
+                }
+                td.appendChild(f);
+                tr.appendChild(td);
+                htmlFields.push(f);
+            }
+        }
+        tbd.appendChild(tr);
+    }
+
+    tbd.appendChild(tr);
+
+    return tbd;
+}
+
+function presubmit(form) {
+    // XXX use JSON-encoding from jQuery or the like
+    var data = '';
+    for(var i = 0; htmlFields.length > i; i++) {
+        f = htmlFields[i];
+        if(f.value) {
+            data += ',"'+ f.name +'": '+ f.value;
+        }
+    }
+    data = '{'+ data.substring(1) +'}';
+    document.getElementById('id_jsondata').value = data;
+    return true;
+}
+
+oldOnload = window.onload
+window.onload = function() {
+    if(oldOnload) {
+        oldOnload();
+    }
+    build_structure(document.getElementById('generated_table'));
+};
+</script>
+<table>
+    <tbody id="generated_table"></tbody>
+</table>
+<form method="POST" onSubmit="return presubmit(this);">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Opslaan"></td>
+        </tr>
+    </table>
+</form>
+{{ block.super }}
+{% endblock %}
