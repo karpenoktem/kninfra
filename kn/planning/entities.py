@@ -45,7 +45,10 @@ class Worker(SONWrapper):
     @classmethod
     def all_in_pool(cls, p):
         for m in wcol.find({'pools':  _id(p)}):
-            yield cls.from_data(m)
+            w = cls.from_data(m)
+            if not w.is_active_in(p):
+                continue
+            yield w
 
     @classmethod
     def by_id(cls, id):
@@ -65,14 +68,8 @@ class Worker(SONWrapper):
     def username(self):
         return str(self.user.name)
 
-    @property
-    def is_active(self):
-        return self.is_active_at(now())
-
-    def is_active_at(self, dt):
-    # TODO ?!
-        return self.get_user().get_related(None, dt, dt, False,
-        False, False).count() > 0
+    def is_active_in(self, pool):
+        return self.user in pool.group.get_members()
 
     def gather_last_shift(self):
         self.last_shift = None
@@ -116,6 +113,7 @@ class Event(SONWrapper):
 class Pool(SONWrapper):
     def __init__(self, data):
         super(Pool, self).__init__(data, pcol)
+        self._group = None
 
     @classmethod
     def from_data(cls, data):
@@ -141,6 +139,12 @@ class Pool(SONWrapper):
 
     def vacancies(self):
         return Vacancy.all_in_pool(self)
+
+    @property
+    def group(self):
+        if not self._group:
+            self._group = Es.by_name(self.name)
+        return self._group
 
 # Generic functions for Vacancy.begin and end.
 #
