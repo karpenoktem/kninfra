@@ -68,7 +68,7 @@ function show_geldteller(el) {
     var tbl = document.createElement('table');
     var tbd = document.createElement('tbody');
 
-    el.onclick = function() {
+    el.onfocus = function() {
         tbl.style.display = '';
     };
 
@@ -121,7 +121,7 @@ function show_geldteller(el) {
 }
 
 function attach_geldteller(el) {
-    el.onclick = function() {
+    el.onfocus = function() {
         show_geldteller(el);
     }
 }
