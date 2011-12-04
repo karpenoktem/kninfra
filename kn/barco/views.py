@@ -4,12 +4,12 @@ import json
 from cStringIO import StringIO
 import subprocess
 
-from django.http import Http404 #, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 # from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
-# from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse
 
 from koert.drank.rikf import open_rikf_ar
 
@@ -91,6 +91,8 @@ def barco_barform(request, repos):
                 '-m', msg, fn], cwd=repopath)
             subprocess.call(['/usr/bin/git', 'pull', '--rebase'], cwd=repopath)
             subprocess.call(['/usr/bin/git', 'push'], cwd=repopath)
+            request.user.push_message("Opgeslagen!")
+            return HttpResponseRedirect(reverse('barco-barform', args=(repos,)))
     else:
         form = BarFormMeta()
     return render_to_response('barco/barform.html', {'fields': fields,
