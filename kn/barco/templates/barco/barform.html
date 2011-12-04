@@ -62,12 +62,78 @@ function presubmit(form) {
     return true;
 }
 
+function show_geldteller(el) {
+    units = [5000, 2000, 1000, 500, 200, 100, 50, 20, 10, 5, 2, 1];
+    u2f = {};
+    var tbl = document.createElement('table');
+    var tbd = document.createElement('tbody');
+
+    el.onclick = function() {
+        tbl.style.display = '';
+    };
+
+    for(var i = 0; units.length > i; i++) {
+        var tr = document.createElement('tr');
+        var td = document.createElement('td');
+        td.appendChild(document.createTextNode(units[i] / 100.0));
+        tr.appendChild(td);
+
+        td = document.createElement('td');
+        var inp = document.createElement('input');
+        inp.type = 'text';
+        inp.size = 3;
+        inp.unit = units[i];
+        u2f[units[i]] = inp;
+        td.appendChild(inp);
+        tr.appendChild(td);
+
+        tbd.appendChild(tr);
+    }
+
+    tr = document.createElement('tr');
+    td = document.createElement('td');
+    tr.appendChild(td);
+    td = document.createElement('td');
+    ok = document.createElement('input');
+    ok.type = 'button';
+    ok.value = "Tel!"
+    ok.onclick = function() {
+        total = 0;
+        for(var u in u2f) {
+            var v = u2f[u].value;
+            if(v != '') {
+                v = parseInt(v, 10);
+                total += u * v;
+            }
+        }
+        if(confirm("Dat is dan "+ (total / 100.0) +".")) {
+            el.value = total / 100.0;
+            tbl.style.display = 'none';
+        }
+    };
+    td.appendChild(ok);
+    tr.appendChild(td);
+    tbd.appendChild(tr);
+
+    tbl.appendChild(tbd);
+
+    el.parentNode.appendChild(tbl);
+}
+
+function attach_geldteller(el) {
+    el.onclick = function() {
+        show_geldteller(el);
+    }
+}
+
 oldOnload = window.onload
 window.onload = function() {
     if(oldOnload) {
         oldOnload();
     }
     build_structure(document.getElementById('generated_table'));
+    attach_geldteller(document.getElementById('id_beginkas'));
+    attach_geldteller(document.getElementById('id_eindkas'));
 };
 </script>
 <table>
