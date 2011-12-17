@@ -9,6 +9,7 @@ import time
 import datetime
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
+from kn.leden import giedo
 from kn.settings import DT_MIN, DT_MAX
 
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
