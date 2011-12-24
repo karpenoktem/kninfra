@@ -1,79 +1,9 @@
-{% extends "leden/base.html" %}
+{% extends "barco/form.html" %}
 {% load base %}
 
 {% block body %}
+{{ block.super }}
 <script type="text/javascript">
-var fields = {{ fields|safe }};
-var prefill = {{ prefill|safe }};
-var htmlFields = [];
-
-function build_structure(tbd) {
-    var tif = {}; //Hier komen alle fields in om ze daarna een tabIndex te geven
-    for(var i = 0; fields.length > i; i++) {
-        row = fields[i];
-        var tr = document.createElement('tr');
-        for(var j = 0; row.length > j; j++) {
-            if(row[j] == '') {
-                var td = document.createElement('td');
-                td.colSpan = 2;
-                tr.appendChild(td);
-            } else if(row[j][0] == '!') {
-                var td = document.createElement('td');
-                td.style.fontWeight = 'bold';
-                td.style.textDecoration = 'underline';
-                td.colSpan = 2;
-                td.appendChild(document.createTextNode(row[j].substring(1)));
-                tr.appendChild(td);
-            } else {
-                var td = document.createElement('td');
-                td.appendChild(document.createTextNode(row[j]));
-                tr.appendChild(td);
-                td = document.createElement('td');
-                var f = document.createElement('input');
-                f.type = 'text';
-                f.size = 3;
-                f.name = row[j];
-                if(prefill[f.name]) {
-                    f.value = prefill[f.name];
-                }
-                td.appendChild(f);
-                tr.appendChild(td);
-                htmlFields.push(f);
-                if((typeof tif[j]) == 'undefined') {
-                        tif[j] = [];
-                }
-                tif[j].push(f);
-            }
-        }
-        tbd.appendChild(tr);
-    }
-
-    tbd.appendChild(tr);
-
-    var ti = 1;
-    for(var j in tif) {
-        for(i = 0; tif[j].length > i; i++) {
-            tif[j][i].tabIndex = ti++;
-        }
-    }
-
-    return tbd;
-}
-
-function presubmit(form) {
-    // XXX use JSON-encoding from jQuery or the like
-    var data = '';
-    for(var i = 0; htmlFields.length > i; i++) {
-        f = htmlFields[i];
-        if(f.value) {
-            data += ',"'+ f.name +'": '+ f.value;
-        }
-    }
-    data = '{'+ data.substring(1) +'}';
-    document.getElementById('id_jsondata').value = data;
-    return true;
-}
-
 function show_geldteller(el) {
     units = [5000, 2000, 1000, 500, 200, 100, 50, 20, 10, 5, 2, 1];
     u2f = {};
@@ -138,28 +68,13 @@ function attach_geldteller(el) {
     }
 }
 
-oldOnload = window.onload
+oldOnload_Barform = window.onload
 window.onload = function() {
-    if(oldOnload) {
-        oldOnload();
+    if(oldOnload_Barform) {
+        oldOnload_Barform();
     }
-    build_structure(document.getElementById('generated_table'));
     attach_geldteller(document.getElementById('id_beginkas'));
     attach_geldteller(document.getElementById('id_eindkas'));
 };
 </script>
-<table>
-    <tbody id="generated_table"></tbody>
-</table>
-<form method="POST" onSubmit="return presubmit(this);">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td><input type="submit" value="Opslaan"></td>
-        </tr>
-    </table>
-</form>
-{{ block.super }}
 {% endblock %}
