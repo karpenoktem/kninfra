@@ -24,4 +24,5 @@ urlpatterns = patterns('',
     (r'^moderatie/', include('kn.moderation.urls')),
     (r'^fotos/', include('kn.fotos.urls')),
     (r'^planning/', include('kn.planning.urls')),
+    (r'^barco/', include('kn.barco.urls')),
 )
