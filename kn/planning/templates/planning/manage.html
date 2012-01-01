@@ -66,6 +66,12 @@
 {% endfor %}
             </td>
         </tr>
+{% empty %}
+        <tr>
+            <td colspan="2">
+                    Er zijn geen diensten voor pool {{ pool }}.
+            </td>
+        </tr>
 {% endfor %}
 {% if event.vacancies %}
         <tr>
