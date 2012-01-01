@@ -26,8 +26,7 @@ class Cilia(WhimDaemon):
         if d['type'] == 'unix':
             with self.unix_lock:
                 set_unix_map(self, d['map'])
-            # XXX decide where we will call this as this is a bit
-            # ugly
+            # XXX decide where we will call this as this is a bit ugly
             with self.samba_lock:
                 set_samba_map(self, d['map'])
         elif d['type'] == 'setpass':

@@ -39,8 +39,7 @@ class Daan(WhimDaemon):
                 return set_postfix_map(self, d['map'])
         elif d['type'] == 'mailman':
             with self.mailman_lock:
-                return apply_mailman_changes(self,
-                        d['changes'])
+                return apply_mailman_changes(self, d['changes'])
         elif d['type'] == 'wiki':
             with self.wiki_lock:
                 return apply_wiki_changes(self, d['changes'])
