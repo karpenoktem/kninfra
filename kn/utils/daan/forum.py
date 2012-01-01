@@ -20,6 +20,27 @@ def forum_setpass(daan, user, password):
     c.close()
     dc.close()
 
+def forum_rename_entity(daan, entity, newname, primary_type):
+    creds = settings.FORUM_MYSQL_SECRET
+    dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2], db=creds[3])
+    c = dc.cursor()
+    c.execute("UPDATE users SET username=%s WHERE username=%s;",
+            (newname, entity))
+    c.execute("UPDATE topics SET poster=%s WHERE poster=%s;", (newname, entity))
+    c.execute("UPDATE topics SET last_poster=%s WHERE last_poster=%s;",
+            (newname, entity))
+    c.execute("UPDATE forums SET last_poster=%s WHERE last_poster=%s;",
+            (newname, entity))
+    c.execute("UPDATE online SET ident=%s WHERE ident=%s;", (newname, entity))
+    c.execute("UPDATE posts SET edited_by=%s WHERE edited_by=%s;",
+            (newname, entity))
+    # XXX forum-moderators need extra queries to keep them moderators of
+    # specific forums and their name could be in the ban-cache. We'll just
+    # ignore them for now.
+    c.execute("COMMIT;")
+    c.close()
+    dc.close()
+
 def apply_forum_changes(daan, changes):
     creds = settings.FORUM_MYSQL_SECRET
     dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],

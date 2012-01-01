@@ -40,6 +40,12 @@ def samba_setpass(cilia, user, password):
             stderr=subprocess.STDOUT, close_fds=True)
     return ph.communicate("%s\n" % password)[0]
 
+def samba_rename_entity(cilia, entity, newname, primary_type):
+    # We doen niks: Als er een sync komt verwijderen we de oude account en maken
+    # we de nieuwe aan. Daarna moet er nog een setpass gebeuren om het
+    # wachtwoord weer te zetten.
+    pass
+
 def set_samba_map(cilia, _map):
     l = logging.getLogger(__name__)
     smbusers = pdbedit_list()

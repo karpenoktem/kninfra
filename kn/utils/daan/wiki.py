@@ -13,6 +13,13 @@ def wiki_setpass(daan, user, password):
                 '--password', password],
         cwd=settings.MEDIAWIKI_PATH)
 
+def wiki_rename_enitity(daan, name, newname, primary_type):
+    # XXX There is not maintenance script for this yet.
+    # https://bugzilla.wikimedia.org/show_bug.cgi?id=33459
+    # It should be done manually for the time being at
+    # http://www.karpenoktem.nl/wiki/Speciaal:GebruikerHernoemen
+    pass
+
 def apply_wiki_changes(daan, changes):
     creds = settings.WIKI_MYSQL_SECRET
     dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],

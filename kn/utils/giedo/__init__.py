@@ -101,6 +101,30 @@ class Giedo(WhimDaemon):
                 self.daan.send(d2)
                 self.cilia.send(d2)
                 return {'success': True}
+            elif d['type'] == 'rename-entity':
+                e = Es.by_name(d['name'])
+                if e is None:
+                    return {'error': 'no such entity'}
+                if e.type not in ('user', 'group'):
+                    return {'error': 'can only rename users and groups'}
+                ne = Es.by_name(d['newname'])
+                if ne is not None:
+                    return {'error': 'newname already in use'}
+                if e.type == 'user':
+                    if not e.check_password(d['pass']):
+                        return {'error': 'wrong password'}
+                e.update_primary_name(d['newname'])
+								d['primary_type'] = e.type
+                self.daan.send(d)
+                self.cilia.send(d)
+                self.sync()
+                if e.type == 'user':
+                    d2 = {'type': 'setpass',
+                          'user': d['name'],
+                          'pass': d['pass']}
+                    self.daan.send(d2)
+                    self.cilia.send(d2)
+                return {'success': True}
             elif d['type'] == 'fotoadmin-move-fotos':
                 # TODO should this block Giedo?
                 ret = self.daan.send(d)

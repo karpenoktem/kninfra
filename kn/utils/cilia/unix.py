@@ -7,6 +7,7 @@ import string
 import logging
 import subprocess
 import datetime
+import os
 
 from kn.base._random import pseudo_randstr
 
@@ -18,6 +19,28 @@ def unix_setpass(cilia, user, password):
     crypthash = crypt.crypt(password, pseudo_randstr(2))
     subprocess.call(['usermod', '-p', crypthash, user])
     return {'success': True}
+
+def unix_rename_entity(cilia, entity, newname, primary_type):
+    if primary_type == 'user':
+        try:
+            pwent = pwd.getpwnam(entity)
+        except KeyError:
+            return {'error': 'User not found'}
+        kn_gid = grp.getgrnam('kn').gr_gid
+        if pwent.pw_gid != kn_gid:
+            return {'error': "Permission denied. Gid is not kn"}
+        newhome = '/home/%s' % newname
+        subprocess.call(['usermod', '-l', newname, '-d', newhome, '-m', entity])
+        return {'success': True}
+    elif primary_type == 'group':
+        try:
+            grent = grp.getgrnam('kn-'+ entity)
+        except KeyError:
+            return {'error': 'Group not found'}
+        subprocess.call(['groupmod', '-n', 'kn-'+ newname, 'kn-'+ entity])
+        os.rename('/groups/+ entity, '/groups/'+ newname)
+        return {'success': True}
+    return {'error': 'Invalid primary_type'}
 
 def set_unix_map(cilia, _map):
     # First get the list of all current users

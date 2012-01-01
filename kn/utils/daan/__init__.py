@@ -51,6 +51,13 @@ class Daan(WhimDaemon):
                 wiki_setpass(self, d['user'], d['pass'])
             with self.forum_lock:
                 forum_setpass(self, d['user'], d['pass'])
+        elif d['type'] == 'rename-entity':
+            with self.wiki_lock:
+                wiki_rename_entity(self, d['name'], d['newname']
+                    d['primary_type'])
+            with self.forum_lock:
+                forum_rename_entity(self, d['name'], d['newname'],
+                    d['primary_type'])
         elif d['type'] == 'update-knsite':
             with self.update_knsite_lock:
                 return live_update_knsite(self)

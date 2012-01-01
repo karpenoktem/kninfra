@@ -541,6 +541,12 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def update_primary_name(self, new, save=True):
+        """ Adds @new as new and primary name. """
+        self._data['names'].insert(0, new)
+        if save:
+            self.save()
+
     def update_primary_email(self, new, save=True):
         """ Adds @new as new and primary e-mail address. """
         if 'emailAddresses' not in self._data:

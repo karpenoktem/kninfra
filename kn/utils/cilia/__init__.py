@@ -34,6 +34,13 @@ class Cilia(WhimDaemon):
                 unix_setpass(self, d['user'], d['pass'])
             with self.samba_lock:
                 samba_setpass(self, d['user'], d['pass'])
+        elif d['type'] == 'rename-entity':
+            with self.unix_lock:
+                unix_rename_entity(self, d['name'], d['newname'],
+                        d['primary_type'])
+            with self.samba_lock:
+                samba_rename_entity(self, d['name'], d['newname'],
+                        d['primary_type'])
         elif d['type'] == 'fotoadmin-remove-moved-fotos':
             with self.fotoadmin_lock:
                 return fotoadmin_remove_moved_fotos(self,
