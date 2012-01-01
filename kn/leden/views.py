@@ -357,6 +357,7 @@ def secr_add_group(request):
                 'humanNames': [{'name': nm,
                     'human': fd['humanName'],
                     'genitive_prefix': fd['genitive_prefix']}],
+								'description': fd['description'],
                 'tags': [_id(fd['parent'])]})
             logging.info("Added group %s" % nm)
             g.save()
