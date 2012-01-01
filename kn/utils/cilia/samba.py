@@ -33,6 +33,8 @@ def pdbedit_list():
     return users
 
 def samba_setpass(cilia, user, password):
+    # XXX het lijkt me verstandig hier te checken of het wel een kn-user is
+    # anders kun je zo een root-exploit doen als je Giedo overneemt.
     ph = subprocess.Popen(['smbpasswd', '-as', user],
             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT, close_fds=True)
