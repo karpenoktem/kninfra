@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'kn.leden',
-    'kn.poll',
+    'kn.poll', # XXX Not yet converted to Mongo
     'kn.subscriptions',
     'kn.browser',
     'kn.reglementen',
