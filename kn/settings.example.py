@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'kn.moderation',
     'kn.fotos',
     'kn.barco',
+    'kn.planning',
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.auth",
