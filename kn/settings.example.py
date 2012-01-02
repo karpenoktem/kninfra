@@ -29,7 +29,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
 )
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -50,12 +50,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
-        "django.contrib.messages.context_processors.messages",
-        "kn.base.context_processors.bg",
+    "django.contrib.messages.context_processors.messages",
+    "kn.base.context_processors.bg",
 )
 TEMPLATE_DIRS = ()
 AUTHENTICATION_BACKENDS = (
-        'kn.leden.auth.MongoBackend',
+    'kn.leden.auth.MongoBackend',
 )
 SESSION_ENGINE = 'kn.leden.sessions'
 LOGIN_REDIRECT_URL='/smoelen/'
