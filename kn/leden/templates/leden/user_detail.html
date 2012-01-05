@@ -68,7 +68,7 @@
         </ul>
         </dd>
 	{% endif %}
-        {% if "secretariaat" in user.cached_groups_names %}
+        {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names %}
 	{% if object.telephones %}
 	<dt>Telefoonnummer</dt>
         <dd>
@@ -113,7 +113,7 @@
         </ul>
         </dd>
         {% endif %}{# object.addresses #}
-        {% endif %}{# "secretariaat" in user.cached_groups_names #}
+        {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names #}
         {% if object.dateOfBirth %}
 	<dt>Geboortedatum</dt>
 	<dd>
