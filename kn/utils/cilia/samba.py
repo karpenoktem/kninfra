@@ -33,6 +33,10 @@ def pdbedit_list():
     return users
 
 def samba_setpass(cilia, user, password):
+    kn_gid = grp.getgrnam('kn').gr_gid
+    pwent = pwd.getpwnam(user)
+    if pwent.pw_gid != kn_gid:
+        return {'error': "Permission denied. Gid is not kn"}
     ph = subprocess.Popen(['smbpasswd', '-as', user],
             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT, close_fds=True)

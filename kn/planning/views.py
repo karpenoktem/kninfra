@@ -172,8 +172,8 @@ def planning_manage(request, poolname):
     events = list(events.values())
     events.sort(key=lambda e: e['date'])
     return render_to_response('planning/manage.html',
-               {'events': events},
-               context_instance=RequestContext(request))
+            {'events': events, 'pool': poolname},
+           context_instance=RequestContext(request))
 
 @login_required
 def planning_poollist(request):
