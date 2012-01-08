@@ -11,10 +11,13 @@ import os
 
 from kn.base._random import pseudo_randstr
 
-def unix_setpass(cilia, user, password):
+def user_is_in_group_kn(pwent):
     kn_gid = grp.getgrnam('kn').gr_gid
+    return pwent.pw_gid == kn_gid
+
+def unix_setpass(cilia, user, password):
     pwent = pwd.getpwnam(user)
-    if pwent.pw_gid != kn_gid:
+    if not user_is_in_group_kn(pwent):
         return {'error': "Permission denied. Gid is not kn"}
     crypthash = crypt.crypt(password, pseudo_randstr(2))
     subprocess.call(['usermod', '-p', crypthash, user])
@@ -26,8 +29,7 @@ def unix_rename_entity(cilia, entity, newname, primary_type):
             pwent = pwd.getpwnam(entity)
         except KeyError:
             return {'error': 'User not found'}
-        kn_gid = grp.getgrnam('kn').gr_gid
-        if pwent.pw_gid != kn_gid:
+        if not user_is_in_group_kn(pwent):
             return {'error': "Permission denied. Gid is not kn"}
         newhome = '/home/%s' % newname
         subprocess.call(['usermod', '-l', newname, '-d', newhome, '-m', entity])
