@@ -36,6 +36,15 @@ function build_structure(tbd) {
                 if(prefill[f.name]) {
                     f.value = prefill[f.name];
                 }
+                var embedWrapper = function(f) {
+                    f.onkeyup = function() {
+                        if(f.value == 'tik') {
+                            var s = prompt("Tik een teken per turfje aan", '');
+                            f.value = s.length;
+                        }
+                    };
+                };
+                embedWrapper(f);
                 td.appendChild(f);
                 tr.appendChild(td);
                 htmlFields.push(f);
