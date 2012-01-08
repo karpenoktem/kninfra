@@ -58,6 +58,9 @@ class Daan(WhimDaemon):
             with self.forum_lock:
                 forum_rename_entity(self, d['name'], d['newname'],
                     d['primary_type'])
+            with self.mailman_lock:
+                mailman_rename_entity(self, d['name'], d['newname'],
+                    d['primary_type'])
         elif d['type'] == 'update-knsite':
             with self.update_knsite_lock:
                 return live_update_knsite(self)

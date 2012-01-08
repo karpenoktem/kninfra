@@ -59,3 +59,37 @@ def apply_mailman_changes(daan, changes):
         for ml in mlo.values():
             ml.Save()
             ml.Unlock()
+
+def mailman_rename_entity(daan, entity, newname, primary_type):
+    if primary_type != 'group':
+        return {'error': 'Entity is not a group'}
+    # service mailman stop
+    if call(['/etc/init.d/mailman', 'stop']) != 0:
+        logging.error("Stopping mailman failed")
+        return {'error': 'Stopping mailman failed'}
+    # mv /var/lib/mailman/lists/${OLD} /var/lib/mailman/lists/${NEW}
+    os.rename(settings.MAILMAN_PATH +'/lists/'+ entity, settings.MAILMAN_PATH +'/lists/'+ newname)
+    # mv /var/lib/mailman/archives/private/${OLD} /var/lib/mailman/archives/private/${NEW}
+    os.rename(settings.MAILMAN_PATH +'/archives/private/'+ entity, settings.MAILMAN_PATH +'/archives/private/'+ newname)
+    # mv /var/lib/mailman/archives/private/${OLD}.mbox /var/lib/mailman/archives/private/${NEW}.mbox
+    os.rename(settings.MAILMAN_PATH +'/archives/private/'+ entity +'.mbox', settings.MAILMAN_PATH +'/archives/private/'+ newname +'.mbox')
+    # mv /var/lib/mailman/archives/private/${NEW}.mbox/${OLD}.mbox /var/lib/mailman/archives/private/${NEW}.mbox/${NEW}.mbox
+    os.rename(settings.MAILMAN_PATH +'/archives/private/'+ newname +'.mbox/'+ entity +'.mbox', settings.MAILMAN_PATH +'/archives/private/'+ newname +'.mbox/'+ newname +'.mbox')
+    # /var/lib/mailman/bin/arch ${NEW}
+    if call([settings.MAILMAN_PATH +'/bin/arch', newname]) != 0:
+        logging.warning("Regenerating archives failed")
+    # Change real_name, subject_prefix
+    ml = MailList.MailList(newname)
+    ml.real_name = newname.capitalize()
+    ml.subject_prefix = '['+ ml.real_name '+] '
+    ml.Save()
+    ml.Unlock()
+    # postfix sync
+    #   Giedo will send a sync when we're done.
+    # genaliases
+    #   XXX [2012-01-08 jille] Bas: Should we do this manually or is this done automatically?
+    # service mailman start
+    if call(['/etc/init.d/mailman', 'start']) != 0:
+        logging.error("Starting mailman failed")
+        return {'error': 'Starting mailman failed'}
+    return {'success': True}
