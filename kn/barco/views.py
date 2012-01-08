@@ -101,7 +101,7 @@ class BarformSpecifics(FormSpecifics):
             csv.write(str(fd['eindkas']))
             if fd['comments'] != '':
                 csv.write("\n\n# XXX ")
-                csv.write(fd['comments'].replace("\n", "\n# "))
+                csv.write(fd['comments'].replace("\r\n", "\n").replace("\n", "\n# "))
             csv.write("\n\n")
             template_write_data_to_file(template, prefill, csv)
 
