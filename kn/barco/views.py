@@ -53,29 +53,29 @@ class FormSpecifics(object):
 # The following function writes data (entered by the user) of count
 # to a file in an order resembling the template.
 def template_write_data_to_file(template, data, csv):
+    emptyColumn = False
+    column = 0
+    while not emptyColumn:
+        emptyColumn = True
+        for row in template:
+            if column >= len(row):
+                continue
             emptyColumn = False
-            column = 0
-            while not emptyColumn:
-                emptyColumn = True
-                for row in template:
-                    if column >= len(row):
-                        continue
-                    emptyColumn = False
-                    if row[column] == '':
-                        continue
-                    if row[column][0] == '!':
-                        csv.write("# ");
-                        csv.write(row[column][1:])
-                        csv.write("\n");
-                    else:
-                        csv.write(row[column])
-                        csv.write(";")
-                        if row[column] in data:
-                            csv.write(str(data[row[column]]))
-                            csv.write("\n")
-                        else:
-                            csv.write("0\n")
-                column += 1
+            if row[column] == '':
+                continue
+            if row[column][0] == '!':
+                csv.write("# ");
+                csv.write(row[column][1:])
+                csv.write("\n");
+            else:
+                csv.write(row[column])
+                csv.write(";")
+                if row[column] in data:
+                    csv.write(str(data[row[column]]))
+                    csv.write("\n")
+                else:
+                    csv.write("0\n")
+        column += 1
 
 
 class BarformSpecifics(FormSpecifics):
