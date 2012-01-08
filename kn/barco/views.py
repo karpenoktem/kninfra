@@ -31,11 +31,13 @@ class FormSpecifics(object):
             django_form, 
             django_template, 
             dir_in_repo, 
-            template_path # see explanation below
+            template_path, # see explanation below
+            weights_path
             ):
         self.django_form = django_form
         self.django_template = django_template
         self.template_path = template_path
+        self.weights_path = weights_path
         self.dir_in_repo = dir_in_repo
 
     def entered_data_to_file(self, fd, csv, template): 
@@ -71,7 +73,13 @@ def template_write_data_to_file(template, data, csv):
                 csv.write(row[column])
                 csv.write(";")
                 if row[column] in data:
-                    csv.write(str(data[row[column]]))
+                    parts = []
+                    for ex in data[row[column]].split(','):
+                        if ex[0] == 'g':
+                            parts.append('gewogen:'+ ex[1:])
+                        else:
+                            parts.append(ex)
+                    csv.write("+".join(parts))
                     csv.write("\n")
                 else:
                     csv.write("0\n")
@@ -84,7 +92,8 @@ class BarformSpecifics(FormSpecifics):
                 django_form=BarformMeta,
                 django_template="barco/barform.html",
                 dir_in_repo="barforms",
-                template_path="form-template-active.csv")
+                template_path="barforms/form-template-active.csv",
+                weights_path=None)
 
     def entered_data_to_file(self, fd, csv, template, prefill):
             csv.write("Bar;;;;\n\n")
@@ -111,7 +120,8 @@ class InvCountSpecifics(FormSpecifics):
         super(InvCountSpecifics, self).__init__(
                 django_form=InvCountMeta,
                 django_template="barco/form.html",
-                template_path="form-template-active.csv",
+                template_path="inventory/form-template-active.csv",
+                weights_path="weights.csv",
                 dir_in_repo="inventory")
 
     def entered_data_to_file(self, fd, csv, template, prefill):
@@ -141,18 +151,23 @@ def barco_enterform(request, repos, formname):
         raise Http404
     formspec = settings.BARCO_FORMS[formname]
     repopath = settings.DRANK_REPOS_PATH % (repos,)
-    dir_path = os.path.join(repopath, formspec.dir_in_repo)
-    template_path = os.path.join(dir_path, formspec.template_path)
+    template_path = os.path.join(repopath, formspec.template_path)
     template = open_rikf_ar(template_path)
+    weight_fields = set()
+    if formspec.weights_path is not None:
+        weights_path = os.path.join(repopath, formspec.weights_path)
+        weights = open_rikf_ar(weights_path)
+        for row in weights:
+            weight_fields.add(row[0].strip())
 
     prefill = {}
     if request.method == 'POST':
         form = (formspec.django_form)(request.POST)
         prefill = json.loads(request.POST['jsondata'])
         # The keys are unicode and that gives trouble when passing it to
-        # the template and |safe'ing it. This line maps all keys to
+        # the template and |safe'ing it. This line maps all keys and values to
         # non-unicode.
-        prefill = dict(map(lambda x: (str(x[0]), x[1]), prefill.items()))
+        prefill = dict(map(lambda x: (str(x[0]), str(x[1])), prefill.items()))
         if form.is_valid():
             # Dump the entered data to a file ...
             fd = form.cleaned_data
@@ -181,5 +196,6 @@ def barco_enterform(request, repos, formname):
                 args=(repos,formname)))
     form = formspec.django_form()
     return render_to_response(formspec.django_template, 
-            {'fields': template, 'form': form, 'prefill': prefill},
+            {'fields': template, 'form': form, 'prefill': prefill,
+                'weight_fields': list(weight_fields)},
         context_instance=RequestContext(request))
