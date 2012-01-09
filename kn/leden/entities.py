@@ -541,6 +541,20 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def update_primary_telephone(self, new, save=True):
+        """ Adds @new as new and primary telephone number. """
+        if 'telephones' not in self._data:
+            self._data['telephones'] = []
+        addrs = self._data['telephones']
+        dt = now()
+        if addrs:
+            addrs[0]['until'] = dt
+        addrs.insert(0, {'number': new,
+                 'from': dt,
+                 'until': DT_MAX})
+        if save:
+            self.save()
+
     def update_primary_email(self, new, save=True):
         """ Adds @new as new and primary e-mail address. """
         if 'emailAddresses' not in self._data:
