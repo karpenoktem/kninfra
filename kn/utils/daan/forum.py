@@ -24,8 +24,8 @@ def forum_rename_entity(daan, entity, newname, primary_type):
     creds = settings.FORUM_MYSQL_SECRET
     dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2], db=creds[3])
     c = dc.cursor()
-    c.execute("UPDATE users SET username=%s WHERE username=%s;",
-            (newname, entity))
+    c.execute("UPDATE users SET username=%s, email=%s WHERE username=%s;",
+            (newname, newname +'@'+ settings.MAILDOMAIN, entity))
     c.execute("UPDATE topics SET poster=%s WHERE poster=%s;", (newname, entity))
     c.execute("UPDATE topics SET last_poster=%s WHERE last_poster=%s;",
             (newname, entity))
