@@ -81,7 +81,7 @@ def mailman_rename_entity(daan, entity, newname, primary_type):
     # Change real_name, subject_prefix
     ml = MailList.MailList(newname)
     ml.real_name = newname.capitalize()
-    ml.subject_prefix = '['+ ml.real_name '+] '
+    ml.subject_prefix = '['+ ml.real_name +'] '
     ml.Save()
     ml.Unlock()
     # postfix sync

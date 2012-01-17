@@ -114,7 +114,7 @@ class Giedo(WhimDaemon):
                     if not e.check_password(d['pass']):
                         return {'error': 'wrong password'}
                 e.update_primary_name(d['newname'])
-								d['primary_type'] = e.type
+                d['primary_type'] = e.type
                 self.daan.send(d)
                 self.cilia.send(d)
                 self.sync()

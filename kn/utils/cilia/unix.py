@@ -40,7 +40,7 @@ def unix_rename_entity(cilia, entity, newname, primary_type):
         except KeyError:
             return {'error': 'Group not found'}
         subprocess.call(['groupmod', '-n', 'kn-'+ newname, 'kn-'+ entity])
-        os.rename('/groups/+ entity, '/groups/'+ newname)
+        os.rename('/groups/'+ entity, '/groups/'+ newname)
         return {'success': True}
     return {'error': 'Invalid primary_type'}
 

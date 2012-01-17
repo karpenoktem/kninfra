@@ -10,9 +10,9 @@ import subprocess
 
 from kn.utils.whim import WhimDaemon
 from kn.utils.daan.postfix import set_postfix_map
-from kn.utils.daan.mailman import apply_mailman_changes
-from kn.utils.daan.wiki import apply_wiki_changes, wiki_setpass
-from kn.utils.daan.forum import apply_forum_changes, forum_setpass
+from kn.utils.daan.mailman import apply_mailman_changes, mailman_rename_entity
+from kn.utils.daan.wiki import apply_wiki_changes, wiki_setpass, wiki_rename_entity
+from kn.utils.daan.forum import apply_forum_changes, forum_setpass, forum_rename_entity
 from kn.utils.daan.live import live_update_knsite, live_update_knfotos
 from kn.utils.daan.fotoadmin import fotoadmin_create_event, fotoadmin_move_fotos
 
@@ -53,7 +53,7 @@ class Daan(WhimDaemon):
                 forum_setpass(self, d['user'], d['pass'])
         elif d['type'] == 'rename-entity':
             with self.wiki_lock:
-                wiki_rename_entity(self, d['name'], d['newname']
+                wiki_rename_entity(self, d['name'], d['newname'],
                     d['primary_type'])
             with self.forum_lock:
                 forum_rename_entity(self, d['name'], d['newname'],

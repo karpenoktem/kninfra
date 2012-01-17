@@ -11,8 +11,8 @@ from kn.utils.whim import WhimDaemon
 
 from kn import settings
 
-from kn.utils.cilia.unix import set_unix_map, unix_setpass
-from kn.utils.cilia.samba import set_samba_map, samba_setpass
+from kn.utils.cilia.unix import set_unix_map, unix_setpass, unix_rename_entity
+from kn.utils.cilia.samba import set_samba_map, samba_setpass, samba_rename_entity
 from kn.utils.cilia.fotoadmin import fotoadmin_remove_moved_fotos
 
 class Cilia(WhimDaemon):

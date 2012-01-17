@@ -13,7 +13,7 @@ def wiki_setpass(daan, user, password):
                 '--password', password],
         cwd=settings.MEDIAWIKI_PATH)
 
-def wiki_rename_enitity(daan, name, newname, primary_type):
+def wiki_rename_entity(daan, name, newname, primary_type):
     # XXX There is not maintenance script for this yet.
     # https://bugzilla.wikimedia.org/show_bug.cgi?id=33459
     # It should be done manually for the time being at
