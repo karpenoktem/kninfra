@@ -70,7 +70,7 @@ class Worker(SONWrapper):
         for v in vcol.find({'assignee': _id(self), 'pool': _id(pool)},
                 sort=[('begin', DESCENDING)], limit=1):
             return Vacancy(v).begin.date()
-    
+
     # last_shift is used in a template
     def set_last_shift(self, pool):
         self.last_shift = self.last_shift_in(pool)
@@ -171,7 +171,7 @@ class Vacancy(SONWrapper):
     pool_id = son_property(('pool',))
     assignee_id = son_property(('assignee',))
     reminder_needed = son_property(('reminder_needed',))
-    
+ 
     @property
     def begin(self):
         return adt_to_datetime(self.begin_raw)
@@ -179,7 +179,7 @@ class Vacancy(SONWrapper):
     @property
     def begin_is_approximate(self):
         return adt_is_approximation(self.begin_raw)
-    
+
     @property
     def end(self):
         return adt_to_datetime(self.end_raw)
