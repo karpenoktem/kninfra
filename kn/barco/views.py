@@ -54,7 +54,7 @@ class FormSpecifics(object):
 
 # The following function writes data (entered by the user) of count
 # to a file in an order resembling the template.
-def template_write_data_to_file(template, data, csv):
+def template_write_data_to_file(template, data, write):
     emptyColumn = False
     column = 0
     while not emptyColumn:
@@ -66,12 +66,12 @@ def template_write_data_to_file(template, data, csv):
             if row[column] == '':
                 continue
             if row[column][0] == '!':
-                csv.write("# ");
-                csv.write(row[column][1:])
-                csv.write("\n");
+                write("# ");
+                write(row[column][1:])
+                write("\n");
             else:
-                csv.write(row[column])
-                csv.write(";")
+                write(row[column])
+                write(";")
                 if row[column] in data:
                     parts = []
                     for ex in data[row[column]].split(','):
@@ -79,10 +79,10 @@ def template_write_data_to_file(template, data, csv):
                             parts.append('gewogen:'+ ex[1:])
                         else:
                             parts.append(ex)
-                    csv.write("+".join(parts))
-                    csv.write("\n")
+                    write("+".join(parts))
+                    write("\n")
                 else:
-                    csv.write("0\n")
+                    write("0\n")
         column += 1
 
 
@@ -95,24 +95,25 @@ class BarformSpecifics(FormSpecifics):
                 template_path="barforms/form-template-active.csv",
                 weights_path=None)
 
-    def entered_data_to_file(self, fd, csv, template, prefill):
-            csv.write("Bar;;;;\n\n")
-            csv.write(fd['pricebase'])
-            csv.write(";")
-            csv.write(str(fd['date']))
-            csv.write(";")
-            csv.write(fd['tapper'])
-            csv.write(";")
-            csv.write(fd['dienst'])
-            csv.write(";")
-            csv.write(str(fd['beginkas']))
-            csv.write(";")
-            csv.write(str(fd['eindkas']))
+    def entered_data_to_file(self, fd, write, template, prefill):
+            write("Bar;;;;\n\n")
+            write(fd['pricebase'])
+            write(";")
+            write(str(fd['date']))
+            write(";")
+            write(fd['tapper'])
+            write(";")
+            write(fd['dienst'])
+            write(";")
+            write(str(fd['beginkas']))
+            write(";")
+            write(str(fd['eindkas']))
             if fd['comments'] != '':
-                csv.write("\n\n# XXX ")
-                csv.write(fd['comments'].replace("\r\n", "\n").replace("\n", "\n# "))
-            csv.write("\n\n")
-            template_write_data_to_file(template, prefill, csv)
+                write("\n\n# XXX ")
+                write(fd['comments'].replace("\r\n", "\n")\
+                        .replace("\n", "\n# "))
+            write("\n\n")
+            template_write_data_to_file(template, prefill, write)
 
 
 class InvCountSpecifics(FormSpecifics):
@@ -124,16 +125,16 @@ class InvCountSpecifics(FormSpecifics):
                 weights_path="weights.csv",
                 dir_in_repo="inventory")
 
-    def entered_data_to_file(self, fd, csv, template, prefill):
-            csv.write("voorraadtelling\n\n")
-            csv.write(str(fd['date']))
-            csv.write(" # tellers: ")
-            csv.write(fd['tellers'])
+    def entered_data_to_file(self, fd, write, template, prefill):
+            write("voorraadtelling\n\n")
+            write(str(fd['date']))
+            write(" # tellers: ")
+            write(fd['tellers'])
             if fd['comments'] != '':
-                csv.write("\n\n# XXX ")
-                csv.write(fd['comments'].replace("\n", "\n# "))
-            csv.write("\n\n")
-            template_write_data_to_file(template, prefill, csv)
+                write("\n\n# XXX ")
+                write(fd['comments'].replace("\n", "\n# "))
+            write("\n\n")
+            template_write_data_to_file(template, prefill, write)
 
       
 settings.BARCO_FORMS = {
@@ -172,8 +173,9 @@ def barco_enterform(request, repos, formname):
             # Dump the entered data to a file ...
             fd = form.cleaned_data
             csv = StringIO();
-            csv.write("# Ingevoerd door "+ str(request.user.name) +"\n")
-            formspec.entered_data_to_file(fd, csv, template, prefill)
+            write = lambda x: csv.write(x.encode("utf-8"))
+            write("# Ingevoerd door "+ str(request.user.name) +"\n")
+            formspec.entered_data_to_file(fd, write, template, prefill)
             
             # commit it to the repository ...
             fn = os.path.join(formspec.dir_in_repo,'%s.csv'%(fd['formname']))
