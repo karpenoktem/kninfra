@@ -48,6 +48,9 @@ class Event(SONWrapper):
     @property
     def owner(self):
         return Es.by_id(self._data['owner'])
+    @property
+    def createdBy(self):
+        return Es.by_id(self._data['createdBy'])
 
     def get_subscriptions(self):
         for s in scol.find({ 'event': self._data['_id']}).sort('date'):
@@ -76,6 +79,7 @@ class Event(SONWrapper):
         return self._data['cost']
 
     is_open = son_property(('is_open',))
+    is_official = son_property(('is_official',), True)
 
     def __unicode__(self):
         return unicode('%s (%s)' % (self.humanName, self.owner))

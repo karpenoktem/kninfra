@@ -18,14 +18,25 @@ from django.core.exceptions import PermissionDenied
 
 @login_required
 def event_list(request):
-    events = tuple(subscr_Es.all_events())
-    open_events = [e for e in reversed(events) if e.is_open]
-    closed_events = [e for e in reversed(events) if not e.is_open]
+    open_events, closed_events, open_leden_events, \
+                closed_leden_events = [],[],[],[]
+    for e in reversed(tuple(subscr_Es.all_events())):
+        if e.is_open:
+            if e.is_official:
+                open_events.append(e)
+            else:
+                open_leden_events.append(e)
+        else:
+            if e.is_official:
+                closed_events.append(e)
+            else:
+                closed_leden_events.append(e)
     return render_to_response('subscriptions/event_list.html',
             {'open_events': open_events,
-             'closed_events': closed_events},
+             'closed_events': closed_events,
+             'open_leden_events': open_leden_events,
+             'closed_leden_events': closed_leden_events},
             context_instance=RequestContext(request))
-
 
 @login_required
 def event_detail(request, name):
@@ -161,7 +172,8 @@ def event_new_or_edit(request, edit=None):
                 'createdBy': request.user._id,
                 'name': name,
                 'cost': str(fd['cost']),
-                'is_open': True}
+                'is_open': True,
+                'is_official': superuser}
             if edit is None:
                 e = subscr_Es.Event(d)
             else:
