@@ -525,6 +525,23 @@ class Entity(SONWrapper):
     def as_primary_type(self):
         return TYPE_MAP[self.type](self._data)
 
+    def update_address(self, street, number, _zip, city, save=True):
+        """ Adds (street, number, _zip, city) as new and primary address. """
+        if 'addresses' not in self._data:
+            self._data['addresses'] = []
+        addresses = self._data['addresses']
+        dt = now()
+        if addresses:
+            addresses[0]['until'] = dt
+        addresses.insert(0, {'street': street,
+                             'number': number,
+                             'zip': _zip,
+                             'city': city,
+                             'from': dt,
+                             'until': DT_MAX})
+        if save:
+            self.save()
+
     def update_study(self, study, institute, number, save=True):
         """ Adds (study, institute, number) as new and primary. """
         if 'studies' not in self._data:
