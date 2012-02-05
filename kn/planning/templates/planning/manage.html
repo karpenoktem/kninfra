@@ -55,7 +55,7 @@
             <td>{{ vacancy.formField }}</td>
             <td style="font-size: 10pt">
 {% for suggestion in vacancy.suggestions %}
-{% if forloop.counter == 5 %}<a
+{% if forloop.counter == 5 and not forloop.last %}<a
         href="javascript:show_more_suggestions('{{ vacancy.formField.name }}');"
         id="more_element_{{ vacancy.formField.name }}">more...</a><span
         style="display: none" id="more_{{ vacancy.formField.name }}">{% endif %}
