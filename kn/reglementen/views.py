@@ -1,36 +1,27 @@
 # vim: et:sta:bs=2:sw=4:
+import kn.reglementen.entities as Es_regl
+
+
 from django.template import RequestContext
-from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponse
-from kn.reglementen.models import Reglement, Version
-from regl.model import Document
+from django.shortcuts import render_to_response
 
 def reglement_list(request):
-    reglementen = Reglement.objects.order_by('humanName').all()
     return render_to_response('reglementen/reglement_list.html',
-            {'reglementen': reglementen},
+            {'reglementen': Es_regl.all()},
             context_instance=RequestContext(request))
 
 def reglement_detail(request, name):
-    try:
-        reglement = Reglement.objects.select_related(
-                'version_set').get(name=name)
-    except Reglement.DoesNotExist:
+    reglement = Es_regl.reglement_by_name(name)
+    if not reglement:
         raise Http404
     return render_to_response('reglementen/reglement_detail.html',
-            {'reglement': reglement,
-             'versions': reglement.version_set.order_by(
-                 'validFrom').all()},
+            {'reglement': reglement},
             context_instance=RequestContext(request))
 
 def version_detail(request, reglement_name, version_name):
-    try:
-        version = Version.objects.select_related(
-                'reglement').get(name=version_name)
-    except Version.DoesNotExist:
-        raise Http404
-    doc = Document.from_string(version.regl)
+    version = Es_regl.version_by_names(reglement_name, version_name)
     return render_to_response('reglementen/version_detail.html',
             {'version': version,
-             'content': doc.to_html()},
+             'content': version.to_html()},
             context_instance=RequestContext(request))

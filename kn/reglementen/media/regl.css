@@ -1,0 +1,37 @@
+/* vim: set et sta bs=2 sw=4 :*/
+.regl {
+    padding-left: 1em;
+}
+
+.regl .articleTitle {
+    font-weight: bold;
+    clear: both;
+}
+
+.regl h2 {
+    font-size: 12pt;
+    text-align: center;
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
+}
+
+.regl h3,
+.regl h4 {
+    font-size: 12pt;
+    float: left;
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
+}
+
+.regl .section2,
+.regl .section3,
+.regl .section4 {
+    margin-left: 2em;
+}
+
+.regl .articleTitle,
+.regl .article {
+    margin-left: -2em;
+}

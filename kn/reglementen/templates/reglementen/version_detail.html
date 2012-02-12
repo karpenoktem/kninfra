@@ -1,22 +1,30 @@
 {% extends "base/base.html" %}
 {% load base %}
 
+{% block head %}
+{{ block.super }}
+<link href="{{ MEDIA_URL }}/reglementen/regl.css"
+	rel="stylesheet" type="text/css" />
+{% endblock %}
+
 {% block body %}
 <h1>{{ version.reglement.humanName }}</h1>
 <h2>{{ version.humanName }}</h2>
 <p>{{ version.description }}</p>
 <p>
-{% if not version.validFrom %}
+{% if not version.valid_from %}
 	Deze versie is (nog) niet aangenomen en daarmee niet van kracht.
 {% else %}
-	{% if version.validUntil %}
-	Deze versie was aangenomen op {{ version.validFrom }} en van kracht
-	tot {{ version.validUntil }}.
+	{% if version.valid_until %}
+	Deze versie was aangenomen op {{ version.valid_from }} en van kracht
+	tot {{ version.valid_until }}.
 	{% else %}
-	Deze versie was aangenomen op {{ version.validFrom }} en nog steeds
+	Deze versie was aangenomen op {{ version.valid_from }} en nog steeds
 	van kracht.
 	{% endif %}
+        <div class="regl">
 	{{content|mark_safe}}
+        </div>
 {% endif %}
 </p>
 {% endblock %}

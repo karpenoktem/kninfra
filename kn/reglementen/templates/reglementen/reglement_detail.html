@@ -4,13 +4,13 @@
 <h1>{{ reglement.humanName }}</h1>
 <p>{{ reglement.description }}</p>
 <ul>
-{% for version in versions %}
+{% for version in reglement.get_versions %}
 	<li><a href="{{ version.get_absolute_url }}"
 		>{{ version.humanName }}</a>
-	{% if version.validFrom %}
-	Aangenomen op {{ version.validFrom }}.
-		{% if version.validUntil %}
-		Was van kracht tot {{ version.validUntil }}.
+	{% if version.valid_from %}
+	Aangenomen op {{ version.valid_from }}.
+		{% if version.valid_until %}
+		Was van kracht tot {{ version.valid_until }}.
 		{% else %}
 		Nog steeds van kracht.
 		{% endif %}
