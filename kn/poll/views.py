@@ -1,72 +1,64 @@
 # vim: et:sta:bs=2:sw=4:
-from django.http import Http404
+import datetime
+
 from django import forms
+from django.http import Http404
 from django.template import RequestContext
-from kn.poll.models import Filling, Answer, AnswerSet, Poll, Question
 from django.shortcuts import render_to_response
-from django.contrib.auth.decorators import login_required
 from django.forms.formsets import formset_factory
+from django.contrib.auth.decorators import login_required
+
+from kn.leden.mongo import _id
+
+import kn.poll.entities as poll_Es
 
 # We create for every answerSet a form
-def create_questionForm(_as):
+def create_questionForm(question):
     class QuestionForm(forms.Form):
-        def __init__(self, q, *args, **kwargs):
+        def __init__(self, *args, **kwargs):
             super(QuestionForm, self).__init__(*args, **kwargs)
-            self.fields['answer'].label = q.text
-        answer = forms.ModelChoiceField(
-                queryset = _as.answer_set.order_by(
-                        'text').all(),
+            self.fields['answer'].label = question[0]
+        answer = forms.ChoiceField(
+                choices = list(enumerate(question[1])) + 
+                        [(-1, '(geen antwoord)')],
                 required=False)
     return QuestionForm
 
 @login_required
 def vote(request, name):
-    try:
-        poll = Poll.objects.select_related(
-                'question_set__answers').get(name=name)
-    except Poll.DoesNotExist:
+    poll = poll_Es.poll_by_name(name)
+    if not poll:
         raise Http404
-    as_lut = dict()
-    qfs = list()
-    questions = list()
+    filling = poll.filling_for(request.user)
+    initial = False
+    if not filling:
+        initial = True
+        filling = poll_Es.Filling({'user': _id(request.user),
+                                   'poll': _id(poll),
+                                   'answers': [None]*len(poll.questions)})
     allValid = True
-    f_lut = dict()
-    fillings = list(Filling.objects.filter(user=request.user,
-                           question__poll=poll))
-    for fi in fillings:
-        f_lut[fi.question.pk] = fi
-    for q in poll.question_set.all():
-        if not q.answers.pk in as_lut:
-            as_lut[q.answers.pk] = create_questionForm(
-                            q.answers)
-        form_kwargs = {'prefix': q.pk}
-        if q.pk in f_lut:
-            form_kwargs['initial'] = {
-                    'answer': f_lut[q.pk].answer_id}
+    forms = [] # question forms
+    for q_id, question in enumerate(poll.questions):
+        form_kwargs = {'prefix': str(q_id)}
+        answer = filling.answers[q_id]
+        if answer is None:
+            answer = -1
+        form_kwargs['initial'] = {'answer': answer}
         if request.method == 'POST':
-            form = as_lut[q.answers.pk](q,
-                            request.POST,
-                            **form_kwargs)
+            form = create_questionForm(question)(request.POST, **form_kwargs)
             if not form.is_valid():
                 allValid = False
         else:
-            form = as_lut[q.answers.pk](q,
-                            **form_kwargs)
-        qfs.append((q, form))
-    if request.method == 'POST' and not poll.isOpen:
+            form = create_questionForm(question)(**form_kwargs)
+        forms.append(form)
+    if request.method == 'POST' and not poll.is_open:
         request.user.push_message("De enquete is gesloten")
     elif allValid and request.method == 'POST':
         request.user.push_message('Veranderingen opgeslagen!')
-        for fi in fillings:
-            fi.delete()
-        for q, form in qfs:
-            answer = form.cleaned_data['answer']
-            if answer is None:
-                continue
-            Filling.objects.create(user=request.user,
-                           answer=answer,
-                           question=q)
+        for q_id, form in enumerate(forms):
+            filling.answers[q_id] = form.cleaned_data['answer']
+        filling.date = datetime.datetime.now()
+        filling.save()
     return render_to_response('poll/vote.html',
-            {'forms': map(lambda x: x[1], qfs),
-             'poll': poll},
+            {'forms': forms, 'poll': poll, 'initial': initial},
             context_instance=RequestContext(request))

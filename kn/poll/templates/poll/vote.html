@@ -1,7 +1,8 @@
 {% extends "base/base.html" %}
 
 {% block body %}
-{{ poll.description }}
+<h1>{{ poll.humanName }}</h1>
+<p><small>[{{ poll.date.date }}]</small> {{ poll.description }}</p>
 <form action="?" method="post">
 {% csrf_token %}
 <table>
@@ -9,8 +10,13 @@
 {{ form }}
 {% endfor %}
 </table>
-{% if poll.isOpen %}
-<input type="submit" value="Pas aan" />
-{% endif %}
+{% if poll.is_open %}
+<input type="submit"
+{% if initial %}
+value="Sla op"
+{% else %}{# initial #}
+value="Pas aan"
+{% endif %}{# initial #} />
+{% endif %}{# poll.is_open #}
 </form>
 {% endblock %}
