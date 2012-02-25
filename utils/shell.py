@@ -8,7 +8,8 @@ except ImportError:
 import time
 import datetime
 import kn.leden.entities as Es
-import kn.reglementen.entities as Es_regl
+import kn.reglementen.entities as regl_Es
+import kn.poll.entities as poll_Es
 from kn.leden.mongo import _id
 from kn.leden import giedo
 from kn.settings import DT_MIN, DT_MAX
