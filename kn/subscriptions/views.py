@@ -171,7 +171,7 @@ def event_new_or_edit(request, edit=None):
                 'humanName': fd['humanName'],
                 'createdBy': request.user._id,
                 'name': name,
-                'cost': int(fd['cost']),
+                'cost': str(fd['cost']),
                 'is_open': True,
                 'is_official': superuser}
             if edit is None:
