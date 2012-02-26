@@ -61,6 +61,18 @@ templates = {
         'barco': [
             [(hm2s(9),False), (hm2s(13),False), 'Persoon 1'],
             [(hm2s(9),False), (hm2s(13),False), 'Persoon 2']]},
+    'vrijdag_met_tappers': {
+        'tappers': [
+            [(hm2s(20, 30),False), (hm2s(23),False), 'eerste dienst'],
+            [(hm2s(23),False), (hm2s(25),False), 'tweede dienst'],
+            [(hm2s(25),False), (hm2s(28),True), 'derde dienst']],
+        'bestuur': [
+            [(hm2s(20, 30),False), (hm2s(24),False), 'openen'],
+            [(hm2s(24),False), (hm2s(28),True), 'sluiten']]},
+    'vrijdag_zonder_tappers': {
+        'bestuur': [
+            [(hm2s(20, 30),False), (hm2s(24),False), 'openen'],
+            [(hm2s(24),False), (hm2s(28),True), 'sluiten']]},
 }
 
 @login_required

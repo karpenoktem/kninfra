@@ -45,6 +45,8 @@ class EventCreateForm(forms.Form):
         ('grootfeest', 'Groot feest'),
         ('dranktelling', 'Dranktelling'),
         ('dranklevering', 'Dranklevering'),
+        ('vrijdag_zonder_tappers', 'Vrijdag'),
+        ('vrijdag_met_tappers', 'Vrijdag (met tappers)'),
         ))
 
 class AddVacancyForm(forms.Form):
