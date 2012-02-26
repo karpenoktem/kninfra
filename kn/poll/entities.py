@@ -49,6 +49,9 @@ def filling_by_user_and_poll(user, poll):
     tmp = fcol.find_one({'poll': _id(poll),
                          'user': _id(user)})
     return None if tmp is None else Filling(tmp)
+def filling_by_poll(poll):
+    for tmp in fcol.find({'poll': _id(poll)}):
+        yield Filling(tmp)
 
 # Models
 # ######################################################################
@@ -71,6 +74,9 @@ class Poll(SONWrapper):
 
     def filling_for(self, user):
         return filling_by_user_and_poll(user, self)
+
+    def fillings(self):
+        return filling_by_poll(self)
 
     def __unicode__(self):
         return self.humanName
