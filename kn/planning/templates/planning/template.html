@@ -7,7 +7,8 @@
         <b>{{ e.description }}</b><br>
         <br>
 {% for vacancy in e.vacancies %}
-        &nbsp;&nbsp;&nbsp;&nbsp;{{ vacancy.name }}
+&nbsp;&nbsp;&nbsp;&nbsp;{{ vacancy.begin_time }} 
+&mdash; <span style="color: gray">{{ vacancy.name }}</span>
 {% for assignee in vacancy.assignees %}
 {% if not forloop.first %}+{% endif %}
 {% if assignee %}
