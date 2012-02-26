@@ -56,7 +56,7 @@ def vote(request, name):
     elif allValid and request.method == 'POST':
         request.user.push_message('Veranderingen opgeslagen!')
         for q_id, form in enumerate(forms):
-            filling.answers[q_id] = form.cleaned_data['answer']
+            filling.answers[q_id] = int(form.cleaned_data['answer'])
         filling.date = datetime.datetime.now()
         filling.save()
     return render_to_response('poll/vote.html',
