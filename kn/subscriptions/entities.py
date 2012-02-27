@@ -76,7 +76,7 @@ class Event(SONWrapper):
         return self._data['humanName']
     @property
     def cost(self):
-        return decimal.Decimal(self._data['cost'])
+        return str(decimal.Decimal(self._data['cost']))
 
     is_open = son_property(('is_open',))
     is_official = son_property(('is_official',), True)
