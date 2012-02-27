@@ -58,7 +58,7 @@ def event_detail(request, name):
             'user': request.user._id,
             'userNotes': notes,
             'date': datetime.datetime.now(),
-            'debit': event.cost})
+            'debit': str(event.cost)})
         subscription.save()
         full_owner_address = '%s <%s>' % (
                 event.owner.humanName,
