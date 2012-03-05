@@ -27,7 +27,9 @@
 {% if "fotocie" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
 <li><a href="/fotos/">Foto's</a></li>
 <ul>
+        <li><a href="{% url fotoadmin-create-event %}">Album maken</a></li>
         <li><a href="{% url fotoadmin-move %}">Foto's verplaatsen</a></li>
+        <li><a href="{% url fotoadmin-status %}">Status bekijken</a></li>
 </ul>
 {% endif %}
 {% endblock %}
