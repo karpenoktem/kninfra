@@ -77,6 +77,10 @@ templates = {
 
 @login_required
 def planning_view(request):
+    if 'lookbehind' in request.GET:
+        lookbehind = int(request.GET['lookbehind'])
+    else:
+        lookbehind = 1
     pools = list(Pool.all())
     poolid2idx = dict()
     i = 0
@@ -85,7 +89,7 @@ def planning_view(request):
         i += 1
     events = list()
     # TODO reduce number of queries
-    for e in Event.all_in_future():
+    for e in Event.all_since_datetime(now() - datetime.timedelta(days=lookbehind)):
         ei = {  'name': e.name,
                 'date': str(e.date.date()),
                 'kind': e.kind,

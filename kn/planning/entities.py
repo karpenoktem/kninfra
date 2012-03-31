@@ -12,7 +12,7 @@ pcol = db['planning_pools']
 ecol = db['planning_events']
 vcol = db['planning_vacancies']
 
-# TODO save vacancies in events
+# TODO save vacancies in events?
 
 # ---
 def ensure_indices():
@@ -97,8 +97,11 @@ class Event(SONWrapper):
 
     @classmethod
     def all_in_future(cls):
-        for c in ecol.find({'date':
-                {'$gte': now() - datetime.timedelta(days=1)}}):
+        return cls.all_since_datetime(now())
+
+    @classmethod
+    def all_since_datetime(cls, since):
+        for c in ecol.find({'date': {'$gte': since}}):
             yield cls.from_data(c)
 
     @classmethod
