@@ -12,6 +12,7 @@ import kn.reglementen.entities as regl_Es
 import kn.poll.entities as poll_Es
 from kn.leden.mongo import _id
 from kn.leden import giedo
+from kn.leden.date import now
 from kn.settings import DT_MIN, DT_MAX
 
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
@@ -65,3 +66,17 @@ def add_name(name, extra_name):
     e = Es.by_name(name)
     e._data['names'].append(extra_name)
     e.save()
+
+def end_rel(who, _with, how, at=None):
+    """ Ends a relation given by names.
+
+    For instance: end_rel('giedo', 'leden', None, '2012-04-09') """
+    who = Es.id_by_name(who)
+    _with = Es.id_by_name(_with)
+    how = Es.ecol.find_one({'sofa_suffix': how})['_id'] \
+            if how is not None else None
+    at = str_to_date(at) if at is not None else now()
+    Es.rcol.update({'who': who,
+            'with': _with,
+            'how': how,
+            'until': DT_MAX}, {'$set': {'until': at}})
