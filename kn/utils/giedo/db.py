@@ -44,7 +44,7 @@ def update_db(giedo):
             for tid in rel.get('tags', ()):
                 if tid not in year_overrides:
                     continue
-                yr, tp = year_overrides[tid]
+                tp, yr = year_overrides[tid]
                 if tp:
                     years.add(yr)
                 else:
