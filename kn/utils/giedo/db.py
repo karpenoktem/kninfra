@@ -166,6 +166,18 @@ def update_db(giedo):
             id2name.get(relkey[1])))
         Es.remove_relation(relkey[0], relkey[2], relkey[1], relkey[3],
                 relkey[4])
+    # Set is_active on Users if and only if they are not in the `leden' group.
+    # TODO We might optimize this by including it in a more generic process
+    active_users = [rel['who'] for rel in Es.by_name('leden').get_rrelated(
+                            None, dt_now, dt_now, False, False, False)]
+    for u in Es.users():
+        is_active = u._id in active_users
+        if u._data['is_active'] == is_active:
+            continue
+        u._data['is_active'] = is_active
+        u.save()
+        logging.info("%s user %s",("activated" if is_active else "deactivated"),
+                        str(u.name))
 
 def _create_yeargroup(g, year, name, tags, groups, id2name):
     n = {'types': ['group','tag'],
