@@ -1,36 +1,155 @@
-Beste %(fullName)s,
+Beste {{ u.first_name }},
 
-Aan het begin van elk acedemisch jaar, controleren wij de ledenadministratie.
-Daarin is over jou opgenomen
+Elk jaar controleren wij de gegevens die zijn opgenomen in de
+ledenadministratie.  Over jou is het volgende opgenomen.
 
- voornaam              %(firstName)s
- achternaam            %(lastName)s
- geslacht              %(gender)s
- geboortedatum         %(dateOfBirth)s
- datum van toetreding  %(dateJoined)s
+Zou je kunnen controleren of het klopt?
 
- e-mail adres          %(email)s
- telefoonnummer        %(telephone)s
+Bij voorbaat dank,
 
- adres
-  straat               %(addr_street)s
-  huisnummer           %(addr_number)s
-  postcode             %(addr_zipCode)s
-  woonplaats           %(addr_city)s
- 
- studie
-  instituut            %(institute)s
-  studie               %(study)s
-  student-nummer       %(studentNumber)s
-
-Kun je terugmailen of deze informatie klopt en deze zo nodig aanvullen of 
-verbeteren?
-
-%(extra)s
-Bij voorbaat dank.
-
-Met vriendelijke groet,
+ Yurre Wieken
 
 
-  Bas Westerbaan
-  Secretaris
+Personalia  {{ u.full_name }}
+-----------------------------------------------------------
+
+  Voornaam              {{ u.first_name }}
+  Achternaam            {{ u.last_name }}
+  Geslacht              {{ u.gender }}
+  Geboortedatum         {{ u.dateOfBirth.date }}
+  Gebruikersnamen       {{ u.names|join:" " }}
+
+  Telefoonnummer(s)
+{% for t in u.telephones %}\
+    * {{ t.number }}\
+{% if t.from and t.until %}\
+ [ van {{ t.from.date }} tot {{ t.until.date }} ]
+{% else %}{% if t.from %}\
+ [ van {{ t.from.date }} ]
+{% else %}{% if t.until %}\
+ [ tot {{ t.until.date }} ]
+{% endif %}{% endif %}{% endif %}\
+{% endfor %}
+
+  E-Mail adres(sen)
+{% for a in u.emailAddresses %}\
+    * {{ a.email }}\
+{% if a.from and a.until %}\
+ [ van {{ a.from.date }} tot {{ a.until.date }} ]
+{% else %}{% if a.from %}\
+ [ van {{ a.from.date }} ]
+{% else %}{% if a.until %}\
+ [ tot {{ a.until.date }} ]
+{% endif %}{% endif %}{% endif %}\
+{% endfor %}
+
+  Studies
+{% for study in u.studies %}\
+{% if study.from and study.until %}\
+    * Van {{study.from.date}} tot {{study.until.date}} studeerde je\
+{% else %}{% if study.from %}\
+    * Vanaf {{study.from.date}} studeer je\
+{% else %}{% if study.until %}\
+    * Tot {{study.until.date}} studeerde je\
+{% else %}\
+    * Je studeert\
+{% endif %}{% endif %}{% endif %}
+      Studie            {{ study.study.humanName }}
+      Instituut         {{ study.institute.humanName }}
+      Studentnummer     {{ study.number }}\
+{% endfor %}
+
+  Adres(sen)
+{% for a in u.addresses %}\
+    * {% if a.from and a.until %}\
+[ van {{ a.from.date }} tot {{ a.until.date }} ]
+{% else %}{% if a.from %}\
+[ van {{ a.from.date }} ]
+{% else %}{% if a.until %}\
+[ tot {{ a.until.date }} ]
+{% endif %}{% endif %}{% endif %}\
+Straat            {{ a.street }} 
+      Nummer            {{ a.number }}
+      Postcode          {{ a.zip }}
+      Stad              {{ a.city }}
+{% endfor %}\
+
+{% if act_comms %}
+Lidmaatschap activiteiten commissies
+-----------------------------------------------------------
+{% for rel in act_comms %}
+ * {% if rel.how %}\
+{{ rel.how.humanName }} van de \
+{% else %}\
+Lid van de \
+{% endif %}\
+{{ rel.with.humanName }} \
+{% if rel.from and rel.until %}\
+[ van {{ rel.from.date }} tot {{ rel.until.date }} ]\
+{% else %}{% if rel.from %}\
+[ van {{ rel.from.date }} ]\
+{% else %}{% if rel.until %}\
+[ tot {{ rel.until.date }} ]\
+{% endif %}{% endif %}{% endif %}\
+{% endfor %}
+{% endif %}
+
+{% if fac_comms %}
+Lidmaatschap faciliterende commissies
+-----------------------------------------------------------
+{% for rel in fac_comms %}
+ * {% if rel.how %}\
+{{ rel.how.humanName }} van de \
+{% else %}\
+Lid van de \
+{% endif %}\
+{{ rel.with.humanName }} \
+{% if rel.from and rel.until %}\
+[ van {{ rel.from.date }} tot {{ rel.until.date }} ]\
+{% else %}{% if rel.from %}\
+[ van {{ rel.from.date }} ]\
+{% else %}{% if rel.until %}\
+[ tot {{ rel.until.date }} ]\
+{% endif %}{% endif %}{% endif %}\
+{% endfor %}
+{% endif %}
+
+{% if lists %}
+Lidmaatschap vrije e-maillijsten
+-----------------------------------------------------------
+{% for rel in lists %}
+ * {% if rel.how %}\
+{{ rel.how.humanName }} van de \
+{% else %}\
+Lid van de \
+{% endif %}\
+{{ rel.with.humanName }} \
+{% if rel.from and rel.until %}\
+[ van {{ rel.from.date }} tot {{ rel.until.date }} ]\
+{% else %}{% if rel.from %}\
+[ van {{ rel.from.date }} ]\
+{% else %}{% if rel.until %}\
+[ tot {{ rel.until.date }} ]\
+{% endif %}{% endif %}{% endif %}\
+{% endfor %}
+{% endif %}
+
+{% if others %}
+Lidmaatschap andere groepen
+-----------------------------------------------------------
+{% for rel in others %}
+ * {% if rel.how %}\
+{{ rel.how.humanName }} van de \
+{% else %}\
+Lid van de \
+{% endif %}\
+{{ rel.with.humanName }} \
+{% if rel.from and rel.until %}\
+[ van {{ rel.from.date }} tot {{ rel.until.date }} ]\
+{% else %}{% if rel.from %}\
+[ van {{ rel.from.date }} ]\
+{% else %}{% if rel.until %}\
+[ tot {{ rel.until.date }} ]\
+{% endif %}{% endif %}{% endif %}\
+{% endfor %}
+{% endif %}
