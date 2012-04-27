@@ -97,6 +97,10 @@ def update_db(giedo):
             sofa_lut[k] = []
         sofa_lut[k].append(svg)
     # Check whether all year-group relations are in place
+    # If there are two relations between an entity and a group in the same year,
+    # we do not want this relation to be handled twice.  Thus we keep a seperate
+    # look-up-table to prevent this.
+    year_vgroup_rel_ok = set()
     for mrel in year_group_mrels:
         g = groups[id2name[mrel['with']]]
         for year in mrel['years']:
@@ -106,13 +110,17 @@ def update_db(giedo):
                 'how': mrel['how'],
                 'from': DT_MIN,
                 'until': DT_MAX}
-            if not relkey(rrel) in vgroup_rlut:
+            if str(yg.name) == 'soco8' and str(id2name[mrel['who']]) == 'stan':
+                print mrel, rrel
+            if (not relkey(rrel) in vgroup_rlut and relkey(rrel)
+                    not in year_vgroup_rel_ok):
                 logging.info("vgroup: adding %s -> %s (%s)" % (
                         id2name[mrel['who']], yg.name,
                         id2name.get(mrel['how'])))
                 Es.rcol.insert(rrel)
-            else:
+            elif relkey(rrel) in vgroup_rlut:
                 del vgroup_rlut[relkey(rrel)]
+            year_vgroup_rel_ok.add(relkey(rrel))
     # Check whether all sofas are created
     sofa_brands = {}
     for b in Es.brands():
