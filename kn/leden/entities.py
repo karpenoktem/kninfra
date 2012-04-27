@@ -171,6 +171,8 @@ def date_to_year(dt):
     year =  dt.year - 2004
     if dt.month >= 9:
         year += 1
+    if year < 1:
+        year = 1
     return year
 
 # Functions to work with relations
