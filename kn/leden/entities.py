@@ -817,6 +817,27 @@ class User(Entity):
             return self._data['has_unix_user']
         else:
             return True
+    @property
+    def emailAddresses(self):
+        ret = []
+        for a in self._data.get('emailAddresses', ()):
+            if a['from'] == DT_MIN:
+                a['from'] = None
+            if a['until'] == DT_MAX:
+                a['until'] = None
+            ret.append(a)
+        return ret
+
+    @property
+    def addresses(self):
+        ret = []
+        for a in self._data.get('addresses', ()):
+            if a['from'] == DT_MIN:
+                a['from'] = None
+            if a['until'] == DT_MAX:
+                a['until'] = None
+            ret.append(a)
+        return ret
 
 class Tag(Entity):
     @permalink
