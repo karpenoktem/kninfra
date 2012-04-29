@@ -110,8 +110,6 @@ def update_db(giedo):
                 'how': mrel['how'],
                 'from': DT_MIN,
                 'until': DT_MAX}
-            if str(yg.name) == 'soco8' and str(id2name[mrel['who']]) == 'stan':
-                print mrel, rrel
             if (not relkey(rrel) in vgroup_rlut and relkey(rrel)
                     not in year_vgroup_rel_ok):
                 logging.info("vgroup: adding %s -> %s (%s)" % (
