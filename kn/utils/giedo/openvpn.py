@@ -31,7 +31,7 @@ def mail_result(user, filename):
         "Karpe Noktems ledenadministratie"
     # TODO this crashes
     # url = reverse('ik-openvpn-download', kwargs={'file': filename})
-    url = 'http://karpenoktem.nl/smoelen/ik/openvpn/%s' %_filename
+    url = 'http://karpenoktem.nl/smoelen/ik/openvpn/%s' % filename
     em = EmailMessage('OpenVPN', msg % (user.first_name, url),
                 to=[user.canonical_email])
     # em.attach_file(os.path.join(settings.VPN_INSTALLER_STORAGE, filename))
