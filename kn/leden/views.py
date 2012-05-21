@@ -495,4 +495,5 @@ def ik_openvpn_download(request, filename):
     response = HttpResponse(FileWrapper(default_storage.open(p)),
             mimetype=mimetypes.guess_type(default_storage.path(p))[0])
     response['Content-Length'] = default_storage.size(p)
+    # XXX use ETags and returns 304's
     return response
