@@ -33,4 +33,6 @@ def get_add_event_form(user, superuser=False):
         cost = forms.DecimalField(label='Kosten')
         date = forms.DateField(label='Datum')
         owner = EntityChoiceField(label="Eigenaar", choices=choices)
+        has_public_subscriptions = forms.BooleanField(required=False,
+                label='Inschrijvingen openbaar')
     return AddEventForm

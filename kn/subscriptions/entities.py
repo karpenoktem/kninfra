@@ -80,6 +80,8 @@ class Event(SONWrapper):
 
     is_open = son_property(('is_open',))
     is_official = son_property(('is_official',), True)
+    has_public_subscriptions = son_property(('has_public_subscriptions',),
+                                    False)
 
     def __unicode__(self):
         return unicode('%s (%s)' % (self.humanName, self.owner))

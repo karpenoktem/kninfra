@@ -84,20 +84,17 @@ def event_detail(request, name):
         else:
             request.user.push_message(
                     "Je bent aangemeld")
+    subscrlist = tuple(event.get_subscriptions())
     ctx = {'object': event,
            'user': request.user,
            'subscription': subscription,
+           'subscrlist': subscrlist,
+           'subscrcount_debit': len([s for s in subscrlist
+                            if s.debit != 0]),
+           'subscrlist_count': len(subscrlist),
            'has_debit_access': event.has_debit_access(request.user),
            'has_read_access': event.has_read_access(request.user),
            'has_write_access': event.has_write_access(request.user)}
-    if event.has_read_access(request.user) or \
-            event.has_debit_access(request.user):
-        subscrlist = tuple(event.get_subscriptions())
-        ctx.update({
-            'subscrlist': subscrlist,
-            'subscrcount_debit': len([s for s in subscrlist
-                            if s.debit != 0]),
-            'subscrlist_count': len(subscrlist)})
     return render_to_response('subscriptions/event_detail.html', ctx,
             context_instance=RequestContext(request))
 

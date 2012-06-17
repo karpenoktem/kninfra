@@ -74,27 +74,35 @@ change_debit = function(id) {
 {% endif %}{# object.is_open #}
 {% endif %}
 
-{% if subscrlist %}
+{% if has_read_access or has_debit_access or object.has_public_subscriptions %}
 	<h2>Aanmeldingen ({{ subscrlist_count }})</h2>
-{% if subscrcount_debit %}
+{% if has_debit_access %}
 	<p>Er staan nog {{ subscrcount_debit }} betalingen open.</p>
-{% endif %}
+{% endif %}{# has_debit_access #}
 	<ul>
 	{% for subscr in subscrlist %}
 	<li><a href="{{ subscr.user.get_absolute_url }}"
-                >{{ subscr.user.full_name }}</a> [debet: &euro;
+                >{{ subscr.user.full_name }}</a>
+                {% if has_debit_access or has_read_access %}
+                [debet: &euro;
                 {{ subscr.debit }}
+                {% endif %}{# has_debit_access or has_read_access #}
                 {% if has_debit_access %}
                 <button onclick="change_debit('{{ subscr.id }}')"
                         >wijzig</button
-                >{% endif %}{# has_debit_access #}]
+                >{% endif %}{# has_debit_access #}
+                {% if has_debit_access or has_read_access %}
+                        ]
+                {% endif %}{# has_debit_access or has_read_access #}
                 {% if subscr.date %}
                         <small>{{ subscr.date.date }}</small>
                 {% endif %}{# subscr.date #}</li>
+                {% if has_read_access %}
                 {% if subscr.userNotes %}
                 <blockquote>{{ subscr.userNotes }}</blockquote>
                 {% endif %}
+                {% endif %}{# has_read_access #}
 	{% endfor %}
 	</ul>
-{% endif %}
+{% endif %}{# has_read_access or has_debit_access or object.has_public_subscriptions#}
 {% endblock %}
