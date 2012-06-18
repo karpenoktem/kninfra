@@ -40,18 +40,66 @@ def event_list(request):
 
 @login_required
 def event_detail(request, name):
+    # First, find the event.
     event = subscr_Es.event_by_name(name)
     if event is None:
         raise Http404
+    # Has the user already subscribed?
     subscription = event.get_subscription_of(request.user)
-    if subscription is not None:
-        if subscription.debit > 0:
-            request.user.push_message((
-                "Je bent al aangemeld, maar moet nog wel %s"+
-                " euro betalen.") % subscription.debit)
+    # What are our permissions?
+    has_read_access = event.has_read_access(request.user)
+    has_write_access = event.has_write_access(request.user)
+    may_subscribe_others = (has_write_access or
+                        event.everyone_can_subscribe_others)
+    # Are we subscribing someone else?
+    if (request.method == 'POST' and event.is_open and
+            request.POST['who'] != str(request.user.id)):
+        other_subscription = event.get_subscription_of(request.POST['who'])
+        # Are we allowed to subscribe others?
+        if not may_subscribe_others:
+            raise PermissionDenied
+        # Is the other already subscribed
+        if other_subscription is not None:
+            request.user.push_message("%s is al aangemeld" % (
+                Es.by_id(request.POST['who']).full_name))
         else:
-            request.user.push_message("Je bent aangemeld!")
-    elif request.method == 'POST' and event.is_open:
+            # Find the user to subscribe
+            user = Es.by_id(request.POST['who'])
+            if not user or not user.is_user:
+                raise Http404
+            notes = request.POST['notes']
+            other_subscription = subscr_Es.Subscription({
+                'event': event._id,
+                'user': _id(user),
+                'date': datetime.datetime.now(),
+                'debit': str(event.cost),
+                'subscribedBy_notes': notes,
+                'confirmed': False,
+                'subscribedBy': _id(request.user)})
+            other_subscription.save()
+            full_owner_address = '%s <%s>' % (
+                    event.owner.humanName,
+                    event.owner.canonical_email)
+            email = EmailMessage(
+                    "Aanmelding %s" % event.humanName,
+                     event.subscribedByOtherMailBody % {
+                        'firstName': user.first_name,
+                        'by_firstName': request.user.first_name,
+                        'by_notes': notes,
+                        'eventName': event.humanName,
+                        'confirmationLink': ("http://karpenoktem.nl%s" %
+                                reverse('event-detail', args=(event.name,))),
+                        'owner': event.owner.humanName},
+                    'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
+                    [user.canonical_email],
+                    [event.owner.canonical_email, request.user.canonical_email],
+                    headers={
+                        'Cc': '%s, %s' % (event.owner.canonical_email,
+                                        request.user.canonical_email),
+                        'Reply-To': full_owner_address})
+            email.send()
+    if (subscription is not None and request.method == 'POST'
+            and event.is_open and request.POST['who'] == str(request.user.id)):
         notes = request.POST['notes']
         subscription = subscr_Es.Subscription({
             'event': event._id,
@@ -77,13 +125,6 @@ def event_detail(request, name):
                     'Cc': full_owner_address,
                     'Reply-To': full_owner_address})
         email.send()
-        if event.cost > 0:
-            request.user.push_message(
-                    "Je bent aangemeld en moet "+\
-                    "nu %s euro betalen" % event.cost)
-        else:
-            request.user.push_message(
-                    "Je bent aangemeld")
     subscrlist = tuple(event.get_subscriptions())
     ctx = {'object': event,
            'user': request.user,
@@ -93,8 +134,13 @@ def event_detail(request, name):
                             if s.debit != 0]),
            'subscrlist_count': len(subscrlist),
            'has_debit_access': event.has_debit_access(request.user),
-           'has_read_access': event.has_read_access(request.user),
-           'has_write_access': event.has_write_access(request.user)}
+           'may_subscribe_others': may_subscribe_others,
+           'has_read_access': has_read_access,
+           'has_write_access': has_write_access}
+    if may_subscribe_others:
+        ctx['users'] = sorted(Es.by_name('leden').get_members(),
+                        lambda x,y: cmp(unicode(x.humanName),
+                            unicode(y.humanName)))
     return render_to_response('subscriptions/event_detail.html', ctx,
             context_instance=RequestContext(request))
 
@@ -108,6 +154,23 @@ def _api_close_event(request):
         raise PermissionDenied
     e.is_open = False
     e.save()
+    return JsonHttpResponse({'success': True})
+
+def _api_confirm_subscription(request):
+    if not 'id' in request.REQUEST:
+        return JsonHttpResponse({'error': 'missing argument'})
+    # Find the event and subscription
+    event = subscr_Es.event_by_id(request.REQUEST['id'])
+    if event is None:
+        return JsonHttpResponse({'error': 'event not found'})
+    subscription = event.get_subscription_of(request.user)
+    if subscription is None:
+        return JsonHttpResponse({'error': 'subscription not found'})
+    # Confirm, if not confirmed already
+    if subscription.confirmed:
+        return JsonHttpResponse({'error': 'already confirmed'})
+    subscription.confirmed = True
+    subscription.save()
     return JsonHttpResponse({'success': True})
 
 def _api_change_debit(request):
@@ -134,6 +197,8 @@ def api(request):
         return _api_change_debit(request)
     elif action == 'close-event':
         return _api_close_event(request)
+    elif action == 'confirm-subscription':
+        return _api_confirm_subscription(request)
     else:
         return JsonHttpResponse({'error': 'unknown action'})
 
@@ -165,6 +230,10 @@ def event_new_or_edit(request, edit=None):
                 'owner': _id(fd['owner']),
                 'description': fd['description'],
                 'mailBody': fd['mailBody'],
+                'subscribedByOtherMailBody': fd['subscribedByOtherMailBody'],
+                'confirmationMailBody': fd['confirmationMailBody'],
+                'everyone_can_subscribe_others':
+                        fd['everyone_can_subscribe_others'],
                 'humanName': fd['humanName'],
                 'createdBy': request.user._id,
                 'name': name,

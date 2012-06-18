@@ -8,7 +8,7 @@ $(function(){
         $.defaultText();
 });
 
-debit_api = function(data, cb) {
+_api = function(data, cb) {
         data.csrfmiddlewaretoken = "{{ csrf_token }}";
         $.post("{% url api %}", data, cb, "json");
 };
@@ -17,7 +17,7 @@ close_event = function() {
         if(!confirm("Weet je zeker dat je de activiteit wilt sluiten? "+
                                 "Je kunt dit niet zelf ongedaan maken."))
                 return;
-        debit_api({'action': 'close-event',
+        _api({'action': 'close-event',
                    'id': '{{ object.id }}' },
                         function(d) {
                 if(d.success) window.location.reload();
@@ -25,8 +25,18 @@ close_event = function() {
         });
 };
 
+confirm_subscription = function() {
+        _api({'action': 'confirm-subscription',
+              'id': '{{ object.id }}',
+              'notes': $('#notes').text()},
+                        function(d) {
+                if(d.success) window.location.reload();
+                if(d.error) alert(d.error);
+        });
+};
+
 change_debit = function(id) {
-        debit_api({'action': 'change-debit',
+        _api({'action': 'change-debit',
                    'id': id,
                    'debit': prompt("Nieuw debet")},
                         function(d) {
@@ -38,6 +48,16 @@ change_debit = function(id) {
 {% endblock %}
 
 {% block body %}
+{% if subscription %}
+{% if subscription.confirmed %}
+{% if subscription.debit > 0 %}
+<div class="message">Je bent aangemeld, maar moet nog wel
+                {{ subscription.debit }} euro betalen.</div>
+{% else %}{# subscription.debit > 0 #}
+<div class="message">Je bent aangemeld.</div>
+{% endif %}{# subscription.debit > 0 #}
+{% endif %}{# subscription.confirmed #}
+{% endif %}{# subscription #}
 <h1>{{ object.humanName }}</h1>
 <p>{{ object.description }}</p>
 <dl>
@@ -60,19 +80,42 @@ change_debit = function(id) {
 <button onclick="close_event()">Sluit inschrijvingen</button>
 {% endif %}{# object.is_open and has_write_access #}
 
-{% if not subscription %}
+{% if not subscription or may_subscribe_others or not subscription.confirmed %}
 {% if object.is_open %}
 <form method="post" action="">
+        {% if subscription and not subscription.confirmed %}
+        <p>Je bent door
+        <a href="{{ subscription.subscribedBy.get_absolute_url }}"
+                >{{ subscription.subscribedBy.full_name }}</a>
+        aangemeld, maar hebt dit nog niet bevestigd.
+        {% endif %}{# subscription and not subscription.confirmed #}
         <textarea class="default" name="notes"
                 style="width: 200px; height: 70px;"
                 title="Opmerkingen"></textarea><br/>
+        {% if subscription and not subscription.confirmed %}
+        <button type="button" onclick="confirm_subscription()"
+                >Aanmelding bevestigen!</button></p>
+        {% endif %}{# subscription and not subscription.confirmed #}
+        {% if may_subscribe_others %}
+        <select name="who">
+        {% for u in users %}
+        <option value="{{ u.id }}"
+                {% if u == user and not subscription %}
+                selected="true"
+                {% endif %}{# u == user #}
+                >{{ u.full_name }}</option>
+        {% endfor %}{# u in users #}
+        <input type="submit" value="aanmelden!" />
+        </select>
+        {% else %}{# may_subscribe_others #}
 	<input type="submit" value="{{ user.full_name }} aanmelden!" /> 
+        {% endif %}{# may_subscribe_others #}
 	{% csrf_token %}
 </form>
 {% else %}{# object.is_open #}
 <p><em>Je kunt je niet meer aanmelden.</em></p>
 {% endif %}{# object.is_open #}
-{% endif %}
+{% endif %}{# not subscription or may_subscribe_others or not subscription.confirmed#}
 
 {% if has_read_access or has_debit_access or object.has_public_subscriptions %}
 	<h2>Aanmeldingen ({{ subscrlist_count }})</h2>
@@ -97,6 +140,19 @@ change_debit = function(id) {
                 {% if subscr.date %}
                         <small>{{ subscr.date.date }}</small>
                 {% endif %}{# subscr.date #}</li>
+                {% if subscr.subscribedBy %}
+                aangemeld door
+                <a href="{{ subscr.subscribedBy.get_absolute_url }}"
+                        >{{ subscr.subscribedBy.full_name }}</a>
+                {% if subscr.subscribedBy_notes %}
+                <blockquote>{{ subscr.subscribedBy_notes }}</blockquote>
+                {% endif %}{# subscr.subscribedBy_notes #}
+                {% if subscr.confirmed %}
+                bevestigd op {{ subscr.dateConfirmed.date }}
+                {% else %}{# subscr.confirmed #}
+                nog onbevestigd
+                {% endif %}{# subscr.confirmed #}
+                {% endif %}{# subscr.subscribedBy #}
                 {% if has_read_access %}
                 {% if subscr.userNotes %}
                 <blockquote>{{ subscr.userNotes }}</blockquote>
