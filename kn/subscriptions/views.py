@@ -170,6 +170,7 @@ def _api_confirm_subscription(request):
     if subscription.confirmed:
         return JsonHttpResponse({'error': 'already confirmed'})
     subscription.confirmed = True
+    subscription.dateConfirmed = datetime.datetime.now()
     subscription.save()
     return JsonHttpResponse({'success': True})
 
