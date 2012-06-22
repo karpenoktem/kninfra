@@ -97,6 +97,8 @@ def p_temporary(begin, end, preflet):
 
 preferences = {
 "tappers": {
+        "anne":     (p_borrel(100,  0,  0),)
+        "annette":  (p_borrel(100,100,  0),)
         # In words:  Bas prefers the first and second shift,
         # but not the last shift and not after 12.00 PM.
         "bas":      (p_borrel(100,100,0,hm2s(24)),),
@@ -110,34 +112,32 @@ preferences = {
                      p_borrel(  0,  0,100),),
         "chaim":    (p_borrel(100,100,100),),
         "dennisi":  (p_borrel(100,100,  0),),
+        "frits":    (p_borrel( 50,100,  0),)
         "hugo":     (p_borrel( 50,100,100),),
         "jean":     (p_borrel(  0,  0, 50),),
         "jille":    (p_borrel(  0,  0,  0),),
         "judithvds":(p_borrel(100,100,  0),),
+        "jurrien":  (p_borrel( 50,100,100),)
         "koen":     (p_borrel( 50, 50, 50),),
         "lisa":     (p_borrel(  0,100,100),),
         "loesje":   (p_borrel(100,100,  0),),
-        "louise":   (p_borrel( 50, 50, 50),),
         "loesje":   (p_borrel(100,100,  0),),
+        "louise":   (p_borrel( 50, 50, 50),),
+        "manon":    (p_borrel(  0,  0, 50),)
         "niek":     (p_borrel(100,100,  0),),
         "nieks":    (p_borrel(  0,100,  0),),
         "olivier":  (p_borrel(100, 50,  0),),
         "petervdv": (p_borrel(100,100,100),),
         "remco":    (p_borrel( 50, 50, 50),),
-        "robin":    (p_borrel( 50, 50,  0),),
         "rik":      (p_borrel(100,100, 50),),
+        "robin":    (p_borrel( 50, 50,  0),),
         "sara":     (p_borrel(  0, 50, 50),),
         "shane":    (p_borrel(100,100,  0),),
+        "simon":    (p_borrel(100,100, 50),)
         "steef":    (p_borrel(100,100,100),),
         "tijn":     (p_borrel(100,100,  0),)
-        "anne":     (p_borrel(100,  0,  0),)
-        "tomn":     (p_borrel(100,100,  0),)
-        "jurrien":  (p_borrel( 50,100,100),)
-        "annette":  (p_borrel(100,100,  0),)
-        "manon":    (p_borrel(  0,  0, 50),)
-        "simon":    (p_borrel(100,100, 50),)
         "timj":     (p_borrel(  0,100,  0),)
-        "frits":    (p_borrel( 50,100,  0),)
+        "tomn":     (p_borrel(100,100,  0),)
 }}
 
 def planning_vacancy_worker_score(vacancy, worker):
