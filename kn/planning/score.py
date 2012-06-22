@@ -77,6 +77,8 @@ def p_borrel_uncurried(first, second, third, not_after, vacancy):
         scores.append(second)
     if vend > BORREL_SECOND_SWITCH:
         scores.append(third)
+    if len(scores) == 0:
+        return False
     return min(scores)
 
 def p_borrel(first, second, third, not_after=BORREL_END):
