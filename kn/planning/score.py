@@ -138,6 +138,27 @@ preferences = {
         "tijn":     (p_borrel(100,100,  0),),
         "timj":     (p_borrel(  0,100,  0),),
         "tomn":     (p_borrel(100,100,  0),),
+},
+"draai": {
+        "bart":       (p_borrel(100,100,  0),),
+        "barts":      (p_borrel(100,100,  0),),
+        "bas":        (p_borrel(100,100,  0),),
+        "daansp":     (p_borrel(100,100, 50),),
+        "felix":      (p_borrel(100,100,  0),),
+        "ids":        (p_borrel(100,100,  0),),
+        "jille":      (p_borrel(100,100, 50),),
+        "koen":       (p_borrel(  0,  0,  0),),
+        "lisettevdl": (p_borrel(  0,  0,  0),),
+        "marjolijn":  (p_borrel(  0,  0,  0),),
+        "michiel":    (p_borrel(  0,100,100),),
+        "mikel":      (p_borrel(  0,  0,  0),),
+        "pp":         (p_borrel(100,  0,  0),),
+        "rik":        (p_borrel(100,100, 50),),
+        "robert":     (p_borrel(  0,  0,  0),),
+        "sjorsg":     (p_borrel(100,100,100),),
+        "stan":       (p_borrel(100,100,  0),),
+        "vincentp":   (p_borrel(100,100,100),),
+        "yurre":      (p_borrel(100,100,100),),
 }}
 
 def planning_vacancy_worker_score(vacancy, worker):
