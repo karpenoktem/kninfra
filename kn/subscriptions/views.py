@@ -52,8 +52,8 @@ def event_detail(request, name):
     may_subscribe_others = (has_write_access or
                         event.everyone_can_subscribe_others)
     # Are we subscribing someone else?
-    if (request.method == 'POST' and event.is_open and
-            request.POST['who'] != str(request.user.id)):
+    if (request.method == 'POST' and event.is_open and 'who' in request.POST
+            and request.POST['who'] != str(request.user.id)):
         other_subscription = event.get_subscription_of(request.POST['who'])
         # Are we allowed to subscribe others?
         if not may_subscribe_others:
@@ -98,8 +98,9 @@ def event_detail(request, name):
                                         request.user.canonical_email),
                         'Reply-To': full_owner_address})
             email.send()
-    if (subscription is not None and request.method == 'POST'
-            and event.is_open and request.POST['who'] == str(request.user.id)):
+    if (subscription is None and request.method == 'POST'
+            and event.is_open and ('who' not in request.POST
+                or request.POST['who'] == str(request.user.id))):
         notes = request.POST['notes']
         subscription = subscr_Es.Subscription({
             'event': event._id,
