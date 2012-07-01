@@ -47,6 +47,7 @@ def args_to_users(args):
         e = todo.pop()
         if e in had:
             continue
+        had.add(e)
         if e.type=="user":
             ret.add(e)
             continue
