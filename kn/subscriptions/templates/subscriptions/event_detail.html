@@ -72,7 +72,9 @@ change_debit = function(id) {
 	{% endif %}
 	{% if object.cost %}
 	<dt>Kosten</dt>
-	<dd>&euro; {{ object.cost }}</dd>
+	<dd>{% if object.cost > 0 %}&euro; {{ object.cost }}
+        {% else %}Deelname aan deze activiteit is gratis
+        {% endif %}</dd>
 	{% endif %}
 </dl>
 
