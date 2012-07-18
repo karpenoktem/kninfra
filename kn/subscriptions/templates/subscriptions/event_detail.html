@@ -71,12 +71,8 @@ change_debit = function(id) {
 		>{{ object.owner.humanName }}</a></dd>
 	{% endif %}
 	{% if object.cost %}
-		{% if object.cost > 0 %}
 	<dt>Kosten</dt>
 	<dd>&euro; {{ object.cost }}</dd>
-		{% else %}
-	<dt>Deelname aan deze activiteit is gratis</dt>
-		{% endif %}
 	{% endif %}
 </dl>
 
