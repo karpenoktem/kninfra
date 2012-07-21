@@ -110,6 +110,7 @@ POSTFIX_VIRTUAL_MAP = '/etc/postfix/virtual/kninfra_maps'
 INFRA_UID = 1002
 
 PHOTOS_DIR = '/var/fotos'
+USER_DIRS = '/mnt/phassa/home/'
 
 # VPN related
 # ############################################################
@@ -132,4 +133,8 @@ MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 WIKI_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
 FORUM_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
 ALLOWED_API_KEYS = ('CHANGE ME',)
+PHOTOS_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
+ALLOWED_API_KEYS = ('CHANGE ME',)
 CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
+DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
+                        '<root@khandhas.karpenoktem.nl>')
