@@ -21,7 +21,7 @@ def ensure_indices():
     vcol.ensure_index('pool')
     vcol.ensure_index('begin')
     vcol.ensure_index('event')
-    vcol.ensure_index((('reminder_needed',1), ('event',1)))
+    vcol.ensure_index([('reminder_needed',1), ('event',1)])
     pcol.ensure_index('name')
     ecol.ensure_index('date')
 
