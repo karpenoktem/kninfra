@@ -9,6 +9,17 @@ import mimetypes
 import os.path
 import os
 
+def _lines_of_file_as_set(path):
+    """ Opens the file at <path>; reads all lines and returns them in a set """
+    ret = set()
+    with open(path) as f:
+        while True:
+            l = f.readline()
+            if not l:
+                break
+            ret.add(l[:-1])
+    return ret
+
 def homedir(request, root, subdir, path):
     original_root = root
     root = os.path.abspath(root)
@@ -39,7 +50,11 @@ def homedir(request, root, subdir, path):
         l.update(os.listdir(p1))
     if os.path.isdir(p2):
         l.update(os.listdir(p2))
-    _p = os.path.join(root, subdir, '...', path)
+    if os.path.isfile(os.path.join(p1, '.ignore')):
+        l -= _lines_of_file_as_set(os.path.join(p1, '.ignore'))
+    if os.path.isfile(os.path.join(p2, '.ignore')):
+        l -= _lines_of_file_as_set(os.path.join(p2, '.ignore'))
+    _p = os.path.join(subdir, '...', path)
     return render_to_response('browser/dirlist.html',
             {'list': [(c, os.path.join(path, c),
                    os.path.isdir(os.path.join(p1, c)) or
