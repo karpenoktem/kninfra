@@ -239,7 +239,11 @@ def ik_chpasswd(request):
             context_instance=RequestContext(request))
 
 def rauth(request):
-    """ An implementation of Jille Timmermans' rauth scheme """
+    """
+        An implementation of Jille Timmermans' rauth scheme
+        The token that is given to the authenticated user is only valid until
+        the end of the day.
+    """
     if request.REQUEST.get('url') is None:
         raise Http404
     if (request.REQUEST.get('validate') is not None and
@@ -252,6 +256,34 @@ def rauth(request):
         if request.REQUEST['validate'] == token:
             return HttpResponse("OK")
         return HttpResponse("INVALID")
+    
+    '''
+    The next check will allow you to request information about the user that
+    is currently logged in using the 'fetch'-get attribute with the property
+    names seperated by commas.
+    A JSON string will be returned containing the information.
+    '''
+    if (request.REQUEST.get('fetch') is not None and
+            request.REQUEST.get('user') is not None):
+        token = sha256('%s|%s|%s|%s' % (
+            request.REQUEST['user'],
+            date.today(),
+            request.REQUEST['url'],
+            settings.SECRET_KEY)).hexdigest()
+        if request.REQUEST['token'] == token:
+            properties = {
+                'username': request.user.name,
+                'names': list(request.user.humanNames),
+                'name': request.user.humanName,
+                'groups': request.user.cached_groups,
+                'groupnames': request.user.cached_groups_names
+            }
+            return HttpResponse(json.dumps(dict([
+                (k, properties[k]) for k in
+                {s.strip() for s in request.REQUEST.get('fetch').split(',')}
+                if k in properties
+            ] )))
+        return HttpResponse("INVALID TOKEN")
     if not request.user.is_authenticated():
         # De replace() is een workaround voor
         #   http://code.djangoproject.com/ticket/11457
