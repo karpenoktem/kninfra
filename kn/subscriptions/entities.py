@@ -58,16 +58,13 @@ class Event(SONWrapper):
     def get_subscription_of(self, user):
         d = scol.find_one({
             'event': self._data['_id'],
-            'user': user._id})
+            'user': _id(user)})
         if d is None:
             return None
         return Subscription(d)
     @property
     def description(self):
         return self._data['description']
-    @property
-    def mailBody(self):
-        return self._data['mailBody']
     @property
     def name(self):
         return self._data['name']
@@ -80,6 +77,13 @@ class Event(SONWrapper):
 
     is_open = son_property(('is_open',))
     is_official = son_property(('is_official',), True)
+    has_public_subscriptions = son_property(('has_public_subscriptions',),
+                                    False)
+    mailBody = son_property(('mailBody',))
+    subscribedByOtherMailBody = son_property(('subscribedByOtherMailBody',))
+    confirmationMailBody = son_property(('confirmationMailBody',))
+    everyone_can_subscribe_others = son_property(
+            ('everyone_can_subscribe_others',), False)
 
     def __unicode__(self):
         return unicode('%s (%s)' % (self.humanName, self.owner))
@@ -125,5 +129,11 @@ class Subscription(SONWrapper):
         self._data['debit'] = str(v)
     debit = property(get_debit, set_debit)
     @property
-    def userNotes(self):
-        return self._data['userNotes']
+    def subscribedBy(self):
+        if not 'subscribedBy' in self._data:
+            return None
+        return Es.by_id(self._data['subscribedBy'])
+    userNotes = son_property(('userNotes',), None)
+    confirmed = son_property(('confirmed',), True)
+    subscribedBy_notes = son_property(('subscribedBy_notes',))
+    dateConfirmed = son_property(('dateConfirmed',))
