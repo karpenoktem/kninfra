@@ -1,7 +1,11 @@
 # vim: et:sta:bs=2:sw=4:
 import pymongo
-from pymongo.objectid import ObjectId
 from kn.settings import MONGO_DB, MONGO_HOST
+
+try:
+    from pymongo.objectid import ObjectId
+except ImportError:
+    from bson import ObjectId
 
 conn = pymongo.Connection(MONGO_HOST)
 db = conn[MONGO_DB]

@@ -4,9 +4,8 @@ import decimal
 from regl.model import Document
 
 from django.db.models import permalink
-from pymongo.objectid import ObjectId
 
-from kn.leden.mongo import db, SONWrapper, _id, son_property
+from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
 
 import kn.leden.entities as Es
 
