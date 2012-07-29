@@ -273,9 +273,10 @@ def rauth(request):
         if request.REQUEST['token'] == token:
             user = Es.by_name(request.REQUEST['user'])
             properties = {
-                'firstname': user._data['person']['nick'],
-                'lastname': user._data['person']['family'],
-                'names': list(user._data['names']),
+                'firstname': user.first_name,
+                'lastname': user.last_name,
+                'gender': user.gender,
+                'fullname': user.full_name,
                 'groups': list(user.cached_groups_names)
             }
             return HttpResponse(json.dumps(dict([
