@@ -360,7 +360,8 @@ def secr_add_user(request):
             Es.add_relation(u, Es.id_by_name('leden',
                             use_cache=True),
                     _from=date_to_dt(fd['dateJoined']))
-            Es.add_relation(u, Es.id_by_name('aan', use_cache=True),
+            for l in fd['addToList']:
+                Es.add_relation(u, Es.id_by_name(l, use_cache=True),
                     _from=now())
             giedo.sync()
             request.user.push_message("Gebruiker toegevoegd. "+

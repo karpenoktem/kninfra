@@ -31,6 +31,9 @@ class AddUserForm(forms.Form):
             choices=Es.studies(), sort_choices=True)
     dateJoined = forms.DateField(label="Datum van inschrijving",
             initial=datetime.date.today)
+    addToList = forms.MultipleChoiceField(label="Voeg toe aan maillijsten",
+            choices=[('aan', "aan"), ('uit', "uit")], initial=['aan'],
+            widget=forms.CheckboxSelectMultiple())
 
 class AddGroupForm(forms.Form):
     name = forms.RegexField(label="Naam", regex=r'^[a-z0-9-]{2,64}$')
