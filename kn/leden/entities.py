@@ -434,21 +434,21 @@ class Entity(SONWrapper):
         """ The list of entities this user is None-related with.
 
         This field is cached. """
-        if not hasattr(self, '__groups_cache'):
+        if not hasattr(self, '_groups_cache'):
             dt = now()
-            self.__groups_cache = [rel['with']
+            self._groups_cache = [rel['with']
                 for rel in self.get_related(
                     None, dt, dt, False, True, False)]
-        return self.__groups_cache
+        return self._groups_cache
 
     @property
     def cached_groups_names(self):
-        if not hasattr(self, '__groups_names_cache'):
-            self.__groups_names_cache = set()
+        if not hasattr(self, '_groups_names_cache'):
+            self._groups_names_cache = set()
             for g in self.cached_groups:
-                self.__groups_names_cache.update([
+                self._groups_names_cache.update([
                     str(n) for n in g.names])
-        return self.__groups_names_cache
+        return self._groups_names_cache
 
     def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                 deref_with=True, deref_how=True):
