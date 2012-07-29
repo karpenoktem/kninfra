@@ -21,10 +21,7 @@ ncol = db['notes']      # notes on entities by the secretaris
 def ensure_indices():
     """ Ensures that the indices we need on the collections are set """
     # entities
-    # NOTE On some versions of Mongo, a unique sparse index does not allow
-    #      more than one entitity without a name.
-    #ecol.ensure_index('names', unique=True, sparse=True)
-    ecol.ensure_index('names', sparse=True)
+    ecol.ensure_index('names', unique=True, sparse=True)
     ecol.ensure_index('types')
     ecol.ensure_index('tags', sparse=True)
     ecol.ensure_index('humanNames.human')
