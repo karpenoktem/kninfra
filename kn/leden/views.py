@@ -280,7 +280,7 @@ def rauth(request):
             }
             return HttpResponse(json.dumps(dict([
                 (k, properties[k]) for k in
-                [s.strip() for s in request.REQUEST.get('fetch').split(',')]
+                set(s.strip() for s in request.REQUEST.get('fetch').split(','))
                 if k in properties
             ] )))
         return HttpResponse("INVALID TOKEN")
