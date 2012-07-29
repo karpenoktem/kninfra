@@ -256,6 +256,9 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
                 query[attr] = None
         if query.get('from') is None: query['from'] = DT_MIN
         if query.get('until') is None: query['until'] = DT_MAX
+        # When DT_MIN < from < until < DT_MAX we need the most complicated
+        # query. However, in the following four cases we can simplify the
+        # required query bits.
         if query['from'] == DT_MIN and query['until'] == DT_MAX:
             del query['from']
             del query['until']
@@ -263,6 +266,14 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
         elif query['from'] == query['until']:
             query['from'] = {'$lte': query['from']}
             query['until'] = {'$gte': query['until']}
+            bits.append(query)
+        elif query['from'] == DT_MIN:
+            query['from'] = {'$lte': query['until']}
+            query['until'] = {'$gte': DT_MIN}
+            bits.append(query)
+        elif query['until'] == DT_MAX:
+            query['until'] = {'$gte': query['from']}
+            query['from'] = {'$lte': DT_MAX}
             bits.append(query)
         else:
             qa, qb, qc = dict(query), dict(query), dict(query)
