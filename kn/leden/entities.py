@@ -279,7 +279,9 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
             qc['until'] = {'$gte': query['until']}
             qc['from'] = {'$lte': query['from']}
             bits.append(qc)
-    cursor = rcol.find({'$or': bits})
+    # NOTE If bits is a one-element-array the `$or' query does not return
+    #      anything, even if it should.  Bug in MongoDB?
+    cursor = rcol.find({'$or': bits} if len(bits) != 1 else bits[0])
     if not deref_how and not deref_who and not deref_with:
         return cursor
     return __derefence_relations(cursor, deref_who, deref_with, deref_how)
