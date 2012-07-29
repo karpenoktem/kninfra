@@ -3,8 +3,6 @@ from django import forms
 import kn.leden.entities as Es
 import datetime
 
-
-
 class EntityChoiceField(forms.ChoiceField):
     def __init__(self, *args, **kwargs):
         kwargs['choices'] = [(e._id, unicode(e.humanName))
