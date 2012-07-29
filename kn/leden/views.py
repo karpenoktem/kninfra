@@ -271,12 +271,12 @@ def rauth(request):
             request.REQUEST['url'],
             settings.SECRET_KEY)).hexdigest()
         if request.REQUEST['token'] == token:
+            user = Es.by_name(request.REQUEST['user'])
             properties = {
-                'username': request.user.name,
-                'names': list(request.user.humanNames),
-                'name': request.user.humanName,
-                'groups': request.user.cached_groups,
-                'groupnames': request.user.cached_groups_names
+                'firstname': user._data['person']['nick'],
+                'lastname': user._data['person']['family'],
+                'names': list(user._data['names']),
+                'groups': list(user.cached_groups_names)
             }
             return HttpResponse(json.dumps(dict([
                 (k, properties[k]) for k in
