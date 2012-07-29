@@ -30,7 +30,7 @@ class AddUserForm(forms.Form):
     study = EntityChoiceField(label="Studie",
             choices=Es.studies(), sort_choices=True)
     dateJoined = forms.DateField(label="Datum van inschrijving",
-            initial=datetime.date.today())
+            initial=datetime.date.today)
 
 class AddGroupForm(forms.Form):
     name = forms.RegexField(label="Naam", regex=r'^[a-z0-9-]{2,64}$')
@@ -39,7 +39,8 @@ class AddGroupForm(forms.Form):
     description = forms.CharField(label="Korte beschrijving")
     parent = EntityChoiceField(label="Parent",
             choices=filter(lambda x: not x.is_virtual, Es.groups()),
-            sort_choices=True, initial=str(Es.by_name('secretariaat')._id))
+            sort_choices=True,
+            initial=lambda x: str(Es.by_name('secretariaat')._id))
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput())
