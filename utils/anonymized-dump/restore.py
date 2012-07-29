@@ -37,7 +37,6 @@ def main():
     print ' relations'
     for e in bson.decode_all(open('relations.bsons').read()):
         db['relations'].save(e)
-        print e
     print ' events'
     for e in bson.decode_all(open('events.bsons').read()):
         db['events'].save(e)
