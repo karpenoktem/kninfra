@@ -17,6 +17,7 @@ rcol = db['relations']  # relations: "giedo is chairman of bestuur from
             #             date A until date B"
 mcol = db['messages']   # message: used for old code
 ncol = db['notes']      # notes on entities by the secretaris
+pcol = db['push_changes'] # Changes to be pushed to remote systems
 
 def ensure_indices():
     """ Ensures that the indices we need on the collections are set """
@@ -901,6 +902,19 @@ class Note(SONWrapper):
             return None
         return by_id(self._data['by'])
 
+
+class PushChange(SONWrapper):
+    def __init__(self, data):
+        super(PushChange, self).__init__(data, pcol)
+    @property
+    def system(self):
+        return self._data['system']
+    @property
+    def action(self):
+        return self._data['action']
+    @property
+    def data(self):
+        return self._data['data']
 
 # List of type of entities
 # ######################################################################
