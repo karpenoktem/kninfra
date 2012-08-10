@@ -60,6 +60,8 @@
 	try {
 	var pageTracker = _gat._getTracker("UA-11922614-1");
 	pageTracker._trackPageview();
-	} catch(err) {}</script>
+        } catch(err) {}
+        var csrf_token = "{{ csrf_token }}";
+        </script>
 	</body>	
 </html>
