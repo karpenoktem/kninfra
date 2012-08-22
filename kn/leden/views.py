@@ -454,7 +454,8 @@ def user_reset_password(request, _id):
     email = EmailMessage(
         "[KN] Nieuw wachtwoord",
         ("Beste %s,\n\n"+
-         "Jouw wachtwoord is gereset.  Je kunt inloggen met:\n"+
+            "Jouw wachtwoord is gereset.  Je kunt op "+
+            "http://karpenoktem.nl/smoelen inloggen met:\n"+
          "  gebruikersnaam     %s\n"+
          "  wachtwoord         %s\n\n"+
          "Met een vriendelijke groet,\n\n"+
