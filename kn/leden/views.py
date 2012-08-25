@@ -377,6 +377,14 @@ def secr_add_user(request):
             context_instance=RequestContext(request))
 
 @login_required
+def secr_notes(request):
+    if 'secretariaat' not in request.user.cached_groups_names:
+        raise PermissionDenied
+    return render_to_response('leden/secr_notes.html',
+                {'notes': Es.get_open_notes()},
+            context_instance=RequestContext(request))
+
+@login_required
 def secr_add_group(request):
     if 'wortel' not in request.user.cached_groups_names:
         raise PermissionDenied

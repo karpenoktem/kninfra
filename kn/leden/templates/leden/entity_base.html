@@ -156,6 +156,22 @@ tot {{ r.until.date }}
 <a href="{{ n.by.get_absolute_url }}">{{ n.by.humanName }}</a>
 {% endif %}{# n.by #}
 <blockquote>{{ n.note }}</blockquote>
+{% if n.open %}
+<button onclick="$.post('{% url leden-api %}', {
+                        'csrfmiddlewaretoken': csrf_token,
+                        data: JSON.stringify({
+                                action: 'close_note',
+                                id: '{{ n.id }}'})
+                        }, function(data) {
+                                if(data.ok)
+                                        window.location.reload();
+                                else
+                                        alert(data.error);
+                        }); return false;">Sluit</button>
+{% else %}{# n.open #}
+<small>Gesloten door {{ n.closed_by.humanName }}
+                op {{ n.closed_at.date }}</small>
+{% endif %}{# n.open #}
 </li>
 {% endfor %}{# n in object.get_notes #}
 </ul>
