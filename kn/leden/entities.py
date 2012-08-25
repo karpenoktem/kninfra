@@ -1,4 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
+import re
 import functools
 
 from django.db.models import permalink
@@ -162,6 +163,29 @@ def names():
     for e in ecol.find({}, {'names':True}):
         ret.update(e.get('names', ()))
     return ret
+
+# Searching entities by keywords
+# ######################################################################
+def by_keyword(keyword, limit=20, _type=None):
+    """ Searches for entities by a keyword. """
+    # TODO The current method does not use indices.  It will search
+    #      through every single entity.  At the moment, it is fast enough.
+    #      To make it future proof, we should implement a query cache.
+    #      See MongoCollection.query in mongo.py of github.com/marietje/maried
+    # TODO We might want to match names.names too.
+    # TODO We want to filter virtual groups and other uninteresting entities
+    # TODO We might want to match multiple keywords out-of-order.
+    #           eg.: "gi jan" matches Giedo, but "jan gi" does not.
+    # TODO We might want to create an index, for when searching on type too
+    regex = '.*%s.*' % '.*'.join([
+                re.escape(bit) for bit in keyword.split(' ') if bit])
+    query_dict = {'humanNames.human': {
+                            '$regex': regex, '$options': 'i'}}
+    if _type:
+        query_dict['types'] = _type
+    cursor = ecol.find(query_dict, limit=(0 if limit is None else limit),
+                            sort=[('humanNames.human', 1)])
+    return map(entity, cursor)
 
 # Specialized functions to work with entities.
 # ######################################################################
