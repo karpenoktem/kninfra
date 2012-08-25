@@ -11,12 +11,12 @@ def view(request):
     action = data.get('action')
     handler = ACTION_HANDLER_MAP.get(action,
                     ACTION_HANDLER_MAP[None])
-    return JsonHttpResponse(handler(data))
+    return JsonHttpResponse(handler(data, request))
 
-def no_such_action(data):
+def no_such_action(data, request):
     return {'error': 'No such action'}
 
-def entities_by_keyword(data):
+def entities_by_keyword(data, request):
     """ Wraps Es.by_keyword.  Finds the first 20 entities matching the given
         keyword.  Example:
         
