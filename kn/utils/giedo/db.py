@@ -26,9 +26,11 @@ def update_db(giedo):
     # Find relations on those groups and add the years for which those
     # relations hold.
     def add_years_to_relations(rels):
+        years_of_year_overrides = [yo[1] for yo in year_overrides.values()]
         until_years = [Es.date_to_year(r['until']) for r in rels
                     if r['until'] != DT_MAX]
         max_until = max(max(until_years) if until_years else 0,
+                max(years_of_year_overrides) if years_of_year_overrides else 0,
                 Es.date_to_year(dt_now))
         from_years = [Es.date_to_year(r['from']) for r in rels
                     if r['from'] != DT_MIN]
