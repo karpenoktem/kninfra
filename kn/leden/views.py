@@ -271,12 +271,13 @@ def rauth(request):
             request.REQUEST['url'],
             settings.SECRET_KEY)).hexdigest()
         if request.REQUEST['token'] == token:
+            user = Es.by_name(request.REQUEST['user'])
             properties = {
-                'username': request.user.name,
-                'names': list(request.user.humanNames),
-                'name': request.user.humanName,
-                'groups': request.user.cached_groups,
-                'groupnames': request.user.cached_groups_names
+                'firstname': user.first_name,
+                'lastname': user.last_name,
+                'gender': user.gender,
+                'fullname': user.full_name,
+                'groups': list(user.cached_groups_names)
             }
             return HttpResponse(json.dumps(dict([
                 (k, properties[k]) for k in
@@ -453,7 +454,8 @@ def user_reset_password(request, _id):
     email = EmailMessage(
         "[KN] Nieuw wachtwoord",
         ("Beste %s,\n\n"+
-         "Jouw wachtwoord is gereset.  Je kunt inloggen met:\n"+
+            "Jouw wachtwoord is gereset.  Je kunt op "+
+            "http://karpenoktem.nl/smoelen inloggen met:\n"+
          "  gebruikersnaam     %s\n"+
          "  wachtwoord         %s\n\n"+
          "Met een vriendelijke groet,\n\n"+
