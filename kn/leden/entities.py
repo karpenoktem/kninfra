@@ -1,5 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
 import re
+import datetime
 import functools
 
 from django.db.models import permalink
@@ -195,6 +196,11 @@ def by_keyword(keyword, limit=20, _type=None):
 def bearers_by_tag_id(tag_id, _as=entity):
     """ Find the bearers of the tag with @tag_id """
     return map(_as, ecol.find({'tags': tag_id}))
+
+def year_to_range(year):
+    """ Returns (start_date, end_date) for the given year """
+    return (datetime.datetime(2003 + year, 9, 1),
+            datetime.datetime(2004 + year, 8, 31))
 
 def date_to_year(dt):
     """ Returns the `verenigingsjaar' at the date """
