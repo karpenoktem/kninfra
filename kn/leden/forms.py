@@ -43,7 +43,7 @@ class AddGroupForm(forms.Form):
     parent = EntityChoiceField(label="Parent",
             choices=filter(lambda x: not x.is_virtual, Es.groups()),
             sort_choices=True,
-            initial=lambda x: str(Es.by_name('secretariaat')._id))
+            initial=lambda: str(Es.by_name('secretariaat')._id))
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput())
