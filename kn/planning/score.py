@@ -110,6 +110,7 @@ preferences = {
                         datetime(2011,11,1),datetime(2011,11,7), 
                         p_borrel(0,0,0)), 
                      p_borrel(  0,  0,100),),
+        "carlien":  (p_borrel( 50, 50, 50),),
         "chaim":    (p_borrel(100,100,100),),
         "dennisi":  (p_borrel(100,100,  0),),
         "frits":    (p_borrel( 50,100,  0),),
