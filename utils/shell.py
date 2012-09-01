@@ -60,7 +60,9 @@ def add_rel(who, _with, how, _from, until):
             'until': until})
 
 def str_to_date(s):
-    return datetime.datetime(*time.strptime(s, '%Y-%m-%d')[:3])
+    if isinstance(s, basestring):
+        return datetime.datetime(*time.strptime(s, '%Y-%m-%d')[:3])
+    return s
 
 def add_name(name, extra_name):
     e = Es.by_name(name)
