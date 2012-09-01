@@ -10,7 +10,7 @@ import datetime
 import kn.leden.entities as Es
 import kn.reglementen.entities as regl_Es
 import kn.poll.entities as poll_Es
-from kn.leden.mongo import _id
+from kn.leden.mongo import _id, ObjectId
 from kn.leden import giedo
 from kn.leden.date import now
 from kn.settings import DT_MIN, DT_MAX
@@ -80,3 +80,8 @@ def end_rel(who, _with, how, at=None):
             'with': _with,
             'how': how,
             'until': DT_MAX}, {'$set': {'until': at}})
+
+def qe(keyword):
+    """ Queries entities by keyword """
+    for e in Es.by_keyword(keyword):
+        print "%-20s %s" % (_id(e), unicode(e.humanName))
