@@ -2,15 +2,17 @@
 
 {% block body %}
 <h1>Smoelenboek</h1>
-<p>Hallo {{user.full_name }},</p>
+<p>Hallo <a href="{{ user.get_absolute_url }}">{{user.full_name }}</a>,</p>
 <p>je kunt hier onder andere</p>
 <ul>
-	<li><a href="{% url user-list %}"
-		>alle gebruikers</a> met onder andere leden en oud-leden;</li>
 	<li><a href="{% url entity-by-name name="leden"  %}"
-		>alle leden</a> en</li>
+		>alle leden en oud-leden</a>,</li>
 	<li><a href="{% url tag-by-name name="comms" %}"
-		>alle commissies</a></li>
+		>alle commissies</a>,</li>
+	<li><a href="{% url entity-by-name name="groepen" %}"
+		>alle groepen</a> en</li>
+	<li>de <a href="{% url entity-by-name name="lists" %}"
+		>e-maillijsten</a></li>
 </ul>
 <p>vinden en jouw 
 <a href="{% url chpasswd %}" name="">wachtwoord veranderen</a>.</p>
