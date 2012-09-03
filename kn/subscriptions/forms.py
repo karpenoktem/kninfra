@@ -34,7 +34,7 @@ def get_add_event_form(user, superuser=False):
             label='E-Mail wanneer aangemeld door een ander',
             widget=forms.Textarea,
             initial="Hallo %(firstName)s,\n\n"+
-                "Je bent door %(by_firstName)s je aangemeld "+
+                "Je bent door %(by_firstName)s aangemeld "+
                     "voor %(eventName)s.\n"+
                 "\n"+
                 "%(by_firstName)s opmerkingen waren:\n"+
