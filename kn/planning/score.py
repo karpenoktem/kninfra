@@ -1,7 +1,7 @@
 # vim: et:sta:bs=2:sw=4:
 from datetime import datetime
 
-# Returns the amount of seconds in the fiven amount of hours and minutes
+# Returns the amount of seconds in the given amount of hours and minutes
 def hm2s(h,m=0):
     return 60*(60*h+m)
 
