@@ -1,7 +1,7 @@
 # vim: et:sta:bs=2:sw=4:
 from datetime import datetime
 
-# Returns the amount of seconds in the fiven amount of hours and minutes
+# Returns the amount of seconds in the given amount of hours and minutes
 def hm2s(h,m=0):
     return 60*(60*h+m)
 
@@ -142,9 +142,9 @@ preferences = {
 },
 "draai": {
         "bart":       (p_borrel(100,100,  0),),
-        "barts":      (p_borrel(100,100,  0),),
+        "barts":      (p_borrel(  0,  0,  0),),
         "bas":        (p_borrel(100,100,  0),),
-        "daansp":     (p_borrel(100,100, 50),),
+        "daansp":     (p_borrel(100,100, 00),),
         "felix":      (p_borrel(100,100,  0),),
         "ids":        (p_borrel(100,100,  0),),
         "jille":      (p_borrel(100,100, 50),),
@@ -153,13 +153,15 @@ preferences = {
         "marjolijn":  (p_borrel(  0,  0,  0),),
         "michiel":    (p_borrel(  0,100,100),),
         "mikel":      (p_borrel(  0,  0,  0),),
+        "pepijn":     (p_borrel(100,100,100),),
+        "petervdv":   (p_borrel(100,  0,  0),),
         "pp":         (p_borrel(100,  0,  0),),
         "rik":        (p_borrel(100,100, 50),),
         "robert":     (p_borrel(  0,  0,  0),),
-        "sjorsg":     (p_borrel(100,100,100),),
-        "stan":       (p_borrel(100,100,  0),),
-        "vincentp":   (p_borrel(100,100,100),),
-        "yurre":      (p_borrel(100,100,100),),
+        "sjorsg":     (p_borrel(100,100, 50),),
+        "stan":       (p_borrel(  0,  0,  0),),
+        "vincentp":   (p_borrel(100,100, 50),),
+        "yurre":      (p_borrel(  0,100,100),),
 }}
 
 def planning_vacancy_worker_score(vacancy, worker):
