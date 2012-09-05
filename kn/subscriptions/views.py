@@ -224,7 +224,10 @@ def event_new_or_edit(request, edit=None):
                 raise PermissionDenied
             name = fd['name']
             # If not secretariaat, then prefix name with the username
-            prefix = str(request.user.name) + '-'
+            if fd['owner'] == request.user.id:
+                prefix = str(request.user.name) + '-'
+            else:
+                prefix = str(Es.by_id(fd['owner']).name) + '-'
             if not superuser and not name.startswith(prefix):
                 name = prefix + name
             d = {
