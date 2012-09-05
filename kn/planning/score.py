@@ -160,7 +160,7 @@ preferences = {
         "sjorsg":     (p_borrel(100,100, 50),),
         "stan":       (p_borrel(  0,  0,  0),),
         "vincentp":   (p_borrel(100,100, 50),),
-        "yurre":      (p_borrel(  0,100,100),),
+        "yurre":      (p_borrel(100,100,100),),
 }}
 
 def planning_vacancy_worker_score(vacancy, worker):
