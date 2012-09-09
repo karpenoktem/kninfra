@@ -115,7 +115,7 @@ def planning_view(request):
 
 # extends cmp with None as bottom
 def cmp_None(x, y, cmp=cmp):
-    return (x == None and -1) or (x == None and 1) or cmp(x, y)
+    return (x == None and -1) or (y == None and 1) or cmp(x, y)
 
 @login_required
 def planning_manage(request, poolname):
