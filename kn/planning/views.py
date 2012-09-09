@@ -114,8 +114,12 @@ def planning_view(request):
             context_instance=RequestContext(request))
 
 # extends cmp with None as bottom
-def cmp_None(x, y, cmp=cmp):
-    return (x == None and -1) or (y == None and 1) or cmp(x, y)
+def cmp_None(x,y,cmp=cmp):
+    if x==None:
+        return -1
+    if y==None:
+        return 1
+    return cmp(x,y)
 
 @login_required
 def planning_manage(request, poolname):
