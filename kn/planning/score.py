@@ -168,7 +168,7 @@ def planning_vacancy_worker_score(vacancy, worker):
     pn = vacancy.pool.name
     if pn not in preferences or un not in preferences[pn]:
         # If the preferences of a worker have not been set,
-        # asume (s)he is available so that we'll get his/her preferences asap.
+        # assume (s)he is available so that we'll get his/her preferences asap.
         return 101
     for preflet in preferences[pn][un]:
         score = preflet(vacancy)
