@@ -7,15 +7,18 @@
 <ul>
 <li><a href="{% url entity-by-name name="leden" %}"
 	>Leden</a></li>
-<li><a href="{% url entity-by-name name="groepen" %}"
-	>Groepen</a></li>
 <li><a href="{% url entity-by-name name="comms" %}"
 	>Commissies</a></li>
+<li><a href="{% url entity-by-name name="groepen" %}"
+	>Groepen</a></li>
+<li><a href="{% url entity-by-name name="lists" %}"
+	>E-maillijsten</a></li>
 </ul>
 <li><a href="{% url event-list %}">Activiteiten</a></li>
 <ul>
         <li><a href="{% url event-new  %}">Aanmaken</a></li>
 </ul>
+
 {% if "secretariaat" in user.cached_groups_names %}
 <li>Secretariaat</li>
 <ul>
@@ -29,6 +32,14 @@
 <li><a href="/fotos/">Foto's</a></li>
 <ul>
         <li><a href="{% url fotoadmin-move %}">Foto's verplaatsen</a></li>
+</ul>
+{% endif %}
+
+<li><a href="{% url planning-home  %}">Planning</a></li>
+{% if "bestuur" in user.cached_groups_names or "barco" in user.cached_groups_names or "disco" in user.cached_groups_names or "secretariaat" in user.cached_groups_names %}
+<ul>
+	<li><a href="{% url planning-poollist %}">Beheer</a></li>
+	<li><a href="{% url planning-event-create %}">Nieuw</a></li>
 </ul>
 {% endif %}
 {% endblock %}

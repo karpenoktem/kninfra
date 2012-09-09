@@ -8,7 +8,7 @@ from django.conf.urls.defaults import *
 from kn.planning import views
 
 urlpatterns = patterns('',
-    (r'^$', views.planning_view),
+    url(r'^$', views.planning_view, name='planning-home'),
     (r'^!api/?$', views.planning_api),
     url(r'^manage/$', views.planning_poollist, name='planning-poollist'),
     url(r'^manage/event/new/$', views.event_create,
