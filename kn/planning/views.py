@@ -91,7 +91,7 @@ def planning_view(request):
     # TODO reduce number of queries
     for e in Event.all_since_datetime(now() - datetime.timedelta(days=lookbehind)):
         ei = {  'name': e.name,
-                'date': str(e.date.date()),
+                'datetime': e.date,
                 'kind': e.kind,
             'vacancies': dict()}
         for idx in poolid2idx.values():
@@ -106,7 +106,7 @@ def planning_view(request):
         for idx in poolid2idx.values():
             ei['vacancies'][idx].sort(key=lambda x: x['begin'])
         events.append(ei)
-    events.sort(key=lambda x: x['date'])
+    events.sort(key=lambda x: x['datetime'])
     return render_to_response('planning/overview.html',
             {'events': events,
              'pools': pools,

@@ -15,20 +15,20 @@
                         colspan="{{ poolcount }}"
                         style="text-align: center;
                         border-bottom: 2px solid white">
-                        <strong>{{ event.date }}</strong>
-                         - {{ event.name }}
+                        <strong>{{ event.datetime|date:"l, j F Y" }}</strong>
+                        &mdash; <em>{{ event.name }}</em>
                         <small>{{ event.kind }}</small>
                 </td>
 	</tr>
 	<tr>
-{% for poolidx, vacancies in event.vacancies.items %}
+	{% for poolidx, vacancies in event.vacancies.items %}
 		<td style="vertical-align: top; text-align: center">
-{% for vacancy in vacancies %}
+		{% for vacancy in vacancies %}
 		<b>{{ vacancy.begin_time }} - {{ vacancy.end_time }}</b><br>
 		{{ vacancy.assignee }}<br>
-{% endfor %}
+		{% endfor %}
 		</td>
-{% endfor %}
+	{% endfor %}
 	</tr>
 {% endfor %}
 </table>
