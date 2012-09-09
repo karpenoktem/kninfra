@@ -121,7 +121,6 @@ preferences = {
         "koen":     (p_borrel( 50, 50, 50),),
         "lisa":     (p_borrel(  0,100,100),),
         "loesje":   (p_borrel(100,100,  0),),
-        "loesje":   (p_borrel(100,100,  0),),
         "louise":   (p_borrel( 50, 50, 50),),
         "manon":    (p_borrel(  0,  0, 50),),
         "niek":     (p_borrel(100,100,  0),),
