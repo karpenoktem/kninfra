@@ -11,7 +11,6 @@ var htmlWeightFields = [];
 
 function build_structure(tbd) {
     var tif = {}; //Hier komen alle fields in om ze daarna een tabIndex te geven
-    var tiwf = {}; // Hetzelf,de voor weighted fields
     var wf_map = {}; // Hier komt {field -> is_weighted}
     for(var i = 0; weight_fields.length > i; i++) {
             wf_map[weight_fields[i]] = true;
@@ -88,10 +87,7 @@ function build_structure(tbd) {
                     }
                     td.appendChild(wf);
                     htmlWeightFields.push(wf);
-                    if((typeof tiwf[j]) == 'undefined') {
-                            tiwf[j] = [];
-                    }
-                    tiwf[j].push(wf);
+                    tif[j].push(wf);
                 }
                 tr.appendChild(td);
             }
@@ -105,11 +101,6 @@ function build_structure(tbd) {
     for(var j in tif) {
         for(i = 0; tif[j].length > i; i++) {
             tif[j][i].tabIndex = ti++;
-        }
-    }
-    for(var j in tiwf) {
-        for(i = 0; tiwf[j].length > i; i++) {
-            tiwf[j][i].tabIndex = ti++;
         }
     }
 
