@@ -1,6 +1,15 @@
 {% extends "leden/base.html" %}
 {% load base %}
 
+{% block head %}
+{{ block.super }}
+<style type="text/css">
+        #body {
+                font-size: 14px;
+        }
+</style>
+{% endblock %}
+
 {% block body %}
 <table style="width: 100%">
 	<tr>
