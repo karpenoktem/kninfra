@@ -41,7 +41,8 @@ class AddGroupForm(forms.Form):
     genitive_prefix = forms.CharField(label="Genitivus", initial="van de")
     description = forms.CharField(label="Korte beschrijving")
     parent = EntityChoiceField(label="Parent",
-            choices=filter(lambda x: not x.is_virtual, Es.groups()),
+            choices=filter(lambda x: (x.is_group and not x.is_virtual)
+                            or (x.is_tag and not x.is_group), Es.all()),
             sort_choices=True,
             initial=lambda: str(Es.by_name('secretariaat')._id))
     true_group = forms.BooleanField(label="Volwaardige groep",
