@@ -9,5 +9,14 @@ Planning overview
                 ({{ pool.administrator }})</li>
 {% endfor %}
 </ul>
+
+Printversie planning:
+<ul>
+{% for pool in pools %}
+<li><a href="{% url planning_template poolname=pool.name %}">{{ pool.name }}</a></li>
+{% endfor %}
+</ul>
+
+
 {{ block.super }}
 {% endblock %}
