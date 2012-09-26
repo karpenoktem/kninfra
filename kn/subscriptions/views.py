@@ -175,6 +175,18 @@ def _api_confirm_subscription(request):
     subscription.save()
     return JsonHttpResponse({'success': True})
 
+def _api_get_email_addresses(request):
+    if not 'id' in request.REQUEST:
+        return JsonHttpResponse({'error': 'missing arguments'})
+    event = subscr_Es.event_by_id(request.REQUEST['id'])
+    if not event:
+        raise Http404
+    # XXX We can optimize this query
+    return JsonHttpResponse({
+            'success': True,
+            'addresses': [s.user.canonical_email
+                    for s in event.get_subscriptions()]})
+
 def _api_change_debit(request):
     if not 'debit' in request.REQUEST or not 'id' in request.REQUEST:
         return JsonHttpResponse({'error': 'missing arguments'})
@@ -197,6 +209,8 @@ def api(request):
     action = request.REQUEST.get('action')
     if action == 'change-debit':
         return _api_change_debit(request)
+    elif action == 'get-email-addresses':
+        return _api_get_email_addresses(request)
     elif action == 'close-event':
         return _api_close_event(request)
     elif action == 'confirm-subscription':
