@@ -181,6 +181,10 @@ def _api_get_email_addresses(request):
     event = subscr_Es.event_by_id(request.REQUEST['id'])
     if not event:
         raise Http404
+    if (not event.has_public_subscriptions and
+            not event.has_read_access(request.user) and
+            not event.has_debit_access(request.user)):
+        raise PermissionDenied
     # XXX We can optimize this query
     return JsonHttpResponse({
             'success': True,
