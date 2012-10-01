@@ -257,6 +257,7 @@ def event_new_or_edit(request, edit=None):
                 'confirmationMailBody': fd['confirmationMailBody'],
                 'everyone_can_subscribe_others':
                         fd['everyone_can_subscribe_others'],
+                'has_public_subscriptions': fd['has_public_subscriptions'],
                 'humanName': fd['humanName'],
                 'createdBy': request.user._id,
                 'name': name,
