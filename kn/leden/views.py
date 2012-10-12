@@ -361,7 +361,8 @@ def secr_add_user(request):
             Es.add_relation(u, Es.id_by_name('leden',
                             use_cache=True),
                     _from=date_to_dt(fd['dateJoined']))
-            Es.add_relation(u, Es.id_by_name('aan', use_cache=True),
+            for l in fd['addToList']:
+                Es.add_relation(u, Es.id_by_name(l, use_cache=True),
                     _from=now())
             giedo.sync()
             request.user.push_message("Gebruiker toegevoegd. "+
@@ -376,6 +377,14 @@ def secr_add_user(request):
             context_instance=RequestContext(request))
 
 @login_required
+def secr_notes(request):
+    if 'secretariaat' not in request.user.cached_groups_names:
+        raise PermissionDenied
+    return render_to_response('leden/secr_notes.html',
+                {'notes': Es.get_open_notes()},
+            context_instance=RequestContext(request))
+
+@login_required
 def secr_add_group(request):
     if 'wortel' not in request.user.cached_groups_names:
         raise PermissionDenied
@@ -387,6 +396,8 @@ def secr_add_group(request):
             g = Es.Group({
                 'types': ['group', 'tag'],
                 'names': [nm],
+                'use_mailman_list': fd['true_group'],
+                'has_unix_group': fd['true_group'],
                 'humanNames': [{'name': nm,
                     'human': fd['humanName'],
                     'genitive_prefix': fd['genitive_prefix']}],
@@ -453,7 +464,8 @@ def user_reset_password(request, _id):
     email = EmailMessage(
         "[KN] Nieuw wachtwoord",
         ("Beste %s,\n\n"+
-         "Jouw wachtwoord is gereset.  Je kunt inloggen met:\n"+
+            "Jouw wachtwoord is gereset.  Je kunt op "+
+            "http://karpenoktem.nl/smoelen inloggen met:\n"+
          "  gebruikersnaam     %s\n"+
          "  wachtwoord         %s\n\n"+
          "Met een vriendelijke groet,\n\n"+

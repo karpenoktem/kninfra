@@ -20,7 +20,7 @@ from kn import settings
 # from kn.base.http import JsonHttpResponse
 from kn.barco.forms import BarformMeta, InvCountMeta
 
-settings.DRANK_REPOSITORIES = ['drank6', 'drank7', 'drank8']
+settings.DRANK_REPOSITORIES = ['drank6', 'drank7', 'drank8', 'drank9']
 settings.DRANK_REPOS_PATH = '/home/infra/barco/%s/'
 
 # The specific behaviour for each different form 

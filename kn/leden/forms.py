@@ -31,6 +31,9 @@ class AddUserForm(forms.Form):
             choices=Es.studies(), sort_choices=True)
     dateJoined = forms.DateField(label="Datum van inschrijving",
             initial=datetime.date.today)
+    addToList = forms.MultipleChoiceField(label="Voeg toe aan maillijsten",
+            choices=[('aan', "aan"), ('uit', "uit")], initial=['aan'],
+            widget=forms.CheckboxSelectMultiple())
 
 class AddGroupForm(forms.Form):
     name = forms.RegexField(label="Naam", regex=r'^[a-z0-9-]{2,64}$')
@@ -38,9 +41,12 @@ class AddGroupForm(forms.Form):
     genitive_prefix = forms.CharField(label="Genitivus", initial="van de")
     description = forms.CharField(label="Korte beschrijving")
     parent = EntityChoiceField(label="Parent",
-            choices=filter(lambda x: not x.is_virtual, Es.groups()),
+            choices=filter(lambda x: (x.is_group and not x.is_virtual)
+                            or (x.is_tag and not x.is_group), Es.all()),
             sort_choices=True,
-            initial=lambda x: str(Es.by_name('secretariaat')._id))
+            initial=lambda: str(Es.by_name('secretariaat')._id))
+    true_group = forms.BooleanField(label="Volwaardige groep",
+            initial=True)
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput())

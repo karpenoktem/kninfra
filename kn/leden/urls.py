@@ -5,7 +5,7 @@ import django.views.generic.simple
 import django.views.generic as generic
 from django.contrib.auth.decorators import login_required
 
-from kn.leden import views
+from kn.leden import views, api
 
 urlpatterns = patterns('',
     url(r'^$',
@@ -50,6 +50,7 @@ urlpatterns = patterns('',
     url(r'^ik/wachtwoord$', views.ik_chpasswd, name="chpasswd"),
     url(r'^ik/smoel$', views.ik_chsmoel, name="ik-chsmoel"),
     url(r'^api/users$', views.api_users),
+    url(r'^api/?$', api.view, name='leden-api'),
     url(r'^ik/openvpn/$', views.ik_openvpn, name="ik-openvpn"),
     url(r'^ik/openvpn/(?P<filename>.+(exe|zip))$', views.ik_openvpn_download,
                 name="ik-openvpn-download"),
@@ -59,6 +60,8 @@ urlpatterns = patterns('',
         views.secr_update_site_agenda, name='secr-update-site-agenda'),
     url(r'^secretariaat/addgroup$',
         views.secr_add_group, name='secr-add-group'),
+    url(r'^secretariaat/notes$',
+        views.secr_notes, name='secr-notes'),
     url(r'^relaties/(?P<_id>[^/]+)/beindig$',
         views.relation_end, name='relation-end'),
     url(r'^relaties/begin$',

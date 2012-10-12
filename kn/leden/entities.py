@@ -1,11 +1,13 @@
 # vim: et:sta:bs=2:sw=4:
+import re
+import datetime
 import functools
 
 from django.db.models import permalink
 from django.contrib.auth.models import get_hexdigest
 
 from kn.leden.date import now
-from kn.leden.mongo import db, SONWrapper, _id
+from kn.leden.mongo import db, SONWrapper, _id, son_property
 from kn.settings import DT_MIN, DT_MAX, MAILDOMAIN
 from kn.base._random import pseudo_randstr
 from kn import settings
@@ -38,7 +40,10 @@ def ensure_indices():
     # messages
     mcol.ensure_index('entity')
     # notes
-    ncol.ensure_index('on')
+    ncol.ensure_index([('on', 1),
+                       ('at', 1)])
+    ncol.ensure_index([('open',1),
+                       ('at',1)])
 
 
 # Basic functions to work with entities
@@ -163,11 +168,39 @@ def names():
         ret.update(e.get('names', ()))
     return ret
 
+# Searching entities by keywords
+# ######################################################################
+def by_keyword(keyword, limit=20, _type=None):
+    """ Searches for entities by a keyword. """
+    # TODO The current method does not use indices.  It will search
+    #      through every single entity.  At the moment, it is fast enough.
+    #      To make it future proof, we should implement a query cache.
+    #      See MongoCollection.query in mongo.py of github.com/marietje/maried
+    # TODO We might want to match names.names too.
+    # TODO We want to filter virtual groups and other uninteresting entities
+    # TODO We might want to match multiple keywords out-of-order.
+    #           eg.: "gi jan" matches Giedo, but "jan gi" does not.
+    # TODO We might want to create an index, for when searching on type too
+    regex = '.*%s.*' % '.*'.join([
+                re.escape(bit) for bit in keyword.split(' ') if bit])
+    query_dict = {'humanNames.human': {
+                            '$regex': regex, '$options': 'i'}}
+    if _type:
+        query_dict['types'] = _type
+    cursor = ecol.find(query_dict, limit=(0 if limit is None else limit),
+                            sort=[('humanNames.human', 1)])
+    return map(entity, cursor)
+
 # Specialized functions to work with entities.
 # ######################################################################
 def bearers_by_tag_id(tag_id, _as=entity):
     """ Find the bearers of the tag with @tag_id """
     return map(_as, ecol.find({'tags': tag_id}))
+
+def year_to_range(year):
+    """ Returns (start_date, end_date) for the given year """
+    return (datetime.datetime(2003 + year, 9, 1),
+            datetime.datetime(2004 + year, 8, 31))
 
 def date_to_year(dt):
     """ Returns the `verenigingsjaar' at the date """
@@ -256,6 +289,9 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
                 query[attr] = None
         if query.get('from') is None: query['from'] = DT_MIN
         if query.get('until') is None: query['until'] = DT_MAX
+        # When DT_MIN < from < until < DT_MAX we need the most complicated
+        # query. However, in the following four cases we can simplify the
+        # required query bits.
         if query['from'] == DT_MIN and query['until'] == DT_MAX:
             del query['from']
             del query['until']
@@ -263,6 +299,14 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
         elif query['from'] == query['until']:
             query['from'] = {'$lte': query['from']}
             query['until'] = {'$gte': query['until']}
+            bits.append(query)
+        elif query['from'] == DT_MIN:
+            query['from'] = {'$lte': query['until']}
+            query['until'] = {'$gte': DT_MIN}
+            bits.append(query)
+        elif query['until'] == DT_MAX:
+            query['until'] = {'$gte': query['from']}
+            query['from'] = {'$lte': DT_MAX}
             bits.append(query)
         else:
             qa, qb, qc = dict(query), dict(query), dict(query)
@@ -364,6 +408,26 @@ def remove_relation(who, _with, how,  _from, until):
              'from': _from,
              'until': until})
 
+# Functions to work with notes
+# ######################################################################
+def note_by_id(the_id):
+    tmp = ncol.find_one({'_id': the_id})
+    return None if tmp is None else Note(tmp)
+
+def get_open_notes():
+    # Prefetch the `by' field.  (We do not need to prefetch the `closed_by'
+    # fields, obviously.)
+    ds = ncol.find({'open': True}, ['by'])
+    ids = set()
+    for d in ds:
+        if d['by'] is not None:
+            ids.add(d['by'])
+    lut = by_ids(list(ids))
+    lut[None] = None
+    # Actually fetch the notes.
+    for d in ncol.find({'open': True}, sort=[('at',1)]):
+        yield Note(d, lut[d['by']])
+
 # Models
 # ######################################################################
 class EntityName(object):
@@ -423,21 +487,21 @@ class Entity(SONWrapper):
         """ The list of entities this user is None-related with.
 
         This field is cached. """
-        if not hasattr(self, '__groups_cache'):
+        if not hasattr(self, '_groups_cache'):
             dt = now()
-            self.__groups_cache = [rel['with']
+            self._groups_cache = [rel['with']
                 for rel in self.get_related(
                     None, dt, dt, False, True, False)]
-        return self.__groups_cache
+        return self._groups_cache
 
     @property
     def cached_groups_names(self):
-        if not hasattr(self, '__groups_names_cache'):
-            self.__groups_names_cache = set()
+        if not hasattr(self, '_groups_names_cache'):
+            self._groups_names_cache = set()
             for g in self.cached_groups:
-                self.__groups_names_cache.update([
+                self._groups_names_cache.update([
                     str(n) for n in g.names])
-        return self.__groups_names_cache
+        return self._groups_names_cache
 
     def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                 deref_with=True, deref_how=True):
@@ -620,14 +684,26 @@ class Entity(SONWrapper):
         dt = now()
         Note({'note': what,
               'on': self._id,
+              'open': True,
               'by': None if by is None else _id(by),
-              'at': dt}).save()
+              'at': dt,
+              'closed_by': None,
+              'closed_at': None}).save()
     def get_notes(self):
-        ds = ncol.find({'on': self._id})
-        lut = by_ids([d['by'] for d in ds if d['by'] is not None])
+        # Prefetch the entities referenced in the by and closed_by fields
+        # of the notes.
+        ds = ncol.find({'on': self._id}, ['by', 'closed_by'])
+        ids = set()
+        for d in ds:
+            if d['by'] is not None:
+                ids.add(d['by'])
+            if d.get('closed_by') is not None:
+                ids.add(d['closed_by'])
+        lut = by_ids(list(ids))
         lut[None] = None
-        for d in ncol.find({'on': self._id}):
-            yield Note(d, lut[d['by']])
+        # Actually fetch the notes.
+        for d in ncol.find({'on': self._id}, sort=[('at',1)]):
+            yield Note(d, lut[d['by']], lut[d.get('closed_by')])
 
     def __eq__(self, other):
         if not isinstance(other, Entity):
@@ -881,18 +957,26 @@ class Brand(Entity):
         return self._data.get('sofa_suffix', None)
 
 class Note(SONWrapper):
-    def __init__(self, data, prefetched_by=None):
+    def __init__(self, data, prefetched_by=None, prefetched_closed_by=None):
         super(Note, self).__init__(data, ncol)
         self._cached_by = prefetched_by
+        self._cached_closed_by = prefetched_closed_by
+    at = son_property(('at',))
+    closed_at = son_property(('closed_at',))
+    note = son_property(('note',))
+    by_id = son_property(('by',))
+    on_id = son_property(('on',))
+    closed_by_id = son_property(('closed_by',))
+    open = son_property(('open',), True)
+
     @property
-    def at(self):
-        return self._data['at']
+    def id(self):
+        return str(_id(self))
+
     @property
-    def note(self):
-        return self._data['note']
-    @property
-    def by_id(self):
-        return self._data['by']
+    def on(self):
+        return by_id(self._data['on'])
+
     @property
     def by(self):
         if self._cached_by is not None:
@@ -900,6 +984,21 @@ class Note(SONWrapper):
         if self._data['by'] is None:
             return None
         return by_id(self._data['by'])
+
+    @property
+    def closed_by(self):
+        if self._cached_closed_by is not None:
+            return self._cached_closed_by
+        if self._data['closed_by'] is None:
+            return None
+        return by_id(self._data['closed_by'])
+
+    def close(self, closed_by_id, save_now=True):
+        self._data['closed_by'] = closed_by_id
+        self._data['closed_at'] = now()
+        self._data['open'] = False
+        if save_now:
+            self.save()
 
 
 # List of type of entities

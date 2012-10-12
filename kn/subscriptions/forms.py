@@ -34,7 +34,7 @@ def get_add_event_form(user, superuser=False):
             label='E-Mail wanneer aangemeld door een ander',
             widget=forms.Textarea,
             initial="Hallo %(firstName)s,\n\n"+
-                "Je bent door %(by_firstName) je aangemeld "+
+                "Je bent door %(by_firstName)s aangemeld "+
                     "voor %(eventName)s.\n"+
                 "\n"+
                 "%(by_firstName)s opmerkingen waren:\n"+
@@ -49,7 +49,7 @@ def get_add_event_form(user, superuser=False):
             label='E-Mail wanneer aanmelding is bevestigd',
             widget=forms.Textarea,
             initial="Hallo %(firstName)s,\n\n"+
-                "Je hebt je aanmelding voor %(eventName)s bevestigd\n\n"+
+                "Je hebt je aanmelding voor %(eventName)s bevestigd.\n\n"+
                 "Met een vriendelijke groet,\n\n"+
                 "%(owner)s")
         cost = forms.DecimalField(label='Kosten')

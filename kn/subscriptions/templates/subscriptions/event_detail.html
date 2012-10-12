@@ -44,6 +44,27 @@ change_debit = function(id) {
                 if(d.error) alert(d.error);
         });
 };
+
+copy_emailaddresses_to_clipboard = function() {
+        _api({'action': 'get-email-addresses',
+              'id': '{{ object.id }}'},
+              function(d) {
+                if(d.error) {
+                        alert(d.error);
+                        return;
+                }
+                var s = '';
+                var first = true;
+                for(var i = 0; i < d.addresses.length; i++) {
+                        if (first) first = false;
+                        else s += '; '
+                        s += d.addresses[i];
+                }
+                prompt("Dit zijn de e-mail adressen", s);
+              });
+        return false;
+};
+
 </script>
 {% endblock %}
 
@@ -160,5 +181,8 @@ change_debit = function(id) {
                 {% endif %}{# has_read_access #}
 	{% endfor %}
 	</ul>
+        <button onclick="copy_emailaddresses_to_clipboard()">
+                Toon e-mail adressen van de ingeschrevenen
+        </button>
 {% endif %}{# has_read_access or has_debit_access or object.has_public_subscriptions#}
 {% endblock %}

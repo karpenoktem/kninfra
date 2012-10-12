@@ -1,22 +1,19 @@
 # vim: et:sta:bs=2:sw=4:
 import _import
-from kn.leden.models import OldKnUser, OldKnGroup
+import kn.leden.entities as Es
 from common import *
 
 def main():
     N = 0
     while True:
         N += 1
-        try:
-            g = OldKnGroup.objects.get(name='leden%s'%N)
-        except OldKnGroup.DoesNotExist:
+        g = Es.by_name('leden%s' % N)
+        if g is None:
             break
     data = [[0 for i in xrange(1,N)] for j in xrange(1,N)]
     groups = list()
     for i in xrange(1,N):
-        groups.append(map(lambda x: x.oldknuser,
-            OldKnGroup.objects.get(
-            name='leden%s'%i).user_set.all()))
+        groups.append(Es.by_name('leden%s'%i).get_members())
     users = reduce(lambda x,y: x+y, groups, [])
     groups = map(frozenset, groups)
     for user in frozenset(users):
