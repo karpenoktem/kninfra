@@ -99,6 +99,8 @@ class AddGroupForm(forms.Form):
     parent = EntityChoiceField(label="Parent",
             _type='group',
             initial=lambda x: str(Es.by_name('secretariaat')._id))
+    true_group = forms.BooleanField(label="Volwaardige groep",
+            initial=True)
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput())

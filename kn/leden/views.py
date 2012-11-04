@@ -396,6 +396,8 @@ def secr_add_group(request):
             g = Es.Group({
                 'types': ['group', 'tag'],
                 'names': [nm],
+                'use_mailman_list': fd['true_group'],
+                'has_unix_group': fd['true_group'],
                 'humanNames': [{'name': nm,
                     'human': fd['humanName'],
                     'genitive_prefix': fd['genitive_prefix']}],
