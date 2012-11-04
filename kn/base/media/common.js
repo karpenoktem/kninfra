@@ -6,14 +6,24 @@ function email(t, d, u) {
 function leden_api(data, cb) {
     $.post(leden_api_url, {
         csrfmiddlewaretoken: csrf_token,
-        data: JSON.stingify(data),
+        data: JSON.stringify(data),
     }, cb, "json");
 }
 
+function entityChoiceField_set(id, objid) {
+    leden_api({action: "entity_humanName_by_id",
+                'id': objid}, function(data) {
+        if(!data)
+            return;
+        $('#_'+id).val(data);
+        $('#'+id).val(objid);
+    });
+}
+
 function create_entityChoiceField(id, type) {
-    $(id).after("<input type='text' id='_"+id+"' />"
-    $(id).autocomplete({
-        source: function(request, responise) {
+    $('#'+id).after("<input type='text' id='_"+id+"' />");
+    $('#_'+id).autocomplete({
+        source: function(request, response) {
             leden_api({
                 action: "entities_by_keyword",
                 keyword: request.term,
@@ -23,8 +33,8 @@ function create_entityChoiceField(id, type) {
                     }));
                 });
         }, select: function(event, ui) {
-            $("_"+id).val(ui.item.label);
-            $(id).val(ui.item.value);
+            $("#_"+id).val(ui.item.label);
+            $("#"+id).val(ui.item.value);
             return false;
         }, minLength: 0}).focus(function() {
             $(this).trigger('keydown.autocomplete');
