@@ -431,7 +431,8 @@ def relation_begin(request):
     for t in ('who', 'with', 'how'):
         if t not in request.POST:
             raise ValueError, "Missing attr %s" % t
-        if t == 'how' and request.POST[t] == 'null':
+        if t == 'how' and (not request.POST[t] or
+                               request.POST[t] == 'null'):
             d[t] = None
         else:
             d[t] = _id(request.POST[t])
