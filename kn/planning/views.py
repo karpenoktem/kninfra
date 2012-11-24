@@ -67,12 +67,12 @@ templates = {
             [(hm2s(23),False), (hm2s(25),False), 'tweede dienst'],
             [(hm2s(25),False), (hm2s(28),True), 'derde dienst']],
         'bestuur': [
-            [(hm2s(17),False), (hm2s(23, 30),False), 'openen'],
-            [(hm2s(23, 30),False), (hm2s(28),True), 'sluiten']]},
+            [(hm2s(17),False), (hm2s(22),False), 'openen'],
+            [(hm2s(22),False), (hm2s(27),True), 'sluiten']]},
     'vrijdag_zonder_tappers': {
         'bestuur': [
-            [(hm2s(17),False), (hm2s(23, 30),False), 'openen'],
-            [(hm2s(23, 30),False), (hm2s(28),True), 'sluiten']]},
+            [(hm2s(17),False), (hm2s(22),False), 'openen'],
+            [(hm2s(22),False), (hm2s(27),True), 'sluiten']]},
 }
 
 @login_required
