@@ -23,7 +23,9 @@ def generate_unix_map(giedo):
                 'expire_date': DT_MIN.strftime('%Y-%m-%d')}
     member_relations_grouped = dict()
     for rel in Es.query_relations(_with=Es.by_name('leden'), until=dt_now):
-        member_relations_grouped[rel['who']] = rel
+        if rel['who'] not in member_relations_grouped:
+            member_relations_grouped[rel['who']] = []
+        member_relations_grouped[rel['who']].append(rel)
     for user_id, relations in member_relations_grouped.items():
         latest = max(relations, key=lambda x: x['until'])
         ret['users'][str(ulut[user_id].name)]['expire_date'] \
