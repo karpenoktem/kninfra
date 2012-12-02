@@ -83,7 +83,7 @@ class Giedo(WhimDaemon):
         for u in Es.users():
             ulut[u._id] = str(u.name)
         member_relations_grouped = dict()
-        for rel in Es.query_relations(_with=Es.by_name('leden'), until=dt_now):
+        for rel in Es.query_relations(_with=Es.by_name('leden'), until=now()):
             if rel['who'] not in member_relations_grouped:
                 member_relations_grouped[rel['who']] = []
             member_relations_grouped[rel['who']].append(rel)
