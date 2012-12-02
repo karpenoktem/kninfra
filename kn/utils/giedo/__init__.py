@@ -162,6 +162,19 @@ class Giedo(WhimDaemon):
                 if not u.check_password(d['oldpass']):
                     return {'error': 'wrong old password'}
                 u.set_password(d['newpass'])
+                d2 = {'type': 'setpass',
+                      'user': d['user'],
+                      'pass': d['newpass']}
+                self.daan.send(d2)
+                self.cilia.send(d2)
+                return {'success': True}
+            elif d['type'] == 'set-villanet-password':
+                u = Es.by_name(d['user'])
+                if u is None:
+                    return {'error': 'no such user'}
+                u = u.as_user()
+                if not u.check_password(d['oldpass']):
+                    return {'error': 'wrong current password'}
                 pc = Es.PushChange({'system': 'villanet',
                     'action': 'changeUser', 'data': {
                         'username': d['user'],
@@ -169,11 +182,6 @@ class Giedo(WhimDaemon):
                             }})
                 pc.save()
                 self.push_changes_event.set()
-                d2 = {'type': 'setpass',
-                      'user': d['user'],
-                      'pass': d['newpass']}
-                self.daan.send(d2)
-                self.cilia.send(d2)
                 return {'success': True}
             elif d['type'] == 'fotoadmin-move-fotos':
                 # TODO should this block Giedo?
