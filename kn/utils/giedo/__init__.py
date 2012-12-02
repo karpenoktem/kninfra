@@ -209,6 +209,7 @@ class Giedo(WhimDaemon):
     def run_change_pusher(self):
         while True:
             self.push_changes_event.wait()
+            self.push_changes_event.clear()
             for pc in Es.pcol.find():
                 if pc['system'] == 'villanet':
                     if settings.VILLANET_SECRET_API_KEY == '':
