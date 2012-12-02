@@ -82,9 +82,12 @@ class Giedo(WhimDaemon):
         ulut = dict()
         for u in Es.users():
             ulut[u._id] = str(u.name)
-        member_relations = itertools.groupby(Es.query_relations(
-            _with=Es.by_name('leden'), until=now()), lambda x: x['who'])
-        for user_id, relations in member_relations:
+        member_relations_grouped = dict()
+        for rel in Es.query_relations(_with=Es.by_name('leden'), until=dt_now):
+            if rel['who'] not in member_relations_grouped:
+                member_relations_grouped[rel['who']] = []
+            member_relations_grouped[rel['who']].append(rel)
+        for user_id, relations in member_relations_grouped.items():
             latest = max(relations, key=lambda x: x['until'])
             users[ulut[user_id]] = latest['until'].strftime('%Y-%m-%d')
         vn = set(ret.keys())
