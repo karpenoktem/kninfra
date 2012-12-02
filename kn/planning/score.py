@@ -1,5 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
 from datetime import datetime
+from collections import Iterable
 
 # Returns the amount of seconds in the given amount of hours and minutes
 def hm2s(h,m=0):
@@ -52,6 +53,9 @@ BORREL_END = hm2s(28)            # 4.00 the next day
 
 def timedelta_to_seconds(td):
     return td.days*hm2s(24)+td.seconds
+
+def p_none():
+    return lambda v: -1
 
 def p_borrel_uncurried(first, second, third, not_after, vacancy):
     event = vacancy.event
@@ -140,27 +144,28 @@ preferences = {
         "tomn":     (p_borrel(100,100,  0),),
 },
 "draai": {
-        "bart":       (p_borrel(100,100,  0),),
-        "barts":      (p_borrel(  0,  0,  0),),
-        "bas":        (p_borrel(100,100,  0),),
-        "daansp":     (p_borrel(100,100, 00),),
-        "felix":      (p_borrel(100,100,  0),),
-        "ids":        (p_borrel(100,100,  0),),
-        "jille":      (p_borrel(100,100, 50),),
-        "koen":       (p_borrel(  0,  0,  0),),
-        "lisettevdl": (p_borrel(  0,  0,  0),),
-        "marjolijn":  (p_borrel(  0,  0,  0),),
-        "michiel":    (p_borrel(  0,100,100),),
-        "mikel":      (p_borrel(  0,  0,  0),),
-        "pepijn":     (p_borrel(100,100,100),),
-        "petervdv":   (p_borrel(100,  0,  0),),
-        "pp":         (p_borrel(100,  0,  0),),
-        "rik":        (p_borrel(100,100, 50),),
-        "robert":     (p_borrel(  0,  0,  0),),
-        "sjorsg":     (p_borrel(100,100, 50),),
-        "stan":       (p_borrel(  0,  0,  0),),
-        "vincentp":   (p_borrel(100,100, 50),),
-        "yurre":      (p_borrel(100,100,100),),
+        "bart":       p_borrel(100,100,  0),
+        "barts":      p_borrel(  0,  0,  0),
+        "bas":        p_borrel(100,100,  0),
+        "daansp":     p_borrel(100, 50,  0),
+        "felix":      p_borrel(100,100,  0),
+        "ids":        p_borrel(100,100,  0),
+        "jille":      p_borrel(100,100, 50),
+        "koen":       p_borrel(  0,  0,  0),
+        "lisettevdl": p_none(),
+        "marjolijn":  p_none(),
+        "michiel":    p_borrel(  0,100,100),
+        "mikel":      p_borrel(  0,  0,  0),
+        "nick":       p_none(),
+        "pepijn":     p_borrel(100,100,100),
+        "petervdv":   p_borrel(100,  0,  0),
+        "pp":         p_borrel(100,  0,  0),
+        "rik":        p_borrel(100,100, 50),
+        "robert":     p_none(),
+        "sjorsg":     p_borrel( 50, 50, 25),
+        "stan":       p_borrel( 50, 50,  0),
+        "vincentp":   p_borrel(100,100, 50),
+        "yurre":      p_borrel(100,100,100),
 }}
 
 def planning_vacancy_worker_score(vacancy, worker):
@@ -170,6 +175,10 @@ def planning_vacancy_worker_score(vacancy, worker):
         # If the preferences of a worker have not been set,
         # assume (s)he is available so that we'll get his/her preferences asap.
         return 101
+    if not isinstance(preferences[pn][un], Iterable):
+        # Check if the prefetlist is not an iterable, and make it an iterable if needed
+        # This allows us to use a single preference without putting it in a tuple
+        preferences[pn][un] = (preferences[pn][un], )
     for preflet in preferences[pn][un]:
         score = preflet(vacancy)
         if score!=False:
