@@ -18,9 +18,8 @@ DAYS_IN_YEAR = 365.242199
 
 def check_email():
     dt_now = now()
-    fac_comm_ids = map(_id, Es.by_name('fac-comms').get_bearers()) 
-    act_comm_ids = map(_id, Es.by_name('act-comms').get_bearers()) 
-    list_ids = map(_id, Es.by_name('lists-opted').get_bearers()) 
+    comm_ids = map(_id, Es.by_name('comms').get_bearers())
+    list_ids = map(_id, Es.by_name('lists-opted').get_bearers())
     with open('check-email.template') as f:
         template_text = StringIO()
         for line in f:
@@ -33,17 +32,14 @@ def check_email():
         rels = m.get_related()
         rels = sorted(rels, cmp=lambda x,y: cmp(str(x['with'].humanName),
                             str(y['with'].humanName)))
-        fac_comms = []
-        act_comms = []
+        comms = []
         lists = []
         others = []
         for rel in rels:
             if Es.relation_is_virtual(rel):
                 continue
-            if _id(rel['with']) in fac_comm_ids:
-                fac_comms.append(rel)
-            elif _id(rel['with']) in act_comm_ids:
-                act_comms.append(rel)
+            if _id(rel['with']) in comm_ids:
+                comms.append(rel)
             elif _id(rel['with']) in list_ids:
                 lists.append(rel)
             else:
@@ -51,12 +47,11 @@ def check_email():
         print m.name
         em = templ.render(Context({
                         'u': m,
-                        'fac_comms': fac_comms,
-                        'act_comms': act_comms,
+                        'comms': comms,
                         'lists': lists,
                         'others': others}))
         send_mail('Controle Karpe Noktem ledenadministratie',
-                    em, 'secretaris@karpenoktem.nl',
+                    em, 'secretariaat@karpenoktem.nl',
                     [m.primary_email])
 
 if __name__ == '__main__':

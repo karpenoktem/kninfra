@@ -7,7 +7,7 @@ Zou je kunnen controleren of het klopt?
 
 Bij voorbaat dank,
 
- Yurre Wieken
+ Astrid van Roosmalen
 
 
 Personalia  {{ u.full_name }}
@@ -56,7 +56,7 @@ Personalia  {{ u.full_name }}
 {% endif %}{% endif %}{% endif %}
       Studie            {{ study.study.humanName }}
       Instituut         {{ study.institute.humanName }}
-      Studentnummer     {{ study.number }}\
+      Studentnummer     {{ study.number }}
 {% endfor %}
 
   Adres(sen)
@@ -74,30 +74,10 @@ Straat            {{ a.street }}
       Stad              {{ a.city }}
 {% endfor %}\
 
-{% if act_comms %}
-Lidmaatschap activiteiten commissies
+{% if comms %}
+Lidmaatschap commissies
 -----------------------------------------------------------
-{% for rel in act_comms %}
- * {% if rel.how %}\
-{{ rel.how.humanName }} van de \
-{% else %}\
-Lid van de \
-{% endif %}\
-{{ rel.with.humanName }} \
-{% if rel.from and rel.until %}\
-[ van {{ rel.from.date }} tot {{ rel.until.date }} ]\
-{% else %}{% if rel.from %}\
-[ van {{ rel.from.date }} ]\
-{% else %}{% if rel.until %}\
-[ tot {{ rel.until.date }} ]\
-{% endif %}{% endif %}{% endif %}\
-{% endfor %}
-{% endif %}
-
-{% if fac_comms %}
-Lidmaatschap faciliterende commissies
------------------------------------------------------------
-{% for rel in fac_comms %}
+{% for rel in comms %}
  * {% if rel.how %}\
 {{ rel.how.humanName }} van de \
 {% else %}\
