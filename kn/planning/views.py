@@ -282,7 +282,7 @@ def event_edit(request, eventid):
         vacancies.append(v)
     vacancies.sort(key=lambda x: str(x.pool_id) + str(x.begin))
     return render_to_response('planning/event_edit.html',
-            {'name': e.name, 'kind': e.kind, 'date': str(e.date.date()),
+            {'name': e.name, 'kind': e.kind, 'date': e.date.date(),
             'avform': avform, 'vacancies': vacancies},
             context_instance=RequestContext(request))
 
