@@ -312,7 +312,6 @@ def planning_api(request):
 
 @login_required
 def planning_template(request, poolname):
-    locale.setlocale(locale.LC_ALL, 'nl_NL')
     pool = Pool.by_name(poolname)
     events = list()
     # TODO reduce number of queries
@@ -321,11 +320,8 @@ def planning_template(request, poolname):
         if not vacancies:
             continue
         ei = {  'name': e.name,
-                'date': str(e.date.date()),
+                'date': e.date,
             'vacancies': list()}
-        ei['description'] = e.date.strftime('%A %d %B')
-        if e.name != 'Borrel':
-            ei['description'] = '%s (%s)' % (ei['description'], ei['name'])
         shifts = dict()
         for v in vacancies:
             if not v.begin in shifts:

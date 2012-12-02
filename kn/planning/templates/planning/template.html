@@ -4,11 +4,11 @@
     </head>
     <body>
 {% for e in events %}
-        <b>{{ e.description }}</b><br>
-        <br>
+<strong>{{ e.name }}</strong> &ndash; <em>{{ e.date|date:"l j F Y" }}</em><br />
+        <br />
 {% for vacancy in e.vacancies %}
 &nbsp;&nbsp;&nbsp;&nbsp;{{ vacancy.begin_time }} 
-&mdash; <span style="color: gray">{{ vacancy.name }}</span>
+&ndash; <span style="color: gray">{{ vacancy.name }}</span>
 {% for assignee in vacancy.assignees %}
 {% if not forloop.first %}+{% endif %}
 {% if assignee %}
