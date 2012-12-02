@@ -386,7 +386,7 @@ def secr_notes(request):
 
 @login_required
 def secr_add_group(request):
-    if 'wortel' not in request.user.cached_groups_names:
+    if 'secretariaat' not in request.user.cached_groups_names:
         raise PermissionDenied
     if request.method == 'POST':
         form = AddGroupForm(request.POST)
@@ -396,6 +396,8 @@ def secr_add_group(request):
             g = Es.Group({
                 'types': ['group', 'tag'],
                 'names': [nm],
+                'use_mailman_list': fd['true_group'],
+                'has_unix_group': fd['true_group'],
                 'humanNames': [{'name': nm,
                     'human': fd['humanName'],
                     'genitive_prefix': fd['genitive_prefix']}],
