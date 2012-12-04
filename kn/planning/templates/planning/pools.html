@@ -2,7 +2,7 @@
 {% load base %}
 
 {% block body %}
-Planning overview
+<h1>Planning overview</h1>
 <ul>
 {% for pool in pools %}
 <li><a href="{% url planning_manage pool.name %}">{{ pool.name }}</a>
