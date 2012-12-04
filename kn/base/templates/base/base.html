@@ -5,8 +5,8 @@
 <link href="{% url style-common %}"
 	rel="stylesheet" type="text/css" />
 <style type="text/css">
-        #main { background-image:
-                url({{ MEDIA_URL }}/base/bgs/rest.{{ BASE_BACKGROUND }}.jpg); }
+        #body { background-image:
+                url({{ MEDIA_URL }}/base/bg.png); }
 </style>
 {% endblock %}
 
@@ -16,11 +16,11 @@
 {% endblock %}
 
 {% block main %}
-{{ block.super }}
 <ul id="menu">
 	{% block menu %}
 	<li><a href="/">Terug</a></li>
 	<li><a href="{% url logout %}">Uitloggen</a></li>
 	{% endblock %}
 </ul>
+{{ block.super }}
 {% endblock %}
