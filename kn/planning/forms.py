@@ -47,6 +47,7 @@ class EventCreateForm(forms.Form):
         ('dranklevering', 'Dranklevering'),
         ('vrijdag_zonder_tappers', 'Vrijdag'),
         ('vrijdag_met_tappers', 'Vrijdag (met tappers)'),
+        ('koken', 'Koken'),
         ))
 
 class AddVacancyForm(forms.Form):

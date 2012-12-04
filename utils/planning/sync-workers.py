@@ -20,7 +20,7 @@ for w in Worker.all():
 dt = now()
 for w in workers.itervalues():
     del w.pools[:]
-for type in ['tappers', 'bestuur', 'barco', 'draai']:
+for type in ['tappers', 'bestuur', 'barco', 'draai', 'cocks']:
     poolid = _id(pools[type])
     group = Es.by_name(type)
     relations = group.get_rrelated(None, dt, dt, True, None, None)
