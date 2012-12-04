@@ -2,9 +2,10 @@
 {% load base %}
 
 {% block body %}
-<table style="width: 100%">
+<table id="planningOverview">
 	<tr>
 {% for pool in pools %}
+                {# TODO pool niet tonen als er voor geen enkel te tonen event diensten zijn #}
 		<th>{{ pool.name }}</th>
 {% endfor %}
 	</tr>
@@ -13,10 +14,9 @@
                 {# TODO move into stylesheet #}
                 <td
                         colspan="{{ poolcount }}"
-                        style="text-align: center;
-                        border-bottom: 2px solid white">
+                        class="poolHeader">
                         <strong>{{ event.datetime|date:"l j F Y" }}</strong>
-                        &mdash; <em>{{ event.name }}</em>
+                         - {{ event.name }}
                         <small>{{ event.kind }}</small>
                 </td>
 	</tr>
