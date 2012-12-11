@@ -73,6 +73,10 @@ templates = {
         'bestuur': [
             [(hm2s(17),False), (hm2s(22),False), 'openen'],
             [(hm2s(22),False), (hm2s(27),True), 'sluiten']]},
+    'koken': {
+        'cocks': [
+            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 1'],
+            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 2']]},
 }
 
 @login_required
