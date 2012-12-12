@@ -10,9 +10,11 @@ import datetime
 import kn.leden.entities as Es
 import kn.reglementen.entities as regl_Es
 import kn.poll.entities as poll_Es
+import kn.subscriptions.entities as subscr_Es
 from kn.leden.mongo import _id, ObjectId
 from kn.leden import giedo
 from kn.leden.date import now
+from kn.utils.mailman import import_mailman
 from kn.settings import DT_MIN, DT_MAX
 
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
