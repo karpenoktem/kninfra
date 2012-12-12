@@ -17,8 +17,7 @@ from kn.leden.mongo import _id
 
 llut = dict()
 clut = dict()
-comms = [g for g in Es.by_name('fac-comms').get_bearers() if g.is_group]
-comms.extend([g for g in Es.by_name('act-comms').get_bearers() if g.is_group])
+comms = [g for g in Es.by_name('comms').get_bearers() if g.is_group]
 comms.append(Es.by_name('bestuur'))
 leden = Es.by_name('leden').get_members()
 leden_lut = {}
@@ -40,7 +39,7 @@ for rel in Es.query_relations(who=leden, _with=comms, how=None):
         clut[w] = (rel['from'], comms_lut[rel['with']])
 
 had = set()
-for y in range(4,9):
+for y in range(3,10):
     print
     print 'Jaar', y
     nnever = 0
