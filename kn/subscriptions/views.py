@@ -77,9 +77,6 @@ def event_detail(request, name):
                 'confirmed': False,
                 'subscribedBy': _id(request.user)})
             other_subscription.save()
-            full_owner_address = '%s <%s>' % (
-                    event.owner.humanName,
-                    event.owner.canonical_email)
             email = EmailMessage(
                     "Aanmelding %s" % event.humanName,
                      event.subscribedByOtherMailBody % {
@@ -91,12 +88,13 @@ def event_detail(request, name):
                                 reverse('event-detail', args=(event.name,))),
                         'owner': event.owner.humanName},
                     'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-                    [user.canonical_email],
-                    [event.owner.canonical_email, request.user.canonical_email],
+                    [user.canonical_full_email],
+                    [event.owner.canonical_full_email,
+                     request.user.canonical_full_email],
                     headers={
-                        'Cc': '%s, %s' % (event.owner.canonical_email,
-                                        request.user.canonical_email),
-                        'Reply-To': full_owner_address})
+                        'Cc': '%s, %s' % (event.owner.canonical_full_email,
+                                        request.user.canonical_full_email),
+                        'Reply-To': event.owner.canonical_full_email})
             email.send()
     if (subscription is None and request.method == 'POST'
             and event.is_open and ('who' not in request.POST
@@ -109,9 +107,6 @@ def event_detail(request, name):
             'date': datetime.datetime.now(),
             'debit': str(event.cost)})
         subscription.save()
-        full_owner_address = '%s <%s>' % (
-                event.owner.humanName,
-                event.owner.canonical_email)
         email = EmailMessage(
                 "Aanmelding %s" % event.humanName,
                  event.mailBody % {
@@ -120,11 +115,11 @@ def event_detail(request, name):
                     'owner': event.owner.humanName,
                     'notes': notes},
                 'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-                [request.user.canonical_email],
-                [event.owner.canonical_email],
+                [request.user.canonical_full_email],
+                [event.owner.canonical_full_email],
                 headers={
-                    'Cc': full_owner_address,
-                    'Reply-To': full_owner_address})
+                    'Cc': event.owner.canonical_full_email,
+                    'Reply-To': event.owner.canonical_full_email})
         email.send()
     subscrlist = tuple(event.get_subscriptions())
     ctx = {'object': event,
@@ -188,7 +183,7 @@ def _api_get_email_addresses(request):
     # XXX We can optimize this query
     return JsonHttpResponse({
             'success': True,
-            'addresses': [s.user.canonical_email
+            'addresses': [s.user.canonical_full_email
                     for s in event.get_subscriptions()]})
 
 def _api_change_debit(request):
