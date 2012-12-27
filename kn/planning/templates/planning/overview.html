@@ -2,9 +2,10 @@
 {% load base %}
 
 {% block body %}
-<table style="width: 100%">
+<table id="planningOverview">
 	<tr>
 {% for pool in pools %}
+                {# TODO pool niet tonen als er voor geen enkel te tonen event diensten zijn #}
 		<th>{{ pool.name }}</th>
 {% endfor %}
 	</tr>
@@ -13,21 +14,20 @@
                 {# TODO move into stylesheet #}
                 <td
                         colspan="{{ poolcount }}"
-                        style="text-align: center;
-                        border-bottom: 2px solid white">
-                        <strong>{{ event.date }}</strong>
+                        class="poolHeader">
+                        <strong>{{ event.datetime|date:"l j F Y" }}</strong>
                          - {{ event.name }}
                 </td>
 	</tr>
 	<tr>
-{% for poolidx, vacancies in event.vacancies.items %}
+	{% for poolidx, vacancies in event.vacancies.items %}
 		<td style="vertical-align: top; text-align: center">
-{% for vacancy in vacancies %}
+		{% for vacancy in vacancies %}
 		<b>{{ vacancy.begin_time }} - {{ vacancy.end_time }}</b><br>
 		{{ vacancy.assignee }}<br>
-{% endfor %}
+		{% endfor %}
 		</td>
-{% endfor %}
+	{% endfor %}
 	</tr>
 {% endfor %}
 </table>

@@ -1,3 +1,12 @@
+body {
+        padding-left: 0;
+}
+
+#wrapper {
+        width: 975px;
+        margin: 0 auto;
+}
+
 #menu ul {
 	margin-left: 0;
 }
@@ -6,21 +15,23 @@
 	height: 97px;
 	background-image: url({{ MEDIA_URL }}/base/logo.png);
 	background-repeat: no-repeat;
+        background-position: center;
 }
 
 #body {
-        float: right;
-        width: 600px;
-        margin: 0 0 0 0;
-        padding: 12px 14px 10px 0;
-        height: 511px;
-        overflow: auto;
+        float: left;
+        width: 791px;
+        margin: 0;
+        padding: 12px 0 10px 14px;
+        background-repeat: repeat-y;
+        background-position: top center;
+        min-height: 511px;
 }
 
 
 #menu {
-	padding: 15px 630px 0 0;
-	margin: 0 0 0 10px;
+        float: left;
+        width: 160px;
 }
 
 #menu li {
@@ -59,6 +70,24 @@ a:hover {
         border-top: 1px solid #800100;
 }
 
+#footer {
+        margin-bottom: 20px;
+}
+
 small {
         color: gray;
+}
+
+.clear {
+        clear: both;
+}
+
+#planningOverview {
+        width: 100%;
+}
+
+#planningOverview .poolHeader {
+        padding-top: 15px;
+        text-align: center;
+        border-bottom: 2px solid white
 }

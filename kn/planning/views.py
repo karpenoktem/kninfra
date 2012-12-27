@@ -68,11 +68,21 @@ templates = {
             [(hm2s(25),False), (hm2s(28),True), 'derde dienst']],
         'bestuur': [
             [(hm2s(17),False), (hm2s(22),False), 'openen'],
-            [(hm2s(22),False), (hm2s(27),True), 'sluiten']]},
+            [(hm2s(22),False), (hm2s(27),True), 'sluiten']],
+        'cocks': [
+            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 1'],
+            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 2']]},
     'vrijdag_zonder_tappers': {
         'bestuur': [
             [(hm2s(17),False), (hm2s(22),False), 'openen'],
-            [(hm2s(22),False), (hm2s(27),True), 'sluiten']]},
+            [(hm2s(22),False), (hm2s(27),True), 'sluiten']],
+        'cocks': [
+            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 1'],
+            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 2']]},
+    'koken': {
+        'cocks': [
+            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 1'],
+            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 2']]},
 }
 
 @login_required
@@ -91,7 +101,7 @@ def planning_view(request):
     # TODO reduce number of queries
     for e in Event.all_since_datetime(now() - datetime.timedelta(days=lookbehind)):
         ei = {  'name': e.name,
-                'date': str(e.date.date()),
+                'datetime': e.date,
                 'kind': e.kind,
             'vacancies': dict()}
         for idx in poolid2idx.values():
@@ -106,7 +116,7 @@ def planning_view(request):
         for idx in poolid2idx.values():
             ei['vacancies'][idx].sort(key=lambda x: x['begin'])
         events.append(ei)
-    events.sort(key=lambda x: x['date'])
+    events.sort(key=lambda x: x['datetime'])
     return render_to_response('planning/overview.html',
             {'events': events,
              'pools': pools,
@@ -282,7 +292,7 @@ def event_edit(request, eventid):
         vacancies.append(v)
     vacancies.sort(key=lambda x: str(x.pool_id) + str(x.begin))
     return render_to_response('planning/event_edit.html',
-            {'name': e.name, 'kind': e.kind, 'date': str(e.date.date()),
+            {'name': e.name, 'kind': e.kind, 'date': e.date.date(),
             'avform': avform, 'vacancies': vacancies},
             context_instance=RequestContext(request))
 
@@ -312,7 +322,6 @@ def planning_api(request):
 
 @login_required
 def planning_template(request, poolname):
-    locale.setlocale(locale.LC_ALL, 'nl_NL')
     pool = Pool.by_name(poolname)
     events = list()
     # TODO reduce number of queries
@@ -321,11 +330,8 @@ def planning_template(request, poolname):
         if not vacancies:
             continue
         ei = {  'name': e.name,
-                'date': str(e.date.date()),
+                'date': e.date,
             'vacancies': list()}
-        ei['description'] = e.date.strftime('%A %d %B')
-        if e.name != 'Borrel':
-            ei['description'] = '%s (%s)' % (ei['description'], ei['name'])
         shifts = dict()
         for v in vacancies:
             if not v.begin in shifts:
