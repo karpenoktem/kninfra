@@ -1,15 +1,50 @@
 # vim: et:sta:bs=2:sw=4:
 from django import forms
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
+from django.core.urlresolvers import reverse
+from django.forms.widgets import flatatt
 import kn.leden.entities as Es
 import datetime
+import json
 
-class EntityChoiceField(forms.ChoiceField):
+class EntityChoiceFieldWidget(forms.TextInput):
     def __init__(self, *args, **kwargs):
-        kwargs['choices'] = [(e._id, unicode(e.humanName))
-                    for e in  kwargs['choices']]
-        if kwargs.get('sort_choices', False):
-            kwargs['choices'].sort(cmp=lambda x,y: cmp(x[1],y[1]))
-            del kwargs['sort_choices']
+        if '_type' in kwargs:
+            self.type = kwargs['_type']
+            del kwargs['_type']
+        else:
+            self.type = None
+        super(EntityChoiceFieldWidget, self).__init__(*args, **kwargs)
+    def render(self, name, value=None, attrs=None):
+        final_attrs = self.build_attrs(attrs, name=name)
+        code_set_value = ''
+        if value:
+            code_set_value = (
+                '''entityChoiceField_set(%(id)s, %(value)s);'''
+                %{'id': json.dumps(final_attrs['id']),
+                  'value': json.dumps(value)})
+        return mark_safe(
+            u'''<input type='hidden' id=%(id)s name=%(name)s />
+                <script type='text/javascript'>//<!--
+                $(function(){
+                    create_entityChoiceField(%(id)s, %(type)s);
+                    %(code_set_value)s
+                });//--></script>'''
+                %{'name': json.dumps(name),
+                  'id': json.dumps(final_attrs['id']),
+                  'type': json.dumps(self.type),
+                  'code_set_value': code_set_value})
+
+
+class EntityChoiceField(forms.CharField):
+    def __init__(self, *args, **kwargs):
+        if '_type' in kwargs:
+            _type = kwargs['_type']
+            del kwargs['_type']
+        else:
+            _type = None
+        kwargs['widget'] = EntityChoiceFieldWidget(_type=_type)
         super(EntityChoiceField, self).__init__(*args, **kwargs)
 
 class AddUserForm(forms.Form):
@@ -26,9 +61,9 @@ class AddUserForm(forms.Form):
     telephone = forms.CharField(label="Telefoonnummer")
     study_number = forms.CharField(label="Studentnummer")
     study_inst = EntityChoiceField(label="Onderwijs instelling",
-            choices=Es.institutes(), sort_choices=True)
+            _type='institute')
     study = EntityChoiceField(label="Studie",
-            choices=Es.studies(), sort_choices=True)
+            _type='study')
     dateJoined = forms.DateField(label="Datum van inschrijving",
             initial=datetime.date.today)
     addToList = forms.MultipleChoiceField(label="Voeg toe aan maillijsten",
@@ -41,10 +76,8 @@ class AddGroupForm(forms.Form):
     genitive_prefix = forms.CharField(label="Genitivus", initial="van de")
     description = forms.CharField(label="Korte beschrijving")
     parent = EntityChoiceField(label="Parent",
-            choices=filter(lambda x: (x.is_group and not x.is_virtual)
-                            or (x.is_tag and not x.is_group), Es.all()),
-            sort_choices=True,
-            initial=lambda: str(Es.by_name('secretariaat')._id))
+            _type='group',
+            initial=lambda x: str(Es.by_name('secretariaat')._id))
     true_group = forms.BooleanField(label="Volwaardige groep",
             initial=True)
 

@@ -2,6 +2,15 @@
 
 {% block body %}
 
+<script type="text/javascript">//<!--
+$(function(){
+        create_entityChoiceField('relation_begin1_with', 'group');
+        create_entityChoiceField('relation_begin1_how', 'brand');
+        create_entityChoiceField('relation_begin2_who', 'user');
+        create_entityChoiceField('relation_begin2_how', 'brand');
+});
+// --></script>
+
 {% if related %}
 <h3>Lidmaatschap</h3>
 <ul>
@@ -46,18 +55,9 @@ tot {{ r.until.date }}
         {% csrf_token %}
         <input type="hidden" name="who" value="{{ object.id }}" />
         Voeg als
-        <select name="how">
-        <option value="null">Lid</option>
-        {% for b in brands %}
-        <option value="{{ b.id }}">{{ b.humanName }}</option>
-        {% endfor %}{# b in brands #}
-        </select>
+        <input name="how" id="relation_begin1_how" type="hidden" />
         toe aan
-        <select name="with">
-        {% for e in groups %}
-        <option value="{{ e.id }}">{{ e.humanName }}</option>
-        {% endfor %}{# e in groups #}
-        </select>
+        <input name="with" id="relation_begin1_with" type="hidden" />
         <input type="submit" value="verstuur" />
 </form>{# relation-begin #}
 {% endif %}{# related or object.is_user #}
@@ -104,25 +104,9 @@ tot {{ r.until.date }}
         {% csrf_token %}
         <input type="hidden" name="with" value="{{ object.id }}" />
         Voeg
-        <select name="who">
-        <optgroup label="Gebruikers">
-        {% for e in users %}
-        <option value="{{ e.id }}">{{ e.full_name }}</option>
-        {% endfor %}{# e in users #}
-        </optgroup>
-        <optgroup label="Groepen">
-        {% for e in groups %}
-        <option value="{{ e.id }}">{{ e.humanName }}</option>
-        {% endfor %}{# e in groups #}
-        </optgroup>
-        </select>
+        <input type="hidden" name="who" id="relation_begin2_who" />
         als
-        <select name="how">
-        <option value="null">Lid</option>
-        {% for b in brands %}
-        <option value="{{ b.id }}">{{ b.humanName }}</option>
-        {% endfor %}{# b in brands #}
-        </select>
+        <input type="hidden" name="how" id="relation_begin2_how" />
         toe
         <input type="submit" value="verstuur" />
 </form>{# relation-begin #}
