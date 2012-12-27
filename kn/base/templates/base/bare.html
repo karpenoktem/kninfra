@@ -10,8 +10,10 @@
 			src="{{ MEDIA_URL }}/base/common.js"></script>
 		<script type="text/javascript"
 			src="{{ MEDIA_URL }}/base/jquery-1.6.4.min.js"></script>
+                <link rel="stylesheet" type="text/css"
+                        href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css" />
                 <script type="text/javascript"
-                src="{{ MEDIA_URL }}/base/jquery-ui-1.8.16.custom.min.js">
+                        src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js">
                 </script>
 		<script type="text/javascript"
 			src="{{ MEDIA_URL }}/base/jquery.defaultText.js"></script>
@@ -61,6 +63,7 @@
 	pageTracker._trackPageview();
         } catch(err) {}
         var csrf_token = "{{ csrf_token }}";
+        var leden_api_url = "{% url leden-api %}";
         </script>
 	</body>	
 </html>
