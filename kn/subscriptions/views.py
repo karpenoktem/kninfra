@@ -81,7 +81,7 @@ def event_detail(request, name):
                     event.owner.humanName,
                     event.owner.canonical_email)
             email = EmailMessage(
-                    "Aanmelding %s" % event.humanName,
+                    "Bevestig je aanmelding voor %s" % event.humanName,
                      event.subscribedByOtherMailBody % {
                         'firstName': user.first_name,
                         'by_firstName': request.user.first_name,
