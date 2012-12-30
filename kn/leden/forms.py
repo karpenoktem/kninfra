@@ -23,7 +23,7 @@ class EntityChoiceFieldWidget(forms.TextInput):
             code_set_value = (
                 '''entityChoiceField_set(%(id)s, %(value)s);'''
                 %{'id': json.dumps(final_attrs['id']),
-                  'value': json.dumps(value)})
+                  'value': json.dumps(str(value))})
         return mark_safe(
             u'''<input type='hidden' id=%(id)s name=%(name)s />
                 <script type='text/javascript'>//<!--
