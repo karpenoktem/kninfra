@@ -195,10 +195,21 @@ def _institute_detail(request, institute):
             context_instance=RequestContext(request))
 
 def entities_by_year_of_birth(request, year):
-    return render_to_response('leden/entities_by_year_of_birth.html', {
-                    'year': int(year),
-                    'users': sorted(Es.by_year_of_birth(int(year)),
-                                        key=lambda x: x.humanName)},
+    _year = int(year)
+    ctx = {'year': _year,
+           'users': sorted(Es.by_year_of_birth(_year),
+                                    key=lambda x: x.humanName)}
+    years = Es.get_years_of_birth()
+    if _year + 1 in years:
+        ctx['next_year'] = _year + 1
+    if _year - 1 in years:
+        ctx['previous_year'] = _year - 1
+    return render_to_response('leden/entities_by_year_of_birth.html', ctx,
+            context_instance=RequestContext(request))
+
+def years_of_birth(request):
+    return render_to_response('leden/years_of_birth.html', {
+                    'years': reversed(Es.get_years_of_birth())},
             context_instance=RequestContext(request))
 
 @login_required
