@@ -194,6 +194,13 @@ def _institute_detail(request, institute):
     return render_to_response('leden/institute_detail.html', ctx,
             context_instance=RequestContext(request))
 
+def entities_by_year_of_birth(request, year):
+    return render_to_response('leden/entities_by_year_of_birth.html', {
+                    'year': int(year),
+                    'users': sorted(Es.by_year_of_birth(int(year)),
+                                        key=lambda x: x.humanName)},
+            context_instance=RequestContext(request))
+
 @login_required
 def ik_chsmoel(request):
     if not 'secretariaat' in request.user.cached_groups_names:
