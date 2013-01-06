@@ -145,6 +145,21 @@ def by_study(study):
     for m in ecol.find({'studies.study': _id(study)}):
         yield entity(m)
 
+def get_years_of_birth():
+    """ Returns the years of birth.
+
+        NOTE Currently, simply queries for the minimum and maximum date of
+        birth and assumes all in between are used. """
+    start = ecol.find_one({'person.dateOfBirth': {'$ne': None}},
+                     {'person.dateOfBirth': 1},
+                     sort=[('person.dateOfBirth', 1)]
+                        )['person']['dateOfBirth'].year
+    end = ecol.find_one({'person.dateOfBirth': {'$ne': None}},
+                     {'person.dateOfBirth': 1},
+                     sort=[('person.dateOfBirth', -1)]
+                        )['person']['dateOfBirth'].year
+    return xrange(start, end+1)
+
 def by_year_of_birth(year):
     """ Finds entities by year of birth """
     for m in ecol.find({'person.dateOfBirth': {
