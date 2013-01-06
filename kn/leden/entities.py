@@ -393,13 +393,19 @@ def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
 def entity_cmp_humanName(x, y):
     return cmp(unicode(x.humanName), unicode(y.humanName))
 
+def dt_cmp_until(x, y):
+    return cmp(DT_MAX if x is None else x,
+            DT_MAX if y is None else y)
+
+def dt_cmp_from(x, y):
+    return cmp(DT_MIN if x is None else x,
+            DT_MIN if y is None else y)
+
 def relation_cmp_until(x, y):
-    return cmp(DT_MAX if x['until'] is None else x['until'],
-           DT_MAX if y['until'] is None else y['until'])
+    return dt_cmp_until(x['until'], y['until'])
 
 def relation_cmp_from(x, y):
-    return cmp(DT_MIN if x['from'] is None else x['from'],
-           DT_MIN if y['from'] is None else y['from'])
+    return dt_cmp_from(x['from'], y['from'])
 
 def remove_relation(who, _with, how,  _from, until):
     if _from is None: _from = DT_MIN
