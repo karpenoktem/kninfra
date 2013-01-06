@@ -1,6 +1,9 @@
 # vim: et:sta:bs=2:sw=4:
 import decimal
 import datetime
+
+from markdown import markdown
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -247,6 +250,8 @@ def event_new_or_edit(request, edit=None):
                 'date': date_to_dt(fd['date']),
                 'owner': _id(fd['owner']),
                 'description': fd['description'],
+                'description_html': markdown(fd['description'],
+                    safe_mode="escape"),
                 'mailBody': fd['mailBody'],
                 'subscribedByOtherMailBody': fd['subscribedByOtherMailBody'],
                 'confirmationMailBody': fd['confirmationMailBody'],

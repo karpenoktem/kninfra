@@ -2,6 +2,7 @@
 import decimal
 
 from django.db.models import permalink
+from django.utils.html import escape
 
 from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
 
@@ -64,6 +65,14 @@ class Event(SONWrapper):
     @property
     def description(self):
         return self._data['description']
+    @property
+    def description_html(self):
+        try:
+            result = self._data['description_html']
+        except KeyError:
+            result = escape(self._data['description'])
+        finally:
+            return result
     @property
     def name(self):
         return self._data['name']
