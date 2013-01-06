@@ -70,7 +70,7 @@ def close_note(data, request):
                     unicode(note.by.humanName), unicode(note.on.humanName),
                     unicode(note.note), unicode(note.closed_by.humanName)),
              'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
-             [Es.by_name('secretariaat').canonical_email]).send()
+             [Es.by_name('secretariaat').canonical_full_email]).send()
     return {'ok': True}
 
 ACTION_HANDLER_MAP = {
