@@ -145,6 +145,13 @@ def by_study(study):
     for m in ecol.find({'studies.study': _id(study)}):
         yield entity(m)
 
+def by_year_of_birth(year):
+    """ Finds entities by year of birth """
+    for m in ecol.find({'person.dateOfBirth': {
+                                '$lt': datetime.datetime(year + 1, 1, 1),
+                                '$gte': datetime.datetime(year, 1, 1) }}):
+        yield entity(m)
+
 def all():
     """ Finds all entities """
     for m in ecol.find():
