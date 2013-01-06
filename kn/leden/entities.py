@@ -32,6 +32,7 @@ def ensure_indices():
     ecol.ensure_index('tags', sparse=True)
     ecol.ensure_index('humanNames.human')
     ecol.ensure_index('studies.study', sparse=True)
+    ecol.ensure_index('person.dateOfBirth', sparse=True)
     # relations
     rcol.ensure_index('how', sparse=True)
     rcol.ensure_index('with')
