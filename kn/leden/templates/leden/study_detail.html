@@ -4,5 +4,24 @@
 {% block body %}
 <h2>{{ object.humanName }}</h2>
 <p>{{ object.description }}</p>
+
+<h3>Studenten</h3>
+<ul>
+{% for student in students %}
+<li><a href="{{ student.student.get_absolute_url }}"
+        >{{ student.student.humanName }}</a>
+{% if student.from or student.until %}
+(
+{% if student.from %}
+van {{ student.from.date }}
+{% endif %}{# student.from #}
+{% if student.until %}
+tot {{ student.until.date }}
+{% endif %}{# student.until #}
+)
+{% endif %}{# student.from or student.until #}
+</li>
+{% endfor %}{# student in students #}
+</ul>
 {{ block.super }}
 {% endblock %}
