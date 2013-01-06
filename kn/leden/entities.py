@@ -139,6 +139,11 @@ def by_id(n):
     """ Finds an entity by id """
     return entity(ecol.find_one({'_id': _id(n)}))
 
+def by_study(study):
+    """ Finds entities by studies.study """
+    for m in ecol.find({'studies.study': _id(study)}):
+        yield entity(m)
+
 def all():
     """ Finds all entities """
     for m in ecol.find():
