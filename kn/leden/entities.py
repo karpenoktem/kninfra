@@ -35,7 +35,7 @@ def ensure_indices():
     rcol.ensure_index('how', sparse=True)
     rcol.ensure_index('with')
     rcol.ensure_index('who')
-    rcol.ensure_index('tags', spare=True)
+    rcol.ensure_index('tags', sparse=True)
     rcol.ensure_index([('until',1),
                ('from',-1)])
     # messages
