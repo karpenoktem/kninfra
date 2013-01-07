@@ -194,6 +194,7 @@ def _institute_detail(request, institute):
     return render_to_response('leden/institute_detail.html', ctx,
             context_instance=RequestContext(request))
 
+@login_required
 def entities_by_year_of_birth(request, year):
     _year = int(year)
     ctx = {'year': _year,
@@ -207,6 +208,7 @@ def entities_by_year_of_birth(request, year):
     return render_to_response('leden/entities_by_year_of_birth.html', ctx,
             context_instance=RequestContext(request))
 
+@login_required
 def years_of_birth(request):
     return render_to_response('leden/years_of_birth.html', {
                     'years': reversed(Es.get_years_of_birth())},
