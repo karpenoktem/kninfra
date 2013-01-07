@@ -172,13 +172,44 @@ def _brand_detail(request, brand):
             context_instance=RequestContext(request))
 def _study_detail(request, study):
     ctx = _entity_detail(request, study)
-    # TODO add followers in ctx
+    ctx['students'] = students = []
+    def _cmp(s1, s2):
+        r = Es.dt_cmp_until(s2['until'], s1['until'])
+        if r: return r
+        return cmp(s1['student'].humanName, s2['student'].humanName)
+    for student in Es.by_study(study):
+        for _study in student.studies:
+            if _study['study'] != study:
+                continue
+            students.append({'student': student,
+                             'from': _study['from'],
+                             'until': _study['until'],
+                             'institute': _study['institute']})
+    ctx['students'].sort(cmp=_cmp)
     return render_to_response('leden/study_detail.html', ctx,
             context_instance=RequestContext(request))
 def _institute_detail(request, institute):
     ctx = _entity_detail(request, institute)
     # TODO add followers in ctx
     return render_to_response('leden/institute_detail.html', ctx,
+            context_instance=RequestContext(request))
+
+def entities_by_year_of_birth(request, year):
+    _year = int(year)
+    ctx = {'year': _year,
+           'users': sorted(Es.by_year_of_birth(_year),
+                                    key=lambda x: x.humanName)}
+    years = Es.get_years_of_birth()
+    if _year + 1 in years:
+        ctx['next_year'] = _year + 1
+    if _year - 1 in years:
+        ctx['previous_year'] = _year - 1
+    return render_to_response('leden/entities_by_year_of_birth.html', ctx,
+            context_instance=RequestContext(request))
+
+def years_of_birth(request):
+    return render_to_response('leden/years_of_birth.html', {
+                    'years': reversed(Es.get_years_of_birth())},
             context_instance=RequestContext(request))
 
 @login_required
