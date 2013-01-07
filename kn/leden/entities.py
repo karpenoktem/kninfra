@@ -2,6 +2,7 @@
 import re
 import datetime
 import functools
+import email.utils
 
 from django.db.models import permalink
 from django.contrib.auth.models import get_hexdigest
@@ -692,6 +693,17 @@ class Entity(SONWrapper):
                  'until': DT_MAX})
         if save:
             self.save()
+
+    @property
+    def canonical_full_email(self):
+        """ Returns the string
+            
+                "[human name]" <[canonical e-mail]>
+            """
+        addr = self.canonical_email
+        if not addr:
+            return None
+        return email.utils.formataddr((unicode(self.humanName), addr))
 
     @property
     def canonical_email(self):

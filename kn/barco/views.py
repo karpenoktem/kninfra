@@ -185,6 +185,7 @@ def barco_enterform(request, repos, formname):
             msg = ("Barform %s ingevoerd via kninfra\n\n"
                     "Signed-off-by: kninfra <root@karpenoktem.nl>" %
                     fd['formname'])
+            # XXX Is it safe to use canonical_full_email?
             author = "%s <%s>" % (str(request.user.humanName),
                     request.user.canonical_email)
             subprocess.call(['/usr/bin/git', 'commit', '--author', author,

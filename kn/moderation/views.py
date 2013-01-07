@@ -61,7 +61,7 @@ def _deactivate_mm(ml, name, user, record, moderators):
             "Moderatiemodus op %s is verlopen" % name,
             ("De moderatiemodus op %s is verlopen.") % name,
             '<wortel@karpenoktem.nl>',
-            [moderators.canonical_email]).send()
+            [moderators.canonical_full_email]).send()
     else:
         EmailMessage(
             "Moderatiemodus op %s is uitgezet door %s" % (name,
@@ -69,7 +69,7 @@ def _deactivate_mm(ml, name, user, record, moderators):
             ("De moderatiemodus op %s is uitgezet door %s.") % (
                 name, str(user.name)),
             '<wortel@karpenoktem.nl>',
-            [moderators.canonical_email]).send()
+            [moderators.canonical_full_email]).send()
 
 def _renew_mm(ml, name, user, record, moderators):
     if not ml.emergency:
@@ -88,7 +88,7 @@ def _renew_mm(ml, name, user, record, moderators):
          "indien niet verder verlengd, af om %s.") % (
             name, str(user.name), until.time()),
         '<wortel@karpenoktem.nl>',
-        [moderators.canonical_email]).send()
+        [moderators.canonical_full_email]).send()
     return record
 
 
@@ -111,7 +111,7 @@ def _activate_mm(ml, name, user, record, moderators):
          "niet verlengd, af om %s.") % (
             name, str(user.name), until.time()),
         '<wortel@karpenoktem.nl>',
-        [moderators.canonical_email]).send()
+        [moderators.canonical_full_email]).send()
     return record
 
 @login_required

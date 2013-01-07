@@ -529,7 +529,7 @@ def user_reset_password(request, _id):
          "  Het Karpe Noktem Smoelenboek") % (
               u.first_name, str(u.name), pwd),
         'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
-        [u.canonical_email])
+        [u.canonical_full_email])
     email.send()
     request.user.push_message("Wachtwoord gereset!")
     return redirect_to_referer(request)
@@ -550,7 +550,7 @@ def note_add(request):
             request.user.full_name, unicode(on.humanName),
             request.POST['note']),
         'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
-        [Es.by_name('secretariaat').canonical_email]).send()
+        [Es.by_name('secretariaat').canonical_full_email]).send()
     return redirect_to_referer(request)
 
 @login_required
