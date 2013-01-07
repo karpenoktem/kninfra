@@ -32,6 +32,8 @@ def ensure_indices():
     ecol.ensure_index('types')
     ecol.ensure_index('tags', sparse=True)
     ecol.ensure_index('humanNames.human')
+    ecol.ensure_index('studies.study', sparse=True)
+    ecol.ensure_index('person.dateOfBirth', sparse=True)
     # relations
     rcol.ensure_index('how', sparse=True)
     rcol.ensure_index('with')
@@ -138,6 +140,33 @@ def by_name(n):
 def by_id(n):
     """ Finds an entity by id """
     return entity(ecol.find_one({'_id': _id(n)}))
+
+def by_study(study):
+    """ Finds entities by studies.study """
+    for m in ecol.find({'studies.study': _id(study)}):
+        yield entity(m)
+
+def get_years_of_birth():
+    """ Returns the years of birth.
+
+        NOTE Currently, simply queries for the minimum and maximum date of
+        birth and assumes all in between are used. """
+    start = ecol.find_one({'person.dateOfBirth': {'$ne': None}},
+                     {'person.dateOfBirth': 1},
+                     sort=[('person.dateOfBirth', 1)]
+                        )['person']['dateOfBirth'].year
+    end = ecol.find_one({'person.dateOfBirth': {'$ne': None}},
+                     {'person.dateOfBirth': 1},
+                     sort=[('person.dateOfBirth', -1)]
+                        )['person']['dateOfBirth'].year
+    return xrange(start, end+1)
+
+def by_year_of_birth(year):
+    """ Finds entities by year of birth """
+    for m in ecol.find({'person.dateOfBirth': {
+                                '$lt': datetime.datetime(year + 1, 1, 1),
+                                '$gte': datetime.datetime(year, 1, 1) }}):
+        yield entity(m)
 
 def all():
     """ Finds all entities """
@@ -393,13 +422,19 @@ def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
 def entity_cmp_humanName(x, y):
     return cmp(unicode(x.humanName), unicode(y.humanName))
 
+def dt_cmp_until(x, y):
+    return cmp(DT_MAX if x is None else x,
+            DT_MAX if y is None else y)
+
+def dt_cmp_from(x, y):
+    return cmp(DT_MIN if x is None else x,
+            DT_MIN if y is None else y)
+
 def relation_cmp_until(x, y):
-    return cmp(DT_MAX if x['until'] is None else x['until'],
-           DT_MAX if y['until'] is None else y['until'])
+    return dt_cmp_until(x['until'], y['until'])
 
 def relation_cmp_from(x, y):
-    return cmp(DT_MIN if x['from'] is None else x['from'],
-           DT_MIN if y['from'] is None else y['from'])
+    return dt_cmp_from(x['from'], y['from'])
 
 def remove_relation(who, _with, how,  _from, until):
     if _from is None: _from = DT_MIN
