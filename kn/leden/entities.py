@@ -845,6 +845,10 @@ class User(Entity):
         return self._data['emailAddresses'][0]['email']
     @property
     def full_name(self):
+        if (not 'person' in self._data or
+                not 'family' in self._data['person'] or
+                not 'nick' in self._data['person']):
+            return unicode(super(User, self).humanName)
         bits = self._data['person']['family'].split(',', 1)
         if len(bits) == 1:
             return self._data['person']['nick'] + ' ' \
@@ -852,13 +856,13 @@ class User(Entity):
         return self._data['person']['nick'] + bits[1] + ' ' + bits[0]
     @property
     def first_name(self):
-        return self._data['person']['nick']
+        return self._data.get('person',{}).get('nick')
     @property
     def last_name(self):
-        return self._data['person']['family']
+        return self._data.get('person',{}).get('family')
     @property
     def gender(self):
-        return self._data['person']['gender']
+        return self._data('person',{}).get('gender')
     @property
     def telephones(self):
         ret = []
