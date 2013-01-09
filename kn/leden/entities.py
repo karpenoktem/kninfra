@@ -825,7 +825,7 @@ class User(Entity):
         return self._data.get('password', None)
     @property
     def is_active(self):
-        return self._data['is_active']
+        return self._data.get('is_active',True)
     def is_authenticated(self):
         # required by django's auth
         return True

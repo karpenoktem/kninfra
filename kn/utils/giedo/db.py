@@ -180,7 +180,7 @@ def update_db(giedo):
                             None, dt_now, dt_now, False, False, False)]
     for u in Es.users():
         is_active = u._id in active_users
-        if u._data['is_active'] == is_active:
+        if u.is_active == is_active:
             continue
         u._data['is_active'] = is_active
         u.save()
