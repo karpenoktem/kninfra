@@ -792,7 +792,7 @@ class Group(Entity):
 class User(Entity):
     def __init__(self, data):
         super(User,self).__init__(data)
-        self._primary_study = None
+        self._primary_study = -1
     @permalink
     def get_absolute_url(self):
         if self.name:
@@ -926,11 +926,9 @@ class User(Entity):
         return ret
     @property
     def primary_study(self):
-        if self._primary_study==None:
-            self._primary_study = None \
-                if len(self._data['studies'])==0 \
-                else by_id(self._data['studies'][0]['study'])\
-                            .as_study()
+        if self._primary_study == -1:
+            self._primary_study = (None if not self._data.get('studies',())
+                else by_id(self._data['studies'][0]['study']).as_study())
         return self._primary_study
     @property
     def proper_primary_study(self):
