@@ -709,7 +709,8 @@ class Entity(SONWrapper):
     def canonical_email(self):
         if self.type in ('institute', 'study', 'brand', 'tag'):
             return None
-        return "%s@%s" % (self.name, MAILDOMAIN)
+        name = self.name if self.name else self.id
+        return "%s@%s" % (name, MAILDOMAIN)
 
     @property
     def got_mailman_list(self):
