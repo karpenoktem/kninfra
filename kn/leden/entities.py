@@ -709,7 +709,8 @@ class Entity(SONWrapper):
     def canonical_email(self):
         if self.type in ('institute', 'study', 'brand', 'tag'):
             return None
-        return "%s@%s" % (self.name, MAILDOMAIN)
+        name = self.name if self.name else self.id
+        return "%s@%s" % (name, MAILDOMAIN)
 
     @property
     def got_mailman_list(self):
@@ -791,7 +792,7 @@ class Group(Entity):
 class User(Entity):
     def __init__(self, data):
         super(User,self).__init__(data)
-        self._primary_study = None
+        self._primary_study = -1
     @permalink
     def get_absolute_url(self):
         if self.name:
@@ -824,7 +825,7 @@ class User(Entity):
         return self._data.get('password', None)
     @property
     def is_active(self):
-        return self._data['is_active']
+        return self._data.get('is_active',True)
     def is_authenticated(self):
         # required by django's auth
         return True
@@ -845,6 +846,10 @@ class User(Entity):
         return self._data['emailAddresses'][0]['email']
     @property
     def full_name(self):
+        if (not 'person' in self._data or
+                not 'family' in self._data['person'] or
+                not 'nick' in self._data['person']):
+            return unicode(super(User, self).humanName)
         bits = self._data['person']['family'].split(',', 1)
         if len(bits) == 1:
             return self._data['person']['nick'] + ' ' \
@@ -852,13 +857,13 @@ class User(Entity):
         return self._data['person']['nick'] + bits[1] + ' ' + bits[0]
     @property
     def first_name(self):
-        return self._data['person']['nick']
+        return self._data.get('person',{}).get('nick')
     @property
     def last_name(self):
-        return self._data['person']['family']
+        return self._data.get('person',{}).get('family')
     @property
     def gender(self):
-        return self._data['person']['gender']
+        return self._data('person',{}).get('gender')
     @property
     def telephones(self):
         ret = []
@@ -921,11 +926,9 @@ class User(Entity):
         return ret
     @property
     def primary_study(self):
-        if self._primary_study==None:
-            self._primary_study = None \
-                if len(self._data['studies'])==0 \
-                else by_id(self._data['studies'][0]['study'])\
-                            .as_study()
+        if self._primary_study == -1:
+            self._primary_study = (None if not self._data.get('studies',())
+                else by_id(self._data['studies'][0]['study']).as_study())
         return self._primary_study
     @property
     def proper_primary_study(self):
