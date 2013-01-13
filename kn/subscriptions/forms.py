@@ -4,17 +4,6 @@ from kn.leden.forms import EntityChoiceField
 import kn.leden.entities as Es
 
 def get_add_event_form(user, superuser=False):
-    if superuser:
-        choices = (sorted(Es.groups(),
-                lambda x,y: cmp(unicode(x.humanName),
-                    unicode(y.humanName))) +
-            sorted(Es.by_name('leden').get_members(),
-                lambda x,y: cmp(unicode(x.humanName),
-                    unicode(y.humanName))))
-    else:
-        choices = [user]+sorted(user.cached_groups,
-            cmp=lambda x,y: cmp(unicode(x.humanName),
-                    unicode(y.humanName)))
     class AddEventForm(forms.Form):
         name = forms.RegexField(label='Korte naam', regex=r'^[a-z0-9-]+$')
         humanName = forms.CharField(label='Naam')
@@ -54,7 +43,7 @@ def get_add_event_form(user, superuser=False):
                 "%(owner)s")
         cost = forms.DecimalField(label='Kosten')
         date = forms.DateField(label='Datum')
-        owner = EntityChoiceField(label="Eigenaar", choices=choices)
+        owner = EntityChoiceField(label="Eigenaar")
         has_public_subscriptions = forms.BooleanField(required=False,
                 label='Inschrijvingen openbaar')
         everyone_can_subscribe_others = forms.BooleanField(required=False,

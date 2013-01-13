@@ -172,13 +172,46 @@ def _brand_detail(request, brand):
             context_instance=RequestContext(request))
 def _study_detail(request, study):
     ctx = _entity_detail(request, study)
-    # TODO add followers in ctx
+    ctx['students'] = students = []
+    def _cmp(s1, s2):
+        r = Es.dt_cmp_until(s2['until'], s1['until'])
+        if r: return r
+        return cmp(s1['student'].humanName, s2['student'].humanName)
+    for student in Es.by_study(study):
+        for _study in student.studies:
+            if _study['study'] != study:
+                continue
+            students.append({'student': student,
+                             'from': _study['from'],
+                             'until': _study['until'],
+                             'institute': _study['institute']})
+    ctx['students'].sort(cmp=_cmp)
     return render_to_response('leden/study_detail.html', ctx,
             context_instance=RequestContext(request))
 def _institute_detail(request, institute):
     ctx = _entity_detail(request, institute)
     # TODO add followers in ctx
     return render_to_response('leden/institute_detail.html', ctx,
+            context_instance=RequestContext(request))
+
+@login_required
+def entities_by_year_of_birth(request, year):
+    _year = int(year)
+    ctx = {'year': _year,
+           'users': sorted(Es.by_year_of_birth(_year),
+                                    key=lambda x: x.humanName)}
+    years = Es.get_years_of_birth()
+    if _year + 1 in years:
+        ctx['next_year'] = _year + 1
+    if _year - 1 in years:
+        ctx['previous_year'] = _year - 1
+    return render_to_response('leden/entities_by_year_of_birth.html', ctx,
+            context_instance=RequestContext(request))
+
+@login_required
+def years_of_birth(request):
+    return render_to_response('leden/years_of_birth.html', {
+                    'years': reversed(Es.get_years_of_birth())},
             context_instance=RequestContext(request))
 
 @login_required
@@ -235,6 +268,31 @@ def ik_chpasswd(request):
     errl.extend(form.non_field_errors())
     errstr = humanized_enum(errl)
     return render_to_response('leden/ik_chpasswd.html',
+            { 'form':form, 'errors':errstr},
+            context_instance=RequestContext(request))
+
+@login_required
+def ik_chpasswd_villanet(request):
+    errl = []
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            try:
+                oldpw = form.cleaned_data['old_password']
+                newpw = form.cleaned_data['new_password']
+                giedo.change_villanet_password(str(request.user.name), oldpw,
+                        newpw)
+                t = ("Lieve %s, maar natuurlijk, jouw wachtwoord voor het "+
+                        "villa-netwerk is veranderd.")
+                request.user.push_message(t % request.user.first_name)
+                return HttpResponseRedirect(reverse('smoelen-home'))
+            except giedo.ChangePasswordError as e:
+                errl.extend(e.args)
+    else:
+        form = ChangePasswordForm()
+    errl.extend(form.non_field_errors())
+    errstr = humanized_enum(errl)
+    return render_to_response('leden/ik_chpasswd_villanet.html',
             { 'form':form, 'errors':errstr},
             context_instance=RequestContext(request))
 
@@ -387,7 +445,7 @@ def secr_notes(request):
 
 @login_required
 def secr_add_group(request):
-    if 'wortel' not in request.user.cached_groups_names:
+    if 'secretariaat' not in request.user.cached_groups_names:
         raise PermissionDenied
     if request.method == 'POST':
         form = AddGroupForm(request.POST)
@@ -397,6 +455,8 @@ def secr_add_group(request):
             g = Es.Group({
                 'types': ['group', 'tag'],
                 'names': [nm],
+                'use_mailman_list': fd['true_group'],
+                'has_unix_group': fd['true_group'],
                 'humanNames': [{'name': nm,
                     'human': fd['humanName'],
                     'genitive_prefix': fd['genitive_prefix']}],
@@ -430,7 +490,8 @@ def relation_begin(request):
     for t in ('who', 'with', 'how'):
         if t not in request.POST:
             raise ValueError, "Missing attr %s" % t
-        if t == 'how' and request.POST[t] == 'null':
+        if t == 'how' and (not request.POST[t] or
+                               request.POST[t] == 'null'):
             d[t] = None
         else:
             d[t] = _id(request.POST[t])
@@ -471,7 +532,7 @@ def user_reset_password(request, _id):
          "  Het Karpe Noktem Smoelenboek") % (
               u.first_name, str(u.name), pwd),
         'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
-        [u.canonical_email])
+        [u.canonical_full_email])
     email.send()
     request.user.push_message("Wachtwoord gereset!")
     return redirect_to_referer(request)
@@ -492,7 +553,7 @@ def note_add(request):
             request.user.full_name, unicode(on.humanName),
             request.POST['note']),
         'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
-        [Es.by_name('secretariaat').canonical_email]).send()
+        [Es.by_name('secretariaat').canonical_full_email]).send()
     return redirect_to_referer(request)
 
 @login_required

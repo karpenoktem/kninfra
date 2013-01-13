@@ -117,7 +117,8 @@
         {% if object.dateOfBirth %}
 	<dt>Geboortedatum</dt>
 	<dd>
-                {{ object.dateOfBirth.year }}-{{ object.dateOfBirth.month }}-{{ object.dateOfBirth.day }}
+        <a href="{% url entities-by-year-of-birth year=object.dateOfBirth.year %}"
+                >{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth.month }}-{{ object.dateOfBirth.day }}
 	</dd>
         {% endif %}
 	{% if object.dateJoined %}

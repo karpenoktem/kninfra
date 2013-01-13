@@ -2,7 +2,7 @@
 {% load base %}
 
 {% block body %}
-<h1>Event bewerken: {{ name }} @ {{ date }} <small> {{ kind }}</small></h1>
+<h1>Event bewerken: {{ name }} @ {{ date|date:"l j F Y" }} <small> {{ kind }}</small></h1>
 <table>
     <tr>
         <th>Naam</th>

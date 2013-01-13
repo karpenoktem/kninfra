@@ -77,11 +77,8 @@ def event_detail(request, name):
                 'confirmed': False,
                 'subscribedBy': _id(request.user)})
             other_subscription.save()
-            full_owner_address = '%s <%s>' % (
-                    event.owner.humanName,
-                    event.owner.canonical_email)
             email = EmailMessage(
-                    "Aanmelding %s" % event.humanName,
+                    "Bevestig je aanmelding voor %s" % event.humanName,
                      event.subscribedByOtherMailBody % {
                         'firstName': user.first_name,
                         'by_firstName': request.user.first_name,
@@ -91,12 +88,13 @@ def event_detail(request, name):
                                 reverse('event-detail', args=(event.name,))),
                         'owner': event.owner.humanName},
                     'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-                    [user.canonical_email],
-                    [event.owner.canonical_email, request.user.canonical_email],
+                    [user.canonical_full_email],
+                    [event.owner.canonical_full_email,
+                     request.user.canonical_full_email],
                     headers={
-                        'Cc': '%s, %s' % (event.owner.canonical_email,
-                                        request.user.canonical_email),
-                        'Reply-To': full_owner_address})
+                        'Cc': '%s, %s' % (event.owner.canonical_full_email,
+                                        request.user.canonical_full_email),
+                        'Reply-To': event.owner.canonical_full_email})
             email.send()
     if (subscription is None and request.method == 'POST'
             and event.is_open and ('who' not in request.POST
@@ -109,9 +107,6 @@ def event_detail(request, name):
             'date': datetime.datetime.now(),
             'debit': str(event.cost)})
         subscription.save()
-        full_owner_address = '%s <%s>' % (
-                event.owner.humanName,
-                event.owner.canonical_email)
         email = EmailMessage(
                 "Aanmelding %s" % event.humanName,
                  event.mailBody % {
@@ -120,11 +115,11 @@ def event_detail(request, name):
                     'owner': event.owner.humanName,
                     'notes': notes},
                 'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-                [request.user.canonical_email],
-                [event.owner.canonical_email],
+                [request.user.canonical_full_email],
+                [event.owner.canonical_full_email],
                 headers={
-                    'Cc': full_owner_address,
-                    'Reply-To': full_owner_address})
+                    'Cc': event.owner.canonical_full_email,
+                    'Reply-To': event.owner.canonical_full_email})
         email.send()
     subscrlist = tuple(event.get_subscriptions())
     ctx = {'object': event,
@@ -175,6 +170,22 @@ def _api_confirm_subscription(request):
     subscription.save()
     return JsonHttpResponse({'success': True})
 
+def _api_get_email_addresses(request):
+    if not 'id' in request.REQUEST:
+        return JsonHttpResponse({'error': 'missing arguments'})
+    event = subscr_Es.event_by_id(request.REQUEST['id'])
+    if not event:
+        raise Http404
+    if (not event.has_public_subscriptions and
+            not event.has_read_access(request.user) and
+            not event.has_debit_access(request.user)):
+        raise PermissionDenied
+    # XXX We can optimize this query
+    return JsonHttpResponse({
+            'success': True,
+            'addresses': [s.user.canonical_full_email
+                    for s in event.get_subscriptions()]})
+
 def _api_change_debit(request):
     if not 'debit' in request.REQUEST or not 'id' in request.REQUEST:
         return JsonHttpResponse({'error': 'missing arguments'})
@@ -197,6 +208,8 @@ def api(request):
     action = request.REQUEST.get('action')
     if action == 'change-debit':
         return _api_change_debit(request)
+    elif action == 'get-email-addresses':
+        return _api_get_email_addresses(request)
     elif action == 'close-event':
         return _api_close_event(request)
     elif action == 'confirm-subscription':
@@ -239,6 +252,7 @@ def event_new_or_edit(request, edit=None):
                 'confirmationMailBody': fd['confirmationMailBody'],
                 'everyone_can_subscribe_others':
                         fd['everyone_can_subscribe_others'],
+                'has_public_subscriptions': fd['has_public_subscriptions'],
                 'humanName': fd['humanName'],
                 'createdBy': request.user._id,
                 'name': name,

@@ -18,6 +18,13 @@ def view(request):
 def no_such_action(data, request):
     return {'error': 'No such action'}
 
+
+def _humanName_of_entity(e):
+    """ Returns the human name of an entity, as used in the API. """
+    if e.name:
+        return "%s (%s)" % (e.humanName, e.name)
+    return unicode(e.humanName)
+
 def entities_by_keyword(data, request):
     """ Wraps Es.by_keyword.  Finds the first 20 entities matching the given
         keyword.  Example:
@@ -30,9 +37,17 @@ def entities_by_keyword(data, request):
     _type = data.get('type', None)
     if _type and not isinstance(_type, basestring):
         _type = None
-    return [[e.id, "%s (%s)" % (e.humanName, e.name)]
+    return [[e.id, _humanName_of_entity(e)]
                     for e in Es.by_keyword(data.get('keyword', ''),
                                            _type=_type)]
+
+def entity_humanName_by_id(data, request):
+    """ Returns the human name of an entity by its id.  Example:
+
+          >> {action:"entity_humanName_by_id", id="4e6fcc85e60edf3dc0000270"}
+          << "Giedo Jansen (giedo) """
+    e = Es.by_id(data['id'])
+    return None if e is None else _humanName_of_entity(e)
 
 def close_note(data, request):
     """ Wraps Note.close()
@@ -55,10 +70,11 @@ def close_note(data, request):
                     unicode(note.by.humanName), unicode(note.on.humanName),
                     unicode(note.note), unicode(note.closed_by.humanName)),
              'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
-             [Es.by_name('secretariaat').canonical_email]).send()
+             [Es.by_name('secretariaat').canonical_full_email]).send()
     return {'ok': True}
 
 ACTION_HANDLER_MAP = {
+        'entity_humanName_by_id': entity_humanName_by_id,
         'entities_by_keyword': entities_by_keyword,
         'close_note': close_note,
         None: no_such_action,

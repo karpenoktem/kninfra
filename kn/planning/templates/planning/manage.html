@@ -41,7 +41,7 @@
     {{ event.form.non_field_errors }}
     <table>
         <tr>
-            <th colspan="2"><a href="{% url planning-event-edit event.id %}">{{ event.date }}</a></th>
+            <th colspan="2"><a href="{% url planning-event-edit event.id %}">{{ event.date|date:"l j F Y" }}</a></th>
             <th colspan="2"><a href="{% url planning-event-edit event.id %}">{{ event.name }}</a>  <small>{{event.kind}}</small></th>
         </tr>
 {% for vacancy in event.vacancies %}

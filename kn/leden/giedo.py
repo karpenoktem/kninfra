@@ -23,6 +23,15 @@ def change_password(user, old, new):
     if 'error' in ret:
         raise ChangePasswordError(ret['error'])
 
+def change_villanet_password(user, old, new):
+    giedo = get_giedo_connection()
+    ret = giedo.send({'type': 'set-villanet-password',
+              'user': user,
+              'oldpass': old,
+              'newpass': new})
+    if 'error' in ret:
+        raise ChangePasswordError(ret['error'])
+
 def sync():
     get_giedo_connection().send({'type': 'sync'})
 

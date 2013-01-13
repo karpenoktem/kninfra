@@ -136,5 +136,6 @@ ALLOWED_API_KEYS = ('CHANGE ME',)
 PHOTOS_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
 ALLOWED_API_KEYS = ('CHANGE ME',)
 CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
+VILLANET_SECRET_API_KEY = '' # CHANGE ME
 DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
                         '<root@khandhas.karpenoktem.nl>')

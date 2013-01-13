@@ -18,47 +18,26 @@ class EntityChoiceFieldWidget(forms.TextInput):
         super(EntityChoiceFieldWidget, self).__init__(*args, **kwargs)
     def render(self, name, value=None, attrs=None):
         final_attrs = self.build_attrs(attrs, name=name)
+        code_set_value = ''
         if value:
-            final_attrs['value'] = escape(value)
-        if not final_attrs.has_key('id'):
-            final_attrs['id'] = 'id_%s' % name
-        del final_attrs['name']
+            code_set_value = (
+                '''entityChoiceField_set(%(id)s, %(value)s);'''
+                %{'id': json.dumps(final_attrs['id']),
+                  'value': json.dumps(str(value))})
         return mark_safe(
-            u'''<input type='text' %(attrs)s />
-                <input type='hidden' id=%(id2)s name=%(name)s />
+            u'''<input type='hidden' id=%(id)s name=%(name)s />
                 <script type='text/javascript'>//<!--
-                $(%(hid)s).autocomplete({
-                    source: function(request, response) {
-                        $.post(%(api_url)s, {
-                            csrfmiddlewaretoken: csrf_token,
-                            data: JSON.stringify({
-                                action: "entities_by_keyword",
-                                keyword: request.term,
-                                type: %(type)s
-                            })
-                        }, function(data) {
-                            response($.map(data, function(item) {
-                                return {label: item[1], value: item[0]};
-                            }));
-                        }, "json");
-                    }, select: function(event, ui) {
-                        $(%(hid)s).val(ui.item.label);
-                        $(%(hid2)s).val(ui.item.value);
-                        return false;
-                    }, minLength: 0}).focus(function() {
-                        $(this).trigger('keydown.autocomplete');
-                    });
-                //--></script>''' % {
-                                 'attrs': flatatt(final_attrs),
-                                 'name': json.dumps(name),
-                                 'id2': json.dumps(final_attrs['id']+'2'),
-                                 'hid': json.dumps('#'+final_attrs['id']),
-                                 'hid2': json.dumps('#'+final_attrs['id']+'2'),
-                                 'type': json.dumps(self.type),
-                                 'api_url': json.dumps(reverse('leden-api'))})
+                $(function(){
+                    create_entityChoiceField(%(id)s, %(type)s);
+                    %(code_set_value)s
+                });//--></script>'''
+                %{'name': json.dumps(name),
+                  'id': json.dumps(final_attrs['id']),
+                  'type': json.dumps(self.type),
+                  'code_set_value': code_set_value})
 
 
-class EntityChoiceField(forms.ChoiceField):
+class EntityChoiceField(forms.CharField):
     def __init__(self, *args, **kwargs):
         if '_type' in kwargs:
             _type = kwargs['_type']
@@ -99,6 +78,8 @@ class AddGroupForm(forms.Form):
     parent = EntityChoiceField(label="Parent",
             _type='group',
             initial=lambda x: str(Es.by_name('secretariaat')._id))
+    true_group = forms.BooleanField(label="Volwaardige groep",
+            initial=True)
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput())
