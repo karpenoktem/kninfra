@@ -73,3 +73,17 @@ textarea.default, input.default {
         padding-bottom: 1em;
         color: red;
 }
+
+/* markdown classes */
+div.md_h1 {
+        font-size: 1.6em;
+}
+div.md_h2 {
+        font-size: 1.4em;
+}
+div.md_h3 {
+        font-size: 1.2em;
+}
+div.md_h4 {
+        font-weight: bold;
+}
