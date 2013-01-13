@@ -285,12 +285,13 @@ def rauth(request):
                 if k in properties
             ] )))
         return HttpResponse("INVALID TOKEN")
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated() and not request.REQUEST.get('nologinrequired'):
         # De replace() is een workaround voor
         #   http://code.djangoproject.com/ticket/11457
         return redirect_to_login('%s?url=%s' % (
                 reverse('rauth'),
                 request.REQUEST['url'].replace('/', '%2F')))
+
     token = sha256('%s|%s|%s|%s' % (str(request.user.name),
                     date.today(),
                     request.REQUEST['url'],
