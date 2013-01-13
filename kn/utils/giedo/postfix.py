@@ -13,7 +13,7 @@ def generate_postfix_map(giedo):
     id2email = {}
     # handle the straightforward cases
     for e in Es.all():
-        if e.canonical_email is None or e.name is None:
+        if e.canonical_email is None:
             continue
         id2email[e._id] = e.canonical_email
         for nm in e.other_names:
@@ -21,7 +21,7 @@ def generate_postfix_map(giedo):
         if e.type == 'user':
             tbl[e.canonical_email] = (e.primary_email,)
         elif e.type == 'group':
-            if e.got_mailman_list:
+            if e.got_mailman_list and e.name:
                 tbl[e.canonical_email] = ('%s@%s' % (
                     str(e.name), LISTS_MAILDOMAIN),)
             else:
@@ -29,6 +29,9 @@ def generate_postfix_map(giedo):
                 non_mailman_groups[e._id] = e
         else:
             logging.warn("postfix: unhandled type: %s" % e.type)
+        id_email = "%s@%s" % (e.id, MAILDOMAIN)
+        if not id_email in tbl:
+            tbl[id_email] = (e.canonical_email,)
     # handle the non-mailman groups
     for rel in Es.query_relations(_with=non_mailman_groups.keys(),
             _from=dt_now, until=dt_now, how=None):

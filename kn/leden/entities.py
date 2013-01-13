@@ -32,6 +32,8 @@ def ensure_indices():
     ecol.ensure_index('types')
     ecol.ensure_index('tags', sparse=True)
     ecol.ensure_index('humanNames.human')
+    ecol.ensure_index('studies.study', sparse=True)
+    ecol.ensure_index('person.dateOfBirth', sparse=True)
     # relations
     rcol.ensure_index('how', sparse=True)
     rcol.ensure_index('with')
@@ -138,6 +140,33 @@ def by_name(n):
 def by_id(n):
     """ Finds an entity by id """
     return entity(ecol.find_one({'_id': _id(n)}))
+
+def by_study(study):
+    """ Finds entities by studies.study """
+    for m in ecol.find({'studies.study': _id(study)}):
+        yield entity(m)
+
+def get_years_of_birth():
+    """ Returns the years of birth.
+
+        NOTE Currently, simply queries for the minimum and maximum date of
+        birth and assumes all in between are used. """
+    start = ecol.find_one({'person.dateOfBirth': {'$ne': None}},
+                     {'person.dateOfBirth': 1},
+                     sort=[('person.dateOfBirth', 1)]
+                        )['person']['dateOfBirth'].year
+    end = ecol.find_one({'person.dateOfBirth': {'$ne': None}},
+                     {'person.dateOfBirth': 1},
+                     sort=[('person.dateOfBirth', -1)]
+                        )['person']['dateOfBirth'].year
+    return xrange(start, end+1)
+
+def by_year_of_birth(year):
+    """ Finds entities by year of birth """
+    for m in ecol.find({'person.dateOfBirth': {
+                                '$lt': datetime.datetime(year + 1, 1, 1),
+                                '$gte': datetime.datetime(year, 1, 1) }}):
+        yield entity(m)
 
 def all():
     """ Finds all entities """
@@ -393,13 +422,19 @@ def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
 def entity_cmp_humanName(x, y):
     return cmp(unicode(x.humanName), unicode(y.humanName))
 
+def dt_cmp_until(x, y):
+    return cmp(DT_MAX if x is None else x,
+            DT_MAX if y is None else y)
+
+def dt_cmp_from(x, y):
+    return cmp(DT_MIN if x is None else x,
+            DT_MIN if y is None else y)
+
 def relation_cmp_until(x, y):
-    return cmp(DT_MAX if x['until'] is None else x['until'],
-           DT_MAX if y['until'] is None else y['until'])
+    return dt_cmp_until(x['until'], y['until'])
 
 def relation_cmp_from(x, y):
-    return cmp(DT_MIN if x['from'] is None else x['from'],
-           DT_MIN if y['from'] is None else y['from'])
+    return dt_cmp_from(x['from'], y['from'])
 
 def remove_relation(who, _with, how,  _from, until):
     if _from is None: _from = DT_MIN
@@ -674,7 +709,8 @@ class Entity(SONWrapper):
     def canonical_email(self):
         if self.type in ('institute', 'study', 'brand', 'tag'):
             return None
-        return "%s@%s" % (self.name, MAILDOMAIN)
+        name = self.name if self.name else self.id
+        return "%s@%s" % (name, MAILDOMAIN)
 
     @property
     def got_mailman_list(self):
@@ -756,7 +792,7 @@ class Group(Entity):
 class User(Entity):
     def __init__(self, data):
         super(User,self).__init__(data)
-        self._primary_study = None
+        self._primary_study = -1
     @permalink
     def get_absolute_url(self):
         if self.name:
@@ -789,7 +825,7 @@ class User(Entity):
         return self._data.get('password', None)
     @property
     def is_active(self):
-        return self._data['is_active']
+        return self._data.get('is_active',True)
     def is_authenticated(self):
         # required by django's auth
         return True
@@ -810,6 +846,10 @@ class User(Entity):
         return self._data['emailAddresses'][0]['email']
     @property
     def full_name(self):
+        if (not 'person' in self._data or
+                not 'family' in self._data['person'] or
+                not 'nick' in self._data['person']):
+            return unicode(super(User, self).humanName)
         bits = self._data['person']['family'].split(',', 1)
         if len(bits) == 1:
             return self._data['person']['nick'] + ' ' \
@@ -817,13 +857,13 @@ class User(Entity):
         return self._data['person']['nick'] + bits[1] + ' ' + bits[0]
     @property
     def first_name(self):
-        return self._data['person']['nick']
+        return self._data.get('person',{}).get('nick')
     @property
     def last_name(self):
-        return self._data['person']['family']
+        return self._data.get('person',{}).get('family')
     @property
     def gender(self):
-        return self._data['person']['gender']
+        return self._data('person',{}).get('gender')
     @property
     def telephones(self):
         ret = []
@@ -886,11 +926,9 @@ class User(Entity):
         return ret
     @property
     def primary_study(self):
-        if self._primary_study==None:
-            self._primary_study = None \
-                if len(self._data['studies'])==0 \
-                else by_id(self._data['studies'][0]['study'])\
-                            .as_study()
+        if self._primary_study == -1:
+            self._primary_study = (None if not self._data.get('studies',())
+                else by_id(self._data['studies'][0]['study']).as_study())
         return self._primary_study
     @property
     def proper_primary_study(self):
