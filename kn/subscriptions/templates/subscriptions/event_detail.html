@@ -80,7 +80,7 @@ copy_emailaddresses_to_clipboard = function() {
 {% endif %}{# subscription.confirmed #}
 {% endif %}{# subscription #}
 <h1>{{ object.humanName }}</h1>
-<p>{{ object.description_html|safe }}</p>
+<blockquote>{{ object.description_html|safe }}</blockquote>
 <dl>
         {% if object.date %}
         <dt>Datum</dt>
