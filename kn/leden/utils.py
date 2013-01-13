@@ -19,7 +19,8 @@ def find_name_for_user(first_name, last_name):
         return clean(s)
     fn = clean(first_name)
     ln = clean_ln(last_name)
-    users = [u for u in Es.users() if clean(u.first_name) == fn]
+    users = [u for u in Es.users() if u.first_name
+                        and clean(u.first_name) == fn]
     # First, simply try the first_name.  This is OK if the name is not taken
     # and there is noone else with that first_name.
     if fn not in names and len(users) == 0:
