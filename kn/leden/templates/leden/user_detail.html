@@ -37,12 +37,12 @@
 	{% for name in object.names %}{% if not forloop.first %}, 
 	{% endif %}{{ name  }}{% endfor %}
 	</dd>
-	<dt>E-Mail adres</dt>
+	<dt>E-Mailadres</dt>
 	<dd>
         {{ object.canonical_email }}
 	</dd>
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names %}
-        <dt>Achterliggend e-mail adres<dt>
+        <dt>Achterliggend e-mailadres<dt>
         <dd>
         {{ object.primary_email }}
         {% if "secretariaat" in user.cached_groups_names %}

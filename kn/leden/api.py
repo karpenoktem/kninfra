@@ -1,4 +1,3 @@
-import re
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -86,6 +85,8 @@ def entity_update_primary_email(data, request):
     is_secretariaat = 'secretariaat' in request.user.cached_groups_names
     if not is_secretariaat:
         return {'ok': False, 'error': 'Permission denied'}
+    if not 'id' in data or not isinstance(data['id'], basestring):
+        return {'ok': False, 'error': 'Missing argument "id"'}
     if not 'new' in data or not isinstance(data['new'], basestring):
         return {'ok': False, 'error': 'Missing argument "new"'}
     new_email = data['new']
