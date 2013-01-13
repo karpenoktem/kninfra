@@ -1,11 +1,14 @@
+import re
 import json
 
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
+from django.core.validators import email_re
 
 from kn.base.http import JsonHttpResponse
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
+from kn.leden import giedo
 
 @login_required
 def view(request):
@@ -73,10 +76,33 @@ def close_note(data, request):
              [Es.by_name('secretariaat').canonical_full_email]).send()
     return {'ok': True}
 
+def entity_update_primary_email(data, request):
+    """ Calls entity.update_primary_email
+
+        >> {action:"entity_update_primary_email",id:"4e6fcc85e60edf3dc0000270",
+                    new:"giedo@univ.gov"}
+        << {ok: true}
+      ( << {ok: false, error: "Permission denied"} ) """
+    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
+    if not is_secretariaat:
+        return {'ok': False, 'error': 'Permission denied'}
+    if not 'new' in data or not isinstance(data['new'], basestring):
+        return {'ok': False, 'error': 'Missing argument "new"'}
+    new_email = data['new']
+    if not email_re.match(new_email):
+        return {'ok': False, 'error': 'Not valid e-mail address'}
+    e = Es.by_id(_id(data.get('id')))
+    if e is None:
+        return {'ok': False, 'error': 'Entity not found'}
+    e.update_primary_email(new_email)
+    giedo.sync()
+    return {'ok': True}
+
 ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
         'entities_by_keyword': entities_by_keyword,
         'close_note': close_note,
+        'entity_update_primary_email':  entity_update_primary_email,
         None: no_such_action,
         }
 
