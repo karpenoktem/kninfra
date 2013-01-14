@@ -76,6 +76,7 @@ DEFAULT_FILE_STORAGE = 'kn.base.storage.OurFileSystemStorage'
 BASE_BGS = ['antal', 'park', 'band', 'weekend']
 
 # smoelen
+BASE_URL = 'https://karpenoktem.nl'
 SMOELEN_PHOTOS_PATH = 'smoelen'
 USER_PHOTOS_URL = 'http://karpenoktem.nl/fotos/?search_tag=%s'
 
