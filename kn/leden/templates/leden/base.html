@@ -42,13 +42,4 @@
 	<li><a href="{% url planning-event-create %}">Nieuw</a></li>
 </ul>
 {% endif %}
-
-{% if "barco" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
-<li>Barco</li>
-<ul>
-	<li><a href={% url barco-enterform repos="drank9" formname="barform" %}>Turflijsten</a></li>
-	<li><a href={% url barco-enterform repos="drank9" formname="invcount" %}>Dranktellingen</a></li>
-</ul>
-
-{% endif %}
 {% endblock %}
