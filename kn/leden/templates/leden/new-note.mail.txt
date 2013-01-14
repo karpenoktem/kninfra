@@ -1,0 +1,9 @@
+{% block subject %}
+Nieuwe notitie
+{% endblock %}
+
+{% block plain %}
+Door {{ user.full_name }} is de volgende notitie geplaatst op {{on.humanName}}:
+
+     {{ note }}
+{% endblock %}
