@@ -2,6 +2,7 @@
 
 import datetime
 import decimal
+from markdown import Markdown
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
@@ -18,7 +19,7 @@ import kn.leden.entities as Es
 from kn.leden.mongo import _id
 import kn.subscriptions.entities as subscr_Es
 from kn.subscriptions.forms import get_add_event_form
-from kn.utils.markdown_parse import Markdown, FixHeadingsExtension
+from kn.utils.markdown_parse import FixHeadingsExtension
 
 
 markdown = Markdown(extensions=[FixHeadingsExtension()], safe_mode="escape")

@@ -67,12 +67,10 @@ class Event(SONWrapper):
         return self._data['description']
     @property
     def description_html(self):
-        try:
-            result = self._data['description_html']
-        except KeyError:
-            result = escape(self._data['description'])
-        finally:
-            return result
+        return self._data.get('description_html',
+                escape(self._data['description']))
+        # Let wel: 'description' is een *fallback*, het is niet de bedoeling dat
+        # deze bij nieuwe actieviteitne nog gebruikt wordt
     @property
     def name(self):
         return self._data['name']
