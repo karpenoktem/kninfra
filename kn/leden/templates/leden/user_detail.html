@@ -37,10 +37,32 @@
 	{% for name in object.names %}{% if not forloop.first %}, 
 	{% endif %}{{ name  }}{% endfor %}
 	</dd>
-	<dt>E-Mail</dt>
+	<dt>E-Mailadres</dt>
 	<dd>
         {{ object.canonical_email }}
 	</dd>
+        {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names %}
+        <dt>Achterliggend e-mailadres<dt>
+        <dd>
+        {{ object.primary_email }}
+        {% if "secretariaat" in user.cached_groups_names %}
+        <button onclick="var new_address = prompt('Nieuw e-mail adres');
+                         if (!new_address) return false;
+                         $.post('{% url leden-api %}', {
+                                'csrfmiddlewaretoken': csrf_token,
+                                data: JSON.stringify({
+                                        action: 'entity_update_primary_email',
+                                        new: new_address,
+                                        id: '{{ object.id }}'})
+                                }, function(data) {
+                                        if(data.ok)
+                                                window.location.reload();
+                                        else
+                                                alert(data.error);
+                                }); return false;">Wijzig e-mail</button>
+        {% endif %}{# "secretariaat" in user.cached_groups_names #}
+        </dd>
+        {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names #}
 	{% if object.primary_study %}
 	<dt>Studie</dt>
         <dd>
