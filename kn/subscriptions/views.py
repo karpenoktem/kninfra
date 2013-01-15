@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group
 import kn.subscriptions.entities as subscr_Es
 from kn.subscriptions.forms import get_add_event_form
+from kn.base.mail import render_then_email
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
 from kn.leden.date import date_to_dt
@@ -264,16 +265,11 @@ def event_new_or_edit(request, edit=None):
             else:
                 e._data.update(d)
             e.save()
-            act = 'bewerkt' if edit else 'aangemaakt'
-            EmailMessage(
-                    "Activiteit %s %s door %s" % (fd['humanName'], act,
-                        unicode(request.user.humanName)),
-                    "%s heeft een activiteit %s:\n\n"\
-                    "    http://karpenoktem.nl%s" %
-                    (unicode(request.user.humanName), act,
-                        reverse('event-detail', args=(e.name,))),
-                    'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-                    ['secretariaat@karpenoktem.nl']).send()
+            render_then_email('subscriptions/' +
+                    ('event-edited' if edit else 'new-event') + '.mail.txt',
+                    Es.by_name('secretariaat').canonical_full_email, {
+                        'event': e,
+                        'user': request.user})
             return HttpResponseRedirect(reverse('event-detail', args=(e.name,)))
     elif edit is None:
         form = AddEventForm()
