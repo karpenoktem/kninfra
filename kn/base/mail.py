@@ -31,9 +31,9 @@ def render_then_email(template, to, ctx={}, cc=[], bcc=[], from_email=None,
     # Set up e-mail
     headers = {}
     if cc:
-        headers['CC': ' ,'.join(cc)]
+        headers['CC'] = ', '.join(cc)
     if reply_to:
-        headers['Reply-To': reply_to]
+        headers['Reply-To'] = reply_to
     if not from_email:
         from_email = rendered_nodes.get('from',
                 settings.DEFAULT_FROM_EMAIL).strip()
