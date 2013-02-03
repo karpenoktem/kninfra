@@ -16,7 +16,7 @@ TIME_ZONE = 'Europe/Amsterdam'
 LANGUAGE_CODE = 'nl-NL'
 SITE_ID = 1
 USE_I18N = True
-MEDIA_ROOT = '/home/infra/media/'
+MEDIA_ROOT = '/home/infra/repo/media/'
 MEDIA_URL = '/djmedia'
 DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@karpenoktem.nl>'
 
