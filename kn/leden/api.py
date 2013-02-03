@@ -75,76 +75,68 @@ def close_note(data, request):
              [Es.by_name('secretariaat').canonical_full_email]).send()
     return {'ok': True}
 
-def entity_update_primary_email(data, request):
-    """ Calls entity.update_primary_email
+def entity_update(update_type, data, request):
+    """ Updates an entity
+            >> (see below)
 
-        >> {action:"entity_update_primary_email",id:"4e6fcc85e60edf3dc0000270",
-                    new:"giedo@univ.gov"}
-        << {ok: true}
-      ( << {ok: false, error: "Permission denied"} ) """
+            << {ok: true}
+          ( << {ok: false, error: "Permission denied"} ) """
     is_secretariaat = 'secretariaat' in request.user.cached_groups_names
     if not is_secretariaat:
         return {'ok': False, 'error': 'Permission denied'}
     if not 'id' in data or not isinstance(data['id'], basestring):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if not 'new' in data or not isinstance(data['new'], basestring):
-        return {'ok': False, 'error': 'Missing argument "new"'}
-    new_email = data['new']
-    if not email_re.match(new_email):
-        return {'ok': False, 'error': 'Not valid e-mail address'}
-    e = Es.by_id(_id(data.get('id')))
+    if update_type in ('primary_email', 'primary_telephone'):
+        if not 'new' in data or not isinstance(data['new'], basestring):
+            return {'ok': False, 'error': 'Missing argument "new"'}
+    if update_type in ('address'):
+        for attr in ('street', 'number', 'zip', 'city'):
+            if attr not in data or not isinstance(data[attr], basestring):
+                return {'ok': False, 'error': 'Missing argument "%s"' % attr}
+
+    e = Es.by_id(data['id'])
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
-    e.update_primary_email(new_email)
-    giedo.sync()
-    return {'ok': True}
 
-def entity_update_primary_telephone(data, request):
-    """ Calls entity.update_primary_telephone
-
-        >> {action:"entity_update_primary_telephone",id:"4e6fcc85e60edf3dc0000270",
-                    new:"+31611223344"}
-        << {ok: true}
-      ( << {ok: false, error: "Permission denied"} ) """
-    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
-    if not is_secretariaat:
-        return {'ok': False, 'error': 'Permission denied'}
-    if not 'id' in data or not isinstance(data['id'], basestring):
-        return {'ok': False, 'error': 'Missing argument "id"'}
-    if not 'new' in data or not isinstance(data['new'], basestring):
-        return {'ok': False, 'error': 'Missing argument "new"'}
-    new_phone = data['new']
-    if not len(new_phone) > 9:
-        return {'ok': False, 'error': 'Phone number is too short'}
-    e = Es.by_id(_id(data.get('id')))
-    if e is None:
-        return {'ok': False, 'error': 'Entity not found'}
-    e.update_primary_telephone(new_phone)
-    giedo.sync()
-    return {'ok': True}
-
-def entity_update_address(data, request):
-    """ Calls entity.update_address
-
-        >> {action:"entity_update_address",id:"4e6fcc85e60edf3dc0000270",
+    if (update_type == 'primary_email'):
+        """ >> {action:"entity_update_primary_email",id:"4e6fcc85e60edf3dc0000270",
+                    new:"giedo@univ.gov"} """
+        new_email = data['new']
+        if not email_re.match(new_email):
+            return {'ok': False, 'error': 'Not valid e-mail address'}
+        e.update_primary_email(new_email)
+    elif (update_type == 'primary_telephone'):
+        """ >> {action:"entity_update_primary_telephone",id:"4e6fcc85e60edf3dc0000270",
+                    new:"+31611223344"} """
+        new_phone = data['new']
+        if not len(new_phone) > 9:
+            return {'ok': False, 'error': 'Phone number is too short'}
+        e.update_primary_telephone(new_phone)
+    elif (update_type == 'address'):
+        """ >> {action:"entity_update_address",id:"4e6fcc85e60edf3dc0000270",
                     street:"Street",
                     number:"23",
                     zip:"1234AA",
-                    city:"Amsterdam"}
-        << {ok: true}
-      ( << {ok: false, error: "Permission denied"} ) """
-    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
-    if not is_secretariaat:
-        return {'ok': False, 'error': 'Permission denied'}
-    for attr in ('id', 'street', 'number', 'zip', 'city'):
-        if attr not in data or not isinstance(data[attr], basestring):
-            return {'ok': False, 'error': 'Missing argument "%s"' % attr}
-    e = Es.by_id(_id(data.get('id')))
-    if e is None:
-        return {'ok': False, 'error': 'Entity not found'}
-    e.update_address(data['street'], data['number'], data['zip'], data['city'])
+                    city:"Amsterdam"} """
+        e.update_address(data['street'], data['number'], data['zip'], data['city'])
+    else:
+        return {'ok': False, 'error': 'Unknown update type: "%s"' % update_type}
+
     giedo.sync()
     return {'ok': True}
+
+def entity_update_primary_email(data, request):
+    """ Calls entity.update_primary_email via entity_update """
+    return entity_update('primary_email', data, request)
+
+def entity_update_primary_telephone(data, request):
+    """ Calls entity.update_primary_telephone via entity_update """
+    return entity_update('primary_telephone', data, request)
+
+def entity_update_address(data, request):
+    """ Calls entity.update_address via entity_update """
+    return entity_update('address', data, request)
+
 
 ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
