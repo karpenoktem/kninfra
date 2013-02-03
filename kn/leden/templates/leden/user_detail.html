@@ -145,17 +145,17 @@
                                 return false;
                         }
                          addr_street = $.trim(addr[0]);
-                         addr_num    = $.trim(addr[1]);
-                         addr_postal = $.trim(addr[2]);
+                         addr_number = $.trim(addr[1]);
+                         addr_zip    = $.trim(addr[2]);
                          addr_city   = $.trim(addr[3]);
                          $.post('{% url leden-api %}', {
                                 'csrfmiddlewaretoken': csrf_token,
                                 data: JSON.stringify({
                                         action: 'entity_update_address',
                                         street: addr_street,
-                                        streetnum: addr_num,
-                                        postal: addr_postal,
-                                        city: addr_city,
+                                        number: addr_number,
+                                        zip   : addr_zip,
+                                        city  : addr_city,
                                         id: '{{ object.id }}'})
                                 }, function(data) {
                                         if(data.ok)
