@@ -127,7 +127,10 @@ def entity_update_address(data, request):
     """ Calls entity.update_address
 
         >> {action:"entity_update_address",id:"4e6fcc85e60edf3dc0000270",
-                    new:"Street, number, postal code, city"}
+                    street:"Street",
+                    streetnum:"23",
+                    postal:"1234AA",
+                    city:"Amsterdam"}
         << {ok: true}
       ( << {ok: false, error: "Permission denied"} ) """
     is_secretariaat = 'secretariaat' in request.user.cached_groups_names
@@ -135,19 +138,19 @@ def entity_update_address(data, request):
         return {'ok': False, 'error': 'Permission denied'}
     if not 'id' in data or not isinstance(data['id'], basestring):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if not 'new' in data or not isinstance(data['new'], basestring):
-        return {'ok': False, 'error': 'Missing argument "new"'}
-    if not data['new'].count(',') == 3:
-        return {'ok': False, 'error': 'Expected input: street, number, postal code, city'}
-    new_entries = data['new'].split(',');
-    new_street = new_entries[0].strip(', ');
-    new_number = new_entries[1].strip(', ');
-    new_pc     = new_entries[2].strip(', ');
-    new_city   = new_entries[3].strip(', ');
+    if not 'street' in data or not isinstance(data['street'], basestring):
+        return {'ok': False, 'error': 'Missing argument "street"'}
+    if not 'streetnum' in data or not isinstance(data['streetnum'], basestring):
+        return {'ok': False, 'error': 'Missing argument "streetnum"'}
+    if not 'postal' in data or not isinstance(data['postal'], basestring):
+        return {'ok': False, 'error': 'Missing argument "postal"'}
+    if not 'city' in data or not isinstance(data['city'], basestring):
+        return {'ok': False, 'error': 'Missing argument "city"'}
+    print data
     e = Es.by_id(_id(data.get('id')))
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
-    e.update_address(new_street, new_number, new_pc, new_city)
+    e.update_address(data['street'], data['streetnum'], data['postal'], data['city'])
     giedo.sync()
     return {'ok': True}
 
