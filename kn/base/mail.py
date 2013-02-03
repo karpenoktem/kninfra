@@ -3,7 +3,15 @@ import django.core.mail
 
 from kn import settings
 
-def render_then_email(template, to, ctx={}, cc=[], bcc=[], from_email=None,
+def get_template_convert_slashes(name):
+    """ Just like django.template.loader.get_template, but removes newlines
+            preceded by slashes. """
+    template, origin = django.template.loader.find_template(name)
+    template = template.replace('\\\n', '')
+    return django.template.loader.get_template_from_string(template,
+                                                            origin, name)
+
+def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
                         reply_to=None):
     """ Render an e-mail from a template and send it. """
     # Normalize arguments
@@ -14,7 +22,7 @@ def render_then_email(template, to, ctx={}, cc=[], bcc=[], from_email=None,
     if isinstance(bcc, basestring):
         bcc = [bcc]
     # Render template
-    template = django.template.loader.get_template(template)
+    template = get_template_convert_slashes(template_name)
     rendered_nodes = {}
     ctx['BASE_URL'] = settings.BASE_URL
     context = django.template.Context(ctx)
