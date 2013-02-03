@@ -92,7 +92,24 @@
 	{% endif %}
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names %}
 	{% if object.telephones %}
-	<dt>Telefoonnummer</dt>
+        <dt>Telefoonnummer
+        {% if "secretariaat" in user.cached_groups_names %}
+        <button onclick="var new_phone = prompt('Nieuw telefoonnummer');
+                         if (!new_phone) return false;
+                         $.post('{% url leden-api %}', {
+                                'csrfmiddlewaretoken': csrf_token,
+                                data: JSON.stringify({
+                                        action: 'entity_update_primary_telephone',
+                                        new: new_phone,
+                                        id: '{{ object.id }}'})
+                                }, function(data) {
+                                        if(data.ok)
+                                                window.location.reload();
+                                        else
+                                                alert(data.error);
+                                }); return false;">Wijzig telefoonnummer</button>
+        {% endif %}{# "secretariaat" in user.cached_groups_names #}
+        </dt>
         <dd>
         <ul>
         {% for t in object.telephones %}
