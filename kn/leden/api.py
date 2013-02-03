@@ -136,17 +136,9 @@ def entity_update_address(data, request):
     is_secretariaat = 'secretariaat' in request.user.cached_groups_names
     if not is_secretariaat:
         return {'ok': False, 'error': 'Permission denied'}
-    if not 'id' in data or not isinstance(data['id'], basestring):
-        return {'ok': False, 'error': 'Missing argument "id"'}
-    if not 'street' in data or not isinstance(data['street'], basestring):
-        return {'ok': False, 'error': 'Missing argument "street"'}
-    if not 'number' in data or not isinstance(data['number'], basestring):
-        return {'ok': False, 'error': 'Missing argument "number"'}
-    if not 'zip' in data or not isinstance(data['zip'], basestring):
-        return {'ok': False, 'error': 'Missing argument "zip"'}
-    if not 'city' in data or not isinstance(data['city'], basestring):
-        return {'ok': False, 'error': 'Missing argument "city"'}
-    print data
+    for attr in ('id', 'street', 'number', 'zip', 'city'):
+        if attr not in data or not isinstance(data[attr], basestring):
+            return {'ok': False, 'error': 'Missing argument "%s"' % attr}
     e = Es.by_id(_id(data.get('id')))
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
