@@ -123,12 +123,41 @@ def entity_update_primary_telephone(data, request):
     giedo.sync()
     return {'ok': True}
 
+def entity_update_address(data, request):
+    """ Calls entity.update_address
+
+        >> {action:"entity_update_address",id:"4e6fcc85e60edf3dc0000270",
+                    new:"Street, number, postal code, city"}
+        << {ok: true}
+      ( << {ok: false, error: "Permission denied"} ) """
+    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
+    if not is_secretariaat:
+        return {'ok': False, 'error': 'Permission denied'}
+    if not 'id' in data or not isinstance(data['id'], basestring):
+        return {'ok': False, 'error': 'Missing argument "id"'}
+    if not 'new' in data or not isinstance(data['new'], basestring):
+        return {'ok': False, 'error': 'Missing argument "new"'}
+    if not data['new'].count(',') == 3:
+        return {'ok': False, 'error': 'Expected input: street, number, postal code, city'}
+    new_entries = data['new'].split(',');
+    new_street = new_entries[0].strip(', ');
+    new_number = new_entries[1].strip(', ');
+    new_pc     = new_entries[2].strip(', ');
+    new_city   = new_entries[3].strip(', ');
+    e = Es.by_id(_id(data.get('id')))
+    if e is None:
+        return {'ok': False, 'error': 'Entity not found'}
+    e.update_address(new_street, new_number, new_pc, new_city)
+    giedo.sync()
+    return {'ok': True}
+
 ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
         'entities_by_keyword': entities_by_keyword,
         'close_note': close_note,
         'entity_update_primary_email':  entity_update_primary_email,
         'entity_update_primary_telephone':  entity_update_primary_telephone,
+        'entity_update_address':  entity_update_address,
         None: no_such_action,
         }
 
