@@ -1,0 +1,85 @@
+{% block from %}
+Secretaris Karpe Noktem <secretaris@karpenoktem.nl>
+{% endblock %}
+
+{% block subject %}
+[Karpe Noktem] Jouw gegevens
+{% endblock %}
+
+{% block plain %}
+Beste {{ u.first_name }},
+
+Welkom bij Karpe Noktem!
+
+Wij hebben de volgende gegevens van jouw inschrijfformulier
+overgenomen.  Kun je controleren of deze kloppen?
+
+Bij voorbaat dank,
+
+ Astrid van Roosmalen
+
+
+Personalia  {{ u.full_name }}
+-----------------------------------------------------------
+
+  Voornaam              {{ u.first_name }}
+  Achternaam            {{ u.last_name }}
+  Geslacht              {{ u.gender }}
+  Geboortedatum         {{ u.dateOfBirth.date }}
+  Gebruikersnamen       {{ u.names|join:" " }}
+
+  Telefoonnummer(s)
+{% for t in u.telephones %}\
+    * {{ t.number }}\
+{% if t.from and t.until %}\
+ [ van {{ t.from.date }} tot {{ t.until.date }} ]
+{% else %}{% if t.from %}\
+ [ van {{ t.from.date }} ]
+{% else %}{% if t.until %}\
+ [ tot {{ t.until.date }} ]
+{% endif %}{% endif %}{% endif %}\
+{% endfor %}
+
+  E-Mail adres(sen)
+{% for a in u.emailAddresses %}\
+    * {{ a.email }}\
+{% if a.from and a.until %}\
+ [ van {{ a.from.date }} tot {{ a.until.date }} ]
+{% else %}{% if a.from %}\
+ [ van {{ a.from.date }} ]
+{% else %}{% if a.until %}\
+ [ tot {{ a.until.date }} ]
+{% endif %}{% endif %}{% endif %}\
+{% endfor %}
+
+  Studies
+{% for study in u.studies %}\
+{% if study.from and study.until %}\
+    * Van {{study.from.date}} tot {{study.until.date}} studeerde je\
+{% else %}{% if study.from %}\
+    * Vanaf {{study.from.date}} studeer je\
+{% else %}{% if study.until %}\
+    * Tot {{study.until.date}} studeerde je\
+{% else %}\
+    * Je studeert\
+{% endif %}{% endif %}{% endif %}
+      Studie            {{ study.study.humanName }}
+      Instituut         {{ study.institute.humanName }}
+      Studentnummer     {{ study.number }}
+{% endfor %}
+
+  Adres(sen)
+{% for a in u.addresses %}\
+    * {% if a.from and a.until %}\
+[ van {{ a.from.date }} tot {{ a.until.date }} ]
+{% else %}{% if a.from %}\
+[ van {{ a.from.date }} ]
+{% else %}{% if a.until %}\
+[ tot {{ a.until.date }} ]
+{% endif %}{% endif %}{% endif %}\
+Straat            {{ a.street }} 
+      Nummer            {{ a.number }}
+      Postcode          {{ a.zip }}
+      Stad              {{ a.city }}
+{% endfor %}
+{% endblock %}
