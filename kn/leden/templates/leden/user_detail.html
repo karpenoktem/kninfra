@@ -134,10 +134,10 @@
         <dt>Adres
         {% if "secretariaat" in user.cached_groups_names %}
         <button onclick="var new_addr = prompt('Nieuw adres (straatnaam, nummer, postcode, plaats)',
-                        '{{ object.addresses.0.street }}, \
-{{ object.addresses.0.number }}, \
-{{ object.addresses.0.zip    }}, \
-{{ object.addresses.0.city   }}');
+                        '{{ object.primary_address.street }}, \
+{{ object.primary_address.number }}, \
+{{ object.primary_address.zip    }}, \
+{{ object.primary_address.city   }}');
                          if (!new_addr) return false;
                          $.post('{% url leden-api %}', {
                                 'csrfmiddlewaretoken': csrf_token,
