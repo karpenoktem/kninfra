@@ -99,11 +99,36 @@ def entity_update_primary_email(data, request):
     giedo.sync()
     return {'ok': True}
 
+def entity_update_primary_telephone(data, request):
+    """ Calls entity.update_primary_telephone
+
+        >> {action:"entity_update_primary_telephone",id:"4e6fcc85e60edf3dc0000270",
+                    new:"+31611223344"}
+        << {ok: true}
+      ( << {ok: false, error: "Permission denied"} ) """
+    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
+    if not is_secretariaat:
+        return {'ok': False, 'error': 'Permission denied'}
+    if not 'id' in data or not isinstance(data['id'], basestring):
+        return {'ok': False, 'error': 'Missing argument "id"'}
+    if not 'new' in data or not isinstance(data['new'], basestring):
+        return {'ok': False, 'error': 'Missing argument "new"'}
+    new_phone = data['new']
+    if not len(new_phone) > 9:
+        return {'ok': False, 'error': 'Phone number is too short'}
+    e = Es.by_id(_id(data.get('id')))
+    if e is None:
+        return {'ok': False, 'error': 'Entity not found'}
+    e.update_primary_telephone(new_phone)
+    giedo.sync()
+    return {'ok': True}
+
 ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
         'entities_by_keyword': entities_by_keyword,
         'close_note': close_note,
         'entity_update_primary_email':  entity_update_primary_email,
+        'entity_update_primary_telephone':  entity_update_primary_telephone,
         None: no_such_action,
         }
 
