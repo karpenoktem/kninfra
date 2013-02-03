@@ -128,8 +128,8 @@ def entity_update_address(data, request):
 
         >> {action:"entity_update_address",id:"4e6fcc85e60edf3dc0000270",
                     street:"Street",
-                    streetnum:"23",
-                    postal:"1234AA",
+                    number:"23",
+                    zip:"1234AA",
                     city:"Amsterdam"}
         << {ok: true}
       ( << {ok: false, error: "Permission denied"} ) """
@@ -140,17 +140,17 @@ def entity_update_address(data, request):
         return {'ok': False, 'error': 'Missing argument "id"'}
     if not 'street' in data or not isinstance(data['street'], basestring):
         return {'ok': False, 'error': 'Missing argument "street"'}
-    if not 'streetnum' in data or not isinstance(data['streetnum'], basestring):
-        return {'ok': False, 'error': 'Missing argument "streetnum"'}
-    if not 'postal' in data or not isinstance(data['postal'], basestring):
-        return {'ok': False, 'error': 'Missing argument "postal"'}
+    if not 'number' in data or not isinstance(data['number'], basestring):
+        return {'ok': False, 'error': 'Missing argument "number"'}
+    if not 'zip' in data or not isinstance(data['zip'], basestring):
+        return {'ok': False, 'error': 'Missing argument "zip"'}
     if not 'city' in data or not isinstance(data['city'], basestring):
         return {'ok': False, 'error': 'Missing argument "city"'}
     print data
     e = Es.by_id(_id(data.get('id')))
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
-    e.update_address(data['street'], data['streetnum'], data['postal'], data['city'])
+    e.update_address(data['street'], data['number'], data['zip'], data['city'])
     giedo.sync()
     return {'ok': True}
 
