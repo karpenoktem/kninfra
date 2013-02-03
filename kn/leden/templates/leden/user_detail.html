@@ -139,15 +139,15 @@
 {{ object.primary_address.zip    }}, \
 {{ object.primary_address.city   }}');
                          if (!new_addr) return false;
-                         addr = new_addr.split(',');
+                         var addr = new_addr.split(',');
                          if (addr.length != 4) {
                                 alert('Er mist een waarde (verwacht: 4, gekregen: '+addr.length+')');
                                 return false;
                         }
-                         addr_street = $.trim(addr[0]);
-                         addr_number = $.trim(addr[1]);
-                         addr_zip    = $.trim(addr[2]);
-                         addr_city   = $.trim(addr[3]);
+                         var addr_street = $.trim(addr[0]);
+                         var addr_number = $.trim(addr[1]);
+                         var addr_zip    = $.trim(addr[2]);
+                         var addr_city   = $.trim(addr[3]);
                          $.post('{% url leden-api %}', {
                                 'csrfmiddlewaretoken': csrf_token,
                                 data: JSON.stringify({
