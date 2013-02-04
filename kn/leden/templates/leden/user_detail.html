@@ -52,8 +52,8 @@
                                 'csrfmiddlewaretoken': csrf_token,
                                 data: JSON.stringify({
                                         action: 'entity_update_primary',
-                                        action_type: 'email',
-                                        new: new_address,
+                                        new: { type : 'email',
+                                               value: new_address },
                                         id: '{{ object.id }}'})
                                 }, function(data) {
                                         if(data.ok)
@@ -101,8 +101,8 @@
                                 'csrfmiddlewaretoken': csrf_token,
                                 data: JSON.stringify({
                                         action: 'entity_update_primary',
-                                        action_type: 'telephone',
-                                        new: new_phone,
+                                        new: { type : 'telephone',
+                                               value: new_phone },
                                         id: '{{ object.id }}'})
                                 }, function(data) {
                                         if(data.ok)
@@ -154,11 +154,11 @@
                                 'csrfmiddlewaretoken': csrf_token,
                                 data: JSON.stringify({
                                         action: 'entity_update_primary',
-                                        action_type: 'address',
-                                        street: addr_street,
-                                        number: addr_number,
-                                        zip   : addr_zip,
-                                        city  : addr_city,
+                                        new: { type  : 'address',
+                                               street: addr_street,
+                                               number: addr_number,
+                                               zip   : addr_zip,
+                                               city  : addr_city },
                                         id: '{{ object.id }}'})
                                 }, function(data) {
                                         if(data.ok)
