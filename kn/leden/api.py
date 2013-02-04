@@ -82,7 +82,7 @@ def close_note(data, request):
              [Es.by_name('secretariaat').canonical_full_email]).send()
     return {'ok': True}
 
-def entity_update(update_type, data, request):
+def entity_update_primary(update_type, data, request):
     """ Updates an entity
             >> (see below)
 
@@ -93,7 +93,7 @@ def entity_update(update_type, data, request):
         return {'ok': False, 'error': 'Permission denied'}
     if not 'id' in data or not isinstance(data['id'], basestring):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if update_type in ('primary_email', 'primary_telephone'):
+    if update_type in ('email', 'telephone'):
         if not 'new' in data or not isinstance(data['new'], basestring):
             return {'ok': False, 'error': 'Missing argument "new"'}
     if update_type in ('address'):
@@ -105,14 +105,14 @@ def entity_update(update_type, data, request):
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
 
-    if (update_type == 'primary_email'):
+    if (update_type == 'email'):
         """ >> {action:"entity_update_primary_email",id:"4e6fcc85e60edf3dc0000270",
                     new:"giedo@univ.gov"} """
         new_email = data['new']
         if not email_re.match(new_email):
             return {'ok': False, 'error': 'Not valid e-mail address'}
         e.update_primary_email(new_email)
-    elif (update_type == 'primary_telephone'):
+    elif (update_type == 'telephone'):
         """ >> {action:"entity_update_primary_telephone",id:"4e6fcc85e60edf3dc0000270",
                     new:"+31611223344"} """
         new_phone = data['new']
@@ -149,9 +149,7 @@ ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
         'entities_by_keyword': entities_by_keyword,
         'close_note': close_note,
-        'entity_update_primary_email':  entity_update_primary_email,
-        'entity_update_primary_telephone':  entity_update_primary_telephone,
-        'entity_update_address':  entity_update_address,
+        'entity_update_primary':  entity_update_primary,
         None: no_such_action,
         }
 
