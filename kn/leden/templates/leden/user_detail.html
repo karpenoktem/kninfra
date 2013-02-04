@@ -51,7 +51,8 @@
                          $.post('{% url leden-api %}', {
                                 'csrfmiddlewaretoken': csrf_token,
                                 data: JSON.stringify({
-                                        action: 'entity_update_primary_email',
+                                        action: 'entity_update_primary',
+                                        action_type: 'email',
                                         new: new_address,
                                         id: '{{ object.id }}'})
                                 }, function(data) {
@@ -99,7 +100,8 @@
                          $.post('{% url leden-api %}', {
                                 'csrfmiddlewaretoken': csrf_token,
                                 data: JSON.stringify({
-                                        action: 'entity_update_primary_telephone',
+                                        action: 'entity_update_primary',
+                                        action_type: 'telephone',
                                         new: new_phone,
                                         id: '{{ object.id }}'})
                                 }, function(data) {
@@ -151,7 +153,8 @@
                          $.post('{% url leden-api %}', {
                                 'csrfmiddlewaretoken': csrf_token,
                                 data: JSON.stringify({
-                                        action: 'entity_update_address',
+                                        action: 'entity_update_primary',
+                                        action_type: 'address',
                                         street: addr_street,
                                         number: addr_number,
                                         zip   : addr_zip,
