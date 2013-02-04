@@ -13,9 +13,16 @@ from kn.leden import giedo
 def view(request):
     data = json.loads(request.REQUEST.get('data', {}))
     action = data.get('action')
+    action_type = None
+    if not data.get('action_type') == None:
+        action_type = data.get('action_type')
+    print action_type
     handler = ACTION_HANDLER_MAP.get(action,
                     ACTION_HANDLER_MAP[None])
-    return JsonHttpResponse(handler(data, request))
+    if not action_type == None:
+        return JsonHttpResponse(handler(action_type, data, request))
+    else:
+        return JsonHttpResponse(handler(data, request))
 
 def no_such_action(data, request):
     return {'error': 'No such action'}
