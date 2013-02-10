@@ -1,0 +1,8 @@
+{% block subject %}
+Moderatiemodus op {{ name }} is verlengd door {{ user.name }}
+{% endblock %}
+
+{% block plain %}
+De moderatiemodus op {{ name }} is verlengd door {{ user.humanName }}.
+Deze loop, indien niet verder verlengd, af om {{ until.time }}.
+{% endblock %}

@@ -1,0 +1,10 @@
+{% block subject %}
+Notitie gesloten
+{% endblock %}
+
+{% block plain %}
+De volgende notitie van {{ note.by.humanName }} op {{ note.on.humanName }}
+is door {{ note.closed_by.humanName }} gesloten.
+
+   {{ note.note }}
+{% endblock %}

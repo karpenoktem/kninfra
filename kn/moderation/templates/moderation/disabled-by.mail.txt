@@ -1,0 +1,7 @@
+{% block subject %}
+Moderatiemodus op {{ name }} is uitgezet door {{ user.name }}
+{% endblock %}
+
+{% block plain %}
+De moderatiemodus op {{ name }} is uitgezet door {{ user.humanName }}.
+{% endblock %}

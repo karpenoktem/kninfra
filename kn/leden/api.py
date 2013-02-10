@@ -1,10 +1,10 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.core.mail import EmailMessage
 from django.core.validators import email_re
 
 from kn.base.http import JsonHttpResponse
+from kn.base.mail import render_then_email
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
 from kn.leden import giedo
@@ -65,14 +65,9 @@ def close_note(data, request):
     if not note.open:
         return {'ok': False, 'error': 'Note already closed'}
     note.close(_id(request.user))
-    EmailMessage(
-            "Notitie gesloten",
-            ("De volgende notitie van %s op %s:\r\n\r\n%s\r\n\r\n"+
-             "is door %s gesloten") % (
-                    unicode(note.by.humanName), unicode(note.on.humanName),
-                    unicode(note.note), unicode(note.closed_by.humanName)),
-             'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
-             [Es.by_name('secretariaat').canonical_full_email]).send()
+    render_then_email('leden/note-closed.mail.txt',
+                        Es.by_name('secretariaat').canonical_full_email, {
+                            'note': note})
     return {'ok': True}
 
 def entity_update_primary_email(data, request):

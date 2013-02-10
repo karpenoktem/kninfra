@@ -2,6 +2,7 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from kn.base.text import humanized_enum
+from kn.base.mail import render_then_email
 from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
 from kn.leden.utils import find_name_for_user
 from kn.leden import giedo
@@ -18,7 +19,6 @@ from django.core.servers.basehttp import FileWrapper
 from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
-from django.core.mail import EmailMessage
 from os import path
 import re
 from itertools import chain
@@ -520,19 +520,10 @@ def user_reset_password(request, _id):
     pwd = pseudo_randstr()
     u.set_password(pwd)
     giedo.change_password(str(u.name), pwd, pwd)
-    email = EmailMessage(
-        "[KN] Nieuw wachtwoord",
-        ("Beste %s,\n\n"+
-            "Jouw wachtwoord is gereset.  Je kunt op "+
-            "http://karpenoktem.nl/smoelen inloggen met:\n"+
-         "  gebruikersnaam     %s\n"+
-         "  wachtwoord         %s\n\n"+
-         "Met een vriendelijke groet,\n\n"+
-         "  Het Karpe Noktem Smoelenboek") % (
-              u.first_name, str(u.name), pwd),
-        'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
-        [u.canonical_full_email])
-    email.send()
+    render_then_email("leden/reset-password.mail.txt",
+                        u.canonical_full_email, {
+                            'user': u,
+                            'password': pwd})
     request.user.push_message("Wachtwoord gereset!")
     return redirect_to_referer(request)
 
@@ -546,13 +537,11 @@ def note_add(request):
     if on is None:
         raise Http404
     on.add_note(request.POST['note'], request.user)
-    email = EmailMessage(
-        "Nieuwe notitie",
-        "Door %s is de volgende notitie geplaatst op %s:\r\n\r\n%s" % (
-            request.user.full_name, unicode(on.humanName),
-            request.POST['note']),
-        'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
-        [Es.by_name('secretariaat').canonical_full_email]).send()
+    render_then_email("leden/new-note.mail.txt",
+                        Es.by_name('secretariaat').canonical_full_email, {
+                            'user': request.user,
+                            'note': request.POST['note'],
+                            'on': on})
     return redirect_to_referer(request)
 
 @login_required
