@@ -15,9 +15,11 @@ def unix_setpass(cilia, user, password):
     pwent = pwd.getpwnam(user)
     if pwent.pw_gid != kn_gid:
         return {'error': "Permission denied. Gid is not kn"}
-    crypthash = crypt.crypt(password, pseudo_randstr(2))
-    subprocess.call(['usermod', '-p', crypthash, user])
-    return {'success': True}
+    ph = subprocess.Popen(['chpasswd'], stdin=subprocess.PIPE)
+    ph.communicate("%s:%s\n" % (user, password))
+    if ph.returncode == 0:
+        return {'success': True}
+    return {'success': False}
 
 def set_unix_map(cilia, _map):
     # First get the list of all current users

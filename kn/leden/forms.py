@@ -28,12 +28,12 @@ class EntityChoiceFieldWidget(forms.TextInput):
             u'''<input type='hidden' id=%(id)s name=%(name)s />
                 <script type='text/javascript'>//<!--
                 $(function(){
-                    create_entityChoiceField(%(id)s, %(type)s);
+                    create_entityChoiceField(%(id)s, %(params)s);
                     %(code_set_value)s
                 });//--></script>'''
                 %{'name': json.dumps(name),
                   'id': json.dumps(final_attrs['id']),
-                  'type': json.dumps(self.type),
+                  'params': json.dumps({'type': self.type}),
                   'code_set_value': code_set_value})
 
 
