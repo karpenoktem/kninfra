@@ -132,19 +132,6 @@ def entity_update_primary(data, request):
     giedo.sync()
     return {'ok': True}
 
-def entity_update_primary_email(data, request):
-    """ Calls entity.update_primary_email via entity_update """
-    return entity_update('primary_email', data, request)
-
-def entity_update_primary_telephone(data, request):
-    """ Calls entity.update_primary_telephone via entity_update """
-    return entity_update('primary_telephone', data, request)
-
-def entity_update_address(data, request):
-    """ Calls entity.update_address via entity_update """
-    return entity_update('address', data, request)
-
-
 ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
         'entities_by_keyword': entities_by_keyword,
