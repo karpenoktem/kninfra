@@ -14,17 +14,19 @@
 	<dt>E-Maillijst</dt>
         <dd><a href="mailto:{{ object.canonical_email }}">
                 {{ object.canonical_email }}</a></dd>
-        {% if chiefs|length > 0 %}
+
+        {% if chiefs %}
         <dt>{% if chiefs|length > 1 %}Hoofden{% else %}Hoofd{% endif %}</dt>
         <dd>
         {% for chief in chiefs %}
         {% if not forloop.first %}<br/>{% endif %}
         <a href="{{ chief.who.get_absolute_url }}">{{ chief.who.humanName }}</a>
         {{ chief|rel_when }}
-        {% endfor %}
+        {% endfor %}{# chief in chiefs #}
         </dd>
-        {% endif %}
-        {% if pipos|length > 0 %}
+        {% endif %}{# chiefs #}
+
+        {% if pipos %}
         <dt>
         {% if pipos|length > 1 %}
         Bestuurspipo's
@@ -37,9 +39,9 @@
         {% if not forloop.first %}<br/>{% endif %}
         <a href="{{ pipo.who.get_absolute_url }}">{{ pipo.who.humanName }}</a>
         {{ pipo|rel_when }}
-        {% endfor %}
+        {% endfor %}{# pipo in pipos #}
         </dd>
-        {% endif %}
+        {% endif %}{# pipos #}
 </dl>
 {% if isFreeToJoin %}
 {% if relation_with_group %}

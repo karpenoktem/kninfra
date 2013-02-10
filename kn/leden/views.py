@@ -103,11 +103,11 @@ def _entity_detail(request, e):
            'chiefs': [],
            'pipos': [] }
     for r in rrelated:
-        if r['how'] != None:
-            if str(r['how'].name) == '!brand-hoofd' and Es.relation_is_active(r):
+        if r['how'] and Es.relation_is_active(r):
+            if str(r['how'].name) == '!brand-hoofd':
                 r['hidden'] = True
                 ctx['chiefs'].append(r)
-            if str(r['how'].name) == '!brand-bestuurspipo' and Es.relation_is_active(r):
+            if str(r['how'].name) == '!brand-bestuurspipo':
                 r['hidden'] = True
                 ctx['pipos'].append(r)
     # Is request.user allowed to add (r)relations?
