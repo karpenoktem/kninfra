@@ -52,7 +52,7 @@ Personalia  {{ u.full_name }}
 {% endif %}{% endif %}{% endif %}\
 {% endfor %}
 
-  Studies
+  Studie(s)
 {% for study in u.studies %}\
 {% if study.from and study.until %}\
     * Van {{study.from.date}} tot {{study.until.date}} studeerde je\
