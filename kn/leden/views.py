@@ -99,7 +99,15 @@ def _entity_detail(request, e):
            'rrelated': rrelated,
            'now': now(),
            'tags': sorted(tags, Es.entity_cmp_humanName),
-           'object': e}
+           'object': e,
+           'chiefs': [],
+           'pipos': [] }
+    for r in rrelated:
+        if r['how'] != None:
+            if str(r['how'].name) == '!brand-hoofd' and r['until'] == None:
+                ctx['chiefs'].append(r)
+            if str(r['how'].name) == '!brand-bestuurspipo' and r['until'] == None:
+                ctx['pipos'].append(r)
     # Is request.user allowed to add (r)relations?
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):

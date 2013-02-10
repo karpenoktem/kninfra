@@ -72,6 +72,9 @@ tot {{ r.until.date }}
 </ul><h4>Tot jaar {{ r.until_year }}</h4><ul>
 {% endif %}
 {% endifchanged %}
+{% if not r.until_year and r.how.name %}
+{# Deze al in aparte kopjes bovenaan #} 
+{% else %}
 <li>
 <a href="{{ r.who.get_absolute_url }}">{{ r.who.humanName }}</a>, 
 {% if r.how %}
@@ -93,6 +96,7 @@ tot {{ r.until.date }}
 {% csrf_token %}
 <input type="submit" value="be&euml;indig" />
 </form>
+{% endif %}
 {% endif %}
 {% endfor %}
 </li>
