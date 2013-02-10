@@ -168,24 +168,5 @@
 	</dd>
 	{% endif %}
 </dl>
-{% if comms %}
-	<h2>Groepen</h2>
-	<ul>
-	{% for comm in comms %}
-	<li><a href="{{ comm.oldkngroup.get_absolute_url }}"
-		>{{ comm.oldkngroup.humanName }}</a></li>
-	{% endfor %}
-	</ul>
-{% endif %}
-{% if oldseats %}
-	<h2>Zetels</h2>
-	<ul>
-		{% for oldseat in oldseats %}
-		<li>{{ oldseat.humanName }} {{ oldseat.group.genitive_prefix }}
-		<a href="{{ oldseat.group.get_absolute_url }}"
-			>{{ oldseat.group.humanName }}</a></li>
-		{% endfor %}
-	</ul>
-{% endif %}
 {{ block.super }}
 {% endblock %}
