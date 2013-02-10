@@ -118,12 +118,36 @@ def entity_update_primary_telephone(data, request):
     giedo.sync()
     return {'ok': True}
 
+def entity_update_address(data, request):
+    """ Calls entity.update_address
+
+        >> {action:"entity_update_address",id:"4e6fcc85e60edf3dc0000270",
+                    street:"Street",
+                    number:"23",
+                    zip:"1234AA",
+                    city:"Amsterdam"}
+        << {ok: true}
+      ( << {ok: false, error: "Permission denied"} ) """
+    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
+    if not is_secretariaat:
+        return {'ok': False, 'error': 'Permission denied'}
+    for attr in ('id', 'street', 'number', 'zip', 'city'):
+        if attr not in data or not isinstance(data[attr], basestring):
+            return {'ok': False, 'error': 'Missing argument "%s"' % attr}
+    e = Es.by_id(_id(data.get('id')))
+    if e is None:
+        return {'ok': False, 'error': 'Entity not found'}
+    e.update_address(data['street'], data['number'], data['zip'], data['city'])
+    giedo.sync()
+    return {'ok': True}
+
 ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
         'entities_by_keyword': entities_by_keyword,
         'close_note': close_note,
         'entity_update_primary_email':  entity_update_primary_email,
         'entity_update_primary_telephone':  entity_update_primary_telephone,
+        'entity_update_address':  entity_update_address,
         None: no_such_action,
         }
 

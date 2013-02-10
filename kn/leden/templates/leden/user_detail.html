@@ -131,7 +131,40 @@
         {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names #}
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names %}
 	{% if object.addresses %}
-	<dt>Adres</dt>
+        <dt>Adres
+        {% if "secretariaat" in user.cached_groups_names %}
+        <button onclick="var new_addr = prompt('Nieuw adres (straatnaam, nummer, postcode, plaats)',
+                        '{{ object.primary_address.street }}, \
+{{ object.primary_address.number }}, \
+{{ object.primary_address.zip    }}, \
+{{ object.primary_address.city   }}');
+                         if (!new_addr) return false;
+                         var addr = new_addr.split(',');
+                         if (addr.length != 4) {
+                                alert('Er mist een waarde (verwacht: 4, gekregen: '+addr.length+')');
+                                return false;
+                        }
+                         var addr_street = $.trim(addr[0]);
+                         var addr_number = $.trim(addr[1]);
+                         var addr_zip    = $.trim(addr[2]);
+                         var addr_city   = $.trim(addr[3]);
+                         $.post('{% url leden-api %}', {
+                                'csrfmiddlewaretoken': csrf_token,
+                                data: JSON.stringify({
+                                        action: 'entity_update_address',
+                                        street: addr_street,
+                                        number: addr_number,
+                                        zip   : addr_zip,
+                                        city  : addr_city,
+                                        id: '{{ object.id }}'})
+                                }, function(data) {
+                                        if(data.ok)
+                                                window.location.reload();
+                                        else
+                                                alert(data.error);
+                                }); return false;">Wijzig adres</button>
+        {% endif %}{# "secretariaat" in user.cached_groups_names #}
+        </dt>
         <dd>
         <ul>
         {% for a in object.addresses %}
