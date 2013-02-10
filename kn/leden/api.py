@@ -84,51 +84,47 @@ def entity_update_primary(data, request):
     is_secretariaat = 'secretariaat' in request.user.cached_groups_names
     if not is_secretariaat:
         return {'ok': False, 'error': 'Permission denied'}
-    print data
-    if not 'id' in data or not isinstance(data['id'], basestring):
-        return {'ok': False, 'error': 'Missing argument "%s"' % attr}
-    if not 'new' in data or not len(data['new']) > 1:
-        return {'ok': False, 'error': 'Not enough arguments in "new"'}
-    update = data.get('new')
-    if not 'type' in update or not isinstance(update['type'], basestring):
-        return {'ok': False, 'error': 'Missing argument "new.type"'}
-
-    if update['type'] in ('email', 'telephone'):
-        if not 'value' in update or not isinstance(update['value'], basestring):
-            return {'ok': False, 'error': 'Missing argument "value"'}
-    if update['type'] in ('address'):
+    if 'id' not in data or not isinstance(data['id'], basestring):
+        return {'ok': False, 'error': 'Missing argument "id"' % attr}
+    if 'type' not in data or not isinstance(data['type'], basestring):
+        return {'ok': False, 'error': 'Missing argument "type"'}
+    if 'new' not in data:
+        return {'ok': False, 'error': 'Missing argument "new"'}
+    new = data['new']
+    typ = data['type']
+    if typ in ('email', 'telephone'):
+        if not isinstance(new, basestring):
+            return {'ok': False, 'error': '"new" should be a string'}
+    elif typ == 'address':
+        if not isinstance(new, dict):
+            return {'ok': False, 'error': '"new" should be a dict'}
         for attr in ('street', 'number', 'zip', 'city'):
-            if attr not in update or not isinstance(update[attr], basestring):
-                return {'ok': False, 'error': 'Missing argument "%s"' % attr}
-
+            if attr not in new or not isinstance(new[attr], basestring):
+                return {'ok': False, 'error': 'Missing argument "new.%s"'%attr}
     e = Es.by_id(data['id'])
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
-
-    if (update['type'] == 'email'):
+    if (typ == 'email'):
         """ >> {action:"entity_update_primary_email",id:"4e6fcc85e60edf3dc0000270",
                     new:"giedo@univ.gov"} """
-        new_email = update['value']
-        if not email_re.match(new_email):
+        if not email_re.match(new):
             return {'ok': False, 'error': 'Not valid e-mail address'}
-        e.update_primary_email(new_email)
-    elif (update['type'] == 'telephone'):
+        e.update_primary_email(new)
+    elif (typ == 'telephone'):
         """ >> {action:"entity_update_primary_telephone",id:"4e6fcc85e60edf3dc0000270",
                     new:"+31611223344"} """
-        new_phone = update['value']
-        if not len(new_phone) > 9:
+        if not len(new) > 9:
             return {'ok': False, 'error': 'Phone number is too short'}
-        e.update_primary_telephone(new_phone)
-    elif (update['type'] == 'address'):
+        e.update_primary_telephone(new)
+    elif (typ == 'address'):
         """ >> {action:"entity_update_address",id:"4e6fcc85e60edf3dc0000270",
                     street:"Street",
                     number:"23",
                     zip:"1234AA",
                     city:"Amsterdam"} """
-        e.update_address(update['street'], update['number'], update['zip'], update['city'])
+        e.update_address(new['street'], new['number'], new['zip'], new['city'])
     else:
-        return {'ok': False, 'error': 'Unknown update type: "%s"' % update['type']}
-
+        return {'ok': False, 'error': 'Unknown update type: "%s"' % typ}
     giedo.sync()
     return {'ok': True}
 
