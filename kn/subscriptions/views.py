@@ -11,6 +11,7 @@ from kn.subscriptions.forms import get_add_event_form
 from kn.base.mail import render_then_email
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
+import kn.utils.markdown
 from kn.leden.date import date_to_dt
 from kn.base.http import JsonHttpResponse
 from django.http import Http404, HttpResponseRedirect
@@ -250,6 +251,8 @@ def event_new_or_edit(request, edit=None):
                 'date': date_to_dt(fd['date']),
                 'owner': _id(fd['owner']),
                 'description': fd['description'],
+                'description_html': kn.utils.markdown.parser.convert(
+                                                fd['description']),
                 'mailBody': fd['mailBody'],
                 'subscribedByOtherMailBody': fd['subscribedByOtherMailBody'],
                 'confirmationMailBody': fd['confirmationMailBody'],
