@@ -1,4 +1,5 @@
 {% extends "leden/base.html" %}
+{% load leden %}
 
 {% block body %}
 
@@ -29,14 +30,7 @@ lid
 {% endif %}
 {{ r.with.genitive_prefix }}
 <a href="{{ r.with.get_absolute_url }}">{{ r.with.humanName }}</a>
-{% if r.from or r.until %}
-({% if r.from %}
-van {{ r.from.date }}
-{% endif %}
-{% if r.until %}
-tot {{ r.until.date }}
-{% endif %})
-{% endif %}
+{{ r|rel_when }}
 {% if r.may_end %}
 <form action="{% url relation-end _id=r.id %}" style="display:inline"
                 method="post">
@@ -79,14 +73,7 @@ tot {{ r.until.date }}
 {% else %}
 lid
 {% endif %}
-{% if r.from or r.until %}
-({% if r.from %}
-van {{ r.from.date }}
-{% endif %}
-{% if r.until %}
-tot {{ r.until.date }}
-{% endif %})
-{% endif %}
+{{ r|rel_when }}
 {% if r.may_end %}
 <form action="{% url relation-end _id=r.id %}" style="display:inline"
                 method="post">
