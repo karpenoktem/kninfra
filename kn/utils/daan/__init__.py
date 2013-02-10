@@ -26,7 +26,7 @@ class Daan(WhimDaemon):
         self.wiki_lock = threading.Lock()
         self.forum_lock = threading.Lock()
         self.update_knsite_lock = threading.Lock()
-        self.update_knforum_lock = threading.Lock()
+        self.update_knfotos_lock = threading.Lock()
         self.fotoadmin_lock = threading.Lock()
 
     def pre_mainloop(self):

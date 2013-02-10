@@ -170,6 +170,8 @@ def _api_confirm_subscription(request):
     subscription = event.get_subscription_of(request.user)
     if subscription is None:
         return JsonHttpResponse({'error': 'subscription not found'})
+    if not event.is_open:
+        return JsonHttpResponse({'error': 'event is closed'})
     # Confirm, if not confirmed already
     if subscription.confirmed:
         return JsonHttpResponse({'error': 'already confirmed'})
