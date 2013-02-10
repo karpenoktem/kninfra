@@ -66,6 +66,7 @@ lid
 </ul><h4>Tot jaar {{ r.until_year }}</h4><ul>
 {% endif %}
 {% endifchanged %}
+{% if not r.hidden %}
 <li>
 <a href="{{ r.who.get_absolute_url }}">{{ r.who.humanName }}</a>, 
 {% if r.how %}
@@ -80,7 +81,8 @@ lid
 {% csrf_token %}
 <input type="submit" value="be&euml;indig" />
 </form>
-{% endif %}
+{% endif %}{# r.may_end #}
+{% endif %}{# r.hidden #}
 {% endfor %}
 </li>
 </ul>
