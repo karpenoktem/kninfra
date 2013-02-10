@@ -22,6 +22,11 @@ class Cilia(WhimDaemon):
         self.samba_lock = threading.Lock()
         self.fotoadmin_lock = threading.Lock()
 
+    def pre_mainloop(self):
+        super(Cilia, self).pre_mainloop()
+        if hasattr(settings, 'INFRA_UID'):
+            os.chown(settings.CILIA_SOCKET, settings.INFRA_UID, -1)
+
     def handle(self, d):
         if d['type'] == 'unix':
             with self.unix_lock:
