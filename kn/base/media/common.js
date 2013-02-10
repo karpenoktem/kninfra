@@ -22,8 +22,12 @@ function entityChoiceField_set(id, objid) {
 
 function create_entityChoiceField(id, params) {
     if(!params) params = {};
-    $('#'+id).after("<input type='text' id='_"+id+"' />");
-    $('#_'+id).autocomplete({
+    if(!params.input_type) params.input_type = 'text';
+    $('#'+id).after("<input type='"+params.input_type+"' id='_"+id+"' />");
+    var box = $('#_'+id);
+    if(params.placeholder)
+        box.attr('placeholder', params.placeholder);
+    box.autocomplete({
         source: function(request, response) {
             leden_api({
                 action: "entities_by_keyword",
