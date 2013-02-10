@@ -2,7 +2,6 @@
 
 import datetime
 import decimal
-from markdown import Markdown
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
@@ -19,10 +18,7 @@ import kn.leden.entities as Es
 from kn.leden.mongo import _id
 import kn.subscriptions.entities as subscr_Es
 from kn.subscriptions.forms import get_add_event_form
-from kn.utils.markdown_parse import FixHeadingsExtension
-
-
-markdown = Markdown(extensions=[FixHeadingsExtension()], safe_mode="escape")
+import kn.utils.markdown
 
 @login_required
 def event_list(request):
@@ -257,7 +253,8 @@ def event_new_or_edit(request, edit=None):
                 'date': date_to_dt(fd['date']),
                 'owner': _id(fd['owner']),
                 'description': fd['description'],
-                'description_html': markdown.convert(fd['description']),
+                'description_html': kn.utils.markdown.parser.convert(
+                                                fd['description']),
                 'mailBody': fd['mailBody'],
                 'subscribedByOtherMailBody': fd['subscribedByOtherMailBody'],
                 'confirmationMailBody': fd['confirmationMailBody'],

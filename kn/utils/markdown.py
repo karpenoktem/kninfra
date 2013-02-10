@@ -1,26 +1,17 @@
-# vim: et:sta:bs=2:sw=4:
+from __future__ import absolute_import
 
-"""
-KN markdown parser
-This module is named markdown_parse (instead of markdown), because importing
-markdown will import *this* module
-This module depends on Markdown: http://pypi.python.org/pypi/Markdown
-"""
+""" KN markdown parser
+This module depends on Markdown: http://pypi.python.org/pypi/Markdown """
 
-from markdown import Extension
+from markdown import Extension, Markdown
 from markdown.treeprocessors import Treeprocessor
 
-
 class FixHeadingsExtension(Extension):
-    """
-        FixHeadingsExtension wordt gebruikt als extension voor markdown.Markdown
-        zodat header tags veranderd worden '<h2>' -> '<div class="md_h2">'
-    """
+    """ FixHeadingsExtension wordt gebruikt als extension voor markdown.Markdown
+        zodat header tags veranderd worden '<h2>' -> '<div class="md_h2">' """
     class FixHeadingsProcessor(Treeprocessor):
-        """
-            FixHeadingsProcessor van Daan, zie FixHeadingsExtension voor het
-            gebruik van de class.
-        """
+        """ FixHeadingsProcessor van Daan, zie FixHeadingsExtension voor het
+            gebruik van de class.  """
         def run(self, root):
             for elem in (elem for elem in root if elem.tag in
                     ('h1', 'h2', 'h3', 'h4', 'h5', 'h6')):
@@ -34,3 +25,7 @@ class FixHeadingsExtension(Extension):
     def extendMarkdown(self, md, md_globals):
         md.treeprocessors.add('fixheading',
                 FixHeadingsExtension.FixHeadingsProcessor(md), '_end')
+
+parser = Markdown(extensions=[FixHeadingsExtension()], safe_mode="escape")
+
+# vim: et:sta:bs=2:sw=4:
