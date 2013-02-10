@@ -1,24 +1,21 @@
 # vim: et:sta:bs=2:sw=4:
-
-import datetime
 import decimal
-
+import datetime
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
-from django.core.exceptions import PermissionDenied
-from django.core.mail import EmailMessage
-from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-
-from kn.base.http import JsonHttpResponse
-from kn.leden.date import date_to_dt
-import kn.leden.entities as Es
-from kn.leden.mongo import _id
+from django.core.urlresolvers import reverse
+from django.contrib.auth.models import Group
 import kn.subscriptions.entities as subscr_Es
 from kn.subscriptions.forms import get_add_event_form
+import kn.leden.entities as Es
+from kn.leden.mongo import _id
 import kn.utils.markdown
+from kn.leden.date import date_to_dt
+from kn.base.http import JsonHttpResponse
+from django.http import Http404, HttpResponseRedirect
+from django.core.mail import EmailMessage
+from django.core.exceptions import PermissionDenied
 
 @login_required
 def event_list(request):
