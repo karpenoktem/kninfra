@@ -6,6 +6,7 @@ from kn.base.mail import render_then_email
 from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
 from kn.leden.utils import find_name_for_user
 from kn.leden import giedo
+from kn.leden.auth import login_or_basicauth_required
 from kn.leden.mongo import _id
 from kn.leden.date import now, date_to_dt
 from kn.base.http import redirect_to_referer
@@ -582,7 +583,7 @@ def ik_openvpn(request):
             {'password_incorrect': password_incorrect},
             context_instance=RequestContext(request))
 
-@login_required
+@login_or_basicauth_required
 def ik_openvpn_download(request, filename):
     m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', filename)
     m2 = re.match('^openvpn-config-([^.]+)\.zip$', filename)
