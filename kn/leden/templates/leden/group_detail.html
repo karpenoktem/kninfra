@@ -1,18 +1,47 @@
 {% extends "leden/entity_base.html" %}
 {% load base %}
+{% load leden %}
 
 {% block body %}
-<!-- TODO stub -->
 <h1>{{ object.humanName }}</h1>
 <p>{{ object.description }}</p>
 <dl>
 	<dt>Korte namen</dt>
 	<dd>
         {% for name in object.names %}{% if not forloop.first %}, {% endif %}
-        {{ name  }}{% endfor %}
+        {{ name }}{% endfor %}
 	</dd>
-	<dt>E-Mail lijst</dt>
-        <dd>{{ object.canonical_email }}</dd>
+	<dt>E-Maillijst</dt>
+        <dd><a href="mailto:{{ object.canonical_email }}">
+                {{ object.canonical_email }}</a></dd>
+
+        {% if chiefs %}
+        <dt>{% if chiefs|length > 1 %}Hoofden{% else %}Hoofd{% endif %}</dt>
+        <dd>
+        {% for chief in chiefs %}
+        {% if not forloop.first %}<br/>{% endif %}
+        <a href="{{ chief.who.get_absolute_url }}">{{ chief.who.humanName }}</a>
+        {{ chief|rel_when }}
+        {% endfor %}{# chief in chiefs #}
+        </dd>
+        {% endif %}{# chiefs #}
+
+        {% if pipos %}
+        <dt>
+        {% if pipos|length > 1 %}
+        Bestuurspipo's
+        {% else %}
+        Bestuurspipo
+        {% endif %}
+        </dt>
+        <dd>
+        {% for pipo in pipos %}
+        {% if not forloop.first %}<br/>{% endif %}
+        <a href="{{ pipo.who.get_absolute_url }}">{{ pipo.who.humanName }}</a>
+        {{ pipo|rel_when }}
+        {% endfor %}{# pipo in pipos #}
+        </dd>
+        {% endif %}{# pipos #}
 </dl>
 {% if isFreeToJoin %}
 {% if relation_with_group %}
