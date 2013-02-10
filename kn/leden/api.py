@@ -85,7 +85,7 @@ def entity_update_primary(data, request):
     if not is_secretariaat:
         return {'ok': False, 'error': 'Permission denied'}
     if 'id' not in data or not isinstance(data['id'], basestring):
-        return {'ok': False, 'error': 'Missing argument "id"' % attr}
+        return {'ok': False, 'error': 'Missing argument "id"'}
     if 'type' not in data or not isinstance(data['type'], basestring):
         return {'ok': False, 'error': 'Missing argument "type"'}
     if 'new' not in data:
