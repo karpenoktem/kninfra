@@ -16,14 +16,16 @@ TIME_ZONE = 'Europe/Amsterdam'
 LANGUAGE_CODE = 'nl-NL'
 SITE_ID = 1
 USE_I18N = True
-MEDIA_ROOT = '/home/infra/media/'
+MEDIA_ROOT = '/home/infra/repo/media/'
 MEDIA_URL = '/djmedia'
 DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@karpenoktem.nl>'
 
 ROOT_URLCONF = 'kn.urls'
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
+    ('kn.base.template.SlashNewlineStrippingTemplateLoader', (
+        'django.template.loaders.filesystem.load_template_source',
+        'django.template.loaders.app_directories.load_template_source',
+    )),
 )
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
