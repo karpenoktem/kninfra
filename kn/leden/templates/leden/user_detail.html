@@ -133,10 +133,10 @@
         {% if "secretariaat" in user.cached_groups_names %}
         <button onclick="var new_addr = prompt(
                         'Nieuw adres (straatnaam, nummer, postcode, plaats)',
-                                '{{ object.primary_address.street }}, '+
-                                '{{ object.primary_address.number }}, '+
-                                '{{ object.primary_address.zip    }}, '+
-                                '{{ object.primary_address.city   }}');
+                        '{{ object.primary_address.street|escapejs }}, '+
+                        '{{ object.primary_address.number|escapejs }}, '+
+                        '{{ object.primary_address.zip|escapejs }}, '+
+                        '{{ object.primary_address.city|escapejs }}');
                          if (!new_addr) return false;
                          var addr = new_addr.split(',');
                          if (addr.length != 4) {
