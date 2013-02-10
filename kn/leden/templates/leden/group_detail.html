@@ -14,37 +14,6 @@
 	<dt>E-Mail lijst</dt>
         <dd>{{ object.canonical_email }}</dd>
 </dl>
-{% if subGroups %}
-	<ul>
-	{% for comm in subGroups %}
-	{% ifnotequal comm object %}
-	<li>
-	<a href="{{ comm.get_absolute_url }}"
-		>{{ comm.humanName }}</a>
-	</li>
-	{% endifnotequal %}
-	{% endfor %}
-	</ul>
-{% endif %}
-{% if oldseats %}
-	<h2>Zetels</h2>
-	<dl>
-	{% for oldseat in oldseats %}
-	<dt>{{ oldseat.humanName }}</dt>
-	<dd><a href="{{ oldseat.user.get_absolute_url }}"
-		>{{ oldseat.user.full_name }}</a></dd>
-	{% endfor %}
-	</dl>
-{% endif %}
-{% if otherMembers %}
-	<h2>Algemeen leden</h2>
-	<ul>
-	{% for user in otherMembers %}
-	<li><a href="{{ user.oldknuser.get_absolute_url }}"
-		>{{ user.oldknuser.full_name }}</a></li>
-	{% endfor %}
-	</ul>
-{% endif %}
 {% if isFreeToJoin %}
 {% if relation_with_group %}
 <form action="{% url relation-end _id=relation_with_group %}"
