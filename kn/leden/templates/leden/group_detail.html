@@ -1,5 +1,6 @@
 {% extends "leden/entity_base.html" %}
 {% load base %}
+{% load leden %}
 
 {% block body %}
 <h1>{{ object.humanName }}</h1>
@@ -19,7 +20,7 @@
         {% for chief in chiefs %}
         {% if not forloop.first %}<br/>{% endif %}
         <a href="{{ chief.who.get_absolute_url }}">{{ chief.who.humanName }}</a>
-        {% if chief.from %} (sinds {{ chief.from.date }}){% endif %}
+        {{ chief|rel_when }}
         {% endfor %}
         </dd>
         {% endif %}
@@ -35,7 +36,7 @@
         {% for pipo in pipos %}
         {% if not forloop.first %}<br/>{% endif %}
         <a href="{{ pipo.who.get_absolute_url }}">{{ pipo.who.humanName }}</a>
-        {% if pipo.from %} (sinds {{ pipo.from.date }}){% endif %}
+        {{ pipo|rel_when }}
         {% endfor %}
         </dd>
         {% endif %}
