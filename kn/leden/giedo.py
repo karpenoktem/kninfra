@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 from kn import settings
 
 from kn.utils.whim import WhimDaemon, WhimClient
@@ -57,3 +56,5 @@ def openvpn_create(user, want):
     get_giedo_connection().send({'type': 'openvpn_create',
         'user': user,
         'want': want})
+
+# vim: et:sta:bs=2:sw=4:

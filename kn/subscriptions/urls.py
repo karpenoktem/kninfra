@@ -1,8 +1,7 @@
-# vim: et:sta:bs=2:sw=4:
 from django.conf.urls.defaults import *
+from django.contrib.auth.decorators import login_required
 import django.views.generic.list_detail
 
-from django.contrib.auth.decorators import login_required
 from kn.subscriptions import views
 
 urlpatterns = patterns('',
@@ -17,3 +16,5 @@ urlpatterns = patterns('',
     url(r'^(?P<edit>[a-zA-Z0-9\-.]+)/edit/?$',
         views.event_new_or_edit, name='event-edit'),
 )
+
+# vim: et:sta:bs=2:sw=4:

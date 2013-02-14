@@ -1,7 +1,6 @@
-# vim: et:sta:bs=2:sw=4:
+from subprocess import call
 import logging
 import os
-from subprocess import call
 
 from kn import settings
 
@@ -59,3 +58,5 @@ def apply_mailman_changes(daan, changes):
         for ml in mlo.values():
             ml.Save()
             ml.Unlock()
+
+# vim: et:sta:bs=2:sw=4:

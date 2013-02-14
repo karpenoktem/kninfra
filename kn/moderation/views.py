@@ -1,13 +1,12 @@
-# vim: et:sta:bs=2:sw=4:
 import os
 import sys
 import os.path
 import datetime
 
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponse, Http404, HttpResponseRedirect
 
 import kn.leden.entities as Es
 import kn.moderation.entities as mod_Es
@@ -151,3 +150,5 @@ def overview(request):
             {'lists': lists,
              'is_moderator': is_moderator},
             context_instance=RequestContext(request))
+
+# vim: et:sta:bs=2:sw=4:

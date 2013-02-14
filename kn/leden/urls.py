@@ -1,9 +1,7 @@
-# vim: et:sta:bs=2:sw=4:
 from django.conf.urls.defaults import *
-
-import django.views.generic.simple
-import django.views.generic as generic
 from django.contrib.auth.decorators import login_required
+import django.views.generic as generic
+import django.views.generic.simple
 
 from kn.leden import views, api
 
@@ -75,3 +73,5 @@ urlpatterns = patterns('',
     url(r'^noteer$',
         views.note_add, name='add-note'),
 )
+
+# vim: et:sta:bs=2:sw=4:

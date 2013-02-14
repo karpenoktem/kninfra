@@ -1,11 +1,11 @@
-# vim: et:sta:bs=2:sw=4:
 import pymongo
-from kn.settings import MONGO_DB, MONGO_HOST
 
 try:
     from pymongo.objectid import ObjectId
 except ImportError:
     from bson import ObjectId
+
+from kn.settings import MONGO_DB, MONGO_HOST
 
 conn = pymongo.Connection(MONGO_HOST)
 db = conn[MONGO_DB]
@@ -63,3 +63,5 @@ def son_property(path, default=None):
             obj = obj[bit]
         obj[path[-1]] = x
     return property(__getter, __setter)
+
+# vim: et:sta:bs=2:sw=4:

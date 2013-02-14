@@ -1,7 +1,7 @@
-# vim: et:sta:bs=2:sw=4:
-import MySQLdb
 import logging
 import itertools
+
+import MySQLdb
 
 import kn.leden.entities as Es
 
@@ -39,3 +39,5 @@ def generate_forum_changes(self):
     c.close()
     dc.close()
     return todo
+
+# vim: et:sta:bs=2:sw=4:

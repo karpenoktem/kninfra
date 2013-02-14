@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# vim: et:sta:bs=2:sw=4:
 from django.core.management import execute_manager
+
 try:
     import settings # Assumed to be in the same directory.
 except ImportError:
@@ -10,3 +10,5 @@ except ImportError:
 
 if __name__ == "__main__":
     execute_manager(settings)
+
+# vim: et:sta:bs=2:sw=4:
