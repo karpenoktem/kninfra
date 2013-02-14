@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from kn.leden.mongo import _id
-from kn.leden.date import date_to_dt, now
+from kn.leden.date import date_to_dt, now, date_to_midnight
 from kn.base.http import JsonHttpResponse
 from kn.planning.forms import *
 from kn.planning.entities import Pool, Worker, Event, Vacancy
@@ -99,7 +99,8 @@ def planning_view(request):
         i += 1
     events = list()
     # TODO reduce number of queries
-    for e in Event.all_since_datetime(now() - datetime.timedelta(days=lookbehind)):
+    for e in Event.all_since_datetime(date_to_midnight(now())
+            - datetime.timedelta(days=lookbehind)):
         ei = {  'name': e.name,
                 'datetime': e.date,
                 'kind': e.kind,
