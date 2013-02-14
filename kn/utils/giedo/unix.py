@@ -1,11 +1,10 @@
-# vim: et:sta:bs=2:sw=4:
-import kn.leden.entities as Es
-from kn.settings import DT_MIN
 import logging
 import itertools
 
 from tarjan.tc import tc        # transitive closure of a graph
 
+import kn.leden.entities as Es
+from kn.settings import DT_MIN
 from kn.leden.date import now
 
 def generate_unix_map(giedo):
@@ -65,3 +64,5 @@ def generate_unix_map(giedo):
         ret['groups'][str(g.name)] = [str(ulut[c].name)
                 for c in memb_graph[g._id] if c in ulut]
     return ret
+
+# vim: et:sta:bs=2:sw=4:

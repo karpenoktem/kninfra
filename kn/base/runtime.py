@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import sys
 import imp
 import os.path
@@ -11,3 +10,5 @@ def setup_virtual_package(name, path=os.curdir):
                  [modulePath])
         imp.load_module(name, f, fn, suffix)
         sys.modules[name].__path__ = [modulePath]
+
+# vim: et:sta:bs=2:sw=4:

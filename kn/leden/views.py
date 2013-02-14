@@ -1,37 +1,40 @@
-# vim: et:sta:bs=2:sw=4:
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.template import RequestContext
-from kn.base.text import humanized_enum
-from kn.base.mail import render_then_email
-from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
-from kn.leden.utils import find_name_for_user
-from kn.leden import giedo
-from kn.leden.auth import login_or_basicauth_required
-from kn.leden.mongo import _id
-from kn.leden.date import now, date_to_dt
-from kn.base.http import redirect_to_referer
-from kn import settings
-from kn.settings import DT_MIN, DT_MAX
-from kn.base._random import pseudo_randstr
-from django.shortcuts import render_to_response
-from django.contrib.auth.decorators import login_required
-from django.core.files.storage import default_storage
-from django.core.servers.basehttp import FileWrapper
-from django.core.paginator import Paginator, EmptyPage
-from django.core.urlresolvers import reverse
-from django.core.exceptions import PermissionDenied
-from os import path
-import re
 from itertools import chain
-import mimetypes
-from django.contrib.auth.views import redirect_to_login
-from kn import settings
 from hashlib import sha256
 from datetime import date
 from glob import glob
-import json
+from os import path
+
+import mimetypes
 import logging
 import Image
+import json
+import re
+
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import redirect_to_login
+from django.core.paginator import Paginator, EmptyPage
+from django.core.files.storage import default_storage
+from django.core.servers.basehttp import FileWrapper
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import render_to_response
+from django.core.urlresolvers import reverse
+from django.template import RequestContext
+
+from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
+from kn.leden.auth import login_or_basicauth_required
+from kn.leden.utils import find_name_for_user
+from kn.leden.date import now, date_to_dt
+from kn.leden.mongo import _id
+from kn.leden import giedo
+
+from kn.base._random import pseudo_randstr
+from kn.base.http import redirect_to_referer
+from kn.base.mail import render_then_email
+from kn.base.text import humanized_enum
+
+from kn.settings import DT_MIN, DT_MAX
+from kn import settings
 
 import kn.leden.entities as Es
 
@@ -601,3 +604,5 @@ def ik_openvpn_download(request, filename):
     response['Content-Length'] = default_storage.size(p)
     # XXX use ETags and returns 304's
     return response
+
+# vim: et:sta:bs=2:sw=4:

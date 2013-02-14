@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import kn.leden.entities as Es
 from kn import settings
 
@@ -45,3 +44,5 @@ def find_name_for_user(first_name, last_name):
         n = fn + ln + str(i)
         if n not in names:
             return n
+
+# vim: et:sta:bs=2:sw=4:

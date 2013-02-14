@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import logging
 
 import os.path
@@ -15,3 +14,5 @@ def set_postfix_map(daan, tbl):
                 continue
             f.write("%s %s\n" % (k, ', '.join(v)))
     call(['postmap', POSTFIX_VIRTUAL_MAP])
+
+# vim: et:sta:bs=2:sw=4:

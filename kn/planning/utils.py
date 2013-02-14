@@ -1,5 +1,5 @@
-# vim: et:sta:bs=2:sw=4:
 from django.core.mail import EmailMessage
+
 import kn.leden.entities as Es
 
 def send_reminder(vacancy, update=True):
@@ -23,3 +23,5 @@ def send_reminder(vacancy, update=True):
     if update:
         vacancy.reminder_needed = False
         vacancy.save()
+
+# vim: et:sta:bs=2:sw=4:

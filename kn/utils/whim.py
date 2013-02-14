@@ -1,12 +1,12 @@
-# vim: et:sta:bs=2:sw=4:
 import threading
-import msgpack
 import os.path
 import logging
 import socket
 import select
-import mirte
 import os
+
+import msgpack
+import mirte
 
 """ Whim is a very simple server/client protocol.
 
@@ -164,3 +164,5 @@ class WhimDaemon(object):
 
     def handle(self, d):
         raise NotImplementedError
+
+# vim: et:sta:bs=2:sw=4:

@@ -1,4 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
+import subprocess
 import threading
 import os.path
 import logging
@@ -6,7 +7,6 @@ import socket
 import select
 import json
 import os
-import subprocess
 
 from kn.utils.whim import WhimDaemon
 from kn.utils.daan.postfix import set_postfix_map

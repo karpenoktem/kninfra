@@ -1,12 +1,10 @@
-# vim: et:sta:bs=2:sw=4:
 import decimal
-
-from regl.model import Document
 
 from django.db.models import permalink
 
-from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
+from regl.model import Document
 
+from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
 import kn.leden.entities as Es
 
 rcol = db['reglement']
@@ -91,3 +89,5 @@ class ReglementVersion(SONWrapper):
         return ('version-detail', (), {
                             'reglement_name': self.reglement.name,
                             'version_name': self.name})
+
+# vim: et:sta:bs=2:sw=4:

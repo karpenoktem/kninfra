@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import threading
 import os.path
 import logging
@@ -7,10 +6,9 @@ import select
 import json
 import os
 
-from kn.utils.whim import WhimDaemon
-
 from kn import settings
 
+from kn.utils.whim import WhimDaemon
 from kn.utils.cilia.unix import set_unix_map, unix_setpass
 from kn.utils.cilia.samba import set_samba_map, samba_setpass
 from kn.utils.cilia.fotoadmin import fotoadmin_remove_moved_fotos
@@ -43,3 +41,5 @@ class Cilia(WhimDaemon):
             with self.fotoadmin_lock:
                 return fotoadmin_remove_moved_fotos(self,
                         d['user'], d['dir'])
+
+# vim: et:sta:bs=2:sw=4:

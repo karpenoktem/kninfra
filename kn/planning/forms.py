@@ -1,10 +1,9 @@
-# vim: et:sta:bs=2:sw=4:
+import datetime
+
 from django import forms
 
 import kn.leden.entities as Es
 from kn.planning.entities import Pool, Worker
-
-import datetime
 
 class WorkerChoiceField(forms.ChoiceField):
     def __init__(self, *args, **kwargs):
@@ -62,3 +61,5 @@ class AddVacancyForm(forms.Form):
             choices=((True,"bij benadering"),(False, "exact")))
     pool = forms.ChoiceField(label="Type",
             choices=map(lambda x: (x._id, x.name), Pool.all()))
+
+# vim: et:sta:bs=2:sw=4:

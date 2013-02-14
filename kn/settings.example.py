@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import datetime
 
 # Base Django settings
@@ -142,3 +141,5 @@ CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
 VILLANET_SECRET_API_KEY = '' # CHANGE ME
 DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
                         '<root@khandhas.karpenoktem.nl>')
+
+# vim: et:sta:bs=2:sw=4:

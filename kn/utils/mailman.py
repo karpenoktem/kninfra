@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import os.path
 
 from kn.base.runtime import setup_virtual_package
@@ -16,3 +15,5 @@ def import_mailman():
         setup_virtual_package('Mailman', os.path.join(
             settings.MAILMAN_PATH, 'Mailman'))
     __mailman_imported = True
+
+# vim: et:sta:bs=2:sw=4:

@@ -1,8 +1,8 @@
-# vim: et:sta:bs=2:sw=4:
 import hashlib
 import logging
-import MySQLdb
 import subprocess
+
+import MySQLdb
 
 from kn import settings
 from kn.base._random import pseudo_randstr
@@ -73,3 +73,5 @@ def apply_wiki_changes(daan, changes):
         c.execute("COMMIT;")
         c.close()
     dc.close()
+
+# vim: et:sta:bs=2:sw=4:

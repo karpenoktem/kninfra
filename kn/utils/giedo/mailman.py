@@ -1,9 +1,9 @@
-# vim: et:sta:bs=2:sw=4:
-import kn.leden.entities as Es
 import logging
 
 from kn.utils.mailman import import_mailman
+import kn.leden.entities as Es
 from kn.leden.date import now
+
 import_mailman()
 import Mailman
 import Mailman.Utils
@@ -56,3 +56,5 @@ def generate_mailman_changes(giedo):
                 todo['remove'][n] = []
             todo['remove'][n].append(em)
     return todo
+
+# vim: et:sta:bs=2:sw=4:

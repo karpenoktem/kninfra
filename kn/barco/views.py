@@ -1,23 +1,18 @@
-# vim: et:sta:bs=2:sw=4:
-import locale
-import json
 from cStringIO import StringIO
 import subprocess
 import os.path
+import locale
+import json
 
-from django.http import Http404, HttpResponseRedirect
-from django.template import RequestContext
-from django.shortcuts import render_to_response
-# from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
+from django.template import RequestContext
 
 from koert.drank.rikf import open_rikf_ar
 
 from kn import settings
-# from kn.leden.mongo import _id
-# from kn.leden.date import date_to_dt, now
-# from kn.base.http import JsonHttpResponse
 from kn.barco.forms import BarformMeta, InvCountMeta
 
 settings.DRANK_REPOSITORIES = ['drank6', 'drank7', 'drank8', 'drank9']
@@ -202,3 +197,5 @@ def barco_enterform(request, repos, formname):
             {'fields': template, 'form': form, 'prefill': prefill,
                 'weight_fields': list(weight_fields)},
         context_instance=RequestContext(request))
+
+# vim: et:sta:bs=2:sw=4:
