@@ -20,6 +20,10 @@ function entityChoiceField_set(id, objid) {
     });
 }
 
+function entityChoiceField_get(id) {
+    return $('#_'+id).val();
+}
+
 function create_entityChoiceField(id, params) {
     if(!params) params = {};
     if(!params.input_type) params.input_type = 'text';
