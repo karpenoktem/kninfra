@@ -523,6 +523,18 @@ def relation_begin(request):
         raise ValueError, "This relation already exists"
     # Add the relation!
     Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
+    # Notify informacie
+    if request.user.id == d['who']:
+        Es.notify_informacie("%s heeft zichzelf als %s ingeschreven voor %s" % (
+                            request.user.full_name,
+                            Es.by_id(d['how']).humanName if d['how'] else 'lid',
+                            Es.by_id(d['with']).humanName))
+    else:
+        # TODO (rik) leave out 'als lid'
+        Es.notify_informacie("%s is als %s ingeschreven voor %s" % (
+                            Es.by_id(d['who']).humanName,
+                            Es.by_id(d['how']).humanName if d['how'] else 'lid',
+                            Es.by_id(d['with']).humanName))
     giedo.sync()
     return redirect_to_referer(request)
 

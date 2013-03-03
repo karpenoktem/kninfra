@@ -1,0 +1,13 @@
+{% block subject %}
+Wijzigingen aan de ledenadministratie
+{% endblock %}
+
+{% block plain %}
+Best Informacie-lid,
+
+De volgende wijzigingen hebben plaatsgevonden aan de ledenadministratie:
+
+{% for nt in ntfs %}\
+  * {{ nt.text }}
+{% endfor %}
+{% endblock %}

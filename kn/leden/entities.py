@@ -475,6 +475,10 @@ def notify_informacie(text):
     incol.insert({'text': text,
                   'when': now()})
 
+def pop_all_informacie_notifications():
+    ntfs = list(incol.find({}, sort=[('when',1)]))
+    incol.remove({'_id': {'$in': [m['_id'] for m in ntfs]}})
+    return [InformacieNotification(d) for d in ntfs]
 
 # Models
 # ######################################################################
@@ -1062,6 +1066,12 @@ class Note(SONWrapper):
         if save_now:
             self.save()
 
+class InformacieNotification(SONWrapper):
+    def __init__(self, data):
+        super(InformacieNotification, self).__init__(data, incol)
+
+    text = son_property(('text', ))
+    when = son_property(('when', ))
 
 class PushChange(SONWrapper):
     def __init__(self, data):
