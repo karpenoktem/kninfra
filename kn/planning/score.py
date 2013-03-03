@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 from datetime import datetime
 from collections import Iterable
 
@@ -185,3 +184,5 @@ def planning_vacancy_worker_score(vacancy, worker):
             return score
     # If nothing has been set, assume the worker is not available
     return 0
+
+# vim: et:sta:bs=2:sw=4:

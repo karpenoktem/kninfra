@@ -1,29 +1,26 @@
-# vim: et:sta:bs=2:sw=4:
-import threading
-import os.path
-import logging
-import socket
-import select
+import os
 import time
 import json
-import os
-import subprocess
+import socket
+import select
 import urllib2
+import logging
+import os.path
 import itertools
+import threading
+import subprocess
 from urllib import urlencode
+
+import mirte # github.com/bwesterb/mirte
 from M2Crypto import RSA
-from kn.base._random import pseudo_randstr
 
 from django.core.files.storage import default_storage
 
-import mirte # github.com/bwesterb/mirte
-
-import kn.leden.entities as Es
-
-from kn.utils.whim import WhimDaemon, WhimClient
-from kn.leden.date import now
-
 from kn import settings
+from kn.utils.whim import WhimDaemon, WhimClient
+from kn.base._random import pseudo_randstr
+import kn.leden.entities as Es
+from kn.leden.date import now
 
 from kn.utils.giedo.db import update_db
 from kn.utils.giedo.postfix import generate_postfix_map
@@ -241,3 +238,5 @@ class Giedo(WhimDaemon):
             return (True, ret[4:])
         else:
             return (False, ret)
+
+# vim: et:sta:bs=2:sw=4:

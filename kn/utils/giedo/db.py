@@ -1,5 +1,5 @@
-# vim: et:sta:bs=2:sw=4:
 import logging
+
 import kn.leden.entities as Es
 from kn.leden.date import now
 from kn.settings import DT_MIN, DT_MAX
@@ -201,3 +201,5 @@ def _create_yeargroup(g, year, name, tags, groups, id2name):
     n['_id'] = Es.ecol.insert(n)
     groups[name] = Es.entity(n)
     id2name[n['_id']] = name
+
+# vim: et:sta:bs=2:sw=4:

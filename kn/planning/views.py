@@ -1,17 +1,17 @@
-# vim: et:sta:bs=2:sw=4:
-import locale
 from random import shuffle
+import locale
 
-from django.http import Http404, HttpResponseRedirect
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.core.exceptions import PermissionDenied
+from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 
-from kn.leden.mongo import _id
-from kn.leden.date import date_to_dt, now, date_to_midnight
 from kn.base.http import JsonHttpResponse
+from kn.leden.date import date_to_dt, now, date_to_midnight
+from kn.leden.mongo import _id
+
 from kn.planning.forms import *
 from kn.planning.entities import Pool, Worker, Event, Vacancy
 from kn.planning.score import planning_vacancy_worker_score
@@ -349,3 +349,5 @@ def planning_template(request, poolname):
     events.sort(key=lambda x: x['date'])
     return render_to_response('planning/template.html', {'events': events},
             context_instance=RequestContext(request))
+
+# vim: et:sta:bs=2:sw=4:

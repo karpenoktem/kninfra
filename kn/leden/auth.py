@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import base64
 
 from django.http import HttpResponse
@@ -40,3 +39,5 @@ def login_or_basicauth_required(view):
             return response
         return redirect_to_login(request.path)
     return _auth_check
+
+# vim: et:sta:bs=2:sw=4:

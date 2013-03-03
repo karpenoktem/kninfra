@@ -1,6 +1,4 @@
 # vim: et:sta:bs=2:sw=4:
-from kn import settings
-
 import subprocess
 import os.path
 import grp
@@ -9,6 +7,8 @@ import os
 import re
 
 import MySQLdb
+
+from kn import settings
 
 def fotoadmin_create_event(daan, date, name, humanName):
     if not re.match('^20\d{2}-\d{2}-\d{2}$', date):

@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import re
 import datetime
 import functools
@@ -1075,3 +1074,5 @@ TYPE_MAP = {
     'tag':          Tag,
     'brand':        Brand
 }
+
+# vim: et:sta:bs=2:sw=4:

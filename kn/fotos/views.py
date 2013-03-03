@@ -1,8 +1,7 @@
-# vim: et:sta:bs=2:sw=4:
 from glob import glob
 from os.path import basename
-
 import MySQLdb
+
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.core.exceptions import PermissionDenied
@@ -69,3 +68,5 @@ def fotoadmin_status(request):
     return render_to_response('fotos/admin/status.html',
             {'photos': photos},
              context_instance=RequestContext(request))
+
+# vim: et:sta:bs=2:sw=4:

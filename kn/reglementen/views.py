@@ -1,10 +1,9 @@
-# vim: et:sta:bs=2:sw=4:
-import kn.reglementen.entities as Es_regl
-
 from django.contrib.auth.decorators import login_required
-from django.template import RequestContext
-from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response
+from django.http import Http404, HttpResponse
+from django.template import RequestContext
+
+import kn.reglementen.entities as Es_regl
 
 @login_required
 def reglement_list(request):
@@ -28,3 +27,5 @@ def version_detail(request, reglement_name, version_name):
             {'version': version,
              'content': version.to_html()},
             context_instance=RequestContext(request))
+
+# vim: et:sta:bs=2:sw=4:

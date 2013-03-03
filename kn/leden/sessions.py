@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import datetime
 
 from django.contrib.sessions.backends.base import SessionBase, CreateError
@@ -47,3 +46,5 @@ class SessionStore(SessionBase):
 
 def ensure_indices():
     scol.ensure_index('expire_dt')
+
+# vim: et:sta:bs=2:sw=4:
