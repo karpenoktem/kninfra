@@ -514,6 +514,9 @@ class EntityHumanName(object):
     @property
     def humanName(self):
         return self._data['human']
+    @property
+    def genitive(self):
+        return self._data.get('genitive_prefix', 'van de') + ' ' + unicode(self)
     def __unicode__(self):
         return self.humanName
     def __repr__(self):
