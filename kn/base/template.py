@@ -3,6 +3,8 @@ from django.template import TemplateDoesNotExist
 from django.template.loader import (BaseLoader, find_template_loader,
                     make_origin, get_template_from_string)
 
+import re
+
 # Based on django.template.loader.cached.Loader.  A lot is boilerplate:
 # the magic happens in SlashNewlineStrippingTemplateLoader._process
 
@@ -12,9 +14,13 @@ class SlashNewlineStrippingTemplateLoader(BaseLoader):
     def __init__(self, loaders):
         self._loaders = loaders
         self._cached_loaders = []
+        self._the_re = re.compile('\\\\\\n\\s*', re.M)
 
     def _process(self, template):
-        return template.replace("\\\n", '')
+        print 'trollol', len(template)
+        t =  self._the_re.sub('', template)
+        print len(t)
+        return t
 
     @property
     def loaders(self):
