@@ -436,6 +436,8 @@ def secr_add_user(request):
             for l in fd['addToList']:
                 Es.add_relation(u, Es.id_by_name(l, use_cache=True),
                     _from=now())
+            Es.notify_informacie("%s is ingeschreven als lid." % (
+                        u.humanName))
             giedo.sync()
             request.user.push_message("Gebruiker toegevoegd. "+
                 "Let op: hij heeft geen wachtwoord "+
@@ -477,6 +479,8 @@ def secr_add_group(request):
                 'tags': [_id(fd['parent'])]})
             logging.info("Added group %s" % nm)
             g.save()
+            Es.notify_informacie("De groep %s is opgericht." % (
+                        unicode(g.humanName)))
             giedo.sync()
             request.user.push_message("Groep toegevoegd.")
             return HttpResponseRedirect(reverse('group-by-name', args=(nm,)))
@@ -493,6 +497,18 @@ def relation_end(request, _id):
     if not Es.user_may_end_relation(request.user, rel):
         raise PermissionDenied
     Es.end_relation(_id)
+    # Notify informacie
+    if request.user == rel['who']:
+        Es.notify_informacie("%s heeft zich uitgeschreven als %s %s" % (
+                        request.user.full_name,
+                        rel['how'].humanName if rel['how'] else 'lid',
+                        rel['with'].humanName.genitive))
+    else:
+        # TODO (rik) leave out 'als lid'
+        Es.notify_informacie("%s is geen %s meer %s" % (
+                        rel['who'].humanName,
+                        rel['how'].humanName if rel['how'] else 'lid',
+                        rel['with'].humanName.genitive))
     giedo.sync()
     return redirect_to_referer(request)
 
@@ -523,6 +539,18 @@ def relation_begin(request):
         raise ValueError, "This relation already exists"
     # Add the relation!
     Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
+    # Notify informacie
+    if request.user._id == d['who']:
+        Es.notify_informacie("%s heeft zich ingeschreven als %s %s" % (
+                            request.user.full_name,
+                            Es.by_id(d['how']).humanName if d['how'] else 'lid',
+                            Es.by_id(d['with']).humanName.genitive))
+    else:
+        # TODO (rik) leave out 'als lid'
+        Es.notify_informacie("%s is nu %s %s" % (
+                            Es.by_id(d['who']).humanName,
+                            Es.by_id(d['how']).humanName if d['how'] else 'lid',
+                            Es.by_id(d['with']).humanName.genitive))
     giedo.sync()
     return redirect_to_referer(request)
 

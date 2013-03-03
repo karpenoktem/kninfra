@@ -1,0 +1,16 @@
+{% block subject %}
+Wijzigingen aan de ledenadministratie
+{% endblock %}
+
+{% block plain %}
+Best InformaCie-lid,
+
+De volgende wijzigingen hebben plaatsgevonden aan de ledenadministratie:
+
+{% for nt in ntfs %}\
+  * {{ nt.text }}
+{% endfor %}
+
+Met geautomatiseerde groet,
+Het Smoelenboek
+{% endblock %}
