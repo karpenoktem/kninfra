@@ -17,10 +17,7 @@ class SlashNewlineStrippingTemplateLoader(BaseLoader):
         self._the_re = re.compile('\\\\\\n\\s*', re.M)
 
     def _process(self, template):
-        print 'trollol', len(template)
-        t =  self._the_re.sub('', template)
-        print len(t)
-        return t
+        return self._the_re.sub('', template)
 
     @property
     def loaders(self):
