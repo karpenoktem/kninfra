@@ -438,7 +438,7 @@ def secr_add_user(request):
                     _from=now())
             Es.notify_informacie("%s is ingeschreven als lid." % (
                         u.humanName))
-            giedo.sync()
+            giedo.sync_async(request)
             request.user.push_message("Gebruiker toegevoegd. "+
                 "Let op: hij heeft geen wachtwoord "+
                 "en hij moet nog gemaild worden.")
@@ -481,7 +481,7 @@ def secr_add_group(request):
             g.save()
             Es.notify_informacie("De groep %s is opgericht." % (
                         unicode(g.humanName)))
-            giedo.sync()
+            giedo.sync_async(request)
             request.user.push_message("Groep toegevoegd.")
             return HttpResponseRedirect(reverse('group-by-name', args=(nm,)))
     else:
@@ -509,7 +509,7 @@ def relation_end(request, _id):
                         rel['who'].humanName,
                         rel['how'].humanName if rel['how'] else 'lid',
                         rel['with'].humanName.genitive))
-    giedo.sync()
+    giedo.sync_async(request)
     return redirect_to_referer(request)
 
 @login_required
@@ -551,7 +551,7 @@ def relation_begin(request):
                             Es.by_id(d['who']).humanName,
                             Es.by_id(d['how']).humanName if d['how'] else 'lid',
                             Es.by_id(d['with']).humanName.genitive))
-    giedo.sync()
+    giedo.sync_async(request)
     return redirect_to_referer(request)
 
 @login_required

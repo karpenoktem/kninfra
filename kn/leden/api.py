@@ -127,7 +127,7 @@ def entity_update_primary(data, request):
         e.update_address(new['street'], new['number'], new['zip'], new['city'])
     else:
         return {'ok': False, 'error': 'Unknown update type: "%s"' % typ}
-    giedo.sync()
+    giedo.sync_async(request)
     return {'ok': True}
 
 ACTION_HANDLER_MAP = {
