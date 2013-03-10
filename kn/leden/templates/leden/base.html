@@ -67,7 +67,8 @@
         Wijzingen worden doorgevoerd ...
 </div>
 <script type="text/javascript">
-        setTimeout(function(){checkGiedoSync({{ waitingOnGiedoSync }})}, 1000);
+        setTimeout(function(){checkGiedoSync(
+                        {{ request.session.waitingOnGiedoSync }})}, 1000);
 </script>
 {% endif %}{# request.session.waiting_on_giedo_sync #}
 {{ block.super }}
