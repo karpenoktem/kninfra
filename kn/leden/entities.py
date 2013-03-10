@@ -34,6 +34,7 @@ def ensure_indices():
     ecol.ensure_index('tags', sparse=True)
     ecol.ensure_index('humanNames.human')
     ecol.ensure_index('studies.study', sparse=True)
+    ecol.ensure_index('studies.institute', sparse=True)
     ecol.ensure_index('person.dateOfBirth', sparse=True)
     # relations
     rcol.ensure_index('how', sparse=True)
@@ -147,6 +148,11 @@ def by_id(n):
 def by_study(study):
     """ Finds entities by studies.study """
     for m in ecol.find({'studies.study': _id(study)}):
+        yield entity(m)
+
+def by_institute(institute):
+    """ Finds entities by studies.insitute """
+    for m in ecol.find({'studies.institute': _id(institute)}):
         yield entity(m)
 
 def get_years_of_birth():
