@@ -51,6 +51,13 @@ def entity_humanName_by_id(data, request):
     e = Es.by_id(data['id'])
     return None if e is None else _humanName_of_entity(e)
 
+def get_last_synced(data, request):
+    """ Returns the timestamp when giedo last synced.  Example:
+
+          >> {action:"get_last_synced"}
+          << 1362912433.822199 """
+    return giedo.get_last_synced()
+
 def close_note(data, request):
     """ Wraps Note.close()
 
@@ -120,7 +127,7 @@ def entity_update_primary(data, request):
         e.update_address(new['street'], new['number'], new['zip'], new['city'])
     else:
         return {'ok': False, 'error': 'Unknown update type: "%s"' % typ}
-    giedo.sync()
+    giedo.sync_async(request)
     return {'ok': True}
 
 ACTION_HANDLER_MAP = {
@@ -128,6 +135,7 @@ ACTION_HANDLER_MAP = {
         'entities_by_keyword': entities_by_keyword,
         'close_note': close_note,
         'entity_update_primary':  entity_update_primary,
+        'get_last_synced':  get_last_synced,
         None: no_such_action,
         }
 

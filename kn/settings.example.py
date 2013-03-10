@@ -31,6 +31,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'kn.leden.giedo.SyncStatusMiddleware',
 )
 INSTALLED_APPS = (
     'django.contrib.auth',
