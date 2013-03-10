@@ -52,4 +52,14 @@ function create_entityChoiceField(id, params) {
         });
 }
 
+function checkGiedoSync(goal) {
+    leden_api({action: "get_last_synced"},
+        function(data) {
+            if(data < goal)
+                setTimeout(function(){checkGiedoSync(goal)}, 1000);
+            else
+                $('#waitingOnGiedoSyncNotice').remove();
+        });
+}
+
 // vim: et:sta:bs=2:sw=4:

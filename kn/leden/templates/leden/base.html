@@ -60,3 +60,15 @@
 </ul>
 {% endif %}
 {% endblock %}
+
+{% block messages %}
+{% if request.session.waitingOnGiedoSync %}
+<div class="notice" id="waitingOnGiedoSyncNotice">
+        Wijzingen worden doorgevoerd ...
+</div>
+<script type="text/javascript">
+        setTimeout(function(){checkGiedoSync({{ waitingOnGiedoSync }})}, 1000);
+</script>
+{% endif %}{# request.session.waiting_on_giedo_sync #}
+{{ block.super }}
+{% endblock %}{# messages #}
