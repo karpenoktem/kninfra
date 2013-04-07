@@ -1,5 +1,5 @@
-# vim: et:sta:bs=2:sw=4:
 import json
+
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 
 def redirect_to_referer(request):
@@ -14,3 +14,5 @@ class JsonHttpResponse(HttpResponse):
             kwargs['mimetype'] = 'application/json; charset=utf8'
         super(JsonHttpResponse, self).__init__(
             json.dumps(obj), *args, **kwargs)
+
+# vim: et:sta:bs=2:sw=4:

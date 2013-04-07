@@ -1,5 +1,6 @@
-from django import forms
 import datetime
+
+from django import forms
 
 class FormMeta(forms.Form):
     formname = forms.RegexField(label="Formuliernaam", regex=r'\d{3}')

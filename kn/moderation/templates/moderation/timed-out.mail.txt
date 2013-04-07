@@ -1,0 +1,7 @@
+{% block subject %}
+Moderatiemodus op {{ name }} is verlopen
+{% endblock %}
+
+{% block plain %}
+De moderatiemodus op {{ name }} is verlopen.
+{% endblock %}

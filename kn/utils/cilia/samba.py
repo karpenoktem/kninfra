@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import pwd
 import grp
 import string
@@ -83,3 +82,5 @@ def set_samba_map(cilia, _map):
     for user in smbusers_surplus:
         l.info("Removing stray user %s", user)
         subprocess.call(['pdbedit', '-x', '-u', user])
+
+# vim: et:sta:bs=2:sw=4:

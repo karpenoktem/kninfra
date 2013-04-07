@@ -1,20 +1,23 @@
-# vim: et:sta:bs=2:sw=4:
 import decimal
 import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group
-import kn.subscriptions.entities as subscr_Es
-from kn.subscriptions.forms import get_add_event_form
-import kn.leden.entities as Es
-from kn.leden.mongo import _id
-from kn.leden.date import date_to_dt
-from kn.base.http import JsonHttpResponse
 from django.http import Http404, HttpResponseRedirect
 from django.core.mail import EmailMessage
 from django.core.exceptions import PermissionDenied
+
+from kn.base.mail import render_then_email
+from kn.base.http import JsonHttpResponse
+import kn.utils.markdown
+import kn.leden.entities as Es
+from kn.leden.mongo import _id
+from kn.leden.date import date_to_dt
+import kn.subscriptions.entities as subscr_Es
+from kn.subscriptions.forms import get_add_event_form
 
 @login_required
 def event_list(request):
@@ -162,6 +165,8 @@ def _api_confirm_subscription(request):
     subscription = event.get_subscription_of(request.user)
     if subscription is None:
         return JsonHttpResponse({'error': 'subscription not found'})
+    if not event.is_open:
+        return JsonHttpResponse({'error': 'event is closed'})
     # Confirm, if not confirmed already
     if subscription.confirmed:
         return JsonHttpResponse({'error': 'already confirmed'})
@@ -247,6 +252,8 @@ def event_new_or_edit(request, edit=None):
                 'date': date_to_dt(fd['date']),
                 'owner': _id(fd['owner']),
                 'description': fd['description'],
+                'description_html': kn.utils.markdown.parser.convert(
+                                                fd['description']),
                 'mailBody': fd['mailBody'],
                 'subscribedByOtherMailBody': fd['subscribedByOtherMailBody'],
                 'confirmationMailBody': fd['confirmationMailBody'],
@@ -264,16 +271,11 @@ def event_new_or_edit(request, edit=None):
             else:
                 e._data.update(d)
             e.save()
-            act = 'bewerkt' if edit else 'aangemaakt'
-            EmailMessage(
-                    "Activiteit %s %s door %s" % (fd['humanName'], act,
-                        unicode(request.user.humanName)),
-                    "%s heeft een activiteit %s:\n\n"\
-                    "    http://karpenoktem.nl%s" %
-                    (unicode(request.user.humanName), act,
-                        reverse('event-detail', args=(e.name,))),
-                    'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-                    ['secretariaat@karpenoktem.nl']).send()
+            render_then_email('subscriptions/' +
+                    ('event-edited' if edit else 'new-event') + '.mail.txt',
+                    Es.by_name('secretariaat').canonical_full_email, {
+                        'event': e,
+                        'user': request.user})
             return HttpResponseRedirect(reverse('event-detail', args=(e.name,)))
     elif edit is None:
         form = AddEventForm()
@@ -283,3 +285,5 @@ def event_new_or_edit(request, edit=None):
     ctx = {'form': form}
     return render_to_response('subscriptions/event_new_or_edit.html', ctx,
             context_instance=RequestContext(request))
+
+# vim: et:sta:bs=2:sw=4:

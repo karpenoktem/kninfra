@@ -20,6 +20,10 @@ function entityChoiceField_set(id, objid) {
     });
 }
 
+function entityChoiceField_get(id) {
+    return $('#_'+id).val();
+}
+
 function create_entityChoiceField(id, params) {
     if(!params) params = {};
     if(!params.input_type) params.input_type = 'text';
@@ -34,17 +38,27 @@ function create_entityChoiceField(id, params) {
                 keyword: request.term,
                 type: params.type}, function(data) {
                     response($.map(data, function(item) {
-                        return {label: item[1], value: item[0]};
+                        return {value: item[1], key: item[0]};
                     }));
                 });
         }, select: function(event, ui) {
-            $("#_"+id).val(ui.item.label);
-            $("#"+id).val(ui.item.value);
+            $("#_"+id).val(ui.item.value);
+            $("#"+id).val(ui.item.key);
             if (params.select)
-                params.select(ui.item.label, ui.item.value);
+                params.select(ui.item.value, ui.item.key);
             return false;
         }, minLength: 0}).focus(function() {
             $(this).trigger('keydown.autocomplete');
+        });
+}
+
+function checkGiedoSync(goal) {
+    leden_api({action: "get_last_synced"},
+        function(data) {
+            if(data < goal)
+                setTimeout(function(){checkGiedoSync(goal)}, 1000);
+            else
+                $('#waitingOnGiedoSyncNotice').remove();
         });
 }
 

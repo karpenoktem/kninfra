@@ -1,8 +1,6 @@
-# vim: et:sta:bs=2:sw=4:
 from django.db.models import permalink
 
 from kn.leden.mongo import db, SONWrapper, _id, son_property
-
 import kn.leden.entities as Es
 
 # Polls:
@@ -104,3 +102,5 @@ class Filling(SONWrapper):
     def __unicode__(self):
         return unicode(u"answers of %s for %s" % (
                 self.user.humanName, self.poll.humanName))
+
+# vim: et:sta:bs=2:sw=4:

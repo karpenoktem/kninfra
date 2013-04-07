@@ -1,10 +1,9 @@
-# vim: et:sta:bs=2:sw=4:
 import decimal
 
 from django.db.models import permalink
+from django.utils.html import escape
 
 from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
-
 import kn.leden.entities as Es
 
 ecol = db['events']
@@ -64,6 +63,12 @@ class Event(SONWrapper):
     @property
     def description(self):
         return self._data['description']
+    @property
+    def description_html(self):
+        return self._data.get('description_html',
+                escape(self._data['description']))
+        # Let wel: 'description' is een *fallback*, het is niet de bedoeling dat
+        # deze bij nieuwe actieviteitne nog gebruikt wordt
     @property
     def name(self):
         return self._data['name']
@@ -136,3 +141,5 @@ class Subscription(SONWrapper):
     confirmed = son_property(('confirmed',), True)
     subscribedBy_notes = son_property(('subscribedBy_notes',))
     dateConfirmed = son_property(('dateConfirmed',))
+
+# vim: et:sta:bs=2:sw=4:

@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import re
 import datetime
 import functools
@@ -21,6 +20,8 @@ rcol = db['relations']  # relations: "giedo is chairman of bestuur from
 mcol = db['messages']   # message: used for old code
 ncol = db['notes']      # notes on entities by the secretaris
 pcol = db['push_changes'] # Changes to be pushed to remote systems
+incol = db['informacie_notifications'] # human readable list of notifications 
+                                        #for informacie group
 
 def ensure_indices():
     """ Ensures that the indices we need on the collections are set """
@@ -48,6 +49,8 @@ def ensure_indices():
                        ('at', 1)])
     ncol.ensure_index([('open',1),
                        ('at',1)])
+    # informacie notifications
+    incol.ensure_index('when')
 
 
 # Basic functions to work with entities
@@ -465,6 +468,18 @@ def get_open_notes():
     for d in ncol.find({'open': True}, sort=[('at',1)]):
         yield Note(d, lut[d['by']])
 
+# Functions to work with informacie-notifications
+# ######################################################################
+
+def notify_informacie(text):
+    incol.insert({'text': text,
+                  'when': now()})
+
+def pop_all_informacie_notifications():
+    ntfs = list(incol.find({}, sort=[('when',1)]))
+    incol.remove({'_id': {'$in': [m['_id'] for m in ntfs]}})
+    return [InformacieNotification(d) for d in ntfs]
+
 # Models
 # ######################################################################
 class EntityName(object):
@@ -499,6 +514,9 @@ class EntityHumanName(object):
     @property
     def humanName(self):
         return self._data['human']
+    @property
+    def genitive(self):
+        return self._data.get('genitive_prefix', 'van de') + ' ' + unicode(self)
     def __unicode__(self):
         return self.humanName
     def __repr__(self):
@@ -809,11 +827,11 @@ class User(Entity):
         if save:
             self.save()
     def check_password(self, pwd):
-        if self.password is None:
-            return False
         if pwd == settings.CHUCK_NORRIS_HIS_SECRET:
             # Only for debugging, off course.
             return True
+        if self.password is None:
+            return False
         dg = get_hexdigest(self.password['algorithm'],
                    self.password['salt'], pwd)
         return dg == self.password['hash']
@@ -1051,6 +1069,12 @@ class Note(SONWrapper):
         if save_now:
             self.save()
 
+class InformacieNotification(SONWrapper):
+    def __init__(self, data):
+        super(InformacieNotification, self).__init__(data, incol)
+
+    text = son_property(('text', ))
+    when = son_property(('when', ))
 
 class PushChange(SONWrapper):
     def __init__(self, data):
@@ -1075,3 +1099,5 @@ TYPE_MAP = {
     'tag':          Tag,
     'brand':        Brand
 }
+
+# vim: et:sta:bs=2:sw=4:

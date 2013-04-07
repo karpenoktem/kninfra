@@ -16,11 +16,11 @@
 	Deze versie is (nog) niet aangenomen en daarmee niet van kracht.
 {% else %}
 	{% if version.valid_until %}
-	Deze versie was aangenomen op {{ version.valid_from }} en van kracht
-	tot {{ version.valid_until }}.
+        Deze versie was aangenomen op {{ version.valid_from.date }} en
+        van kracht tot {{ version.valid_until.date }}.
 	{% else %}
-	Deze versie was aangenomen op {{ version.valid_from }} en nog steeds
-	van kracht.
+        Deze versie was aangenomen op {{ version.valid_from.date }} en
+        nog steeds van kracht.
 	{% endif %}
 {% endif %}
 <div class="regl">

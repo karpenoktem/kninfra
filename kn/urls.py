@@ -1,12 +1,10 @@
-# vim: et:sta:bs=2:sw=4:
-from django.conf.urls.defaults import *
-from kn.leden import views
-
 from django.contrib import auth
-
-import django.contrib.auth.views
-from kn.base.views import direct_to_folder
 from django.conf import settings
+from django.conf.urls.defaults import *
+import django.contrib.auth.views
+
+from kn.leden import views
+from kn.base.views import direct_to_folder
 
 urlpatterns = patterns('',
     (r'^base/', include('kn.base.urls')),
@@ -26,3 +24,5 @@ urlpatterns = patterns('',
     (r'^planning/', include('kn.planning.urls')),
     (r'^barco/', include('kn.barco.urls')),
 )
+
+# vim: et:sta:bs=2:sw=4:

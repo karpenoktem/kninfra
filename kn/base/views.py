@@ -1,9 +1,9 @@
-# vim: et:sta:bs=2:sw=4:
-from django.core.servers.basehttp import FileWrapper
-from django.http import Http404, HttpResponse
 import mimetypes
 import os.path
 import os
+
+from django.core.servers.basehttp import FileWrapper
+from django.http import Http404, HttpResponse
 
 def direct_to_folder(request, root, subdir):
     root = os.path.abspath(root)
@@ -18,3 +18,5 @@ def direct_to_folder(request, root, subdir):
         raise Http404
     return HttpResponse(FileWrapper(open(p)),
             mimetype=mimetypes.guess_type(p)[0])
+
+# vim: et:sta:bs=2:sw=4:

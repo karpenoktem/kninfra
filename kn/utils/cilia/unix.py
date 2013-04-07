@@ -1,12 +1,11 @@
-# vim: et:sta:bs=2:sw=4:
 import pwd
-import spwd
 import grp
+import spwd
 import crypt
 import string
 import logging
-import subprocess
 import datetime
+import subprocess
 
 from kn.base._random import pseudo_randstr
 
@@ -90,3 +89,5 @@ def set_unix_map(cilia, _map):
             if m in w_memb:
                 continue
             subprocess.call(['gpasswd', '-d', m, gname])
+
+# vim: et:sta:bs=2:sw=4:

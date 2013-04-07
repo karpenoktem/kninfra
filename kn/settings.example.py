@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import datetime
 
 # Base Django settings
@@ -22,14 +21,17 @@ DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@karpenoktem.nl>'
 
 ROOT_URLCONF = 'kn.urls'
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
+    ('kn.base.template.SlashNewlineStrippingTemplateLoader', (
+        'django.template.loaders.filesystem.load_template_source',
+        'django.template.loaders.app_directories.load_template_source',
+    )),
 )
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'kn.leden.giedo.SyncStatusMiddleware',
 )
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -76,6 +78,7 @@ DEFAULT_FILE_STORAGE = 'kn.base.storage.OurFileSystemStorage'
 BASE_BGS = ['antal', 'park', 'band', 'weekend']
 
 # smoelen
+BASE_URL = 'https://karpenoktem.nl'
 SMOELEN_PHOTOS_PATH = 'smoelen'
 USER_PHOTOS_URL = 'http://karpenoktem.nl/fotos/?search_tag=%s'
 
@@ -139,3 +142,5 @@ CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
 VILLANET_SECRET_API_KEY = '' # CHANGE ME
 DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
                         '<root@khandhas.karpenoktem.nl>')
+
+# vim: et:sta:bs=2:sw=4:
