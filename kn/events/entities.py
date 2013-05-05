@@ -1,3 +1,5 @@
+import decimal
+
 from django.db.models import permalink
 
 from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
@@ -35,6 +37,12 @@ class Subscription(SONWrapper):
     state = son_property(('state',))
     when = son_property(('when',)) # reference date
 
+    def _get_debit(self):
+        return decimal.Decimal(self._data['debit'])
+    def _set_debit(self, v):
+        self._data['debit'] = str(v)
+    debit = property(_get_debit, _set_debit)
+
     @property
     def changes(self):
         return self._data['changes']
@@ -53,10 +61,13 @@ class Event(SONWrapper):
     humanName = son_property(('humanName',))
     when = son_property(('when',))
     owner = son_property(('owner',))
-    cost = son_property(('cost',))
     description = son_property(('description',))
     description_html = son_property(('description_html',))
     manually_closed = son_property(('manually_closed',))
+
+    @property
+    def cost(self):
+        return decimal.Decimal(self._data['cost'])
     
     # Behavioral settings
     has_public_subscriptions = son_property(('has_public_subscriptions',))
@@ -97,6 +108,10 @@ class Event(SONWrapper):
     @property
     def subscriptions(self):
         return [Subscription(d, self) for d in  self._data['subscriptions']]
+
+    @property
+    def is_open(self):
+        return not self.manually_closed
 
 
 # vim: et:sta:bs=2:sw=4:
