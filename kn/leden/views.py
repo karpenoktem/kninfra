@@ -204,7 +204,20 @@ def _study_detail(request, study):
             context_instance=RequestContext(request))
 def _institute_detail(request, institute):
     ctx = _entity_detail(request, institute)
-    # TODO add followers in ctx
+    ctx['students'] = students = []
+    def _cmp(s1, s2):
+        r = Es.dt_cmp_until(s2['until'], s1['until'])
+        if r: return r
+        return cmp(s1['student'].humanName, s2['student'].humanName)
+    for student in Es.by_institute(institute):
+        for _study in student.studies:
+            if _study['institute'] != institute:
+                continue
+            students.append({'student': student,
+                             'from': _study['from'],
+                             'until': _study['until'],
+                             'study': _study['study']})
+    ctx['students'].sort(cmp=_cmp)
     return render_to_response('leden/institute_detail.html', ctx,
             context_instance=RequestContext(request))
 
