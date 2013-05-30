@@ -9,7 +9,7 @@ ADMINS = (
     ('Bram Westerbaan', 'bramw@karpenoktem.nl'),
 )
 
-DATABASES = {} # We do not use Django's DB abstraction
+DATABASES = {'default': {}} # We do not use Django's DB abstraction
 MANAGERS = ADMINS
 TIME_ZONE = 'Europe/Amsterdam'
 LANGUAGE_CODE = 'nl-NL'
