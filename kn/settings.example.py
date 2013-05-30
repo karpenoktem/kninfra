@@ -22,8 +22,8 @@ DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@karpenoktem.nl>'
 ROOT_URLCONF = 'kn.urls'
 TEMPLATE_LOADERS = (
     ('kn.base.template.SlashNewlineStrippingTemplateLoader', (
-        'django.template.loaders.filesystem.load_template_source',
-        'django.template.loaders.app_directories.load_template_source',
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
     )),
 )
 MIDDLEWARE_CLASSES = (
