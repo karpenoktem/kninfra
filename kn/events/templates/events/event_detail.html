@@ -22,14 +22,116 @@
 <h2>Aanmeldingen</h2>
 
 {% if event.subscribed %}
-<ul>
+<ol>
 {% for sub in event.subscribed %}
-    <li>{{ sub.who }}</li>
+<li><a href="{{ sub.who.get_absolute_url }}"
+        >{{ sub.who.humanName }}</a>
+    <ul>
+    {% for change in sub.changes %}
+        <li>
+            {% if change.type == 'invited' %}
+                uitgenodigd
+            {% endif %}{# change.type == 'invited' #}
+            {% if change.type == 'subscribed' %}
+                aangemeld
+            {% endif %}{# change.type == 'subscribed' #}
+            {% if change.type == 'confirmed' %}
+                bevestigd
+            {% endif %}{# change.type == 'confirmed' #}
+            {% if change.type == 'unsubscribed' %}
+                afgemeld
+            {% endif %}{# change.type == 'unsubscribed' #}
+            op {{ change.when.date }}
+            {% if change.by %}
+            door <a href="{{ change.by.get_absolute_url }}"
+                    >{{ change.by.humanName }}</a>
+            {% endif %}{# change.by #}
+            {% if change.notes and may_see_notes %}
+            <blockquote>{{ change.notes }}</blockquote>
+            {% endif %}{# change.notes and may_see_notes #}
+        </li>
+    {% endfor %}{# change in sub.changes #}
+    </ul>
+</li>
 {% endfor %} {# sub in event.subscribed #}
-</ul>
+</ol>
 {% else %}{# event.subscribed #}
-    Er zijn geen aanmeldingen.
+    <p>Er zijn geen aanmeldingen.</p>
 {% endif %}{# event.subscribed #}
+
+{% if event.reservists %}
+<h2>Reservelijst</h2>
+<ol>
+{% for sub in event.reservists %}
+<li><a href="{{ sub.who.get_absolute_url }}"
+        >{{ sub.who.humanName }}</a>
+    <ul>
+    {% for change in sub.changes %}
+        <li>
+            {% if change.type == 'invited' %}
+                uitgenodigd
+            {% endif %}{# change.type == 'invited' #}
+            {% if change.type == 'subscribed' %}
+                aangemeld
+            {% endif %}{# change.type == 'subscribed' #}
+            {% if change.type == 'confirmed' %}
+                bevestigd
+            {% endif %}{# change.type == 'confirmed' #}
+            {% if change.type == 'unsubscribed' %}
+                afgemeld
+            {% endif %}{# change.type == 'unsubscribed' #}
+            op {{ change.when.date }}
+            {% if change.by %}
+            door <a href="{{ change.by.get_absolute_url }}"
+                    >{{ change.by.humanName }}</a>
+            {% endif %}{# change.by #}
+            {% if change.notes and may_see_notes %}
+            <blockquote>{{ change.notes }}</blockquote>
+            {% endif %}{# change.notes and may_see_notes #}
+        </li>
+    {% endfor %}{# change in sub.changes #}
+    </ul>
+</li>
+{% endfor %} {# sub in event.reservists #}
+</ol>
+{% endif %}{# event.reservists #}
+
+{% if event.unconfirmed %}
+<h2>Onbevestigd</h2>
+<ul>
+{% for sub in event.unconfirmed %}
+<li><a href="{{ sub.who.get_absolute_url }}"
+        >{{ sub.who.humanName }}</a>
+    <ul>
+    {% for change in sub.changes %}
+        <li>
+            {% if change.type == 'invited' %}
+                uitgenodigd
+            {% endif %}{# change.type == 'invited' #}
+            {% if change.type == 'subscribed' %}
+                aangemeld
+            {% endif %}{# change.type == 'subscribed' #}
+            {% if change.type == 'confirmed' %}
+                bevestigd
+            {% endif %}{# change.type == 'confirmed' #}
+            {% if change.type == 'unsubscribed' %}
+                afgemeld
+            {% endif %}{# change.type == 'unsubscribed' #}
+            op {{ change.when.date }}
+            {% if change.by %}
+            door <a href="{{ change.by.get_absolute_url }}"
+                    >{{ change.by.humanName }}</a>
+            {% endif %}{# change.by #}
+            {% if change.notes and may_see_notes %}
+            <blockquote>{{ change.notes }}</blockquote>
+            {% endif %}{# change.notes and may_see_notes #}
+        </li>
+    {% endfor %}{# change in sub.changes #}
+    </ul>
+</li>
+{% endfor %} {# sub in event.unconfirmed #}
+</ul>
+{% endif %}{# event.unconfirmed #}
 
 {% if event.unsubscribed %}
 <h2>Afmeldingen</h2>
@@ -40,11 +142,26 @@
     <ul>
     {% for change in sub.changes %}
         <li>
-            {{ change.type }}
+            {% if change.type == 'invited' %}
+                uitgenodigd
+            {% endif %}{# change.type == 'invited' #}
             {% if change.type == 'subscribed' %}
                 aangemeld
-            {% endif %}
+            {% endif %}{# change.type == 'subscribed' #}
+            {% if change.type == 'confirmed' %}
+                bevestigd
+            {% endif %}{# change.type == 'confirmed' #}
+            {% if change.type == 'unsubscribed' %}
+                afgemeld
+            {% endif %}{# change.type == 'unsubscribed' #}
             op {{ change.when.date }}
+            {% if change.by %}
+            door <a href="{{ change.by.get_absolute_url }}"
+                    >{{ change.by.humanName }}</a>
+            {% endif %}{# change.by #}
+            {% if change.notes and may_see_notes %}
+            <blockquote>{{ change.notes }}</blockquote>
+            {% endif %}{# change.notes and may_see_notes #}
         </li>
     {% endfor %}{# change in sub.changes #}
     </ul>
@@ -53,23 +170,6 @@
 </ul>
 {% endif %}{# event.unsubscribed #}
 
-{% if event.reservists %}
-<h2>Reservelijst</h2>
-<ul>
-{% for sub in event.reservists %}
-    <li>{{ sub.who }}</li>
-{% endfor %} {# sub in event.reservists #}
-</ul>
-{% endif %}{# event.reservists #}
-
-{% if event.unconfirmed %}
-<h2>Onbevestigd</h2>
-<ul>
-{% for sub in event.unconfirmed %}
-    <li>{{ sub.who }}</li>
-{% endfor %} {# sub in event.unconfirmed #}
-</ul>
-{% endif %}{# event.unconfirmed #}
 
 {% endif %}{# may_see_subscriptions #}
 {% endblock %}

@@ -18,7 +18,9 @@ def event_detail(request, name):
     return render_to_response('events/event_detail.html',
                     {'event': event,
                      'may_see_subscriptions':
-                            event.may_see_subscriptions(request.user)},
+                            event.may_see_subscriptions(request.user),
+                     'may_see_notes':
+                            event.may_see_notes(request.user)},
             context_instance=RequestContext(request))
 
 @login_required

@@ -33,7 +33,7 @@ class SubscriptionChange(SONWrapper):
     def __init__(self, data, subscription):
         super(SubscriptionChange, self).__init__(data, ecol, subscription)
 
-    # confirmed, subscribed
+    # confirmed, subscribed, unsubscribed, invited
     type = son_property(('type',))
     by = son_property(('by',))
     when = son_property(('when',))
@@ -130,6 +130,8 @@ class Event(SONWrapper):
         return ('penningmeester' in user.cached_groups_names or
                 'secretariaat' in user.cached_groups_names)
 
+    def may_see_notes(self, user):
+        return self.has_read_access(user)
     def may_see_subscriptions(self, user):
         return (self.has_read_access(user) or
                 self.has_public_subscriptions)
