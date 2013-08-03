@@ -15,10 +15,15 @@ from kn.leden.mongo import _id
 @login_required
 def event_detail(request, name):
     event = events_Es.event_by_name(name)
+    subscription = event.subscription_for(request.user._id)
     return render_to_response('events/event_detail.html',
                     {'event': event,
                      'may_see_subscriptions':
-                            event.may_see_subscriptions(request.user)},
+                            event.may_see_subscriptions(request.user),
+                     'subscription': subscription,
+                     'subscribed': subscription and subscription.subscribed,
+                     'may_see_notes':
+                            event.may_see_notes(request.user)},
             context_instance=RequestContext(request))
 
 @login_required

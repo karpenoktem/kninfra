@@ -33,11 +33,15 @@ class SubscriptionChange(SONWrapper):
     def __init__(self, data, subscription):
         super(SubscriptionChange, self).__init__(data, ecol, subscription)
 
-    # confirmed, subscribed
+    # confirmed, subscribed, unsubscribed, invited
     type = son_property(('type',))
-    by = son_property(('by',))
+    by_id = son_property(('by',))
     when = son_property(('when',))
     notes = son_property(('notes',))
+
+    @property
+    def by(self):
+        return Es.by_id(self.by_id) if self.by_id else None
 
 class Subscription(SONWrapper):
     def __init__(self, data, event):
@@ -61,6 +65,9 @@ class Subscription(SONWrapper):
     @property
     def changes(self):
         return [SubscriptionChange(d, self) for d in  self._data['changes']]
+    @property
+    def subscribed(self):
+        return self.state == STATE_SUBSCRIBED
 
 class EventChange(SONWrapper):
     def __init__(self, data, event):
@@ -130,13 +137,20 @@ class Event(SONWrapper):
         return ('penningmeester' in user.cached_groups_names or
                 'secretariaat' in user.cached_groups_names)
 
+    def may_see_notes(self, user):
+        return self.has_read_access(user)
     def may_see_subscriptions(self, user):
         return (self.has_read_access(user) or
                 self.has_public_subscriptions)
+    def subscription_for(self, user_id):
+        for subscription in self._data['subscriptions']:
+            if subscription['who'] == user_id:
+                return Subscription(subscription, self)
+        return None
 
     @property
     def changes(self):
-        return [SubscriptionChange(d, self) for d in  self._data['changes']]
+        return [EventChange(d, self) for d in  self._data['changes']]
 
     @property
     def subscriptions(self):
