@@ -23,7 +23,7 @@ for e in ecol.find():
         by = None
         if old.get('confirmed') == False:
             state = 2
-            type_ = 'subscribedBy'
+            type_ = 'invited'
             by = old.get('subscribedBy')
 
         changes = [{
