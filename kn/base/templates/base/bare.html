@@ -60,12 +60,14 @@
 		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 	</script>
 	<script type="text/javascript">
+        {% block js %}
 	try {
 	var pageTracker = _gat._getTracker("UA-11922614-1");
 	pageTracker._trackPageview();
         } catch(err) {}
         var csrf_token = "{{ csrf_token }}";
         var leden_api_url = "{% url leden-api %}";
+        {% endblock %}
         </script>
 	</body>	
 </html>
