@@ -33,10 +33,6 @@ def event_list(request):
             context_instance=RequestContext(request))
 
 @login_required
-def api(request):
-    pass
-
-@login_required
 def event_new_or_edit(request, edit=None):
     superuser = 'secretariaat' in request.user.cached_groups_names
     # If we are editing an existing event, fetch it!
