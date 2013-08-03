@@ -18,7 +18,7 @@ for e in ecol.find():
     
     new_subscriptions = []
     for old in old_subscriptions:
-        state = 1;
+        state = 0
         type_ = 'subscribed'
         by = None
         if old.get('confirmed') == False:
