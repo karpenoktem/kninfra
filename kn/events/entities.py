@@ -35,9 +35,13 @@ class SubscriptionChange(SONWrapper):
 
     # confirmed, subscribed, unsubscribed, invited
     type = son_property(('type',))
-    by = son_property(('by',))
+    by_id = son_property(('by',))
     when = son_property(('when',))
     notes = son_property(('notes',))
+
+    @property
+    def by(self):
+        return Es.by_id(self.by_id) if self.by_id else None
 
 class Subscription(SONWrapper):
     def __init__(self, data, event):
