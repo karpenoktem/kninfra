@@ -29,14 +29,16 @@ for e in ecol.find():
         changes = [{
             'type': type_,
             'when': old.get('date'),
-            'notes': old.get('userNotes')
+            'notes': old.get('userNotes'),
+            'by': old.get('subscribedBy')
         }]
 
         if old.get('dateConfirmed'):
             changes.append({
                 'type': 'confirmed',
-                'when': old.get('dateConfrmed'),
-                'notes': None
+                'when': old.get('dateConfirmed'),
+                'notes': None,
+                'by': old.get('user')
             })
 
         new_subscription = {
@@ -44,7 +46,6 @@ for e in ecol.find():
             'state': state,
             'when': old.get('date'),
             'debit': old.get('debit'),
-            'by': by,
             'changes': changes
         }
 
@@ -52,17 +53,21 @@ for e in ecol.find():
             
 
     new_event = {
-        '_id': e['_id'],
-        'name': e['name'],
-        'humanName': e['humanName'],
-        'owner': e['owner'],
-        'cost': e['cost'],
-        'description': e['description'],
-        'manually_closed': not e['is_open'],
+        '_id': e.get('_id'),
+        'name': e.get('name'),
+        'humanName': e.get('humanName'),
+        'owner': e.get('owner'),
+        'cost': e.get('cost'),
+        'when': e.get('date'),
+        'description': e.get('description'),
+        'description_html': e.get('description_html', escape(e.get('description'))),
+        'manually_closed': not e.get('is_open'),
+        'has_public_subscriptions': e.get('has_public_subscriptions', False),
         'owner_can_subscribe_others': True,
-        'msg_subscribed': e['mailBody'],
+        'anyone_can_subscribe_others': e.get('everyone_can_subscribe_others', False),
+        'msg_subscribed': e.get('mailBody'),
         'msg_subscribedBy': e.get('subscribedByOtherMailBody'),
-        'msg_confirmed': e.get('everyone_can_subscribe_others'),
+        'msg_confirmed': e.get('confirmationMailBody'),
         'is_official': e.get('is_official'),
         'subscriptions': new_subscriptions,
         'changes': [{
@@ -71,25 +76,6 @@ for e in ecol.find():
             'by': e.get('createdBy')
         }]
     }
-    try:
-        new_event['description_html'] = e['description_html']
-    except KeyError:
-        new_event['description_html'] = escape(e['description'])
-
-    try:
-        new_event['when'] = e['date']
-    except KeyError:
-        new_event['when'] = None
-
-    try:
-        new_event['has_public_subscriptions'] = e['has_public_subscriptions']
-    except KeyError:
-        new_event['has_public_subscriptions'] = False
-
-    try:
-        new_event['anyone_can_subscribe_others'] = e['everyone_can_subscribe_others']
-    except KeyError:
-        new_event['heveryone_can_subscribe_others'] = False
 
     new_events.append(new_event)
 
