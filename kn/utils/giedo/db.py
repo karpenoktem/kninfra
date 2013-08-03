@@ -21,7 +21,7 @@ def update_db(giedo):
     groups = Es.of_type_by_name('group')
     groups_set = frozenset(groups.values())
     # Find groups that have a virtual group for each year
-    year_groups = [g for g in groups.itervalues()
+    year_groups = [g for g in groups_set
             if tags['!year-group'] in g.tag_ids]
     # Find relations on those groups and add the years for which those
     # relations hold.
@@ -129,6 +129,8 @@ def update_db(giedo):
         sofa_brands[b._id] = b
     for rel in Es.query_relations(how=sofa_brands.values()):
         if (rel['how'], rel['with']) in sofa_lut:
+            continue
+        if not id2name[rel['with']]:
             continue
         g = groups[id2name[rel['with']]]
         nm = str(g.name) + '-' + sofa_brands[rel['how']].sofa_suffix
