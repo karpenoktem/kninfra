@@ -65,6 +65,9 @@ class Subscription(SONWrapper):
     @property
     def changes(self):
         return [SubscriptionChange(d, self) for d in  self._data['changes']]
+    @property
+    def subscribed(self):
+        return self.state == STATE_SUBSCRIBED
 
 class EventChange(SONWrapper):
     def __init__(self, data, event):
@@ -139,10 +142,15 @@ class Event(SONWrapper):
     def may_see_subscriptions(self, user):
         return (self.has_read_access(user) or
                 self.has_public_subscriptions)
+    def subscription_for(self, user_id):
+        for subscription in self._data['subscriptions']:
+            if subscription['who'] == user_id:
+                return Subscription(subscription, self)
+        return None
 
     @property
     def changes(self):
-        return [SubscriptionChange(d, self) for d in  self._data['changes']]
+        return [EventChange(d, self) for d in  self._data['changes']]
 
     @property
     def subscriptions(self):
