@@ -28,12 +28,23 @@ STATE_NOT_SUBSCRIBED    = 1
 STATE_UNCONFIRMED       = 2
 STATE_RESERVIST         = 3
 
+
+class SubscriptionChange(SONWrapper):
+    def __init__(self, data, subscription):
+        super(SubscriptionChange, self).__init__(data, ecol, subscription)
+
+    # confirmed, subscribed
+    type = son_property(('type',))
+    by = son_property(('by',))
+    when = son_property(('when',))
+    notes = son_property(('notes',))
+
 class Subscription(SONWrapper):
     def __init__(self, data, event):
         super(Subscription, self).__init__(data, ecol, event)
 
     # Basic properties
-    who = son_property(('who',))
+    who_id = son_property(('who',))
     state = son_property(('state',))
     when = son_property(('when',)) # reference date
 
@@ -44,8 +55,22 @@ class Subscription(SONWrapper):
     debit = property(_get_debit, _set_debit)
 
     @property
+    def who(self):
+        return Es.by_id(self._data['who'])
+
+    @property
     def changes(self):
-        return self._data['changes']
+        return [SubscriptionChange(d, self) for d in  self._data['changes']]
+
+class EventChange(SONWrapper):
+    def __init__(self, data, event):
+        super(EventChange, self).__init__(data, ecol, event)
+
+    # created, updated, closed
+    type = son_property(('type',))
+    by = son_property(('by',))
+    when = son_property(('when',))
+    notes = son_property(('notes',))
 
 
 class Event(SONWrapper):
@@ -60,10 +85,14 @@ class Event(SONWrapper):
     name = son_property(('name',))
     humanName = son_property(('humanName',))
     when = son_property(('when',))
-    owner = son_property(('owner',))
+    owner_id = son_property(('owner',))
     description = son_property(('description',))
     description_html = son_property(('description_html',))
     manually_closed = son_property(('manually_closed',))
+
+    @property
+    def owner(self):
+        return Es.by_id(self._data['owner'])
 
     @property
     def cost(self):
@@ -87,13 +116,13 @@ class Event(SONWrapper):
         return ('event-detail', (), {'name': self.name})
 
     def has_read_access(self, user):
-        return  (self.owner == user or
+        return  (self.owner_id == user._id or
             str(self.owner.name) in user.cached_groups_names or
                'secretariaat' in user.cached_groups_names or
                'admlezers' in user.cached_groups_names)
 
     def has_write_access(self, user):
-        return (self.owner == user or
+        return (self.owner_id == user._id or
             str(self.owner.name) in user.cached_groups_names or
                'secretariaat' in user.cached_groups_names)
 
@@ -101,14 +130,33 @@ class Event(SONWrapper):
         return ('penningmeester' in user.cached_groups_names or
                 'secretariaat' in user.cached_groups_names)
 
+    def may_see_subscriptions(self, user):
+        return (self.has_read_access(user) or
+                self.has_public_subscriptions)
+
     @property
     def changes(self):
-        return self._data['changes']
+        return [SubscriptionChange(d, self) for d in  self._data['changes']]
 
     @property
     def subscriptions(self):
         return [Subscription(d, self) for d in  self._data['subscriptions']]
-
+    @property
+    def subscribed(self):
+        return [Subscription(d, self) for d in  self._data['subscriptions']
+                        if d['state'] == STATE_SUBSCRIBED]
+    @property
+    def unconfirmed(self):
+        return [Subscription(d, self) for d in  self._data['subscriptions']
+                        if d['state'] == STATE_UNCONFIRMED]
+    @property
+    def reservists(self):
+        return [Subscription(d, self) for d in  self._data['subscriptions']
+                        if d['state'] == STATE_RESERVIST]
+    @property
+    def unsubscribed(self):
+        return [Subscription(d, self) for d in  self._data['subscriptions']
+                        if d['state'] == STATE_NOT_SUBSCRIBED]
     @property
     def is_open(self):
         return not self.manually_closed

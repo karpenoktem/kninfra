@@ -16,7 +16,9 @@ from kn.leden.mongo import _id
 def event_detail(request, name):
     event = events_Es.event_by_name(name)
     return render_to_response('events/event_detail.html',
-                        {'event': event},
+                    {'event': event,
+                     'may_see_subscriptions':
+                            event.may_see_subscriptions(request.user)},
             context_instance=RequestContext(request))
 
 @login_required
@@ -31,10 +33,6 @@ def event_list(request):
             {'open_events': open_events,
              'closed_events': closed_events},
             context_instance=RequestContext(request))
-
-@login_required
-def api(request):
-    pass
 
 @login_required
 def event_new_or_edit(request, edit=None):
@@ -56,6 +54,7 @@ def event_new_or_edit(request, edit=None):
             if not superuser and not request.user.is_related_with(
                             fd['owner']) and not fd['owner'] == request.user.id:
                 raise PermissionDenied
+            # TODO move to entities
             d = {   'when': date_to_dt(fd['when']),
                     'name': fd['name'],
                     'humanName': fd['humanName'],
@@ -72,9 +71,10 @@ def event_new_or_edit(request, edit=None):
                     'anyone_can_subscribe_others': fd[
                                         'anyone_can_subscribe_others'],
                     'cost': str(fd['cost']),
+                    'subscriptions': [],
                     'manually_closed': False}
             change = {
-                    'type': 'update',
+                    'type': 'updated',
                     'by': _id(request.user),
                     'when': datetime.datetime.now()}
             if edit is None:
