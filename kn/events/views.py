@@ -91,7 +91,7 @@ def event_new_or_edit(request, edit=None):
         d = e._data
         form = AddEventForm(d)
     ctx = {'form': form}
-    return render_to_response('subscriptions/event_new_or_edit.html', ctx,
+    return render_to_response('events/event_new_or_edit.html', ctx,
             context_instance=RequestContext(request))
 
 # vim: et:sta:bs=2:sw=4:
