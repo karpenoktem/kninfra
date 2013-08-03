@@ -29,8 +29,18 @@ function create_entityChoiceField(id, params) {
     if(!params.input_type) params.input_type = 'text';
     $('#'+id).after("<input type='"+params.input_type+"' id='_"+id+"' />");
     var box = $('#_'+id);
-    if(params.placeholder)
+    if(params.placeholder) {
         box.attr('placeholder', params.placeholder);
+    }
+    if(params.attrs) {
+        for(var attr in params.attrs) {
+            if(attr == 'class') {
+                box.addClass(params.attrs[attr]);
+            } else if(box.attr(attr) == '') {
+                box.attr(attr, params.attrs[attr]);
+            }
+        }
+    }
     box.autocomplete({
         source: function(request, response) {
             leden_api({
