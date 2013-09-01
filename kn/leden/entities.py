@@ -802,8 +802,7 @@ class Group(Entity):
         for rel in self.get_rrelated(how=None, deref_with=False):
             _all.add(rel['who'])
             if ((rel['until'] is None or rel['until'] >= dt) and
-                    rel['from'] is None
-                    or rel['from'] <= dt):
+                    (rel['from'] is None or rel['from'] <= dt)):
                 cur.add(rel['who'])
         return (cur, _all - cur)
     def get_members(self):
