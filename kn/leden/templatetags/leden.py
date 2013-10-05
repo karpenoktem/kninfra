@@ -19,4 +19,11 @@ def rel_when_filter(r):
         ret += 'tot %s' % until.date()
     return '(%s)' % ret
 
+# http://ianrolfe.livejournal.com/37243.html
+@register.filter(name='lookup')
+def lookup_filter(dict, index):
+    if index in dict:
+        return dict[index]
+    return ''
+
 # vim: et:sta:bs=2:sw=4:
