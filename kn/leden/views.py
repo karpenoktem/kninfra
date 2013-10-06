@@ -99,8 +99,20 @@ def _entity_detail(request, e):
                     Es.date_to_year(r['until']))
         r['virtual'] = Es.relation_is_virtual(r)
     tags = [t.as_primary_type() for t in e.get_tags()]
+
+    year_counts = {}
+    for r in rrelated:
+        key = r['until_year']
+        if key is None:
+            key = 'this'
+
+        if not key in year_counts:
+            year_counts[key] = 0
+        year_counts[key] += 1
+
     ctx = {'related': related,
            'rrelated': rrelated,
+           'year_counts': year_counts,
            'now': now(),
            'tags': sorted(tags, Es.entity_cmp_humanName),
            'object': e,
