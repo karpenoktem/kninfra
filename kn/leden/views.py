@@ -3,6 +3,7 @@ from hashlib import sha256
 from datetime import date
 from glob import glob
 from os import path
+from sets import Set
 
 import mimetypes
 import logging
@@ -101,19 +102,19 @@ def _entity_detail(request, e):
     tags = [t.as_primary_type() for t in e.get_tags()]
 
     # mapping of year => set of members
-    year_counts = {}
+    year_sets = {}
     for r in rrelated:
-        key = r['until_year']
-        if key is None:
-            key = 'this'
+        year = r['until_year']
+        if year is None:
+            year = 'this'
 
-        if not key in year_counts:
-            year_counts[key] = {}
-        year_counts[key][r['who']] = True
+        if not year in year_sets:
+            year_sets[year] = Set()
+        year_sets[year].add(r['who'])
 
-    # convert to year => amount of members
-    for key in year_counts:
-        year_counts[key] = len(year_counts[key])
+    year_counts = {}
+    for year in year_sets:
+        year_counts[year] = len(year_sets[year])
 
     ctx = {'related': related,
            'rrelated': rrelated,
