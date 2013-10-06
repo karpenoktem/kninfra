@@ -3,7 +3,6 @@ from hashlib import sha256
 from datetime import date
 from glob import glob
 from os import path
-from sets import Set
 
 import mimetypes
 import logging
@@ -109,7 +108,7 @@ def _entity_detail(request, e):
             year = 'this'
 
         if not year in year_sets:
-            year_sets[year] = Set()
+            year_sets[year] = set()
         year_sets[year].add(r['who'])
 
     year_counts = {}
