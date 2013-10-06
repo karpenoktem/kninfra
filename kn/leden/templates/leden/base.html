@@ -1,6 +1,23 @@
 {% extends "base/base.html" %}
 
 {% block menu %}
+{% if user.is_authenticated %}
+<input type="hidden" id="searchfield" />
+<script type="text/javascript">
+        $(function(){
+                {# TODO we need a page for when the user did not select #}
+                {#      something from the dropdown #}
+                create_entityChoiceField('searchfield', {
+                        placeholder: 'Zoeken ...',
+                        input_type: 'search',
+                        select: function(label, entid) {
+                                {# TODO We should write a JS reverse() #}
+                                location.href = '/smoelen/id/'+ entid;
+                        }});
+        });
+</script>
+{% endif %}{# user #}
+
 {{ block.super }}
 <li><a href="{% url smoelen-home %}"
 	>Smoelenboek</a></li>
@@ -43,3 +60,16 @@
 </ul>
 {% endif %}
 {% endblock %}
+
+{% block messages %}
+{% if request.session.waitingOnGiedoSync %}
+<div class="notice" id="waitingOnGiedoSyncNotice">
+        Wijzingen worden doorgevoerd ...
+</div>
+<script type="text/javascript">
+        setTimeout(function(){checkGiedoSync(
+                        {{ request.session.waitingOnGiedoSync }})}, 1000);
+</script>
+{% endif %}{# request.session.waiting_on_giedo_sync #}
+{{ block.super }}
+{% endblock %}{# messages #}

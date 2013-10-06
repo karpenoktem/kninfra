@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import datetime
 
 # Base Django settings
@@ -10,26 +9,29 @@ ADMINS = (
     ('Bram Westerbaan', 'bramw@karpenoktem.nl'),
 )
 
-DATABASES = {} # We do not use Django's DB abstraction
+DATABASES = {'default': {}} # We do not use Django's DB abstraction
 MANAGERS = ADMINS
 TIME_ZONE = 'Europe/Amsterdam'
 LANGUAGE_CODE = 'nl-NL'
 SITE_ID = 1
 USE_I18N = True
-MEDIA_ROOT = '/home/infra/media/'
+MEDIA_ROOT = '/home/infra/repo/media/'
 MEDIA_URL = '/djmedia'
 DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@karpenoktem.nl>'
 
 ROOT_URLCONF = 'kn.urls'
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
+    ('kn.base.template.SlashNewlineStrippingTemplateLoader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
 )
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'kn.leden.giedo.SyncStatusMiddleware',
 )
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -47,7 +49,7 @@ INSTALLED_APPS = (
     'kn.planning',
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.auth",
+    "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
@@ -76,6 +78,7 @@ DEFAULT_FILE_STORAGE = 'kn.base.storage.OurFileSystemStorage'
 BASE_BGS = ['antal', 'park', 'band', 'weekend']
 
 # smoelen
+BASE_URL = 'https://karpenoktem.nl'
 SMOELEN_PHOTOS_PATH = 'smoelen'
 USER_PHOTOS_URL = 'http://karpenoktem.nl/fotos/?search_tag=%s'
 
@@ -139,3 +142,5 @@ CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
 VILLANET_SECRET_API_KEY = '' # CHANGE ME
 DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
                         '<root@khandhas.karpenoktem.nl>')
+
+# vim: et:sta:bs=2:sw=4:

@@ -1,6 +1,5 @@
-# vim: et:sta:bs=2:sw=4:
-import logging
 import os
+import logging
 import subprocess
 from glob import glob
 from tempfile import mkdtemp
@@ -173,3 +172,5 @@ def create_openvpn_zip(giedo, user):
 
 if __name__ == '__main__':
     create_openvpn_installer(None, Es.by_name('jille'))
+
+# vim: et:sta:bs=2:sw=4:

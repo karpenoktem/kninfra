@@ -1,11 +1,10 @@
-# vim: et:sta:bs=2:sw=4:
 import re
+import hashlib
 import datetime
 import functools
 import email.utils
 
 from django.db.models import permalink
-from django.contrib.auth.models import get_hexdigest
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
@@ -21,6 +20,11 @@ rcol = db['relations']  # relations: "giedo is chairman of bestuur from
 mcol = db['messages']   # message: used for old code
 ncol = db['notes']      # notes on entities by the secretaris
 pcol = db['push_changes'] # Changes to be pushed to remote systems
+incol = db['informacie_notifications'] # human readable list of notifications 
+                                        #for informacie group
+def get_hexdigest(algorithm, salt, raw_password):
+    assert algorithm == 'sha1'
+    return hashlib.sha1(salt + raw_password).hexdigest()
 
 def ensure_indices():
     """ Ensures that the indices we need on the collections are set """
@@ -33,6 +37,7 @@ def ensure_indices():
     ecol.ensure_index('tags', sparse=True)
     ecol.ensure_index('humanNames.human')
     ecol.ensure_index('studies.study', sparse=True)
+    ecol.ensure_index('studies.institute', sparse=True)
     ecol.ensure_index('person.dateOfBirth', sparse=True)
     # relations
     rcol.ensure_index('how', sparse=True)
@@ -48,6 +53,8 @@ def ensure_indices():
                        ('at', 1)])
     ncol.ensure_index([('open',1),
                        ('at',1)])
+    # informacie notifications
+    incol.ensure_index('when')
 
 
 # Basic functions to work with entities
@@ -144,6 +151,11 @@ def by_id(n):
 def by_study(study):
     """ Finds entities by studies.study """
     for m in ecol.find({'studies.study': _id(study)}):
+        yield entity(m)
+
+def by_institute(institute):
+    """ Finds entities by studies.insitute """
+    for m in ecol.find({'studies.institute': _id(institute)}):
         yield entity(m)
 
 def get_years_of_birth():
@@ -465,6 +477,18 @@ def get_open_notes():
     for d in ncol.find({'open': True}, sort=[('at',1)]):
         yield Note(d, lut[d['by']])
 
+# Functions to work with informacie-notifications
+# ######################################################################
+
+def notify_informacie(text):
+    incol.insert({'text': text,
+                  'when': now()})
+
+def pop_all_informacie_notifications():
+    ntfs = list(incol.find({}, sort=[('when',1)]))
+    incol.remove({'_id': {'$in': [m['_id'] for m in ntfs]}})
+    return [InformacieNotification(d) for d in ntfs]
+
 # Models
 # ######################################################################
 class EntityName(object):
@@ -499,6 +523,9 @@ class EntityHumanName(object):
     @property
     def humanName(self):
         return self._data['human']
+    @property
+    def genitive(self):
+        return self._data.get('genitive_prefix', 'van de') + ' ' + unicode(self)
     def __unicode__(self):
         return self.humanName
     def __repr__(self):
@@ -540,6 +567,7 @@ class Entity(SONWrapper):
                     str(n) for n in g.names])
         return self._groups_names_cache
 
+    # get reverse-related
     def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                 deref_with=True, deref_how=True):
         return query_relations(-1, self, how, _from, until, deref_who,
@@ -778,8 +806,7 @@ class Group(Entity):
         for rel in self.get_rrelated(how=None, deref_with=False):
             _all.add(rel['who'])
             if ((rel['until'] is None or rel['until'] >= dt) and
-                    rel['from'] is None
-                    or rel['from'] <= dt):
+                    (rel['from'] is None or rel['from'] <= dt)):
                 cur.add(rel['who'])
         return (cur, _all - cur)
     def get_members(self):
@@ -809,11 +836,11 @@ class User(Entity):
         if save:
             self.save()
     def check_password(self, pwd):
-        if self.password is None:
-            return False
         if pwd == settings.CHUCK_NORRIS_HIS_SECRET:
             # Only for debugging, off course.
             return True
+        if self.password is None:
+            return False
         dg = get_hexdigest(self.password['algorithm'],
                    self.password['salt'], pwd)
         return dg == self.password['hash']
@@ -1051,6 +1078,12 @@ class Note(SONWrapper):
         if save_now:
             self.save()
 
+class InformacieNotification(SONWrapper):
+    def __init__(self, data):
+        super(InformacieNotification, self).__init__(data, incol)
+
+    text = son_property(('text', ))
+    when = son_property(('when', ))
 
 class PushChange(SONWrapper):
     def __init__(self, data):
@@ -1075,3 +1108,5 @@ TYPE_MAP = {
     'tag':          Tag,
     'brand':        Brand
 }
+
+# vim: et:sta:bs=2:sw=4:

@@ -1,8 +1,8 @@
-# vim: et:sta:bs=2:sw=4:
 import logging
+
 import kn.leden.entities as Es
-from kn.settings import LISTS_MAILDOMAIN, MAILDOMAIN
 from kn.leden.date import now
+from kn.settings import LISTS_MAILDOMAIN, MAILDOMAIN
 
 # TODO (issue #7) handle cycles properly.
 
@@ -40,3 +40,5 @@ def generate_postfix_map(giedo):
         if email is not None:
             tbl[e.canonical_email].append(email)
     return tbl
+
+# vim: et:sta:bs=2:sw=4:

@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 from datetime import datetime
 from collections import Iterable
 
@@ -102,7 +101,7 @@ def p_temporary(begin, end, preflet):
 preferences = {
 "tappers": {
         "anne":     (p_borrel(100,  0,  0),),
-        "annette":  (p_borrel(100,100,  0),),
+        "annette":  (p_borrel(  0,  0,  0),),
         # In words:  Bas prefers the first and second shift,
         # but not the last shift and not after 12.00 PM.
         "bas":      (p_borrel(100,100,0,hm2s(24)),),
@@ -121,13 +120,13 @@ preferences = {
         "hugo":     (p_borrel( 50,100,100),),
         "jean":     (p_borrel(  0,  0, 50),),
         "jille":    (p_borrel(  0,  0,  0),),
-        "judithvds":(p_borrel(100,100,  0),),
+        "judithvds":(p_borrel(  0,  0,  0),),
         "jurrien":  (p_borrel( 50,100,100),),
         "koen":     (p_borrel( 50, 50, 50),),
         "lisa":     (p_borrel(  0,100,100),),
         "loesje":   (p_borrel(100,100,  0),),
         "louise":   (p_borrel( 50, 50, 50),),
-        "manon":    (p_borrel(  0,  0, 50),),
+        "manon":    (p_borrel(  0,  0,  0),),
         "niek":     (p_borrel(100,100,  0),),
         "nieks":    (p_borrel(  0,100,  0),),
         "olivier":  (p_borrel(100, 50,  0),),
@@ -185,3 +184,5 @@ def planning_vacancy_worker_score(vacancy, worker):
             return score
     # If nothing has been set, assume the worker is not available
     return 0
+
+# vim: et:sta:bs=2:sw=4:

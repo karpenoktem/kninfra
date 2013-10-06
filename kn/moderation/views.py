@@ -1,18 +1,17 @@
-# vim: et:sta:bs=2:sw=4:
 import os
 import sys
 import os.path
 import datetime
 
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.core.mail import EmailMessage
-from django.http import HttpResponse, Http404, HttpResponseRedirect
 
 import kn.leden.entities as Es
 import kn.moderation.entities as mod_Es
 from kn.utils.mailman import import_mailman
+from kn.base.mail import render_then_email
 from kn import settings
 
 import_mailman()
@@ -57,19 +56,14 @@ def _deactivate_mm(ml, name, user, record, moderators):
         ml.HandleRequest(id, mm_cfg.APPROVE)
     ml.Save()
     if user is None:
-        EmailMessage(
-            "Moderatiemodus op %s is verlopen" % name,
-            ("De moderatiemodus op %s is verlopen.") % name,
-            '<wortel@karpenoktem.nl>',
-            [moderators.canonical_full_email]).send()
+        render_then_email('moderation/timed-out.mail.txt',
+                moderators.canonical_full_email, {
+                    'name': name})
     else:
-        EmailMessage(
-            "Moderatiemodus op %s is uitgezet door %s" % (name,
-                            str(user.name)),
-            ("De moderatiemodus op %s is uitgezet door %s.") % (
-                name, str(user.name)),
-            '<wortel@karpenoktem.nl>',
-            [moderators.canonical_full_email]).send()
+        render_then_email('moderation/disabled-by.mail.txt',
+                moderators.canonical_full_email, {
+                    'name': name,
+                    'user': user})
 
 def _renew_mm(ml, name, user, record, moderators):
     if not ml.emergency:
@@ -81,16 +75,12 @@ def _renew_mm(ml, name, user, record, moderators):
     record.by = user
     record.at = now
     record.save()
-    EmailMessage(
-        "Moderatiemodus op %s is verlengd door %s" % (name,
-                            str(user.name)),
-        ("De moderatiemodus op %s is verlengd door %s.  Deze loopt, "+
-         "indien niet verder verlengd, af om %s.") % (
-            name, str(user.name), until.time()),
-        '<wortel@karpenoktem.nl>',
-        [moderators.canonical_full_email]).send()
+    render_then_email('moderation/extended.mail.txt',
+            moderators.canonical_full_email, {
+                'name': name,
+                'user': user,
+                'until': until})
     return record
-
 
 def _activate_mm(ml, name, user, record, moderators):
     if ml.emergency:
@@ -104,14 +94,11 @@ def _activate_mm(ml, name, user, record, moderators):
     record.by = user
     record.at = now
     record.save()
-    EmailMessage(
-        "Moderatiemodus op %s is aangezet door %s" % (name,
-                            str(user.name)),
-        ("%s is op moderatiemodus gezet door %s.  Deze loopt, indien "+
-         "niet verlengd, af om %s.") % (
-            name, str(user.name), until.time()),
-        '<wortel@karpenoktem.nl>',
-        [moderators.canonical_full_email]).send()
+    render_then_email('moderation/enabled.mail.txt',
+            moderators.canonical_full_email, {
+                'name': name,
+                'user': user,
+                'until': until})
     return record
 
 @login_required
@@ -163,3 +150,5 @@ def overview(request):
             {'lists': lists,
              'is_moderator': is_moderator},
             context_instance=RequestContext(request))
+
+# vim: et:sta:bs=2:sw=4:

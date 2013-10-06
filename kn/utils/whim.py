@@ -1,12 +1,12 @@
-# vim: et:sta:bs=2:sw=4:
 import threading
-import msgpack
 import os.path
 import logging
 import socket
 import select
-import mirte
 import os
+
+import msgpack
+import mirte
 
 """ Whim is a very simple server/client protocol.
 
@@ -36,6 +36,14 @@ class WhimClient(object):
         self.event_lut = {}
         self.msg_lut = {}
         self.got_reader = False
+    def send_noret(self, d):
+        """ Sends the message `d` to the server, but do not wait for its
+            response. """
+        bs = self.packer.pack((None, d))
+        # Send the message
+        with self.w_lock:
+            self.f.write(bs)
+            self.f.flush()
     def send(self, d):
         """ Sends the message @d to the server and returns its
             response """
@@ -158,9 +166,13 @@ class WhimDaemon(object):
     def __handle(self, mid, msg, s):
         f, unp, wl = self.sock_state[s]
         ret = self.handle(msg)
-        with wl:
-            f.write(self.packer.pack([mid, ret]))
-            f.flush()
+        # If mid is None, the other side does not expect a return value.
+        if mid is not None:
+            with wl:
+                f.write(self.packer.pack([mid, ret]))
+                f.flush()
 
     def handle(self, d):
         raise NotImplementedError
+
+# vim: et:sta:bs=2:sw=4:

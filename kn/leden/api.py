@@ -1,10 +1,10 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.core.mail import EmailMessage
 from django.core.validators import email_re
 
 from kn.base.http import JsonHttpResponse
+from kn.base.mail import render_then_email
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
 from kn.leden import giedo
@@ -51,6 +51,13 @@ def entity_humanName_by_id(data, request):
     e = Es.by_id(data['id'])
     return None if e is None else _humanName_of_entity(e)
 
+def get_last_synced(data, request):
+    """ Returns the timestamp when giedo last synced.  Example:
+
+          >> {action:"get_last_synced"}
+          << 1362912433.822199 """
+    return giedo.get_last_synced()
+
 def close_note(data, request):
     """ Wraps Note.close()
 
@@ -65,45 +72,70 @@ def close_note(data, request):
     if not note.open:
         return {'ok': False, 'error': 'Note already closed'}
     note.close(_id(request.user))
-    EmailMessage(
-            "Notitie gesloten",
-            ("De volgende notitie van %s op %s:\r\n\r\n%s\r\n\r\n"+
-             "is door %s gesloten") % (
-                    unicode(note.by.humanName), unicode(note.on.humanName),
-                    unicode(note.note), unicode(note.closed_by.humanName)),
-             'Karpe Noktem\'s ledenadministratie <root@karpenoktem.nl>',
-             [Es.by_name('secretariaat').canonical_full_email]).send()
+    render_then_email('leden/note-closed.mail.txt',
+                        Es.by_name('secretariaat').canonical_full_email, {
+                            'note': note})
     return {'ok': True}
 
-def entity_update_primary_email(data, request):
-    """ Calls entity.update_primary_email
+def entity_update_primary(data, request):
+    """ Updates an entity
+            >> (see below)
 
-        >> {action:"entity_update_primary_email",id:"4e6fcc85e60edf3dc0000270",
-                    new:"giedo@univ.gov"}
-        << {ok: true}
-      ( << {ok: false, error: "Permission denied"} ) """
+            << {ok: true}
+          ( << {ok: false, error: "Permission denied"} ) """
     is_secretariaat = 'secretariaat' in request.user.cached_groups_names
     if not is_secretariaat:
         return {'ok': False, 'error': 'Permission denied'}
-    if not 'id' in data or not isinstance(data['id'], basestring):
+    if 'id' not in data or not isinstance(data['id'], basestring):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if not 'new' in data or not isinstance(data['new'], basestring):
+    if 'type' not in data or not isinstance(data['type'], basestring):
+        return {'ok': False, 'error': 'Missing argument "type"'}
+    if 'new' not in data:
         return {'ok': False, 'error': 'Missing argument "new"'}
-    new_email = data['new']
-    if not email_re.match(new_email):
-        return {'ok': False, 'error': 'Not valid e-mail address'}
-    e = Es.by_id(_id(data.get('id')))
+    new = data['new']
+    typ = data['type']
+    if typ in ('email', 'telephone'):
+        if not isinstance(new, basestring):
+            return {'ok': False, 'error': '"new" should be a string'}
+    elif typ == 'address':
+        if not isinstance(new, dict):
+            return {'ok': False, 'error': '"new" should be a dict'}
+        for attr in ('street', 'number', 'zip', 'city'):
+            if attr not in new or not isinstance(new[attr], basestring):
+                return {'ok': False, 'error': 'Missing argument "new.%s"'%attr}
+    e = Es.by_id(data['id'])
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
-    e.update_primary_email(new_email)
-    giedo.sync()
+    if (typ == 'email'):
+        """ >> {action:"entity_update_primary_email",id:"4e6fcc85e60edf3dc0000270",
+                    new:"giedo@univ.gov"} """
+        if not email_re.match(new):
+            return {'ok': False, 'error': 'Not valid e-mail address'}
+        e.update_primary_email(new)
+    elif (typ == 'telephone'):
+        """ >> {action:"entity_update_primary_telephone",id:"4e6fcc85e60edf3dc0000270",
+                    new:"+31611223344"} """
+        if not len(new) > 9:
+            return {'ok': False, 'error': 'Phone number is too short'}
+        e.update_primary_telephone(new)
+    elif (typ == 'address'):
+        """ >> {action:"entity_update_address",id:"4e6fcc85e60edf3dc0000270",
+                    street:"Street",
+                    number:"23",
+                    zip:"1234AA",
+                    city:"Amsterdam"} """
+        e.update_address(new['street'], new['number'], new['zip'], new['city'])
+    else:
+        return {'ok': False, 'error': 'Unknown update type: "%s"' % typ}
+    giedo.sync_async(request)
     return {'ok': True}
 
 ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
         'entities_by_keyword': entities_by_keyword,
         'close_note': close_note,
-        'entity_update_primary_email':  entity_update_primary_email,
+        'entity_update_primary':  entity_update_primary,
+        'get_last_synced':  get_last_synced,
         None: no_such_action,
         }
 

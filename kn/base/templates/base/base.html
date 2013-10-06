@@ -19,7 +19,9 @@
 <ul id="menu">
 	{% block menu %}
 	<li><a href="/">Terug</a></li>
+        {% if user.is_authenticated %}
 	<li><a href="{% url logout %}">Uitloggen</a></li>
+        {% endif %}{# user.is_authenticated #}
 	{% endblock %}
 </ul>
 {{ block.super }}

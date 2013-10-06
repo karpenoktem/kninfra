@@ -1,13 +1,15 @@
 {% extends "leden/base.html" %}
+{% load leden %}
+{% load base %}
 
 {% block body %}
 
 <script type="text/javascript">//<!--
 $(function(){
-        create_entityChoiceField('relation_begin1_with', 'group');
-        create_entityChoiceField('relation_begin1_how', 'brand');
-        create_entityChoiceField('relation_begin2_who', 'user');
-        create_entityChoiceField('relation_begin2_how', 'brand');
+        create_entityChoiceField('relation_begin1_with', {type: 'group'});
+        create_entityChoiceField('relation_begin1_how', {type: 'brand'});
+        create_entityChoiceField('relation_begin2_who', {type: 'user'});
+        create_entityChoiceField('relation_begin2_how', {type: 'brand'});
 });
 // --></script>
 
@@ -26,24 +28,22 @@ $(function(){
 <a href="{{ r.how.get_absolute_url }}">{{ r.how.humanName }}</a>
 {% else %}
 lid
-{% endif %}
+{% endif %}{# r.how #}
 {{ r.with.genitive_prefix }}
 <a href="{{ r.with.get_absolute_url }}">{{ r.with.humanName }}</a>
-{% if r.from or r.until %}
-({% if r.from %}
-van {{ r.from.date }}
-{% endif %}
-{% if r.until %}
-tot {{ r.until.date }}
-{% endif %})
-{% endif %}
+{{ r|rel_when }}
 {% if r.may_end %}
 <form action="{% url relation-end _id=r.id %}" style="display:inline"
-                method="post">
+        method="post"
+        onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
+        wil uitschrijven als \
+        {% if r.how %}{{ r.how.humanName }}{% else %}lid{% endif %} \
+        {{ r.with.genitive_prefix }} {{ r.with.humanName }}?');">
+
 {% csrf_token %}
 <input type="submit" value="be&euml;indig" />
 </form>
-{% endif %}
+{% endif %}{# r.may_end #}
 </li>
 {% endif %}{# not r.virtual #}
 {% endfor %}{# r.related #}
@@ -51,7 +51,12 @@ tot {{ r.until.date }}
 {% endif %}
 {% if may_add_related %}
 {% if related or object.is_user %}
-<form action="{% url relation-begin %}" method="post" style="display: inline">
+<form action="{% url relation-begin %}" method="post" style="display: inline" \
+        onsubmit="return confirm('Weet je zeker dat je {{ object.humanName }} \
+        wil inschrijven als \
+        '+ (entityChoiceField_get('relation_begin1_how') ?
+        entityChoiceField_get('relation_begin1_how') : 'lid') +' \
+        van '+ entityChoiceField_get('relation_begin1_with') +'?');">
         {% csrf_token %}
         <input type="hidden" name="who" value="{{ object.id }}" />
         Voeg als
@@ -64,14 +69,14 @@ tot {{ r.until.date }}
 {% endif %}{# may_add_related #}
 
 {% if rrelated %}
-<h3>Leden</h3>
+<h3>Leden ({{ year_counts.this }})</h3>
 <ul>
 {% for r in rrelated %}
 {% ifchanged r.until_year %}
 {% if r.until_year %}
-</ul><h4>Tot jaar {{ r.until_year }}</h4><ul>
+</ul><h4>Tot jaar {{ r.until_year }} ({{ year_counts|lookup:r.until_year }})</h4><ul>
 {% endif %}
-{% endifchanged %}
+{% endifchanged %} {% if not r.hidden %}
 <li>
 <a href="{{ r.who.get_absolute_url }}">{{ r.who.humanName }}</a>, 
 {% if r.how %}
@@ -79,28 +84,32 @@ tot {{ r.until.date }}
 {% else %}
 lid
 {% endif %}
-{% if r.from or r.until %}
-({% if r.from %}
-van {{ r.from.date }}
-{% endif %}
-{% if r.until %}
-tot {{ r.until.date }}
-{% endif %})
-{% endif %}
+{{ r|rel_when }}
 {% if r.may_end %}
 <form action="{% url relation-end _id=r.id %}" style="display:inline"
-                method="post">
+        method="post"
+        onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
+        wil uitschrijven als \
+        {% if r.how %}{{ r.how.humanName }}{% else %}lid{% endif %} \
+        {{ r.with.genitive_prefix }} {{ r.with.humanName }}?');">
 {% csrf_token %}
 <input type="submit" value="be&euml;indig" />
 </form>
-{% endif %}
+{% endif %}{# r.may_end #}
+{% endif %}{# r.hidden #}
 {% endfor %}
 </li>
 </ul>
 {% endif %}
 {% if may_add_rrelated %}
 {% if rrelated or object.is_group %}
-<form action="{% url relation-begin %}" method="post" style="display: inline">
+<form action="{% url relation-begin %}" method="post" style="display: inline"
+        onsubmit="return confirm('Weet je zeker dat je '+
+        entityChoiceField_get('relation_begin2_who') +' \
+        wil inschrijven als \
+        '+ (entityChoiceField_get('relation_begin2_how') ?
+        entityChoiceField_get('relation_begin2_how') : 'lid') +' \
+        van {{ object.humanName }}?');">
         {% csrf_token %}
         <input type="hidden" name="with" value="{{ object.id }}" />
         Voeg

@@ -1,5 +1,5 @@
-# vim: et:sta:bs=2:sw=4:
 from django import forms
+
 from kn.leden.forms import EntityChoiceField
 import kn.leden.entities as Es
 
@@ -49,3 +49,5 @@ def get_add_event_form(user, superuser=False):
         everyone_can_subscribe_others = forms.BooleanField(required=False,
                 label='Iedereen kan iedereen inschrijven')
     return AddEventForm
+
+# vim: et:sta:bs=2:sw=4:

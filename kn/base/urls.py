@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 from django.conf.urls.defaults import *
 
 import django.views.generic.simple
@@ -15,3 +14,5 @@ urlpatterns = patterns('',
         {'template':'base/common.css',
          'mimetype':'text/css'}, name='style-common'),
 )
+
+# vim: et:sta:bs=2:sw=4:

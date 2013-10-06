@@ -1,13 +1,13 @@
-# vim: et:sta:bs=2:sw=4:
-from django.shortcuts import render_to_response
-from django.core.servers.basehttp import FileWrapper
-from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.template import RequestContext
-from django.conf import settings
 import mimetypes
 import os.path
 import os
+
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.core.servers.basehttp import FileWrapper
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.conf import settings
 
 def _lines_of_file_as_set(path):
     """ Opens the file at <path>; reads all lines and returns them in a set """
@@ -63,3 +63,5 @@ def homedir(request, root, subdir, path):
              'subdir': subdir, 'root': original_root,
              'path': _p},
                                 context_instance=RequestContext(request))
+
+# vim: et:sta:bs=2:sw=4:

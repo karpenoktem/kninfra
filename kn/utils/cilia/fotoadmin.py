@@ -1,9 +1,8 @@
-# vim: et:sta:bs=2:sw=4:
-from kn import settings
-
 import subprocess
 import os.path
 import re
+
+from kn import settings
 
 def fotoadmin_remove_moved_fotos(cilia, user, directory):
     if not re.match('^[a-z0-9]{3,32}$', user):
@@ -20,3 +19,5 @@ def fotoadmin_remove_moved_fotos(cilia, user, directory):
         return {'error': 'Security exception'}
     subprocess.call(['rm', '-rf', fotos_path])
     return {'success': True}
+
+# vim: et:sta:bs=2:sw=4:

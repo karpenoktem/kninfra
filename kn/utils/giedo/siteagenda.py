@@ -1,17 +1,17 @@
-# vim: et:sta:bs=2:sw=4:
 # Genereert config.agenda.php van de Karpe Noktem google calendar.
 #  TODO  UTF?
 
-import gdata.calendar.service
-import gdata.calendar
-import gdata.service
+from datetime import datetime, timedelta
+from cStringIO import StringIO
 import locale
 import sys
 import re
 
-from cStringIO import StringIO
+import gdata.calendar.service
+import gdata.calendar
+import gdata.service
+
 from iso8601 import parse_date
-from datetime import datetime, timedelta
 
 try:
     # Nederlandse afkortingen voor data
@@ -121,3 +121,5 @@ if __name__ == '__main__':
     else: cid = default_cid
     events = retreive(cid)
     print to_config_agenda_php(events)
+
+# vim: et:sta:bs=2:sw=4:

@@ -1,12 +1,13 @@
-# vim: et:sta:bs=2:sw=4:
-from django import forms
-from django.utils.html import escape
+import datetime
+import json
+
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.forms.widgets import flatatt
+from django.utils.html import escape
+from django import forms
+
 import kn.leden.entities as Es
-import datetime
-import json
 
 class EntityChoiceFieldWidget(forms.TextInput):
     def __init__(self, *args, **kwargs):
@@ -28,12 +29,12 @@ class EntityChoiceFieldWidget(forms.TextInput):
             u'''<input type='hidden' id=%(id)s name=%(name)s />
                 <script type='text/javascript'>//<!--
                 $(function(){
-                    create_entityChoiceField(%(id)s, %(type)s);
+                    create_entityChoiceField(%(id)s, %(params)s);
                     %(code_set_value)s
                 });//--></script>'''
                 %{'name': json.dumps(name),
                   'id': json.dumps(final_attrs['id']),
-                  'type': json.dumps(self.type),
+                  'params': json.dumps({'type': self.type}),
                   'code_set_value': code_set_value})
 
 
@@ -77,7 +78,7 @@ class AddGroupForm(forms.Form):
     description = forms.CharField(label="Korte beschrijving")
     parent = EntityChoiceField(label="Parent",
             _type='group',
-            initial=lambda x: str(Es.by_name('secretariaat')._id))
+            initial=Es.by_name('secretariaat')._id)
     true_group = forms.BooleanField(label="Volwaardige groep",
             initial=True)
 
@@ -107,3 +108,5 @@ class ChangePasswordForm(forms.Form):
             raise forms.ValidationError(errors)
 
         return cleaned_data
+
+# vim: et:sta:bs=2:sw=4:
