@@ -100,15 +100,20 @@ def _entity_detail(request, e):
         r['virtual'] = Es.relation_is_virtual(r)
     tags = [t.as_primary_type() for t in e.get_tags()]
 
-    year_counts = {}
+    # mapping of year => set of members
+    year_sets = {}
     for r in rrelated:
-        key = r['until_year']
-        if key is None:
-            key = 'this'
+        year = r['until_year']
+        if year is None:
+            year = 'this'
 
-        if not key in year_counts:
-            year_counts[key] = 0
-        year_counts[key] += 1
+        if not year in year_sets:
+            year_sets[year] = set()
+        year_sets[year].add(r['who'])
+
+    year_counts = {}
+    for year in year_sets:
+        year_counts[year] = len(year_sets[year])
 
     ctx = {'related': related,
            'rrelated': rrelated,
