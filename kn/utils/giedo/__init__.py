@@ -160,7 +160,7 @@ class Giedo(WhimDaemon):
                     return {'error': 'no such user'}
                 u = u.as_user()
                 if not u.check_password(d['oldpass']):
-                    return {'error': 'niet het goede oude wachtwoord'}
+                    return {'error': 'wrong old password'}
                 u.set_password(d['newpass'])
                 d2 = {'type': 'setpass',
                       'user': d['user'],
@@ -175,7 +175,7 @@ class Giedo(WhimDaemon):
                     return {'error': 'no such user'}
                 u = u.as_user()
                 if not u.check_password(d['oldpass']):
-                    return {'error': 'een fout in je KN-wachtwoord'}
+                    return {'error': 'wrong current password'}
                 pc = Es.PushChange({'system': 'villanet',
                     'action': 'changeUser', 'data': {
                         'username': d['user'],
