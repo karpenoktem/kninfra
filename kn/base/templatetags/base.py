@@ -20,4 +20,9 @@ def email_filter(value):
 def mark_safe_filter(value):
     return mark_safe(value)
 
+# http://ianrolfe.livejournal.com/37243.html
+@register.filter(name='lookup')
+def lookup_filter(dict, index):
+    return dict.get(index, '')
+
 # vim: et:sta:bs=2:sw=4:
