@@ -103,9 +103,12 @@ def _entity_detail(request, e):
     year_counts = {}
     for r in rrelated:
         key = r['until_year']
-        if key == None:
+        if key is None:
             key = 'this'
-        year_counts[key] = year_counts.get(key, 0) + 1
+
+        if not key in year_counts:
+            year_counts[key] = 0
+        year_counts[key] += 1
 
     ctx = {'related': related,
            'rrelated': rrelated,
