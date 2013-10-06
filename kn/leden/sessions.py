@@ -22,7 +22,7 @@ class SessionStore(SessionBase):
         return scol.find_one({'_id': session_key}) is not None
     def create(self):
         while True:
-            self.session_key = self._get_new_session_key()
+            self._session_key = self._get_new_session_key()
             try:
                 self.save(must_create=True)
             except CreateError:
@@ -39,9 +39,9 @@ class SessionStore(SessionBase):
         # TODO handle errors
     def delete(self, session_key=None):
         if session_key is None:
-            if self._session_key is None:
+            if self.session_key is None:
                 return
-            session_key = self._session_key
+            session_key = self.session_key
         scol.remove({'_id': session_key})
 
 def ensure_indices():

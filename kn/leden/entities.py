@@ -1,10 +1,10 @@
 import re
+import hashlib
 import datetime
 import functools
 import email.utils
 
 from django.db.models import permalink
-from django.contrib.auth.models import get_hexdigest
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
@@ -22,6 +22,9 @@ ncol = db['notes']      # notes on entities by the secretaris
 pcol = db['push_changes'] # Changes to be pushed to remote systems
 incol = db['informacie_notifications'] # human readable list of notifications 
                                         #for informacie group
+def get_hexdigest(algorithm, salt, raw_password):
+    assert algorithm == 'sha1'
+    return hashlib.sha1(salt + raw_password).hexdigest()
 
 def ensure_indices():
     """ Ensures that the indices we need on the collections are set """
