@@ -32,6 +32,10 @@ img.right {
         margin: 0.5em 0 0.5em 0.5em;
 }
 
+a img {
+	border: none; /* IE normalization */
+}
+
 h2 {
         font-size: 1.4em;
 }
