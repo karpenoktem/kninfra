@@ -309,11 +309,11 @@ def add_relation(who, _with, how=None, _from=None, until=None):
         _from = DT_MIN
     if until is None:
         until = DT_MAX
-    rcol.insert({'who': _id(who),
-             'with': _id(_with),
-             'how': None if how is None else _id(how),
-             'from': _from,
-             'until': until})
+    return rcol.insert({'who': _id(who),
+                     'with': _id(_with),
+                     'how': None if how is None else _id(how),
+                     'from': _from,
+                     'until': until})
 
 def disj_query_relations(queries, deref_who=False, deref_with=False,
         deref_how=False):
@@ -480,9 +480,15 @@ def get_open_notes():
 # Functions to work with informacie-notifications
 # ######################################################################
 
-def notify_informacie(text):
-    incol.insert({'text': text,
-                  'when': now()})
+def notify_informacie(event, entity=None, relation=None):
+    data = {'when': now(), 'event': event}
+    if relation:
+        data['rel'] = _id(relation)
+    elif entity:
+        data['entity'] = _id(entity)
+    else:
+        raise ValueError, 'supply either entity or relation'
+    incol.insert(data)
 
 def pop_all_informacie_notifications():
     ntfs = list(incol.find({}, sort=[('when',1)]))
@@ -524,8 +530,11 @@ class EntityHumanName(object):
     def humanName(self):
         return self._data['human']
     @property
+    def genitive_prefix(self):
+        return self._data.get('genitive_prefix', 'van de')
+    @property
     def genitive(self):
-        return self._data.get('genitive_prefix', 'van de') + ' ' + unicode(self)
+        return self.genitive_prefix + ' ' + unicode(self)
     def __unicode__(self):
         return self.humanName
     def __repr__(self):
@@ -1082,7 +1091,15 @@ class InformacieNotification(SONWrapper):
     def __init__(self, data):
         super(InformacieNotification, self).__init__(data, incol)
 
-    text = son_property(('text', ))
+    def event(self):
+        return self._data.get('event')
+
+    def rel(self):
+        return relation_by_id(self._data['rel'])
+
+    def entity(self):
+        return by_id(self._data['entity'])
+
     when = son_property(('when', ))
 
 class PushChange(SONWrapper):

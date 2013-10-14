@@ -466,8 +466,7 @@ def secr_add_user(request):
             for l in fd['addToList']:
                 Es.add_relation(u, Es.id_by_name(l, use_cache=True),
                     _from=now())
-            Es.notify_informacie("%s is ingeschreven als lid." % (
-                        u.humanName))
+            Es.notify_informacie('adduser', entity=u._id)
             giedo.sync_async(request)
             request.user.push_message("Gebruiker toegevoegd. "+
                 "Let op: hij heeft geen wachtwoord "+
@@ -509,8 +508,7 @@ def secr_add_group(request):
                 'tags': [_id(fd['parent'])]})
             logging.info("Added group %s" % nm)
             g.save()
-            Es.notify_informacie("De groep %s is opgericht." % (
-                        unicode(g.humanName)))
+            Es.notify_informacie('addgroup', entity=g._id)
             giedo.sync_async(request)
             request.user.push_message("Groep toegevoegd.")
             return HttpResponseRedirect(reverse('group-by-name', args=(nm,)))
@@ -527,18 +525,14 @@ def relation_end(request, _id):
     if not Es.user_may_end_relation(request.user, rel):
         raise PermissionDenied
     Es.end_relation(_id)
+
     # Notify informacie
     if request.user == rel['who']:
-        Es.notify_informacie("%s heeft zich uitgeschreven als %s %s" % (
-                        request.user.full_name,
-                        rel['how'].humanName if rel['how'] else 'lid',
-                        rel['with'].humanName.genitive))
+        Es.notify_informacie('relation_ended', relation=_id)
     else:
         # TODO (rik) leave out 'als lid'
-        Es.notify_informacie("%s is geen %s meer %s" % (
-                        rel['who'].humanName,
-                        rel['how'].humanName if rel['how'] else 'lid',
-                        rel['with'].humanName.genitive))
+        Es.notify_informacie('relation_end', relation=_id)
+
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
@@ -557,6 +551,7 @@ def relation_begin(request):
     if not Es.user_may_begin_relation(request.user, d['who'], d['with'],
                                                                 d['how']):
         raise PermissionDenied
+
     # Check whether such a relation already exists
     dt = now()
     ok = False
@@ -567,20 +562,17 @@ def relation_begin(request):
         ok = True
     if not ok:
         raise ValueError, "This relation already exists"
+
     # Add the relation!
-    Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
+    relation_id = Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
+
     # Notify informacie
     if request.user._id == d['who']:
-        Es.notify_informacie("%s heeft zich ingeschreven als %s %s" % (
-                            request.user.full_name,
-                            Es.by_id(d['how']).humanName if d['how'] else 'lid',
-                            Es.by_id(d['with']).humanName.genitive))
+        Es.notify_informacie('relation_begun', relation=relation_id)
     else:
         # TODO (rik) leave out 'als lid'
-        Es.notify_informacie("%s is nu %s %s" % (
-                            Es.by_id(d['who']).humanName,
-                            Es.by_id(d['how']).humanName if d['how'] else 'lid',
-                            Es.by_id(d['with']).humanName.genitive))
+        Es.notify_informacie('relation_begin', relation=relation_id)
+
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
