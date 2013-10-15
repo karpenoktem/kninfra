@@ -56,7 +56,7 @@
     </tr>
 </table>
 </form>
-<form method="POST" style="display: inline" onSubmit="return confirm('Weet je het zeker?')">
+<form method="POST" style="display: inline" onsubmit="return confirm('Weet je het zeker?')">
 {% csrf_token %}
 <input type="hidden" name="action" value="remove_event">
 <input type="submit" value="Verwijder event">
