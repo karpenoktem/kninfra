@@ -890,7 +890,7 @@ class User(Entity):
         return self._data.get('person',{}).get('family')
     @property
     def gender(self):
-        return self._data('person',{}).get('gender')
+        return self._data.get('person',{}).get('gender')
     @property
     def telephones(self):
         ret = []
