@@ -144,6 +144,10 @@ def by_name(n):
     """ Finds an entity by name """
     return entity(ecol.find_one({'names': n}))
 
+def by_humanName(n):
+    """ Finds an entity by one of its humanNames """
+    return entity(ecol.find_one({'humanNames': {'human': n}}))
+
 def by_id(n):
     """ Finds an entity by id """
     return entity(ecol.find_one({'_id': _id(n)}))
@@ -1029,7 +1033,7 @@ class Institute(Entity):
     @permalink
     def get_absolute_url(self):
         if self.name:
-            return ('institute-by-name', (),
+            return ('institute-by-humanName', (),
                     {'name': self.name})
         return ('institute-by-id', (), {'_id': self.id})
 class Brand(Entity):
