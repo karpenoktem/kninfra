@@ -1,0 +1,39 @@
+{% extends "base/base.html" %}
+
+{% block body %}
+<div id="home-container">
+  <div id="random-text">
+    <p>Welkom op de website van <strong>Alternatieve studentenvereniging
+          Karpe Noktem</strong>.</p>
+
+    <div class="slider-wrapper theme-default">
+      <div id="slider" class="nivoSlider">
+          {# TODO #}
+      </div>
+    </div>
+    <script type="text/javascript>
+        $(window).load(function() {
+                $('#slider').nivoSlider({
+                  effect: 'sliceDown',
+                  animSpeed: 750,
+                  pauseTime: 5000,
+                  pauseOnHover: true,
+                  prevText: 'vorige',
+                  nextText: 'volgende',
+                  directionNav: true,
+                  randomStart: false
+                });
+              });
+    </script>
+  </div>
+  <div id="agenda">
+    <h1><a href="{# TODO #}">agenda</a></h1>
+    <ul id="fullagenda">
+      {# TODO #}
+    </ul>
+  </div>
+</div>
+<div style="clear: both;"></div>
+
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}
