@@ -89,3 +89,7 @@ def qe(keyword):
     """ Queries entities by keyword """
     for e in Es.by_keyword(keyword):
         print "%-20s %s" % (_id(e), unicode(e.humanName))
+
+def create_study(name):
+    return Es.ecol.insert({'types': ['study'],
+                           'humanNames': [{'human': name}]})

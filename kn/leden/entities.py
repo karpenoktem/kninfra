@@ -567,6 +567,7 @@ class Entity(SONWrapper):
                     str(n) for n in g.names])
         return self._groups_names_cache
 
+    # get reverse-related
     def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                 deref_with=True, deref_how=True):
         return query_relations(-1, self, how, _from, until, deref_who,
@@ -805,8 +806,7 @@ class Group(Entity):
         for rel in self.get_rrelated(how=None, deref_with=False):
             _all.add(rel['who'])
             if ((rel['until'] is None or rel['until'] >= dt) and
-                    rel['from'] is None
-                    or rel['from'] <= dt):
+                    (rel['from'] is None or rel['from'] <= dt)):
                 cur.add(rel['who'])
         return (cur, _all - cur)
     def get_members(self):
@@ -890,7 +890,7 @@ class User(Entity):
         return self._data.get('person',{}).get('family')
     @property
     def gender(self):
-        return self._data('person',{}).get('gender')
+        return self._data.get('person',{}).get('gender')
     @property
     def telephones(self):
         ret = []

@@ -230,7 +230,7 @@ def event_new_or_edit(request, edit=None):
         if e is None:
             raise Http404
         if not superuser and not request.user.is_related_with(e.owner) and \
-                not _id(e.owner) == request.user.id:
+                not _id(e.owner) == request.user._id:
             raise PermissionDenied
     AddEventForm = get_add_event_form(request.user, superuser)
     if request.method == 'POST':
@@ -246,7 +246,8 @@ def event_new_or_edit(request, edit=None):
                 prefix = str(request.user.name) + '-'
             else:
                 prefix = str(Es.by_id(fd['owner']).name) + '-'
-            if not superuser and not name.startswith(prefix):
+            if (not superuser and not name.startswith(prefix) and (
+                    edit is None or e.name != name)):
                 name = prefix + name
             d = {
                 'date': date_to_dt(fd['date']),
