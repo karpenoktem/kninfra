@@ -54,6 +54,10 @@ urlpatterns = patterns('',
             {'template': 'static/bestuur9.html'}, name='bestuur9'),
     url(r'^bestuur10/?$', generic.simple.direct_to_template,
             {'template': 'static/bestuur10.html'}, name='bestuur10'),
+    # TODO we want to use reverse, but it is not initialized properly
+    #      at this moment in the request handler.
+    url(r'^bestuur/?$', generic.simple.redirect_to,
+            {'url': '/bestuur10'}),
 
     url(r'^introPoster2013/?$', generic.simple.direct_to_template,
             {'template': 'static/introPoster2013.html'},
