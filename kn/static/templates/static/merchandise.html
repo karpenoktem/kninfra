@@ -1,0 +1,11 @@
+{% extends "static/base.html" %}
+
+{% load base %}
+
+{% block body %}
+<p>Wil je zo een kek Karpe Noktem <strong>t-shirt</strong>; wil je 
+ook <strong>stickers</strong> om je omgeving onveilig te maken
+of heb jij een goed idee voor ander Karpe Noktem spul?  E-Mail dan naar
+{% filter email %}proco@karpenoktem.nl{% endfilter %}.</p>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}
