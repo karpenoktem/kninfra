@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     (r'^fotos/', include('kn.fotos.urls')),
     (r'^planning/', include('kn.planning.urls')),
     (r'^barco/', include('kn.barco.urls')),
+    (r'^agenda/', include('kn.agenda.urls')),
     (r'', include('kn.static.urls')),
 )
 

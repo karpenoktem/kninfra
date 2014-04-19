@@ -1,0 +1,57 @@
+{% extends "static/base.html" %}
+
+{% block body %}
+<div>
+  <a href="http://www.google.com/calendar/embed?src=vssp95jliss0lpr768ec9spbd8%40group.calendar.google.com&amp;ctz=Europe/Paris" target="_blank"
+    >Ook op Google Calendar</a>.
+  Ben je geen lid, maar wil je wel op de hoogte blijven van onze activiteiten?
+  Zet jezelf op de geïnteresseerden-e-maillijst
+  <form method="post"
+    action="https://karpenoktem.nl/mailman/subscribe/geinteresseerden"
+    style="display: inline;">
+      <input name="email" type="text" placeholder="jouw@email.com" />
+      <input type="submit" value="voeg toe" />
+  </form>
+</div>
+
+<div id="agenda">
+<ul id="fullagenda">
+
+{% for item in agenda %}
+  {% ifchanged %}
+  <li class="monthSeparator">{{ item.month }}</li>
+  {% endifchanged %}
+  <li class="item"
+    onclick="$(this).find('.description')
+                    .toggleClass('preview');
+             $(this).find('.arrow')
+                    .toggleClass('opened')
+                    .css('height', 
+                      ($(this).find('.item_content').height() - 40) +'px');">
+    <div class="item_wrapper">
+      <div class="dateholder">
+        <div class="date">
+          {{ item.start.date }}
+        </div>
+        <div class="arrow"></div>
+      </div>
+      <div class="item_content">
+        <div class="titlebar">
+          <span class="title">{{ item.title }}</span>
+      {% if item.end.date != item.start.date %}
+        <span class="datelong">{{ item.start.date }}\
+              &mdash;{{ item.end.date }}</span></div>
+      {% endif %}
+        <div class="description preview">
+          {{ item.description|safe }}
+        </div>
+      </div>
+    </div>
+    <div style="clear: both;"></div>
+  </li>
+{% endfor %}
+
+</ul>
+</div>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}
