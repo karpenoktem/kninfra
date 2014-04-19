@@ -1,6 +1,39 @@
 {% extends "base/base.html" %}
 
+{% load base %}
+
 {% block body %}
-{# TODO #}
+<p class="imageDisplay">
+<img src="{{ MEDIA_URL }}/static/img/bestuur10.jpg" />
+  <table style="font-size: smaller">
+    <tr><td>Liza Boon<br/>Pandcommissaris</td>
+      <td>Amirouche Chemim<br/>Vice-voorzitter</td><td></td>
+      <td>Els Lunding<br/>Secretaris</td></tr>
+    <tr><td></td><td>Jean Mennens<br/>Voorzitter</td>
+       <td>Jurrien Riezebos<br/>Penningmeester</td><td></td>
+   </table>
+ </p>
+ <p><strong>Het tiende bestuur</strong> van A.S.V. Karpe Noktem is
+ net zo divers als de vereniging zelf.  <em>Jean Mennens</em> maakt
+ als voorzitter gebruik van zijn kennis als docent natuurkunde en
+ houdt de vereniging goed in de gaten.  Hij wordt hierin bijgestaan
+ door <em>Els Lunding</em>, die naast haar studie in Engelse literatuur
+ zorgt voor de goede communicatie zowel binnen als buiten de vereniging.
+ <em>Jurrien Riezebos</em> laat naast zijn kennis van de wereldse
+ geschiedenis ook zien dat hij de geldelijke stromen binnen de vereniging
+ goed kan beheersen als penningmeester.  Als vice-voorzitter zorgt
+ <em>Amirouche Chemim</em> voor het contact met de zusjesverenigingen
+ en andere externen, waarin hij inspiratie put uit zijn studie
+ toegepaste psychologie.  <em>Liza Boon</em> maakt als pandcommissaris
+ gebruik van haar studie politicologie en zorgt voor de goede verstandhouding
+ met de verschillende verenigingen binnen de Villa van Schaeck.</p>
+
+ <p>Alle bestuursleden zijn bereikbaar op hun functie- of voornaam
+ @karpenoktem.nl, behalve Els, die is bereikbaar op
+ {% filter email %}elsl@karpenoktem.nl{% endfilter %}.
+ </p>
+
+ <p>&lArr; Het vorige,
+ <a href="{% url bestuur9 %}">negende bestuur</a>.</p>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}
