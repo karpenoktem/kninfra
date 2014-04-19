@@ -4,25 +4,28 @@
 {{ block.super }}
 <link href="{% url style-common %}"
 	rel="stylesheet" type="text/css" />
-<style type="text/css">
-        #body { background-image:
-                url({{ MEDIA_URL }}/base/bg.png); }
-</style>
+{% endblock %}
+
+{% block topmenu %}
+{{ block.super }}
+<ul id="menu">
+	<li><a href="/">terug</a></li>
+        {% if user.is_authenticated %}
+	<li><a href="{% url logout %}">uitloggen</a></li>
+        {% endif %}{# user.is_authenticated #}
+</ul>
 {% endblock %}
 
 {% block wrapper %}
-<div id="logo"></div>
 {{ block.super }}
 {% endblock %}
 
 {% block main %}
 <ul id="menu">
 	{% block menu %}
-	<li><a href="/">Terug</a></li>
-        {% if user.is_authenticated %}
-	<li><a href="{% url logout %}">Uitloggen</a></li>
-        {% endif %}{# user.is_authenticated #}
 	{% endblock %}
 </ul>
+<div id="actualContent">
 {{ block.super }}
+</div>
 {% endblock %}

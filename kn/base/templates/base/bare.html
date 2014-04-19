@@ -24,25 +24,38 @@
 		<![endif]-->
 		{% endblock %}
 	</head>
-	<body><div id="wrapper">
+        <body>
+                <div id="header">
+                        <div class="container">
+                                <a href="/">
+                                        <img id="logo" src="{{ MEDIA_URL }}/base/logo.png" alt="Karpe Noktem" />
+                                </a>
+                                <div id="navigator" class="container">
+                                {% block topmenu %}
+                                {% endblock %}
+                                </div>
+                        </div>
+                </div>
 		{% block wrapper %}
-		<div id="main">
-			{% block main %}
-			<div id="body">
-                        {% block messages %}
-			{% if messages %}
-			<ul id="messages">
-				{% for message in messages %}
-				<li>{{ message }}</li>
-				{% endfor %}
-			</ul>
-			{% endif %}
-			{% endblock %}
-			{% block body %}
-			{% endblock %}
-			</div>
-			{% endblock %}
-                        <div class="clear"></div>
+		<div id="content">
+                        <div class="container">
+                                <div id="body">
+                                {% block main %}
+                                {% block messages %}
+                                {% if messages %}
+                                <ul id="messages">
+                                        {% for message in messages %}
+                                        <li>{{ message }}</li>
+                                        {% endfor %}
+                                </ul>
+                                {% endif %}
+                                {% endblock %}
+                                {% block body %}
+                                {% endblock %}
+                                </div>
+                                {% endblock %}
+                                <div class="clear"></div>
+                        </div>
 		</div>
 		{% endblock %}
 		<div id="footer">
