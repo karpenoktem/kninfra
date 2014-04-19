@@ -1,6 +1,10 @@
+import os.path
+
 from django.conf.urls.defaults import *
+from django.conf import settings
 import django.views.generic as generic
 import django.views.generic.simple
+from kn.base.views import direct_to_folder
 
 urlpatterns = patterns('',
     url(r'^(?:(?:home|default)/?)?$', generic.simple.direct_to_template,
@@ -41,6 +45,8 @@ urlpatterns = patterns('',
     url(r'^robots.txt/?$', generic.simple.direct_to_template,
             {'template': 'static/robots.txt',
              'mimetype': 'text/plain'}),
+    (r'^img/(?P<subdir>.*)', direct_to_folder,
+        {'root': os.path.join(settings.MEDIA_ROOT, 'static/img') }),
 )
 
 # vim: et:sta:bs=2:sw=4:
