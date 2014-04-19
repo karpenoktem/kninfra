@@ -1,6 +1,22 @@
 {% extends "base/base.html" %}
 
+{% load base %}
+
 {% block body %}
-{# TODO #}
+<p>
+  Kom eens een keer langs bij een van onze
+  <a href="{% url activiteiten %}">activiteiten</a>,
+    bijvoorbeeld de maandagavond
+  borrels in de <a href="{% url route %}">Villa van Schaeck</a>, of stuur een
+  e-mailtje naar {% filter email %}secretaris@karpenoktem.nl{% endfilter %}
+  en dan is het zo geregeld!
+</p>
+
+<h2>uitschrijven</h2>
+
+<p>
+  Wil je je uitschrijven? Stuur ook dan een mailtje naar
+  {% filter email %}secretaris@karpenoktem.nl{% endfilter %}.
+</p>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}
