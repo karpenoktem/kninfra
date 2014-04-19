@@ -47,8 +47,10 @@ urlpatterns = patterns('',
     url(r'^robots.txt/?$', generic.simple.direct_to_template,
             {'template': 'static/robots.txt',
              'mimetype': 'text/plain'}),
-    (r'^img/(?P<subdir>.*)', direct_to_folder,
-        {'root': os.path.join(settings.MEDIA_ROOT, 'static/img') }),
+
+    # Backwards compatibility
+    url(r'^img/(?P<subdir>.*)', direct_to_folder,
+            {'root': os.path.join(settings.MEDIA_ROOT, 'static/img') }),
 )
 
 # vim: et:sta:bs=2:sw=4:
