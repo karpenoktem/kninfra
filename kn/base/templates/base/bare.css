@@ -1,91 +1,315 @@
-a, body, #menu a {
-        color: #eee;
-}
-
+/* body */
 body {
-        background-color: black;
-        font-family: "trebuchet ms", verdana;
-        padding-left: 50%;
+	margin: 0;
+	background-color: #000;
+	color: #102020;
+	line-height: 1.6em;
+	font-family: serif;
 }
 
-#wrapper {
-        width: 800px;
-        margin-left: -400px;
-}
-
-#main {
-        background-repeat: no-repeat;
-        min-height: 533px;
-}
-
-h1 {
-        font-size: 1.3em;
-}
-
-img.left {
-        float: left;
-        margin: 0.5em 0.5em 0.5em 0;
-}
-
-img.right {
-        float: right;
-        margin: 0.5em 0 0.5em 0.5em;
-}
-
-h2 {
-        font-size: 1.4em;
-}
-
-p, h2, img {
-        padding: 0;
-        margin: 0 0 1em 0;
-}
-
-h2 {
-        margin-bottom: 0.5em;
-}
-
-#footer a {
+/* links -- kleuren overgenomen van MediaWiki */
+a {
 	text-decoration: none;
 }
-
-#footer a:hover {
-	color: #fff;
+a:link {
+	color: #3366BB;
+}
+a:visited {
+	color: #663366;
+}
+a:active {
+	color: #FAA700;
+}
+a:hover, a:focus {
 	text-decoration: underline;
 }
 
+.clear {
+	clear: both;
+}
+
+/* container */
+.container {
+	margin: 0 auto;
+	max-width: 850px;
+}
+
+/* header */
+#header {
+	z-index: 1;
+	position: absolute;
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 70px;
+}
+#header, #footer {
+	width: 100%;
+	margin: 0;
+	background-color: #000;
+	font-family: sans-serif;
+	font-size: 16px;
+}
 #footer {
+	position: absolute;
+	padding: 0.25em 0;
+	font-size: 14px;
+	box-shadow: 0px -2px 3px 0px #a31e1b;
+	color: #929292;
+}
+@media screen and (min-width: 800px) {
+	#header {
+		box-shadow: 0px 2px 3px #a31e1b;
+	}
+}
+#header > * {
+	position: relative;
+	height: 100%;
+}
+#header #logo {
+	position: absolute;
+	bottom: 8px;
+	left: 20px;
+        height: 40px;
+}
+
+#header #logo #collapser {
+	position: absolute;
+	left: -35px;
+}
+
+/* navigator */
+#navigator {
+	position: absolute;
+	height: 42px;
+	margin: 0;
+	padding: 0;
+	font-variant: small-caps;
+	right: 10px;
+	bottom: 0px;
+	background-color: rgba(0, 0, 0, 0.75);
+}
+#navigator ul {
+	list-style: none;
+	margin: 0;
+}
+#navigator ul, #navigator li > a {
+	padding: 8px 6px;
+}
+#navigator li {
+	display: inline;
+	margin: 0 6px;
+}
+#navigator li > a {
+	border-bottom: solid 3px transparent;
+}
+#navigator li > a:link,
+#navigator li > a:visited {
+	color: #a0a0a0;
+	text-decoration: none;
+}
+#navigator li > a:hover {
+	border-bottom: solid 3px #a31e1b;
+	color: #f0f0f0;
+}
+#navigator li > a:active {
+	color: #f0f0f0;
+	text-decoration: underline;
+}
+#navigator li > a.active {
+	color: #f0f0f0;
+	font-weight: bold;
+}
+@media screen and (min-width: 800px) {
+	#navigator {
+		right: 10px;
+		bottom: 0px;
+	}
+}
+@media screen and (max-width: 800px) {
+	#navigator {
+		left: 0px;
+		right: 0px;
+		bottom: -42px;
+		box-shadow: 0px 1px 4px #a31e1b;
+	}
+	#navigator ul {
+		background-color: rgba(0, 0, 0, 0.90);
+	}
+}
+
+/* content */
+#content {
+	margin: 0 auto;
+	padding: 20px 0 40px 0;
+	position: absolute;
+	top: 70px;
+	width: 100%;
+	min-height: 300px;
+	background-color: #f0f0f0;
+	background-image: url('{{ MEDIA_URL }}/base/uiltje.png');
+	background-repeat: no-repeat;
+	background-position: 100% 0%;
+	background-attachment: scroll;
+}
+@media screen and (min-width: 800px) {
+	#content {
+		padding-top: 20px;
+	}
+}
+@media screen and (max-width: 800px) {
+	#content {
+		padding-top: 30px;
+		top: 442px;
+	}
+}
+
+/* content */
+#content h1, #content h2 {
+	color: #404040;
+	font-variant: small-caps;
+	font-family: sans-serif;
+	margin-bottom: 0;
+	padding: 4px 0;
+	margin: 0;
+}
+#content h1 a {
+	color: #404040;
+}
+#content h1 a:hover {
+	text-decoration: none;
+}
+#content img {
+	padding: 4px;
+	border: solid 1px #aaa;
+	background-color: #f8f8f8;
+	box-shadow: 0px 0px 2px #a31e1b;
+	margin: 0.25em 0.5em;
+}
+#content hr {
+	background-color: #a31e1b;
+	height: 3px;
+	width: 5em;
+	border: none;
+	margin: 8px auto;
+}
+#menu {
+        float: left;
+        list-style-type: none;
+}
+#menu ul {
+        list-style-type: none;
+}
+
+
+
+#body {
+        float: left;
+}
+
+
+.right {
+	float: right;
+}
+.left {
+	float: left;
+}
+.clear {
         clear: both;
-        text-align: center;
 }
 
-address {
-	padding-left: 3em;
+/* omhoog-scroll knopje */
+#footer #scrollUp {
+	float: right;
 }
 
-textarea.default, input.default {
-        color: gray;
+.email {
+	font-family: monospace;
+}
+.email.obfuscated {
+	visibility: hidden;
 }
 
-.error {
-        padding-top: 1em;
-        padding-left: 1em;
-        padding-bottom: 1em;
-        color: red;
+/* overmenu */
+
+#overMenu {
+	text-align: right;
 }
 
-/* markdown classes */
-.md_h1 {
-        font-weight: bold;
+#overMenu a {
+	font-variant: small-caps;
+	font-family: sans-serif;
+	text-transform: lowercase;
+	padding: 0 0.4em;
+	text-decoration: underline;
+	color: #000;
 }
-.md_h2 {
-        font-style: italic;
+
+#overMenu a:hover {
+	text-decoration: none;
+	color: #000;
 }
-.md_h3 {
-        font-weight: bold;
-        font-size: 0.9em;
+#overMenu a.active {
+	font-weight: bold;
+	text-decoration: none;
+	color: #000;
 }
-.md_h4 {
-        font-style: italic;
-        font-size: 0.9em;
+
+/* we willen alle tekst input-veldjes wat cleaner hebben */
+input:not([type=submit]):not([type=file]) {
+	border: solid 1px #b0b0b0;
+	padding: 2px;
+	color: #102020;
+}
+
+#loginButton {
+	position: relative;
+}
+
+#loginButtonLink:hover img {
+	-webkit-filter: brightness(115%);
+}
+#loginButton.open #loginButtonLink img {
+	-webkit-filter: brightness(150%);
+}
+
+#loginWindow {
+	display: none;
+
+	position: absolute;
+	top: auto;
+	right: -12px;
+	margin-top: 8px;
+	width: 290px;
+	padding: 11px 20px 15px;
+	border-radius: 0 0 4px 4px;
+	box-shadow: 0px 0px 3px #a31e1b;
+	z-index: -1;
+
+	background-color: #000; /* IE8 */
+	background-color: rgba(0, 0, 0, 0.92);
+	color: #afafaf;
+	text-transform: none;
+	font-variant: normal;
+}
+
+#loginButton.open #loginWindow {
+	display: block;
+}
+
+#loginWindow h2 {
+	padding: 4px 0;
+	margin: 0;
+	font-size: 1em;
+	text-transform: uppercase;
+	font-family: sans-serif;
+}
+
+#loginWindow input[type=text],
+#loginWindow input[type=password] {
+	width: 160px;
+}
+
+#actualContent {
+        padding-left: 20px;
+        float: right;
 }
