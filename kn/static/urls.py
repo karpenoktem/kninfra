@@ -111,6 +111,8 @@ urlpatterns = patterns('',
     # Backwards compatibility
     url(r'^img/(?P<subdir>.*)', direct_to_folder,
             {'root': os.path.join(settings.MEDIA_ROOT, 'static/img') }),
+    url(r'^baragenda/?$', generic.simple.redirect_to,
+            {'url': '/planning'}),  # TODO use reverse_url
 )
 
 # vim: et:sta:bs=2:sw=4:
