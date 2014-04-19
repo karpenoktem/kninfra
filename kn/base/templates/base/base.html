@@ -8,12 +8,10 @@
 
 {% block topmenu %}
 {{ block.super }}
-<ul id="menu">
-	<li><a href="/">terug</a></li>
-        {% if user.is_authenticated %}
-	<li><a href="{% url logout %}">uitloggen</a></li>
-        {% endif %}{# user.is_authenticated #}
-</ul>
+{% endblock %}
+
+{% block overmenu %}
+{{ block.super }}
 {% endblock %}
 
 {% block wrapper %}
@@ -21,11 +19,5 @@
 {% endblock %}
 
 {% block main %}
-<ul id="menu">
-	{% block menu %}
-	{% endblock %}
-</ul>
-<div id="actualContent">
 {{ block.super }}
-</div>
 {% endblock %}

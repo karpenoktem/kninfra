@@ -1,2 +1,46 @@
 {% extends "base/base.html" %}
 
+{% block topmenu %}
+<ul>
+    <li><a href="/agenda">agenda</a></li>
+    <li><a href="/over">over</a></li>
+    <li><a href="https://www.karpenoktem.nl/fotos">foto's</a></li>
+    <li><a href="/lidworden">lidworden</a></li>
+    <li><a href="/contact">contact</a></li>
+    <li id="loginButton">
+        <a id="loginButtonLink" href="/accounts/login/">
+                <img src="{{ MEDIA_URL }}/base/login.png" width="13" alt=""/> leden</a>
+        <div id="loginWindow">
+            <h2>Inloggen voor leden</h2>
+            <p>
+                Leden kunnen hier inloggen om o.a. het smoelenboek, de wiki en
+                het forum te bekijken. Weet je je wachtwoord niet meer, mail
+                dan naar 'webcie@karpenoktem.nl'.
+            </p>
+            <form method="POST" action="/accounts/login/">
+                <table>
+                    <tr>
+                        <td><label for="input-username">Gebruikersnaam</label></td>
+                        <td><input id="input-username" type="text" name="username" /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="input-password">Wachtwoord</label></td>
+                        <td><input id="input-password" type="password" name="password" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="hidden" id="csrfmiddlewaretoken" name="csrfmiddlewaretoken" value=""/></td>
+                        <td><input type="submit" id="input-submit" value="Inloggen"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </li>
+</ul>
+{% endblock %}{# topmenu #}
+
+{% block main %}
+{% block overmenu %}
+    {{ block.super }}
+{% endblock %}
+    {{ block.super }}
+{% endblock %}
