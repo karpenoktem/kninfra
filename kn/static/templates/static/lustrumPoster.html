@@ -1,0 +1,18 @@
+{% extends "base/bare.html" %}
+
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet"
+  href="{{ MEDIA_URL }}/static/style/lustrumPoster.css" />
+{% endblock %}
+
+{% block body %}
+<a href="{% url lustrum %}" title="Naar de website" />
+     <img src="{{ MEDIA_URL }}/static/img/lustrum5.jpg"
+        alt="Lustrum Poster. Klik hier om verder te gaan naar de website"
+        title="Lustrum" 
+        class="boilerplate" /></a>
+<p class="wrappingtext">(<a href="{% url lustrum %}"
+    >ga naar de website</a>)</p>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}
