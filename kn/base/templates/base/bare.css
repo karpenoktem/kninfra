@@ -50,7 +50,8 @@ a:hover, a:focus {
 	font-size: 16px;
 }
 #footer {
-	position: absolute;
+	position: relative;
+        top: 70px;
 	padding: 0.25em 0;
 	font-size: 14px;
 	box-shadow: 0px -2px 3px 0px #a31e1b;
@@ -141,7 +142,7 @@ a:hover, a:focus {
 #content {
 	margin: 0 auto;
 	padding: 20px 0 40px 0;
-	position: absolute;
+	position: relative;
 	top: 70px;
 	width: 100%;
 	min-height: 300px;
@@ -164,10 +165,11 @@ a:hover, a:focus {
 }
 
 /* content */
-#content h1, #content h2 {
+#content h1, #content h2, #content h3 {
 	color: #404040;
 	font-variant: small-caps;
 	font-family: sans-serif;
+        text-transform: lowercase;
 	margin-bottom: 0;
 	padding: 4px 0;
 	margin: 0;
@@ -214,12 +216,17 @@ a:hover, a:focus {
 }
 .clear {
         clear: both;
+}
 a img {
 	border: none; /* IE normalization */
 }
 
 h2 {
         font-size: 1.4em;
+}
+
+h3 {
+        font-size: 1.2em;
 }
 
 /* omhoog-scroll knopje */
@@ -264,6 +271,10 @@ input:not([type=submit]):not([type=file]) {
 	border: solid 1px #b0b0b0;
 	padding: 2px;
 	color: #102020;
+}
+
+input[type=search] {
+        margin-top: 10px;
 }
 
 #loginButton {
@@ -315,6 +326,7 @@ input:not([type=submit]):not([type=file]) {
 }
 
 #actualContent {
+        width: 615px;
         padding-left: 20px;
         float: right;
 }
