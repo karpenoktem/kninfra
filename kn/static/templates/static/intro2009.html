@@ -1,0 +1,80 @@
+{% extends "static/base.html" %}
+
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ MEDIA_URL }}/static/style/intro2009.css" />
+{% endblock %}
+
+{% block body %}
+<dl id="introAgenda">
+<div class="date">maandag 17 aug</div>
+<dt>Pubquiz</dt>
+<dd>
+<img src="{{ MEDIA_URL }}/static/img/intro2009maandag.jpg" class="right" />
+Na het grote succes van vorig jaar alweer een pubquiz in de intro!  Quizmasters
+Daan en Chris hebben weer een briljante quiz voor ons in petto.  Doe mee en win
+die felbegeerde prijs!<br/>
+<em>21:00 in Café 't Haantje, Daalseweg 19</em>
+</dd>
+
+<div class="date">dinsdag 18 aug</div>
+<dt>Eten in het Park</dt>
+<dd>
+<img src="{{ MEDIA_URL }}/static/img/intro2009dinsdag.jpg" class="left" />
+Trap je luie mentorpappa en mamma en eet dinsdagavond mee met Karpe Noktem
+in stijl in het prachtige Kronenburger Park.  Kom je met jouw mentorgroep?
+E-Mail dan naar <?php echo email('parkhangen@karpenoktem.nl'); ?>, dan houden
+we rekening met jullie. <br/>
+<em>Vanaf 16:00 in het Kronenburger Park</em>
+</dd>
+
+<div class="date">woensdag 19 aug</div>
+<dt>Open Borrel</dt>
+<dd>
+<img src="{{ MEDIA_URL }}/static/img/intro2009woensdag.jpg" class="right" />
+Voor de verandering houden we onze wekelijkse borrel op de woensdag, maar dit
+keer in de grote zaal!  Start samen met KN het nieuwe jaar met een knal op
+deze feestelijke borrels met leuke mensen, goede DJ's, bier voor één euro
+en alle andere gezeligheden die je van Karpe gewend bent.<br/>
+<em>21:00 in de 
+<a href="{% url route %}">Villa van Schaeck</a></em>
+</dd>
+
+<div class="date">donderdag 20 aug</div>
+<dt>Villa Live en Beestfeest</dt>
+<dd>
+Samen met de andere verenigingen in de Villa van Schaeck houden we het
+terugkerende feest Villa Live, met live muziek!  Ook zullen onze vaste
+DJs draaien op een gelijktijdig
+<a href="http://www.olympus.science.ru.nl/beestfeest">Beestfeest</a>
+ in Doornroosje.<br/>
+<em><strong>Villa Live</strong> 22:00, 
+<a href="{% url route %}">Villa van Schaeck</a></em>
+</dd>
+
+<div class="date">zondag 23 aug</div>
+<dt>Filmavond</dt>
+<dd>
+<img src="{{ MEDIA_URL }}/static/img/intro2009zondag.jpg" class="right" />
+Heb jij nog geen bestemmingsplan voor de vrije zondagavond?  Of heb je net
+een zwaar (intro-)weekend achter de rug en wil je even rustig achteroverleunen
+met een filmpje?  Kom dan naar de Karpe Noktem Filmavond in 't Haantje!<br/>
+<em>21:00 in café 't Haantje, daalseweg 19</em>
+</dd>
+
+<div class="date">maandag 24 aug</div>
+<dt>Karpe Intr'Rock</dt>
+<dd>
+<img src="{{ MEDIA_URL }}/static/img/intro2009maandag2.jpg" class="left" />
+Karpe Noktem pakt uit!  De band
+<a href="http://www.myspace.com/atzero">At Zero</a> trapt af en overgenomen
+door onze eigen huis DJ's garanderen wij een spetterend einde van jouw
+introductie.<br/>
+<em>21:00 in de 
+<a href="{% url route %}">Villa van Schaeck</a>; band 22:00;
+bier, fris en wijn voor slechts één euro</em>
+</dd>
+
+</dl>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}
