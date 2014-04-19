@@ -47,6 +47,9 @@ urlpatterns = patterns('',
     url(r'^robots.txt/?$', generic.simple.direct_to_template,
             {'template': 'static/robots.txt',
              'mimetype': 'text/plain'}),
+    url(r'^introPoster2013/?$', generic.simple.direct_to_template,
+            {'template': 'static/introPoster2013.html'},
+            name='introPoster2013'),
 
     # Backwards compatibility
     url(r'^img/(?P<subdir>.*)', direct_to_folder,
