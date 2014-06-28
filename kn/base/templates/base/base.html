@@ -1,5 +1,7 @@
 {% extends "base/bare.html" %}
 
+{% load base %}
+
 {% block head %}
 {{ block.super }}
 <link href="{% url style-base %}"
@@ -15,6 +17,44 @@
                 </a>
                 <div id="navigator" class="container">
                 {% block topmenu %}
+                <ul>
+                    <li><a href="{% url agenda %}">agenda</a></li>
+                    <li><a href="/over">over</a></li>
+                    <li><a href="{% url fotos %}">foto's</a></li>
+                    <li><a href="{% url contact %}">contact</a></li>
+                    {% block user %}
+                    <li><a href="{% url lidworden %}">lidworden</a></li>
+                    {% endblock user %}
+                    <li id="loginButton">
+                        <a id="loginButtonLink" href="{% url login %}">
+                                <img src="{{ MEDIA_URL }}/base/login.png" width="13" alt=""/> leden</a>
+                        <div id="loginWindow">
+                            <h2>Inloggen voor leden</h2>
+                            <p>
+                                Leden kunnen hier inloggen om o.a. het smoelenboek, de wiki en
+                                het forum te bekijken. Weet je je wachtwoord niet meer, mail
+                                dan naar
+                                {% filter email %}webcie@karpenoktem.nl{% endfilter %}
+                            </p>
+                            <form method="POST" action="/accounts/login/">
+                                <table>
+                                    <tr>
+                                        <td><label for="input-username">Gebruikersnaam</label></td>
+                                        <td><input id="input-username" type="text" name="username" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="input-password">Wachtwoord</label></td>
+                                        <td><input id="input-password" type="password" name="password" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="hidden" id="csrfmiddlewaretoken" name="csrfmiddlewaretoken" value=""/></td>
+                                        <td><input type="submit" id="input-submit" value="Inloggen"/></td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
                 {% endblock %}
                 </div>
         </div>
@@ -24,7 +64,7 @@
 <div id="content">
         <div class="container">
                 <div id="body">
-                {% block overmenu %}
+                {% block submenu %}
                 {% endblock %}
                 {% block main %}
                 {% block messages %}
