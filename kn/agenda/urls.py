@@ -5,7 +5,7 @@ import django.views.generic.simple
 import django.views.generic as generic
 
 urlpatterns = patterns('',
-    url(r'^/?$', views.agenda, name='agenda'),
+    url(r'^agenda/?$', views.agenda, name='agenda'),
     url(r'^styles/agenda/$',
         generic.simple.direct_to_template,
         {'template':'agenda/agenda.css',
