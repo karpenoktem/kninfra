@@ -4,13 +4,13 @@
 
 {% block topmenu %}
 <ul>
-    <li><a href="/agenda">agenda</a></li>
-    <li><a href="/over">over</a></li>
-    <li><a href="https://www.karpenoktem.nl/fotos">foto's</a></li>
-    <li><a href="/lidworden">lidworden</a></li>
-    <li><a href="/contact">contact</a></li>
+        <li><a href="{% url agenda %}">agenda</a></li>
+        <li><a href="/over">over</a></li>
+        <li><a href="{% url fotos %}">foto's</a></li>
+        <li><a href="{% url lidworden %}">lidworden</a></li>
+        <li><a href="{% url contact %}">contact</a></li>
     <li id="loginButton">
-        <a id="loginButtonLink" href="/accounts/login/">
+        <a id="loginButtonLink" href="{% url login %}">
                 <img src="{{ MEDIA_URL }}/base/login.png" width="13" alt=""/> leden</a>
         <div id="loginWindow">
             <h2>Inloggen voor leden</h2>
