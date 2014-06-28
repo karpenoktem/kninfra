@@ -1,0 +1,14 @@
+#an {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+}
+#an > li {
+        display: inline;
+        margin: 0;
+        padding: 0;
+}
+#an > li > a > img {
+        padding: 0;
+        margin: 2px;
+}
