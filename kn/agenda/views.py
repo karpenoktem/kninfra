@@ -6,5 +6,9 @@ def agenda(request):
     return render_to_response('agenda/agenda.html',
             {'agenda': Es_a.all()},
             context_instance=RequestContext(request))
+def ledenmail_template(request):
+    return render_to_response('agenda/ledenmail-template.html',
+            {'agenda': list(Es_a.all())},
+            context_instance=RequestContext(request))
 
 # vim: et:sta:bs=2:sw=4:

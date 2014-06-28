@@ -9,9 +9,16 @@ from kn.base.views import direct_to_folder
 urlpatterns = patterns('',
     url(r'^(?:(?:home|default)/?)?$', generic.simple.direct_to_template,
             {'template': 'static/home.html'}, name='home'),
-    url(r'^(?:over|watis)/?$',
+    # TODO we have to specify a separate url entry to make the reverse URL work
+    #      for pages with several names.  Is there a way to do this without
+    #      the duplication.
+    url(r'^over/?$',
         generic.simple.direct_to_template,
             {'template': 'static/over.html'}, name='over'),
+    url(r'^watis/?$',  # alias van over
+        generic.simple.direct_to_template,
+            {'template': 'static/over.html'}),
+
     url(r'^contact/?$', generic.simple.direct_to_template,
             {'template': 'static/contact.html'}, name='contact'),
     url(r'^lidworden/?$', generic.simple.direct_to_template,
@@ -20,8 +27,12 @@ urlpatterns = patterns('',
             {'template': 'static/geschiedenis.html'}, name='geschiedenis'),
     url(r'^activiteiten/?$', generic.simple.direct_to_template,
             {'template': 'static/activiteiten.html'}, name='activiteiten'),
-    url(r'^(?:akta|an|aktanokturna)/?$', generic.simple.direct_to_template,
+
+    url(r'^akta/?$', generic.simple.direct_to_template,
             {'template': 'static/aktanokturna.html'}, name='aktanokturna'),
+    url(r'^(?:an|aktanokturna)/?$', generic.simple.direct_to_template,
+            {'template': 'static/aktanokturna.html'}),
+
     url(r'^zusjes/?$', generic.simple.direct_to_template,
             {'template': 'static/zusjes.html'}, name='zusjes'),
     url(r'^route/?$', generic.simple.direct_to_template,

@@ -1,5 +1,11 @@
 {% extends "static/base.html" %}
 
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet"
+  href="{% url style-agenda %}" />
+{% endblock %}
+
 {% block body %}
 <div>
   <a href="http://www.google.com/calendar/embed?src=vssp95jliss0lpr768ec9spbd8%40group.calendar.google.com&amp;ctz=Europe/Paris" target="_blank"
@@ -31,7 +37,7 @@
     <div class="item_wrapper">
       <div class="dateholder">
         <div class="date">
-          {{ item.start.date }}
+          {{ item.shortdate }}
         </div>
         <div class="arrow"></div>
       </div>
