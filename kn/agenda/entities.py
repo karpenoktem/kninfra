@@ -35,6 +35,9 @@ class AgendaEvent(SONWrapper):
     @property
     def month(self):
         return self.start.date().strftime('%B')
+    @property
+    def shortdate(self):
+        return self.start.date().strftime('%a %d')
 
     def __unicode__(self):
         return self.title
