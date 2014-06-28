@@ -78,11 +78,6 @@ a:hover, a:focus {
 	margin: 0.25em 0.5em;
 }
 
-#body {
-        float: left;
-        width: 850px;
-}
-
 .right {
 	float: right;
 }

@@ -168,30 +168,69 @@
 	visibility: hidden;
 }
 
-/* overmenu */
+/* submenu */
 
-#overMenu {
+#submenu {
 	text-align: right;
+	margin: 0;
+	line-height: 1;
 }
 
-#overMenu a {
+#submenu li {
+	list-style-type: none;
+	display: inline-block;
+	position: relative;
+}
+
+#submenu a {
+	text-decoration: underline;
+}
+
+#submenu a,
+#submenu span {
+	display: inline-block;
+	padding: 4px 8px 8px;
+	color: #000;
 	font-variant: small-caps;
 	font-family: sans-serif;
 	text-transform: lowercase;
-	padding: 0 0.4em;
-	text-decoration: underline;
-	color: #000;
 }
 
-#overMenu a:hover {
-	text-decoration: none;
-	color: #000;
+#submenu input { /* search input */
+       margin: 0 8px;
 }
-#overMenu a.active {
-	font-weight: bold;
-	text-decoration: none;
-	color: #000;
+#submenu li:hover > a,
+#submenu li:hover > span {
+       background: white;
 }
+#submenu a:hover {
+       text-decoration: none;
+}
+#submenu a.active {
+       font-weight: bold;
+       text-decoration: none;
+       color: #000;
+}
+
+#submenu li ul { /* dropdown menu */
+       display: none;
+       position: absolute;
+       text-align: left;
+       background: white;
+       padding-left: 0;
+}
+#submenu li:hover ul {
+       display: block;
+       background: white;
+}
+#submenu li li { /* 2nd level */
+       display: block;
+}
+
+#submenu li li a {
+       min-width: 10em;
+}
+
 
 /* we willen alle tekst input-veldjes wat cleaner hebben */
 input:not([type=submit]):not([type=file]) {
