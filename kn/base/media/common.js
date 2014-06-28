@@ -122,13 +122,13 @@ if (! isMobile()) {
 $(document).ready(function() {
     // ScrollUp animation
     $("#scrollUp").click(function(event) {
-    var sTop = 0;
-    if(!isMobile && $.cookie('collapseHeader') != 'y') {
-        sTop = headerFixedThreshold;
-    }
-    $('html, body').animate({scrollTop: sTop}, 300);
-        event.preventDefault();
-        return false;
+        var sTop = 0;
+        if(!isMobile && $.cookie('collapseHeader') != 'y') {
+            sTop = headerFixedThreshold;
+        }
+        $('html, body').animate({scrollTop: sTop}, 300);
+            event.preventDefault();
+            return false;
     });
 
     // read menu state collapse state from cookie
@@ -141,6 +141,15 @@ $(document).ready(function() {
             top: collapsedHeaderHeight
         });
     }
+
+    // Skip to content after first view
+    if (sessionStorage['visited']) {
+        $('html, body').animate({
+            scrollTop: $('#content').offset().top - collapsedHeaderHeight
+        }, 'fast');
+    }
+    sessionStorage['visited'] = 'true';
+
 
     if (!isMobile()) {
         $('#csrfmiddlewaretoken').val(getCsrftoken());

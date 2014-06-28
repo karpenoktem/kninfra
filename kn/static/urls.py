@@ -66,7 +66,7 @@ urlpatterns = patterns('',
     # TODO we want to use reverse, but it is not initialized properly
     #      at this moment in the request handler.
     url(r'^bestuur/?$', generic.simple.redirect_to,
-            {'url': '/bestuur10'}),
+            {'url': '/bestuur10'}, name='bestuur'),
 
     url(r'^introPoster2013/?$', generic.simple.direct_to_template,
             {'template': 'static/introPoster2013.html'},
@@ -129,6 +129,12 @@ urlpatterns = patterns('',
             {'root': os.path.join(settings.MEDIA_ROOT, 'static/img') }),
     url(r'^baragenda/?$', generic.simple.redirect_to,
             {'url': '/planning'}),  # TODO use reverse_url
+
+    # style
+    url(r'^styles/static/$',
+        generic.simple.direct_to_template,
+        {'template':'static/base.css',
+         'mimetype':'text/css'}, name='static-base'),
 )
 
 # vim: et:sta:bs=2:sw=4:
