@@ -142,6 +142,15 @@ $(document).ready(function() {
         });
     }
 
+    // Skip to content after first view
+    if (sessionStorage['visited']) {
+        $('html, body').animate({
+            scrollTop: $('#content').offset().top - collapsedHeaderHeight
+        }, 'fast');
+    }
+    sessionStorage['visited'] = 'true';
+
+
     if (!isMobile()) {
         $('#csrfmiddlewaretoken').val(getCsrftoken());
 
