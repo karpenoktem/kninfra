@@ -1,5 +1,7 @@
 {% extends "base/base.html" %}
 
+{% load base %}
+
 {% block topmenu %}
 <ul>
     <li><a href="/agenda">agenda</a></li>
@@ -15,7 +17,8 @@
             <p>
                 Leden kunnen hier inloggen om o.a. het smoelenboek, de wiki en
                 het forum te bekijken. Weet je je wachtwoord niet meer, mail
-                dan naar 'webcie@karpenoktem.nl'.
+                dan naar
+                {% filter email %}webcie@karpenoktem.nl{% endfilter %}
             </p>
             <form method="POST" action="/accounts/login/">
                 <table>
