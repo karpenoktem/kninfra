@@ -122,13 +122,13 @@ if (! isMobile()) {
 $(document).ready(function() {
     // ScrollUp animation
     $("#scrollUp").click(function(event) {
-    var sTop = 0;
-    if(!isMobile && $.cookie('collapseHeader') != 'y') {
-        sTop = headerFixedThreshold;
-    }
-    $('html, body').animate({scrollTop: sTop}, 300);
-        event.preventDefault();
-        return false;
+        var sTop = 0;
+        if(!isMobile && $.cookie('collapseHeader') != 'y') {
+            sTop = headerFixedThreshold;
+        }
+        $('html, body').animate({scrollTop: sTop}, 300);
+            event.preventDefault();
+            return false;
     });
 
     // read menu state collapse state from cookie
