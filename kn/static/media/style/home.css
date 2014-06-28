@@ -1,0 +1,54 @@
+#random-text {
+	float: left;
+	width: 475px;
+	margin-right: 50px;
+}
+
+#agenda {
+	float: left;
+	width: 320px;
+}
+
+#agenda li.monthSeparator {
+	font-size: 1.0em;
+}
+
+#agenda li.item {
+	padding: 0.5em;
+}
+
+#agenda li.item .item_content {
+	width: 225px;
+}
+
+#agenda li.item .item_content .preview {
+	display: none;
+}
+
+#agenda .datelong {
+	display: none;
+}
+
+#agenda li.item .date {
+	float: left;
+	width: 25px;
+	height: 32px;
+	margin: 0;
+	margin-right: 15px;
+	padding: 3px 6px;
+	line-height: 15px;
+	font-size: 0.8em;
+}
+
+/* photoslider properties */
+.nivoSlider {
+	z-index: 0;
+}
+.nivoSlider img {
+	border-radius: 4px;
+	/* reset properties used for normal images */
+	padding: 0 !important;
+	border: 0 !important;
+	background-color: transparent !important;
+	margin: 0 !important;
+}

@@ -1,112 +1,88 @@
 {% extends "static/overbase.html" %}
 
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet"
+  href="{{ MEDIA_URL }}/static/style/aktanokturna.css" />
+{% endblock %}
+
 {% block body %}
-<p>Hier kun je de oudere uitgaven van de Akta Nokturna downloaden:
+<p>Hier kun je de oudere uitgaven van de Akta Nokturna downloaden:</p>
+
 <ul id="an">
-  <img style="float: right" src="{{ MEDIA_URL}}/static/img/akta.jpg"
-        width="322" />
-<li>Jaargang 10</li>
-  <ul>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta37.pdf" %}"
-              >Akta 37</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta38.pdf" %}"
-              >Akta 38</a></li>
-  </ul>
-  <li>Jaargang 9</li>
-  <ul>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta31.pdf" %}"
-              >(Intro) Akta 31</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta32.pdf" %}"
-              >Akta 32</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta33.pdf" %}"
-              >Akta 33</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta34.pdf" %}"
-              >Akta 34</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta35.pdf" %}"
-              >Akta 35</a></li>
-  </ul>
-  <li>Jaargang 8</li>
-  <ul>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta25.pdf" %}"
-              >(Intro) Akta 25</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta26.pdf" %}"
-              >Akta 26</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta27.pdf" %}"
-              >Akta 27</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta28.pdf" %}"
-              >Akta 28</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta29.pdf" %}"
-              >Akta 29</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta30.pdf" %}"
-              >Akta 30</a></li>
-  </ul>
-  <li>Jaargang 7</li>
-  <ul>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta20.pdf" %}"
-              >(Intro) Akta 20</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta21.pdf" %}"
-              >Akta 21</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta22.pdf" %}"
-              >Akta 22</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta23.pdf" %}"
-              >Akta 23</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta24.pdf" %}"
-              >Akta 24</a></li>
-  </ul>
-  <li>Jaargang 6</li>
-  <ul>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta16.pdf" %}"
-              >(Intro) Akta 16</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta17.pdf" %}"
-              >Akta 17</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta18.pdf" %}"
-              >Akta 18</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta19.pdf" %}"
-              >Akta 19</a></li>
-  </ul>
-  <li>Jaargang 5</li>
-  <ul>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta12.pdf" %}"
-              >(Intro) Akta 12</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta13.pdf" %}"
-              >Akta 13</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta14.pdf" %}"
-              >Akta 14</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta15.pdf" %}"
-              >Akta 15</a></li>
-  </ul>
-  <li>Jaargang 4</li>
-  <ul>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta10.pdf" %}"
-              >Akta 10</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta11.pdf" %}"
-              >Akta 11</a></li>
-  </ul> 
-  <li>Jaargang 3</li>
-  <ul>  
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta8.pdf" %}"
-              >Akta 8</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta9.pdf" %}"
-              >Akta 9</a></li>
-  </ul>
-  <li>Jaargang 2</li>
-  <ul>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta3.pdf" %}"
-              >Akta 3</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta4.pdf" %}"
-              >Akta 4</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta5.pdf" %}"
-              >Akta 5</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta6.pdf" %}"
-              >Akta 6</a></li>
-  </ul>
-  <li>Jaargang 1</li>
-  <ul>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta1.pdf" %}"
-              >Akta 1</a></li>
-    <li><a href="{% url groupfolder subdir="leden" path="aktas/akta2.pdf" %}"
-              >Akta 2</a></li>
-  </ul>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta38.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta38.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta37.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta37.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta35.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta35.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta34.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta34.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta33.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta33.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta32.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta32.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta31.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta31.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta30.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta30.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta29.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta29.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta28.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta28.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta27.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta27.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta26.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta26.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta25.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta25.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta24.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta24.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta23.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta23.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta22.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta22.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta21.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta21.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta20.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta20.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta19.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta19.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta18.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta18.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta17.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta17.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta16.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta16.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta15.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta15.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta14.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta14.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta13.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta13.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta12.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta12.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta11.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta11.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta10.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta10.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta9.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta9.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta8.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta8.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta6.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta6.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta5.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta5.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta4.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta4.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta3.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta3.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta2.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta2.jpg" width="200"></a></li>
+<li><a href="{% url groupfolder subdir="leden" path="aktas/akta1.pdf" %}">
+  <img src="{{ MEDIA_URL }}/static/img/aktas/akta1.jpg" width="200"></a></li>
 </ul>
+
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}
