@@ -27,49 +27,28 @@
 		{% endblock %}
 	</head>
         <body>
-                <div id="header">
-                        <div class="container">
-                                <a href="/">
-                                        <img id="logo" src="{{ MEDIA_URL }}/base/logo.png" alt="Karpe Noktem" />
-                                </a>
-                                <div id="navigator" class="container">
-                                {% block topmenu %}
-                                {% endblock %}
-                                </div>
-                        </div>
-                </div>
-		{% block wrapper %}
-		<div id="content">
-                        <div class="container">
-                                <div id="body">
-                                {% block overmenu %}
-                                {% endblock %}
-                                {% block main %}
-                                {% block messages %}
-                                {% if messages %}
-                                <ul id="messages">
-                                        {% for message in messages %}
-                                        <li>{{ message }}</li>
-                                        {% endfor %}
-                                </ul>
-                                {% endif %}
-                                {% endblock %}
+                {% block header %}
+                {% endblock %}
+                {% block wrapper %}
+                <div id="content">
+                    <div class="container">
+                        <div id="body">
                                 {% block body %}
                                 {% endblock %}
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                        {% block footer %}
+                        <div id="footer">
+                                <div class="container">
+                                        &copy;2007&mdash;2014,
+                                        Alternatieve studentenvereniging Karpe Noktem
+                                        <small><a id="scrollUp" href="#">Terug naar boven</a></small>
                                 </div>
-                                {% endblock %}
-                                <div class="clear"></div>
                         </div>
-		</div>
-		{% endblock %}
-		<div id="footer">
-                        <div class="container">
-                                &copy;2007&mdash;2014,
-                                Alternatieve studentenvereniging Karpe Noktem
-                                <small><a id="scrollUp" href="#">Terug naar boven</a></small>
-                        </div>
-		</div>
-	</div>
+                        {% endblock %}
+                </div>
+                {% endblock %}
 	<script type="text/javascript">
 		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
