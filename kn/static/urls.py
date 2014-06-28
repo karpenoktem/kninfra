@@ -129,6 +129,12 @@ urlpatterns = patterns('',
             {'root': os.path.join(settings.MEDIA_ROOT, 'static/img') }),
     url(r'^baragenda/?$', generic.simple.redirect_to,
             {'url': '/planning'}),  # TODO use reverse_url
+
+    # style
+    url(r'^styles/static/$',
+        generic.simple.direct_to_template,
+        {'template':'static/base.css',
+         'mimetype':'text/css'}, name='static-base'),
 )
 
 # vim: et:sta:bs=2:sw=4:
