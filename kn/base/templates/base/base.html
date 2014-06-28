@@ -25,6 +25,9 @@
                     {% block user %}
                     <li><a href="{% url lidworden %}">lidworden</a></li>
                     {% endblock user %}
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url smoelen-home %}">{{ user.name }}</a></li>
+                    {% else %}{# user.is_authenticated #}
                     <li id="loginButton">
                         <a id="loginButtonLink" href="{% url login %}">
                                 <img src="{{ MEDIA_URL }}/base/login.png" width="13" alt=""/> leden</a>
@@ -54,6 +57,7 @@
                             </form>
                         </div>
                     </li>
+                    {% endif %}{# user.is_authenticated #}
                 </ul>
                 {% endblock %}
                 </div>
