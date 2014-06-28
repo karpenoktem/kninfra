@@ -1,4 +1,5 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
+from django.utils.safestring import mark_safe
 
 acol = db['agenda']
 
@@ -35,9 +36,22 @@ class AgendaEvent(SONWrapper):
     @property
     def month(self):
         return self.start.date().strftime('%B')
+
     @property
     def shortdate(self):
         return self.start.date().strftime('%a %d')
+
+    @property
+    def date(self):
+        if self.start.day == self.end.day:
+            return self.start.date().strftime('%A %e %B')
+        if self.start.month == self.end.month:
+            return mark_safe("{} &mdash; {}".format(
+                    self.start.date().strftime('%a %e'),
+                    self.end.date().strftime('%a %e %B')))
+        return mark_safe("{} &mdash; {}".format(
+                self.start.date().strftime('%a %e %b'),
+                self.end.date().strftime('%a %e %b')))
 
     def __unicode__(self):
         return self.title
