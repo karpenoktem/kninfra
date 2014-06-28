@@ -1,5 +1,11 @@
 {% extends "base/base.html" %}
 
+{% block head %}
+{{ block.super }}
+<link href="{% url leden-base %}"
+	rel="stylesheet" type="text/css" />
+{% endblock %}
+
 {% block topmenu %}
 {% if user.is_authenticated %}
 {{ block.super }}
