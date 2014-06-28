@@ -66,13 +66,13 @@
 	text-align: center;
 	height: 10px;
 	margin-top: 3px;
-	background-image: url(../img/agenda_open.png);
+	background-image: url({{ MEDIA_URL }}/agenda/agenda_open.png);
 	background-position: center bottom;
 	background-repeat: no-repeat;
 }
 
 #agenda li.item .opened {
-	background-image: url(../img/agenda_close.png);
+	background-image: url({{ MEDIA_URL }}/agenda/agenda_close.png);
 }
 
 #agenda li.item .item_content {
