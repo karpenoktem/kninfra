@@ -1,6 +1,5 @@
-var headerHeight = 400;
 var collapsedHeaderHeight = 70;
-var headerFixedThreshold = headerHeight - collapsedHeaderHeight;
+var headerCollapsed = false;
 
 function email(t, d, u) {
     var email = u + '@' + d + '.' + t;
@@ -97,59 +96,44 @@ function isMobile() {
     return 'ontouchstart' in document.documentElement && (window.matchMedia ? window.matchMedia('(max-device-width: 800px)') : true);
 }
 
-// Menubar half-fixed
-if (! isMobile()) {
-    $(window).scroll(function(e) {
-        if($.cookie('collapseHeader') === 'y') {
-            $('#header').css({
-                position: 'fixed',
-                top: -headerFixedThreshold
-            });
-        } else if($(window).scrollTop() > headerFixedThreshold) {
-            $('#header').css({
-                position: 'fixed',
-                top: -headerFixedThreshold
-            });
-        } else {
-            $('#header').css({
-                position: 'absolute',
-                top: 0
-            });
-        }
-    });
-}
-
 $(document).ready(function() {
     // ScrollUp animation
     $("#scrollUp").click(function(event) {
         var sTop = 0;
-        if(!isMobile && $.cookie('collapseHeader') != 'y') {
-            sTop = headerFixedThreshold;
-        }
         $('html, body').animate({scrollTop: sTop}, 300);
             event.preventDefault();
             return false;
     });
 
-    // read menu state collapse state from cookie
-    if($.cookie('collapseHeader') === 'y') {
-        $('#header').css({
-            position: 'fixed',
-            top: -headerFixedThreshold
-        });
-        $('#content').css({
-            top: collapsedHeaderHeight
-        });
-    }
+    var headerFixedThreshold = $('#content').offset().top - collapsedHeaderHeight;
 
     // Skip to content after first view
     if (sessionStorage['visited']) {
-        $('html, body').animate({
-            scrollTop: $('#content').offset().top - collapsedHeaderHeight
-        }, 'fast');
+        // <html> for Firefox, <body> for other browsers
+        document.documentElement.scrollTop = headerFixedThreshold;
+        document.body.scrollTop = headerFixedThreshold;
+    } else {
+        $(document.body).addClass('firstView');
     }
     sessionStorage['visited'] = 'true';
 
+    function fixHeader() {
+        var shouldBeCollapsed = $(window).scrollTop() > headerFixedThreshold;
+        if (headerCollapsed !== shouldBeCollapsed) {
+            // don't touch the DOM if that's not needed!
+            headerCollapsed = shouldBeCollapsed;
+            if (shouldBeCollapsed) {
+                $('#header').addClass('collapsed');
+            } else {
+                $('#header').removeClass('collapsed');
+            }
+        }
+    }
+    // Menubar half-fixed
+    if (! isMobile()) {
+        $(window).scroll(fixHeader);
+    }
+    fixHeader();
 
     if (!isMobile()) {
         $('#csrfmiddlewaretoken').val(getCsrftoken());
@@ -170,43 +154,6 @@ $(document).ready(function() {
         });
     }
 });
-
-function collapseHeader(img) {
-    if($.cookie('collapseHeader') === 'y') {
-        $.cookie('collapseHeader', 'n');
-        img.src = 'img/up.png';
-
-        $('#content').css({
-            top: headerHeight
-        });
-
-        $('#header').css({
-            height: headerHeight
-        });
-
-        if($(window).scrollTop() > headerFixedThreshold) {
-            $('#header').css({
-                position: 'fixed',
-                top: -headerFixedThreshold
-            });
-        } else {
-            $('#header').css({
-                position: 'absolute',
-                top: 0
-            });
-        }
-    } else {
-        $.cookie('collapseHeader', 'y');
-        img.src = 'img/down.png';
-        $('#header').css({
-            position: 'fixed',
-            top: -headerFixedThreshold
-        });
-        $('#content').css({
-            top: collapsedHeaderHeight
-        });
-    }
-}
 
 // Implement rot13 for email obscurification
 function rot13 (s) {
