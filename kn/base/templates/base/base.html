@@ -22,12 +22,11 @@
                     <li><a href="{% url over %}">over</a></li>
                     <li><a href="{% url fotos %}">foto's</a></li>
                     <li><a href="{% url contact %}">contact</a></li>
-                    {% block user %}
-                    <li><a href="{% url lidworden %}">lidworden</a></li>
-                    {% endblock user %}
                     {% if user.is_authenticated %}
+                    <li><a href="{% url logout %}">uitloggen</a></li>
                     <li><a href="{% url smoelen-home %}">{{ user.name }}</a></li>
                     {% else %}{# user.is_authenticated #}
+                    <li><a href="{% url lidworden %}">lidworden</a></li>
                     <li id="loginButton">
                         <a id="loginButtonLink" href="{% url login %}">
                                 <img src="{{ MEDIA_URL }}/base/login.png" width="13" alt=""/> leden</a>

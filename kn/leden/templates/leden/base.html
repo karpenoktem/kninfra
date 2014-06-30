@@ -1,13 +1,5 @@
 {% extends "base/base.html" %}
 
-{% block user %}
-{% if user.is_authenticated %}
-    <li><a href="{% url logout %}">uitloggen</a></li>
-{% else %}
-{{ block.super }}
-{% endif %}
-{% endblock user %}
-
 {% block submenu %}
 <ul id="submenu">
     <li><a href="{% url smoelen-home %}">Smoelenboek</a>
