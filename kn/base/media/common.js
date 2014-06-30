@@ -1,5 +1,5 @@
 var collapsedHeaderHeight = 70;
-var headerCollapsed = false;
+var headerCollapsed = true;
 
 function email(t, d, u) {
     var email = u + '@' + d + '.' + t;
@@ -105,15 +105,15 @@ $(document).ready(function() {
             return false;
     });
 
+    $(document.body).addClass('header-expanded');
     var headerFixedThreshold = $('#content').offset().top - collapsedHeaderHeight;
 
     // Skip to content after first view
     if (sessionStorage['visited']) {
+        $(document.body).addClass('viewedBefore');
         // <html> for Firefox, <body> for other browsers
         document.documentElement.scrollTop = headerFixedThreshold;
         document.body.scrollTop = headerFixedThreshold;
-    } else {
-        $(document.body).addClass('firstView');
     }
     sessionStorage['visited'] = 'true';
 
@@ -123,9 +123,9 @@ $(document).ready(function() {
             // don't touch the DOM if that's not needed!
             headerCollapsed = shouldBeCollapsed;
             if (shouldBeCollapsed) {
-                $('#header').addClass('collapsed');
+                $('#header').removeClass('expanded');
             } else {
-                $('#header').removeClass('collapsed');
+                $('#header').addClass('expanded');
             }
         }
     }
