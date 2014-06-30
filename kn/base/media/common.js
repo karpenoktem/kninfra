@@ -99,10 +99,9 @@ function isMobile() {
 $(document).ready(function() {
     // ScrollUp animation
     $("#scrollUp").click(function(event) {
-        var sTop = 0;
-        $('html, body').animate({scrollTop: sTop}, 300);
-            event.preventDefault();
-            return false;
+        $('html, body').animate({scrollTop: 0}, 300);
+        event.preventDefault();
+        return false;
     });
 
     $(document.body).addClass('header-expanded');
