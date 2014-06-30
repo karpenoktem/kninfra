@@ -18,7 +18,7 @@ body.firstView {
 	background-repeat: no-repeat;
 	background-position: center;
 	height: 400px;
-        background-image: url('{% header %}');
+	background-image: url('{% header %}');
 	width: 100%;
 	margin: 0;
 	background-color: #000;
@@ -213,38 +213,38 @@ body.firstView {
 }
 
 #submenu input { /* search input */
-       margin: 0 8px;
+	margin: 0 8px;
 }
 #submenu li:hover > a,
 #submenu li:hover > span {
-       background: white;
+	background: white;
 }
 #submenu a:hover {
-       text-decoration: none;
+	text-decoration: none;
 }
 #submenu a.active {
-       font-weight: bold;
-       text-decoration: none;
-       color: #000;
+	font-weight: bold;
+	text-decoration: none;
+	color: #000;
 }
 
 #submenu li ul { /* dropdown menu */
-       display: none;
-       position: absolute;
-       text-align: left;
-       background: white;
-       padding-left: 0;
+	display: none;
+	position: absolute;
+	text-align: left;
+	background: white;
+	padding-left: 0;
 }
 #submenu li:hover ul {
-       display: block;
-       background: white;
+	display: block;
+	background: white;
 }
 #submenu li li { /* 2nd level */
-       display: block;
+	display: block;
 }
 
 #submenu li li a {
-       min-width: 10em;
+	min-width: 10em;
 }
 
 
