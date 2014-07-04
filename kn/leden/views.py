@@ -21,7 +21,7 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
-from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
+from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm, AddInstituteForm, AddStudyForm
 from kn.leden.auth import login_or_basicauth_required
 from kn.leden.utils import find_name_for_user
 from kn.leden.date import now, date_to_dt
@@ -57,6 +57,8 @@ def user_list(request, page):
 def entity_detail(request, name=None, _id=None, type=None):
     if name is not None:
         e = Es.by_name(name)
+        if e is None:
+            e = Es.by_humanName(name)
     else:
         e = Es.by_id(_id)
     if e is None:
@@ -517,6 +519,54 @@ def secr_add_group(request):
     else:
         form = AddGroupForm()
     return render_to_response('leden/secr_add_group.html', {'form': form},
+            context_instance=RequestContext(request))
+
+@login_required
+def secr_add_institute(request):
+    if 'secretariaat' not in request.user.cached_groups_names:
+        raise PermissionDenied
+    if request.method == 'POST':
+        form = AddInstituteForm(request.POST)
+        if form.is_valid():
+            fd = form.cleaned_data
+            nm = fd['humanName']
+            g = Es.Institute({
+                'types': ['institute'],
+                'humanNames': [{'human': nm}]})
+            logging.info("Added institute %s" % nm)
+            g.save()
+            Es.notify_informacie("Het instituut %s is aangemaakt." % (
+                        unicode(g.humanName)))
+            giedo.sync_async(request)
+            request.user.push_message("Instituut toegevoegd.")
+            return HttpResponseRedirect(reverse('institute-by-humanName', args=(nm,)))
+    else:
+        form = AddInstituteForm()
+    return render_to_response('leden/secr_add_institute.html', {'form': form},
+            context_instance=RequestContext(request))
+
+@login_required
+def secr_add_study(request):
+    if 'secretariaat' not in request.user.cached_groups_names:
+        raise PermissionDenied
+    if request.method == 'POST':
+        form = AddStudyForm(request.POST)
+        if form.is_valid():
+            fd = form.cleaned_data
+            nm = fd['humanName']
+            g = Es.Institute({
+                'types': ['study'],
+                'humanNames': [{'human': nm}]})
+            logging.info("Added study %s" % nm)
+            g.save()
+            Es.notify_informacie("De studie %s is aangemaakt." % (
+                        unicode(g.humanName)))
+            giedo.sync_async(request)
+            request.user.push_message("Studie toegevoegd.")
+            return HttpResponseRedirect(reverse('study-by-humanName', args=(nm,)))
+    else:
+        form = AddStudyForm()
+    return render_to_response('leden/secr_add_study.html', {'form': form},
             context_instance=RequestContext(request))
 
 @login_required

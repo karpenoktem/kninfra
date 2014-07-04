@@ -1,0 +1,12 @@
+{% extends "leden/base.html" %}
+{% load base %}
+
+{% block body %}
+<form method="post" action="?">{% csrf_token %}
+<table>
+{{ form.as_table }}
+<tr><td colspan="2"><input type="submit" value="Maak aan"/></td></tr>
+</table>
+</form>
+{{ block.super }}
+{% endblock %}

@@ -82,6 +82,12 @@ class AddGroupForm(forms.Form):
     true_group = forms.BooleanField(label="Volwaardige groep",
             initial=True)
 
+class AddInstituteForm(forms.Form):
+    humanName = forms.CharField(label="Naam van het instituut")
+
+class AddStudyForm(forms.Form):
+    humanName = forms.CharField(label="Naam van de studie")
+
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput())
     new_password = forms.CharField(widget=forms.PasswordInput())
