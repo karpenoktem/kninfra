@@ -1,5 +1,7 @@
 {% extends "static/base.html" %}
 
+{% load base %}
+
 {% block head %}
 {{ block.super }}
 <link rel="stylesheet" href="{{ MEDIA_URL }}/static/style/intro2009.css" />
@@ -23,7 +25,8 @@ die felbegeerde prijs!<br/>
 <img src="{{ MEDIA_URL }}/static/img/intro2009dinsdag.jpg" class="left" />
 Trap je luie mentorpappa en mamma en eet dinsdagavond mee met Karpe Noktem
 in stijl in het prachtige Kronenburger Park.  Kom je met jouw mentorgroep?
-E-Mail dan naar <?php echo email('parkhangen@karpenoktem.nl'); ?>, dan houden
+E-Mail dan naar {% filter email %}parkhangen@karpenoktem.nl{% endfilter %},
+dan houden
 we rekening met jullie. <br/>
 <em>Vanaf 16:00 in het Kronenburger Park</em>
 </dd>
