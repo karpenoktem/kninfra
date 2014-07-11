@@ -4,10 +4,10 @@ from django.utils.safestring import mark_safe
 acol = db['agenda']
 
 def ensure_indices():
-    acol.ensure_index('when')
+    acol.ensure_index('start')
 
 def all():
-    for m in acol.find():
+    for m in acol.find().sort('start'):
         yield AgendaEvent(m)
 
 def update(events):
