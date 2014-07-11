@@ -29,4 +29,9 @@
 {% endfor %}
 
 </ul>
+{% if has_more %}
+<div class="more">
+  <a href="{% url agenda %}">Meer...</a>
+</div>
+{% endif %}
 {# vim: set sw=2 ts=2 et: #}
