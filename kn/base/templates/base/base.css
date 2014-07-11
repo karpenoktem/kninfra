@@ -1,20 +1,25 @@
 {% load base %}
 
+html {
+	overflow-y: scroll; /* always show the scrollbar */
+}
+
 html, body {
 	height: 100%;
 }
 body {
 	min-height: 1354px;
-	min-height: calc(100% + 330px); /* prevent jumping around with short pages */
-}
-body.firstView {
 	min-height: 100%;
+}
+body.viewedBefore {
+	min-height: calc(100% + 330px); /* prevent jumping around with short pages */
 }
 
 /* header */
 #header {
 	z-index: 1;
-	position: absolute;
+	position: fixed;
+	top: -330px;
 	background-repeat: no-repeat;
 	background-position: center;
 	height: 400px;
@@ -25,9 +30,11 @@ body.firstView {
 	font-family: sans-serif;
 	font-size: 16px;
 }
-#header.collapsed {
-	position: fixed;
-	top: -330px;
+/* reduce flicker on page load by loading the page with the header collapsed
+ * and expanding it with JS while scrolling to the right position */
+#header.expanded {
+	position: absolute;
+	top: 0;
 }
 
 @media screen and (min-width: 800px) {
@@ -43,11 +50,6 @@ body.firstView {
 	position: absolute;
 	bottom: 8px;
 	left: 20px;
-}
-
-#header #logo #collapser {
-	position: absolute;
-	left: -35px;
 }
 
 /* navigator */
@@ -115,7 +117,7 @@ body.firstView {
 	margin: 0 auto;
 	padding: 20px 0 40px 0;
 	position: relative;
-	top: 400px;
+	top: 70px;
 	width: 100%;
 	min-height: 300px;
 	background-color: #f0f0f0;
@@ -123,6 +125,9 @@ body.firstView {
 	background-repeat: no-repeat;
 	background-position: 100% 0%;
 	background-attachment: scroll;
+}
+body.header-expanded #content {
+	top: 400px;
 }
 @media screen and (min-width: 800px) {
 	#content {
