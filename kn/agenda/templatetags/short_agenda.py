@@ -2,9 +2,12 @@ from django import template
 import kn.agenda.entities as Es_a
 
 register = template.Library()
-max_items = 10;
+MAX_ITEMS = 10;
 
 @register.inclusion_tag('agenda/short_agenda.html')
 def show_short_agenda():
-        Es_limited = list(Es_a.all(limit=max_items + 1));
-        return {'short_agenda': Es_limited[0:max_items], 'has_more': len(Es_limited) > max_items}
+    items = list(Es_a.all(limit=MAX_ITEMS + 1));
+    return {'short_agenda': items[0:MAX_ITEMS],
+            'has_more': len(items) > MAX_ITEMS}
+
+# vim: et:sta:bs=2:sw=4:
