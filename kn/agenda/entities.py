@@ -1,4 +1,6 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
+
+from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 
 acol = db['agenda']
@@ -35,6 +37,14 @@ class AgendaEvent(SONWrapper):
     end = son_property(('end',))
     description = son_property(('description',))
     title = son_property(('title',))
+
+    @property
+    def description(self):
+        text = self._data.get('description', '')
+        text = text.replace('Villa van Schaeck',
+                    '<a href="{}">Villa van Schaeck</a>'.format(
+                                                    reverse('route')))
+        return text
 
     @property
     def month(self):
