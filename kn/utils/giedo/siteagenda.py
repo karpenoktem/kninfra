@@ -13,6 +13,4 @@ def update_site_agenda(giedo):
     update(fetch())
     return {'success': True}
 
-update_site_agenda()
-
 # vim: et:sta:bs=2:sw=4:
