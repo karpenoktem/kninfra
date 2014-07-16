@@ -1,97 +1,95 @@
-html, body {
-	margin: 0;
-	padding: 0;
+a, body, #menu a {
+        color: #eee;
 }
 
 body {
-	background-color: #000;
-	color: #102020;
-	line-height: 1.6em;
-	font-family: serif;
+        background-color: black;
+        font-family: "trebuchet ms", verdana;
+        padding-left: 50%;
 }
 
-/* links -- kleuren overgenomen van MediaWiki */
-a {
-	text-decoration: none;
-}
-a:link {
-	color: #3366BB;
-}
-a:visited {
-	color: #663366;
-}
-a:active {
-	color: #FAA700;
-}
-a:hover, a:focus {
-	text-decoration: underline;
+#wrapper {
+        width: 800px;
+        margin-left: -400px;
 }
 
-.clear {
-	clear: both;
+#main {
+        background-repeat: no-repeat;
+        min-height: 533px;
 }
 
-/* container */
-.container {
-	margin: 0 auto;
-	max-width: 850px;
+h1 {
+        font-size: 1.3em;
 }
 
-/* header */
-#footer {
-	position: absolute;
-	bottom: -0px;
-	width: 100%;
-	margin: 0;
-	padding: 0.25em 0;
-	background-color: #000;
-	font-family: sans-serif;
-	font-size: 16px;
-	font-size: 14px;
-	box-shadow: 0px -2px 3px 0px #a31e1b;
-	color: #929292;
+img.left {
+        float: left;
+        margin: 0.5em 0.5em 0.5em 0;
 }
 
-/* content */
-#content {
-	margin: 0 auto;
-	padding: 20px 0 40px 0;
-	position: relative;
-	width: 100%;
-	min-height: 300px;
-}
-@media screen and (min-width: 800px) {
-	#content {
-		padding-top: 20px;
-	}
-}
-@media screen and (max-width: 800px) {
-	#content {
-		padding-top: 30px;
-		top: 442px;
-	}
+img.right {
+        float: right;
+        margin: 0.5em 0 0.5em 0.5em;
 }
 
-/* content */
-#content img {
-	padding: 4px;
-	border: solid 1px #aaa;
-	background-color: #f8f8f8;
-	box-shadow: 0px 0px 2px #a31e1b;
-	margin: 0.25em 0.5em;
-}
-
-.right {
-	float: right;
-}
-.left {
-	float: left;
-}
 a img {
 	border: none; /* IE normalization */
 }
 
-/* omhoog-scroll knopje */
-#footer #scrollUp {
-	float: right;
+h2 {
+        font-size: 1.4em;
+}
+
+p, h2, img {
+        padding: 0;
+        margin: 0 0 1em 0;
+}
+
+h2 {
+        margin-bottom: 0.5em;
+}
+
+#footer a {
+	text-decoration: none;
+}
+
+#footer a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
+#footer {
+        clear: both;
+        text-align: center;
+}
+
+address {
+	padding-left: 3em;
+}
+
+textarea.default, input.default {
+        color: gray;
+}
+
+.error {
+        padding-top: 1em;
+        padding-left: 1em;
+        padding-bottom: 1em;
+        color: red;
+}
+
+/* markdown classes */
+.md_h1 {
+        font-weight: bold;
+}
+.md_h2 {
+        font-style: italic;
+}
+.md_h3 {
+        font-weight: bold;
+        font-size: 0.9em;
+}
+.md_h4 {
+        font-style: italic;
+        font-size: 0.9em;
 }

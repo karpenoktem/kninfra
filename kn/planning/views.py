@@ -1,4 +1,5 @@
 from random import shuffle
+import locale
 
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
@@ -313,6 +314,7 @@ def _api_send_reminder(request):
 
 @login_required
 def planning_api(request):
+    locale.setlocale(locale.LC_ALL, 'nl_NL')
     action = request.REQUEST.get('action')
     if action == 'send-reminder':
         return _api_send_reminder(request)
