@@ -42,8 +42,8 @@ class AgendaEvent(SONWrapper):
     def description(self):
         text = self._data.get('description', '')
         text = text.replace('Villa van Schaeck',
-                    '<a href="{}">Villa van Schaeck</a>'.format(
-                                                    reverse('route')))
+                    '<a href="%s">Villa van Schaeck</a>' %
+                                                    reverse('route'))
         return text
 
     @property
