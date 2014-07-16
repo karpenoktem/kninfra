@@ -9,10 +9,10 @@ urlpatterns = patterns('',
         generic.simple.direct_to_template,
         {'template':'base/bare.css',
          'mimetype':'text/css'}, name='style-bare'),
-    url(r'^styles/base/$',
+    url(r'^styles/common/$',
         generic.simple.direct_to_template,
-        {'template':'base/base.css',
-         'mimetype':'text/css'}, name='style-base'),
+        {'template':'base/common.css',
+         'mimetype':'text/css'}, name='style-common'),
 )
 
 # vim: et:sta:bs=2:sw=4:

@@ -72,12 +72,6 @@ urlpatterns = patterns('',
         views.relation_begin, name='relation-begin'),
     url(r'^noteer$',
         views.note_add, name='add-note'),
-
-    # style
-    url(r'^styles/leden/$',
-        generic.simple.direct_to_template,
-        {'template':'leden/base.css',
-         'mimetype':'text/css'}, name='leden-base'),
 )
 
 # vim: et:sta:bs=2:sw=4:
