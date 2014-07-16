@@ -66,6 +66,7 @@
 	text-align: center;
 	height: 10px;
 	margin-top: 3px;
+    background-size: 16px;
 	background-image: url({{ MEDIA_URL }}/agenda/agenda_open.png);
 	background-position: center bottom;
 	background-repeat: no-repeat;
