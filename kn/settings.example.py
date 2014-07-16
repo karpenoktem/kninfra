@@ -1,4 +1,5 @@
 import datetime
+import locale
 
 # Base Django settings
 # ############################################################
@@ -18,6 +19,9 @@ USE_I18N = True
 MEDIA_ROOT = '/home/infra/repo/media/'
 MEDIA_URL = '/djmedia'
 DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@karpenoktem.nl>'
+
+# Globally set locale
+locale.setlocale(locale.LC_ALL, 'nl_NL.UTF-8')
 
 ROOT_URLCONF = 'kn.urls'
 TEMPLATE_LOADERS = (
@@ -47,6 +51,8 @@ INSTALLED_APPS = (
     'kn.fotos',
     'kn.barco',
     'kn.planning',
+    'kn.static',
+    'kn.agenda',
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",

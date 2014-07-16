@@ -1,0 +1,326 @@
+{% load base %}
+
+html {
+	overflow-y: scroll; /* always show the scrollbar */
+}
+
+html, body {
+	height: 100%;
+}
+body {
+	min-height: 1354px;
+	min-height: 100%;
+}
+body.viewedBefore {
+	min-height: calc(100% + 330px); /* prevent jumping around with short pages */
+}
+
+/* header */
+#header {
+	z-index: 1;
+	position: fixed;
+	top: -330px;
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 400px;
+	background-image: url('{% header %}');
+	width: 100%;
+	margin: 0;
+	background-color: #000;
+	font-family: sans-serif;
+	font-size: 16px;
+}
+/* reduce flicker on page load by loading the page with the header collapsed
+ * and expanding it with JS while scrolling to the right position */
+#header.expanded {
+	position: absolute;
+	top: 0;
+}
+
+@media screen and (min-width: 800px) {
+	#header {
+		box-shadow: 0px 2px 3px #a31e1b;
+	}
+}
+#header > * {
+	position: relative;
+	height: 100%;
+}
+#header #logo {
+	position: absolute;
+	bottom: 8px;
+}
+
+/* navigator */
+#navigator {
+	position: absolute;
+	height: 42px;
+	margin: 0;
+	padding: 0;
+	font-variant: small-caps;
+	right: 10px;
+	bottom: 0px;
+	background-color: rgba(0, 0, 0, 0.75);
+}
+#navigator ul {
+	list-style: none;
+	margin: 0;
+}
+#navigator ul, #navigator li > a {
+	padding: 8px 6px;
+}
+#navigator li {
+	display: inline;
+	margin: 0 6px;
+}
+#navigator li > a {
+	border-bottom: solid 3px transparent;
+}
+#navigator li > a:link,
+#navigator li > a:visited {
+	color: #a0a0a0;
+	text-decoration: none;
+}
+#navigator li > a:hover {
+	border-bottom: solid 3px #a31e1b;
+	color: #f0f0f0;
+}
+#navigator li > a:active {
+	color: #f0f0f0;
+	text-decoration: underline;
+}
+#navigator li > a.active {
+	color: #f0f0f0;
+	font-weight: bold;
+}
+@media screen and (min-width: 800px) {
+	#navigator {
+		right: 10px;
+		bottom: 0px;
+	}
+}
+@media screen and (max-width: 800px) {
+	#navigator {
+		left: 0px;
+		right: 0px;
+		bottom: -42px;
+		box-shadow: 0px 1px 4px #a31e1b;
+	}
+	#navigator ul {
+		background-color: rgba(0, 0, 0, 0.90);
+	}
+}
+
+/* content */
+#content {
+	margin: 0 auto;
+	padding: 20px 0 40px 0;
+	position: relative;
+	top: 70px;
+	width: 100%;
+	min-height: 300px;
+	background-color: #f0f0f0;
+	background-image: url('{{ MEDIA_URL }}/base/uiltje.png');
+	background-repeat: no-repeat;
+	background-position: 100% 0%;
+	background-attachment: scroll;
+}
+body.header-expanded #content {
+	top: 400px;
+}
+@media screen and (min-width: 800px) {
+	#content {
+		padding-top: 20px;
+	}
+}
+@media screen and (max-width: 800px) {
+	#content {
+		padding-top: 30px;
+		top: 442px;
+	}
+}
+
+/* content */
+#content h1, #content h2 {
+	color: #404040;
+	font-variant: small-caps;
+	font-family: sans-serif;
+	margin-bottom: 0;
+	padding: 4px 0;
+	margin: 0;
+}
+#content h1 a {
+	color: #404040;
+}
+#content h1 a:hover {
+	text-decoration: none;
+}
+#content img {
+	padding: 4px;
+	border: solid 1px #aaa;
+	background-color: #f8f8f8;
+	box-shadow: 0px 0px 2px #a31e1b;
+	margin: 0.25em 0.5em;
+}
+#content hr {
+	background-color: #a31e1b;
+	height: 3px;
+	width: 5em;
+	border: none;
+	margin: 8px auto;
+}
+.right {
+	float: right;
+}
+.left {
+	float: left;
+}
+
+/* omhoog-scroll knopje */
+#footer #scrollUp {
+	float: right;
+}
+
+.email {
+	font-family: monospace;
+}
+.email.obfuscated {
+	visibility: hidden;
+}
+
+/* submenu */
+
+#submenu {
+	text-align: right;
+	margin: 0;
+	line-height: 1;
+}
+
+#submenu li {
+	list-style-type: none;
+	display: inline-block;
+	position: relative;
+}
+
+#submenu a {
+	text-decoration: underline;
+}
+
+#submenu a,
+#submenu span {
+	display: inline-block;
+	padding: 4px 8px 8px;
+	color: #000;
+	font-variant: small-caps;
+	font-family: sans-serif;
+	text-transform: lowercase;
+}
+
+#submenu input { /* search input */
+	margin: 0 8px;
+}
+#submenu li:hover > a,
+#submenu li:hover > span {
+	background: white;
+}
+#submenu a:hover {
+	text-decoration: none;
+}
+#submenu a.active {
+	font-weight: bold;
+	text-decoration: none;
+	color: #000;
+}
+
+#submenu li ul { /* dropdown menu */
+	display: none;
+	position: absolute;
+	text-align: left;
+	background: white;
+	padding-left: 0;
+}
+#submenu li:hover ul {
+	display: block;
+	background: white;
+}
+#submenu li li { /* 2nd level */
+	display: block;
+}
+
+#submenu li li a {
+	min-width: 10em;
+}
+
+
+/* we willen alle tekst input-veldjes wat cleaner hebben */
+input:not([type=submit]):not([type=file]) {
+	border: solid 1px #b0b0b0;
+	padding: 2px;
+	color: #102020;
+}
+
+#loginButton {
+	position: relative;
+}
+
+#loginButtonLink:hover img {
+	-webkit-filter: brightness(115%);
+}
+#loginButton.open #loginButtonLink img {
+	-webkit-filter: brightness(150%);
+}
+
+#loginWindow {
+	display: none;
+
+	position: absolute;
+	top: auto;
+	right: -12px;
+	margin-top: 8px;
+	width: 290px;
+	padding: 11px 20px 15px;
+	border-radius: 0 0 4px 4px;
+	box-shadow: 0px 0px 3px #a31e1b;
+	z-index: -1;
+
+	background-color: #000; /* IE8 */
+	background-color: rgba(0, 0, 0, 0.92);
+	color: #afafaf;
+	text-transform: none;
+	font-variant: normal;
+}
+
+#loginButton.open #loginWindow {
+	display: block;
+}
+
+#loginWindow h2 {
+	padding: 4px 0;
+	margin: 0;
+	font-size: 1em;
+	text-transform: uppercase;
+	font-family: sans-serif;
+}
+
+#loginWindow input[type=text],
+#loginWindow input[type=password] {
+	width: 160px;
+}
+
+#lustrumAgenda .date {
+	padding-top: 1em;
+}
+
+#lustrumAgenda dt {
+	font-size: 1.2em;
+	color: #404040;
+	font-variant: small-caps;
+	font-family: sans-serif;
+	font-weight: bold;
+	border-bottom: 1px #404040 solid;
+	margin-bottom: 3px;
+}
+
+#lustrumAgenda dd {
+	margin-left: 0;
+}
