@@ -1,0 +1,21 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <ul>
+      {% for item in agenda %}
+      <li>
+        <em>{{ item.date|lower }}</em>
+        {{ item.title }}
+      </li>
+      {% endfor %}
+    </ul>
+    {% for item in agenda %}
+      <p>
+      <strong>{{ item.title }}</strong><br>
+      <em>{{ item.date }}</em><br>
+      {{ item.description|safe|linebreaksbr }}
+      </p>
+    {% endfor %}
+  </body>
+</html>

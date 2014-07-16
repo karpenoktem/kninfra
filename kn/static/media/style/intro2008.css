@@ -1,0 +1,17 @@
+.boilerplate {
+	border: none;	
+}
+
+.wrappingtext {
+	font-size: small;
+	text-align: center;
+}
+
+.wrappingtext,
+.wrappingtext a {
+	color: gray;
+}
+
+.wrappingtext a:hover {
+	color: white;
+}

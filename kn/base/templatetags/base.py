@@ -1,7 +1,12 @@
 from django.template.defaultfilters import stringfilter
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
+from django.conf import settings
 from django import template
+
+import os
+import random
+import os.path
 
 register = template.Library()
 
@@ -24,5 +29,15 @@ def mark_safe_filter(value):
 @register.filter(name='lookup')
 def lookup_filter(dict, index):
     return dict.get(index, '')
+
+_header_images = None
+@register.simple_tag
+def header():
+    global _header_images
+    path = os.path.join(settings.MEDIA_ROOT, 'base/headers')
+    if _header_images is None:
+        _header_images = [fn for fn in os.listdir(path)]
+    pick = random.choice(_header_images)
+    return os.path.join(settings.MEDIA_URL, 'base/headers', pick)
 
 # vim: et:sta:bs=2:sw=4:

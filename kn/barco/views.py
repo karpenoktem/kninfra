@@ -1,7 +1,6 @@
 from cStringIO import StringIO
 import subprocess
 import os.path
-import locale
 import json
 
 from django.contrib.auth.decorators import login_required
