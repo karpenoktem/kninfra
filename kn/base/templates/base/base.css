@@ -121,6 +121,7 @@ body.viewedBefore {
 	min-height: 300px;
 	background-color: #f0f0f0;
 	background-image: url('{{ MEDIA_URL }}/base/uiltje.png');
+    background-size: 400px;
 	background-repeat: no-repeat;
 	background-position: 100% 0%;
 	background-attachment: scroll;
