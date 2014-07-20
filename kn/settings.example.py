@@ -87,6 +87,7 @@ BASE_BGS = ['antal', 'park', 'band', 'weekend']
 BASE_URL = 'https://karpenoktem.nl'
 SMOELEN_PHOTOS_PATH = 'smoelen'
 USER_PHOTOS_URL = 'http://karpenoktem.nl/fotos/?search_tag=%s'
+SMOELEN_WIDTH = 300
 
 # moderation & mailman
 MAILDOMAIN = 'karpenoktem.nl'
