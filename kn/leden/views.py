@@ -154,7 +154,9 @@ def _user_detail(request, user):
             path.join(settings.SMOELEN_PHOTOS_PATH,
                     str(user.name)))
     ctx = _entity_detail(request, user)
-    ctx.update({'hasPhoto': hasPhoto,
+    ctx.update({
+            'hasPhoto': hasPhoto,
+            'photoWidth': settings.SMOELEN_WIDTH,
             'photosUrl': settings.USER_PHOTOS_URL % str(user.name)})
     return render_to_response('leden/user_detail.html', ctx,
             context_instance=RequestContext(request))
@@ -268,8 +270,9 @@ def ik_chsmoel(request):
         raise ValueError, "Missing `smoel' in FILES"
     user = Es.by_id(request.POST['id'])
     img = Image.open(request.FILES['smoel'])
-    img = img.resize((settings.SMOELEN_WIDTH,
-        int(float(settings.SMOELEN_WIDTH) / img.size[0] * img.size[1])),
+    smoelen_width = settings.SMOELEN_WIDTH * 2
+    img = img.resize((smoelen_width,
+        int(float(smoelen_width) / img.size[0] * img.size[1])),
             Image.ANTIALIAS)
     img.save(default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
             str(user.name)) + ".jpg", 'w'), "JPEG")
