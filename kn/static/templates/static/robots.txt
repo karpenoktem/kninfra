@@ -4,3 +4,4 @@ Disallow: /archief/
 Disallow: /fotos/
 Disallow: /~bas/
 Disallow: /mailman/archives/
+Disallow: /groups/leden/aktas/
