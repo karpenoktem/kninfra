@@ -28,7 +28,7 @@
                     <li><a href="{% url logout %}">uitloggen</a></li>
                     <li><a href="{% url smoelen-home %}">{{ user.name }}</a></li>
                     {% else %}{# user.is_authenticated #}
-                    <li><a href="{% url lidworden %}">lidworden</a></li>
+                    <li><a href="{% url lidworden %}">lid worden</a></li>
                     <li id="loginButton">
                         <a id="loginButtonLink" href="{% url login %}">
                             <img src="{{ MEDIA_URL }}/base/login.png"
