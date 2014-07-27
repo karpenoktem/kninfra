@@ -1,12 +1,15 @@
 #random-text {
-	float: left;
-	width: 475px;
-	margin-right: 50px;
+	max-width: 475px;
 }
-
-#agenda {
-	float: left;
-	width: 320px;
+@media screen and (min-width: 826px) {
+	#agenda {
+		float: left;
+		width: 320px;
+	}
+	#random-text {
+		margin-right: 50px;
+		float: left;
+	}
 }
 
 #agenda li.monthSeparator {
@@ -18,7 +21,7 @@
 }
 
 #agenda li.item .item_content {
-	width: 225px;
+	margin-left: 52px;
 }
 
 #agenda li.item .item_content .preview {
@@ -34,7 +37,6 @@
 	width: 25px;
 	height: 32px;
 	margin: 0;
-	margin-right: 15px;
 	padding: 3px 6px;
 	line-height: 15px;
 	font-size: 0.8em;

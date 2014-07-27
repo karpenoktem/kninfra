@@ -11,14 +11,16 @@ body {
 	min-height: 1354px;
 	min-height: 100%;
 }
-body.viewedBefore {
-	min-height: calc(100% + 330px); /* prevent jumping around with short pages */
+@media screen and (min-width: 801px) {
+	body.viewedBefore {
+		min-height: calc(100% + 330px); /* prevent jumping around with short pages */
+	}
 }
 
 /* header */
 #header {
 	z-index: 1;
-	position: fixed;
+	position: absolute;
 	top: -330px;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -30,16 +32,17 @@ body.viewedBefore {
 	font-family: sans-serif;
 	font-size: 16px;
 }
-/* reduce flicker on page load by loading the page with the header collapsed
- * and expanding it with JS while scrolling to the right position */
-#header.expanded {
-	position: absolute;
-	top: 0;
-}
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 801px) {
 	#header {
 		box-shadow: 0px 2px 3px #a31e1b;
+		position: fixed;
+	}
+	/* reduce flicker on page load by loading the page with the header collapsed
+	 * and expanding it with JS while scrolling to the right position */
+	#header.expanded {
+		position: absolute;
+		top: 0;
 	}
 }
 #header > * {
@@ -47,8 +50,19 @@ body.viewedBefore {
 	height: 100%;
 }
 #header #logo {
+	display: block;
 	position: absolute;
 	bottom: 8px;
+	line-height: 0;
+}
+@media screen and (max-width: 800px) {
+	#header #logo {
+		left: 10px;
+		right: 10px;
+	}
+	#header #logo img {
+		max-width: 100%;
+	}
 }
 
 /* navigator */
@@ -93,7 +107,7 @@ body.viewedBefore {
 	color: #f0f0f0;
 	font-weight: bold;
 }
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 801px) {
 	#navigator {
 		right: 10px;
 		bottom: 0px;
@@ -108,6 +122,20 @@ body.viewedBefore {
 	}
 	#navigator ul {
 		background-color: rgba(0, 0, 0, 0.90);
+		padding: 8px 5px;
+	}
+	#navigator li {
+		margin: 0;
+	}
+	#navigator li > a {
+		padding: 8px 4px;
+	}
+	#loginButton .label {
+		/* not enough space */
+		display: none;
+	}
+	#navigator img {
+		vertical-align: middle;
 	}
 }
 
@@ -126,18 +154,18 @@ body.viewedBefore {
 	background-position: 100% 0%;
 	background-attachment: scroll;
 }
-body.header-expanded #content {
-	top: 400px;
-}
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 801px) {
 	#content {
 		padding-top: 20px;
+	}
+	body.header-expanded #content {
+		top: 400px;
 	}
 }
 @media screen and (max-width: 800px) {
 	#content {
 		padding-top: 30px;
-		top: 442px;
+		top: 112px;
 	}
 }
 
@@ -162,6 +190,7 @@ body.header-expanded #content {
 	background-color: #f8f8f8;
 	box-shadow: 0px 0px 2px #a31e1b;
 	margin: 0.25em 0.5em;
+	max-width: 94%;
 }
 #content hr {
 	background-color: #a31e1b;
@@ -169,17 +198,6 @@ body.header-expanded #content {
 	width: 5em;
 	border: none;
 	margin: 8px auto;
-}
-.right {
-	float: right;
-}
-.left {
-	float: left;
-}
-
-/* omhoog-scroll knopje */
-#footer #scrollUp {
-	float: right;
 }
 
 .email {
@@ -195,6 +213,7 @@ body.header-expanded #content {
 	text-align: right;
 	margin: 0;
 	line-height: 1;
+	padding: 0;
 }
 
 #submenu li {
@@ -252,12 +271,41 @@ body.header-expanded #content {
 	min-width: 10em;
 }
 
+@media screen and (max-width: 550px) {
+	#submenu {
+		text-align: left;
+	}
+	#submenu a,
+	#submenu span {
+		padding: 4px;
+	}
+	#submenu input {
+		width: 5em;
+	}
+	/* monkey-patching to make the autocomplete work on small screens */
+	.ui-autocomplete {
+		left: 0 !important;
+		width: 98% !important;
+		width: calc(100% - 6px) !important;
+	}
+	.ui-autocomplete .ui-menu-item a {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+}
 
 /* we willen alle tekst input-veldjes wat cleaner hebben */
 input:not([type=submit]):not([type=file]) {
 	border: solid 1px #b0b0b0;
 	padding: 2px;
 	color: #102020;
+}
+@media screen and (max-width: 550px) {
+	input:not([type=submit]):not([type=file]) {
+		font-size: 1em; /* don't zoom when focusing the field */
+		max-width: 9em;
+	}
 }
 
 #loginButton {
@@ -278,7 +326,7 @@ input:not([type=submit]):not([type=file]) {
 	top: auto;
 	right: -12px;
 	margin-top: 8px;
-	width: 290px;
+	min-width: 290px;
 	padding: 11px 20px 15px;
 	border-radius: 0 0 4px 4px;
 	box-shadow: 0px 0px 3px #a31e1b;

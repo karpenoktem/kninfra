@@ -11,4 +11,5 @@
 #an > li > a > img {
         padding: 0;
         margin: 2px;
+        max-width: 47%;
 }

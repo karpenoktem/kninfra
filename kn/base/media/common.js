@@ -134,24 +134,22 @@ $(document).ready(function() {
     }
     fixHeader();
 
-    if (!isMobile()) {
-        $('#csrfmiddlewaretoken').val(getCsrftoken());
+    $('#csrfmiddlewaretoken').val(getCsrftoken());
 
-        $(document.getElementById('loginButtonLink')).bind('click', function (event) {
-            var loginButton = $('#loginButton');
-            loginButton.toggleClass('open');
-            event.preventDefault();
-            event.stopPropagation();
-        });
+    $(document.getElementById('loginButtonLink')).bind('click', function (event) {
+        var loginButton = $('#loginButton');
+        loginButton.toggleClass('open');
+        event.preventDefault();
+        event.stopPropagation();
+    });
 
-        $(document.body).bind('click', function (event) {
-            $('#loginButton').removeClass('open');
-        });
+    $(document.body).bind('click', function (event) {
+        $('#loginButton').removeClass('open');
+    });
 
-        $('#loginWindow').bind('click', function (event) {
-            event.stopPropagation();
-        });
-    }
+    $('#loginWindow').bind('click', function (event) {
+        event.stopPropagation();
+    });
 });
 
 // Implement rot13 for email obscurification
