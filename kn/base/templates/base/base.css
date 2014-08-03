@@ -192,6 +192,9 @@ body {
 	margin: 0.25em 0.5em;
 	max-width: 94%;
 }
+#content .nivoSlider img {
+	max-width: none; /* initial */
+}
 #content hr {
 	background-color: #a31e1b;
 	height: 3px;
