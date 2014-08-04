@@ -1,14 +1,20 @@
 #random-text {
 	max-width: 475px;
+	margin-right: 50px;
+	float: left;
 }
-@media screen and (min-width: 826px) {
+#agenda {
+	float: left;
+	width: 320px;
+}
+@media screen and (max-width: 825px) {
 	#agenda {
-		float: left;
-		width: 320px;
+		float: none; /* initial */
+		width: auto; /* initial */
 	}
 	#random-text {
-		margin-right: 50px;
-		float: left;
+		margin-right: 0; /* initial */
+		float: none; /* initial */
 	}
 }
 
