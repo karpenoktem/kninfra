@@ -124,6 +124,8 @@ body {
 		background-color: rgba(0, 0, 0, 0.90);
 		padding: 8px 5px;
 	}
+}
+@media screen and (max-width: 550px) {
 	#navigator li {
 		margin: 0;
 	}
@@ -295,6 +297,9 @@ body {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
+	}
+	.container {
+		padding: 0 10px;
 	}
 }
 
