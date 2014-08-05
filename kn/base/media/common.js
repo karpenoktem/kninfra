@@ -113,7 +113,7 @@ $(document).ready(function() {
     // Skip to content after first view
     // scrolling needs the media queries to work. Media queries don't work in IE8,
     // and getComputedStyle doesn't work either so this is a test to exclude old browsers.
-    if (sessionStorage['visited'] && 'getComputedStyle' in window) {
+    if (sessionStorage['visited'] && window.getComputedStyle && getComputedStyle(document.body).paddingTop == headerHeight + "px") {
         $(document.body).addClass('viewedBefore');
         // <html> for Firefox, <body> for other browsers
         document.documentElement.scrollTop = headerFixedThreshold;
