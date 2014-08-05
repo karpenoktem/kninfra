@@ -29,7 +29,7 @@
         <body>
                 {% block header %}
                 {% endblock %}
-                {% block wrapper %}
+                {% block content %}
                 <div id="content">
                     <div class="container">
                         <div id="body">
@@ -38,17 +38,17 @@
                         </div>
                         <div class="clear"></div>
                     </div>
-                        {% block footer %}
-                        <div id="footer">
-                                <div class="container">
-                                        &copy;2007&mdash;2014,
-                                        Alternatieve studentenvereniging Karpe Noktem
-                                        <small><a id="scrollUp" href="#">Terug naar boven</a></small>
-                                </div>
-                        </div>
-                        {% endblock %}
                 </div>
-                {% endblock %}
+                {% endblock content %}
+                {% block footer %}
+                <div id="footer">
+                        <div class="container">
+                                &copy;2007&mdash;2014,
+                                Alternatieve studentenvereniging Karpe Noktem
+                                <small><a id="scrollUp" href="#">Terug naar boven</a></small>
+                        </div>
+                </div>
+                {% endblock footer %}
 	<script type="text/javascript">
 		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));

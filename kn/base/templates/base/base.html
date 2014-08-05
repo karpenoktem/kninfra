@@ -66,7 +66,7 @@
         </div>
 </div>
 {% endblock %}
-{% block wrapper %}
+{% block content %}
 <div id="content">
         <div class="container">
                 <div id="body">
@@ -88,8 +88,5 @@
                 {% endblock %}
                 <div class="clear"></div>
         </div>
-        {% block footer %}
-        {{ block.super }}
-        {% endblock %}
 </div>
-{% endblock %}
+{% endblock content %}

@@ -37,12 +37,7 @@ a:hover, a:focus {
 	max-width: 850px;
 }
 
-/* header */
 #footer {
-	position: absolute;
-	bottom: -0px;
-	width: 100%;
-	margin: 0;
 	padding: 0.25em 0;
 	background-color: #000;
 	font-family: sans-serif;
@@ -55,21 +50,8 @@ a:hover, a:focus {
 /* content */
 #content {
 	margin: 0 auto;
-	padding: 20px 0 40px 0;
-	position: relative;
-	width: 100%;
 	min-height: 300px;
-}
-@media screen and (min-width: 800px) {
-	#content {
-		padding-top: 20px;
-	}
-}
-@media screen and (max-width: 800px) {
-	#content {
-		padding-top: 30px;
-		top: 442px;
-	}
+	padding-top: 20px;
 }
 
 /* content */
