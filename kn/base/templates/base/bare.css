@@ -49,7 +49,6 @@ a:hover, a:focus {
 
 /* content */
 #content {
-	margin: 0 auto;
 	min-height: 300px;
 	padding-top: 20px;
 }
