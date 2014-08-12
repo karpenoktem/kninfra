@@ -1,6 +1,7 @@
-.boilerplate {
-	border: none;	
-	padding-left: 100px;
+#content img.boilerplate {
+	border: 0;
+        padding: 0;
+        margin: 0;
 }
 
 .wrappingtext {
