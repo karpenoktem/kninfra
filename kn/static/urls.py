@@ -9,7 +9,9 @@ from kn.base.views import direct_to_folder
 from kn.static import views
 
 urlpatterns = patterns('',
-    url(r'^(?:(?:home|default)/?)?$', views.home, name='home'),
+    url(r'^home/?$', views.home, name='home'),
+    url(r'^default/?$', views.home),
+    url(r'^/?$', views.home),
     # TODO we have to specify a separate url entry to make the reverse URL work
     #      for pages with several names.  Is there a way to do this without
     #      the duplication.
