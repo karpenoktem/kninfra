@@ -35,8 +35,8 @@ mkdir $tmpdir
 
 
 
-echo '*** installing required packages...'
-apt-get install lighttpd php5-cgi python-django msgpack-python python-setuptools python-pyparsing python-markdown python-flup python-pymongo python-mysqldb python-imaging mongodb mailman
+echo -e '\n*** installing required packages...'
+apt-get install -y lighttpd php5-cgi python-django msgpack-python python-setuptools python-pyparsing python-markdown python-flup python-pymongo python-mysqldb python-imaging mongodb mailman
 
 mkdir -p /home/infra/scm
 mkdir -p /home/infra/py
@@ -98,6 +98,13 @@ fi
 if [ ! -f /home/infra/repo/kn/settings.py ]; then
 	cp /home/infra/repo/kn/settings.example.py /home/infra/repo/kn/settings.py
 fi
+
+
+
+
+echo -e '\n*** fixing permissions...'
+chown -R infra:infra /home/infra
+
 
 
 
