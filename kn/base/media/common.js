@@ -1,4 +1,5 @@
 var collapsedHeaderHeight = 70;
+var headerHeight = 400;
 var headerCollapsed = true;
 
 function email(t, d, u) {
@@ -104,11 +105,17 @@ $(document).ready(function() {
         return false;
     });
 
+    /* reduce flicker on page load by loading the page with the header collapsed
+     * and expanding it with JS while scrolling to the right position */
     $(document.body).addClass('header-expanded');
-    var headerFixedThreshold = $('#content').offset().top - collapsedHeaderHeight;
+    var headerFixedThreshold = headerHeight - collapsedHeaderHeight;
 
-    // Skip to content after first view
-    if (sessionStorage['visited']) {
+    // Skip to content after first view.
+    // Scrolling needs the media queries to work. Media queries don't work in
+    // IE8, and getComputedStyle doesn't work either so this is a test to
+    // exclude old browsers.
+    if (sessionStorage['visited'] && window.getComputedStyle &&
+        getComputedStyle(document.body).paddingTop == headerHeight + "px") {
         $(document.body).addClass('viewedBefore');
         // <html> for Firefox, <body> for other browsers
         document.documentElement.scrollTop = headerFixedThreshold;
@@ -122,17 +129,17 @@ $(document).ready(function() {
             // don't touch the DOM if that's not needed!
             headerCollapsed = shouldBeCollapsed;
             if (shouldBeCollapsed) {
-                $('#header').removeClass('expanded');
+                $('#header').addClass('fixed');
             } else {
-                $('#header').addClass('expanded');
+                $('#header').removeClass('fixed');
             }
         }
     }
     // Menubar half-fixed
     if (! isMobile()) {
         $(window).scroll(fixHeader);
+        fixHeader();
     }
-    fixHeader();
 
     $('#csrfmiddlewaretoken').val(getCsrftoken());
 

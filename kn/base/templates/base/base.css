@@ -2,18 +2,29 @@
 
 html {
 	overflow-y: scroll; /* always show the scrollbar */
-}
-
-html, body {
 	height: 100%;
 }
+
 body {
-	min-height: 1354px;
-	min-height: 100%;
+	box-sizing: border-box;
+	height: 100%;
+	padding-top: 70px;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+@media screen and (max-width: 800px) {
+	body {
+		padding-top: 112px;
+	}
 }
 @media screen and (min-width: 801px) {
+	body.header-expanded {
+		padding-top: 400px;
+	}
 	body.viewedBefore {
-		min-height: calc(100% + 330px); /* prevent jumping around with short pages */
+		height: calc(100% + 330px); /* prevent jumping around with short pages */
 	}
 }
 
@@ -34,6 +45,15 @@ body {
 }
 
 @media screen and (min-width: 801px) {
+	body.header-expanded #header {
+		top: 0;
+		position: absolute;
+	}
+	body #header.fixed {
+		position: fixed;
+		top: -330px;
+	}
+
 	#header {
 		box-shadow: 0px 2px 3px #a31e1b;
 		position: fixed;
@@ -143,31 +163,26 @@ body {
 
 /* content */
 #content {
-	margin: 0 auto;
-	padding: 20px 0 40px 0;
-	position: relative;
-	top: 70px;
-	width: 100%;
-	min-height: 300px;
+	padding-bottom: 6px; /* prevent collapsing of margins */
 	background-color: #f0f0f0;
 	background-image: url('{{ MEDIA_URL }}/base/uiltje.png');
     background-size: 400px;
 	background-repeat: no-repeat;
 	background-position: 100% 0%;
 	background-attachment: scroll;
+	-webkit-flex-grow: 1;
+	flex-grow: 1;
+	-webkit-flex-shrink: 0;
+	flex-shrink: 0;
 }
 @media screen and (min-width: 801px) {
 	#content {
 		padding-top: 20px;
 	}
-	body.header-expanded #content {
-		top: 400px;
-	}
 }
-@media screen and (max-width: 800px) {
+@supports (display: flex) {
 	#content {
-		padding-top: 30px;
-		top: 112px;
+		min-height: 0; /* initial */
 	}
 }
 
