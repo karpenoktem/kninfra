@@ -96,6 +96,11 @@ body {
 	bottom: 0px;
 	background-color: rgba(0, 0, 0, 0.75);
 }
+#navigator > ul { /* hack for #loginButton positioning */
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+}
 #navigator ul {
 	list-style: none;
 	margin: 0;
@@ -333,6 +338,16 @@ input:not([type=submit]):not([type=file]) {
 
 #loginButton {
 	position: relative;
+}
+@media screen and (max-width: 800px) {
+	#loginButton {
+		float: right;
+	}
+}
+@media screen and (max-width: 400px) {
+	#loginButton {
+		position: static;
+	}
 }
 
 #loginButtonLink:hover img {
