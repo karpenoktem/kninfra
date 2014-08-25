@@ -339,16 +339,6 @@ input:not([type=submit]):not([type=file]) {
 #loginButton {
 	position: relative;
 }
-@media screen and (max-width: 800px) {
-	#loginButton {
-		float: right;
-	}
-}
-@media screen and (max-width: 400px) {
-	#loginButton {
-		position: static;
-	}
-}
 
 #loginButtonLink:hover img {
 	-webkit-filter: brightness(115%);
@@ -379,6 +369,20 @@ input:not([type=submit]):not([type=file]) {
 
 #loginButton.open #loginWindow {
 	display: block;
+}
+
+@media screen and (max-width: 800px) {
+	#loginButton {
+		float: right;
+	}
+}
+@media screen and (max-width: 400px) {
+	#loginButton {
+		position: static;
+	}
+	#loginWindow {
+		right: 0px;
+	}
 }
 
 #loginWindow h2 {
