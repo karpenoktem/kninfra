@@ -157,6 +157,11 @@ $(document).ready(function() {
     $('#loginWindow').bind('click', function (event) {
         event.stopPropagation();
     });
+
+    $('#submenu-button').bind('click', function(event) {
+        event.preventDefault();
+        $('#submenu-wrapper').toggleClass('open');
+    });
 });
 
 // Implement rot13 for email obscurification
