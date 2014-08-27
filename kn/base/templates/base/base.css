@@ -401,15 +401,19 @@ body {
 }
 
 /* we willen alle tekst input-veldjes wat cleaner hebben */
-input:not([type=submit]):not([type=file]) {
+input:not([type=submit]):not([type=file]):not([type=checkbox]),
+textarea {
 	border: solid 1px #b0b0b0;
 	padding: 2px;
 	color: #102020;
 }
 @media screen and (max-width: 550px) {
 	input:not([type=submit]):not([type=file]) {
-		font-size: 1em; /* don't zoom when focusing the field */
 		max-width: 9em;
+	}
+	input:not([type=submit]):not([type=file]),
+	textarea {
+		font-size: 1em; /* don't zoom when focusing the field */
 	}
 }
 
@@ -490,4 +494,21 @@ input:not([type=submit]):not([type=file]) {
 
 #lustrumAgenda dd {
 	margin-left: 0;
+}
+
+form.top-aligned p {
+	max-width: 400px;
+}
+
+form.top-aligned input,
+form.top-aligned textarea {
+	display: block;
+	margin: 2px 0;
+}
+form.top-aligned textarea {
+	box-sizing: border-box;
+	width: 100%;
+}
+form.top-aligned input[type=checkbox] {
+	float: right;
 }
