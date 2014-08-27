@@ -259,7 +259,6 @@ body {
 #submenu span {
 	display: inline-block;
 	padding: 4px 8px 8px;
-	color: #000;
 	font-variant: small-caps;
 	font-family: sans-serif;
 	text-transform: lowercase;
@@ -275,7 +274,6 @@ body {
 #submenu a.active {
 	font-weight: bold;
 	text-decoration: none;
-	color: #000;
 }
 
 #submenu li ul { /* dropdown menu */
@@ -303,6 +301,14 @@ body {
 
 #submenu-button {
 	display: none;
+}
+
+@media screen and (min-width: 551px) {
+	#submenu a,
+	#submenu span,
+	#submenu a.active {
+		color: #000;
+	}
 }
 
 @media screen and (max-width: 550px) {
@@ -349,17 +355,33 @@ body {
 		right: 0;
 	}
 	#submenu li {
-		display: block;
+		display: list-item;
 		position: static;
 	}
 	#submenu a,
 	#submenu span {
-		display: block;
+		display: inline;
 		font-variant: normal;
+		text-transform: none;
+		text-decoration: none;
+		vertical-align: middle;
+		line-height: 1.8;
+	}
+	#submenu a:hover {
+		text-decoration: underline;
 	}
 	#submenu li ul {
 		position: static;
 		padding-left: 1em;
+	}
+	#submenu li li {
+		display: list-item;
+	}
+	#submenu li li::before {
+		content: "▶";
+		font-size: 9px;
+		vertical-align: middle;
+		color: #777;
 	}
 
 	/* monkey-patching to make the autocomplete work on small screens */
