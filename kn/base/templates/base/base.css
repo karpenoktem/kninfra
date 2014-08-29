@@ -264,8 +264,8 @@ body {
 	text-transform: lowercase;
 }
 
-#submenu li:hover > a,
-#submenu li:hover > span {
+#submenu.has-dropdown li:hover > a,
+#submenu.has-dropdown li:hover > span {
 	background: white;
 }
 #submenu a:hover {

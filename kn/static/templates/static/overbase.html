@@ -1,13 +1,16 @@
 {% extends "static/base.html" %}
 
 {% block submenu %}
-<div id="submenu">
-    <a href="{% url over %}">over karpe noktem</a>
-    <a href="{% url geschiedenis %}">geschiedenis</a>
-    <a href="{% url activiteiten %}">activiteiten</a>
-    <a href="{% url bestuur %}">bestuur</a>
-    <a href="{% url aktanokturna %}">akta nokturna</a>
-    <a href="{% url zusjes %}">zusjes</a>
-    <a href="{% url sponsoren %}">sponsoren</a>
+<div id="submenu-wrapper">
+    <a id="submenu-button" href="">&nbsp;</a>
+    <ul id="submenu">
+        <li><a href="{% url over %}">Over Karpe Noktem</a></li>
+        <li><a href="{% url geschiedenis %}">Geschiedenis</a></li>
+        <li><a href="{% url activiteiten %}">Activiteiten</a></li>
+        <li><a href="{% url bestuur %}">Bestuur</a></li>
+        <li><a href="{% url aktanokturna %}">Akta Nokturna</a></li>
+        <li><a href="{% url zusjes %}">Zusjes</a></li>
+        <li><a href="{% url sponsoren %}">Sponsoren</a></li>
+    </div>
 </div>
 {% endblock %}
