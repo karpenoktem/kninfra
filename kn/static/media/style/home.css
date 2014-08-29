@@ -1,20 +1,32 @@
-#random-text {
+#random-text,
+#slider-wrapper {
 	max-width: 475px;
-	margin-right: 50px;
 	float: left;
 }
 #agenda {
-	float: left;
-	width: 320px;
+	margin-left: 525px;
 }
-@media screen and (max-width: 825px) {
-	#agenda {
+@media screen and (max-width: 850px) {
+	#random-text,
+	#slider-wrapper {
 		float: none; /* initial */
-		width: auto; /* initial */
 	}
 	#random-text {
-		margin-right: 0; /* initial */
-		float: none; /* initial */
+		max-width: none; /* initial */
+	}
+	#agenda {
+		margin-left: 0; /* initial */
+		margin-bottom: 26px;
+	}
+
+	/* reverse the order of agenda and slider
+	 * Only some browsers support this, but the rest will simply ignore it. */
+	#body {
+		display: flex;
+		flex-direction: column;
+	}
+	#slider-wrapper {
+		order: 1;
 	}
 }
 
