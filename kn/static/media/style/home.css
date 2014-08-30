@@ -22,10 +22,13 @@
 	/* reverse the order of agenda and slider
 	 * Only some browsers support this, but the rest will simply ignore it. */
 	#body {
+		display: -webkit-flex;
 		display: flex;
+		-webkit-flex-direction: column;
 		flex-direction: column;
 	}
 	#slider-wrapper {
+		-webkit-order: 1;
 		order: 1;
 	}
 }
