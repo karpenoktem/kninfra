@@ -3,7 +3,7 @@
 	max-width: 475px;
 	float: left;
 }
-#agenda {
+#agenda-wrapper {
 	margin-left: 525px;
 }
 @media screen and (max-width: 850px) {
@@ -14,7 +14,7 @@
 	#random-text {
 		max-width: none; /* initial */
 	}
-	#agenda {
+	#agenda-wrapper {
 		margin-left: 0; /* initial */
 		margin-bottom: 26px;
 	}
@@ -29,35 +29,6 @@
 		order: 1;
 	}
 }
-
-#agenda li.monthSeparator {
-	font-size: 1.0em;
-}
-
-#agenda li.item {
-	padding: 0.5em;
-}
-
-#agenda li.item .item_content {
-	margin-left: 52px;
-}
-
-#agenda li.item .item_content .preview {
-	display: none;
-}
-
-#agenda .datelong {
-	display: none;
-}
-
-#agenda li.item .date {
-	float: left;
-	width: 25px;
-	height: 32px;
-	margin: 0;
-	padding: 3px 6px;
-	line-height: 15px;
-	font-size: 0.8em;
 }
 
 /* photoslider properties */
