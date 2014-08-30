@@ -32,6 +32,15 @@
 		order: 1;
 	}
 }
+/* CSS hack to exclude IE10+
+ * IE has a very buggy implementation of flexbox (even IE11), and causes a lot
+ * of whitespace beneath the NivoSlider.
+ * http://www.limecanvas.com/css-hacks-targeting-ie-10/
+ */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+	#body {
+		display: block;
+	}
 }
 
 /* photoslider properties */
