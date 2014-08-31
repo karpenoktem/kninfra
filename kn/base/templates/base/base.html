@@ -12,9 +12,8 @@
 {{ block.super }}
 <div id="header">
         <div class="container">
-                <a href="/">
-                        <img id="logo" width="310"
-                                src="{{ MEDIA_URL }}/base/logo.png"
+                <a href="/" id="logo">
+                        <img width="310" src="{{ MEDIA_URL }}/base/logo.png"
                                 alt="Karpe Noktem" />
                 </a>
                 <div id="navigator" class="container">
@@ -26,13 +25,13 @@
                     <li><a href="{% url contact %}">contact</a></li>
                     {% if user.is_authenticated %}
                     <li><a href="{% url logout %}">uitloggen</a></li>
-                    <li><a href="{% url smoelen-home %}">{{ user.name }}</a></li>
+                    <li id="loginButton"><a href="{% url smoelen-home %}">{{ user.name }}</a></li>
                     {% else %}{# user.is_authenticated #}
                     <li><a href="{% url lidworden %}">lid worden</a></li>
                     <li id="loginButton">
                         <a id="loginButtonLink" href="{% url login %}">
                             <img src="{{ MEDIA_URL }}/base/login.png"
-                                    width="13" alt=""/> leden</a>
+                                width="13" alt=""/> <span class="label">leden</span></a>
                         <div id="loginWindow">
                             <h2>Inloggen voor leden</h2>
                             <p>

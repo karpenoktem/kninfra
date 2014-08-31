@@ -30,7 +30,7 @@ body {
 
 /* header */
 #header {
-	z-index: 1;
+	z-index: 5;
 	position: absolute;
 	top: -330px;
 	background-repeat: no-repeat;
@@ -43,19 +43,26 @@ body {
 	font-family: sans-serif;
 	font-size: 16px;
 }
+
 @media screen and (min-width: 801px) {
 	body.header-expanded #header {
 		top: 0;
+		position: absolute;
 	}
 	body #header.fixed {
 		position: fixed;
 		top: -330px;
 	}
-}
 
-@media screen and (min-width: 800px) {
 	#header {
 		box-shadow: 0px 2px 3px #a31e1b;
+		position: fixed;
+	}
+	/* reduce flicker on page load by loading the page with the header collapsed
+	 * and expanding it with JS while scrolling to the right position */
+	#header.expanded {
+		position: absolute;
+		top: 0;
 	}
 }
 #header > * {
@@ -63,8 +70,19 @@ body {
 	height: 100%;
 }
 #header #logo {
+	display: block;
 	position: absolute;
 	bottom: 8px;
+	line-height: 0;
+}
+@media screen and (max-width: 800px) {
+	#header #logo {
+		left: 10px;
+		right: 10px;
+	}
+	#header #logo img {
+		max-width: 100%;
+	}
 }
 
 /* navigator */
@@ -77,6 +95,11 @@ body {
 	right: 10px;
 	bottom: 0px;
 	background-color: rgba(0, 0, 0, 0.75);
+}
+#navigator > ul { /* hack for #loginButton positioning */
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
 }
 #navigator ul {
 	list-style: none;
@@ -109,7 +132,7 @@ body {
 	color: #f0f0f0;
 	font-weight: bold;
 }
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 801px) {
 	#navigator {
 		right: 10px;
 		bottom: 0px;
@@ -124,6 +147,22 @@ body {
 	}
 	#navigator ul {
 		background-color: rgba(0, 0, 0, 0.90);
+		padding: 8px 5px;
+	}
+}
+@media screen and (max-width: 550px) {
+	#navigator li {
+		margin: 0;
+	}
+	#navigator li > a {
+		padding: 8px 4px;
+	}
+	#loginButton .label {
+		/* not enough space */
+		display: none;
+	}
+	#navigator img {
+		vertical-align: middle;
 	}
 }
 
@@ -140,6 +179,11 @@ body {
 	flex-grow: 1;
 	-webkit-flex-shrink: 0;
 	flex-shrink: 0;
+}
+@media screen and (min-width: 801px) {
+	#content {
+		padding-top: 20px;
+	}
 }
 @supports (display: flex) {
 	#content {
@@ -168,6 +212,10 @@ body {
 	background-color: #f8f8f8;
 	box-shadow: 0px 0px 2px #a31e1b;
 	margin: 0.25em 0.5em;
+	max-width: 94%;
+}
+#content .nivoSlider img {
+	max-width: none; /* initial */
 }
 #content hr {
 	background-color: #a31e1b;
@@ -175,17 +223,6 @@ body {
 	width: 5em;
 	border: none;
 	margin: 8px auto;
-}
-.right {
-	float: right;
-}
-.left {
-	float: left;
-}
-
-/* omhoog-scroll knopje */
-#footer #scrollUp {
-	float: right;
 }
 
 .email {
@@ -197,10 +234,15 @@ body {
 
 /* submenu */
 
-#submenu {
+#submenu-wrapper {
 	text-align: right;
+}
+
+#submenu {
+	display: inline-block;
 	margin: 0;
 	line-height: 1;
+	padding: 0;
 }
 
 #submenu li {
@@ -217,17 +259,13 @@ body {
 #submenu span {
 	display: inline-block;
 	padding: 4px 8px 8px;
-	color: #000;
 	font-variant: small-caps;
 	font-family: sans-serif;
 	text-transform: lowercase;
 }
 
-#submenu input { /* search input */
-	margin: 0 8px;
-}
-#submenu li:hover > a,
-#submenu li:hover > span {
+#submenu.has-dropdown li:hover > a,
+#submenu.has-dropdown li:hover > span {
 	background: white;
 }
 #submenu a:hover {
@@ -236,18 +274,17 @@ body {
 #submenu a.active {
 	font-weight: bold;
 	text-decoration: none;
-	color: #000;
 }
 
 #submenu li ul { /* dropdown menu */
-	display: none;
+	left: -9999px;
 	position: absolute;
 	text-align: left;
 	background: white;
 	padding-left: 0;
 }
 #submenu li:hover ul {
-	display: block;
+	left: auto;
 	background: white;
 }
 #submenu li li { /* 2nd level */
@@ -258,12 +295,126 @@ body {
 	min-width: 10em;
 }
 
+#_searchfield {
+	margin: 4px 8px 8px;
+}
+
+#submenu-button {
+	display: none;
+}
+
+@media screen and (min-width: 551px) {
+	#submenu a,
+	#submenu span,
+	#submenu a.active {
+		color: #000;
+	}
+}
+
+@media screen and (max-width: 550px) {
+	#submenu-wrapper {
+		direction: rtl;
+	}
+	#submenu-wrapper > * {
+		direction: ltr;
+	}
+	#submenu-button {
+		display: inline-block;
+		position: relative;
+		top: 1px;
+		z-index: 1;
+		width: 32px;
+		height: 32px;
+
+		margin-left: 10px;
+		padding: 4px 8px;
+		color: black;
+		text-decoration: none;
+		font-size: 20px;
+		border: 1px solid rgba(127, 127, 127, 0.5);
+		border-radius: 2px;
+		background: white url('{{ MEDIA_URL }}/base/menu.svg') no-repeat 8px 4px;
+	}
+	#submenu-wrapper.open a#submenu-button {
+		border-bottom-color: white;
+		border-radius: 2px 2px 0 0;
+	}
+	#submenu {
+		display: block;
+		min-width: 200px;
+		position: absolute;
+		left: -9999px;
+
+		text-align: left;
+		background: white;
+		padding: 16px 12px;
+		border: 1px solid rgba(127, 127, 127, 0.5);
+	}
+	#submenu-wrapper.open #submenu {
+		left: auto;
+		right: 0;
+	}
+	#submenu li {
+		display: list-item;
+		position: static;
+	}
+	#submenu a,
+	#submenu span {
+		display: inline;
+		font-variant: normal;
+		text-transform: none;
+		text-decoration: none;
+		vertical-align: middle;
+		line-height: 1.8;
+	}
+	#submenu a:hover {
+		text-decoration: underline;
+	}
+	#submenu li ul {
+		position: static;
+		padding-left: 1em;
+	}
+	#submenu li li {
+		display: list-item;
+	}
+	#submenu li li::before {
+		content: "▶";
+		font-size: 9px;
+		vertical-align: middle;
+		color: #777;
+	}
+
+	/* monkey-patching to make the autocomplete work on small screens */
+	.ui-autocomplete {
+		left: 0 !important;
+		width: 98% !important;
+		width: calc(100% - 6px) !important;
+	}
+	.ui-autocomplete .ui-menu-item a {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+	.container {
+		padding: 0 10px;
+	}
+}
 
 /* we willen alle tekst input-veldjes wat cleaner hebben */
-input:not([type=submit]):not([type=file]) {
+input:not([type=submit]):not([type=file]):not([type=checkbox]),
+textarea {
 	border: solid 1px #b0b0b0;
 	padding: 2px;
 	color: #102020;
+}
+@media screen and (max-width: 550px) {
+	input:not([type=submit]):not([type=file]) {
+		max-width: 9em;
+	}
+	input:not([type=submit]):not([type=file]),
+	textarea {
+		font-size: 1em; /* don't zoom when focusing the field */
+	}
 }
 
 #loginButton {
@@ -284,11 +435,10 @@ input:not([type=submit]):not([type=file]) {
 	top: auto;
 	right: -12px;
 	margin-top: 8px;
-	width: 290px;
+	max-width: 290px;
 	padding: 11px 20px 15px;
 	border-radius: 0 0 4px 4px;
 	box-shadow: 0px 0px 3px #a31e1b;
-	z-index: -1;
 
 	background-color: #000; /* IE8 */
 	background-color: rgba(0, 0, 0, 0.92);
@@ -299,6 +449,20 @@ input:not([type=submit]):not([type=file]) {
 
 #loginButton.open #loginWindow {
 	display: block;
+}
+
+@media screen and (max-width: 800px) {
+	#loginButton {
+		float: right;
+	}
+}
+@media screen and (max-width: 400px) {
+	#loginButton {
+		position: static;
+	}
+	#loginWindow {
+		right: 0px;
+	}
 }
 
 #loginWindow h2 {
@@ -330,4 +494,21 @@ input:not([type=submit]):not([type=file]) {
 
 #lustrumAgenda dd {
 	margin-left: 0;
+}
+
+form.top-aligned p {
+	max-width: 400px;
+}
+
+form.top-aligned input,
+form.top-aligned textarea {
+	display: block;
+	margin: 2px 0;
+}
+form.top-aligned textarea {
+	box-sizing: border-box;
+	width: 100%;
+}
+form.top-aligned input[type=checkbox] {
+	float: right;
 }

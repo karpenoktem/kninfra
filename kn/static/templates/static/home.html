@@ -15,38 +15,36 @@
 
 
 {% block body %}
-<div id="home-container">
-  <div id="random-text">
-    <p>Welkom op de website van <strong>Alternatieve studentenvereniging
-          Karpe Noktem</strong>.</p>
+<div id="random-text">
+<p>Welkom op de website van <strong>Alternatieve studenten&shy;vereniging
+      Karpe Noktem</strong>.</p>
+</div>
 
-    <div class="slider-wrapper theme-default">
-      <div id="slider" class="nivoSlider">
-        {% for image in slideshow_images %}
-        <img src="{{ image }}" alt="" />
-        {% endfor %}
-      </div>
-    </div>
-    <script type="text/javascript">
-      $(window).load(function() {
-        $('#slider').nivoSlider({
-          effect: 'sliceDown',
-          animSpeed: 750,
-          pauseTime: 5000,
-          pauseOnHover: true,
-          prevText: 'vorige',
-          nextText: 'volgende',
-          directionNav: true,
-          randomStart: false
-        });
-      });
-    </script>
-  </div>
-  <div id="agenda">
-  {% show_short_agenda %}
+<div id="slider-wrapper" class="slider-wrapper theme-default">
+  <div id="slider" class="nivoSlider">
+    {% for image in slideshow_images %}
+    <img src="{{ image }}" alt="" />
+    {% endfor %}
   </div>
 </div>
-<div style="clear: both;"></div>
 
+<div id="agenda-wrapper">
+{% show_short_agenda %}
+</div>
+
+<script type="text/javascript">
+$(window).load(function() {
+  $('#slider').nivoSlider({
+    effect: 'sliceDown',
+    animSpeed: 750,
+    pauseTime: 5000,
+    pauseOnHover: true,
+    prevText: 'vorige',
+    nextText: 'volgende',
+    directionNav: true,
+    randomStart: false
+  });
+});
+</script>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}
