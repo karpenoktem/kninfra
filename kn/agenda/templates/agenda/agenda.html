@@ -20,45 +20,7 @@
   </form>
 </div>
 
-<div id="agenda">
-<ul id="fullagenda">
+{% include "agenda/widget.html" %}
 
-{% for item in agenda %}
-  {% ifchanged %}
-  <li class="monthSeparator">{{ item.month }}</li>
-  {% endifchanged %}
-  <li class="item"
-    onclick="$(this).find('.description')
-                    .toggleClass('preview');
-             $(this).find('.arrow')
-                    .toggleClass('opened')
-                    .css('height', 
-                      ($(this).find('.item_content').height() - 40) +'px');">
-    <div class="item_wrapper">
-      <div class="dateholder">
-        <div class="date">
-          {{ item.shortdate }}
-        </div>
-        <div class="arrow"></div>
-      </div>
-      <div class="item_content">
-        <div class="titlebar">
-          <span class="title">{{ item.title }}</span>
-      {% if item.end.date != item.start.date %}
-        <span class="datelong">{{ item.start.date }}\
-              &mdash;{{ item.end.date }}</span>
-      {% endif %}
-        </div>
-        <div class="description preview">
-          {{ item.description|safe|linebreaksbr }}
-        </div>
-      </div>
-    </div>
-    <div style="clear: both;"></div>
-  </li>
-{% endfor %}
-
-</ul>
-</div>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

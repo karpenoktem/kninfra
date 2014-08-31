@@ -35,6 +35,7 @@ a:hover, a:focus {
 .container {
 	margin: 0 auto;
 	max-width: 850px;
+	padding: 0 15px;
 }
 
 #footer {
@@ -50,7 +51,17 @@ a:hover, a:focus {
 /* content */
 #content {
 	min-height: 300px;
-	padding-top: 20px;
+}
+@media screen and (min-width: 801px) {
+	#content {
+		padding-top: 20px;
+	}
+}
+@media screen and (max-width: 800px) {
+	#content {
+		padding-top: 30px;
+		top: 442px;
+	}
 }
 
 /* content */
@@ -68,6 +79,11 @@ a:hover, a:focus {
 .left {
 	float: left;
 }
+@media screen and (max-width: 450px) {
+	.right {
+		float: none;
+	}
+}
 a img {
 	border: none; /* IE normalization */
 }
@@ -75,4 +91,9 @@ a img {
 /* omhoog-scroll knopje */
 #footer #scrollUp {
 	float: right;
+}
+@media screen and (max-width: 550px) {
+	#footer #scrollUp {
+		display: none;
+	}
 }
