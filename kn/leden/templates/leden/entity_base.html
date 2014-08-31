@@ -4,15 +4,6 @@
 
 {% block body %}
 
-<script type="text/javascript">//<!--
-$(function(){
-        create_entityChoiceField('relation_begin1_with', {type: 'group'});
-        create_entityChoiceField('relation_begin1_how', {type: 'brand'});
-        create_entityChoiceField('relation_begin2_who', {type: 'user'});
-        create_entityChoiceField('relation_begin2_how', {type: 'brand'});
-});
-// --></script>
-
 {% if related %}
 <h3>Lidmaatschap</h3>
 <ul>
@@ -54,15 +45,16 @@ lid
 <form action="{% url relation-begin %}" method="post" style="display: inline" \
         onsubmit="return confirm('Weet je zeker dat je {{ object.humanName }} \
         wil inschrijven als \
-        '+ (entityChoiceField_get('relation_begin1_how') ?
-        entityChoiceField_get('relation_begin1_how') : 'lid') +' \
+        '+ (entityChoiceField_get('relation_begin1_how') || 'lid') +' \
         van '+ entityChoiceField_get('relation_begin1_with') +'?');">
         {% csrf_token %}
         <input type="hidden" name="who" value="{{ object.id }}" />
         Voeg als
-        <input name="how" id="relation_begin1_how" type="hidden" />
+        <input name="how" id="_relation_begin1_how" type="text"
+            class="entity-select" data-type="brand" disabled/>
         toe aan
-        <input name="with" id="relation_begin1_with" type="hidden" />
+        <input name="with" id="_relation_begin1_with" type="text"
+            class="entity-select" data-type="group" disabled/>
         <input type="submit" value="verstuur" />
 </form>{# relation-begin #}
 {% endif %}{# related or object.is_user #}
@@ -107,15 +99,16 @@ lid
         onsubmit="return confirm('Weet je zeker dat je '+
         entityChoiceField_get('relation_begin2_who') +' \
         wil inschrijven als \
-        '+ (entityChoiceField_get('relation_begin2_how') ?
-        entityChoiceField_get('relation_begin2_how') : 'lid') +' \
+        '+ (entityChoiceField_get('relation_begin2_how') || 'lid') +' \
         van {{ object.humanName }}?');">
         {% csrf_token %}
         <input type="hidden" name="with" value="{{ object.id }}" />
         Voeg
-        <input type="hidden" name="who" id="relation_begin2_who" />
+        <input type="text" name="who" id="_relation_begin2_who"
+            class="entity-select" data-type="user" disabled/>
         als
-        <input type="hidden" name="how" id="relation_begin2_how" />
+        <input type="text" name="how" id="_relation_begin2_how"
+            class="entity-select" data-type="brand" disabled/>
         toe
         <input type="submit" value="verstuur" />
 </form>{# relation-begin #}

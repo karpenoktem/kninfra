@@ -14,54 +14,73 @@ function leden_api(data, cb) {
     }, cb, "json");
 }
 
-function entityChoiceField_set(id, objid) {
-    leden_api({action: "entity_humanName_by_id",
-                'id': objid}, function(data) {
-        if(!data)
-            return;
-        $('#_'+id).val(data);
-        $('#'+id).val(objid);
-    });
-}
-
 function entityChoiceField_get(id) {
     return $('#_'+id).val();
 }
 
-function create_entityChoiceField(id, params) {
-    if(!params) params = {};
-    if(!params.input_type) params.input_type = 'text';
-    $('#'+id).after("<input type='"+params.input_type+"' id='_"+id+"' />");
-    var box = $('#_'+id);
-    if(params.placeholder) {
-        box.attr('placeholder', params.placeholder);
-    }
-    var myParams = {
-        source: function(request, response) {
-            leden_api({
-                action: "entities_by_keyword",
-                keyword: request.term,
-                type: params.type}, function(data) {
-                    response($.map(data, function(item) {
-                        return {value: item[1], key: item[0]};
-                    }));
-                });
-        },
-        select: function(event, ui) {
-            $("#_"+id).val(ui.item.value);
-            $("#"+id).val(ui.item.key);
-            if (params.select) {
-                params.select(ui.item.value, ui.item.key);
-            }
-            return false;
-        },
-        minLength: 0
-    };
-    if(params.position) {
-        myParams.position = params.position;
-    }
-    box.autocomplete(myParams).focus(function() {
-        $(this).trigger('keydown.autocomplete');
+function createAllEntityChoiceFields() {
+    $('.entity-select').each(function(i, input) {
+        input = $(input);
+
+        var id = input.attr('id');
+        if (id.substr(0, 1) != '_') {
+            console.error("id doesn't start with '_'");
+            return;
+        }
+        id = id.substr(1);
+
+        // give only the hidden input an id (without '_') and a name
+        var hiddenInput = $('<input type="hidden">');
+        hiddenInput.attr('id', id);
+        hiddenInput.attr('name', input.attr('name'));
+        input.removeAttr('name');
+        input.before(hiddenInput);
+
+        // the entity type
+        var type = input.attr('data-type') || null;
+
+        var myParams = {
+            source: function(request, response) {
+                leden_api({
+                    action: "entities_by_keyword",
+                    keyword: request.term,
+                    type: type},
+                    function(data) {
+                        response($.map(data, function(item) {
+                            return {value: item[1], key: item[0]};
+                        }));
+                    });
+            },
+            select: function(event, ui) {
+                input.val(ui.item.value);
+                hiddenInput.val(ui.item.key);
+                if (input.attr('data-next')) {
+                    location.href = input.attr('data-next') + ui.item.key;
+                }
+                return false;
+            },
+            minLength: 0
+        };
+        if(input.attr('data-position')) {
+            myParams.position = JSON.parse(input.attr('data-position'));
+        }
+        input.autocomplete(myParams).focus(function() {
+            $(this).trigger('keydown.autocomplete');
+        });
+
+        // set default value
+        if (input.attr('data-value')) {
+            leden_api({action: "entity_humanName_by_id",
+                        'id': input.attr('data-value')}, function(data) {
+                if(!data)
+                    return;
+                input.val(data);
+                hiddenInput.val(input.attr('data-value'));
+                input.prop('disabled', false);
+            });
+        } else {
+            input.prop('disabled', false);
+        }
     });
 }
 
@@ -162,6 +181,8 @@ $(document).ready(function() {
         event.preventDefault();
         $('#submenu-wrapper').toggleClass('open');
     });
+
+    createAllEntityChoiceFields();
 });
 
 // Implement rot13 for email obscurification
