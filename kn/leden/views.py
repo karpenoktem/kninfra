@@ -32,6 +32,7 @@ from kn.base._random import pseudo_randstr
 from kn.base.http import redirect_to_referer
 from kn.base.mail import render_then_email
 from kn.base.text import humanized_enum
+from kn.base import strings
 
 from kn.settings import DT_MIN, DT_MAX
 from kn import settings
@@ -313,6 +314,7 @@ def ik_chpasswd(request):
     else:
         form = ChangePasswordForm()
     errl.extend(form.non_field_errors())
+    errl = strings.humanize_list(errl, 'leden')
     errstr = humanized_enum(errl)
     return render_to_response('leden/ik_chpasswd.html',
             { 'form':form, 'errors':errstr},
@@ -338,6 +340,7 @@ def ik_chpasswd_villanet(request):
     else:
         form = ChangePasswordForm()
     errl.extend(form.non_field_errors())
+    errl = strings.humanize_list(errl, 'leden')
     errstr = humanized_enum(errl)
     return render_to_response('leden/ik_chpasswd_villanet.html',
             { 'form':form, 'errors':errstr},
