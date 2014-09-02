@@ -136,22 +136,14 @@ function presubmit(form) {
     return true;
 }
 
-//     Dangerous Globals.
-// The variable below was first simply called "oldOnload"
-// which caused an infinite loop when an extending template
-// performed the same trick. 
-oldOnload_Form = window.onload
-window.onload = function() {
-    if(oldOnload_Form) {
-        oldOnload_Form();
-    }
+window.addEventListener('load', function() {
     build_structure(document.getElementById('generated_table'));
-};
+});
 </script>
 <table>
     <tbody id="generated_table"></tbody>
 </table>
-<form method="POST" onSubmit="return presubmit(this);">
+<form method="POST" onsubmit="return presubmit(this);">
     {% csrf_token %}
     <table>
         {{ form.as_table }}

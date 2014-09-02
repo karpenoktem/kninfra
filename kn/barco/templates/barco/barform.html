@@ -68,13 +68,9 @@ function attach_geldteller(el) {
     }
 }
 
-oldOnload_Barform = window.onload
-window.onload = function() {
-    if(oldOnload_Barform) {
-        oldOnload_Barform();
-    }
+window.addEventListener('load',  function() {
     attach_geldteller(document.getElementById('id_beginkas'));
     attach_geldteller(document.getElementById('id_eindkas'));
-};
+});
 </script>
 {% endblock %}
