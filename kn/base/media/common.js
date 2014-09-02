@@ -7,6 +7,61 @@ function email(t, d, u) {
     document.write('<a href="mailto:' + email + '">' + email + '</a>');
 }
 
+// Load JavaScript and CSS with a specific name:
+// resource-<name>. Call the callback when the resource has loaded.
+function loadResource(name, callback) {
+    var count = 0;
+
+    var onload = function (event) {
+        count -= 1;
+        if (count == 0) {
+            callback();
+        } else if (count < 0) {
+            console.error('loadResource: count got below zero');
+        }
+    };
+
+    var onerror = function (event) {
+        console.error('could not load resource:', event);
+        onload(); // proceed: this is what the browser would do natively
+    };
+
+    // get all needed resources
+    $('[name|=resource]').each(function(i, element) {
+        element = $(element)
+
+        if (element.attr('name') != 'resource-' + name) {
+            // not what we're looking for
+            return;
+        }
+
+        var newElement = null;
+        if (element.prop('tagName') == 'SCRIPT') {
+            newElement = $('<script>');
+            newElement.prop('async', true);
+            newElement.attr('src', element.attr('data-src'));
+            // some browsers don't support the onload event on <link> elements
+            // http://pieisgood.org/test/script-link-events/
+            newElement.on('load', onload);
+            newElement.on('error', onerror);
+            count += 1;
+        } else if (element.prop('tagName') == 'LINK' && element.attr('rel') == 'stylesheet') {
+            newElement = $('<link rel="stylesheet">');
+            newElement.attr('href', element.attr('data-href'));
+        } else {
+            console.warn('unknown resource type:', element.prop('tagName'));
+            return;
+        }
+
+        element.remove();
+        document.head.appendChild(newElement[0]);
+    });
+
+    if (count == 0) {
+        console.error("Cannot find JavaScript resource");
+    }
+}
+
 function leden_api(data, cb) {
     $.post(leden_api_url, {
         csrfmiddlewaretoken: csrf_token,
@@ -19,6 +74,10 @@ function entityChoiceField_get(id) {
 }
 
 function createAllEntityChoiceFields() {
+    loadResource('jquery-ui', createAllEntityChoiceFieldsCallback);
+}
+
+function createAllEntityChoiceFieldsCallback() {
     $('.entity-select').each(function(i, input) {
         input = $(input);
 
