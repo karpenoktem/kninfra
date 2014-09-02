@@ -1,35 +1,54 @@
 {% extends "leden/base.html" %}
 {% load base %}
 
+{% block head %}
+{{ block.super }}
+<style type="text/css">
+#planningOverview-wrapper {
+    overflow-x: scroll;
+}
+#planningOverview {
+    width: 100%;
+    box-sizing: border-box;
+}
+#planningOverview td {
+    vertical-align: top;
+    text-align: center;
+}
+</style>
+{% endblock head %}
+
 {% block body %}
-<table id="planningOverview">
-	<tr>
+<div id="planningOverview-wrapper">
+    <table id="planningOverview">
+        <tr>
 {% for pool in pools %}
-                {# TODO pool niet tonen als er voor geen enkel te tonen event diensten zijn #}
-		<th>{{ pool.name }}</th>
+            {# TODO pool niet tonen als er voor geen enkel te tonen event diensten zijn #}
+            <th>{{ pool.name }}</th>
 {% endfor %}
-	</tr>
+        </tr>
 {% for event in events %}
-	<tr>
-                {# TODO move into stylesheet #}
-                <td
-                        colspan="{{ poolcount }}"
-                        class="poolHeader">
-                        <strong>{{ event.datetime|date:"l j F Y" }}</strong>
-                         - {{ event.name }}
-                </td>
-	</tr>
-	<tr>
-	{% for poolidx, vacancies in event.vacancies.items %}
-		<td style="vertical-align: top; text-align: center">
-		{% for vacancy in vacancies %}
-		<b>{{ vacancy.begin_time }} - {{ vacancy.end_time }}</b><br>
-		{{ vacancy.assignee }}<br>
-		{% endfor %}
-		</td>
-	{% endfor %}
-	</tr>
+        <tr>
+            {# TODO move into stylesheet #}
+            <td
+                colspan="{{ poolcount }}"
+                class="poolHeader">
+                <strong>{{ event.datetime|date:"l j F Y" }}</strong>
+                 - {{ event.name }}
+            </td>
+        </tr>
+        <tr>
+    {% for poolidx, vacancies in event.vacancies.items %}
+            <td>
+        {% for vacancy in vacancies %}
+            <b>{{ vacancy.begin_time }} - {{ vacancy.end_time }}</b><br>
+            {{ vacancy.assignee }}<br>
+        {% endfor %}
+            </td>
+    {% endfor %}
+        </tr>
 {% endfor %}
-</table>
+    </table>
+</div>
 {{ block.super }}
 {% endblock %}
