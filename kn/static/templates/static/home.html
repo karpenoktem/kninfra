@@ -8,9 +8,12 @@
 <link rel="stylesheet"
   href="{{ MEDIA_URL }}/static/style/home.css" />
 <script type="text/javascript"
-  src="{{ MEDIA_URL }}/static/jquery.nivo.slider.pack.js"></script>
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/static/style/nivo-slider.css" />
-<link rel="stylesheet" href="{{ MEDIA_URL }}/static/nivo-slider/default.css" type="text/css" media="screen" />
+  data-src="{{ MEDIA_URL }}/static/jquery.nivo.slider.pack.js"
+  name="resource-nivo-slider"></script>
+<link rel="stylesheet" type="text/css" name="resource-nivo-slider"
+  data-href="{{ MEDIA_URL}}/static/style/nivo-slider.css" />
+<link rel="stylesheet" data-href="{{ MEDIA_URL }}/static/nivo-slider/default.css"
+  type="text/css" media="screen" name="resource-nivo-slider" />
 {% endblock %}
 
 
@@ -33,16 +36,18 @@
 </div>
 
 <script type="text/javascript">
-$(window).load(function() {
-  $('#slider').nivoSlider({
-    effect: 'sliceDown',
-    animSpeed: 750,
-    pauseTime: 5000,
-    pauseOnHover: true,
-    prevText: 'vorige',
-    nextText: 'volgende',
-    directionNav: true,
-    randomStart: false
+$(document).ready(function() {
+  loadResource('nivo-slider', function() {
+    $('#slider').nivoSlider({
+      effect: 'sliceDown',
+      animSpeed: 750,
+      pauseTime: 5000,
+      pauseOnHover: true,
+      prevText: 'vorige',
+      nextText: 'volgende',
+      directionNav: true,
+      randomStart: false
+    });
   });
 });
 </script>

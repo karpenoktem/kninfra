@@ -60,3 +60,7 @@
 .nivo-main-image {
 	height: auto;
 }
+/* do not show images until the slider has loaded */
+.nivoSlider img {
+	display: none;
+}

@@ -48,6 +48,9 @@ function loadResource(name, callback) {
         } else if (element.prop('tagName') == 'LINK' && element.attr('rel') == 'stylesheet') {
             newElement = $('<link rel="stylesheet">');
             newElement.attr('href', element.attr('data-href'));
+            if (element.attr('media')) {
+                newElement.attr('media', element.attr('media'));
+            }
         } else {
             console.warn('unknown resource type:', element.prop('tagName'));
             return;
