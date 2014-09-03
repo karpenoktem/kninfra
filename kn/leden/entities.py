@@ -1,10 +1,10 @@
 import re
+import hashlib
 import datetime
 import functools
 import email.utils
 
 from django.db.models import permalink
-from django.contrib.auth.models import get_hexdigest
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
@@ -22,6 +22,9 @@ ncol = db['notes']      # notes on entities by the secretaris
 pcol = db['push_changes'] # Changes to be pushed to remote systems
 incol = db['informacie_notifications'] # human readable list of notifications 
                                         #for informacie group
+def get_hexdigest(algorithm, salt, raw_password):
+    assert algorithm == 'sha1'
+    return hashlib.sha1(salt + raw_password).hexdigest()
 
 def ensure_indices():
     """ Ensures that the indices we need on the collections are set """
@@ -34,6 +37,7 @@ def ensure_indices():
     ecol.ensure_index('tags', sparse=True)
     ecol.ensure_index('humanNames.human')
     ecol.ensure_index('studies.study', sparse=True)
+    ecol.ensure_index('studies.institute', sparse=True)
     ecol.ensure_index('person.dateOfBirth', sparse=True)
     # relations
     rcol.ensure_index('how', sparse=True)
@@ -147,6 +151,11 @@ def by_id(n):
 def by_study(study):
     """ Finds entities by studies.study """
     for m in ecol.find({'studies.study': _id(study)}):
+        yield entity(m)
+
+def by_institute(institute):
+    """ Finds entities by studies.insitute """
+    for m in ecol.find({'studies.institute': _id(institute)}):
         yield entity(m)
 
 def get_years_of_birth():
@@ -558,6 +567,7 @@ class Entity(SONWrapper):
                     str(n) for n in g.names])
         return self._groups_names_cache
 
+    # get reverse-related
     def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                 deref_with=True, deref_how=True):
         return query_relations(-1, self, how, _from, until, deref_who,
@@ -796,8 +806,7 @@ class Group(Entity):
         for rel in self.get_rrelated(how=None, deref_with=False):
             _all.add(rel['who'])
             if ((rel['until'] is None or rel['until'] >= dt) and
-                    rel['from'] is None
-                    or rel['from'] <= dt):
+                    (rel['from'] is None or rel['from'] <= dt)):
                 cur.add(rel['who'])
         return (cur, _all - cur)
     def get_members(self):
@@ -881,7 +890,7 @@ class User(Entity):
         return self._data.get('person',{}).get('family')
     @property
     def gender(self):
-        return self._data('person',{}).get('gender')
+        return self._data.get('person',{}).get('gender')
     @property
     def telephones(self):
         ret = []

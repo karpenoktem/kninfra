@@ -1,0 +1,5 @@
+To add the gradient, use
+
+convert INPUT.JPG -rotate -90 -size $(identify -format %H INPUT.JPG)x500 gradient:#00000000-#000000ff -rotate 90 -composite -rotate 90 -size $(identify -format %H INPUT.JPG)x500 gradient:#00000000-#000000ff -rotate 90 -composite -rotate 180 -resize 1800 -quality 85% OUTPUT.JPG
+
+First version of command by Daan.  Updated a bit by Bas.

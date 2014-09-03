@@ -1,0 +1,47 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+
+{% block body %}
+<p class="imageDisplay">
+<img width="800"
+     src="{{ MEDIA_URL }}/static/img/bestuur11.jpg?v=2" /><br/>
+     <small>Van links naar rechts:
+           Jeffry (secretaris);
+           Henk (vice-voorzitter);
+           Margot (voorzitter);
+           Niels (pandcommissaris)
+           en Daan (penningmeester).</small></p>
+
+<p>Het <strong>elfde bestuur</strong> der A.S.V. Karpe Noktem zijn echte
+Bourgondi&euml;rs maar gelukkig geen Brabanders, Limburgers en Zeeuwen met
+een aantal uitzonderingen daar gelaten.
+Ze zijn jong, ambitieus en vol idee&euml;n, waarmee ze onze vereniging naar
+een hoger niveau tillen.</p>
+<p>Dit alles onder de bezielende leiding van onze voorzitter <em>Margot
+Mangnus</em>, student taalwetenschap, die als jongste voorzitter van
+Karpe Noktem de vernieuwingsgeest belichaamt.  Zij wordt bijgestaan door
+vier 'stoere' mannen: onze trouwe secretaris <em>Jeffry Huntjens</em>, student
+geschiedenis, heeft de langste baard en is daarom bedeeld met de taak de leden
+te managen.  <em>Daan Sprenkels</em>, student scheikunde en voormalig
+bestuurslid van Olympus, houdt als penningmeester toezicht op onze
+financi&euml;n.  <em>Niels van Beers</em>, student rechten en scouting-o-loog,
+zal met zijn brede postuur, uitgebreide survival skills en kennis
+over de Efteling de contacten binnen de Villa onderhouden.  Onze vice-voorzitter
+<em>Eric "Henk" Buitinck</em>, student natuur- en sterrenkunde, is
+verantwoordelijk voor de externe contacten, PR en de
+broodnodige portie death metal.</p>
+
+<p>Alle bestuursleden zijn bereikbaar op hun functie- of voornaam
+@karpenoktem.nl, behalve Daan en Niels.  Zij zijn respectievelijk
+te bereiken via
+{% filter email %}daansp@karpenoktem.nl{% endfilter %}
+en
+{% filter email %}nielsv@karpenoktem.nl{% endfilter %}.
+Margot is overigens ook te benaderen via
+{% filter email %}khaleesi@karpenoktem.nl{% endfilter %}.
+
+<p>&lArr; Het vorige,
+<a href="{% url bestuur10 %}">tiende bestuur.</a>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}

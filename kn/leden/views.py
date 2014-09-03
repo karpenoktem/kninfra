@@ -99,8 +99,25 @@ def _entity_detail(request, e):
                     Es.date_to_year(r['until']))
         r['virtual'] = Es.relation_is_virtual(r)
     tags = [t.as_primary_type() for t in e.get_tags()]
+
+    # mapping of year => set of members
+    year_sets = {}
+    for r in rrelated:
+        year = r['until_year']
+        if year is None:
+            year = 'this'
+
+        if not year in year_sets:
+            year_sets[year] = set()
+        year_sets[year].add(r['who'])
+
+    year_counts = {}
+    for year in year_sets:
+        year_counts[year] = len(year_sets[year])
+
     ctx = {'related': related,
            'rrelated': rrelated,
+           'year_counts': year_counts,
            'now': now(),
            'tags': sorted(tags, Es.entity_cmp_humanName),
            'object': e,
@@ -137,7 +154,9 @@ def _user_detail(request, user):
             path.join(settings.SMOELEN_PHOTOS_PATH,
                     str(user.name)))
     ctx = _entity_detail(request, user)
-    ctx.update({'hasPhoto': hasPhoto,
+    ctx.update({
+            'hasPhoto': hasPhoto,
+            'photoWidth': settings.SMOELEN_WIDTH,
             'photosUrl': settings.USER_PHOTOS_URL % str(user.name)})
     return render_to_response('leden/user_detail.html', ctx,
             context_instance=RequestContext(request))
@@ -204,7 +223,20 @@ def _study_detail(request, study):
             context_instance=RequestContext(request))
 def _institute_detail(request, institute):
     ctx = _entity_detail(request, institute)
-    # TODO add followers in ctx
+    ctx['students'] = students = []
+    def _cmp(s1, s2):
+        r = Es.dt_cmp_until(s2['until'], s1['until'])
+        if r: return r
+        return cmp(s1['student'].humanName, s2['student'].humanName)
+    for student in Es.by_institute(institute):
+        for _study in student.studies:
+            if _study['institute'] != institute:
+                continue
+            students.append({'student': student,
+                             'from': _study['from'],
+                             'until': _study['until'],
+                             'study': _study['study']})
+    ctx['students'].sort(cmp=_cmp)
     return render_to_response('leden/institute_detail.html', ctx,
             context_instance=RequestContext(request))
 
@@ -238,8 +270,9 @@ def ik_chsmoel(request):
         raise ValueError, "Missing `smoel' in FILES"
     user = Es.by_id(request.POST['id'])
     img = Image.open(request.FILES['smoel'])
-    img = img.resize((settings.SMOELEN_WIDTH,
-        int(float(settings.SMOELEN_WIDTH) / img.size[0] * img.size[1])),
+    smoelen_width = settings.SMOELEN_WIDTH * 2
+    img = img.resize((smoelen_width,
+        int(float(smoelen_width) / img.size[0] * img.size[1])),
             Image.ANTIALIAS)
     img.save(default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
             str(user.name)) + ".jpg", 'w'), "JPEG")

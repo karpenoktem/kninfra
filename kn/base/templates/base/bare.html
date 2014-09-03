@@ -4,57 +4,46 @@
 	<head>
 		{% block head %}
 		<title>{% block title %}ASV Karpe Noktem{% endblock %}</title>
-		<link href="{% url style-bare %}"
-			rel="stylesheet" type="text/css" />
+		<meta name="viewport" content="width=device-width"/>
 		<script type="text/javascript"
-			src="{{ MEDIA_URL }}/base/common.js"></script>
-		<script type="text/javascript"
-			src="{{ MEDIA_URL }}/base/jquery-1.6.4.min.js"></script>
+                       src="{{ MEDIA_URL }}/base/jquery-1.11.1.min.js"></script>
                 <link rel="stylesheet" type="text/css"
                         href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css" />
                 <script type="text/javascript"
                         src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js">
                 </script>
+                <script type="text/javascript"
+                        src="{{ MEDIA_URL }}/base/jquery.cookie.js"></script>
 		<script type="text/javascript"
-			src="{{ MEDIA_URL }}/base/jquery.defaultText.js"></script>
+			src="{{ MEDIA_URL }}/base/common.js"></script>
+		<link href="{% url style-bare %}"
+			rel="stylesheet" type="text/css" />
 		<link rel="icon" href="{{ MEDIA_URL }}/base/favicon.ico" />
-		<!--[if lte IE 7]>
-		<link rel="stylesheet" type="text/css"
-			href="{{ MEDIA_URL }}/base/iehacks.css" />
-		<![endif]-->
 		{% endblock %}
 	</head>
-	<body><div id="wrapper">
-		{% block wrapper %}
-		<div id="main">
-			{% block main %}
-			<div id="body">
-                        {% block messages %}
-			{% if messages %}
-			<ul id="messages">
-				{% for message in messages %}
-				<li>{{ message }}</li>
-				{% endfor %}
-			</ul>
-			{% endif %}
-			{% endblock %}
-			{% block body %}
-			{% endblock %}
-			</div>
-			{% endblock %}
+        <body>
+                {% block header %}
+                {% endblock %}
+                {% block content %}
+                <div id="content">
+                    <div class="container">
+                        <div id="body">
+                                {% block body %}
+                                {% endblock %}
+                        </div>
                         <div class="clear"></div>
-		</div>
-		{% endblock %}
-		<div id="footer">
-		<!--[if IE]>
-		Internet Explorer is 
-		<a href="http://www.google.com/search?q=ie+sucks">brak</a>.
-		Gebruik <a href="http://www.mozilla.com/en-US/firefox/">een</a>
-		open browser voor een beter resultaat.<br/>
-		<![endif]-->
-		&copy;2007&mdash;2013, Karpe Noktem
-		</div>
-	</div>
+                    </div>
+                </div>
+                {% endblock content %}
+                {% block footer %}
+                <div id="footer">
+                        <div class="container">
+                                &copy;2007&mdash;2014,
+                                Alternatieve studentenvereniging Karpe Noktem
+                                <small><a id="scrollUp" href="#">Terug naar boven</a></small>
+                        </div>
+                </div>
+                {% endblock footer %}
 	<script type="text/javascript">
 		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));

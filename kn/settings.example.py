@@ -1,4 +1,5 @@
 import datetime
+import locale
 
 # Base Django settings
 # ############################################################
@@ -9,7 +10,7 @@ ADMINS = (
     ('Bram Westerbaan', 'bramw@karpenoktem.nl'),
 )
 
-DATABASES = {} # We do not use Django's DB abstraction
+DATABASES = {'default': {}} # We do not use Django's DB abstraction
 MANAGERS = ADMINS
 TIME_ZONE = 'Europe/Amsterdam'
 LANGUAGE_CODE = 'nl-NL'
@@ -19,11 +20,14 @@ MEDIA_ROOT = '/home/infra/repo/media/'
 MEDIA_URL = '/djmedia'
 DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@karpenoktem.nl>'
 
+# Globally set locale
+locale.setlocale(locale.LC_ALL, 'nl_NL.UTF-8')
+
 ROOT_URLCONF = 'kn.urls'
 TEMPLATE_LOADERS = (
     ('kn.base.template.SlashNewlineStrippingTemplateLoader', (
-        'django.template.loaders.filesystem.load_template_source',
-        'django.template.loaders.app_directories.load_template_source',
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
     )),
 )
 MIDDLEWARE_CLASSES = (
@@ -47,9 +51,11 @@ INSTALLED_APPS = (
     'kn.fotos',
     'kn.barco',
     'kn.planning',
+    'kn.static',
+    'kn.agenda',
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.auth",
+    "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
@@ -81,6 +87,7 @@ BASE_BGS = ['antal', 'park', 'band', 'weekend']
 BASE_URL = 'https://karpenoktem.nl'
 SMOELEN_PHOTOS_PATH = 'smoelen'
 USER_PHOTOS_URL = 'http://karpenoktem.nl/fotos/?search_tag=%s'
+SMOELEN_WIDTH = 300
 
 # moderation & mailman
 MAILDOMAIN = 'karpenoktem.nl'
