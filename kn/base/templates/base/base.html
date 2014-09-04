@@ -41,6 +41,7 @@
                                 {% filter email %}webcie@karpenoktem.nl{% endfilter %}
                             </p>
                             <form method="POST" action="/accounts/login/">
+                                {% csrf_token %}
                                 <table>
                                     <tr>
                                         <td><label for="input-username">Gebruikersnaam</label></td>
@@ -51,7 +52,7 @@
                                         <td><input id="input-password" type="password" name="password" /></td>
                                     </tr>
                                     <tr>
-                                        <td><input type="hidden" id="csrfmiddlewaretoken" name="csrfmiddlewaretoken" value=""/></td>
+                                        <td></td>
                                         <td><input type="submit" id="input-submit" value="Inloggen"/></td>
                                     </tr>
                                 </table>
