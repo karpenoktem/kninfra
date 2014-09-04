@@ -141,23 +141,6 @@ $(document).ready(function() {
         fixHeader();
     }
 
-    $('#csrfmiddlewaretoken').val(getCsrftoken());
-
-    $(document.getElementById('loginButtonLink')).bind('click', function (event) {
-        var loginButton = $('#loginButton');
-        loginButton.toggleClass('open');
-        event.preventDefault();
-        event.stopPropagation();
-    });
-
-    $(document.body).bind('click', function (event) {
-        $('#loginButton').removeClass('open');
-    });
-
-    $('#loginWindow').bind('click', function (event) {
-        event.stopPropagation();
-    });
-
     $('#submenu-button').bind('click', function(event) {
         event.preventDefault();
         $('#submenu-wrapper').toggleClass('open');
@@ -173,6 +156,27 @@ function rot13 (s) {
         return String.fromCharCode(k + (c ? 96 : 64));
     }
     ).join('');
+}
+
+function setupLoginWindow() {
+    $(document).ready(function() {
+        $('#csrfmiddlewaretoken').val(getCsrftoken());
+
+        $(document.getElementById('loginButtonLink')).bind('click', function (event) {
+            var loginButton = $('#loginButton');
+            loginButton.toggleClass('open');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+        $(document.body).bind('click', function (event) {
+            $('#loginButton').removeClass('open');
+        });
+
+        $('#loginWindow').bind('click', function (event) {
+            event.stopPropagation();
+        });
+    });
 }
 
 function unobfuscateEmail() {
