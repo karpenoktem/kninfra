@@ -11,7 +11,7 @@ def redirect_to_referer(request):
 class JsonHttpResponse(HttpResponse):
     def __init__(self, obj, *args, **kwargs):
         if 'mimetype' not in kwargs:
-            kwargs['mimetype'] = 'application/json; charset=utf8'
+            kwargs['mimetype'] = 'application/json; charset=utf-8'
         super(JsonHttpResponse, self).__init__(
             json.dumps(obj), *args, **kwargs)
 
