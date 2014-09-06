@@ -7,6 +7,67 @@ function email(t, d, u) {
     document.write('<a href="mailto:' + email + '">' + email + '</a>');
 }
 
+// Load JavaScript and CSS with a specific name:
+// resource-<name>. Call the callback when the resource has loaded.
+function loadResource(name, callback) {
+    var count = 0;
+
+    var onload = function (event) {
+        count -= 1;
+        if (count == 0) {
+            callback();
+        } else if (count < 0) {
+            console.error('loadResource: count got below zero');
+        }
+    };
+
+    var onerror = function (event) {
+        console.error('could not load resource:', event);
+        onload(); // proceed: this is what the browser would do natively
+    };
+
+    // get all needed resources
+    $('[name|=resource]').each(function(i, element) {
+        element = $(element)
+
+        if (element.attr('name') != 'resource-' + name) {
+            // not what we're looking for
+            return;
+        }
+
+        var newElement = null;
+        if (element.prop('tagName') == 'SCRIPT') {
+            count += 1;
+            newElement = $('<script>');
+            if (!('onload' in newElement[0])) {
+                $.getScript(element.attr('data-src'), onload);
+                return;
+            }
+            newElement.prop('async', true);
+            newElement.attr('src', element.attr('data-src'));
+            // some browsers don't support the onload event on <link> elements
+            // http://pieisgood.org/test/script-link-events/
+            newElement.on('load', onload);
+            newElement.on('error', onerror);
+        } else if (element.prop('tagName') == 'LINK' && element.attr('rel') == 'stylesheet') {
+            newElement = $('<link rel="stylesheet" href="'+element.attr('data-href')+'">');
+            if (element.attr('media')) {
+                newElement.attr('media', element.attr('media'));
+            }
+        } else {
+            console.warn('unknown resource type:', element.prop('tagName'));
+            return;
+        }
+
+        element.remove();
+        $('head')[0].appendChild(newElement[0]);
+    });
+
+    if (count == 0) {
+        console.error("Cannot find JavaScript resource");
+    }
+}
+
 function leden_api(data, cb) {
     $.post(leden_api_url, {
         csrfmiddlewaretoken: csrf_token,
@@ -14,54 +75,77 @@ function leden_api(data, cb) {
     }, cb, "json");
 }
 
-function entityChoiceField_set(id, objid) {
-    leden_api({action: "entity_humanName_by_id",
-                'id': objid}, function(data) {
-        if(!data)
-            return;
-        $('#_'+id).val(data);
-        $('#'+id).val(objid);
-    });
-}
-
 function entityChoiceField_get(id) {
     return $('#_'+id).val();
 }
 
-function create_entityChoiceField(id, params) {
-    if(!params) params = {};
-    if(!params.input_type) params.input_type = 'text';
-    $('#'+id).after("<input type='"+params.input_type+"' id='_"+id+"' />");
-    var box = $('#_'+id);
-    if(params.placeholder) {
-        box.attr('placeholder', params.placeholder);
-    }
-    var myParams = {
-        source: function(request, response) {
-            leden_api({
-                action: "entities_by_keyword",
-                keyword: request.term,
-                type: params.type}, function(data) {
-                    response($.map(data, function(item) {
-                        return {value: item[1], key: item[0]};
-                    }));
-                });
-        },
-        select: function(event, ui) {
-            $("#_"+id).val(ui.item.value);
-            $("#"+id).val(ui.item.key);
-            if (params.select) {
-                params.select(ui.item.value, ui.item.key);
-            }
-            return false;
-        },
-        minLength: 0
-    };
-    if(params.position) {
-        myParams.position = params.position;
-    }
-    box.autocomplete(myParams).focus(function() {
-        $(this).trigger('keydown.autocomplete');
+function createAllEntityChoiceFields() {
+    loadResource('jquery-ui', createAllEntityChoiceFieldsCallback);
+}
+
+function createAllEntityChoiceFieldsCallback() {
+    $('.entity-select').each(function(i, input) {
+        input = $(input);
+
+        var id = input.attr('id');
+        if (id.substr(0, 1) != '_') {
+            console.error("id doesn't start with '_'");
+            return;
+        }
+        id = id.substr(1);
+
+        // give only the hidden input an id (without '_') and a name
+        var hiddenInput = $('<input type="hidden">');
+        hiddenInput.attr('id', id);
+        hiddenInput.attr('name', input.attr('name'));
+        input.removeAttr('name');
+        input.before(hiddenInput);
+
+        // the entity type
+        var type = input.attr('data-type') || null;
+
+        var myParams = {
+            source: function(request, response) {
+                leden_api({
+                    action: "entities_by_keyword",
+                    keyword: request.term,
+                    type: type},
+                    function(data) {
+                        response($.map(data, function(item) {
+                            return {value: item[1], key: item[0]};
+                        }));
+                    });
+            },
+            select: function(event, ui) {
+                input.val(ui.item.value);
+                hiddenInput.val(ui.item.key);
+                if (input.attr('data-next')) {
+                    location.href = input.attr('data-next') + ui.item.key;
+                }
+                return false;
+            },
+            minLength: 0
+        };
+        if(input.attr('data-position')) {
+            myParams.position = JSON.parse(input.attr('data-position'));
+        }
+        input.autocomplete(myParams).focus(function() {
+            $(this).trigger('keydown.autocomplete');
+        });
+
+        // set default value
+        if (input.attr('data-value')) {
+            leden_api({action: "entity_humanName_by_id",
+                        'id': input.attr('data-value')}, function(data) {
+                if(!data)
+                    return;
+                input.val(data);
+                hiddenInput.val(input.attr('data-value'));
+                input.prop('disabled', false);
+            });
+        } else {
+            input.prop('disabled', false);
+        }
     });
 }
 
@@ -162,6 +246,8 @@ $(document).ready(function() {
         event.preventDefault();
         $('#submenu-wrapper').toggleClass('open');
     });
+
+    createAllEntityChoiceFields();
 });
 
 // Implement rot13 for email obscurification

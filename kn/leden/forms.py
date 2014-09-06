@@ -19,24 +19,18 @@ class EntityChoiceFieldWidget(forms.TextInput):
         super(EntityChoiceFieldWidget, self).__init__(*args, **kwargs)
     def render(self, name, value=None, attrs=None):
         final_attrs = self.build_attrs(attrs, name=name)
-        code_set_value = ''
-        if value:
-            code_set_value = (
-                '''entityChoiceField_set(%(id)s, %(value)s);'''
-                %{'id': json.dumps(final_attrs['id']),
-                  'value': json.dumps(str(value))})
-        return mark_safe(
-            u'''<input type='hidden' id=%(id)s name=%(name)s />
-                <script type='text/javascript'>//<!--
-                $(function(){
-                    create_entityChoiceField(%(id)s, %(params)s);
-                    %(code_set_value)s
-                });//--></script>'''
-                %{'name': json.dumps(name),
-                  'id': json.dumps(final_attrs['id']),
-                  'params': json.dumps({'type': self.type}),
-                  'code_set_value': code_set_value})
 
+        params = ''
+        if value:
+            params += ' data-value=' + json.dumps(str(value))
+        if self.type:
+            params += ' data-type=' + json.dumps(self.type)
+
+        return u'''<input type="text" name=%(name)s id=%(id)s
+                    class="entity-select" %(params)s disabled/>''' \
+                %{'name': json.dumps(name),
+                  'id': json.dumps('_'+final_attrs['id']),
+                  'params': params}
 
 class EntityChoiceField(forms.CharField):
     def __init__(self, *args, **kwargs):
