@@ -122,6 +122,10 @@ INFRA_UID = 1002
 PHOTOS_DIR = '/var/fotos'
 USER_DIRS = '/mnt/phassa/home/'
 
+LDAP_HOST = 'localhost'
+LDAP_BASE = 'ou=users,dc=karpenoktem,dc=nl'
+LDAP_USER = 'cn=giedo,dc=karpenoktem,dc=nl'
+
 # VPN related
 # ############################################################
 VPN_COMMONNAME_POSTFIX = '.vpn.karpenoktem.nl'
@@ -149,5 +153,6 @@ CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
 VILLANET_SECRET_API_KEY = '' # CHANGE ME
 DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
                         '<root@khandhas.karpenoktem.nl>')
+LDAP_PASS = 'CHANGE ME'
 
 # vim: et:sta:bs=2:sw=4:

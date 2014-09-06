@@ -15,6 +15,7 @@ from kn.utils.daan.wiki import apply_wiki_changes, wiki_setpass
 from kn.utils.daan.forum import apply_forum_changes, forum_setpass
 from kn.utils.daan.live import live_update_knsite, live_update_knfotos
 from kn.utils.daan.fotoadmin import fotoadmin_create_event, fotoadmin_move_fotos
+from kn.utils.daan._ldap import apply_ldap_changes, ldap_setpass
 
 from kn import settings
 
@@ -25,6 +26,7 @@ class Daan(WhimDaemon):
         self.mailman_lock = threading.Lock()
         self.wiki_lock = threading.Lock()
         self.forum_lock = threading.Lock()
+        self.ldap_lock = threading.Lock()
         self.update_knsite_lock = threading.Lock()
         self.update_knfotos_lock = threading.Lock()
         self.fotoadmin_lock = threading.Lock()
@@ -43,10 +45,15 @@ class Daan(WhimDaemon):
         elif d['type'] == 'wiki':
             with self.wiki_lock:
                 return apply_wiki_changes(self, d['changes'])
+        elif d['type'] == 'ldap':
+            with self.ldap_lock:
+                return apply_ldap_changes(self, d['changes'])
         elif d['type'] == 'forum':
             with self.forum_lock:
                 return apply_forum_changes(self, d['changes'])
         elif d['type'] == 'setpass':
+            with self.ldap_lock:
+                ldap_setpass(self, d['user'], d['pass'])
             with self.wiki_lock:
                 wiki_setpass(self, d['user'], d['pass'])
             with self.forum_lock:
