@@ -1,5 +1,11 @@
 {% extends "leden/base.html" %}
 
+{% block head %}
+<script src="{{ MEDIA_URL }}/leden/zxcvbn.js" type="text/javascript">
+</script>
+{{ block.super }}
+{% endblock %}
+
 {% block body %}
 <h1>Wachtwoord veranderen</h1>
 <form method="post" action="">
@@ -14,9 +20,51 @@
 	 {{form.old_password}} naar
 	{{form.new_password}}, ik zeg het nogmaals 
 	{{form.new_password_again}}, kunnen 
-	<input type="submit" value="veranderen?" /> 
+	<input type="submit" value="veranderen?" id="pwsubmit" /> 
 	</p>
+        <p id="pwstat">
+        </p>
 
 </form>
+
+<script type="text/javascript">
+        $('#{{form.new_password.auto_id}}').keyup(function(){
+                var res = zxcvbn($(this).val());
+                var text = null;
+                if (res.crack_time < 1)
+                        text = 'binnen een seconde';
+                else if (res.crack_time < 60)
+                        text = 'binnen een minuut';
+                else if (res.crack_time < 60*60)
+                        text = 'binnen een uur';
+                else if (res.crack_time < 60*60*24)
+                        text = 'binnen een dag';
+                else if (res.crack_time < 60*60*24*30)
+                        text = 'binnen een maand';
+                else if (res.crack_time < 60*60*24*356)
+                        text = 'binnen een jaar';
+                else if (res.crack_time < 60*60*24*356*10)
+                        text = 'binnen een decennium';
+                else if (res.crack_time < 60*60*24*356*100)
+                        text = 'binnen een eeuw';
+                else
+                        text = null;
+                
+                if (res.crack_time > 60*60*24*356*10) {
+                        $('#pwsubmit').prop('disabled', false);
+                        $('#pwstat').css('color', 'green');
+                } else {
+                        $('#pwsubmit').prop('disabled', true);
+                        $('#pwstat').css('color', 'red');
+                }
+
+
+                if (text !== null)
+                        $('#pwstat').html("Wachtwoord is te raden "
+                                                + text + ".");
+                else
+                        $('#pwstat').html("Wachtwoord is erg sterk!");
+        });
+</script>
 
 {% endblock %}
