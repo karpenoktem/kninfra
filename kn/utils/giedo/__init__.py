@@ -30,6 +30,7 @@ from kn.utils.giedo.forum import generate_forum_changes
 from kn.utils.giedo.unix import generate_unix_map
 from kn.utils.giedo.openvpn import create_openvpn_installer, create_openvpn_zip
 from kn.utils.giedo.siteagenda import update_site_agenda
+from kn.utils.giedo._ldap import generate_ldap_changes
 
 class Giedo(WhimDaemon):
     def __init__(self):
@@ -50,10 +51,14 @@ class Giedo(WhimDaemon):
                   ('mailman', self.daan, self._gen_mailman),
                   ('forum', self.daan, self._gen_forum),
                   ('unix', self.cilia, self._gen_unix),
-                  ('wiki', self.daan, self._gen_wiki))
+                  ('wiki', self.daan, self._gen_wiki),
+                  ('ldap', self.daan, self._gen_ldap))
         self.push_changes_event.set()
 
 
+    def _gen_ldap(self):
+        return {'type': 'ldap',
+                'changes': generate_ldap_changes(self)}
     def _gen_postfix(self):
         return {'type': 'postfix',
             'map': generate_postfix_map(self)}
