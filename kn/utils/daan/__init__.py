@@ -9,7 +9,7 @@ import json
 import os
 
 from kn.utils.whim import WhimDaemon
-from kn.utils.daan.postfix import set_postfix_map
+from kn.utils.daan.postfix import set_postfix_map, set_postfix_slm_map
 from kn.utils.daan.mailman import apply_mailman_changes
 from kn.utils.daan.wiki import apply_wiki_changes, wiki_setpass
 from kn.utils.daan.forum import apply_forum_changes, forum_setpass
@@ -23,6 +23,7 @@ class Daan(WhimDaemon):
     def __init__(self):
         super(Daan, self).__init__(settings.DAAN_SOCKET)
         self.postfix_lock = threading.Lock()
+        self.postfix_slm_lock = threading.Lock()
         self.mailman_lock = threading.Lock()
         self.wiki_lock = threading.Lock()
         self.forum_lock = threading.Lock()
@@ -39,6 +40,9 @@ class Daan(WhimDaemon):
         if d['type'] == 'postfix':
             with self.postfix_lock:
                 return set_postfix_map(self, d['map'])
+        elif d['type'] == 'postfix-slm':
+            with self.postfix_slm_lock:
+                return set_postfix_slm_map(self, d['map'])
         elif d['type'] == 'mailman':
             with self.mailman_lock:
                 return apply_mailman_changes(self, d['changes'])

@@ -23,7 +23,8 @@ import kn.leden.entities as Es
 from kn.leden.date import now
 
 from kn.utils.giedo.db import update_db
-from kn.utils.giedo.postfix import generate_postfix_map
+from kn.utils.giedo.postfix import generate_postfix_map, \
+                                   generate_postfix_slm_map
 from kn.utils.giedo.mailman import generate_mailman_changes
 from kn.utils.giedo.wiki import generate_wiki_changes
 from kn.utils.giedo.forum import generate_forum_changes
@@ -48,6 +49,7 @@ class Giedo(WhimDaemon):
                 "villanet.pem"))
         self.ss_actions = (
                   ('postfix', self.daan, self._gen_postfix),
+                  ('postfix-slm', self.daan, self._gen_postfix_slm),
                   ('mailman', self.daan, self._gen_mailman),
                   ('forum', self.daan, self._gen_forum),
                   ('unix', self.cilia, self._gen_unix),
@@ -59,6 +61,9 @@ class Giedo(WhimDaemon):
     def _gen_ldap(self):
         return {'type': 'ldap',
                 'changes': generate_ldap_changes(self)}
+    def _gen_postfix_slm(self):
+        return {'type': 'postfix-slm',
+            'map': generate_postfix_slm_map(self)}
     def _gen_postfix(self):
         return {'type': 'postfix',
             'map': generate_postfix_map(self)}

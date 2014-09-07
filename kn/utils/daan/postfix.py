@@ -2,8 +2,15 @@ import logging
 
 import os.path
 
-from kn.settings import POSTFIX_VIRTUAL_MAP
+from kn.settings import POSTFIX_VIRTUAL_MAP, POSTFIX_SLM_MAP
 from subprocess import call
+
+def set_postfix_slm_map(daan, tbl):
+    # TODO check whether the entries are valid and within karpenoktem.nl!
+    with open(POSTFIX_SLM_MAP, 'w') as f:
+        for k, v in tbl.iteritems():
+            f.write("%s %s\n" % (k, ', '.join(v)))
+    call(['postmap', POSTFIX_SLM_MAP])
 
 def set_postfix_map(daan, tbl):
     # TODO check whether the entries are valid and within karpenoktem.nl!
