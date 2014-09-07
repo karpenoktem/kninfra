@@ -117,6 +117,7 @@ CILIA_SOCKET = '/var/run/infra/S-cilia'
 USERNAME_CHARS = 'qwertyuiopasdfghjklzxcvbnm123456789-'
 
 POSTFIX_VIRTUAL_MAP = '/etc/postfix/virtual/kninfra_maps'
+POSTFIX_SLM_MAP = '/etc/postfix/virtual/kninfra_slm_maps'
 INFRA_UID = 1002
 
 PHOTOS_DIR = '/var/fotos'
