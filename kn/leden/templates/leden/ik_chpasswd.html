@@ -16,11 +16,11 @@
 	<p> Probeer het nog eens? </p>
 	{% endif %}
 
-	<p>Lieve website, zou je mijn oude wachtwoord
-	 {{form.old_password}} naar
-	{{form.new_password}}, ik zeg het nogmaals 
-	{{form.new_password_again}}, kunnen 
-	<input type="submit" value="veranderen?" id="pwsubmit" /> 
+	<p>Lieve website, zou je mijn oude wachtwoord van:<br />
+	{{form.old_password}}<br />
+	naar: <br />{{form.new_password}},<br />
+	ik zeg het nogmaals: <br />{{form.new_password_again}},<br />
+	kunnen <input type="submit" value="veranderen?" id="pwsubmit" /> 
 	</p>
         <p id="pwstat">
         </p>
