@@ -1,12 +1,16 @@
 {% extends "static/base.html" %}
 {% load short_agenda %}
 
-{% block head %}
+{% block styles %}
 {{ block.super }}
 <link rel="stylesheet"
   href="{% url style-agenda %}" />
 <link rel="stylesheet"
   href="{{ MEDIA_URL }}/static/style/home.css" />
+{% endblock styles %}
+
+{% block head %}
+{{ block.super }}
 <script type="text/javascript"
   src="{{ MEDIA_URL }}/static/jquery.nivo.slider.pack.js"></script>
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/static/style/nivo-slider.css" />

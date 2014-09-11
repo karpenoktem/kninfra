@@ -1,10 +1,10 @@
 {% extends "base/bare.html" %}
 
-{% block head %}
+{% block styles %}
 {{ block.super }}
 <link rel="stylesheet"
   href="{{ MEDIA_URL }}/static/style/introPoster2013.css" />
-{% endblock %}
+{% endblock styles %}
 
 {% block body %}
 <a href="{% url home %}" title="Naar de website" />

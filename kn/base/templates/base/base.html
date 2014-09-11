@@ -2,11 +2,11 @@
 
 {% load base %}
 
-{% block head %}
+{% block styles %}
 {{ block.super }}
 <link href="{% url style-base %}"
 	rel="stylesheet" type="text/css" />
-{% endblock %}
+{% endblock styles %}
 
 {% block header %}
 {{ block.super }}
