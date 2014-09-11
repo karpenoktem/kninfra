@@ -5,10 +5,14 @@
 		{% block head %}
 		<title>{% block title %}ASV Karpe Noktem{% endblock %}</title>
 		<meta name="viewport" content="width=device-width"/>
+		{% block styles %}
+		<link rel="stylesheet" type="text/css"
+			href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css" />
+		<link href="{% url style-bare %}"
+			rel="stylesheet" type="text/css" />
+		{% endblock styles %}
 		<script type="text/javascript"
-                       src="{{ MEDIA_URL }}/base/jquery-1.11.1.min.js"></script>
-                <link rel="stylesheet" type="text/css"
-                        href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css" />
+                        src="{{ MEDIA_URL }}/base/jquery-1.11.1.min.js"></script>
                 <script type="text/javascript"
                         src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js">
                 </script>
@@ -16,8 +20,6 @@
                         src="{{ MEDIA_URL }}/base/jquery.cookie.js"></script>
 		<script type="text/javascript"
 			src="{{ MEDIA_URL }}/base/common.js"></script>
-		<link href="{% url style-bare %}"
-			rel="stylesheet" type="text/css" />
 		<link rel="icon" href="{{ MEDIA_URL }}/base/favicon.ico" />
 		<script type="text/javascript">
 		  var _gaq = _gaq || [];
