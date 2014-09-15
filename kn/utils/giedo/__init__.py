@@ -136,7 +136,10 @@ class Giedo(WhimDaemon):
         todo_event = threading.Event()
 
         def _sync_action(func, *args):
-            func(*args)
+            try:
+                func(*args)
+            except Exception as e:
+                logging.exception("Uncaught exception")
             with todo_lock:
                 todo[0] -= 1
                 if todo[0] == 0:
