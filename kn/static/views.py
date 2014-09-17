@@ -18,6 +18,7 @@ def home(request):
             {'slideshow_images': _slideshow_images},
             context_instance=RequestContext(request))
 
+# legacy URL redirect view
 def hink_stap(request, name):
     return redirect(settings.EXTERNAL_URLS[name], permanent=True)
 
