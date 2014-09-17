@@ -88,6 +88,13 @@ BASE_URL = 'https://karpenoktem.nl'
 SMOELEN_PHOTOS_PATH = 'smoelen'
 USER_PHOTOS_URL = 'http://karpenoktem.nl/fotos/?search_tag=%s'
 SMOELEN_WIDTH = 300
+EXTERNAL_URLS = {
+    'fotos-pdn': 'https://karpenoktem.nl/fotos/index.php?album=pdn',
+    'fotos':     'https://karpenoktem.nl/fotos/',
+    'stukken':   'https://karpenoktem.nl/groups/leden/',
+    'wiki':      'https://karpenoktem.nl/wiki/Hoofdpagina',
+    'forum':     'https://karpenoktem.nl/forum/',
+}
 
 # moderation & mailman
 MAILDOMAIN = 'karpenoktem.nl'

@@ -114,23 +114,9 @@ urlpatterns = patterns('',
             {'template': 'static/intro2010.html'},
             name='intro2010'),
 
-    # Forwards
-    # TODO make configurable for khandhas
-    url(r'^hink-stap/fotos-pdn/?$', generic.simple.redirect_to,
-            {'url': '/fotos/index.php?album=pdn'},
-            name='fotos-pdn'),
-    url(r'^hink-stap/fotos/?$', generic.simple.redirect_to,
-            {'url': '/fotos'},
-            name='fotos'),
-    url(r'^hink-stap/stukken/?$', generic.simple.redirect_to,
-            {'url': '/groups/leden'},
-            name='stukken'),
-    url(r'^hink-stap/wiki/?$', generic.simple.redirect_to,
-            {'url': '/wiki'},
-            name='wiki'),
-    url(r'^hink-stap/forum/?$', generic.simple.redirect_to,
-            {'url': '/forum'},
-            name='forum'),
+    # legacy redirect URLs
+    url(r'^hink-stap/(?P<name>fotos-pdn|fotos|wiki|forum|stukken)$',
+            views.hink_stap),
 
     # Backwards compatibility
     url(r'^img/(?P<subdir>.*)', direct_to_folder,

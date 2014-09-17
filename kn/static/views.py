@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 
 import os.path
 
@@ -17,6 +17,9 @@ def home(request):
     return render_to_response('static/home.html',
             {'slideshow_images': _slideshow_images},
             context_instance=RequestContext(request))
+
+def hink_stap(request, name):
+    return redirect(settings.EXTERNAL_URLS[name], permanent=True)
 
 
 # vim: et:sta:bs=2:sw=4:

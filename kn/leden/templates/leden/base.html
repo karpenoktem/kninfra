@@ -1,5 +1,7 @@
 {% extends "base/base.html" %}
 
+{% load base %}
+
 {% block submenu %}
 <div id="submenu-wrapper">
     <a id="submenu-button" href="">&nbsp;</a>
@@ -33,7 +35,7 @@
         </li>
         {% endif %}
         {% if "fotocie" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
-        <li><a href="{% url fotos %}">Foto's</a>
+        <li><a href="{% external_url "fotos" %}">Foto's</a>
             <ul>
                 <li><a href="{% url fotoadmin-move %}">Foto's verplaatsen</a></li>
             </ul>
@@ -48,6 +50,9 @@
             </ul>
             {% endif %}
         </li>
+
+        <li><a href="{% external_url "wiki" %}">Wiki</a></li>
+        <li><a href="{% external_url "stukken" %}">Stukken</a></li>
     </ul>
 
     <input type="hidden" id="searchfield" />

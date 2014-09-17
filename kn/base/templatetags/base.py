@@ -40,4 +40,9 @@ def header():
     pick = random.choice(_header_images)
     return os.path.join(settings.MEDIA_URL, 'base/headers', pick)
 
+# easily look up external URLs defined in settings.py
+@register.simple_tag
+def external_url(name):
+    return settings.EXTERNAL_URLS[name]
+
 # vim: et:sta:bs=2:sw=4:
