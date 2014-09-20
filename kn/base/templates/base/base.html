@@ -5,8 +5,25 @@
 {% block styles %}
 {{ block.super }}
 <link href="{% url style-base %}"
-	rel="stylesheet" type="text/css" />
+    rel="stylesheet" type="text/css" />
 {% endblock styles %}
+
+{% block head %}
+{{ block.super }}
+<script>
+  function loadDeferredCSS() {
+    var links = document.querySelectorAll('link[deferred-href]');
+    for (var i=0; i<links.length; i++) {
+      links[i].setAttribute('href', links[i].getAttribute('deferred-href'));
+    }
+  }
+  if (window.addEventListener) {
+    window.addEventListener('DOMContentLoaded', loadDeferredCSS);
+  } else {
+    window.attachEvent('onload', loadDeferredCSS);
+  }
+</script>
+{% endblock head %}
 
 {% block header %}
 {{ block.super }}
