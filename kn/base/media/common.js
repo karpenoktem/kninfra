@@ -75,23 +75,6 @@ function checkGiedoSync(goal) {
         });
 }
 
-function getCsrftoken() {
-    if ($.cookie('csrftoken')) {
-        return $.cookie('csrftoken');
-    } else {
-        // http://stackoverflow.com/a/12502559/559350
-        // generate 32 pseudo-random characters
-        var csrftoken = '';
-        for (var i=0; i<4; i++) {
-            csrftoken += Math.random().toString(36).slice(2, 10);
-        }
-        // emulate default Django behavior
-        // https://github.com/django/django/blob/master/django/middleware/csrf.py#L182
-        $.cookie('csrftoken', csrftoken, {path: '/', expires: 7*52})
-        return csrftoken;
-    }
-}
-
 function isMobile() {
     // use matchMedia if available
     return 'ontouchstart' in document.documentElement && (window.matchMedia ? window.matchMedia('(max-device-width: 800px)') : true);
@@ -141,9 +124,7 @@ $(document).ready(function() {
         fixHeader();
     }
 
-    $('#csrfmiddlewaretoken').val(getCsrftoken());
-
-    $(document.getElementById('loginButtonLink')).bind('click', function (event) {
+    $('#loginButtonLink').bind('click', function (event) {
         var loginButton = $('#loginButton');
         loginButton.toggleClass('open');
         event.preventDefault();
