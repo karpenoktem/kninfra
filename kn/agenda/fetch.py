@@ -44,7 +44,7 @@ def fetch(cid=None):
     return r
 
 if __name__ == '__main__':
-    from kn.agenda.entitities import update
+    from kn.agenda.entities import update
     update(fetch())
 
 # vim: et:sta:bs=2:sw=4:
