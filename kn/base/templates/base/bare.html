@@ -27,6 +27,18 @@
 		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		  })();
 
+		  function loadDeferredCSS() {
+		    var links = document.querySelectorAll('link[deferred-href]');
+		    for (var i=0; i<links.length; i++) {
+		      links[i].setAttribute('href', links[i].getAttribute('deferred-href'));
+		    }
+		  }
+		  if (window.addEventListener) {
+		    window.addEventListener('DOMContentLoaded', loadDeferredCSS);
+		  } else {
+		    window.attachEvent('onload', loadDeferredCSS);
+		  }
+
 		  var csrf_token = "{{ csrf_token }}";
 		  var leden_api_url = "{% url leden-api %}";
 		</script>
