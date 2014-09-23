@@ -144,10 +144,6 @@ def by_name(n):
     """ Finds an entity by name """
     return entity(ecol.find_one({'names': n}))
 
-def by_humanName(n):
-    """ Finds an entity by one of its humanNames """
-    return entity(ecol.find_one({'humanNames': {'human': n}}))
-
 def by_id(n):
     """ Finds an entity by id """
     return entity(ecol.find_one({'_id': _id(n)}))
@@ -157,10 +153,20 @@ def by_study(study):
     for m in ecol.find({'studies.study': _id(study)}):
         yield entity(m)
 
+def by_studyName(n):
+    """ Finds a study by its humanName restricted by type 'study' """
+    return entity(ecol.find_one({'humanNames': {'human': n},
+        'types' : [ 'study' ]}))
+
 def by_institute(institute):
     """ Finds entities by studies.insitute """
     for m in ecol.find({'studies.institute': _id(institute)}):
         yield entity(m)
+
+def by_instituteName(n):
+    """ Finds an institute by its humanName restricted by type 'institute' """
+    return entity(ecol.find_one({'humanNames': {'human': n},
+        'types' : [ 'institute' ]}))
 
 def get_years_of_birth():
     """ Returns the years of birth.
@@ -1033,7 +1039,7 @@ class Institute(Entity):
     @permalink
     def get_absolute_url(self):
         if self.name:
-            return ('institute-by-humanName', (),
+            return ('institute-by-instituteName', (),
                     {'name': self.name})
         return ('institute-by-id', (), {'_id': self.id})
 class Brand(Entity):

@@ -57,8 +57,10 @@ def user_list(request, page):
 def entity_detail(request, name=None, _id=None, type=None):
     if name is not None:
         e = Es.by_name(name)
-        if e is None:
-            e = Es.by_humanName(name)
+        if e is None and type is 'institute':
+            e = Es.by_instituteName(name)
+        if e is None and type is 'study':
+            e = Es.by_studyName(name)
     else:
         e = Es.by_id(_id)
     if e is None:
@@ -540,7 +542,7 @@ def secr_add_institute(request):
                         unicode(g.humanName)))
             giedo.sync_async(request)
             request.user.push_message("Instituut toegevoegd.")
-            return HttpResponseRedirect(reverse('institute-by-humanName', args=(nm,)))
+            return HttpResponseRedirect(reverse('institute-by-instituteName', args=(nm,)))
     else:
         form = AddInstituteForm()
     return render_to_response('leden/secr_add_institute.html', {'form': form},
@@ -564,7 +566,7 @@ def secr_add_study(request):
                         unicode(g.humanName)))
             giedo.sync_async(request)
             request.user.push_message("Studie toegevoegd.")
-            return HttpResponseRedirect(reverse('study-by-humanName', args=(nm,)))
+            return HttpResponseRedirect(reverse('study-by-studyName', args=(nm,)))
     else:
         form = AddStudyForm()
     return render_to_response('leden/secr_add_study.html', {'form': form},
