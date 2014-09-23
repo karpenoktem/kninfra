@@ -84,9 +84,11 @@ class AddGroupForm(forms.Form):
 
 class AddInstituteForm(forms.Form):
     humanName = forms.CharField(label="Naam van het instituut")
+    description = forms.CharField(label="Beschrijving van het instituut")
 
 class AddStudyForm(forms.Form):
     humanName = forms.CharField(label="Naam van de studie")
+    description = forms.CharField(label="Beschrijving van de studie")
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput())

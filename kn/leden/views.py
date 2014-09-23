@@ -533,9 +533,11 @@ def secr_add_institute(request):
         if form.is_valid():
             fd = form.cleaned_data
             nm = fd['humanName']
+            ds = fd['description']
             g = Es.Institute({
                 'types': ['institute'],
-                'humanNames': [{'human': nm}]})
+                'humanNames': [{'human': nm}],
+                'description': ds})
             logging.info("Added institute %s" % nm)
             g.save()
             Es.notify_informacie("Het instituut %s is aangemaakt." % (
@@ -557,9 +559,11 @@ def secr_add_study(request):
         if form.is_valid():
             fd = form.cleaned_data
             nm = fd['humanName']
+            ds = fd['description']
             g = Es.Institute({
                 'types': ['study'],
-                'humanNames': [{'human': nm}]})
+                'humanNames': [{'human': nm}],
+                'description': ds})
             logging.info("Added study %s" % nm)
             g.save()
             Es.notify_informacie("De studie %s is aangemaakt." % (
