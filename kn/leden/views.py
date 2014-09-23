@@ -540,8 +540,7 @@ def secr_add_institute(request):
                 'description': ds})
             logging.info("Added institute %s" % nm)
             g.save()
-            Es.notify_informacie("Het instituut %s is aangemaakt." % (
-                        unicode(g.humanName)))
+            Es.notify_informacie('addInstitute', entity=g)
             giedo.sync_async(request)
             request.user.push_message("Instituut toegevoegd.")
             return HttpResponseRedirect(reverse('institute-by-instituteName', args=(nm,)))
@@ -566,8 +565,7 @@ def secr_add_study(request):
                 'description': ds})
             logging.info("Added study %s" % nm)
             g.save()
-            Es.notify_informacie("De studie %s is aangemaakt." % (
-                        unicode(g.humanName)))
+            Es.notify_informacie('addStudy', entity=g)
             giedo.sync_async(request)
             request.user.push_message("Studie toegevoegd.")
             return HttpResponseRedirect(reverse('study-by-studyName', args=(nm,)))

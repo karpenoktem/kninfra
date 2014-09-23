@@ -12,6 +12,10 @@ De volgende wijzigingen hebben plaatsgevonden aan de ledenadministratie:
   * {{ nt.entity.humanName }} is ingeschreven als lid\
 {% elif nt.event == 'addgroup' %}
   * De groep {{ nt.entity.humanName }} is opgericht\
+{% elif nt.event == 'addStudy' %}
+  * De studie {{ nt.entity.humanName }} is aangemaakt\
+{% elif nt.event == 'addInstitute' %}
+  * Het instituut {{ nt.entity.humanName }} is aangemaakt\
 {% elif nt.event == 'relation_begin' %}
   * {{ nt.rel.who.humanName }} is nu {% filter force_escape %}{% firstof nt.rel.how.humanName "lid" %}{% endfilter %} {{ nt.rel.with.humanName.genitive }}\
 {% elif nt.event == 'relation_begun' %}
@@ -38,6 +42,10 @@ Het Smoelenboek
 	<li><a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}">{{ nt.entity.humanName }}</a> is ingeschreven als lid</li>\
 {% elif nt.event == 'addgroup' %}
 	<li>De groep <a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}">{{ nt.entity.humanName }}</a> is opgericht</li>\
+{% elif nt.event == 'addStudy' %}
+	<li>De studie <a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}">{{ nt.entity.humanName }}</a> is aangemaakt</li>\
+{% elif nt.event == 'addInstitute' %}
+	<li>Het instituut <a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}">{{ nt.entity.humanName }}</a> is aangemaakt</li>\
 {% elif nt.event == 'relation_begin' %}
 	<li><a href="{{ BASE_URL }}{{ nt.rel.who.get_absolute_url }}">{{ nt.rel.who.humanName}}</a> is nu {% if nt.rel.how %}<a href="{{ BASE_URL }}{{ nt.rel.how.get_absolute_url }}">{{ nt.rel.how.humanName }}</a>{% else %}lid{% endif %} {{ nt.rel.with.humanName.genitive_prefix }} <a href="{{ BASE_URL }}{{ nt.rel.with.get_absolute_url }}">{{ nt.rel.with.humanName }}</a></li>\
 {% elif nt.event == 'relation_begun' %}
