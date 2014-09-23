@@ -40,9 +40,8 @@
 	{% endif %}{{ name  }}{% endfor %}
 	</dd>
 	<dt>E-Mailadres</dt>
-	<dd>
-        {{ object.canonical_email }}
-	</dd>
+        <dd><a href="mailto:{{ object.canonical_email }}">
+                {{ object.canonical_email }}</a></dd>
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names %}
         <dt>Achterliggend e-mailadres<dt>
         <dd>
