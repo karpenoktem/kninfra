@@ -482,9 +482,9 @@ def get_open_notes():
 
 def notify_informacie(event, entity=None, relation=None):
     data = {'when': now(), 'event': event}
-    if relation:
+    if relation is not None:
         data['rel'] = _id(relation)
-    elif entity:
+    elif entity is not None:
         data['entity'] = _id(entity)
     else:
         raise ValueError, 'supply either entity or relation'
