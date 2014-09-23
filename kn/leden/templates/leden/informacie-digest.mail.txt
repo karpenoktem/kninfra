@@ -1,16 +1,55 @@
-{% block subject %}
+{% block subject %}\
 Wijzigingen aan de ledenadministratie
-{% endblock %}
+{% endblock %}\
 
 {% block plain %}
 Best InformaCie-lid,
 
 De volgende wijzigingen hebben plaatsgevonden aan de ledenadministratie:
-
+\
 {% for nt in ntfs %}\
-  * {{ nt.text }}
+{% if nt.event == 'adduser' %}
+  * {{ nt.entity.humanName }} is ingeschreven als lid\
+{% elif nt.event == 'addgroup' %}
+  * De groep {{ nt.entity.humanName }} is opgericht\
+{% elif nt.event == 'relation_begin' %}
+  * {{ nt.rel.who.humanName }} is nu {% filter force_escape %}{% firstof nt.rel.how.humanName "lid" %}{% endfilter %} {{ nt.rel.with.humanName.genitive }}\
+{% elif nt.event == 'relation_begun' %}
+  * {{ nt.rel.who.humanName }} heeft zich ingeschreven als {% filter force_escape %}{% firstof nt.rel.how.humanName "lid" %}{% endfilter %} {{ nt.rel.with.humanName.genitive }}\
+{% elif nt.event == 'relation_end' %}
+  * {{ nt.rel.who.humanName }} is geen {% filter force_escape %}{% firstof nt.rel.how.humanName "lid" %}{% endfilter %} meer {{ nt.rel.with.humanName.genitive }}\
+{% elif nt.event == 'relation_ended' %}
+  * {{ nt.rel.who.humanName }} heeft zich uitgeschreven als {% filter force_escape %}{% firstof nt.rel.how.humanName "lid" %}{% endfilter %} {{ nt.rel.with.humanName.genitive }}\
+{% endif %}\
 {% endfor %}
 
 Met geautomatiseerde groet,
 Het Smoelenboek
+{% endblock %}
+
+{% block html %}
+<p>Best InformaCie-lid,</p>
+
+<p>De volgende wijzigingen hebben plaatsgevonden aan de ledenadministratie:</p>
+
+<ul>\
+{% for nt in ntfs %}\
+{% if nt.event == 'adduser' %}
+	<li><a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}">{{ nt.entity.humanName }}</a> is ingeschreven als lid</li>\
+{% elif nt.event == 'addgroup' %}
+	<li>De groep <a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}">{{ nt.entity.humanName }}</a> is opgericht</li>\
+{% elif nt.event == 'relation_begin' %}
+	<li><a href="{{ BASE_URL }}{{ nt.rel.who.get_absolute_url }}">{{ nt.rel.who.humanName}}</a> is nu {% if nt.rel.how %}<a href="{{ BASE_URL }}{{ nt.rel.how.get_absolute_url }}">{{ nt.rel.how.humanName }}</a>{% else %}lid{% endif %} {{ nt.rel.with.humanName.genitive_prefix }} <a href="{{ BASE_URL }}{{ nt.rel.with.get_absolute_url }}">{{ nt.rel.with.humanName }}</a></li>\
+{% elif nt.event == 'relation_begun' %}
+	<li><a href="{{ BASE_URL }}{{ nt.rel.who.get_absolute_url }}">{{ nt.rel.who.humanName}}</a> heeft zich ingeschreven als {% if nt.rel.how %}<a href="{{ BASE_URL }}{{ nt.rel.how.get_absolute_url }}">{{ nt.rel.how.humanName }}</a>{% else %}lid{% endif %} {{ nt.rel.with.humanName.genitive_prefix }} <a href="{{ BASE_URL }}{{ nt.rel.with.get_absolute_url }}">{{ nt.rel.with.humanName }}</a></li>\
+{% elif nt.event == 'relation_end' %}
+	<li><a href="{{ BASE_URL }}{{ nt.rel.who.get_absolute_url }}">{{ nt.rel.who.humanName}}</a> is geen {% if nt.rel.how %}<a href="{{ BASE_URL }}{{ nt.rel.how.get_absolute_url }}">{{ nt.rel.how.humanName }}</a>{% else %}lid{% endif %} meer {{ nt.rel.with.humanName.genitive_prefix }} <a href="{{ BASE_URL }}{{ nt.rel.with.get_absolute_url }}">{{ nt.rel.with.humanName }}</a></li>\
+{% elif nt.event == 'relation_ended' %}
+	<li><a href="{{ BASE_URL }}{{ nt.rel.who.get_absolute_url }}">{{ nt.rel.who.humanName}}</a> heeft zich uitgeschreven als {% if nt.rel.how %}<a href="{{ BASE_URL }}{{ nt.rel.how.get_absolute_url }}">{{ nt.rel.how.humanName }}</a>{% else %}lid{% endif %} {{ nt.rel.with.humanName.genitive_prefix }} <a href="{{ BASE_URL }}{{ nt.rel.with.get_absolute_url }}">{{ nt.rel.with.humanName }}</a></li>\
+{% endif %}\
+{% endfor %}
+</ul>
+
+<p>Met geautomatiseerde groet,<br/>
+Het Smoelenboek</p>
 {% endblock %}
