@@ -61,6 +61,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.contrib.messages.context_processors.messages",
     "kn.base.context_processors.bg",
+    "kn.base.context_processors.base_url",
 )
 TEMPLATE_DIRS = ()
 AUTHENTICATION_BACKENDS = (
