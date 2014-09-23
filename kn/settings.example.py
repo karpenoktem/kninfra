@@ -61,6 +61,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.contrib.messages.context_processors.messages",
     "kn.base.context_processors.bg",
+    "kn.base.context_processors.base_url",
 )
 TEMPLATE_DIRS = ()
 AUTHENTICATION_BACKENDS = (
@@ -85,6 +86,7 @@ BASE_BGS = ['antal', 'park', 'band', 'weekend']
 
 # smoelen
 BASE_URL = 'https://karpenoktem.nl'
+ABSOLUTE_MEDIA_URL = BASE_URL + MEDIA_URL
 SMOELEN_PHOTOS_PATH = 'smoelen'
 USER_PHOTOS_URL = 'http://karpenoktem.nl/fotos/?search_tag=%s'
 SMOELEN_WIDTH = 300
