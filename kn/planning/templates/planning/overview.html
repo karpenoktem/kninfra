@@ -1,7 +1,7 @@
 {% extends "leden/base.html" %}
 {% load base %}
 
-{% block styles %}
+{% block styles-inline %}
 {{ block.super }}
 <style type="text/css">
 #planningOverview-wrapper {
@@ -16,7 +16,7 @@
     text-align: center;
 }
 </style>
-{% endblock styles %}
+{% endblock styles-inline %}
 
 {% block body %}
 <div id="planningOverview-wrapper">

@@ -1,11 +1,11 @@
 {% extends "base/base.html" %}
 {% load base %}
 
-{% block styles %}
+{% block styles-inline %}
 {{ block.super }}
 <link href="{{ MEDIA_URL }}/reglementen/regl.css"
 	rel="stylesheet" type="text/css" />
-{% endblock styles %}
+{% endblock styles-inline %}
 
 {% block body %}
 <h1>{{ version.reglement.humanName }}</h1>

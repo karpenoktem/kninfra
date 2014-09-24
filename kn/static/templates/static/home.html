@@ -5,9 +5,13 @@
 {{ block.super }}
 <link rel="stylesheet"
   href="{{ MEDIA_URL }}/agenda/agenda.css" />
+{% endblock styles %}
+
+{% block styles-inline %}
+{{ block.super }}
 <link rel="stylesheet"
   href="{{ MEDIA_URL }}/static/style/home.css" />
-{% endblock styles %}
+{% endblock styles-inline %}
 
 {% block head %}
 {{ block.super }}

@@ -2,11 +2,11 @@
 {% load base %}
 <!-- TODO stub -->
 
-{% block styles %}
+{% block styles-inline %}
 {{ block.super }}
 <link href="{{ MEDIA_URL }}/leden/user_detail.css"
 	rel="stylesheet" type="text/css" />
-{% endblock styles %}
+{% endblock styles-inline %}
 
 {% block body %}
 {% if hasPhoto %}

@@ -8,12 +8,17 @@
 		<meta property="og:image" content="{{ ABSOLUTE_MEDIA_URL }}/base/logo-og.png"/>
 		<meta property="og:locale" content="nl_NL"/>
 		<meta property="og:site_name" content="ASV Karpe Noktem"/>
+		{% load compress %}
+		{% compress css %}
 		{% block styles %}
 		<link href="{{ MEDIA_URL }}/base/bare.css"
 			rel="stylesheet" type="text/css" />
 		{% endblock styles %}
+		{% endcompress %}
+		{% compress css inline %}
 		{% block styles-inline %}
 		{% endblock %}
+		{% endcompress %}
 		<script type="text/javascript"
                         src="{{ MEDIA_URL }}/base/jquery-1.11.1.min.js"></script>
                 </script>

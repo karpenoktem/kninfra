@@ -2,14 +2,10 @@
 
 {% load base %}
 
-{% block styles %}
+{% block head %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css"
     deferred-href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css"/>
-{% endblock styles %}
-
-{% block head %}
-{{ block.super }}
 <script type="text/javascript"
         src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js" defer></script>
 {% endblock head %}
