@@ -4,6 +4,7 @@ import kn.leden.entities as Es
 
 import subprocess
 import pyx
+import sys
 
 def generate():
     ret = []
@@ -37,7 +38,8 @@ def main():
     g.plot(pyx.graph.data.points(ret,x=1,y=2),
                 [pyx.graph.style.symbol(size=0.03,
                         symbol=pyx.graph.style.symbol.plus)])
-    g.writePDFfile('test')
+    g.writePDFfile('member-graph' if len(sys.argv) <= 1
+                            else sys.argv[1])
 
 if __name__ == '__main__':
     main()
