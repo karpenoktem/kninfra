@@ -423,6 +423,7 @@ def secr_add_user(request):
             fd = form.cleaned_data
             nm = find_name_for_user(fd['first_name'],
                         fd['last_name'])
+            # First, create the entity.
             u = Es.User({
                 'types': ['user'],
                 'names': [nm],
@@ -463,17 +464,29 @@ def secr_add_user(request):
                 })
             logging.info("Added user %s" % nm)
             u.save()
+            # Then, add the relations.
             Es.add_relation(u, Es.id_by_name('leden',
                             use_cache=True),
                     _from=date_to_dt(fd['dateJoined']))
             for l in fd['addToList']:
                 Es.add_relation(u, Es.id_by_name(l, use_cache=True),
                     _from=now())
+            # Let giedo synch. to create the e-mail adresses, unix user, etc.
+            # TODO use giedo.async() and let giedo send the welcome e-mail
+            giedo.sync()
+            # Create a new password and send it via e-mail
+            pwd = pseudo_randstr()
+            u.set_password(pwd)
+            giedo.change_password(str(u.name), pwd, pwd)
+            render_then_email("leden/set-password.mail.txt",
+                        u.canonical_full_email, {
+                            'user': u,
+                            'password': pwd})
+            # Send the welcome e-mail
+            render_then_email("leden/welcome.mail.txt",
+                        u.canonical_full_email, {
+                            'u': u})
             Es.notify_informacie('adduser', entity=u._id)
-            giedo.sync_async(request)
-            request.user.push_message("Gebruiker toegevoegd. "+
-                "Let op: hij heeft geen wachtwoord "+
-                "en hij moet nog gemaild worden.")
             return HttpResponseRedirect(reverse('user-by-name',
                     args=(nm,)))
     else:
