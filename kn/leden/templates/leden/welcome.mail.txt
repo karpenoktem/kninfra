@@ -16,7 +16,7 @@ overgenomen.  Kun je controleren of deze kloppen?
 
 Bij voorbaat dank,
 
- Astrid van Roosmalen
+  Jeffry Huntjens
 
 
 Personalia  {{ u.full_name }}
