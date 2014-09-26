@@ -1,36 +1,40 @@
-# vim: et:sta:bs=2:sw=4:
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.template import RequestContext
-from kn.base.text import humanized_enum
-from kn.base.mail import render_then_email
-from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
-from kn.leden.utils import find_name_for_user
-from kn.leden import giedo
-from kn.leden.mongo import _id
-from kn.leden.date import now, date_to_dt
-from kn.base.http import redirect_to_referer
-from kn import settings
-from kn.settings import DT_MIN, DT_MAX
-from kn.base._random import pseudo_randstr
-from django.shortcuts import render_to_response
-from django.contrib.auth.decorators import login_required
-from django.core.files.storage import default_storage
-from django.core.servers.basehttp import FileWrapper
-from django.core.paginator import Paginator, EmptyPage
-from django.core.urlresolvers import reverse
-from django.core.exceptions import PermissionDenied
-from os import path
-import re
 from itertools import chain
-import mimetypes
-from django.contrib.auth.views import redirect_to_login
-from kn import settings
 from hashlib import sha256
 from datetime import date
 from glob import glob
-import json
+from os import path
+
+import mimetypes
 import logging
 import Image
+import json
+import re
+
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import redirect_to_login
+from django.core.paginator import Paginator, EmptyPage
+from django.core.files.storage import default_storage
+from django.core.servers.basehttp import FileWrapper
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import render_to_response
+from django.core.urlresolvers import reverse
+from django.template import RequestContext
+
+from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
+from kn.leden.auth import login_or_basicauth_required
+from kn.leden.utils import find_name_for_user
+from kn.leden.date import now, date_to_dt
+from kn.leden.mongo import _id
+from kn.leden import giedo
+
+from kn.base._random import pseudo_randstr
+from kn.base.http import redirect_to_referer
+from kn.base.mail import render_then_email
+from kn.base.text import humanized_enum
+
+from kn.settings import DT_MIN, DT_MAX
+from kn import settings
 
 import kn.leden.entities as Es
 
@@ -95,11 +99,38 @@ def _entity_detail(request, e):
                     Es.date_to_year(r['until']))
         r['virtual'] = Es.relation_is_virtual(r)
     tags = [t.as_primary_type() for t in e.get_tags()]
+
+    # mapping of year => set of members
+    year_sets = {}
+    for r in rrelated:
+        year = r['until_year']
+        if year is None:
+            year = 'this'
+
+        if not year in year_sets:
+            year_sets[year] = set()
+        year_sets[year].add(r['who'])
+
+    year_counts = {}
+    for year in year_sets:
+        year_counts[year] = len(year_sets[year])
+
     ctx = {'related': related,
            'rrelated': rrelated,
+           'year_counts': year_counts,
            'now': now(),
            'tags': sorted(tags, Es.entity_cmp_humanName),
-           'object': e}
+           'object': e,
+           'chiefs': [],
+           'pipos': [] }
+    for r in rrelated:
+        if r['how'] and Es.relation_is_active(r):
+            if str(r['how'].name) == '!brand-hoofd':
+                r['hidden'] = True
+                ctx['chiefs'].append(r)
+            if str(r['how'].name) == '!brand-bestuurspipo':
+                r['hidden'] = True
+                ctx['pipos'].append(r)
     # Is request.user allowed to add (r)relations?
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):
@@ -123,7 +154,9 @@ def _user_detail(request, user):
             path.join(settings.SMOELEN_PHOTOS_PATH,
                     str(user.name)))
     ctx = _entity_detail(request, user)
-    ctx.update({'hasPhoto': hasPhoto,
+    ctx.update({
+            'hasPhoto': hasPhoto,
+            'photoWidth': settings.SMOELEN_WIDTH,
             'photosUrl': settings.USER_PHOTOS_URL % str(user.name)})
     return render_to_response('leden/user_detail.html', ctx,
             context_instance=RequestContext(request))
@@ -190,7 +223,20 @@ def _study_detail(request, study):
             context_instance=RequestContext(request))
 def _institute_detail(request, institute):
     ctx = _entity_detail(request, institute)
-    # TODO add followers in ctx
+    ctx['students'] = students = []
+    def _cmp(s1, s2):
+        r = Es.dt_cmp_until(s2['until'], s1['until'])
+        if r: return r
+        return cmp(s1['student'].humanName, s2['student'].humanName)
+    for student in Es.by_institute(institute):
+        for _study in student.studies:
+            if _study['institute'] != institute:
+                continue
+            students.append({'student': student,
+                             'from': _study['from'],
+                             'until': _study['until'],
+                             'study': _study['study']})
+    ctx['students'].sort(cmp=_cmp)
     return render_to_response('leden/institute_detail.html', ctx,
             context_instance=RequestContext(request))
 
@@ -224,8 +270,9 @@ def ik_chsmoel(request):
         raise ValueError, "Missing `smoel' in FILES"
     user = Es.by_id(request.POST['id'])
     img = Image.open(request.FILES['smoel'])
-    img = img.resize((settings.SMOELEN_WIDTH,
-        int(float(settings.SMOELEN_WIDTH) / img.size[0] * img.size[1])),
+    smoelen_width = settings.SMOELEN_WIDTH * 2
+    img = img.resize((smoelen_width,
+        int(float(smoelen_width) / img.size[0] * img.size[1])),
             Image.ANTIALIAS)
     img.save(default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
             str(user.name)) + ".jpg", 'w'), "JPEG")
@@ -425,6 +472,7 @@ def secr_add_user(request):
                 Es.add_relation(u, Es.id_by_name(l, use_cache=True),
                     _from=now())
             # Let giedo synch. to create the e-mail adresses, unix user, etc.
+            # TODO use giedo.async() and let giedo send the welcome e-mail
             giedo.sync()
             # Create a new password and send it via e-mail
             pwd = pseudo_randstr()
@@ -438,8 +486,9 @@ def secr_add_user(request):
             render_then_email("leden/welcome.mail.txt",
                         u.canonical_full_email, {
                             'u': u})
-            request.user.push_message("Gebruiker toegevoegd.")
-            return HttpResponseRedirect(reverse('user-by-name', args=(nm,)))
+            Es.notify_informacie('adduser', entity=u._id)
+            return HttpResponseRedirect(reverse('user-by-name',
+                    args=(nm,)))
     else:
         form = AddUserForm()
     return render_to_response('leden/secr_add_user.html',
@@ -475,7 +524,8 @@ def secr_add_group(request):
                 'tags': [_id(fd['parent'])]})
             logging.info("Added group %s" % nm)
             g.save()
-            giedo.sync()
+            Es.notify_informacie('addgroup', entity=g._id)
+            giedo.sync_async(request)
             request.user.push_message("Groep toegevoegd.")
             return HttpResponseRedirect(reverse('group-by-name', args=(nm,)))
     else:
@@ -491,7 +541,15 @@ def relation_end(request, _id):
     if not Es.user_may_end_relation(request.user, rel):
         raise PermissionDenied
     Es.end_relation(_id)
-    giedo.sync()
+
+    # Notify informacie
+    if request.user == rel['who']:
+        Es.notify_informacie('relation_ended', relation=_id)
+    else:
+        # TODO (rik) leave out 'als lid'
+        Es.notify_informacie('relation_end', relation=_id)
+
+    giedo.sync_async(request)
     return redirect_to_referer(request)
 
 @login_required
@@ -509,6 +567,7 @@ def relation_begin(request):
     if not Es.user_may_begin_relation(request.user, d['who'], d['with'],
                                                                 d['how']):
         raise PermissionDenied
+
     # Check whether such a relation already exists
     dt = now()
     ok = False
@@ -519,9 +578,18 @@ def relation_begin(request):
         ok = True
     if not ok:
         raise ValueError, "This relation already exists"
+
     # Add the relation!
-    Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
-    giedo.sync()
+    relation_id = Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
+
+    # Notify informacie
+    if request.user._id == d['who']:
+        Es.notify_informacie('relation_begun', relation=relation_id)
+    else:
+        # TODO (rik) leave out 'als lid'
+        Es.notify_informacie('relation_begin', relation=relation_id)
+
+    giedo.sync_async(request)
     return redirect_to_referer(request)
 
 @login_required
@@ -584,7 +652,7 @@ def ik_openvpn(request):
             {'password_incorrect': password_incorrect},
             context_instance=RequestContext(request))
 
-@login_required
+@login_or_basicauth_required
 def ik_openvpn_download(request, filename):
     m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', filename)
     m2 = re.match('^openvpn-config-([^.]+)\.zip$', filename)
@@ -602,3 +670,5 @@ def ik_openvpn_download(request, filename):
     response['Content-Length'] = default_storage.size(p)
     # XXX use ETags and returns 304's
     return response
+
+# vim: et:sta:bs=2:sw=4:

@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import subprocess
 
 def live_update_knsite(self):
@@ -18,3 +17,5 @@ def live_update_knfotos(self):
                 if subprocess.call(act, cwd=cwd) != 0:
                         return {'error': str(act)+ " failed"}
         return {'success': True}
+
+# vim: et:sta:bs=2:sw=4:

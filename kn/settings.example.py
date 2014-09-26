@@ -1,5 +1,5 @@
-# vim: et:sta:bs=2:sw=4:
 import datetime
+import locale
 
 # Base Django settings
 # ############################################################
@@ -10,26 +10,32 @@ ADMINS = (
     ('Bram Westerbaan', 'bramw@karpenoktem.nl'),
 )
 
-DATABASES = {} # We do not use Django's DB abstraction
+DATABASES = {'default': {}} # We do not use Django's DB abstraction
 MANAGERS = ADMINS
 TIME_ZONE = 'Europe/Amsterdam'
 LANGUAGE_CODE = 'nl-NL'
 SITE_ID = 1
 USE_I18N = True
-MEDIA_ROOT = '/home/infra/media/'
+MEDIA_ROOT = '/home/infra/repo/media/'
 MEDIA_URL = '/djmedia'
 DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@karpenoktem.nl>'
 
+# Globally set locale
+locale.setlocale(locale.LC_ALL, 'nl_NL.UTF-8')
+
 ROOT_URLCONF = 'kn.urls'
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
+    ('kn.base.template.SlashNewlineStrippingTemplateLoader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
 )
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'kn.leden.giedo.SyncStatusMiddleware',
 )
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -45,14 +51,17 @@ INSTALLED_APPS = (
     'kn.fotos',
     'kn.barco',
     'kn.planning',
+    'kn.static',
+    'kn.agenda',
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.auth",
+    "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.contrib.messages.context_processors.messages",
     "kn.base.context_processors.bg",
+    "kn.base.context_processors.base_url",
 )
 TEMPLATE_DIRS = ()
 AUTHENTICATION_BACKENDS = (
@@ -77,8 +86,17 @@ BASE_BGS = ['antal', 'park', 'band', 'weekend']
 
 # smoelen
 BASE_URL = 'https://karpenoktem.nl'
+ABSOLUTE_MEDIA_URL = BASE_URL + MEDIA_URL
 SMOELEN_PHOTOS_PATH = 'smoelen'
 USER_PHOTOS_URL = 'http://karpenoktem.nl/fotos/?search_tag=%s'
+SMOELEN_WIDTH = 300
+EXTERNAL_URLS = {
+    'fotos-pdn': 'https://karpenoktem.nl/fotos/index.php?album=pdn',
+    'fotos':     'https://karpenoktem.nl/fotos/',
+    'stukken':   'https://karpenoktem.nl/groups/leden/',
+    'wiki':      'https://karpenoktem.nl/wiki/Hoofdpagina',
+    'forum':     'https://karpenoktem.nl/forum/',
+}
 
 # moderation & mailman
 MAILDOMAIN = 'karpenoktem.nl'
@@ -108,10 +126,15 @@ CILIA_SOCKET = '/var/run/infra/S-cilia'
 USERNAME_CHARS = 'qwertyuiopasdfghjklzxcvbnm123456789-'
 
 POSTFIX_VIRTUAL_MAP = '/etc/postfix/virtual/kninfra_maps'
+POSTFIX_SLM_MAP = '/etc/postfix/virtual/kninfra_slm_maps'
 INFRA_UID = 1002
 
 PHOTOS_DIR = '/var/fotos'
 USER_DIRS = '/mnt/phassa/home/'
+
+LDAP_HOST = 'localhost'
+LDAP_BASE = 'ou=users,dc=karpenoktem,dc=nl'
+LDAP_USER = 'cn=giedo,dc=karpenoktem,dc=nl'
 
 # VPN related
 # ############################################################
@@ -140,3 +163,6 @@ CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
 VILLANET_SECRET_API_KEY = '' # CHANGE ME
 DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
                         '<root@khandhas.karpenoktem.nl>')
+LDAP_PASS = 'CHANGE ME'
+
+# vim: et:sta:bs=2:sw=4:

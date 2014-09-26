@@ -7,7 +7,7 @@ Zou je kunnen controleren of het klopt?
 
 Bij voorbaat dank,
 
- Astrid van Roosmalen
+ Els Lunding
 
 
 Personalia  {{ u.full_name }}
@@ -68,10 +68,10 @@ Personalia  {{ u.full_name }}
 {% else %}{% if a.until %}\
 [ tot {{ a.until.date }} ]
 {% endif %}{% endif %}{% endif %}\
-Straat            {{ a.street }} 
-      Nummer            {{ a.number }}
-      Postcode          {{ a.zip }}
-      Stad              {{ a.city }}
+       Straat            {{ a.street }} 
+       Nummer            {{ a.number }}
+       Postcode          {{ a.zip }}
+       Stad              {{ a.city }}
 {% endfor %}\
 
 {% if comms %}

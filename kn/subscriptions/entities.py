@@ -1,11 +1,9 @@
-# vim: et:sta:bs=2:sw=4:
 import decimal
 
 from django.db.models import permalink
 from django.utils.html import escape
 
 from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
-
 import kn.leden.entities as Es
 
 ecol = db['events']
@@ -143,3 +141,5 @@ class Subscription(SONWrapper):
     confirmed = son_property(('confirmed',), True)
     subscribedBy_notes = son_property(('subscribedBy_notes',))
     dateConfirmed = son_property(('dateConfirmed',))
+
+# vim: et:sta:bs=2:sw=4:

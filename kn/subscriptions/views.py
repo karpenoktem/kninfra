@@ -1,22 +1,23 @@
-# vim: et:sta:bs=2:sw=4:
 import decimal
 import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group
-import kn.subscriptions.entities as subscr_Es
-from kn.subscriptions.forms import get_add_event_form
-from kn.base.mail import render_then_email
-import kn.leden.entities as Es
-from kn.leden.mongo import _id
-import kn.utils.markdown
-from kn.leden.date import date_to_dt
-from kn.base.http import JsonHttpResponse
 from django.http import Http404, HttpResponseRedirect
 from django.core.mail import EmailMessage
 from django.core.exceptions import PermissionDenied
+
+from kn.base.mail import render_then_email
+from kn.base.http import JsonHttpResponse
+import kn.utils.markdown
+import kn.leden.entities as Es
+from kn.leden.mongo import _id
+from kn.leden.date import date_to_dt
+import kn.subscriptions.entities as subscr_Es
+from kn.subscriptions.forms import get_add_event_form
 
 @login_required
 def event_list(request):
@@ -229,7 +230,7 @@ def event_new_or_edit(request, edit=None):
         if e is None:
             raise Http404
         if not superuser and not request.user.is_related_with(e.owner) and \
-                not _id(e.owner) == request.user.id:
+                not _id(e.owner) == request.user._id:
             raise PermissionDenied
     AddEventForm = get_add_event_form(request.user, superuser)
     if request.method == 'POST':
@@ -245,7 +246,8 @@ def event_new_or_edit(request, edit=None):
                 prefix = str(request.user.name) + '-'
             else:
                 prefix = str(Es.by_id(fd['owner']).name) + '-'
-            if not superuser and not name.startswith(prefix):
+            if (not superuser and not name.startswith(prefix) and (
+                    edit is None or e.name != name)):
                 name = prefix + name
             d = {
                 'date': date_to_dt(fd['date']),
@@ -284,3 +286,5 @@ def event_new_or_edit(request, edit=None):
     ctx = {'form': form}
     return render_to_response('subscriptions/event_new_or_edit.html', ctx,
             context_instance=RequestContext(request))
+
+# vim: et:sta:bs=2:sw=4:

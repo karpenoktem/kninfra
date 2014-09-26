@@ -2,16 +2,9 @@
 {% load base %}
 {% block body %}
 <h1>Nieuwe activiteit</h1>
-<form method="post" action="?">
+<form method="post" action="?" class="top-aligned">
         {% csrf_token %}
-        <table>
-        <tbody>
-        {{ form.as_table }}
-        </tbody>
-        <tfoot>
-                <tr colspan="2"><td>
-                        <input type="submit" value="Maak aan!"/></td></tr>
-        </table>
-        </tfoot>
+        {{ form.as_p }}
+        <input type="submit" value="Maak aan!"/>
 </form>
 {% endblock %}

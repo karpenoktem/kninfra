@@ -1,15 +1,8 @@
 import django.template
+import django.template.loader
 import django.core.mail
 
 from kn import settings
-
-def get_template_convert_slashes(name):
-    """ Just like django.template.loader.get_template, but removes newlines
-            preceded by slashes. """
-    template, origin = django.template.loader.find_template(name)
-    template = template.replace('\\\n', '')
-    return django.template.loader.get_template_from_string(template,
-                                                            origin, name)
 
 def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
                         reply_to=None):
@@ -22,7 +15,7 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
     if isinstance(bcc, basestring):
         bcc = [bcc]
     # Render template
-    template = get_template_convert_slashes(template_name)
+    template = django.template.loader.get_template(template_name)
     rendered_nodes = {}
     ctx['BASE_URL'] = settings.BASE_URL
     context = django.template.Context(ctx)
@@ -36,6 +29,7 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
         raise KeyError, "Missing subject block"
     if not 'plain' in rendered_nodes:
         raise KeyError, "Missing plain block"
+
     # Set up e-mail
     headers = {}
     if cc:
@@ -45,12 +39,21 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
     if not from_email:
         from_email = rendered_nodes.get('from',
                 settings.DEFAULT_FROM_EMAIL).strip()
-    email = django.core.mail.EmailMessage(rendered_nodes['subject'].strip(),
-                                          rendered_nodes['plain'].strip(),
-                                          from_email,
-                                          to,
-                                          headers=headers,
-                                          bcc=(cc + bcc))
+
+    Email = django.core.mail.EmailMessage
+    if 'html' in rendered_nodes:
+        Email = django.core.mail.EmailMultiAlternatives
+    email = Email(rendered_nodes['subject'].strip(),
+                          rendered_nodes['plain'].strip(),
+                          from_email,
+                          to,
+                          headers=headers,
+                          bcc=(cc + bcc))
+
+    # whether this email contains a HTML version
+    if 'html' in rendered_nodes:
+        email.attach_alternative(rendered_nodes['html'].strip(), "text/html")
+
     # And send!
     email.send()
 

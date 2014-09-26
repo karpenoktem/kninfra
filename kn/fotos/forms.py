@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 import os
 from glob import glob
 from datetime import date
@@ -44,3 +43,5 @@ def getMoveFotosForm():
         move_dst = forms.ChoiceField(label='naar',
                 choices=move_fotos_list_events())
     return MoveFotosForm
+
+# vim: et:sta:bs=2:sw=4:

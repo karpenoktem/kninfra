@@ -1,8 +1,9 @@
 # vim: et:sta:bs=2:sw=4:
 import logging
-import MySQLdb
 import hashlib
 import time
+
+import MySQLdb
 
 from kn import settings
 from kn.base._random import pseudo_randstr

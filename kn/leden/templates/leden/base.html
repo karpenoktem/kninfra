@@ -1,45 +1,100 @@
 {% extends "base/base.html" %}
 
-{% block menu %}
+{% load base %}
+
+{% block styles %}
 {{ block.super }}
-<li><a href="{% url smoelen-home %}"
-	>Smoelenboek</a></li>
-<ul>
-<li><a href="{% url entity-by-name name="leden" %}"
-	>Leden</a></li>
-<li><a href="{% url entity-by-name name="comms" %}"
-	>Commissies</a></li>
-<li><a href="{% url entity-by-name name="groepen" %}"
-	>Groepen</a></li>
-<li><a href="{% url entity-by-name name="lists" %}"
-	>E-maillijsten</a></li>
-</ul>
-<li><a href="{% url event-list %}">Activiteiten</a></li>
-<ul>
-        <li><a href="{% url event-new  %}">Aanmaken</a></li>
-</ul>
+<link rel="stylesheet" type="text/css"
+    deferred-href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css"/>
+{% endblock styles %}
 
-{% if "secretariaat" in user.cached_groups_names %}
-<li>Secretariaat</li>
-<ul>
-        <li><a href="{% url secr-add-user  %}">Lid inschrijven</a></li>
-        <li><a href="{% url secr-add-group  %}">Groep aanmaken</a></li>
-        <li><a href="{% url secr-update-site-agenda  %}">Agenda updaten</a></li>
-        <li><a href="{% url secr-notes  %}">Openstaande notities</a></li>
-</ul>
-{% endif %}
-{% if "fotocie" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
-<li><a href="/fotos/">Foto's</a></li>
-<ul>
-        <li><a href="{% url fotoadmin-move %}">Foto's verplaatsen</a></li>
-</ul>
-{% endif %}
+{% block head %}
+{{ block.super }}
+<script type="text/javascript"
+        src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js" defer></script>
+{% endblock head %}
 
-<li><a href="{% url planning-home  %}">Planning</a></li>
-{% if "bestuur" in user.cached_groups_names or "barco" in user.cached_groups_names or "disco" in user.cached_groups_names or "chef" in user.cached_groups_names or "secretariaat" in user.cached_groups_names %}
-<ul>
-	<li><a href="{% url planning-poollist %}">Beheer</a></li>
-	<li><a href="{% url planning-event-create %}">Nieuw</a></li>
-</ul>
-{% endif %}
-{% endblock %}
+{% block submenu %}
+<div id="submenu-wrapper">
+    <a id="submenu-button" href="">&nbsp;</a>
+    <ul id="submenu" class="has-dropdown">
+        <li><a href="{% url smoelen-home %}">Smoelenboek</a>
+          <ul>
+              <li><a href="{% url entity-by-name name="leden" %}"
+                  >Leden</a></li>
+              <li><a href="{% url entity-by-name name="comms" %}"
+                  >Commissies</a></li>
+              <li><a href="{% url entity-by-name name="groepen" %}"
+                  >Groepen</a></li>
+              <li><a href="{% url entity-by-name name="lists" %}"
+                  >E-maillijsten</a></li>
+              </ul>
+          </li>
+        <li><a href="{% url event-list %}">Activiteiten</a>
+            <ul>
+                <li><a href="{% url event-new  %}">Aanmaken</a></li>
+            </ul>
+        </li>
+
+        {% if "secretariaat" in user.cached_groups_names %}
+        <li><span>Secretariaat</span>
+            <ul>
+                <li><a href="{% url secr-add-user  %}">Lid inschrijven</a></li>
+                <li><a href="{% url secr-add-group  %}">Groep aanmaken</a></li>
+                <li><a href="{% url secr-update-site-agenda  %}">Agenda updaten</a></li>
+                <li><a href="{% url secr-notes  %}">Openstaande notities</a></li>
+            </ul>
+        </li>
+        {% endif %}
+        {% if "fotocie" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
+        <li><a href="{% external_url "fotos" %}">Foto's</a>
+            <ul>
+                <li><a href="{% url fotoadmin-move %}">Foto's verplaatsen</a></li>
+            </ul>
+        </li>
+        {% endif %}
+
+        <li><a href="{% url planning-home  %}">Planning</a>
+            {% if "bestuur" in user.cached_groups_names or "barco" in user.cached_groups_names or "disco" in user.cached_groups_names or "chef" in user.cached_groups_names or "secretariaat" in user.cached_groups_names %}
+            <ul>
+                <li><a href="{% url planning-poollist %}">Beheer</a></li>
+                <li><a href="{% url planning-event-create %}">Nieuw</a></li>
+            </ul>
+            {% endif %}
+        </li>
+
+        <li><a href="{% external_url "wiki" %}">Wiki</a></li>
+        <li><a href="{% external_url "stukken" %}">Stukken</a></li>
+    </ul>
+
+    <input type="hidden" id="searchfield" />
+    <script type="text/javascript">
+        $(function(){
+            {# TODO we need a page for when the user did not select #}
+            {#      something from the dropdown #}
+            create_entityChoiceField('searchfield', {
+                placeholder: 'Zoeken ...',
+                input_type: 'search',
+                position: { my : "right top", at: "right bottom" },
+                select: function(label, entid) {
+                    {# TODO We should write a JS reverse() #}
+                    location.href = '/smoelen/id/'+ entid;
+                }});
+        });
+    </script>
+</div>
+{% endblock submenu %}
+
+{% block messages %}
+{% if request.session.waitingOnGiedoSync %}
+<div class="notice" id="waitingOnGiedoSyncNotice">
+        Wijzingen worden doorgevoerd ...
+</div>
+<script type="text/javascript">
+        setTimeout(function(){checkGiedoSync(
+                        {{ request.session.waitingOnGiedoSync }})}, 1000);
+</script>
+{% endif %}{# request.session.waiting_on_giedo_sync #}
+{{ block.super }}
+{% endblock messages %}
+

@@ -1,5 +1,5 @@
-# vim: et:sta:bs=2:sw=4:
 import logging
+
 import kn.leden.entities as Es
 from kn.leden.date import now
 from kn.settings import DT_MIN, DT_MAX
@@ -21,7 +21,7 @@ def update_db(giedo):
     groups = Es.of_type_by_name('group')
     groups_set = frozenset(groups.values())
     # Find groups that have a virtual group for each year
-    year_groups = [g for g in groups.itervalues()
+    year_groups = [g for g in groups_set
             if tags['!year-group'] in g.tag_ids]
     # Find relations on those groups and add the years for which those
     # relations hold.
@@ -130,6 +130,8 @@ def update_db(giedo):
     for rel in Es.query_relations(how=sofa_brands.values()):
         if (rel['how'], rel['with']) in sofa_lut:
             continue
+        if not id2name[rel['with']]:
+            continue
         g = groups[id2name[rel['with']]]
         nm = str(g.name) + '-' + sofa_brands[rel['how']].sofa_suffix
         logging.info("creating sofa %s" % nm)
@@ -201,3 +203,5 @@ def _create_yeargroup(g, year, name, tags, groups, id2name):
     n['_id'] = Es.ecol.insert(n)
     groups[name] = Es.entity(n)
     id2name[n['_id']] = name
+
+# vim: et:sta:bs=2:sw=4:

@@ -1,0 +1,15 @@
+#introAgenda dt {
+	font-weight: bold;
+	border-bottom: 1px solid gray;
+	color: white;
+}
+
+#introAgenda dd {
+	margin-bottom: 1em;
+	margin-left: 0;
+}
+
+#introAgenda .date {
+       font-style: italic;
+       float: right;
+}

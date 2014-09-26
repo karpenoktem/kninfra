@@ -4,10 +4,6 @@
 {% block head %}
 {{ block.super }}
 <script type="text/javascript">
-$(function(){
-        $.defaultText();
-});
-
 _api = function(data, cb) {
         data.csrfmiddlewaretoken = "{{ csrf_token }}";
         $.post("{% url api %}", data, cb, "json");
@@ -108,11 +104,14 @@ copy_emailaddresses_to_clipboard = function() {
         <p>Je bent door
         <a href="{{ subscription.subscribedBy.get_absolute_url }}"
                 >{{ subscription.subscribedBy.full_name }}</a>
-        aangemeld, maar hebt dit nog niet bevestigd.
+        aangemeld, maar hebt dit nog niet bevestigd.</p>
         {% endif %}{# subscription and not subscription.confirmed #}
+        <!--[if lte IE 9]>
+        Opmerkingen:<br/>
+        <![endif]-->
         <textarea class="default" name="notes"
                 style="width: 200px; height: 70px;"
-                title="Opmerkingen"></textarea><br/>
+                placeholder="Opmerkingen"></textarea><br/>
         {% if subscription and not subscription.confirmed %}
         <button type="button" onclick="confirm_subscription()"
                 >Aanmelding bevestigen!</button></p>
@@ -129,7 +128,9 @@ copy_emailaddresses_to_clipboard = function() {
         <input type="submit" value="aanmelden!" />
         </select>
         {% else %}{# may_subscribe_others #}
+        {% if not subscription %}
 	<input type="submit" value="{{ user.full_name }} aanmelden!" /> 
+        {% endif %}{# not subscription #}
         {% endif %}{# may_subscribe_others #}
 	{% csrf_token %}
 </form>

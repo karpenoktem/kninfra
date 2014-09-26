@@ -1,9 +1,8 @@
-# vim: et:sta:bs=2:sw=4:
+import datetime
+
+from kn.leden.date import now
 from kn.leden.mongo import  db, SONWrapper, son_property, _id
 import kn.leden.entities as Es
-from kn.leden.date import now
-
-import datetime
 
 from pymongo import DESCENDING
 
@@ -273,3 +272,5 @@ class Vacancy(SONWrapper):
         events = map(lambda e: e['_id'], ecol.find({'date': {'$lte': dt}}))
         for v in vcol.find({'reminder_needed': True, 'event': {'$in': events}}):
             yield cls.from_data(v)
+
+# vim: et:sta:bs=2:sw=4:

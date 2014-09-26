@@ -1,42 +1,42 @@
-# vim: et:sta:bs=2:sw=4:
-import threading
-import os.path
-import logging
-import socket
-import select
+import os
 import time
 import json
-import os
-import subprocess
+import socket
+import select
 import urllib2
+import logging
+import os.path
 import itertools
+import threading
+import subprocess
 from urllib import urlencode
+
+import mirte # github.com/bwesterb/mirte
 from M2Crypto import RSA
-from kn.base._random import pseudo_randstr
 
 from django.core.files.storage import default_storage
 
-import mirte # github.com/bwesterb/mirte
-
-import kn.leden.entities as Es
-
+from kn import settings
 from kn.utils.whim import WhimDaemon, WhimClient
+from kn.base._random import pseudo_randstr
+import kn.leden.entities as Es
 from kn.leden.date import now
 
-from kn import settings
-
 from kn.utils.giedo.db import update_db
-from kn.utils.giedo.postfix import generate_postfix_map
+from kn.utils.giedo.postfix import generate_postfix_map, \
+                                   generate_postfix_slm_map
 from kn.utils.giedo.mailman import generate_mailman_changes
 from kn.utils.giedo.wiki import generate_wiki_changes
 from kn.utils.giedo.forum import generate_forum_changes
 from kn.utils.giedo.unix import generate_unix_map
 from kn.utils.giedo.openvpn import create_openvpn_installer, create_openvpn_zip
 from kn.utils.giedo.siteagenda import update_site_agenda
+from kn.utils.giedo._ldap import generate_ldap_changes
 
 class Giedo(WhimDaemon):
     def __init__(self):
         super(Giedo, self).__init__(settings.GIEDO_SOCKET)
+        self.last_sync_ts = 0
         self.daan = WhimClient(settings.DAAN_SOCKET)
         self.cilia = WhimClient(settings.CILIA_SOCKET)
         self.mirte = mirte.get_a_manager()
@@ -49,13 +49,21 @@ class Giedo(WhimDaemon):
                 "villanet.pem"))
         self.ss_actions = (
                   ('postfix', self.daan, self._gen_postfix),
+                  ('postfix-slm', self.daan, self._gen_postfix_slm),
                   ('mailman', self.daan, self._gen_mailman),
                   ('forum', self.daan, self._gen_forum),
                   ('unix', self.cilia, self._gen_unix),
-                  ('wiki', self.daan, self._gen_wiki))
+                  ('wiki', self.daan, self._gen_wiki),
+                  ('ldap', self.daan, self._gen_ldap))
         self.push_changes_event.set()
 
 
+    def _gen_ldap(self):
+        return {'type': 'ldap',
+                'changes': generate_ldap_changes(self)}
+    def _gen_postfix_slm(self):
+        return {'type': 'postfix-slm',
+            'map': generate_postfix_slm_map(self)}
     def _gen_postfix(self):
         return {'type': 'postfix',
             'map': generate_postfix_map(self)}
@@ -128,7 +136,10 @@ class Giedo(WhimDaemon):
         todo_event = threading.Event()
 
         def _sync_action(func, *args):
-            func(*args)
+            try:
+                func(*args)
+            except Exception as e:
+                logging.exception("Uncaught exception")
             with todo_lock:
                 todo[0] -= 1
                 if todo[0] == 0:
@@ -149,12 +160,14 @@ class Giedo(WhimDaemon):
         for act in self.ss_actions:
             self.threadPool.execute(_sync_action, _entry, *act)
         todo_event.wait()
+        self.last_sync_ts = time.time()
 
     def handle(self, d):
-        with self.operation_lock:
-            if d['type'] == 'sync':
+        if d['type'] == 'sync':
+            with self.operation_lock:
                 return self.sync()
-            elif d['type'] == 'setpass':
+        elif d['type'] == 'setpass':
+            with self.operation_lock:
                 u = Es.by_name(d['user'])
                 if u is None:
                     return {'error': 'no such user'}
@@ -168,7 +181,8 @@ class Giedo(WhimDaemon):
                 self.daan.send(d2)
                 self.cilia.send(d2)
                 return {'success': True}
-            elif d['type'] == 'set-villanet-password':
+        elif d['type'] == 'set-villanet-password':
+            with self.operation_lock:
                 u = Es.by_name(d['user'])
                 if u is None:
                     return {'error': 'no such user'}
@@ -183,7 +197,8 @@ class Giedo(WhimDaemon):
                 pc.save()
                 self.push_changes_event.set()
                 return {'success': True}
-            elif d['type'] == 'fotoadmin-move-fotos':
+        elif d['type'] == 'fotoadmin-move-fotos':
+            with self.operation_lock:
                 # TODO should this block Giedo?
                 ret = self.daan.send(d)
                 if 'success' not in ret:
@@ -192,8 +207,9 @@ class Giedo(WhimDaemon):
                     'type': 'fotoadmin-remove-moved-fotos',
                     'user': d['user'],
                     'dir': d['dir']})
-            elif d['type'] == 'openvpn_create':
-                # XXX hoeft niet onder de operation_lock
+        elif d['type'] == 'openvpn_create':
+            with self.operation_lock:
+                # XXX hoeft niet onder de operation_lock?
                 u = Es.by_name(d['user'])
                 if u is None:
                     return {'error': 'no such user'}
@@ -202,12 +218,16 @@ class Giedo(WhimDaemon):
                     create_openvpn_installer(self, u)
                 else:
                     create_openvpn_zip(self, u)
-            elif d['type'] == 'update-site-agenda':
+        elif d['type'] == 'update-site-agenda':
+            with self.operation_lock:
                 return update_site_agenda(self)
-            elif d['type'] in ['update-knsite', 'update-knfotos',
+        elif d['type'] in ['update-knsite', 'update-knfotos',
                     'fotoadmin-create-event']:
+            with self.operation_lock:
                 return self.daan.send(d)
-            else:
+        elif d['type'] == 'last-synced?':
+            return self.last_sync_ts
+        else:
                 logging.warn("Unknown command: %s" % d['type'])
 
     def villanet_encrypt_password(self, password):
@@ -241,3 +261,5 @@ class Giedo(WhimDaemon):
             return (True, ret[4:])
         else:
             return (False, ret)
+
+# vim: et:sta:bs=2:sw=4:

@@ -11,9 +11,9 @@ if sys.stdout.encoding is None:
 def fmt_date(d):
     if d==None:
         return ""
-    return str(d)
+    return str(d.date())
 
-fmt = "%35r%10s%10s%15s"
+fmt = "%35s%12s%12s%15s"
 print fmt % ("NAME  ", "FROM  ", "UNTIL  ", "NUMBER  ")
 for m in args_to_users(sys.argv[1:]):
     for nr in m.telephones:

@@ -8,9 +8,9 @@
 	<li><a href="{{ version.get_absolute_url }}"
 		>{{ version.humanName }}</a>
 	{% if version.valid_from %}
-	Aangenomen op {{ version.valid_from }}.
+	Aangenomen op {{ version.valid_from.date }}.
 		{% if version.valid_until %}
-		Was van kracht tot {{ version.valid_until }}.
+		Was van kracht tot {{ version.valid_until.date }}.
 		{% else %}
 		Nog steeds van kracht.
 		{% endif %}

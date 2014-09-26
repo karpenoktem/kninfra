@@ -31,7 +31,7 @@ with open('entities.bsons', 'w') as f:
                      'number': '<private>',
                      'from': DT_MIN,
                      'until': DT_MAX}]
-        if 'emailAddresses' in e:
+        if 'emailAddresses' in e and 'names' in e and e['names']:
             e['emailAddresses'] = [
                     {'from': DT_MIN,
                      'until': DT_MAX,

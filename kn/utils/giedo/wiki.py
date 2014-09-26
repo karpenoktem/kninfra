@@ -1,10 +1,9 @@
-# vim: et:sta:bs=2:sw=4:
-import MySQLdb
 import logging
 import itertools
 
-import kn.leden.entities as Es
+import MySQLdb
 
+import kn.leden.entities as Es
 from kn import settings
 
 def generate_wiki_changes(self):
@@ -52,3 +51,5 @@ def generate_wiki_changes(self):
     c.close()
     dc.close()
     return todo
+
+# vim: et:sta:bs=2:sw=4:

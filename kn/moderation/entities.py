@@ -1,4 +1,3 @@
-# vim: et:sta:bs=2:sw=4:
 from kn.leden.mongo import  db, SONWrapper, son_property, _id
 
 import kn.leden.entities as Es
@@ -24,3 +23,5 @@ class ModerationRecord(SONWrapper):
 def by_name(name):
     d = mcol.find_one({'list': name})
     return None if d is None else ModerationRecord(d)
+
+# vim: et:sta:bs=2:sw=4:

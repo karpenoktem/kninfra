@@ -1,8 +1,12 @@
-# vim: et:sta:bs=2:sw=4:
-from django import template
 from django.template.defaultfilters import stringfilter
-from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
+from django.utils.safestring import mark_safe
+from django.conf import settings
+from django import template
+
+import os
+import random
+import os.path
 
 register = template.Library()
 
@@ -20,3 +24,25 @@ def email_filter(value):
 @register.filter(name='mark_safe')
 def mark_safe_filter(value):
     return mark_safe(value)
+
+# http://ianrolfe.livejournal.com/37243.html
+@register.filter(name='lookup')
+def lookup_filter(dict, index):
+    return dict.get(index, '')
+
+_header_images = None
+@register.simple_tag
+def header():
+    global _header_images
+    path = os.path.join(settings.MEDIA_ROOT, 'base/headers')
+    if _header_images is None:
+        _header_images = [fn for fn in os.listdir(path)]
+    pick = random.choice(_header_images)
+    return os.path.join(settings.MEDIA_URL, 'base/headers', pick)
+
+# easily look up external URLs defined in settings.py
+@register.simple_tag
+def external_url(name):
+    return settings.EXTERNAL_URLS[name]
+
+# vim: et:sta:bs=2:sw=4:

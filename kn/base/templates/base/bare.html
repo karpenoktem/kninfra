@@ -1,69 +1,73 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="nl">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl-NL" lang="nl-NL" prefix="og: http://ogp.me/ns#">
 	<head>
 		{% block head %}
+		<meta charset="utf-8"/>
 		<title>{% block title %}ASV Karpe Noktem{% endblock %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<meta property="og:image" content="{{ ABSOLUTE_MEDIA_URL }}/base/logo-og.png"/>
+		<meta property="og:locale" content="nl_NL"/>
+		<meta property="og:site_name" content="ASV Karpe Noktem"/>
+		{% block styles %}
 		<link href="{% url style-bare %}"
 			rel="stylesheet" type="text/css" />
+		{% endblock styles %}
 		<script type="text/javascript"
-			src="{{ MEDIA_URL }}/base/common.js"></script>
-		<script type="text/javascript"
-			src="{{ MEDIA_URL }}/base/jquery-1.6.4.min.js"></script>
-                <link rel="stylesheet" type="text/css"
-                        href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css" />
-                <script type="text/javascript"
-                        src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js">
+                        src="{{ MEDIA_URL }}/base/jquery-1.11.1.min.js"></script>
                 </script>
 		<script type="text/javascript"
-			src="{{ MEDIA_URL }}/base/jquery.defaultText.js"></script>
+			src="{{ MEDIA_URL }}/base/common.js"></script>
 		<link rel="icon" href="{{ MEDIA_URL }}/base/favicon.ico" />
-		<!--[if lte IE 7]>
-		<link rel="stylesheet" type="text/css"
-			href="{{ MEDIA_URL }}/base/iehacks.css" />
-		<![endif]-->
+		<script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-11922614-1']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = 'https://ssl.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+
+		  function loadDeferredCSS() {
+		    var links = document.querySelectorAll('link[deferred-href]');
+		    for (var i=0; i<links.length; i++) {
+		      links[i].setAttribute('href', links[i].getAttribute('deferred-href'));
+		    }
+		  }
+		  if (window.addEventListener) {
+		    window.addEventListener('DOMContentLoaded', loadDeferredCSS);
+		  } else {
+		    window.attachEvent('onload', loadDeferredCSS);
+		  }
+
+		  var csrf_token = "{{ csrf_token }}";
+		  var leden_api_url = "{% url leden-api %}";
+		</script>
 		{% endblock %}
 	</head>
-	<body><div id="wrapper">
-		{% block wrapper %}
-		<div id="main">
-			{% block main %}
-			<div id="body">
-			{% if messages %}
-			<ul id="messages">
-				{% for message in messages %}
-				<li>{{ message }}</li>
-				{% endfor %}
-			</ul>
-			{% endif %}
-			{% block body %}
-			{% endblock %}
-			</div>
-			{% endblock %}
+        <body>
+                {% block header %}
+                {% endblock %}
+                {% block content %}
+                <div id="content">
+                    <div class="container">
+                        <div id="body">
+                                {% block body %}
+                                {% endblock %}
+                        </div>
                         <div class="clear"></div>
-		</div>
-		{% endblock %}
-		<div id="footer">
-		<!--[if IE]>
-		Internet Explorer is 
-		<a href="http://www.google.com/search?q=ie+sucks">brak</a>.
-		Gebruik <a href="http://www.mozilla.com/en-US/firefox/">een</a>
-		open browser voor een beter resultaat.<br/>
-		<![endif]-->
-		&copy;2007&mdash;2013, Karpe Noktem
-		</div>
-	</div>
-	<script type="text/javascript">
-		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-	</script>
-	<script type="text/javascript">
-	try {
-	var pageTracker = _gat._getTracker("UA-11922614-1");
-	pageTracker._trackPageview();
-        } catch(err) {}
-        var csrf_token = "{{ csrf_token }}";
-        var leden_api_url = "{% url leden-api %}";
-        </script>
+                    </div>
+                </div>
+                {% endblock content %}
+                {% block footer %}
+                <div id="footer">
+                        <div class="container">
+                                &copy;2007&mdash;2014,
+                                Alternatieve studentenvereniging Karpe Noktem
+                                <small><a id="scrollUp" href="#">Terug naar boven</a></small>
+                        </div>
+                </div>
+                {% endblock footer %}
 	</body>	
 </html>

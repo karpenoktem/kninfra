@@ -1,5 +1,5 @@
 *.pyo
 *.pyc
 *.login
-/media
 *.swp
+.DS_Store

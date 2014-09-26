@@ -1,11 +1,11 @@
 {% extends "base/base.html" %}
 {% load base %}
 
-{% block head %}
+{% block styles %}
 {{ block.super }}
 <link href="{{ MEDIA_URL }}/reglementen/regl.css"
 	rel="stylesheet" type="text/css" />
-{% endblock %}
+{% endblock styles %}
 
 {% block body %}
 <h1>{{ version.reglement.humanName }}</h1>
@@ -16,11 +16,11 @@
 	Deze versie is (nog) niet aangenomen en daarmee niet van kracht.
 {% else %}
 	{% if version.valid_until %}
-	Deze versie was aangenomen op {{ version.valid_from }} en van kracht
-	tot {{ version.valid_until }}.
+        Deze versie was aangenomen op {{ version.valid_from.date }} en
+        van kracht tot {{ version.valid_until.date }}.
 	{% else %}
-	Deze versie was aangenomen op {{ version.valid_from }} en nog steeds
-	van kracht.
+        Deze versie was aangenomen op {{ version.valid_from.date }} en
+        nog steeds van kracht.
 	{% endif %}
 {% endif %}
 <div class="regl">
