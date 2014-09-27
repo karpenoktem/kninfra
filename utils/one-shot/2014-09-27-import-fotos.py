@@ -4,6 +4,7 @@ from kn import settings
 import kn.fotos.entities as fEs
 
 import MySQLdb
+import random
 
 def main():
     fEs.ensure_indices()
@@ -18,14 +19,27 @@ def main():
             continue
         if fEs.by_oldId('album', oldId) is not None:
             continue
+        path = path.strip('/')
         fEs.entity({
             'type': 'album',
             'oldId': oldId,
+            'random': random.random(),
             'name': name,
             'path': path,
+            'parents': fEs.path_to_parents(path),
             'title': humanName,
             'description': description,
             'visibility': [visibility]}).save()
+    if fEs.by_path('') is None:
+        fEs.entity({
+            'type': 'album',
+            'name': '',
+            'path': '',
+            'parents': [],
+            'random': random.random(),
+            'title': 'Karpe Noktem fotoalbum',
+            'description': "De fotocollectie van Karpe Noktem",
+            'visibility': ['world']}).save()
     c.execute("SELECT id, name, path, type, visibility, rotation "
                         + "FROM fa_photos")
     print 'fotos'
@@ -35,11 +49,14 @@ def main():
         _type = {'photo': 'foto'}.get(_type, _type)
         if fEs.by_oldId(_type, oldId) is not None:
             continue
+        path = path.strip('/')
         fEs.entity({
             'type': _type,
             'oldId': oldId,
             'name': name,
+            'random': random.random(),
             'path': path,
+            'parents': fEs.path_to_parents(path),
             'title': None,
             'description': None,
             'visibility': [visibility],

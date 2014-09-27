@@ -1,13 +1,30 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property
+from django.core.paginator import Paginator
+from django.db.models import permalink
 
 fcol = db['fotos']
 
+
 def ensure_indices():
-    fcol.ensure_index([('type',1), ('oldId', 1)], sparse=True)
+    fcol.ensure_index([('type', 1), ('oldId', 1)], sparse=True)
     fcol.ensure_index([('path', 1), ('name', 1)])
+    fcol.ensure_index([('type', 1), ('parents', 1), ('random', 1)])
     fcol.ensure_index('tags', sparse=True)
-    fcol.ensure_index('cache', sparse=True)
-    fcol.ensure_index([('path', 1), ('visibility', 1)])
+    fcol.ensure_index([('cache', 1), ('type', 1)], sparse=True)
+    fcol.ensure_index([('path', 1), ('visibility', 1), ('name', 1)])
+
+def path_to_parents(p):
+    if not p:
+        return []
+    parents = []
+    cur = None
+    for bit in p.split('/'):
+        if cur:
+            cur += '/' + bit
+        else:
+            cur = bit
+        parents.append(cur)
+    return parents
 
 def entity(d):
     if d is None:
@@ -27,7 +44,7 @@ def by_path(p):
         name = bits[0]
     else:
         pp, name = bits
-    return by_path_and_name(pp, n)
+    return by_path_and_name(pp, name)
 
 class FotoEntity(SONWrapper):
     def __init__(self, data):
@@ -39,21 +56,70 @@ class FotoEntity(SONWrapper):
 
     oldId = son_property(('oldId',))
     name = son_property(('name',))
-    title = son_property(('title',))
+    path = son_property(('path',))
+    _type = son_property(('type',))
+
+    @property
+    def title(self):
+        if self._data.get('title'):
+            return self._data['title']
+        return self._data['name']
+
     description = son_property(('description',))
     visibility = son_property(('visibility',))
+
+    def required_visibility(self, user):
+        if user is None:
+            return frozenset(('world',))
+        if 'webcie' in user._cached_groups_names:
+            return frozenset(('leden', 'world', 'hidden'))
+        if 'leden' in user._cached_groups_names:
+            return frozenset(('leden', 'world'))
+        return frozenset(('world',))
+
+    def may_view(self, user):
+        return bool(self.required_visibility(user)
+                        & frozenset(self.visibility))
+
+    @permalink
+    def get_browse_url(self):
+        return ('fotos-browse', (), {'path': self.full_path})
+
+    @property
+    def full_path(self):
+        if not self.path:
+            return self.name
+        return self.path + '/' + self.name
 
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
         super(FotoAlbum, self).__init__(data)
 
+    def children_page_paginator(self, path, page, user):
+        required_visibility = self.required_visibility(user)
+        cursor = fcol.find({'path': path,
+                           'visibility': {'$in': tuple(required_visibility)}}
+                           ).sort('name', -1)
+        pr = Paginator(cursor, 8)
+        p = pr.page(1 if page is None else page)
+        children = [entity(e) for e in p.object_list]
+        return (children, p, pr)
+
 class Foto(FotoEntity):
     def __init__(self, data):
         super(Foto, self).__init__(data)
 
+    @permalink
+    def get_thumbnail_url(self):
+        return ('fotos-cache', (), {'path': self.full_path,
+                                   'cache': 'thumb'})
+
 class Video(FotoEntity):
     def __init__(self, data):
         super(Video, self).__init__(data)
+
+CACHE_TYPES = (
+        'thumb',)
 
 TYPE_MAP = {
         'album':        FotoAlbum,

@@ -1,15 +1,68 @@
 from glob import glob
 from os.path import basename
+
 import MySQLdb
+import Image
 
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import EmptyPage
 from django.contrib.auth.decorators import login_required
+from django.http import Http404, HttpResponse
 
 from kn.fotos.forms import CreateEventForm, getMoveFotosForm
 from kn.settings import PHOTOS_DIR, PHOTOS_MYSQL_SECRET
 from kn.leden import giedo
+
+import kn.fotos.entities as fEs
+
+def browse(request, path):
+    o = fEs.by_path(path)
+    if o is None:
+        raise Http404
+    if not o.may_view(request.user if request.user.is_authenticated()
+                        else None):
+        raise PermissionDenied
+    ctx = {'o': o}
+    return globals()['_browse_'+o._type](request, o, ctx)
+
+def _browse_album(request, album, ctx):
+    try:
+        children, page, paginator = album.children_page_paginator(
+                        album.full_path, request.GET.get('p'),
+                    request.user if request.user.is_authenticated() else None)
+    except EmptyPage:
+        raise Http404
+    ctx.update({
+        'p': page,
+        'pr': paginator,
+        'cs': children})
+    return render_to_response('fotos/browse_album.html', ctx,
+             context_instance=RequestContext(request))
+
+def _browse_foto(request, foto, ctx):
+    return render_to_response('fotos/browse_foto.html', ctx,
+             context_instance=RequestContext(request))
+
+def _browse_video(request, video, ctx):
+    return render_to_response('fotos/browse_video.html', ctx,
+             context_instance=RequestContext(request))
+
+def cache(request, cache, path):
+    if not cache in fEs.CACHE_TYPES:
+        raise Http404
+    o = fEs.by_path(path)
+    if o is None:
+        raise Http404
+    if not o.may_view(request.user if request.user.is_authenticated()
+                        else None):
+        raise PermissionDenied
+    resp = HttpResponse(mimetype='image/png')
+    import Image
+    Image.new('RGB', (200, 200)).save(resp, 'PNG')
+    return resp
+
 
 @login_required
 def fotoadmin_create_event(request):

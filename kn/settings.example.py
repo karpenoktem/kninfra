@@ -130,6 +130,7 @@ POSTFIX_SLM_MAP = '/etc/postfix/virtual/kninfra_slm_maps'
 INFRA_UID = 1002
 
 PHOTOS_DIR = '/var/fotos'
+PHOTOS_CACHE_DIR = '/var/cache/fotos'
 USER_DIRS = '/mnt/phassa/home/'
 
 LDAP_HOST = 'localhost'
