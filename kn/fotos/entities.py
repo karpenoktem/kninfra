@@ -1,5 +1,4 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property
-from django.core.paginator import Paginator
 from django.db.models import permalink
 
 fcol = db['fotos']
@@ -91,28 +90,26 @@ class FotoEntity(SONWrapper):
             return self.name
         return self.path + '/' + self.name
 
-class FotoAlbum(FotoEntity):
-    def __init__(self, data):
-        super(FotoAlbum, self).__init__(data)
-
-    def children_page_paginator(self, path, page, user):
-        required_visibility = self.required_visibility(user)
-        cursor = fcol.find({'path': path,
-                           'visibility': {'$in': tuple(required_visibility)}}
-                           ).sort('name', -1)
-        pr = Paginator(cursor, 8)
-        p = pr.page(1 if page is None else page)
-        children = [entity(e) for e in p.object_list]
-        return (children, p, pr)
-
-class Foto(FotoEntity):
-    def __init__(self, data):
-        super(Foto, self).__init__(data)
-
     @permalink
     def get_thumbnail_url(self):
         return ('fotos-cache', (), {'path': self.full_path,
                                    'cache': 'thumb'})
+
+class FotoAlbum(FotoEntity):
+    def __init__(self, data):
+        super(FotoAlbum, self).__init__(data)
+
+    def list(self, user, offset, count):
+        required_visibility = self.required_visibility(user)
+        return map(entity, fcol.find({'path': self.full_path,
+                           'visibility': {'$in': tuple(required_visibility)}},
+                            skip=offset, limit=count
+                           ).sort('name', -1))
+
+
+class Foto(FotoEntity):
+    def __init__(self, data):
+        super(Foto, self).__init__(data)
 
 class Video(FotoEntity):
     def __init__(self, data):

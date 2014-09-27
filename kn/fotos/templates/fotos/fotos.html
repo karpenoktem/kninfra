@@ -1,0 +1,21 @@
+{% extends "base/base.html" %}
+
+{% block head %}
+{{ block.super }}
+<script type="text/javascript" src="{{ MEDIA_URL }}/fotos/fotos.js?v=2">
+</script>
+<script type="text/javascript">
+var fotos_api_url = "{% url fotos-api %}";
+</script>
+{% endblock head%}
+
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css"
+        href="{{ MEDIA_URL }}/fotos/fotos.css" />
+{% endblock styles %}
+
+{% block body %}
+<ul id="fotos">
+</ul>
+{% endblock body %}

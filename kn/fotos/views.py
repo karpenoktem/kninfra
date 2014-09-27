@@ -17,36 +17,8 @@ from kn.leden import giedo
 
 import kn.fotos.entities as fEs
 
-def browse(request, path):
-    o = fEs.by_path(path)
-    if o is None:
-        raise Http404
-    if not o.may_view(request.user if request.user.is_authenticated()
-                        else None):
-        raise PermissionDenied
-    ctx = {'o': o}
-    return globals()['_browse_'+o._type](request, o, ctx)
-
-def _browse_album(request, album, ctx):
-    try:
-        children, page, paginator = album.children_page_paginator(
-                        album.full_path, request.GET.get('p'),
-                    request.user if request.user.is_authenticated() else None)
-    except EmptyPage:
-        raise Http404
-    ctx.update({
-        'p': page,
-        'pr': paginator,
-        'cs': children})
-    return render_to_response('fotos/browse_album.html', ctx,
-             context_instance=RequestContext(request))
-
-def _browse_foto(request, foto, ctx):
-    return render_to_response('fotos/browse_foto.html', ctx,
-             context_instance=RequestContext(request))
-
-def _browse_video(request, video, ctx):
-    return render_to_response('fotos/browse_video.html', ctx,
+def fotos(request):
+    return render_to_response('fotos/fotos.html', {},
              context_instance=RequestContext(request))
 
 def cache(request, cache, path):
@@ -62,7 +34,6 @@ def cache(request, cache, path):
     import Image
     Image.new('RGB', (200, 200)).save(resp, 'PNG')
     return resp
-
 
 @login_required
 def fotoadmin_create_event(request):
