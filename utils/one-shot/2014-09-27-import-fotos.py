@@ -2,6 +2,7 @@ import _import
 
 from kn import settings
 import kn.fotos.entities as fEs
+import kn.leden.entities as Es
 
 import MySQLdb
 import random
@@ -62,6 +63,20 @@ def main():
             'visibility': [visibility],
             'rotation': rotation,
             'cache': []}).save()
+    print 'tags'
+    c.execute("SELECT photo_id, username, createdby FROM fa_tags")
+    for oldId, username, createdby in c.fetchall():
+        foto = fEs.by_oldId('foto', oldId)
+        if foto is None:
+            continue
+        user = Es.by_name(username)
+        if user is None:
+            continue
+        if not 'tags' in foto._data:
+            foto._data['tags'] = []
+        if not user._id in foto._data['tags']:
+            foto._data['tags'].append(user._id)
+            foto.save()
     print 'done'
 
 if __name__ == '__main__':
