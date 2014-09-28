@@ -5,7 +5,9 @@
 
   KNF.prototype.change_path = function(path) {
     $('#fotos').empty();
-    this.path = path;
+    this.path = path; // it is important we set path before changing location
+    if (this.get_url_path() != path)
+      location.href = "#" + path;
     this.fotos_offset = 0;
     this.fetched_all_fotos = false;
     this.fetching_more_fotos = false;
@@ -52,6 +54,22 @@
     this.fetch_more_fotos();
   };
 
+  // Returns the path according to the current URL
+  KNF.prototype.get_url_path = function() {
+    var tmp = location.hash;
+    if (tmp.substr(0,1) == "#")
+      tmp = tmp.substr(1);
+    return tmp;
+  };
+
+  KNF.prototype.on_popstate = function() {
+    console.info([this.get_url_path(), this.path]);
+    var new_path = this.get_url_path();
+    if (new_path == this.path)
+      return;
+    this.change_path(new_path);
+  };
+
   KNF.prototype.api = function(data, cb) {
     $.post(fotos_api_url, {
       csrfmiddlewaretoken: csrf_token,
@@ -63,6 +81,7 @@
     var that = this;
     this.change_path('');
     $(window).scroll(function(){that.on_scroll();});
+    $(window).bind('popstate', function() {that.on_popstate();});
   };
 
   $(document).ready(function(){
