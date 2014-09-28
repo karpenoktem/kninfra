@@ -42,6 +42,19 @@ ul#fotos li img {
     min-height: 300px;
 }
 
+#kruimelpad {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#kruimelpad > li {
+    display: inline;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 0;
+}
+
 #foto > div > img {
     padding: 0;
     margin: 0;

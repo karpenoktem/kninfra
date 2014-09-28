@@ -4,7 +4,11 @@
   }
 
   KNF.prototype.change_path = function(path) {
+    var that = this;
+    // Clear out the old
     $('#fotos').empty();
+    $('#kruimelpad').empty();
+    // Update state
     this.path = path; // it is important we set path before changing location
     if (this.get_url_path() != path)
       location.href = "#" + path;
@@ -12,7 +16,35 @@
     this.fotos = {};
     this.fetched_all_fotos = false;
     this.fetching_more_fotos = false;
+    // Update kruimelpad
+    var cur = null;
+    $.each([null].concat(path.split('/')), function(k, component) {
+      if (component !== null) {
+        $('<li>/</li>').appendTo('#kruimelpad');
+        if (component === '') {
+          return;
+        } else if (!cur) {
+          cur = component;
+        } else {
+          cur += '/' + component;
+        }
+      }
+      var our_cur;
+      if (component === null)
+        our_cur = '';
+      else
+        our_cur = cur;
+      var li = $('<li></li>')
+          .click(function() {
+            that.change_path(our_cur);
+          })
+          .appendTo('#kruimelpad');
+      $('<a href="javascript:void(0)"></a>').text(
+            component ? component : 'fotos').appendTo(li);
+    });
+    // Fetch new
     this.fetch_more_fotos();
+
   };
 
   KNF.prototype.fetch_more_fotos = function() {
