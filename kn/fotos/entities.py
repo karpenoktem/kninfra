@@ -104,6 +104,11 @@ class FotoEntity(SONWrapper):
         return self.path + '/' + self.name
 
     @permalink
+    def get_cache_url(self, cache):
+        return ('fotos-cache', (), {'path': self.full_path,
+                                    'cache': cache})
+
+    @permalink
     def get_thumbnail_url(self):
         return ('fotos-cache', (), {'path': self.full_path,
                                    'cache': 'thumb'})
@@ -176,7 +181,10 @@ class FotoAlbum(FotoEntity):
     
 class Foto(FotoEntity):
     CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg'),
-              'thumb2x': cache_tuple('jpg', 'image/jpeg')}
+              'thumb2x': cache_tuple('jpg', 'image/jpeg'),
+              'large': cache_tuple('jpg', 'image/jpeg'),
+              'large2x': cache_tuple('jpg', 'image/jpeg'),
+              }
 
 
     def __init__(self, data):
@@ -198,6 +206,17 @@ class Foto(FotoEntity):
                              source,
                              '-resize', '400x',
                              target])
+        elif cache == 'large':
+            subprocess.call(['convert',
+                             source,
+                             '-resize', '850x',
+                             target])
+        elif cache == 'large2x':
+            subprocess.call(['convert',
+                             source,
+                             '-quality', '90',
+                             '-resize', '1700x',
+                             target])
         return True
 
 
@@ -207,7 +226,10 @@ class Video(FotoEntity):
 
 CACHE_TYPES = (
         'thumb',
-        'thumb2x',)
+        'thumb2x',
+        'large',
+        'large2x',
+    )
 
 TYPE_MAP = {
         'album':        FotoAlbum,

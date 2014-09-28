@@ -25,13 +25,18 @@ def _list(data, request):
         return {'error': 'Object not found'}
     cs = o.list(request.user if request.user.is_authenticated() else None,
                     offset, count)
-    return {'children': [
-                {'type': c._type,
+    ret_cs = []
+    for c in cs:
+        entry = {'type': c._type,
                  'thumbnail': c.get_thumbnail_url(),
                  'thumbnail2x': c.get_thumbnail2x_url(),
                  'path': c.full_path,
-                 'title': c.title} for c in cs]}
-    return {'error': str(len(cs))}
+                 'title': c.title}
+        if c._type == 'foto':
+            entry['large'] = c.get_cache_url('large')
+            entry['large2x'] = c.get_cache_url('large2x')
+        ret_cs.append(entry)
+    return {'children': ret_cs}
 
 ACTION_HANDLER_MAP = {
         'list': _list,
