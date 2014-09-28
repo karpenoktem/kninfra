@@ -28,6 +28,7 @@ def _list(data, request):
     return {'children': [
                 {'type': c._type,
                  'thumbnail': c.get_thumbnail_url(),
+                 'thumbnail2x': c.get_thumbnail2x_url(),
                  'path': c.full_path,
                  'title': c.title} for c in cs]}
     return {'error': str(len(cs))}

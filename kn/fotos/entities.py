@@ -1,7 +1,17 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property
+from kn import settings
+
 from django.db.models import permalink
 
+import os
+import os.path
+import subprocess
+from collections import namedtuple
+
+cache_tuple = namedtuple('cache_tuple', ('ext', 'mimetype'))
+
 fcol = db['fotos']
+lcol = db['fotoLocks']
 
 
 def ensure_indices():
@@ -46,6 +56,8 @@ def by_path(p):
     return by_path_and_name(pp, name)
 
 class FotoEntity(SONWrapper):
+    CACHES = {}
+
     def __init__(self, data):
         super(FotoEntity, self).__init__(data, fcol)
 
@@ -57,6 +69,7 @@ class FotoEntity(SONWrapper):
     name = son_property(('name',))
     path = son_property(('path',))
     _type = son_property(('type',))
+    caches = son_property(('caches',), ())
 
     @property
     def title(self):
@@ -94,6 +107,61 @@ class FotoEntity(SONWrapper):
     def get_thumbnail_url(self):
         return ('fotos-cache', (), {'path': self.full_path,
                                    'cache': 'thumb'})
+    @permalink
+    def get_thumbnail2x_url(self):
+        return ('fotos-cache', (), {'path': self.full_path,
+                                   'cache': 'thumb2x'})
+
+    def lock_cache(self, cache):
+        ret = lcol.find_and_modify({'_id': self._id},
+                                   {'$addToSet': {'cacheLocks': cache}},
+                                   upsert=True)
+        if ret is None:
+            return True
+        return cache not in ret.get('cacheLocks', ())
+
+    def unlock_cache(self, cache):
+        ret = lcol.update({'_id': self._id},
+                          {'$pull': {'cacheLocks': cache}})
+
+    def get_cache_path(self, cache):
+        path = os.path.join(settings.PHOTOS_CACHE_DIR, cache,
+                            self.path, self.name)
+        ext = self.CACHES[cache].ext
+        if ext:
+            path += '.' + ext
+        return path
+
+    def get_cache_mimetype(self, cache):
+        return self.CACHES[cache].mimetype
+
+    def ensure_cached(self, cache):
+        if not cache in self.CACHES:
+            raise KeyError
+        if cache in self.caches:
+            return True
+        if not self.lock_cache(cache):
+            return False
+        try:
+            self._cache(cache)
+            # Normally, we would just modify _data and .save().  However,
+            # as the _cache operation may take quite some time, a full
+            # .save() might overwrite other changes. (Like other caches.)
+            # Thus we perform the change manually.
+            if not 'caches' in self._data:
+                self._data['caches'] = []
+            self._data['caches'].append(cache)
+            fcol.update({'_id': self._id}, {'$addToSet': {'caches': cache}})
+        finally:
+            self.unlock_cache(cache)
+        return True
+
+    def _cache(self, cache):
+        raise NotImplementedError
+
+    @property
+    def original_path(self):
+        return os.path.join(settings.PHOTOS_DIR, self.path, self.name)
 
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
@@ -105,18 +173,41 @@ class FotoAlbum(FotoEntity):
                            'visibility': {'$in': tuple(required_visibility)}},
                             skip=offset, limit=count
                            ).sort('name', -1))
-
-
+    
 class Foto(FotoEntity):
+    CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg'),
+              'thumb2x': cache_tuple('jpg', 'image/jpeg')}
+
+
     def __init__(self, data):
         super(Foto, self).__init__(data)
+
+    def _cache(self, cache):
+        source = self.original_path
+        target = self.get_cache_path(cache)
+        target_dir = os.path.dirname(target)
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
+        if cache == 'thumb':
+            subprocess.call(['convert',
+                             source,
+                             '-resize', '200x',
+                             target])
+        elif cache == 'thumb2x':
+            subprocess.call(['convert',
+                             source,
+                             '-resize', '400x',
+                             target])
+        return True
+
 
 class Video(FotoEntity):
     def __init__(self, data):
         super(Video, self).__init__(data)
 
 CACHE_TYPES = (
-        'thumb',)
+        'thumb',
+        'thumb2x',)
 
 TYPE_MAP = {
         'album':        FotoAlbum,

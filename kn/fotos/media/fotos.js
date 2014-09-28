@@ -30,7 +30,12 @@
         if (that.fotos_request_count != data.children.length)
           that.fetched_all_fotos = true;
         $.each(data.children, function(i, c) {
-          var thumb = $('<li><img src="'+c.thumbnail+'"/><br/></li>');
+          var thumb = $(
+            '<li>'+
+               '<img src="'+c.thumbnail+'" '+
+                     'srcset="'+c.thumbnail+' 1x, '
+                               +c['thumbnail2x']+' 2x"/>'+
+               '<br/></li>');
           $('<span></span>').text(c.title).appendTo(thumb);
           if (c.type == 'album') {
             thumb.click(function(){

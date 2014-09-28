@@ -1,4 +1,5 @@
 from glob import glob
+import os.path
 from os.path import basename
 
 import MySQLdb
@@ -7,6 +8,7 @@ import Image
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.core.exceptions import PermissionDenied
+from django.core.servers.basehttp import FileWrapper
 from django.core.paginator import EmptyPage
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
@@ -30,9 +32,10 @@ def cache(request, cache, path):
     if not o.may_view(request.user if request.user.is_authenticated()
                         else None):
         raise PermissionDenied
-    resp = HttpResponse(mimetype='image/png')
-    import Image
-    Image.new('RGB', (200, 200)).save(resp, 'PNG')
+    o.ensure_cached(cache)
+    resp = HttpResponse(FileWrapper(open(o.get_cache_path(cache))),
+                            mimetype=o.get_cache_mimetype(cache))
+    resp['Content-Length'] = os.path.getsize(o.get_cache_path(cache))
     return resp
 
 @login_required

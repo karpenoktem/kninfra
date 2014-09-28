@@ -6,11 +6,17 @@ ul#fotos {
 
 ul#fotos li {
     display: inline-block;
-    width: 200px;
-    height: 280px;
+    min-width: 200px;
+    min-height: 140px;
     font-family: sans-serif;
     font-size: smaller;
     vertical-align: top;
+}
+
+ul#fotos li img {
+    padding: 0;
+    border: 0;
+    margin: 0;
 }
 
 /* vim: set et bs=2 sw=4 sta: */
