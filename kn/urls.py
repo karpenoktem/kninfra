@@ -8,7 +8,6 @@ from kn.leden import views
 from kn.base.views import direct_to_folder
 
 urlpatterns = patterns('',
-    (r'^base/', include('kn.base.urls')),
     url(r'^groups/(?P<subdir>[^/]+)/(?P<path>.*)',
         'kn.browser.views.homedir', {'root':'/mnt/phassa/groups/'},
                 name='groupfolder'),

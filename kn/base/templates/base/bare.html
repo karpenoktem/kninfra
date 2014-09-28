@@ -8,16 +8,26 @@
 		<meta property="og:image" content="{{ ABSOLUTE_MEDIA_URL }}/base/logo-og.png"/>
 		<meta property="og:locale" content="nl_NL"/>
 		<meta property="og:site_name" content="ASV Karpe Noktem"/>
+		{% load compress %}
+		{% compress css %}
 		{% block styles %}
-		<link href="{% url style-bare %}"
+		<link href="{{ MEDIA_URL }}/base/bare.css"
 			rel="stylesheet" type="text/css" />
 		{% endblock styles %}
+		{% endcompress %}
+		{% compress css inline %}
+		{% block styles-inline %}
+		{% endblock %}
+		{% endcompress %}
+		{% compress js %}
 		<script type="text/javascript"
                         src="{{ MEDIA_URL }}/base/jquery-1.11.1.min.js"></script>
                 </script>
 		<script type="text/javascript"
 			src="{{ MEDIA_URL }}/base/common.js"></script>
+		{% endcompress %}
 		<link rel="icon" href="{{ MEDIA_URL }}/base/favicon.ico" />
+		{% compress js inline %}
 		<script type="text/javascript">
 		  var _gaq = _gaq || [];
 		  _gaq.push(['_setAccount', 'UA-11922614-1']);
@@ -44,6 +54,7 @@
 		  var csrf_token = "{{ csrf_token }}";
 		  var leden_api_url = "{% url leden-api %}";
 		</script>
+		{% endcompress %}
 		{% endblock %}
 	</head>
         <body>

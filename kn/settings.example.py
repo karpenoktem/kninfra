@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'compressor',
     'kn.leden',
     'kn.poll', # XXX Not yet converted to Mongo
     'kn.subscriptions',
@@ -78,6 +79,19 @@ FORCE_SCRIPT_NAME=''
 STORAGE_ROOT = '/home/infra/storage'
 STORAGE_URL = '/djmedia/storage'
 DEFAULT_FILE_STORAGE = 'kn.base.storage.OurFileSystemStorage'
+
+
+# Plugin settings
+# ############################################################
+
+COMPRESS_ROOT = MEDIA_ROOT
+COMPRESS_URL  = '/djmedia/' # TODO MEDIA_URL must end in a slash in Django 1.5+
+COMPRESS_ENABLED = True # you may want to disable compression while developing
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.datauri.CssDataUriFilter',
+]
+
 
 # Application settings
 # ############################################################

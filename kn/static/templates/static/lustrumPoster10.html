@@ -1,10 +1,10 @@
 {% extends "base/bare.html" %}
 
-{% block styles %}
+{% block styles-inline %}
 {{ block.super }}
 <link rel="stylesheet"
   href="{{ MEDIA_URL }}/static/style/lustrumPoster10.css" />
-{% endblock styles %}
+{% endblock styles-inline %}
 
 {% block body %}
 <a href="{% url lustrum %}" title="Naar de website" />

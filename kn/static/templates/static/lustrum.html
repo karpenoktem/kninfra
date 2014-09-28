@@ -1,9 +1,9 @@
 {% extends "static/base.html" %}
 
-{% block styles %}
+{% block styles-inline %}
 {{ block.super }}
 <link rel="stylesheet" href="{{ MEDIA_URL }}/static/style/lustrum.css" />
-{% endblock styles %}
+{% endblock styles-inline %}
 
 {% block body %}
 <dl id="lustrumAgenda">
