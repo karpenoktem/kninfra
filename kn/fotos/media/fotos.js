@@ -79,7 +79,7 @@
 
   KNF.prototype.run = function() {
     var that = this;
-    this.change_path('');
+    this.on_popstate();
     $(window).scroll(function(){that.on_scroll();});
     $(window).bind('popstate', function() {that.on_popstate();});
   };
