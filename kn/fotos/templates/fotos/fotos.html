@@ -6,6 +6,8 @@
 </script>
 <script type="text/javascript">
 var fotos_api_url = "{% url fotos-api %}";
+// FIXME (hack) this forces the header to be collapsed.
+sessionStorage['visited'] = true;
 </script>
 {% endblock head%}
 
