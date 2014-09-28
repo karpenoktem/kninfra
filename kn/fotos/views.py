@@ -32,10 +32,16 @@ def cache(request, cache, path):
     if not o.may_view(request.user if request.user.is_authenticated()
                         else None):
         raise PermissionDenied
-    o.ensure_cached(cache)
-    resp = HttpResponse(FileWrapper(open(o.get_cache_path(cache))),
-                            mimetype=o.get_cache_mimetype(cache))
-    resp['Content-Length'] = os.path.getsize(o.get_cache_path(cache))
+    if o._type == 'album':
+        f = o.get_random_foto_for(request.user
+                                    if request.user.is_authenticated()
+                                    else None)
+    else:
+        f = o
+    f.ensure_cached(cache)
+    resp = HttpResponse(FileWrapper(open(f.get_cache_path(cache))),
+                            mimetype=f.get_cache_mimetype(cache))
+    resp['Content-Length'] = os.path.getsize(f.get_cache_path(cache))
     return resp
 
 @login_required

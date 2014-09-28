@@ -4,9 +4,11 @@ from kn import settings
 from django.db.models import permalink
 
 import os
+import random
 import os.path
 import subprocess
 from collections import namedtuple
+
 
 cache_tuple = namedtuple('cache_tuple', ('ext', 'mimetype'))
 
@@ -178,6 +180,22 @@ class FotoAlbum(FotoEntity):
                            'visibility': {'$in': tuple(required_visibility)}},
                             skip=offset, limit=count
                            ).sort('name', -1))
+
+    def get_random_foto_for(self, user):
+        r = random.random()
+        required_visibility = self.required_visibility(user)
+        while True:
+            f = entity(fcol.find_one(
+                    {'random': {'$lt': r},
+                     'parents': self.full_path,
+                     'type': 'foto',
+                     'visibility': {'$in': tuple(required_visibility)}},
+                        sort=[('random',-1)]))
+            if f is not None:
+                return f
+            if r == 1:
+                return None
+            r = 1
     
 class Foto(FotoEntity):
     CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg'),

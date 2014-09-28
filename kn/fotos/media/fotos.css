@@ -11,6 +11,7 @@ ul#fotos li {
     font-family: sans-serif;
     font-size: smaller;
     vertical-align: top;
+    cursor: pointer;
 }
 
 ul#fotos li img {
