@@ -6,6 +6,7 @@ from django.db.models import permalink
 import os
 import random
 import os.path
+import mimetypes
 import subprocess
 from collections import namedtuple
 
@@ -132,6 +133,8 @@ class FotoEntity(SONWrapper):
                           {'$pull': {'cacheLocks': cache}})
 
     def get_cache_path(self, cache):
+        if cache == 'full':
+            return os.path.join(settings.PHOTOS_DIR, self.path, self.name)
         path = os.path.join(settings.PHOTOS_CACHE_DIR, cache,
                             self.path, self.name)
         ext = self.CACHES[cache].ext
@@ -140,7 +143,10 @@ class FotoEntity(SONWrapper):
         return path
 
     def get_cache_mimetype(self, cache):
-        return self.CACHES[cache].mimetype
+        mimetype = self.CACHES[cache].mimetype
+        if mimetype is not None:
+            return mimetype
+        return mimetypes.guess_type(self.get_cache_path(cache))[0]
 
     def ensure_cached(self, cache):
         if not cache in self.CACHES:
@@ -202,6 +208,7 @@ class Foto(FotoEntity):
               'thumb2x': cache_tuple('jpg', 'image/jpeg'),
               'large': cache_tuple('jpg', 'image/jpeg'),
               'large2x': cache_tuple('jpg', 'image/jpeg'),
+              'full': cache_tuple(None, None),
               }
 
 
@@ -209,6 +216,8 @@ class Foto(FotoEntity):
         super(Foto, self).__init__(data)
 
     def _cache(self, cache):
+        if cache == 'full':
+            return True
         source = self.original_path
         target = self.get_cache_path(cache)
         target_dir = os.path.dirname(target)
@@ -247,6 +256,7 @@ CACHE_TYPES = (
         'thumb2x',
         'large',
         'large2x',
+        'full',
     )
 
 TYPE_MAP = {
