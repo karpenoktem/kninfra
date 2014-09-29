@@ -130,10 +130,12 @@
     var foto = this.fotos[path];
     $('html').addClass('noscroll');
     $('#foto > div').empty();
-    var img = $(
-         '<img src="'+foto.large+'" '+
-               'srcset="'+foto.large+' 1x, '
-                         +foto.large2x+' 2x"/>').appendTo('#foto > div');
+    $('<img src="'+foto.large+'" '+
+           'srcset="'+foto.large+' 1x, '
+                     +foto.large2x+' 2x"/><br/>')
+            .appendTo('#foto > div');
+    $('<a href="'+foto.full+'">origineel</a>')
+            .appendTo('#foto > div');
     $('#foto').show();
   };
 

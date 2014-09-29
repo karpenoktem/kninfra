@@ -21,6 +21,7 @@ ul#fotos li img {
     border: 0;
 }
 
+
 #foto {
     display: none;
     z-index: 10;
@@ -32,12 +33,22 @@ ul#fotos li img {
     left: 0px;
     padding-top: 40px;
     overflow-y: scroll;
+    font-family: sans-serif;
+    font-size: smaller;
+    color: white;
+}
+
+/* FIXME is not applied. Why? */
+#foto > div > a:link,
+#foto > div > a:visited {
+    color white;
 }
 
 #foto > div {
     width: 850px;
     background-color: rgba(0,0,0,0.4);
     margin: 0 auto;
+    margin-bottom: 40px;
     padding: 10px;
     text-align: center;
     min-height: 300px;

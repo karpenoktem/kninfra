@@ -35,6 +35,7 @@ def _list(data, request):
         if c._type == 'foto':
             entry['large'] = c.get_cache_url('large')
             entry['large2x'] = c.get_cache_url('large2x')
+            entry['full'] = c.get_cache_url('full')
         ret_cs.append(entry)
     return {'children': ret_cs}
 
