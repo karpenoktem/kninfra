@@ -64,12 +64,13 @@
           that.fetched_all_fotos = true;
         $.each(data.children, function(i, c) {
           that.fotos[c.path] = c;
+          var srcset = encodeURI(c.thumbnail) + " 1x, " +
+                       encodeURI(c.thumbnail2x) + " 2x"; 
           var thumb = $(
             '<li>'+
-               '<img src="'+c.thumbnail+'" '+
-                     'srcset="'+c.thumbnail+' 1x, '
-                               +c.thumbnail2x+' 2x"/>'+
+               '<img /> '+
                '<br/></li>');
+          $('> img', thumb).attr('src', c.thumbnail).attr('srcset', srcset);
           $('<span></span>').text(c.title).appendTo(thumb);
           if (c.type == 'album') {
             thumb.click(function(){
@@ -129,13 +130,17 @@
   KNF.prototype.show_foto = function(path) {
     var foto = this.fotos[path];
     $('html').addClass('noscroll');
-    $('#foto > div').empty();
-    $('<img src="'+foto.large+'" '+
-           'srcset="'+foto.large+' 1x, '
-                     +foto.large2x+' 2x"/><br/>')
-            .appendTo('#foto > div');
-    $('<a href="'+foto.full+'">origineel</a>')
-            .appendTo('#foto > div');
+    var fotoDiv = $('#foto > div');
+    fotoDiv.empty()
+    var srcset = encodeURI(foto.large) + " 1x, " +
+                 encodeURI(foto.large2x) + " 2x"; 
+    $('<img/>').attr('src', foto.large)
+            .attr('srcset', srcset)
+            .appendTo(fotoDiv);
+    $('<br/>').appendTo(fotoDiv);
+    $('<a>origineel</a>')
+            .attr('href', foto.full)
+            .appendTo(fotoDiv);
     $('#foto').show();
   };
 
