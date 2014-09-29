@@ -118,7 +118,6 @@
   };
 
   KNF.prototype.on_popstate = function() {
-    console.info([this.get_url_path(), this.path]);
     var new_path = this.get_url_path();
     if (new_path == this.path)
       return;
