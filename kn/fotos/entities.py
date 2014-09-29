@@ -151,15 +151,22 @@ class FotoEntity(SONWrapper):
         if not self.lock_cache(cache):
             return False
         try:
-            self._cache(cache)
+            meta = self._cache(cache)
+            if meta is None:
+                return False
             # Normally, we would just modify _data and .save().  However,
             # as the _cache operation may take quite some time, a full
             # .save() might overwrite other changes. (Like other caches.)
             # Thus we perform the change manually.
             if not 'caches' in self._data:
                 self._data['caches'] = []
+            if not 'cacheMeta' in self._data:
+                self._data['cacheMeta'] = {}
+            self._data['cacheMeta'][cache] = meta
             self._data['caches'].append(cache)
-            fcol.update({'_id': self._id}, {'$addToSet': {'caches': cache}})
+            fcol.update({'_id': self._id},
+                        {'$addToSet': {'caches': cache},
+                         '$set': {'cacheMeta.'+cache: meta}})
         finally:
             self.unlock_cache(cache)
         return True
@@ -212,7 +219,7 @@ class Foto(FotoEntity):
 
     def _cache(self, cache):
         if cache == 'full':
-            return True
+            return {}
         source = self.original_path
         target = self.get_cache_path(cache)
         target_dir = os.path.dirname(target)
@@ -239,7 +246,7 @@ class Foto(FotoEntity):
                              '-quality', '90',
                              '-resize', '1700x',
                              target])
-        return True
+        return {}
 
 
 class Video(FotoEntity):
