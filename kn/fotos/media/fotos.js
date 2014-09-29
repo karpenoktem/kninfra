@@ -64,8 +64,8 @@
           that.fetched_all_fotos = true;
         $.each(data.children, function(i, c) {
           that.fotos[c.path] = c;
-          var srcset = encodeURI(c.thumbnail) + " 1x, " +
-                       encodeURI(c.thumbnail2x) + " 2x"; 
+          var srcset = c.thumbnail + " 1x, " +
+                       c.thumbnail2x + " 2x"; 
           var thumb = $(
             '<li>'+
                '<img /> '+
@@ -141,8 +141,8 @@
     $('html').addClass('noscroll');
     var fotoDiv = $('#foto > div');
     fotoDiv.empty()
-    var srcset = encodeURI(foto.large) + " 1x, " +
-                 encodeURI(foto.large2x) + " 2x"; 
+    var srcset = foto.large + " 1x, " +
+                 foto.large2x + " 2x"; 
     var img = $('<img/>')
             .attr('srcset', srcset)
             .attr('src', foto.large);
