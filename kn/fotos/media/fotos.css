@@ -19,6 +19,7 @@ ul#fotos li img {
     max-width: none;
     padding: 0;
     border: 0;
+    background-color: #f2f2f2;
 }
 
 
@@ -72,6 +73,7 @@ ul#fotos li img {
     margin: 0;
     border: 0;
     max-width: none;
+    background-color: black;
 }
 
 .noscroll {

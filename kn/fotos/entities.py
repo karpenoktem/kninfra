@@ -4,6 +4,7 @@ from kn import settings
 from django.db.models import permalink
 
 import os
+import Image
 import random
 import os.path
 import mimetypes
@@ -127,6 +128,9 @@ class FotoEntity(SONWrapper):
         ret = lcol.update({'_id': self._id},
                           {'$pull': {'cacheLocks': cache}})
 
+    def get_cache_meta(self, cache):
+        return self._data.get('cacheMeta', {}).get(cache, {})
+
     def get_cache_path(self, cache):
         if cache == 'full':
             return os.path.join(settings.PHOTOS_DIR, self.path, self.name)
@@ -246,7 +250,8 @@ class Foto(FotoEntity):
                              '-quality', '90',
                              '-resize', '1700x',
                              target])
-        return {}
+        # No worries: Image.open is lazy and will only read headers
+        return {'size': Image.open(target).size}
 
 
 class Video(FotoEntity):

@@ -37,6 +37,14 @@ def _list(data, request):
             entry['large'] = c.get_cache_url('large')
             entry['large2x'] = c.get_cache_url('large2x')
             entry['full'] = c.get_cache_url('full')
+            entry['largeSize'] = c.get_cache_meta('large').get('size')
+            if entry['largeSize'] is None:
+                size2x = c.get_cache_meta('large2x').get('size')
+                if size2x: entry['largeSize'] = [x/2 for x in size2x]
+            entry['thumbnailSize'] = c.get_cache_meta('thumb').get('size')
+            if entry['thumbnailSize'] is None:
+                size2x = c.get_cache_meta('thumb2x').get('size')
+                if size2x: entry['thumbnailSize'] = [x/2 for x in size2x]
         ret_cs.append(entry)
     return {'children': ret_cs}
 
