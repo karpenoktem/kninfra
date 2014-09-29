@@ -70,7 +70,7 @@
             '<li>'+
                '<img /> '+
                '<br/></li>');
-          $('> img', thumb).attr('src', c.thumbnail).attr('srcset', srcset);
+          $('> img', thumb).attr('srcset', srcset).attr('src', c.thumbnail);
           var title = c.title;
           if (!title && c.type == 'album')
             title = c.name;
@@ -138,8 +138,9 @@
     fotoDiv.empty()
     var srcset = encodeURI(foto.large) + " 1x, " +
                  encodeURI(foto.large2x) + " 2x"; 
-    $('<img/>').attr('src', foto.large)
+    $('<img/>')
             .attr('srcset', srcset)
+            .attr('src', foto.large)
             .appendTo(fotoDiv);
     $('<br/>').appendTo(fotoDiv);
     $('<a>origineel</a>')
