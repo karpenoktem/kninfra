@@ -73,12 +73,7 @@ class FotoEntity(SONWrapper):
     path = son_property(('path',))
     _type = son_property(('type',))
     caches = son_property(('caches',), ())
-
-    @property
-    def title(self):
-        if self._data.get('title'):
-            return self._data['title']
-        return self._data['name']
+    title = son_property(('title',))
 
     description = son_property(('description',))
     visibility = son_property(('visibility',))

@@ -31,6 +31,7 @@ def _list(data, request):
                  'thumbnail': c.get_thumbnail_url(),
                  'thumbnail2x': c.get_thumbnail2x_url(),
                  'path': c.full_path,
+                 'name': c.name,
                  'title': c.title}
         if c._type == 'foto':
             entry['large'] = c.get_cache_url('large')

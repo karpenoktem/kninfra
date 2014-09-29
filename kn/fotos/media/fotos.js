@@ -71,7 +71,11 @@
                '<img /> '+
                '<br/></li>');
           $('> img', thumb).attr('src', c.thumbnail).attr('srcset', srcset);
-          $('<span></span>').text(c.title).appendTo(thumb);
+          var title = c.title;
+          if (!title && c.type == 'album')
+            title = c.name;
+          if (title)
+            $('<span></span>').text(c.title).appendTo(thumb);
           if (c.type == 'album') {
             thumb.click(function(){
               that.change_path(c.path);
