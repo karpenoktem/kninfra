@@ -68,6 +68,17 @@ ul#fotos li img {
     padding: 0;
 }
 
+#foto > div > div > .prev,
+#foto > div > div > .next {
+    display: inline-block;
+}
+#foto > div > div > .prev {
+    float: left;
+}
+#foto > div > div > .next {
+    float: right;
+}
+
 #foto > div > img {
     padding: 0;
     margin: 0;

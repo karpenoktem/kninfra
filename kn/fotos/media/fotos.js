@@ -1,6 +1,7 @@
 (function(){
   function KNF(){
-    this.fotos_request_count = 12;
+    this.showing_foto = false;
+    this.foto_shown = null;
   }
 
   KNF.prototype.change_path = function(path) {
@@ -36,6 +37,7 @@
       var li = $('<li></li>')
           .click(function() {
             that.change_path(our_cur);
+            return false;
           })
           .appendTo('#kruimelpad');
       $('<a href="javascript:void(0)"></a>').text(
@@ -72,18 +74,20 @@
         if (c.type == 'album') {
           thumb.click(function(){
             that.change_path(c.path);
+            return false;
           });
         }
         if (c.type == 'foto') {
 
           thumb.click(function(){
             that.show_foto(i);
+            return false;
           });
         }
         thumb.appendTo('#fotos');
       })(this.foto_offset);
     }
-    if (this.foto_offset == this.fotos.length - 1)
+    if (this.foto_offset == this.fotos.length)
       this.displaying_all_fotos = true;
     else
       setTimeout(function(){that.on_scroll()}, 0);
@@ -140,17 +144,35 @@
   };
 
   KNF.prototype.hide_foto = function() {
+    this.showing_foto = false;
     $('#foto').hide();
     $('html').removeClass('noscroll');
   };
 
+  KNF.prototype.change_foto = function(offset) {
+    this.hide_foto();
+    this.show_foto(offset);
+  };
+
   KNF.prototype.show_foto = function(offset) {
+    var that = this;
     var foto = this.fotos[offset];
+    this.showing_foto = true;
+    this.foto_shown = offset;
     $('html').addClass('noscroll');
     var fotoDiv = $('#foto > div');
     fotoDiv.empty()
     var srcset = foto.large + " 1x, " +
                  foto.large2x + " 2x"; 
+    var navHead = $('<div></div>').appendTo(fotoDiv);
+    if (offset != 0)
+      $('<a href="javascript:void(0)" class="prev">vorige</a>')
+              .click(function(){that.change_foto(offset - 1); return false;})
+              .appendTo(navHead);
+    if (offset != this.fotos.length - 1)
+      $('<a href="javascript:void(0)" class="next">volgende</a>')
+              .click(function(){that.change_foto(offset + 1); return false;})
+              .appendTo(navHead);
     var img = $('<img/>')
             .attr('srcset', srcset)
             .attr('src', foto.large);
@@ -172,6 +194,25 @@
     $(window).bind('popstate', function() {that.on_popstate();});
     $('#foto').click(function(){
       that.hide_foto();
+      return false;
+    });
+    $(document).keydown(function(e) {
+      if (!that.showing_foto)
+        return;
+      // Escape
+      if (e.which == 27) {
+        that.hide_foto();
+        return false;
+      }
+      // Left and right arrows
+      if (e.which != 37 && e.which != 39)
+        return;
+      var offset = that.foto_shown;
+      offset += e.which == 37 ? -1 : 1;
+      if (offset < 0 || offset >= that.fotos.length)
+        return;
+      that.change_foto(offset);
+      return false;
     });
   };
 
