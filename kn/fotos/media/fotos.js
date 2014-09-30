@@ -2,6 +2,7 @@
   function KNF(){
     this.showing_foto = false;
     this.foto_shown = null;
+    this.fotos_fetched = false;
   }
 
   KNF.prototype.change_path = function(path) {
@@ -16,6 +17,7 @@
     this.fotos = [];
     this.displaying_all_fotos = false;
     this.foto_offset = 0;
+    this.fotos_fetched = false;
     // Update kruimelpad
     var cur = null;
     $.each([null].concat(path.split('/')), function(k, component) {
@@ -49,6 +51,8 @@
 
   KNF.prototype.display_more_fotos = function() {
     var that = this;
+    if (!this.fotos_fetched)
+      return;
     var limit = Math.min(this.fotos.length, this.foto_offset + 4);
     for (; this.foto_offset < limit; this.foto_offset++) {
       (function(i){
@@ -105,13 +109,14 @@
         $.each(data.children, function(i, c) {
           that.fotos.push(c);
         });
+        that.fotos_fetched = true;
         that.display_more_fotos();
         setTimeout(function(){that.on_scroll()}, 0);
       });
   };
 
   KNF.prototype.on_scroll = function() {
-    if (this.displaying_all_fotos)
+    if (this.displaying_all_fotos || !this.fotos_fetched)
       return;
     var diff = $(document).height()
                   - $(window).scrollTop()
