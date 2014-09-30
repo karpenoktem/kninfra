@@ -4,7 +4,7 @@
 {% block styles %}
 {{ block.super }}
 <link rel="stylesheet"
-  href="{% url style-agenda %}" />
+  href="{{ MEDIA_URL }}/agenda/agenda.css" />
 <link rel="stylesheet"
   href="{{ MEDIA_URL }}/static/style/home.css" />
 {% endblock styles %}

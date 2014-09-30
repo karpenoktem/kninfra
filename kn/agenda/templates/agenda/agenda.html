@@ -3,7 +3,7 @@
 {% block styles %}
 {{ block.super }}
 <link rel="stylesheet"
-  href="{% url style-agenda %}" />
+  href="{{ MEDIA_URL }}/agenda/agenda.css" />
 {% endblock styles %}
 
 {% block body %}

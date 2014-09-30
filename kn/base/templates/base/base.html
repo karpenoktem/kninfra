@@ -4,9 +4,18 @@
 
 {% block styles %}
 {{ block.super }}
-<link href="{% url style-base %}"
+<link href="{{ MEDIA_URL }}/base/base.css"
     rel="stylesheet" type="text/css" />
 {% endblock styles %}
+
+{% block styles-inline %}
+{{ block.super }}
+<style type="text/css">
+#header {
+	background-image: url('{% header %}');
+}
+</style>
+{% endblock styles-inline %}
 
 {% block header %}
 {{ block.super }}
