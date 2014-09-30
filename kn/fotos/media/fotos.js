@@ -12,10 +12,9 @@
     this.path = path; // it is important we set path before changing location
     if (this.get_url_path() != path)
       location.href = "#" + path;
-    this.fotos_offset = 0;
-    this.fotos = {};
-    this.fetched_all_fotos = false;
-    this.fetching_more_fotos = false;
+    this.fotos = [];
+    this.displaying_all_fotos = false;
+    this.foto_offset = 0;
     // Update kruimelpad
     var cur = null;
     $.each([null].concat(path.split('/')), function(k, component) {
@@ -43,70 +42,79 @@
             component ? component : 'fotos').appendTo(li);
     });
     // Fetch new
-    this.fetch_more_fotos();
-
+    this.fetch_fotos();
   };
 
-  KNF.prototype.fetch_more_fotos = function() {
+  KNF.prototype.display_more_fotos = function() {
     var that = this;
-    this.fetching_more_fotos = true;
+    var limit = Math.min(this.fotos.length, this.foto_offset + 4);
+    for (; this.foto_offset < limit; this.foto_offset++) {
+      (function(i){
+        var c = that.fotos[i];
+        var srcset = c.thumbnail + " 1x, " +
+                     c.thumbnail2x + " 2x"; 
+        var thumb = $(
+          '<li>'+
+             '<img /> '+
+             '<br/></li>');
+        $('> img', thumb)
+            .attr('srcset', srcset)
+            .attr('src', c.thumbnail);
+        if (c.thumbnailSize)
+          $('> img', thumb)
+              .attr('width', c.thumbnailSize[0])
+              .attr('height', c.thumbnailSize[1]);
+        var title = c.title;
+        if (!title && c.type == 'album')
+          title = c.name;
+        if (title)
+          $('<span></span>').text(title).appendTo(thumb);
+        if (c.type == 'album') {
+          thumb.click(function(){
+            that.change_path(c.path);
+          });
+        }
+        if (c.type == 'foto') {
+
+          thumb.click(function(){
+            that.show_foto(i);
+          });
+        }
+        thumb.appendTo('#fotos');
+      })(this.foto_offset);
+    }
+    if (this.foto_offset == this.fotos.length - 1)
+      this.displaying_all_fotos = true;
+    else
+      setTimeout(function(){that.on_scroll()}, 0);
+  };
+
+  KNF.prototype.fetch_fotos = function() {
+    var that = this;
     var old_path = this.path;
     this.api({action: 'list',
-              path: this.path,
-              offset: this.fotos_offset,
-              count: this.fotos_request_count},
+              path: this.path},
       function(data) {
         if(old_path != that.path) return;
         if(data.error) return alert(data.error);
-        that.fetching_more_fotos = false;
-        that.fotos_offset += data.children.length;
-        if (that.fotos_request_count != data.children.length)
-          that.fetched_all_fotos = true;
+        
         $.each(data.children, function(i, c) {
-          that.fotos[c.path] = c;
-          var srcset = c.thumbnail + " 1x, " +
-                       c.thumbnail2x + " 2x"; 
-          var thumb = $(
-            '<li>'+
-               '<img /> '+
-               '<br/></li>');
-          $('> img', thumb)
-              .attr('srcset', srcset)
-              .attr('src', c.thumbnail);
-          if (c.thumbnailSize)
-            $('> img', thumb)
-                .attr('width', c.thumbnailSize[0])
-                .attr('height', c.thumbnailSize[1]);
-          var title = c.title;
-          if (!title && c.type == 'album')
-            title = c.name;
-          if (title)
-            $('<span></span>').text(title).appendTo(thumb);
-          if (c.type == 'album') {
-            thumb.click(function(){
-              that.change_path(c.path);
-            });
-          }
-          if (c.type == 'foto') {
-            thumb.click(function(){
-              that.show_foto(c.path);
-            });
-          }
-          thumb.appendTo('#fotos');
+          that.fotos.push(c);
         });
-        setTimeout(function(){that.on_scroll()});
+        that.display_more_fotos();
+        setTimeout(function(){that.on_scroll()}, 0);
       });
   };
 
   KNF.prototype.on_scroll = function() {
-    if (this.fetching_more_fotos || this.fetched_all_fotos)
+    if (this.displaying_all_fotos)
       return;
     var diff = $(document).height()
                   - $(window).scrollTop()
                   - $(window).height();
     if (diff >= 200)
       return;
-    this.fetch_more_fotos();
+    this.display_more_fotos();
   };
 
   // Returns the path according to the current URL
@@ -136,8 +144,8 @@
     $('html').removeClass('noscroll');
   };
 
-  KNF.prototype.show_foto = function(path) {
-    var foto = this.fotos[path];
+  KNF.prototype.show_foto = function(offset) {
+    var foto = this.fotos[offset];
     $('html').addClass('noscroll');
     var fotoDiv = $('#foto > div');
     fotoDiv.empty()

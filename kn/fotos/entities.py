@@ -186,11 +186,10 @@ class FotoAlbum(FotoEntity):
     def __init__(self, data):
         super(FotoAlbum, self).__init__(data)
 
-    def list(self, user, offset, count):
+    def list(self, user):
         required_visibility = self.required_visibility(user)
         return map(entity, fcol.find({'path': self.full_path,
                            'visibility': {'$in': tuple(required_visibility)}},
-                            skip=offset, limit=count
                            ).sort('name', -1))
 
     def get_random_foto_for(self, user):

@@ -18,13 +18,10 @@ def _list(data, request):
         return {'error': 'Missing path attribute'}
     if not isinstance(data['path'], basestring):
         return {'error': 'path should be string'}
-    offset = int(data.get('offset', 0))
-    count = int(data.get('count', 12))
     o = fEs.by_path(data['path'])
     if o is None:
         return {'error': 'Object not found'}
-    cs = o.list(request.user if request.user.is_authenticated() else None,
-                    offset, count)
+    cs = o.list(request.user if request.user.is_authenticated() else None)
     ret_cs = []
     for c in cs:
         entry = {'type': c._type,
