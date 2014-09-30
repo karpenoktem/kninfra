@@ -64,13 +64,15 @@ a:hover, a:focus {
 	}
 }
 
-/* content */
 #content img {
 	padding: 4px;
 	border: solid 1px #aaa;
 	background-color: #f8f8f8;
 	box-shadow: 0px 0px 2px #a31e1b;
-	margin: 0.25em 0.5em;
+	margin: 4px 8px;
+	/* box-sizing doesn't work for images that have a width= attribute */
+	/* 100% - (margin + border + padding) * 2 */
+	max-width: calc(100% - (8px + 1px + 4px) * 2);
 }
 
 .right {
