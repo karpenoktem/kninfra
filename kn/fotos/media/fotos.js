@@ -112,7 +112,7 @@
     var diff = $(document).height()
                   - $(window).scrollTop()
                   - $(window).height();
-    if (diff >= 200)
+    if (diff >= 400)
       return;
     this.display_more_fotos();
   };
