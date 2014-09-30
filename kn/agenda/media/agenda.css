@@ -61,13 +61,13 @@
 	height: 10px;
 	width: 16px;
 	background-size: 16px;
-	background-image: url({{ MEDIA_URL }}/agenda/agenda_close.png);
+	background-image: url(agenda_close.png);
 	background-position: center bottom;
 	background-repeat: no-repeat;
 }
 
 #agenda li.item.closed .arrow {
-	background-image: url({{ MEDIA_URL }}/agenda/agenda_open.png);
+	background-image: url(agenda_open.png);
 	bottom: auto; /* initial */
 	top: 70px;
 }

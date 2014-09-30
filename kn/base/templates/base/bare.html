@@ -9,9 +9,11 @@
 		<meta property="og:locale" content="nl_NL"/>
 		<meta property="og:site_name" content="ASV Karpe Noktem"/>
 		{% block styles %}
-		<link href="{% url style-bare %}"
+		<link href="{{ MEDIA_URL }}/base/bare.css"
 			rel="stylesheet" type="text/css" />
 		{% endblock styles %}
+		{% block styles-inline %}
+		{% endblock %}
 		<script type="text/javascript"
                         src="{{ MEDIA_URL }}/base/jquery-1.11.1.min.js"></script>
                 </script>
