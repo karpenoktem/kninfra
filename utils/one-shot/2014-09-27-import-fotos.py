@@ -64,8 +64,8 @@ def main():
             'rotation': rotation,
             'cache': []}).save()
     print 'tags'
-    c.execute("SELECT photo_id, username, createdby FROM fa_tags")
-    for oldId, username, createdby in c.fetchall():
+    c.execute("SELECT photo_id, username FROM fa_tags")
+    for oldId, username in c.fetchall():
         foto = fEs.by_oldId('foto', oldId)
         if foto is None:
             continue
