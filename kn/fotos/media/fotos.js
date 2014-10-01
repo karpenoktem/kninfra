@@ -97,6 +97,10 @@
       setTimeout(function(){that.on_scroll()}, 0);
   };
 
+  KNF.prototype.cache_url = function(cache, path) {
+    return "/foto/" + cache + "/" + encodeURI(path);
+  };
+
   KNF.prototype.fetch_fotos = function() {
     var that = this;
     var old_path = this.path;
@@ -107,6 +111,13 @@
         if(data.error) return alert(data.error);
         
         $.each(data.children, function(i, c) {
+          c.thumbnail = that.cache_url('thumb', c.path);
+          c.thumbnail2x = that.cache_url('thumb2x', c.path);
+          if (c.type == 'foto') {
+            c.full = that.cache_url('full', c.path);
+            c.large = that.cache_url('large', c.path);
+            c.large2x = that.cache_url('large2x', c.path);
+          }
           that.fotos.push(c);
         });
         that.fotos_fetched = true;

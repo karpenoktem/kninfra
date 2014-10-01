@@ -14,6 +14,7 @@ urlpatterns = patterns('',
             api.view, name='fotos-api'),
         url(r'^fotos/?$',
             views.fotos, name='fotos'),
+        # NOTE keep up to date with media/fotos.js
         url(r'^foto/(?P<cache>[^/]+)/(?P<path>.*)$',
             views.cache, name='fotos-cache'),
 )

@@ -25,15 +25,10 @@ def _list(data, request):
     ret_cs = []
     for c in cs:
         entry = {'type': c._type,
-                 'thumbnail': c.get_thumbnail_url(),
-                 'thumbnail2x': c.get_thumbnail2x_url(),
                  'path': c.full_path,
                  'name': c.name,
                  'title': c.title}
         if c._type == 'foto':
-            entry['large'] = c.get_cache_url('large')
-            entry['large2x'] = c.get_cache_url('large2x')
-            entry['full'] = c.get_cache_url('full')
             entry['largeSize'] = c.get_cache_meta('large').get('size')
             if entry['largeSize'] is None:
                 size2x = c.get_cache_meta('large2x').get('size')

@@ -102,6 +102,7 @@ class FotoEntity(SONWrapper):
             return self.name
         return self.path + '/' + self.name
 
+    # NOTE keep up to date with media/fotos.js
     @permalink
     def get_cache_url(self, cache):
         return ('fotos-cache', (), {'path': self.full_path,
