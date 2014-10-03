@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from iso8601 import parse_date
 
 import gdata
@@ -16,7 +16,7 @@ def parse_date_range(start, end):
         end += 'T23:59:59.000'
         hack_on_end = True
     if hack_on_end:
-        the_end_date = parse_date(end) - datetime.timedelta(1,0,0)
+        the_end_date = parse_date(end) - timedelta(1,0,0)
     else:
         the_end_date = parse_date(end)
     return (parse_date(start),
