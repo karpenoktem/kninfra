@@ -39,10 +39,12 @@ ul#fotos li img {
     color: white;
 }
 
-/* FIXME is not applied. Why? */
-#foto > div > a:link,
-#foto > div > a:visited {
-    color white;
+#foto  a:link,
+#foto  a:visited {
+    color: #aaa;
+}
+#foto  a:hover {
+    color: #fff;
 }
 
 #foto > div {
