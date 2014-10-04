@@ -21,6 +21,8 @@
     // Update kruimelpad
     var cur = null;
     $.each([null].concat(path.split('/')), function(k, component) {
+      if (component === '')
+        return;
       if (component !== null) {
         $('<li>/</li>').appendTo('#kruimelpad');
         if (component === '') {
