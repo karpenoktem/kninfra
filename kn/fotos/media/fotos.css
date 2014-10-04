@@ -13,6 +13,8 @@ ul#fotos li {
     vertical-align: top;
     cursor: pointer;
     text-align: center;
+    line-height: 1;
+    margin-bottom: 4px;
 }
 
 ul#fotos li img {
