@@ -71,12 +71,14 @@ ul#fotos li img {
 }
 
 #foto > div > div > .prev,
+#foto > div > div > .orig,
 #foto > div > div > .next {
     display: inline-block;
 }
 #foto > div > div > .prev {
     float: left;
 }
+#foto > div > div > .orig,
 #foto > div > div > .next {
     float: right;
 }

@@ -187,6 +187,9 @@
       $('<a href="javascript:void(0)" class="prev">vorige</a>')
               .click(function(){that.change_foto(offset - 1); return false;})
               .appendTo(navHead);
+    $('<span></span>')
+              .text(foto.title ? foto.title : foto.name)
+              .appendTo(navHead);
     if (offset != this.fotos.length - 1)
       $('<a href="javascript:void(0)" class="next">volgende</a>')
               .click(function(){that.change_foto(offset + 1); return false;})
@@ -198,10 +201,16 @@
       img.attr('width', foto.largeSize[0])
          .attr('height', foto.largeSize[1]);
     img.appendTo(fotoDiv);
-    $('<br/>').appendTo(fotoDiv);
-    $('<a>origineel</a>')
+    var navFooter = $('<div></div>')
+              .appendTo(fotoDiv);
+    $('<a class="orig">origineel</a>')
             .attr('href', foto.full)
-            .appendTo(fotoDiv);
+            .appendTo(navFooter);
+    $('<div class="clear"></div>').appendTo(navFooter);
+    if (foto.description)
+      $('<p></p>')
+            .text('foto.description')
+            .appendTo(navFooter);
     $('#foto').show();
   };
 
