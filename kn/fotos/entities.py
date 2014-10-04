@@ -53,8 +53,8 @@ def by_path_and_name(p, n):
 def by_path(p):
     bits = p.rsplit('/', 1)
     if len(bits) == 1:
-        pp = ''
         name = bits[0]
+        pp = '' if name else None
     else:
         pp, name = bits
     return by_path_and_name(pp, name)

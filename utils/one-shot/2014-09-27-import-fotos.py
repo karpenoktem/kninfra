@@ -35,7 +35,7 @@ def main():
         fEs.entity({
             'type': 'album',
             'name': '',
-            'path': '',
+            'path': None,
             'parents': [],
             'random': random.random(),
             'title': 'Karpe Noktem fotoalbum',
