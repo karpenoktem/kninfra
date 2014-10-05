@@ -27,7 +27,6 @@ def main():
             'random': random.random(),
             'name': name,
             'path': path,
-            'parents': fEs.path_to_parents(path),
             'title': humanName,
             'description': description,
             'visibility': [visibility]}).save()
@@ -36,7 +35,6 @@ def main():
             'type': 'album',
             'name': '',
             'path': None,
-            'parents': [],
             'random': random.random(),
             'title': 'Karpe Noktem fotoalbum',
             'description': "De fotocollectie van Karpe Noktem",
@@ -57,7 +55,6 @@ def main():
             'name': name,
             'random': random.random(),
             'path': path,
-            'parents': fEs.path_to_parents(path),
             'title': None,
             'description': None,
             'visibility': [visibility],

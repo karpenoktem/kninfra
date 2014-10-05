@@ -29,7 +29,6 @@ def fotoadmin_create_event(daan, date, name, humanName):
         'path': '',
         'random': random.random(),
         'visibility': ['hidden'],
-        'parents': [],
         'title': humanName,
         'description': ''}).save()
     return {'success': True}

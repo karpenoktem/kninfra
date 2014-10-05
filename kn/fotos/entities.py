@@ -4,6 +4,7 @@ from kn import settings
 from django.db.models import permalink
 
 import os
+import re
 import Image
 import random
 import os.path
@@ -21,23 +22,11 @@ lcol = db['fotoLocks']
 def ensure_indices():
     fcol.ensure_index([('type', 1), ('oldId', 1)], sparse=True)
     fcol.ensure_index([('path', 1), ('name', 1)])
-    fcol.ensure_index([('type', 1), ('parents', 1), ('random', 1)])
+    fcol.ensure_index([('type', 1), ('path', 1),
+                       ('random', 1), ('visibility', 1)])
     fcol.ensure_index('tags', sparse=True)
     fcol.ensure_index([('cache', 1), ('type', 1)], sparse=True)
     fcol.ensure_index([('path', 1), ('visibility', 1), ('name', 1)])
-
-def path_to_parents(p):
-    if not p:
-        return []
-    parents = []
-    cur = None
-    for bit in p.split('/'):
-        if cur:
-            cur += '/' + bit
-        else:
-            cur = bit
-        parents.append(cur)
-    return parents
 
 def entity(d):
     if d is None:
@@ -197,9 +186,18 @@ class FotoAlbum(FotoEntity):
         r = random.random()
         required_visibility = self.required_visibility(user)
         while True:
+            import pprint
+            pprint.pprint(fcol.find(
+                    {'random': {'$lt': r},
+                     'path': {'$regex': re.compile(
+                                "^%s(/|$)" % re.escape(self.full_path))},
+                     'type': 'foto',
+                     'visibility': {'$in': tuple(required_visibility)}},
+                        sort=[('random',-1)]).explain())
             f = entity(fcol.find_one(
                     {'random': {'$lt': r},
-                     'parents': self.full_path,
+                     'path': {'$regex': re.compile(
+                                "^%s(/|$)" % re.escape(self.full_path))},
                      'type': 'foto',
                      'visibility': {'$in': tuple(required_visibility)}},
                         sort=[('random',-1)]))
