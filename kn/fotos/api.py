@@ -2,6 +2,7 @@ import json
 
 import kn.fotos.entities as fEs
 from kn.base.http import JsonHttpResponse
+from django.core.exceptions import PermissionDenied
 
 def view(request):
     data = json.loads(request.REQUEST.get('data', {}))
@@ -21,7 +22,10 @@ def _list(data, request):
     o = fEs.by_path(data['path'])
     if o is None:
         return {'error': 'Object not found'}
-    cs = o.list(request.user if request.user.is_authenticated() else None)
+    user = request.user if request.user.is_authenticated() else None
+    if not o.may_view(user):
+        raise PermissionDenied
+    cs = o.list(user)
     ret_cs = []
     for c in cs:
         entry = {'type': c._type,
