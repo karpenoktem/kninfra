@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from iso8601 import parse_date
 
 import gdata

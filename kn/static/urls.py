@@ -4,7 +4,6 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 import django.views.generic as generic
 import django.views.generic.simple
-from django.core.urlresolvers import reverse_lazy
 from kn.base.views import direct_to_folder
 
 from kn.static import views
@@ -12,8 +11,7 @@ from kn.static import views
 urlpatterns = patterns('',
     url(r'^home/?$', views.home, name='home'),
     url(r'^default/?$', views.home),
-    url(r'^/?$', generic.simple.redirect_to,
-                {'url': reverse_lazy('openweekPoster2014')}),
+    url(r'^/?$', views.home),
     # TODO we have to specify a separate url entry to make the reverse URL work
     #      for pages with several names.  Is there a way to do this without
     #      the duplication.
