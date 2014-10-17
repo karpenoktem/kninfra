@@ -2,7 +2,8 @@ from django.conf import settings
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 
-import os.path
+import os
+import glob
 
 _slideshow_images = None
 
@@ -11,7 +12,9 @@ def home(request):
     if _slideshow_images is None:
         _slideshow_images = []
         path = os.path.join(settings.MEDIA_ROOT, 'static/slideshow')
-        for fn in os.listdir(path):
+        files = os.listdir(path)
+        files.sort()
+        for fn in files:
             _slideshow_images.append(os.path.join(settings.MEDIA_URL,
                                         'static/slideshow', fn))
     return render_to_response('static/home.html',
