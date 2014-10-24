@@ -1,4 +1,4 @@
-#random-text,
+#home-text,
 #slider-wrapper {
 	max-width: 475px;
 	float: left;
@@ -7,11 +7,11 @@
 	margin-left: 525px;
 }
 @media screen and (max-width: 850px) {
-	#random-text,
+	#home-text,
 	#slider-wrapper {
 		float: none; /* initial */
 	}
-	#random-text {
+	#home-text {
 		max-width: none; /* initial */
 	}
 	#agenda-wrapper {
