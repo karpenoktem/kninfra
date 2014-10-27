@@ -40,7 +40,6 @@ def apply_mailman_changes(daan, changes):
         ml.require_explicit_destination = 0
         ml.max_num_recipients = 0
         ml.archive_private = 1
-        ml.host_name = settings.MAILDOMAIN
         ml.from_is_list = 1
     try:
         for l in changes['add']:

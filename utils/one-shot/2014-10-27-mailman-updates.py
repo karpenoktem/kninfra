@@ -13,9 +13,9 @@ def main():
         ml = MailList(x, True)
         try:
             changed = False
-            if ml.host_name != settings.MAILDOMAIN:
+            if ml.host_name != settings.LISTS_MAILDOMAIN:
                 print 'Updating host_name of %s' % x
-                ml.host_name = settings.MAILDOMAIN
+                ml.host_name = settings.LISTS_MAILDOMAIN
                 changed = True
             if ml.from_is_list != 1:
                 print 'Updating from_is_list of %s' % x
