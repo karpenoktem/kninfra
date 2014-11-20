@@ -168,8 +168,7 @@ body {
 #content {
 	padding-bottom: 6px; /* prevent collapsing of margins */
 	background-color: #f0f0f0;
-	background-image: url('uiltje.png');
-    background-size: 400px;
+	background-image: url('uiltje.svg');
 	background-repeat: no-repeat;
 	background-position: 100% 0%;
 	background-attachment: scroll;
@@ -177,6 +176,9 @@ body {
 	flex-grow: 1;
 	-webkit-flex-shrink: 0;
 	flex-shrink: 0;
+}
+.no-svg #content {
+	background-image: url('uiltje.png');
 }
 @media screen and (min-width: 801px) {
 	#content {

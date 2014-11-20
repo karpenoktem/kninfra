@@ -143,6 +143,10 @@ $(document).ready(function() {
         event.preventDefault();
         $('#submenu-wrapper').toggleClass('open');
     });
+
+    if (!window.SVGSVGElement) {
+        $(document.documentElement).addClass('no-svg');
+    }
 });
 
 // Implement rot13 for email obscurification
