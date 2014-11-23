@@ -1,11 +1,14 @@
 #!/usr/bin/python
 
-from oauth2client.client import SignedJwtAssertionCredentials
-import httplib2
 from iso8601 import parse_date
 import kn.settings as settings
 import json
 import datetime
+
+# pip install google-api-python-client
+from oauth2client.client import SignedJwtAssertionCredentials
+from googleapiclient.discovery import build
+import httplib2
 
 # How to configure the agenda:
 #
@@ -22,6 +25,9 @@ import datetime
 #
 # Note that this script itself should be run with the repository (for example
 # /home/infra/repo) in PYTHONPATH.
+
+# See https://developers.google.com/api-client-library/python/apis/calendar/v3
+# for documentation about the APIs used here.
 
 def get_credentials():
     key = json.loads(open(settings.GOOGLE_OAUTH2_KEY, 'r').read())
@@ -44,21 +50,13 @@ def fetch():
     credentials.authorize(h)
 
     timeMin = datetime.datetime.utcnow().date().isoformat() + 'T00:00:00Z'
-    resp, content = h.request('https://www.googleapis.com/calendar/v3/calendars/{id}/events?orderBy=startTime&showDeleted=false&singleEvents=true&timeMin={timeMin}&fields=items(description%2Cend%2Cstart%2Csummary)'.format(id=settings.GOOGLE_CALENDAR_ID, timeMin=timeMin))
 
-    if not resp['content-type'].startswith('application/json'):
-        print 'Wrong content type'
-        exit(1)
-
-    data = json.loads(content)
-
-    if resp.status != 200:
-        print 'HTTP error %d: %s' % (data['error']['code'],
-                                     data['error']['message'])
-        exit(1)
+    cal = build('calendar', 'v3', http=h)
+    request = cal.events().list(calendarId=settings.GOOGLE_CALENDAR_ID, timeMin=timeMin, fields='items(summary,description,start,end)')
+    response = request.execute()
 
     agenda = []
-    for item in data['items']:
+    for item in response['items']:
         agenda.append((item['summary'], item['description'],
                        parse_item_date(item['start']),
                        parse_item_date(item['end'])))
