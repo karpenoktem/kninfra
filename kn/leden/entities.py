@@ -180,6 +180,17 @@ def by_year_of_birth(year):
                                 '$gte': datetime.datetime(year, 1, 1) }}):
         yield entity(m)
 
+def by_age(max_age=None):
+    """ Finds entities under a certain age """
+    # This function could be extended to allow for a range of ages (e.g. adding
+    # a min_age argument)
+    date = datetime.date.today()
+    date = date.replace(year=date.year-max_age)
+    dt = datetime.datetime.combine(date, datetime.time(0, 0, 0, 0))
+    for m in ecol.find({'person.dateOfBirth': {
+                                '$gt': dt}}):
+        yield entity(m)
+
 def all():
     """ Finds all entities """
     for m in ecol.find():
@@ -979,6 +990,13 @@ class User(Entity):
     @property
     def dateOfBirth(self):
         return self._data.get('person',{}).get('dateOfBirth')
+    @property
+    def age(self):
+        # age is a little difficult to calculate because of leap years
+        # see http://stackoverflow.com/a/9754466
+        today = datetime.date.today()
+        born = self.dateOfBirth
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
     @property
     def got_unix_user(self):
         if 'has_unix_user' in self._data:
