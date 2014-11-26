@@ -264,7 +264,7 @@ def years_of_birth(request):
 def users_underage(request):
     users = sorted(Es.by_age(max_age=18), key=lambda x: x.dateOfBirth)
     users = filter(lambda u: u.is_active, users)
-    return render_to_response('leden/entities_under_18.html', {
+    return render_to_response('leden/entities_underage.html', {
                     'users': users},
             context_instance=RequestContext(request))
 
