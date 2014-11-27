@@ -42,7 +42,7 @@
 	<dt>E-Mailadres</dt>
         <dd><a href="mailto:{{ object.canonical_email }}">
                 {{ object.canonical_email }}</a></dd>
-        {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names %}
+        {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
         <dt>Achterliggend e-mailadres<dt>
         <dd>
         {{ object.primary_email }}
@@ -62,7 +62,7 @@
                                 }); return false;">Wijzig e-mail</button>
         {% endif %}{# "secretariaat" in user.cached_groups_names #}
         </dd>
-        {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names #}
+        {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
 	{% if object.primary_study %}
 	<dt>Studie</dt>
         <dd>
@@ -72,11 +72,11 @@
                 >{{ s.study.humanName }}</a>
         op <a href="{{ s.institute.get_absolute_url }}"
                 >{{ s.institute.humanName}}</a>
-        {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names %}
+        {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
         {% if s.number %}
         studentnummer {{ s.number }}
         {% endif %}
-        {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names #}
+        {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
         {% if s.from or s.until %}
         ({% if s.from %}
         van {{ s.from.date }}
@@ -90,7 +90,7 @@
         </ul>
         </dd>
 	{% endif %}
-        {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names %}
+        {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
 	{% if object.telephones %}
         <dt>Telefoonnummer
         {% if "secretariaat" in user.cached_groups_names %}
@@ -127,8 +127,6 @@
         </ul>
         </dd>
         {% endif %}{# object.telephones #}
-        {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names #}
-        {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names %}
 	{% if object.addresses %}
         <dt>Adres
         {% if "secretariaat" in user.cached_groups_names %}
@@ -185,7 +183,7 @@
         </ul>
         </dd>
         {% endif %}{# object.addresses #}
-        {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names #}
+        {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
         {% if object.dateOfBirth %}
 	<dt>Geboortedatum</dt>
 	<dd>
