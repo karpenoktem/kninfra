@@ -175,7 +175,8 @@ def get_years_of_birth():
 
 def by_year_of_birth(year):
     """ Finds entities by year of birth """
-    for m in ecol.find({'person.dateOfBirth': {
+    for m in ecol.find({'types': 'user',
+                        'person.dateOfBirth': {
                                 '$lt': datetime.datetime(year + 1, 1, 1),
                                 '$gte': datetime.datetime(year, 1, 1) }}):
         yield entity(m)
@@ -187,7 +188,8 @@ def by_age(max_age=None):
     date = datetime.date.today()
     date = date.replace(year=date.year-max_age)
     dt = datetime.datetime.combine(date, datetime.time(0, 0, 0, 0))
-    for m in ecol.find({'person.dateOfBirth': {
+    for m in ecol.find({'types': 'user',
+                        'person.dateOfBirth': {
                                 '$gt': dt}}):
         yield entity(m)
 
