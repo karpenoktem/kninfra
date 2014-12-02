@@ -730,6 +730,12 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def update_telephone_visibility(self, new, save=True):
+        """ Sets whether the primary telephone number is visible """
+        self._data['visibleTelephone'] = new
+        if save:
+            self.save()
+
     def update_primary_email(self, new, save=True):
         """ Adds @new as new and primary e-mail address. """
         if 'emailAddresses' not in self._data:
@@ -929,6 +935,10 @@ class User(Entity):
         if not telephones:
             return None
         return telephones[0]['number']
+
+    @property
+    def telephone_visible(self):
+        return self._data.get('visibleTelephone', False)
 
     @property
     def addresses(self):

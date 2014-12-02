@@ -83,9 +83,6 @@ def entity_update_primary(data, request):
 
             << {ok: true}
           ( << {ok: false, error: "Permission denied"} ) """
-    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
-    if not is_secretariaat:
-        return {'ok': False, 'error': 'Permission denied'}
     if 'id' not in data or not isinstance(data['id'], basestring):
         return {'ok': False, 'error': 'Missing argument "id"'}
     if 'type' not in data or not isinstance(data['type'], basestring):
@@ -94,15 +91,24 @@ def entity_update_primary(data, request):
         return {'ok': False, 'error': 'Missing argument "new"'}
     new = data['new']
     typ = data['type']
+    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
+    is_user = data['id'] == request.user.id
+    if not (is_secretariaat or (is_user and typ == 'telephone_visibility')):
+        return {'ok': False, 'error': 'Permission denied'}
     if typ in ('email', 'telephone'):
         if not isinstance(new, basestring):
             return {'ok': False, 'error': '"new" should be a string'}
+    elif typ == 'telephone_visibility':
+        if not isinstance(new, bool):
+            return {'ok': False, 'error': '"new" should be a bool'}
     elif typ == 'address':
         if not isinstance(new, dict):
             return {'ok': False, 'error': '"new" should be a dict'}
         for attr in ('street', 'number', 'zip', 'city'):
             if attr not in new or not isinstance(new[attr], basestring):
                 return {'ok': False, 'error': 'Missing argument "new.%s"'%attr}
+    else:
+        return {'ok': False, 'error': 'Unknown update type: "%s"' % typ}
     e = Es.by_id(data['id'])
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
@@ -125,6 +131,10 @@ def entity_update_primary(data, request):
                     zip:"1234AA",
                     city:"Amsterdam"} """
         e.update_address(new['street'], new['number'], new['zip'], new['city'])
+    elif (typ == 'telephone_visibility'):
+        """ >> {action:"entity_update_telephone_visibility",id:"4e6fcc85e60edf3dc0000270",
+                    new:False} """
+        e.update_telephone_visibility(new)
     else:
         return {'ok': False, 'error': 'Unknown update type: "%s"' % typ}
     giedo.sync_async(request)
