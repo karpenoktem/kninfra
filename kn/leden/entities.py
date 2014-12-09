@@ -744,6 +744,22 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def update_visibility_preference(self, key, value, save=True):
+        """ Update a single visibility preference """
+
+        if 'preferences' not in self._data:
+            self._data['preferences'] = {}
+        preferences = self._data['preferences']
+
+        if 'visibility' not in preferences or type(preferences['visibility']) == list:
+            preferences['visibility'] = {}
+        visprefs = preferences['visibility']
+
+        visprefs[key] = value
+
+        if save:
+            self.save()
+
     @property
     def canonical_full_email(self):
         """ Returns the string
@@ -1026,6 +1042,14 @@ class User(Entity):
                 a['until'] = None
             ret.append(a)
         return ret
+
+    @property
+    def preferences(self):
+        return self._data.get('preferences', {})
+
+    @property
+    def visibility(self):
+        return self.preferences.get('visibility', {})
 
 class Tag(Entity):
     @permalink

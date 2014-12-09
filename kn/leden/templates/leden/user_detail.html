@@ -93,6 +93,26 @@
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
 	{% if object.telephones %}
         <dt>Telefoonnummer
+        {% if "secretariaat" in user.cached_groups_names or user == object %}
+        &nbsp; <i><label>
+                {% if object.visibility.telephone %}
+                <span title="Zichtbaar voor alle leden">zichtbaar</span>
+                {% else %}
+                <span title="Alleen zichtbaar voor secretariaat en admlezers">niet zichtbaar</span>
+                {% endif %}
+                <button onclick="$.post('{% url leden-api %}', {
+                                        'csrfmiddlewaretoken': csrf_token,
+                                        data: JSON.stringify({
+                                                action: 'entity_update_visibility',
+                                                property: 'telephone',
+                                                visible: {% if object.visibility.telephone %}false{% else %}true{% endif %},
+                                                id: '{{ object.id }}'})
+                                        }, function(data) {
+                                                if(data.ok) window.location.reload();
+                                                else alert(data.error);
+                                        }); return false;" title="verander zichtbaarheid van het telefoonnummer">Verander</button>
+        </label></i>
+        {% endif %}
         {% if "secretariaat" in user.cached_groups_names %}
         <button onclick="var new_phone = prompt('Nieuw telefoonnummer');
                          if (!new_phone) return false;
@@ -127,6 +147,11 @@
         </ul>
         </dd>
         {% endif %}{# object.telephones #}
+        {% elif object.visibility.telephone %}
+        <dt>Telefoonnummer</dt>
+        <dd>{{ object.primary_telephone }}</dd>
+        {% endif %}
+        {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
 	{% if object.addresses %}
         <dt>Adres
         {% if "secretariaat" in user.cached_groups_names %}
