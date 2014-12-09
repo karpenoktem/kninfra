@@ -730,12 +730,6 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
-    def update_telephone_visibility(self, new, save=True):
-        """ Sets whether the primary telephone number is visible """
-        self._data['visibleTelephone'] = new
-        if save:
-            self.save()
-
     def update_primary_email(self, new, save=True):
         """ Adds @new as new and primary e-mail address. """
         if 'emailAddresses' not in self._data:
@@ -747,6 +741,22 @@ class Entity(SONWrapper):
         addrs.insert(0, {'email': new,
                  'from': dt,
                  'until': DT_MAX})
+        if save:
+            self.save()
+
+    def update_visibility_preference(self, key, value, save=True):
+        """ Update a single visibility preference """
+
+        if 'preferences' not in self._data:
+            self._data['preferences'] = {}
+        preferences = self._data['preferences']
+
+        if 'visibility' not in preferences or type(preferences['visibility']) == list:
+            preferences['visibility'] = {}
+        visprefs = preferences['visibility']
+
+        visprefs[key] = value
+
         if save:
             self.save()
 
@@ -937,10 +947,6 @@ class User(Entity):
         return telephones[0]['number']
 
     @property
-    def telephone_visible(self):
-        return self._data.get('visibleTelephone', False)
-
-    @property
     def addresses(self):
         ret = []
         addresses = self._data.get('addresses', ())
@@ -1036,6 +1042,14 @@ class User(Entity):
                 a['until'] = None
             ret.append(a)
         return ret
+
+    @property
+    def preferences(self):
+        return self._data.get('preferences', {})
+
+    @property
+    def visibility(self):
+        return self.preferences.get('visibility', {})
 
 class Tag(Entity):
     @permalink

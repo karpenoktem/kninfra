@@ -95,7 +95,7 @@
         <dt>Telefoonnummer
         {% if "secretariaat" in user.cached_groups_names or user == object %}
         &nbsp; <i><label>
-                {% if object.telephone_visible %}
+                {% if object.visibility.telephone %}
                 <span title="Zichtbaar voor alle leden">zichtbaar</span>
                 {% else %}
                 <span title="Alleen zichtbaar voor secretariaat en admlezers">niet zichtbaar</span>
@@ -103,9 +103,9 @@
                 <button onclick="$.post('{% url leden-api %}', {
                                         'csrfmiddlewaretoken': csrf_token,
                                         data: JSON.stringify({
-                                                action: 'entity_update_primary',
-                                                type: 'telephone_visibility',
-                                                new: {% if object.telephone_visible %}false{% else %}true{% endif %},
+                                                action: 'entity_update_visibility',
+                                                property: 'telephone',
+                                                visible: {% if object.visibility.telephone %}false{% else %}true{% endif %},
                                                 id: '{{ object.id }}'})
                                         }, function(data) {
                                                 if(data.ok) window.location.reload();
@@ -147,7 +147,7 @@
         </ul>
         </dd>
         {% endif %}{# object.telephones #}
-        {% elif object.telephone_visible %}
+        {% elif object.visibility.telephone %}
         <dt>Telefoonnummer
         <dd>{{ object.primary_telephone }}</dd>
         {% endif %}
