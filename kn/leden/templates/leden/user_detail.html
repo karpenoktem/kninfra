@@ -148,7 +148,7 @@
         </dd>
         {% endif %}{# object.telephones #}
         {% elif object.visibility.telephone %}
-        <dt>Telefoonnummer
+        <dt>Telefoonnummer</dt>
         <dd>{{ object.primary_telephone }}</dd>
         {% endif %}
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
