@@ -96,7 +96,8 @@ copy_emailaddresses_to_clipboard = function() {
 </dl>
 
 {% if object.is_open and has_write_access %}
-<button onclick="close_event()">Sluit inschrijvingen</button>
+<button onclick="close_event()">Sluit inschrijvingen</button> –
+<a href="{% url event-edit edit=object.name %}">Bewerk activiteit</a>
 {% endif %}{# object.is_open and has_write_access #}
 
 {% if not subscription or may_subscribe_others or not subscription.confirmed %}
