@@ -7,9 +7,11 @@ import kn.leden.entities as Es
 from kn import settings
 
 def generate_wiki_changes(self):
+    creds = settings.WIKI_MYSQL_SECRET
+    if not creds:
+        return None
     users = dict()
     id2name = dict()
-    creds = settings.WIKI_MYSQL_SECRET
     dc = MySQLdb.connect(creds[0], user=creds[1],
             passwd=creds[2], db=creds[3])
     c = dc.cursor()

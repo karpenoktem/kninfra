@@ -38,6 +38,8 @@ def ldap_setpass(daan, user, password):
 # TODO exception safety
 
 def apply_ldap_changes(daan, changes):
+    if not changes:
+        return
     l = ldap.open(settings.LDAP_HOST)
     l.bind_s(settings.LDAP_USER, settings.LDAP_PASS)
     try:
