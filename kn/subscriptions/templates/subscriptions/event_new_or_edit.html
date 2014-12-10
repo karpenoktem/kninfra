@@ -1,10 +1,18 @@
 {% extends "leden/base.html" %}
 {% load base %}
 {% block body %}
+{% if form.name.value %}
+<h1>Bewerk activiteit {{ form.humanName.value }}</h1>
+{% else %}
 <h1>Nieuwe activiteit</h1>
+{% endif %}
 <form method="post" action="?" class="top-aligned">
         {% csrf_token %}
         {{ form.as_p }}
+        {% if form.name.value %}
+        <input type="submit" value="Pas aan!"/>
+        {% else %}
         <input type="submit" value="Maak aan!"/>
+        {% endif %}
 </form>
 {% endblock %}
