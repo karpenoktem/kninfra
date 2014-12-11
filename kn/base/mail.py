@@ -5,7 +5,7 @@ import django.core.mail
 from kn import settings
 
 def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
-                        reply_to=None):
+                        reply_to=None, headers=None):
     """ Render an e-mail from a template and send it. """
     # Normalize arguments
     if isinstance(to, basestring):
@@ -14,6 +14,8 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
         cc = [cc]
     if isinstance(bcc, basestring):
         bcc = [bcc]
+    if headers is None:
+        headers = {}
     # Render template
     template = django.template.loader.get_template(template_name)
     rendered_nodes = {}
@@ -31,7 +33,6 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
         raise KeyError, "Missing plain block"
 
     # Set up e-mail
-    headers = {}
     if cc:
         headers['CC'] = ', '.join(cc)
     if reply_to:
