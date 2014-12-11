@@ -10,6 +10,7 @@ from kn import settings
 def generate_forum_changes(self):
     creds = settings.FORUM_MYSQL_SECRET
     if not creds:
+        logging.warning('forum: no credentials available, skipping')
         return None
     users = dict()
     dc = MySQLdb.connect(creds[0], user=creds[1],

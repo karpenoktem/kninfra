@@ -8,6 +8,7 @@ from kn import settings
 
 def generate_ldap_changes(giedo):
     if not settings.LDAP_PASS:
+        logging.warning('ldap: no credentials available, skipping')
         return None
     todo = {'upsert': [], 'remove': []}
     l = ldap.open(settings.LDAP_HOST)
