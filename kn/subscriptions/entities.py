@@ -2,6 +2,7 @@ import decimal
 
 from django.db.models import permalink
 from django.utils.html import escape, linebreaks
+from django.core.mail import EmailMessage
 
 from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
 import kn.leden.entities as Es
@@ -141,5 +142,21 @@ class Subscription(SONWrapper):
     confirmed = son_property(('confirmed',), True)
     subscribedBy_notes = son_property(('subscribedBy_notes',))
     dateConfirmed = son_property(('dateConfirmed',))
+
+    def send_notification(self, subject, body):
+        cc = [self.event._data.owner.canonical_full_email]
+        if self.subscribedBy:
+            cc.append(self.subscribedBy.canonical_full_email)
+        email = EmailMessage(
+                subject,
+                body,
+                'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
+                [self.user.canonical_full_email],
+                cc=cc,
+                headers={
+                    'Reply-To': self.event._data.owner.canonical_full_email
+                },
+        )
+        email.send()
 
 # vim: et:sta:bs=2:sw=4:
