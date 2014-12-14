@@ -22,6 +22,8 @@ def forum_setpass(daan, user, password):
     dc.close()
 
 def apply_forum_changes(daan, changes):
+    if not changes:
+        return
     creds = settings.FORUM_MYSQL_SECRET
     dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
                 db=creds[3])

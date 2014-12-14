@@ -14,6 +14,8 @@ def wiki_setpass(daan, user, password):
         cwd=settings.MEDIAWIKI_PATH)
 
 def apply_wiki_changes(daan, changes):
+    if not changes:
+        return
     creds = settings.WIKI_MYSQL_SECRET
     dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
                 db=creds[3])
