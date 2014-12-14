@@ -283,7 +283,8 @@ def event_new_or_edit(request, edit=None):
     else:
         d = e._data
         form = AddEventForm(d)
-    ctx = {'form': form}
+    ctx = {'form': form,
+           'edit': edit}
     return render_to_response('subscriptions/event_new_or_edit.html', ctx,
             context_instance=RequestContext(request))
 
