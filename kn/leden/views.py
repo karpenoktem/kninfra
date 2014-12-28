@@ -265,7 +265,7 @@ def users_underage(request):
     users = sorted(Es.by_age(max_age=18), key=lambda x: x.dateOfBirth)
     users = filter(lambda u: u.is_active, users)
     final_date = None
-    if len(users) > 0:
+    if users:
         youngest = users[-1]
         final_date = youngest.dateOfBirth.replace(year=youngest.dateOfBirth.year+18)
     return render_to_response('leden/entities_underage.html', {
