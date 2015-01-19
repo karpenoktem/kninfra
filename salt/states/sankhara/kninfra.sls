@@ -16,6 +16,12 @@ infra:
         - home: /home/infra
         - uid: 2000
         - guid: 2000
+interinfra:
+    group.present:
+        - gid: 3000
+        - addusers:
+            - infra
+            - www-data
 https://github.com/karpenoktem/kninfra:
     git.latest:
         - target: /home/infra/repo
