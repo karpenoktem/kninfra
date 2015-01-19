@@ -2,4 +2,5 @@
 *.pyc
 *.login
 *.swp
+/.vagrant
 .DS_Store
