@@ -22,8 +22,14 @@ interinfra:
         - addusers:
             - infra
             - www-data
+{% if grains['vagrant'] %}
+/home/infra/repo:
+    file.symlink:
+        - target: /vagrant
+{% else %}
 https://github.com/karpenoktem/kninfra:
     git.latest:
         - target: /home/infra/repo
     require:
         - pkg: git
+{% endif %}

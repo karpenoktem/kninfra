@@ -1,4 +1,3 @@
-
 Vagrant.configure(2) do |config|
     # See https://docs.vagrantup.com/v2/multi-machine/
     def common(config, hostname)
@@ -11,7 +10,7 @@ Vagrant.configure(2) do |config|
         config.vm.provision :salt do |salt|
             salt.run_highstate = true
             salt.verbose = true
-            salt.minion_config = "salt/" + hostname
+            salt.minion_config = "salt/vagrant_minion_config"
         end
     end
 
