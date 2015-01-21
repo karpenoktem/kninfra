@@ -1,7 +1,7 @@
 base:
     '*':
         - common.sshd
-        - common.lighttpd
+        - common.nginx
         - common.adminutils
         - common.git
     'sankhara':

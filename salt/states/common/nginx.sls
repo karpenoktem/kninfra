@@ -1,4 +1,4 @@
-lighttpd:
+nginx:
     pkg:
         - installed
     service:
