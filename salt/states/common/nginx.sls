@@ -1,5 +1,8 @@
 nginx:
     pkg:
         - installed
-    service:
-        - running
+/etc/nginx/sites-enabled/default:
+    file.absent
+nginx running:
+    service.running:
+        - name: nginx
