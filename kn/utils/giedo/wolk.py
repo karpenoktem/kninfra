@@ -59,7 +59,7 @@ def generate_wolk_changes(giedo):
     for g in gs:
         if not g.got_unix_group:
             continue
-        groups[str(g.name)] = frozenset([str(ulut[c].name)
+        groups[str(g.name)] = set([str(ulut[c].name)
                 for c in memb_graph[g._id] if c in ulut])
 
     # Now, check which users and groups actually exist in owncloud
@@ -78,13 +78,13 @@ def generate_wolk_changes(giedo):
         if user in groups[group]:
             groups[group].remove(user)
     c.execute("SELECT uid FROM oc_users")
-    for user in c.fetchall():
+    for user, in c.fetchall():
         if user not in users:
             logging.info("wolk: stray user %s", user)
             continue
         missing_users.remove(user)
     c.execute("SELECT gid FROM oc_groups")
-    for group in c.fetchall():
+    for group, in c.fetchall():
         if group not in groups:
             logging.info("wolk: stray group %s", user)
             continue
