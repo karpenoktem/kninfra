@@ -12,6 +12,7 @@ from kn.utils.whim import WhimDaemon
 from kn.utils.cilia.unix import set_unix_map, unix_setpass
 from kn.utils.cilia.samba import set_samba_map, samba_setpass
 from kn.utils.cilia.fotoadmin import fotoadmin_remove_moved_fotos
+from kn.utils.cilia.wolk import apply_wolk_changes
 
 class Cilia(WhimDaemon):
     def __init__(self):
@@ -19,6 +20,7 @@ class Cilia(WhimDaemon):
         self.unix_lock = threading.Lock()
         self.samba_lock = threading.Lock()
         self.fotoadmin_lock = threading.Lock()
+        self.wolk_lock = threading.Lock()
 
     def pre_mainloop(self):
         super(Cilia, self).pre_mainloop()
@@ -41,5 +43,10 @@ class Cilia(WhimDaemon):
             with self.fotoadmin_lock:
                 return fotoadmin_remove_moved_fotos(self,
                         d['user'], d['dir'])
+        elif d['type'] == 'wolk':
+            with self.wolk_lock:
+                return apply_wolk_changes(self, d['changes'])
+        else:
+            logging.info('unknown command type: %s', repr(d['type']))
 
 # vim: et:sta:bs=2:sw=4:
