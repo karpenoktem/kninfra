@@ -78,13 +78,13 @@ def generate_wolk_changes(giedo):
         if user in groups[group]:
             groups[group].remove(user)
     c.execute("SELECT uid FROM oc_users")
-    for user in c.fetchall():
+    for user, in c.fetchall():
         if user not in users:
             logging.info("wolk: stray user %s", user)
             continue
         missing_users.remove(user)
     c.execute("SELECT gid FROM oc_groups")
-    for group in c.fetchall():
+    for group, in c.fetchall():
         if group not in groups:
             logging.info("wolk: stray group %s", user)
             continue
