@@ -59,7 +59,7 @@ def generate_wolk_changes(giedo):
     for g in gs:
         if not g.got_unix_group:
             continue
-        groups[str(g.name)] = frozenset([str(ulut[c].name)
+        groups[str(g.name)] = set([str(ulut[c].name)
                 for c in memb_graph[g._id] if c in ulut])
 
     # Now, check which users and groups actually exist in owncloud
