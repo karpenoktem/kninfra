@@ -20,10 +20,13 @@ if($data['type'] === 'apply_changes') {
         }
         foreach($changes['addUserToGroup'] as $user_group) {
                 list($user, $group) = $user_group;
-                echo("$Adding {$user} to {$group}\n");
+                echo("Adding {$user} to {$group}\n");
                 OC_Group::addToGroup($user, $group);
         }
         // TODO removeUserFromGroup
+} elseif($data['type'] === 'setpass') {
+        echo("Setting password of {$data['user']}\n");
+        OC_User::setPassword($data['user'], $data['passwd']);
 } else {
         die('unknown action');
 }

@@ -12,7 +12,7 @@ from kn.utils.whim import WhimDaemon
 from kn.utils.cilia.unix import set_unix_map, unix_setpass
 from kn.utils.cilia.samba import set_samba_map, samba_setpass
 from kn.utils.cilia.fotoadmin import fotoadmin_remove_moved_fotos
-from kn.utils.cilia.wolk import apply_wolk_changes
+from kn.utils.cilia.wolk import apply_wolk_changes, wolk_setpass
 
 class Cilia(WhimDaemon):
     def __init__(self):
@@ -39,6 +39,8 @@ class Cilia(WhimDaemon):
                 unix_setpass(self, d['user'], d['pass'])
             with self.samba_lock:
                 samba_setpass(self, d['user'], d['pass'])
+            with self.wolk_lock:
+                wolk_setpass(self, d['user'], d['pass'])
         elif d['type'] == 'fotoadmin-remove-moved-fotos':
             with self.fotoadmin_lock:
                 return fotoadmin_remove_moved_fotos(self,
