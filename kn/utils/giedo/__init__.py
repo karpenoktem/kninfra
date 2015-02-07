@@ -32,6 +32,7 @@ from kn.utils.giedo.unix import generate_unix_map
 from kn.utils.giedo.openvpn import create_openvpn_installer, create_openvpn_zip
 from kn.utils.giedo.siteagenda import update_site_agenda
 from kn.utils.giedo._ldap import generate_ldap_changes
+from kn.utils.giedo.wolk import generate_wolk_changes
 
 class Giedo(WhimDaemon):
     def __init__(self):
@@ -54,10 +55,14 @@ class Giedo(WhimDaemon):
                   ('forum', self.daan, self._gen_forum),
                   ('unix', self.cilia, self._gen_unix),
                   ('wiki', self.daan, self._gen_wiki),
-                  ('ldap', self.daan, self._gen_ldap))
+                  ('ldap', self.daan, self._gen_ldap),
+                  ('wolk', self.cilia, self._gen_wolk))
         self.push_changes_event.set()
 
 
+    def _gen_wolk(self):
+        return {'type': 'wolk',
+                'changes': generate_wolk_changes(self)}
     def _gen_ldap(self):
         return {'type': 'ldap',
                 'changes': generate_ldap_changes(self)}
