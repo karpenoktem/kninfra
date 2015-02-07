@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 pushd $HOME/repo/kn &> /dev/null
 
 if [ -e $HOME/fcgi.pid ]; then

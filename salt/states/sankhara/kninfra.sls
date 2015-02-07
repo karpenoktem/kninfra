@@ -33,3 +33,9 @@ https://github.com/karpenoktem/kninfra:
     require:
         - pkg: git
 {% endif %}
+/home/infra/bin:
+    file.symlink:
+        - target: /home/infra/repo/bin
+/home/infra/repo/bin/run-fcgi:
+    cmd.run:
+        - user: infra
