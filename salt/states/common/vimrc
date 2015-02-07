@@ -19,3 +19,5 @@ else
 endif
 
 map \h :nohlsearch<CR>
+
+au BufRead,BufNewFile *.sls setfiletype yaml
