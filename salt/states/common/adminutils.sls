@@ -1,6 +1,9 @@
 htop:
     pkg:
         - installed
+iftop:
+    pkg:
+        - installed
 iotop:
     pkg:
         - installed
