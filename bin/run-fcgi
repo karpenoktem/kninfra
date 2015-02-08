@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 pushd $HOME/repo/kn &> /dev/null
 
 if [ -e $HOME/fcgi.pid ]; then
@@ -9,6 +7,8 @@ if [ -e $HOME/fcgi.pid ]; then
 fi
 
 rm -f $HOME/fcgi.sock $HOME/fcgi.pid
+
+set -e
 ./manage.py runfcgi socket=$HOME/fcgi.sock umask=002 pidfile=$HOME/fcgi.pid
 chgrp interinfra $HOME/fcgi.sock
 
