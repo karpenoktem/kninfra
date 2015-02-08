@@ -175,9 +175,22 @@ def get_years_of_birth():
 
 def by_year_of_birth(year):
     """ Finds entities by year of birth """
-    for m in ecol.find({'person.dateOfBirth': {
+    for m in ecol.find({'types': 'user',
+                        'person.dateOfBirth': {
                                 '$lt': datetime.datetime(year + 1, 1, 1),
                                 '$gte': datetime.datetime(year, 1, 1) }}):
+        yield entity(m)
+
+def by_age(max_age=None):
+    """ Finds entities under a certain age """
+    # This function could be extended to allow for a range of ages (e.g. adding
+    # a min_age argument)
+    date = datetime.date.today()
+    date = date.replace(year=date.year-max_age)
+    dt = datetime.datetime.combine(date, datetime.time(0, 0, 0, 0))
+    for m in ecol.find({'types': 'user',
+                        'person.dateOfBirth': {
+                                '$gt': dt}}):
         yield entity(m)
 
 def all():
@@ -731,6 +744,22 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def update_visibility_preference(self, key, value, save=True):
+        """ Update a single visibility preference """
+
+        if 'preferences' not in self._data:
+            self._data['preferences'] = {}
+        preferences = self._data['preferences']
+
+        if 'visibility' not in preferences or type(preferences['visibility']) == list:
+            preferences['visibility'] = {}
+        visprefs = preferences['visibility']
+
+        visprefs[key] = value
+
+        if save:
+            self.save()
+
     @property
     def canonical_full_email(self):
         """ Returns the string
@@ -980,6 +1009,13 @@ class User(Entity):
     def dateOfBirth(self):
         return self._data.get('person',{}).get('dateOfBirth')
     @property
+    def age(self):
+        # age is a little difficult to calculate because of leap years
+        # see http://stackoverflow.com/a/9754466
+        today = datetime.date.today()
+        born = self.dateOfBirth
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    @property
     def got_unix_user(self):
         if 'has_unix_user' in self._data:
             return self._data['has_unix_user']
@@ -1006,6 +1042,14 @@ class User(Entity):
                 a['until'] = None
             ret.append(a)
         return ret
+
+    @property
+    def preferences(self):
+        return self._data.get('preferences', {})
+
+    @property
+    def visibility(self):
+        return self.preferences.get('visibility', {})
 
 class Tag(Entity):
     @permalink
