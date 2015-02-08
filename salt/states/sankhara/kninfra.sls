@@ -11,6 +11,10 @@ packages:
             - python-mysqldb
             - python-imaging
             - python-pip
+mirte:
+    pip.installed
+sarah:
+    pip.installed
 infra:
     user.present:
         - home: /home/infra
