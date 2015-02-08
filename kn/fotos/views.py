@@ -1,6 +1,7 @@
 from glob import glob
 import os.path
 from os.path import basename
+from urllib import unquote
 
 import MySQLdb
 import Image
@@ -24,6 +25,7 @@ def fotos(request):
              context_instance=RequestContext(request))
 
 def cache(request, cache, path):
+    path = unquote(path)
     if not cache in fEs.CACHE_TYPES:
         raise Http404
     o = fEs.by_path(path)
