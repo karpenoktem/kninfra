@@ -36,6 +36,21 @@ https://github.com/karpenoktem/kninfra:
 /home/infra/bin:
     file.symlink:
         - target: /home/infra/repo/bin
+/home/infra/settings.py:
+    file.managed:
+        - source: salt://sankhara/settings.py
+        - template: jinja
+        - user: infra
+        - mode: 600
+{# We cannot set user/group on /vagrant.  Thus also not on /home/infra/repo.
+ # We circumvent by using a symlink #}
+/home/infra/repo/kn/settings.py:
+    file.symlink:
+        - target: /home/infra/settings.py
+        {% if grains['vagrant'] %}
+        - user: vagrant
+        - group: vagrant
+        {% endif %}
 /home/infra/repo/bin/run-fcgi:
     cmd.run:
         - user: infra
