@@ -9,7 +9,6 @@
   KNF.prototype.change_path = function(path) {
     // Clear out the old
     $('#fotos').empty();
-    $('#kruimelpad').empty();
     // Update state
     this.path = path; // it is important we set path before changing location
     if (this.get_url_path() != path)
@@ -18,35 +17,30 @@
     this.displaying_all_fotos = false;
     this.foto_offset = 0;
     this.fotos_fetched = false;
-    // Update kruimelpad
-    var cur = null;
-    $.each([null].concat(path.split('/')), function(k, component) {
-      if (component === '')
-        return;
-      if (component !== null) {
-        $('<li>/</li>').appendTo('#kruimelpad');
-        if (component === '') {
-          return;
-        } else if (!cur) {
+
+    // Update breadcrumbs
+    $('#breadcrumbs').empty();
+    var cur = '';
+    $.each((path ? '/'+path : '').split('/'), function(k, component) {
+      if (component !== '') {
+        $('#breadcrumbs').append(document.createTextNode(' / '));
+        if (!cur) {
           cur = component;
         } else {
           cur += '/' + component;
         }
       }
-      var our_cur;
-      if (component === null)
-        our_cur = '';
-      else
-        our_cur = cur;
-      var li = $('<li></li>')
-          .click(function() {
-            this.change_path(our_cur);
-            return false;
-          }.bind(this))
-          .appendTo('#kruimelpad');
-      $('<a href="javascript:void(0)"></a>').text(
-            component ? component : 'fotos').appendTo(li);
+
+      var a = $('<a></a>').text(
+        component ? component : 'fotos').appendTo('#breadcrumbs');
+      a.attr('href', fotos_root+cur);
+      var p = cur;
+      a.click(function() {
+        this.change_path(p);
+        return false;
+      }.bind(this))
     }.bind(this));
+
     // Fetch new
     this.fetch_fotos();
   };
