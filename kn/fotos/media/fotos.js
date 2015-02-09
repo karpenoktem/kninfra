@@ -13,7 +13,7 @@
     // Update state
     this.path = path; // it is important we set path before changing location
     if (this.get_url_path() != path)
-      location.href = "#" + path;
+      history.pushState(undefined, '', fotos_root + path);
     this.fotos = [];
     this.displaying_all_fotos = false;
     this.foto_offset = 0;
@@ -139,10 +139,7 @@
 
   // Returns the path according to the current URL
   KNF.prototype.get_url_path = function() {
-    var tmp = location.hash;
-    if (tmp.substr(0,1) == "#")
-      tmp = tmp.substr(1);
-    return tmp;
+    return location.pathname.substr(fotos_root.length);
   };
 
   KNF.prototype.onpopstate = function() {

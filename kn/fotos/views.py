@@ -19,7 +19,7 @@ from kn.leden import giedo
 
 import kn.fotos.entities as fEs
 
-def fotos(request):
+def fotos(request, path=''):
     return render_to_response('fotos/fotos.html', {},
              context_instance=RequestContext(request))
 

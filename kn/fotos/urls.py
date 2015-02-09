@@ -12,7 +12,7 @@ urlpatterns = patterns('',
             views.fotoadmin_create_event, name='fotoadmin-create-event'),
         url(r'^fotos/api/?$',
             api.view, name='fotos-api'),
-        url(r'^fotos/?$',
+        url(r'^fotos/(?P<path>.*)$',
             views.fotos, name='fotos'),
         # NOTE keep up to date with media/fotos.js
         url(r'^foto/(?P<cache>[^/]+)/(?P<path>.*)$',
