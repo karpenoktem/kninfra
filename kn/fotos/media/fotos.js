@@ -95,7 +95,7 @@
     if (this.foto_offset == this.fotos.length)
       this.displaying_all_fotos = true;
     else
-      setTimeout(this.on_scroll.bind(this), 0);
+      setTimeout(this.onscroll.bind(this), 0);
   };
 
   KNF.prototype.cache_url = function(cache, path) {
@@ -122,11 +122,11 @@
         }.bind(this));
         this.fotos_fetched = true;
         this.display_more_fotos();
-        setTimeout(this.on_scroll.bind(this), 0);
+        setTimeout(this.onscroll.bind(this), 0);
       }.bind(this));
   };
 
-  KNF.prototype.on_scroll = function() {
+  KNF.prototype.onscroll = function() {
     if (this.displaying_all_fotos || !this.fotos_fetched)
       return;
     var diff = $(document).height()
@@ -145,7 +145,7 @@
     return tmp;
   };
 
-  KNF.prototype.on_popstate = function() {
+  KNF.prototype.onpopstate = function() {
     var new_path = this.get_url_path();
     if (new_path == this.path)
       return;
@@ -212,9 +212,9 @@
   };
 
   KNF.prototype.run = function() {
-    this.on_popstate();
-    $(window).scroll(this.on_scroll.bind(this));
-    $(window).bind('popstate', this.on_popstate.bind(this));
+    this.onpopstate();
+    $(window).scroll(this.onscroll.bind(this));
+    $(window).bind('popstate', this.onpopstate.bind(this));
     $('#foto').click(function(){
       this.hide_foto();
       return false;
