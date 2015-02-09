@@ -5,6 +5,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}/fotos/fotos.js?v=2">
 </script>
 <script type="text/javascript">
+var fotos_root = "{% url fotos '' %}";
 var fotos_api_url = "{% url fotos-api %}";
 // FIXME (hack) this forces the header to be collapsed.
 sessionStorage['visited'] = true;
@@ -18,7 +19,7 @@ sessionStorage['visited'] = true;
 {% endblock styles %}
 
 {% block body %}
-<ul id="kruimelpad"></ul>
+<div id="breadcrumbs"></div>
 <ul id="fotos"></ul>
 <div id="foto">
 <div></div>

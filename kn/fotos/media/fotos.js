@@ -1,3 +1,4 @@
+'use strict';
 (function(){
   function KNF(){
     this.showing_foto = false;
@@ -6,59 +7,51 @@
   }
 
   KNF.prototype.change_path = function(path) {
-    var that = this;
     // Clear out the old
     $('#fotos').empty();
-    $('#kruimelpad').empty();
     // Update state
     this.path = path; // it is important we set path before changing location
     if (this.get_url_path() != path)
-      location.href = "#" + path;
+      history.pushState(undefined, '', fotos_root + path);
     this.fotos = [];
     this.displaying_all_fotos = false;
     this.foto_offset = 0;
     this.fotos_fetched = false;
-    // Update kruimelpad
-    var cur = null;
-    $.each([null].concat(path.split('/')), function(k, component) {
-      if (component === '')
-        return;
-      if (component !== null) {
-        $('<li>/</li>').appendTo('#kruimelpad');
-        if (component === '') {
-          return;
-        } else if (!cur) {
+
+    // Update breadcrumbs
+    $('#breadcrumbs').empty();
+    var cur = '';
+    $.each((path ? '/'+path : '').split('/'), function(k, component) {
+      if (component !== '') {
+        $('#breadcrumbs').append(document.createTextNode(' / '));
+        if (!cur) {
           cur = component;
         } else {
           cur += '/' + component;
         }
       }
-      var our_cur;
-      if (component === null)
-        our_cur = '';
-      else
-        our_cur = cur;
-      var li = $('<li></li>')
-          .click(function() {
-            that.change_path(our_cur);
-            return false;
-          })
-          .appendTo('#kruimelpad');
-      $('<a href="javascript:void(0)"></a>').text(
-            component ? component : 'fotos').appendTo(li);
-    });
+
+      var a = $('<a></a>').text(
+        component ? component : 'fotos').appendTo('#breadcrumbs');
+      a.attr('href', fotos_root+cur);
+      var p = cur;
+      a.click(function() {
+        this.change_path(p);
+        return false;
+      }.bind(this))
+    }.bind(this));
+
     // Fetch new
     this.fetch_fotos();
   };
 
   KNF.prototype.display_more_fotos = function() {
-    var that = this;
     if (!this.fotos_fetched)
       return;
     var limit = Math.min(this.fotos.length, this.foto_offset + 4);
     for (; this.foto_offset < limit; this.foto_offset++) {
       (function(i){
-        var c = that.fotos[i];
+        var c = this.fotos[i];
         var srcset = c.thumbnail + " 1x, " +
                      c.thumbnail2x + " 2x"; 
         var thumb = $(
@@ -79,24 +72,24 @@
           $('<span></span>').text(title).appendTo(thumb);
         if (c.type == 'album') {
           thumb.click(function(){
-            that.change_path(c.path);
+            this.change_path(c.path);
             return false;
-          });
+          }.bind(this));
         }
         if (c.type == 'foto') {
 
           thumb.click(function(){
-            that.show_foto(i);
+            this.show_foto(i);
             return false;
-          });
+          }.bind(this));
         }
         thumb.appendTo('#fotos');
-      })(this.foto_offset);
+      }.bind(this))(this.foto_offset);
     }
     if (this.foto_offset == this.fotos.length)
       this.displaying_all_fotos = true;
     else
-      setTimeout(function(){that.on_scroll()}, 0);
+      setTimeout(this.onscroll.bind(this), 0);
   };
 
   KNF.prototype.cache_url = function(cache, path) {
@@ -104,31 +97,30 @@
   };
 
   KNF.prototype.fetch_fotos = function() {
-    var that = this;
     var old_path = this.path;
     this.api({action: 'list',
               path: this.path},
       function(data) {
-        if(old_path != that.path) return;
+        if(old_path != this.path) return;
         if(data.error) return alert(data.error);
         
         $.each(data.children, function(i, c) {
-          c.thumbnail = that.cache_url('thumb', c.path);
-          c.thumbnail2x = that.cache_url('thumb2x', c.path);
+          c.thumbnail = this.cache_url('thumb', c.path);
+          c.thumbnail2x = this.cache_url('thumb2x', c.path);
           if (c.type == 'foto') {
-            c.full = that.cache_url('full', c.path);
-            c.large = that.cache_url('large', c.path);
-            c.large2x = that.cache_url('large2x', c.path);
+            c.full = this.cache_url('full', c.path);
+            c.large = this.cache_url('large', c.path);
+            c.large2x = this.cache_url('large2x', c.path);
           }
-          that.fotos.push(c);
-        });
-        that.fotos_fetched = true;
-        that.display_more_fotos();
-        setTimeout(function(){that.on_scroll()}, 0);
-      });
+          this.fotos.push(c);
+        }.bind(this));
+        this.fotos_fetched = true;
+        this.display_more_fotos();
+        setTimeout(this.onscroll.bind(this), 0);
+      }.bind(this));
   };
 
-  KNF.prototype.on_scroll = function() {
+  KNF.prototype.onscroll = function() {
     if (this.displaying_all_fotos || !this.fotos_fetched)
       return;
     var diff = $(document).height()
@@ -141,13 +133,10 @@
 
   // Returns the path according to the current URL
   KNF.prototype.get_url_path = function() {
-    var tmp = location.hash;
-    if (tmp.substr(0,1) == "#")
-      tmp = tmp.substr(1);
-    return tmp;
+    return location.pathname.substr(fotos_root.length);
   };
 
-  KNF.prototype.on_popstate = function() {
+  KNF.prototype.onpopstate = function() {
     var new_path = this.get_url_path();
     if (new_path == this.path)
       return;
@@ -173,7 +162,6 @@
   };
 
   KNF.prototype.show_foto = function(offset) {
-    var that = this;
     var foto = this.fotos[offset];
     this.showing_foto = true;
     this.foto_shown = offset;
@@ -185,14 +173,14 @@
     var navHead = $('<div></div>').appendTo(fotoDiv);
     if (offset != 0)
       $('<a href="javascript:void(0)" class="prev">vorige</a>')
-              .click(function(){that.change_foto(offset - 1); return false;})
+              .click(function(){this.change_foto(offset - 1); return false;}.bind(this))
               .appendTo(navHead);
     $('<span></span>')
               .text(foto.title ? foto.title : foto.name)
               .appendTo(navHead);
     if (offset != this.fotos.length - 1)
       $('<a href="javascript:void(0)" class="next">volgende</a>')
-              .click(function(){that.change_foto(offset + 1); return false;})
+              .click(function(){this.change_foto(offset + 1); return false;}.bind(this))
               .appendTo(navHead);
     var img = $('<img/>')
             .attr('srcset', srcset)
@@ -215,37 +203,35 @@
   };
 
   KNF.prototype.run = function() {
-    var that = this;
-    this.on_popstate();
-    $(window).scroll(function(){that.on_scroll();});
-    $(window).bind('popstate', function() {that.on_popstate();});
+    this.onpopstate();
+    $(window).scroll(this.onscroll.bind(this));
+    $(window).bind('popstate', this.onpopstate.bind(this));
     $('#foto').click(function(){
-      that.hide_foto();
+      this.hide_foto();
       return false;
-    });
+    }.bind(this));
     $(document).keydown(function(e) {
-      if (!that.showing_foto)
+      if (!this.showing_foto)
         return;
       // Escape
       if (e.which == 27) {
-        that.hide_foto();
+        this.hide_foto();
         return false;
       }
       // Left and right arrows
       if (e.which != 37 && e.which != 39)
         return;
-      var offset = that.foto_shown;
+      var offset = this.foto_shown;
       offset += e.which == 37 ? -1 : 1;
-      if (offset < 0 || offset >= that.fotos.length)
+      if (offset < 0 || offset >= this.fotos.length)
         return;
-      that.change_foto(offset);
+      this.change_foto(offset);
       return false;
-    });
+    }.bind(this));
   };
 
   $(document).ready(function(){
-    knfotos = new KNF();
-    knfotos.run();
+    (new KNF()).run();
   });
 })();
 
