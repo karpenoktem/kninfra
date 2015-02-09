@@ -1,3 +1,4 @@
+'use strict';
 (function(){
   function KNF(){
     this.showing_foto = false;
@@ -244,8 +245,7 @@
   };
 
   $(document).ready(function(){
-    knfotos = new KNF();
-    knfotos.run();
+    (new KNF()).run();
   });
 })();
 
