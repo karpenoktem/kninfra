@@ -29,9 +29,12 @@
 
       var a = $('<a></a>').text(
         component ? component : 'fotos').appendTo('#breadcrumbs');
-      a.attr('href', fotos_root+cur);
       var p = cur;
-      a.click(function() {
+      a.attr('href', fotos_root+cur)
+       .click(function(e) {
+        if (e.ctrlKey || e.shiftKey || e.metaKey || e.button != 0) {
+          return;
+        }
         this.change_path(p);
         return false;
       }.bind(this))
@@ -64,10 +67,15 @@
         if (title)
           $('<span></span>').text(title).appendTo(thumb);
         if (c.type == 'album') {
-          thumb.click(function() {
-            this.change_path(c.path);
-            return false;
-          }.bind(this));
+          $('> a', thumb)
+            .attr('href', fotos_root + c.path)
+            .click(function(e) {
+              if (e.ctrlKey || e.shiftKey || e.metaKey || e.button != 0) {
+                return;
+              }
+              this.change_path(c.path);
+              return false;
+            }.bind(this));
         }
         if (c.type == 'foto') {
           $('> a', thumb).attr('href', '#'+c.name);
