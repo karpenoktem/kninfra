@@ -25,7 +25,7 @@ def ensure_indices():
     fcol.ensure_index([('type', 1), ('path', 1),
                        ('random', 1), ('visibility', 1)])
     fcol.ensure_index('tags', sparse=True)
-    fcol.ensure_index([('cache', 1), ('type', 1)], sparse=True)
+    fcol.ensure_index([('caches', 1), ('type', 1)], sparse=True)
     fcol.ensure_index([('path', 1), ('visibility', 1), ('name', 1)])
 
 def entity(d):
