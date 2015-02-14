@@ -18,10 +18,16 @@ ul#fotos li {
 }
 
 ul#fotos li img {
+    display: block;
     max-width: none;
+    margin: 5px auto;
     padding: 0;
     border: 0;
     background-color: #f2f2f2;
+}
+
+img.lazy {
+    visibility: hidden;
 }
 
 

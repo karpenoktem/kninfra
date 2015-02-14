@@ -3,7 +3,7 @@
   function KNF(){
     this.showing_foto = false;
     this.foto_shown = null;
-    this.fotos_fetched = false;
+    this.fotos = null;
   }
 
   KNF.prototype.change_path = function(path) {
@@ -13,10 +13,8 @@
     this.path = path; // it is important we set path before changing location
     if (this.get_url_path() != path)
       history.pushState(undefined, '', fotos_root + path);
-    this.fotos = [];
-    this.displaying_all_fotos = false;
+    this.fotos = null;
     this.foto_offset = 0;
-    this.fotos_fetched = false;
 
     // Update breadcrumbs
     $('#breadcrumbs').empty();
@@ -45,22 +43,19 @@
     this.fetch_fotos();
   };
 
-  KNF.prototype.display_more_fotos = function() {
-    if (!this.fotos_fetched)
+  KNF.prototype.display_fotos = function() {
+    if (this.fotos === null)
       return;
-    var limit = Math.min(this.fotos.length, this.foto_offset + 4);
-    for (; this.foto_offset < limit; this.foto_offset++) {
-      (function(i){
+
+    for (var i=0; i<this.fotos.length; i++) {
+      (function(i) {
         var c = this.fotos[i];
         var srcset = c.thumbnail + " 1x, " +
-                     c.thumbnail2x + " 2x"; 
-        var thumb = $(
-          '<li>'+
-             '<img /> '+
-             '<br/></li>');
+                     c.thumbnail2x + " 2x";
+        var thumb = $('<li><img class="lazy" /></li>');
         $('> img', thumb)
-            .attr('srcset', srcset)
-            .attr('src', c.thumbnail);
+            .attr('data-srcset', srcset)
+            .attr('data-src', c.thumbnail);
         if (c.thumbnailSize)
           $('> img', thumb)
               .attr('width', c.thumbnailSize[0])
@@ -84,12 +79,10 @@
           }.bind(this));
         }
         thumb.appendTo('#fotos');
-      }.bind(this))(this.foto_offset);
+      }).call(this, i);
     }
-    if (this.foto_offset == this.fotos.length)
-      this.displaying_all_fotos = true;
-    else
-      setTimeout(this.onscroll.bind(this), 0);
+
+    $(window).lazyLoadXT();
   };
 
   KNF.prototype.cache_url = function(cache, path) {
@@ -103,7 +96,8 @@
       function(data) {
         if(old_path != this.path) return;
         if(data.error) return alert(data.error);
-        
+
+        this.fotos = [];
         $.each(data.children, function(i, c) {
           c.thumbnail = this.cache_url('thumb', c.path);
           c.thumbnail2x = this.cache_url('thumb2x', c.path);
@@ -114,21 +108,8 @@
           }
           this.fotos.push(c);
         }.bind(this));
-        this.fotos_fetched = true;
-        this.display_more_fotos();
-        setTimeout(this.onscroll.bind(this), 0);
+        this.display_fotos();
       }.bind(this));
-  };
-
-  KNF.prototype.onscroll = function() {
-    if (this.displaying_all_fotos || !this.fotos_fetched)
-      return;
-    var diff = $(document).height()
-                  - $(window).scrollTop()
-                  - $(window).height();
-    if (diff >= 400)
-      return;
-    this.display_more_fotos();
   };
 
   // Returns the path according to the current URL
@@ -204,7 +185,6 @@
 
   KNF.prototype.run = function() {
     this.onpopstate();
-    $(window).scroll(this.onscroll.bind(this));
     $(window).bind('popstate', this.onpopstate.bind(this));
     $('#foto').click(function(){
       this.hide_foto();

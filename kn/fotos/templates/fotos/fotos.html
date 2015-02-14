@@ -2,6 +2,7 @@
 
 {% block head %}
 {{ block.super }}
+<script type="text/javascript" src="{{ MEDIA_URL }}/fotos/jquery.lazyloadxt.extra.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/fotos/fotos.js?v=2">
 </script>
 <script type="text/javascript">
@@ -9,6 +10,19 @@ var fotos_root = "{% url fotos '' %}";
 var fotos_api_url = "{% url fotos-api %}";
 // FIXME (hack) this forces the header to be collapsed.
 sessionStorage['visited'] = true;
+// Initialize Lazy Load XT
+$.extend($.lazyLoadXT, {
+  autoInit: false,
+  selector: '#fotos img.lazy',
+  edgeY: 500,
+});
+$.lazyLoadXT.onshow = undefined;
+if ('srcset' in (new Image())) {
+  $.lazyLoadXT.onshow = function () {
+    var el = $(this);
+    el.attr('srcset', el.attr('data-srcset'));
+  };
+}
 </script>
 {% endblock head%}
 
