@@ -206,7 +206,7 @@ class FotoAlbum(FotoEntity):
             if r == 1:
                 return None
             r = 1
-    
+
 class Foto(FotoEntity):
     CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg'),
               'thumb2x': cache_tuple('jpg', 'image/jpeg'),
