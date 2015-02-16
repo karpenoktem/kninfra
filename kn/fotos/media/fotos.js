@@ -102,8 +102,11 @@
               path: this.path},
       function(data) {
         if(old_path != this.path) return;
-        if(data.error) return alert(data.error);
-        
+        if(data.error) {
+          $('#fotos').text(data.error);
+          return;
+        }
+
         $.each(data.children, function(i, c) {
           c.thumbnail = this.cache_url('thumb', c.path);
           c.thumbnail2x = this.cache_url('thumb2x', c.path);
