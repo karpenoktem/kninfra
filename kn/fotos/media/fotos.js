@@ -1,9 +1,8 @@
 'use strict';
 (function(){
   function KNF(){
-    this.showing_foto = false;
-    this.foto_shown = null;
-    this.fotos_fetched = false;
+    this.foto = null;
+    this.fotos = null;
   }
 
   KNF.prototype.change_path = function(path) {
@@ -12,11 +11,8 @@
     // Update state
     this.path = path; // it is important we set path before changing location
     if (this.get_url_path() != path)
-      history.pushState(undefined, '', fotos_root + path);
-    this.fotos = [];
-    this.displaying_all_fotos = false;
-    this.foto_offset = 0;
-    this.fotos_fetched = false;
+      this.pushState(path);
+    this.fotos = null;
 
     // Update breadcrumbs
     $('#breadcrumbs').empty();
@@ -33,9 +29,12 @@
 
       var a = $('<a></a>').text(
         component ? component : 'fotos').appendTo('#breadcrumbs');
-      a.attr('href', fotos_root+cur);
       var p = cur;
-      a.click(function() {
+      a.attr('href', fotos_root+cur)
+       .click(function(e) {
+        if (e.ctrlKey || e.shiftKey || e.metaKey || e.button != 0) {
+          return;
+        }
         this.change_path(p);
         return false;
       }.bind(this))
@@ -45,24 +44,21 @@
     this.fetch_fotos();
   };
 
-  KNF.prototype.display_more_fotos = function() {
-    if (!this.fotos_fetched)
+  KNF.prototype.display_fotos = function() {
+    if (this.fotos === null)
       return;
-    var limit = Math.min(this.fotos.length, this.foto_offset + 4);
-    for (; this.foto_offset < limit; this.foto_offset++) {
-      (function(i){
-        var c = this.fotos[i];
+
+    for (var name in this.fotos) {
+      (function(name) {
+        var c = this.fotos[name];
         var srcset = c.thumbnail + " 1x, " +
-                     c.thumbnail2x + " 2x"; 
-        var thumb = $(
-          '<li>'+
-             '<img /> '+
-             '<br/></li>');
-        $('> img', thumb)
-            .attr('srcset', srcset)
-            .attr('src', c.thumbnail);
+                     c.thumbnail2x + " 2x";
+        var thumb = $('<li><a><img class="lazy" /></a></li>');
+        $('img', thumb)
+            .attr('data-srcset', srcset)
+            .attr('data-src', c.thumbnail);
         if (c.thumbnailSize)
-          $('> img', thumb)
+          $('img', thumb)
               .attr('width', c.thumbnailSize[0])
               .attr('height', c.thumbnailSize[1]);
         var title = c.title;
@@ -71,25 +67,24 @@
         if (title)
           $('<span></span>').text(title).appendTo(thumb);
         if (c.type == 'album') {
-          thumb.click(function(){
-            this.change_path(c.path);
-            return false;
-          }.bind(this));
+          $('> a', thumb)
+            .attr('href', fotos_root + c.path)
+            .click(function(e) {
+              if (e.ctrlKey || e.shiftKey || e.metaKey || e.button != 0) {
+                return;
+              }
+              this.change_path(c.path);
+              return false;
+            }.bind(this));
         }
         if (c.type == 'foto') {
-
-          thumb.click(function(){
-            this.show_foto(i);
-            return false;
-          }.bind(this));
+          $('> a', thumb).attr('href', '#'+c.name);
         }
         thumb.appendTo('#fotos');
-      }.bind(this))(this.foto_offset);
+      }).call(this, name);
     }
-    if (this.foto_offset == this.fotos.length)
-      this.displaying_all_fotos = true;
-    else
-      setTimeout(this.onscroll.bind(this), 0);
+
+    $(window).lazyLoadXT();
   };
 
   KNF.prototype.cache_url = function(cache, path) {
@@ -107,6 +102,8 @@
           return;
         }
 
+        this.fotos = {};
+        var prev = null;
         $.each(data.children, function(i, c) {
           c.thumbnail = this.cache_url('thumb', c.path);
           c.thumbnail2x = this.cache_url('thumb2x', c.path);
@@ -115,24 +112,23 @@
             c.large = this.cache_url('large', c.path);
             c.large2x = this.cache_url('large2x', c.path);
           }
-          this.fotos.push(c);
+          this.fotos[c.name] = c;
+          if (prev !== null) {
+            prev.next = c;
+            c.prev = prev;
+          }
+          prev = c;
         }.bind(this));
-        this.fotos_fetched = true;
-        this.display_more_fotos();
-        setTimeout(this.onscroll.bind(this), 0);
+        this.display_fotos();
+        if (this.get_hash() && this.foto === null) {
+          this.change_foto(this.fotos[this.get_hash()]);
+        }
       }.bind(this));
   };
 
-  KNF.prototype.onscroll = function() {
-    if (this.displaying_all_fotos || !this.fotos_fetched)
-      return;
-    var diff = $(document).height()
-                  - $(window).scrollTop()
-                  - $(window).height();
-    if (diff >= 400)
-      return;
-    this.display_more_fotos();
-  };
+  KNF.prototype.pushState = function (path) {
+    history.pushState(undefined, '', fotos_root + path);
+  }
 
   // Returns the path according to the current URL
   KNF.prototype.get_url_path = function() {
@@ -146,6 +142,20 @@
     this.change_path(new_path);
   };
 
+  // Returns the current photo name
+  KNF.prototype.get_hash = function() {
+    var hash = location.hash;
+    if (hash.length < 1) {
+      return '';
+    }
+
+    return hash.substr(1);
+  }
+
+  KNF.prototype.onhashchange = function() {
+    this.change_foto(this.fotos[this.get_hash()]);
+  }
+
   KNF.prototype.api = function(data, cb) {
     $.post(fotos_api_url, {
       csrfmiddlewaretoken: csrf_token,
@@ -153,37 +163,36 @@
     }, cb, "json");
   };
 
-  KNF.prototype.hide_foto = function() {
-    this.showing_foto = false;
-    $('#foto').hide();
-    $('html').removeClass('noscroll');
-  };
-
-  KNF.prototype.change_foto = function(offset) {
-    this.hide_foto();
-    this.show_foto(offset);
-  };
-
-  KNF.prototype.show_foto = function(offset) {
-    var foto = this.fotos[offset];
-    this.showing_foto = true;
-    this.foto_shown = offset;
+  KNF.prototype.change_foto = function(foto) {
+    if (this.foto) {
+      $('#foto').hide();
+      $('html').removeClass('noscroll');
+    }
+    foto = foto || null;
+    this.foto = foto;
+    if (!foto) {
+      this.pushState(this.get_url_path());
+      return;
+    }
+    if (this.get_hash() != foto.name) {
+      location.hash = '#' + foto.name;
+    }
     $('html').addClass('noscroll');
     var fotoDiv = $('#foto > div');
     fotoDiv.empty()
     var srcset = foto.large + " 1x, " +
                  foto.large2x + " 2x"; 
     var navHead = $('<div></div>').appendTo(fotoDiv);
-    if (offset != 0)
-      $('<a href="javascript:void(0)" class="prev">vorige</a>')
-              .click(function(){this.change_foto(offset - 1); return false;}.bind(this))
+    if (foto.prev)
+      $('<a class="prev">vorige</a>')
+              .attr('href', '#'+foto.prev.name)
               .appendTo(navHead);
     $('<span></span>')
               .text(foto.title ? foto.title : foto.name)
               .appendTo(navHead);
-    if (offset != this.fotos.length - 1)
-      $('<a href="javascript:void(0)" class="next">volgende</a>')
-              .click(function(){this.change_foto(offset + 1); return false;}.bind(this))
+    if (foto.next)
+      $('<a class="next">volgende</a>')
+              .attr('href', '#'+foto.next.name)
               .appendTo(navHead);
     var img = $('<img/>')
             .attr('srcset', srcset)
@@ -207,29 +216,31 @@
 
   KNF.prototype.run = function() {
     this.onpopstate();
-    $(window).scroll(this.onscroll.bind(this));
     $(window).bind('popstate', this.onpopstate.bind(this));
-    $('#foto').click(function(){
-      this.hide_foto();
+    $(window).bind('hashchange', this.onhashchange.bind(this));
+    $('#foto').click(function(e) {
+      if (e.target.nodeName == 'A') return;
+      this.change_foto(null);
       return false;
     }.bind(this));
     $(document).keydown(function(e) {
-      if (!this.showing_foto)
+      if (!this.foto)
         return;
       // Escape
       if (e.which == 27) {
-        this.hide_foto();
+        this.change_foto(null);
         return false;
       }
-      // Left and right arrows
-      if (e.which != 37 && e.which != 39)
-        return;
-      var offset = this.foto_shown;
-      offset += e.which == 37 ? -1 : 1;
-      if (offset < 0 || offset >= this.fotos.length)
-        return;
-      this.change_foto(offset);
-      return false;
+      // left arrow
+      if (e.which == 37) {
+        this.change_foto(this.foto.prev);
+        return false;
+      }
+      // right arrow
+      if (e.which == 39) {
+        this.change_foto(this.foto.next);
+        return false;
+      }
     }.bind(this));
   };
 
