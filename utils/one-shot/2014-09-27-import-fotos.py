@@ -58,8 +58,7 @@ def main():
             'title': None,
             'description': None,
             'visibility': [visibility],
-            'rotation': rotation,
-            'cache': []}).save()
+            'rotation': rotation}).save()
     print 'tags'
     c.execute("SELECT photo_id, username FROM fa_tags")
     for oldId, username in c.fetchall():
