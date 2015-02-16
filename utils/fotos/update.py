@@ -6,6 +6,8 @@ import kn.leden.entities as Es
 
 import os
 import random
+import Image
+from PIL.ExifTags import TAGS
 
 extensions = {
     'gif': 'gif',
@@ -14,6 +16,17 @@ extensions = {
     'png': 'png',
     'bmp': 'bmp',
 }
+
+def getexif(path):
+    img = Image.open(path)
+    if not hasattr(img, '_getexif'):
+        return {}
+    exif = img._getexif()
+    for k, v in exif.items():
+        if k not in TAGS:
+            continue
+        exif[TAGS[k]] = v
+    return exif
 
 def list_album(album):
     _fotos = album.list('system')
@@ -43,14 +56,29 @@ def scan(album):
                     'visibility': ['hidden']})
                 subalbum.save()
             scan(subalbum)
+
         elif os.path.splitext(name)[1][1:].lower() in extensions:
             # photo
             if name not in fotos:
+                exif = getexif(filepath)
+                orientation = 0
+                exif_orientation = int(exif.get('Orientation', '1'))
+                if exif_orientation == 1:
+                    orientation = 0
+                elif exif_orientation == 3:
+                    orientation = 180
+                elif exif_orientation == 6:
+                    orientation = 90
+                elif exif_orientation == 8:
+                    orientation = 270
+                # other orientations are mirrored, and won't occur much in practice
+
                 fEs.entity({
                     'type': 'foto',
                     'path': album.full_path,
                     'name': name,
                     'random': random.random(),
+                    'orientation': orientation,
                     'visibility': ['hidden']}).save()
 
     # TODO deleted albums
