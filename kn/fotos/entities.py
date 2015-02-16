@@ -64,6 +64,7 @@ class FotoEntity(SONWrapper):
     _type = son_property(('type',))
     caches = son_property(('caches',), ())
     title = son_property(('title',))
+    orientation = son_property(('orientation',), 0)
 
     description = son_property(('description',))
     visibility = son_property(('visibility',))
@@ -71,7 +72,7 @@ class FotoEntity(SONWrapper):
     def required_visibility(self, user):
         if user is None:
             return frozenset(('world',))
-        if 'webcie' in user.cached_groups_names:
+        if user == 'system' or 'webcie' in user.cached_groups_names:
             return frozenset(('leden', 'world', 'hidden'))
         if 'leden' in user.cached_groups_names:
             return frozenset(('leden', 'world'))
@@ -231,22 +232,26 @@ class Foto(FotoEntity):
             subprocess.call(['convert',
                              source,
                              '-resize', '200x',
+                             '-rotate', str(self.orientation),
                              target])
         elif cache == 'thumb2x':
             subprocess.call(['convert',
                              source,
                              '-resize', '400x',
+                             '-rotate', str(self.orientation),
                              target])
         elif cache == 'large':
             subprocess.call(['convert',
                              source,
                              '-resize', '850x',
+                             '-rotate', str(self.orientation),
                              target])
         elif cache == 'large2x':
             subprocess.call(['convert',
                              source,
                              '-quality', '90',
                              '-resize', '1700x',
+                             '-rotate', str(self.orientation),
                              target])
         # No worries: Image.open is lazy and will only read headers
         return {'size': Image.open(target).size}
