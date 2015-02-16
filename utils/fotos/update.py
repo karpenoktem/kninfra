@@ -29,7 +29,7 @@ def getexif(path):
     return exif
 
 def list_album(album):
-    _fotos = album.list('system')
+    _fotos = album.list('!system')
     fotos = {}
     for foto in _fotos:
         fotos[foto.name] = foto
