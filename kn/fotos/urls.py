@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from django.shortcuts import redirect
 
 from kn.fotos import views
 from kn.fotos import api
@@ -12,6 +13,8 @@ urlpatterns = patterns('',
             views.fotoadmin_create_event, name='fotoadmin-create-event'),
         url(r'^fotos/api/?$',
             api.view, name='fotos-api'),
+        url(r'^fotos/view\.php$', views.compat_view),
+        url(r'^fotos/foto\.php$', views.compat_foto),
         url(r'^fotos/(?P<path>.*)$',
             views.fotos, name='fotos'),
         # NOTE keep up to date with media/fotos.js

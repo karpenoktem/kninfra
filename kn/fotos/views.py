@@ -7,7 +7,7 @@ import MySQLdb
 import Image
 
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.core.exceptions import PermissionDenied
 from django.core.servers.basehttp import FileWrapper
 from django.core.paginator import EmptyPage
@@ -24,6 +24,10 @@ import kn.leden.entities as Es
 from kn.fotos.api import album_json, album_parents_json
 
 def fotos(request, path=''):
+    if 'album' in request.GET:
+        # redirect old URL
+        return redirect('fotos', path=request.GET['album'], permanent=True)
+
     album = fEs.by_path(path)
     if album is None:
         raise Http404
@@ -90,6 +94,17 @@ def cache(request, cache, path):
                             mimetype=entity.get_cache_mimetype(cache))
     resp['Content-Length'] = os.path.getsize(entity.get_cache_path(cache))
     return resp
+
+def compat_view(request):
+    path = request.GET.get('foto', '')
+    name = None
+    if '/' in path:
+        path, name = path.rsplit('/', 1)
+    return redirect('fotos', path=path+'#'+name, permanent=True)
+
+def compat_foto(request):
+    path = request.GET.get('foto', '')
+    return redirect('fotos-cache', cache='full', path=path, permanent=True)
 
 @login_required
 def fotoadmin_create_event(request):
