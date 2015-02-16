@@ -97,7 +97,10 @@
               path: this.path},
       function(data) {
         if(old_path != this.path) return;
-        if(data.error) return alert(data.error);
+        if(data.error) {
+          $('#fotos').text(data.error);
+          return;
+        }
 
         this.fotos = {};
         var prev = null;
