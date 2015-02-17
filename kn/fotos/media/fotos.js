@@ -113,7 +113,7 @@
         this.read_fotos(path, data);
 
         this.display_fotos();
-        if (path == this.path && this.get_hash() && this.foto === null) {
+        if (path === this.path && this.get_hash() && this.foto === null) {
           this.change_foto(this.fotos[this.path][this.get_hash()]);
         }
       }.bind(this));
@@ -153,7 +153,7 @@
 
   KNF.prototype.onpopstate = function() {
     var new_path = this.get_url_path();
-    if (new_path == this.path)
+    if (new_path === this.path)
       return;
     this.change_path(new_path);
   };
