@@ -7,10 +7,9 @@
 </script>
 <script type="text/javascript">
 'use strict';
+expandHeader = false;
 var fotos_root = "{% url fotos '' %}";
 var fotos_api_url = "{% url fotos-api %}";
-// FIXME (hack) this forces the header to be collapsed.
-sessionStorage['visited'] = true;
 // Initialize Lazy Load XT
 $.extend($.lazyLoadXT, {
   autoInit: false,
