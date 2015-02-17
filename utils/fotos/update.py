@@ -63,17 +63,17 @@ def scan(album):
             if name not in fotos:
                 exif = getexif(filepath)
 
-                orientation = 0
-                exif_orientation = int(exif.get('Orientation', '1'))
-                if exif_orientation == 1:
-                    orientation = 0
-                elif exif_orientation == 3:
-                    orientation = 180
-                elif exif_orientation == 6:
-                    orientation = 90
-                elif exif_orientation == 8:
-                    orientation = 270
-                # other orientations are mirrored, and won't occur much in practice
+                rotation = 0
+                orientation = int(exif.get('Orientation', '1'))
+                if orientation == 1:
+                    rotation = 0
+                elif orientation == 3:
+                    rotation = 180
+                elif orientation == 6:
+                    rotation = 90
+                elif orientation == 8:
+                    rotation = 270
+                # other rotations are mirrored, and won't occur much in practice
 
                 created = None
                 if 'DateTimeOriginal' in exif:
@@ -84,8 +84,8 @@ def scan(album):
                     'path': album.full_path,
                     'name': name,
                     'random': random.random(),
-                    'orientation': orientation,
                     'created': created,
+                    'rotation': rotation,
                     'visibility': ['hidden']}).save()
 
     # TODO deleted albums
