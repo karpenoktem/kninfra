@@ -19,9 +19,16 @@ from kn.settings import PHOTOS_DIR, PHOTOS_MYSQL_SECRET
 from kn.leden import giedo
 
 import kn.fotos.entities as fEs
+from kn.fotos.api import album_json
 
 def fotos(request, path=''):
-    return render_to_response('fotos/fotos.html', {},
+    album = fEs.by_path(path)
+    if album is None:
+        raise Http404
+    user = request.user if request.user.is_authenticated() else None
+    fotos = album_json(album, user)
+    return render_to_response('fotos/fotos.html',
+             {'fotos': fotos},
              context_instance=RequestContext(request))
 
 def cache(request, cache, path):

@@ -14,6 +14,28 @@ def view(request):
 def no_such_action(data, request):
     return {'error': 'No such action'}
 
+def album_json(album, user):
+    if not album.may_view(user):
+        raise PermissionDenied
+    children = album.list(user)
+    json_children = []
+    for child in children:
+        entry = {'type': child._type,
+                 'path': child.full_path,
+                 'name': child.name,
+                 'title': child.title}
+        if child._type == 'foto':
+            entry['largeSize'] = child.get_cache_meta('large').get('size')
+            if entry['largeSize'] is None:
+                size2x = child.get_cache_meta('large2x').get('size')
+                if size2x: entry['largeSize'] = [x/2 for x in size2x]
+            entry['thumbnailSize'] = child.get_cache_meta('thumb').get('size')
+            if entry['thumbnailSize'] is None:
+                size2x = child.get_cache_meta('thumb2x').get('size')
+                if size2x: entry['thumbnailSize'] = [x/2 for x in size2x]
+        json_children.append(entry)
+    return {'children': json_children}
+
 def _list(data, request):
     if 'path' not in data:
         return {'error': 'Missing path attribute'}
@@ -23,26 +45,7 @@ def _list(data, request):
     if o is None:
         return {'error': 'Object not found'}
     user = request.user if request.user.is_authenticated() else None
-    if not o.may_view(user):
-        raise PermissionDenied
-    cs = o.list(user)
-    ret_cs = []
-    for c in cs:
-        entry = {'type': c._type,
-                 'path': c.full_path,
-                 'name': c.name,
-                 'title': c.title}
-        if c._type == 'foto':
-            entry['largeSize'] = c.get_cache_meta('large').get('size')
-            if entry['largeSize'] is None:
-                size2x = c.get_cache_meta('large2x').get('size')
-                if size2x: entry['largeSize'] = [x/2 for x in size2x]
-            entry['thumbnailSize'] = c.get_cache_meta('thumb').get('size')
-            if entry['thumbnailSize'] is None:
-                size2x = c.get_cache_meta('thumb2x').get('size')
-                if size2x: entry['thumbnailSize'] = [x/2 for x in size2x]
-        ret_cs.append(entry)
-    return {'children': ret_cs}
+    return album_json(o, user)
 
 ACTION_HANDLER_MAP = {
         'list': _list,
