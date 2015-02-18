@@ -12,7 +12,9 @@ from kn.static import views
 urlpatterns = patterns('',
     url(r'^home/?$', views.home, name='home'),
     url(r'^default/?$', views.home),
-    url(r'^/?$', views.home),
+    #url(r'^/?$', views.home),
+    url(r'^/?$', generic.simple.redirect_to,
+                {'url': reverse_lazy('openweekPoster2015')}),
     # url(r'^/?$', generic.simple.redirect_to,
     #            {'url': reverse_lazy('introPoster2014')}),
     # TODO we have to specify a separate url entry to make the reverse URL work
