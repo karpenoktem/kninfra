@@ -5,6 +5,7 @@ from django.conf import settings
 import django.views.generic as generic
 import django.views.generic.simple
 from kn.base.views import direct_to_folder
+from django.core.urlresolvers import reverse_lazy
 
 from kn.static import views
 
