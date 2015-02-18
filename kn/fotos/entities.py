@@ -179,9 +179,16 @@ class FotoAlbum(FotoEntity):
 
     def list(self, user):
         required_visibility = self.required_visibility(user)
-        return map(entity, fcol.find({'path': self.full_path,
+        albums = map(entity, fcol.find({'path': self.full_path,
+                           'type': 'album',
                            'visibility': {'$in': tuple(required_visibility)}},
                            ).sort('name', -1))
+        fotos = map(entity, fcol.find({'path': self.full_path,
+                           'type': {'$ne': 'album'},
+                           'visibility': {'$in': tuple(required_visibility)}},
+                           ).sort([('created', 1), ('name', 1)]))
+
+        return albums+fotos
 
     def get_random_foto_for(self, user):
         r = random.random()

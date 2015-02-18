@@ -5,6 +5,7 @@ import kn.fotos.entities as fEs
 import kn.leden.entities as Es
 
 import os
+import datetime
 import random
 import Image
 from PIL.ExifTags import TAGS
@@ -61,6 +62,7 @@ def scan(album):
             # photo
             if name not in fotos:
                 exif = getexif(filepath)
+
                 orientation = 0
                 exif_orientation = int(exif.get('Orientation', '1'))
                 if exif_orientation == 1:
@@ -73,12 +75,17 @@ def scan(album):
                     orientation = 270
                 # other orientations are mirrored, and won't occur much in practice
 
+                created = None
+                if 'DateTimeOriginal' in exif:
+                    created = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
+
                 fEs.entity({
                     'type': 'foto',
                     'path': album.full_path,
                     'name': name,
                     'random': random.random(),
                     'orientation': orientation,
+                    'created': created,
                     'visibility': ['hidden']}).save()
 
     # TODO deleted albums
