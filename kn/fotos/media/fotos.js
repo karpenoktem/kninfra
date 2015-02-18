@@ -1,8 +1,9 @@
 'use strict';
 (function(){
-  function KNF(){
+  function KNF(data){
     this.foto = null;
-    this.fotos = null;
+    this.fotos = {};
+    this.read_fotos(this.get_url_path(), data);
   }
 
   KNF.prototype.change_path = function(path) {
@@ -12,7 +13,6 @@
     this.path = path; // it is important we set path before changing location
     if (this.get_url_path() != path)
       this.pushState(path);
-    this.fotos = null;
 
     // Update breadcrumbs
     $('#breadcrumbs').empty();
@@ -40,17 +40,21 @@
       }.bind(this))
     }.bind(this));
 
-    // Fetch new
-    this.fetch_fotos();
+    if (!(path in this.fotos)) {
+      // Fetch fotos
+      this.fetch_fotos();
+    } else {
+      this.display_fotos();
+    }
   };
 
   KNF.prototype.display_fotos = function() {
-    if (this.fotos === null)
+    if (!this.fotos[this.path])
       return;
 
-    for (var name in this.fotos) {
+    for (var name in this.fotos[this.path]) {
       (function(name) {
-        var c = this.fotos[name];
+        var c = this.fotos[this.path][name];
         var srcset = c.thumbnail + " 1x, " +
                      c.thumbnail2x + " 2x";
         var thumb = $('<li><a><img class="lazy" /></a></li>');
@@ -92,39 +96,51 @@
   };
 
   KNF.prototype.fetch_fotos = function() {
-    var old_path = this.path;
+    var path = this.path;
+    if (this.fotos[path] === null) {
+      // fetch in progress
+      return;
+    }
+    this.fotos[path] = null;
     this.api({action: 'list',
-              path: this.path},
+              path: path},
       function(data) {
-        if(old_path != this.path) return;
         if(data.error) {
           $('#fotos').text(data.error);
           return;
         }
 
-        this.fotos = {};
-        var prev = null;
-        $.each(data.children, function(i, c) {
-          c.thumbnail = this.cache_url('thumb', c.path);
-          c.thumbnail2x = this.cache_url('thumb2x', c.path);
-          if (c.type == 'foto') {
-            c.full = this.cache_url('full', c.path);
-            c.large = this.cache_url('large', c.path);
-            c.large2x = this.cache_url('large2x', c.path);
-          }
-          this.fotos[c.name] = c;
-          if (prev !== null) {
-            prev.next = c;
-            c.prev = prev;
-          }
-          prev = c;
-        }.bind(this));
+        this.read_fotos(path, data);
+
         this.display_fotos();
-        if (this.get_hash() && this.foto === null) {
-          this.change_foto(this.fotos[this.get_hash()]);
+        if (path === this.path && this.get_hash() && this.foto === null) {
+          this.change_foto(this.fotos[this.path][this.get_hash()]);
         }
       }.bind(this));
   };
+
+  KNF.prototype.read_fotos = function(path, data) {
+    this.fotos[path] = {};
+
+    var prev = null;
+    $.each(data.children, function(i, c) {
+      c.thumbnail = this.cache_url('thumb', c.path);
+      c.thumbnail2x = this.cache_url('thumb2x', c.path);
+      if (c.type == 'foto') {
+        c.full = this.cache_url('full', c.path);
+        c.large = this.cache_url('large', c.path);
+        c.large2x = this.cache_url('large2x', c.path);
+      }
+      this.fotos[path][c.name] = c;
+
+      if (prev !== null) {
+        prev.next = c;
+        c.prev = prev;
+      }
+
+      prev = c;
+    }.bind(this));
+  }
 
   KNF.prototype.pushState = function (path) {
     history.pushState(undefined, '', fotos_root + path);
@@ -137,7 +153,7 @@
 
   KNF.prototype.onpopstate = function() {
     var new_path = this.get_url_path();
-    if (new_path == this.path)
+    if (new_path === this.path)
       return;
     this.change_path(new_path);
   };
@@ -153,7 +169,7 @@
   }
 
   KNF.prototype.onhashchange = function() {
-    this.change_foto(this.fotos[this.get_hash()]);
+    this.change_foto(this.fotos[this.path][this.get_hash()]);
   }
 
   KNF.prototype.api = function(data, cb) {
@@ -245,7 +261,7 @@
   };
 
   $(document).ready(function(){
-    (new KNF()).run();
+    (new KNF(fotos)).run();
   });
 })();
 

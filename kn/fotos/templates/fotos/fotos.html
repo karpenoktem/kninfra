@@ -1,5 +1,7 @@
 {% extends "base/base.html" %}
 
+{% load base %}
+
 {% block head %}
 {{ block.super }}
 <script type="text/javascript" src="{{ MEDIA_URL }}/fotos/jquery.lazyloadxt.extra.min.js"></script>
@@ -8,6 +10,8 @@
 <script type="text/javascript">
 'use strict';
 expandHeader = false;
+// initial data to prevent one API request
+var fotos = {{ fotos|json }};
 var fotos_root = "{% url fotos '' %}";
 var fotos_api_url = "{% url fotos-api %}";
 // Initialize Lazy Load XT
