@@ -6,7 +6,9 @@ from django.db.models import permalink
 import os
 import re
 import Image
+from PIL.ExifTags import TAGS
 import random
+import datetime
 import os.path
 import mimetypes
 import subprocess
@@ -64,6 +66,7 @@ class FotoEntity(SONWrapper):
     _type = son_property(('type',))
     caches = son_property(('caches',), ())
     title = son_property(('title',))
+    created = son_property(('created',))
     rotation = son_property(('rotation',))
 
     description = son_property(('description',))
@@ -169,6 +172,12 @@ class FotoEntity(SONWrapper):
     def _cache(self, cache):
         raise NotImplementedError
 
+    def update_metadata(self):
+        '''
+        Load metadata from file if it doesn't exist yet
+        '''
+        raise NotImplementedError
+
     @property
     def original_path(self):
         return os.path.join(settings.PHOTOS_DIR, self.path, self.name)
@@ -226,6 +235,41 @@ class Foto(FotoEntity):
 
     def __init__(self, data):
         super(Foto, self).__init__(data)
+
+    def update_metadata(self):
+        '''
+        Load EXIF metadata from file if it hasn't been loaded yet.
+        '''
+        if None not in [self.rotation, self.created]:
+            pass
+
+        img = Image.open(self.original_path)
+        if not hasattr(img, '_getexif'):
+            return
+
+        exif = {}
+        for k, v in img._getexif().items():
+            if k not in TAGS:
+                continue
+            exif[TAGS[k]] = v
+
+        if self.rotation is None:
+            orientation = int(exif.get('Orientation', '1'))
+            if orientation == 1:
+                self.rotation = 0
+            elif orientation == 3:
+                self.rotation = 180
+            elif orientation == 6:
+                self.rotation = 90
+            elif orientation == 8:
+                self.rotation = 270
+            else:
+                # other rotations are mirrored, and won't occur much in practice
+                self.rotation = 0
+
+        if self.created is None and 'DateTimeOriginal' in exif:
+            self.created = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
+
 
     def _cache(self, cache):
         if cache == 'full':
