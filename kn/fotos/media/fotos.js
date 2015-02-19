@@ -68,19 +68,25 @@
     for (var name in this.fotos[this.path]) {
       (function(name) {
         var c = this.fotos[this.path][name];
-        var thumb = $('<li><a><img class="lazy" /></a></li>');
+        var thumb = $('<li><div><a><img class="lazy" /></a></div></li>');
         if (c.thumbnail !== undefined) {
           var srcset = c.thumbnail + " 1x, " +
                        c.thumbnail2x + " 2x";
           $('img', thumb)
               .attr('data-srcset', srcset)
               .attr('data-src', c.thumbnail);
-          if (c.thumbnailSize)
+          if (c.thumbnailSize) {
             $('img', thumb)
                 .attr('width', c.thumbnailSize[0])
                 .attr('height', c.thumbnailSize[1]);
+            // http://www.smashingmagazine.com/2013/09/16/responsive-images-performance-problem-case-study/
+            $('a', thumb).css('padding-bottom', c.thumbnailSize[1]/c.thumbnailSize[0]*100+'%')
+                         .css('width', c.thumbnailSize[0]);
+            $('div', thumb).css('margin', '0 ' + (200-c.thumbnailSize[0])/2/200*100 + '%');
+          }
         } else {
-          $('a', thumb).text('(geen thumbnail)');
+          $('a', thumb).text('(geen thumbnail)')
+                       .css('height', '100px');
         }
         var title = c.title;
         if (!title && c.type == 'album')
@@ -88,7 +94,7 @@
         if (title)
           $('<span></span>').text(title).appendTo(thumb);
         if (c.type == 'album') {
-          $('> a', thumb)
+          $('a', thumb)
             .attr('href', fotos_root + c.path)
             .click(function(e) {
               if (e.ctrlKey || e.shiftKey || e.metaKey || e.button != 0) {
@@ -99,7 +105,7 @@
             }.bind(this));
         }
         if (c.type == 'foto') {
-          $('> a', thumb).attr('href', '#'+c.name);
+          $('a', thumb).attr('href', '#'+c.name);
         }
         thumb.appendTo('#fotos');
       }).call(this, name);

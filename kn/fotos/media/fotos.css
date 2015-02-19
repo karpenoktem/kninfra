@@ -16,27 +16,40 @@ ul#fotos {
     clear: both;
 }
 
-ul#fotos a {
-    display: block;
-    min-height: 150px;
-}
-
 ul#fotos li {
     display: inline-block;
-    width: 210px;
-    min-height: 140px;
+    padding: 0 5px 12px;
+    width: 200px;
+    max-width: calc(100% / 3 - 10px);
     font-family: sans-serif;
     font-size: smaller;
     vertical-align: top;
     text-align: center;
     line-height: 1;
-    margin-bottom: 4px;
+}
+@media (max-width: 660px) {
+    ul#fotos li {
+        padding: 0 calc(0.5vw + 1.7px) calc(1.5vw + 2.1px);
+    }
 }
 
+ul#fotos li a {
+    /* http://www.smashingmagazine.com/2013/09/16/responsive-images-performance-problem-case-study/ */
+    display: block;
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+}
 ul#fotos li img {
     display: block;
     max-width: none;
-    margin: 5px auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
     padding: 0;
     border: 0;
     background-color: #f2f2f2;
