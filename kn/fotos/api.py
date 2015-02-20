@@ -17,6 +17,7 @@ def no_such_action(data, request):
 def album_json(album, user):
     if not album.may_view(user):
         raise PermissionDenied
+
     children = album.list(user)
     json_children = []
     for child in children:
@@ -34,7 +35,15 @@ def album_json(album, user):
                 size2x = child.get_cache_meta('thumb2x').get('size')
                 if size2x: entry['thumbnailSize'] = [x/2 for x in size2x]
         json_children.append(entry)
-    return {'children': json_children}
+
+    current_album = album
+    json_parents = {}
+    while current_album.full_path:
+        json_parents[current_album.full_path] = current_album.title
+        current_album = current_album.get_parent()
+
+    return {'children': json_children,
+            'parents': json_parents}
 
 def _list(data, request):
     if 'path' not in data:

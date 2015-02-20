@@ -3,6 +3,7 @@
   function KNF(data){
     this.foto = null;
     this.fotos = {};
+    this.parents = {'': "Foto's"};
     this.read_fotos(this.get_url_path(), data);
   }
 
@@ -28,7 +29,7 @@
       }
 
       var a = $('<a></a>').text(
-        component ? component : 'fotos').appendTo('#breadcrumbs');
+          this.parents[cur] || component).appendTo('#breadcrumbs');
       var p = cur;
       a.attr('href', fotos_root+cur)
        .click(function(e) {
@@ -137,9 +138,18 @@
         prev.next = c;
         c.prev = prev;
       }
-
       prev = c;
+
+      if (c.type == 'album' && !(c.path in this.parents)) {
+          this.parents[c.path] = c.title;
+      }
     }.bind(this));
+
+    for (var k in data.parents) {
+        if (!(k in this.parents)) {
+            this.parents[k] = data.parents[k];
+        }
+    }
   }
 
   KNF.prototype.pushState = function (path) {

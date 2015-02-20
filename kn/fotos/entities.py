@@ -182,6 +182,11 @@ class FotoEntity(SONWrapper):
     def original_path(self):
         return os.path.join(settings.PHOTOS_DIR, self.path, self.name)
 
+    def get_parent(self):
+        if self.path is None:
+            return None
+        return by_path(self.path)
+
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
         super(FotoAlbum, self).__init__(data)
