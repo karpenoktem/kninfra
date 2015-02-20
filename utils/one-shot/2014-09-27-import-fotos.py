@@ -47,7 +47,7 @@ def main():
         if fEs.by_oldId('foto', oldId) is not None:
             continue
         path = path.strip('/')
-        fEs.entity({
+        foto = fEs.entity({
             'type': 'foto',
             'oldId': oldId,
             'name': name,
@@ -56,7 +56,9 @@ def main():
             'title': None,
             'description': None,
             'visibility': [visibility],
-            'rotation': rotation}).save()
+            'rotation': rotation})
+        foto.update_metadata()
+        foto.save()
     print 'tags'
     c.execute("SELECT photo_id, username FROM fa_tags")
     for oldId, username in c.fetchall():
