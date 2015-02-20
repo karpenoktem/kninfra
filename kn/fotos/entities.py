@@ -240,20 +240,19 @@ class Foto(FotoEntity):
         '''
         Load EXIF metadata from file if it hasn't been loaded yet.
         '''
-        if None not in [self.rotation, self.created]:
-            pass
-
-        img = Image.open(self.original_path)
-        if not hasattr(img, '_getexif'):
+        if not None in [self.rotation, self.created]:
             return
 
+        img = Image.open(self.original_path)
         exif = {}
-        for k, v in img._getexif().items():
-            if k not in TAGS:
-                continue
-            exif[TAGS[k]] = v
+        if hasattr(img, '_getexif'):
+            for k, v in img._getexif().items():
+                if k not in TAGS:
+                    continue
+                exif[TAGS[k]] = v
 
         if self.rotation is None:
+            self.rotation = 0
             orientation = int(exif.get('Orientation', '1'))
             if orientation == 1:
                 self.rotation = 0
@@ -263,12 +262,12 @@ class Foto(FotoEntity):
                 self.rotation = 90
             elif orientation == 8:
                 self.rotation = 270
-            else:
-                # other rotations are mirrored, and won't occur much in practice
-                self.rotation = 0
+            # other rotations are mirrored, and won't occur much in practice
 
-        if self.created is None and 'DateTimeOriginal' in exif:
-            self.created = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
+        if self.created is None:
+            self.created = settings.DT_MIN # NULL date/time
+            if 'DateTimeOriginal' in exif:
+                self.created = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
 
 
     def _cache(self, cache):
