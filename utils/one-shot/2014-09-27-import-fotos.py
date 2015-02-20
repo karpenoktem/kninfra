@@ -39,18 +39,16 @@ def main():
             'title': 'Karpe Noktem fotoalbum',
             'description': "De fotocollectie van Karpe Noktem",
             'visibility': ['world']}).save()
-    c.execute("SELECT id, name, path, type, visibility, rotation "
-                        + "FROM fa_photos")
+    c.execute("SELECT id, name, path, visibility, rotation FROM fa_photos")
     print 'fotos'
-    for oldId, name, path, _type, visibility, rotation in c.fetchall():
+    for oldId, name, path, visibility, rotation in c.fetchall():
         if visibility in ('lost', 'deleted'):
             continue
-        _type = {'photo': 'foto'}.get(_type, _type)
-        if fEs.by_oldId(_type, oldId) is not None:
+        if fEs.by_oldId('foto', oldId) is not None:
             continue
         path = path.strip('/')
         fEs.entity({
-            'type': _type,
+            'type': 'foto',
             'oldId': oldId,
             'name': name,
             'random': random.random(),
