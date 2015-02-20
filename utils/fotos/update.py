@@ -55,6 +55,10 @@ def scan(album):
                     'visibility': ['hidden']})
                 foto.update_metadata()
                 foto.save()
+            else:
+                foto = fotos[name]
+                foto.update_metadata()
+                foto.save()
 
     # TODO deleted albums
 
