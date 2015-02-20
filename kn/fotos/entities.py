@@ -279,25 +279,25 @@ class Foto(FotoEntity):
         if not os.path.exists(target_dir):
             os.makedirs(target_dir)
         if cache == 'thumb':
-            subprocess.call(['convert',
+            subprocess.check_call(['convert',
                              source,
                              '-resize', '200x',
                              '-rotate', str(self.rotation),
                              target])
         elif cache == 'thumb2x':
-            subprocess.call(['convert',
+            subprocess.check_call(['convert',
                              source,
                              '-resize', '400x',
                              '-rotate', str(self.rotation),
                              target])
         elif cache == 'large':
-            subprocess.call(['convert',
+            subprocess.check_call(['convert',
                              source,
                              '-resize', '850x',
                              '-rotate', str(self.rotation),
                              target])
         elif cache == 'large2x':
-            subprocess.call(['convert',
+            subprocess.check_call(['convert',
                              source,
                              '-quality', '90',
                              '-resize', '1700x',
