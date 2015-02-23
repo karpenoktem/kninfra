@@ -50,6 +50,11 @@ def by_path(p):
         pp, name = bits
     return by_path_and_name(pp, name)
 
+def is_admin(user):
+    if user is None:
+        return False
+    return bool(user.cached_groups_names & set(['fotocie', 'webcie']))
+
 class FotoEntity(SONWrapper):
     CACHES = {}
 
@@ -186,6 +191,9 @@ class FotoEntity(SONWrapper):
         if self.path is None:
             return None
         return by_path(self.path)
+
+    def set_title(self, title):
+        self.title = title
 
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
