@@ -68,6 +68,7 @@ class FotoEntity(SONWrapper):
     title = son_property(('title',))
     created = son_property(('created',))
     rotation = son_property(('rotation',))
+    size = son_property(('size',))
 
     description = son_property(('description',))
     visibility = son_property(('visibility',))
@@ -240,7 +241,7 @@ class Foto(FotoEntity):
         '''
         Load EXIF metadata from file if it hasn't been loaded yet.
         '''
-        if not None in [self.rotation, self.created]:
+        if not None in [self.rotation, self.created, self.size]:
             return False
 
         img = Image.open(self.original_path)
@@ -268,6 +269,9 @@ class Foto(FotoEntity):
             self.created = settings.DT_MIN # NULL date/time
             if 'DateTimeOriginal' in exif:
                 self.created = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
+
+        if self.size is None:
+            self.size = img.size
 
         return True
 
