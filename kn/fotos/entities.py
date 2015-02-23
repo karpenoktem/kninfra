@@ -241,7 +241,7 @@ class Foto(FotoEntity):
         Load EXIF metadata from file if it hasn't been loaded yet.
         '''
         if not None in [self.rotation, self.created]:
-            return
+            return False
 
         img = Image.open(self.original_path)
         exif = {}
@@ -268,6 +268,8 @@ class Foto(FotoEntity):
             self.created = settings.DT_MIN # NULL date/time
             if 'DateTimeOriginal' in exif:
                 self.created = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
+
+        return True
 
 
     def _cache(self, cache):
