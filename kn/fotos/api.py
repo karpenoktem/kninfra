@@ -17,6 +17,7 @@ def no_such_action(data, request):
 def album_json(album, user):
     if not album.may_view(user):
         raise PermissionDenied
+
     children = album.list(user)
     json_children = []
     for child in children:
@@ -34,21 +35,55 @@ def album_json(album, user):
                 size2x = child.get_cache_meta('thumb2x').get('size')
                 if size2x: entry['thumbnailSize'] = [x/2 for x in size2x]
         json_children.append(entry)
-    return {'children': json_children}
+
+    current_album = album
+    json_parents = {}
+    while current_album is not None:
+        json_parents[current_album.full_path] = current_album.title
+        current_album = current_album.get_parent()
+
+    return {'children': json_children,
+            'parents': json_parents}
+
+def entity_from_request(data):
+    if 'path' not in data:
+        return 'Missing path attribute'
+    if not isinstance(data['path'], basestring):
+        return 'path should be string'
+    entity = fEs.by_path(data['path'])
+    if entity is None:
+        return 'Object not found'
+    return entity
 
 def _list(data, request):
-    if 'path' not in data:
-        return {'error': 'Missing path attribute'}
-    if not isinstance(data['path'], basestring):
-        return {'error': 'path should be string'}
-    o = fEs.by_path(data['path'])
-    if o is None:
-        return {'error': 'Object not found'}
+    album = entity_from_request(data)
+    if isinstance(album, basestring):
+        return {'error': album}
     user = request.user if request.user.is_authenticated() else None
-    return album_json(o, user)
+    return album_json(album, user)
+
+def _set_title(data, request):
+    if 'title' not in data:
+        return {'error': 'missing title attribute'}
+    if not isinstance(data['title'], basestring):
+        return {'error': 'title should be string'}
+    title = data['title']
+
+    album = entity_from_request(data)
+    if isinstance(album, basestring):
+        return {'error': album}
+
+    user = request.user if request.user.is_authenticated() else None
+    if not fEs.is_admin(user):
+        raise PermissionDenied
+
+    album.set_title(title)
+    album.save()
+    return {'Ok': True}
 
 ACTION_HANDLER_MAP = {
         'list': _list,
+        'set-title': _set_title,
         None: no_such_action,
         }
 

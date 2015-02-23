@@ -1,7 +1,19 @@
+#breadcrumbs {
+    float: left;
+}
+
+#breadcrumbs > a {
+    margin: 0 5px;
+}
+
+#album-edit {
+    float: right;
+}
 ul#fotos {
     list-style: none;
     padding: 0;
     margin: 0;
+    clear: both;
 }
 
 ul#fotos li {
@@ -63,11 +75,6 @@ img.lazy {
     padding: 10px;
     text-align: center;
     min-height: 300px;
-}
-
-
-#breadcrumbs > a {
-    margin: 0 5px;
 }
 
 #foto > div > div > .prev,
