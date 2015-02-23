@@ -35,22 +35,16 @@ def cache(request, cache, path):
     path = unquote(path)
     if not cache in fEs.CACHE_TYPES:
         raise Http404
-    o = fEs.by_path(path)
-    if o is None:
+    entity = fEs.by_path(path)
+    if entity is None:
         raise Http404
-    if not o.may_view(request.user if request.user.is_authenticated()
+    if not entity.may_view(request.user if request.user.is_authenticated()
                         else None):
         raise PermissionDenied
-    if o._type == 'album':
-        f = o.get_random_foto_for(request.user
-                                    if request.user.is_authenticated()
-                                    else None)
-    else:
-        f = o
-    f.ensure_cached(cache)
-    resp = HttpResponse(FileWrapper(open(f.get_cache_path(cache))),
-                            mimetype=f.get_cache_mimetype(cache))
-    resp['Content-Length'] = os.path.getsize(f.get_cache_path(cache))
+    entity.ensure_cached(cache)
+    resp = HttpResponse(FileWrapper(open(entity.get_cache_path(cache))),
+                            mimetype=entity.get_cache_mimetype(cache))
+    resp['Content-Length'] = os.path.getsize(entity.get_cache_path(cache))
     return resp
 
 @login_required

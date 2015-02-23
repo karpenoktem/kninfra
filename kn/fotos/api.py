@@ -27,6 +27,10 @@ def album_json(album, user):
         if child._type == 'foto':
             entry['largeSize'] = child.get_cache_size('large')
             entry['thumbnailSize'] = child.get_cache_size('thumb')
+        elif child._type == 'album':
+            album_foto = child.get_random_foto_for(user)
+            entry['thumbnailSize'] = album_foto.get_cache_size('thumb')
+            entry['thumbnailPath'] = album_foto.full_path
         json_children.append(entry)
     return {'children': json_children}
 

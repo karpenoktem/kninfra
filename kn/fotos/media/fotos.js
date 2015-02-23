@@ -125,8 +125,13 @@
 
     var prev = null;
     $.each(data.children, function(i, c) {
-      c.thumbnail = this.cache_url('thumb', c.path);
-      c.thumbnail2x = this.cache_url('thumb2x', c.path);
+      if (c.type == 'album') {
+        c.thumbnail = this.cache_url('thumb', c.thumbnailPath);
+        c.thumbnail2x = this.cache_url('thumb2x', c.thumbnailPath);
+      } else {
+        c.thumbnail = this.cache_url('thumb', c.path);
+        c.thumbnail2x = this.cache_url('thumb2x', c.path);
+      }
       if (c.type == 'foto') {
         c.full = this.cache_url('full', c.path);
         c.large = this.cache_url('large', c.path);
