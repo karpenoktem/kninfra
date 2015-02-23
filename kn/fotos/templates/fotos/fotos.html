@@ -40,9 +40,11 @@ if ('srcset' in (new Image())) {
 <div id="breadcrumbs"></div>
 {% if fotos_admin %}
 <div id="album-edit">
-  <input id="album-title" type="text" name="album-title" title="Album titel"
-    oninput="$('#album-edit-button').prop('disabled', false)"/>
-  <button id="album-edit-button" disabled>Ok</button>
+  <form>
+    <input id="album-title" type="text" name="album-title" title="Album titel"
+      oninput="$('#album-edit-button').prop('disabled', false)"/>
+    <button id="album-edit-button" disabled>Ok</button>
+  </form>
 </div>
 {% endif %}
 <ul id="fotos"></ul>
