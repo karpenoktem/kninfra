@@ -53,7 +53,7 @@ def by_path(p):
 def is_admin(user):
     if user is None:
         return False
-    return bool(user.cached_groups_names & set(['fotocie', 'webcie']))
+    return bool(user.cached_groups_names & frozenset(('fotocie', 'webcie')))
 
 class FotoEntity(SONWrapper):
     CACHES = {}
