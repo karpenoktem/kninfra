@@ -15,7 +15,7 @@ import subprocess
 from collections import namedtuple
 
 
-cache_tuple = namedtuple('cache_tuple', ('ext', 'mimetype'))
+cache_tuple = namedtuple('cache_tuple', ('ext', 'mimetype', 'maxwidth', 'maxheight'))
 
 fcol = db['fotos']
 lcol = db['fotoLocks']
@@ -49,6 +49,17 @@ def by_path(p):
     else:
         pp, name = bits
     return by_path_and_name(pp, name)
+
+def resize_proportional(width, height, width_max, height_max=None):
+    width = float(width)
+    height = float(height)
+    if width > width_max:
+        height *= width_max/width
+        width  *= width_max/width
+    if height_max is not None and height > height_max:
+        width  *= height_max/height
+        height *= height_max/height
+    return int(round(width)), int(round(height))
 
 class FotoEntity(SONWrapper):
     CACHES = {}
@@ -142,6 +153,16 @@ class FotoEntity(SONWrapper):
             return mimetype
         return mimetypes.guess_type(self.get_cache_path(cache))[0]
 
+    def get_cache_size(self, cache):
+        c = self.CACHES[cache]
+        if self.rotation in [90, 270]:
+            # rotated
+            height, width = self.size
+        else:
+            # normal
+            width, height = self.size
+        return resize_proportional(width, height, c.maxwidth, c.maxheight)
+
     def ensure_cached(self, cache):
         if not cache in self.CACHES:
             raise KeyError
@@ -226,11 +247,11 @@ class FotoAlbum(FotoEntity):
             r = 1
 
 class Foto(FotoEntity):
-    CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg'),
-              'thumb2x': cache_tuple('jpg', 'image/jpeg'),
-              'large': cache_tuple('jpg', 'image/jpeg'),
-              'large2x': cache_tuple('jpg', 'image/jpeg'),
-              'full': cache_tuple(None, None),
+    CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg', 200, None),
+              'thumb2x': cache_tuple('jpg', 'image/jpeg', 400, None),
+              'large': cache_tuple('jpg', 'image/jpeg', 850, None),
+              'large2x': cache_tuple('jpg', 'image/jpeg', 1700, None),
+              'full': cache_tuple(None, None, None, None),
               }
 
 
@@ -284,31 +305,13 @@ class Foto(FotoEntity):
         target_dir = os.path.dirname(target)
         if not os.path.exists(target_dir):
             os.makedirs(target_dir)
-        if cache == 'thumb':
-            subprocess.check_call(['convert',
-                             source,
-                             '-resize', '200x',
-                             '-rotate', str(self.rotation),
-                             target])
-        elif cache == 'thumb2x':
-            subprocess.check_call(['convert',
-                             source,
-                             '-resize', '400x',
-                             '-rotate', str(self.rotation),
-                             target])
-        elif cache == 'large':
-            subprocess.check_call(['convert',
-                             source,
-                             '-resize', '850x',
-                             '-rotate', str(self.rotation),
-                             target])
-        elif cache == 'large2x':
-            subprocess.check_call(['convert',
-                             source,
-                             '-quality', '90',
-                             '-resize', '1700x',
-                             '-rotate', str(self.rotation),
-                             target])
+
+        size = '%dx%d' % self.get_cache_size(cache)
+        subprocess.check_call(['convert',
+                         source,
+                         '-rotate', str(self.rotation),
+                         '-resize', size,
+                         target])
         # No worries: Image.open is lazy and will only read headers
         return {'size': Image.open(target).size}
 
