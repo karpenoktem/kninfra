@@ -268,10 +268,10 @@
         }
         input.prop('disabled', false);
 
-        // update cache
+        // update/clear cache
         this.parents[path] = title;
-        var parts = path.split('/');
-        if (parts.length > 1) {
+        if (path !== '') {
+          var parts = path.split('/');
           delete this.fotos[parts.slice(0, parts.length-1).join('/')];
         }
 
