@@ -38,6 +38,15 @@ if ('srcset' in (new Image())) {
 
 {% block body %}
 <div id="breadcrumbs"></div>
+{% if fotos_admin %}
+<div id="album-edit">
+  <form>
+    <input id="album-title" type="text" name="album-title" title="Album titel"
+      oninput="$('#album-edit-button').prop('disabled', false)"/>
+    <button id="album-edit-button" disabled>Ok</button>
+  </form>
+</div>
+{% endif %}
 <ul id="fotos"></ul>
 <div id="foto">
 <div></div>

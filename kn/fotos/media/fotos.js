@@ -3,6 +3,7 @@
   function KNF(data){
     this.foto = null;
     this.fotos = {};
+    this.parents = {};
     this.read_fotos(this.get_url_path(), data);
   }
 
@@ -14,10 +15,29 @@
     if (this.get_url_path() != path)
       this.pushState(path);
 
+    this.update_breadcrumbs();
+
+    // update album title edit box
+    var title_input = $('#album-title');
+    if (title_input) {
+        title_input.val(this.parents[this.path]);
+        var parts = this.path.split('/');
+        title_input.attr('placeholder', parts[parts.length-1]);
+    }
+
+    if (!(path in this.fotos)) {
+      // Fetch fotos
+      this.fetch_fotos();
+    } else {
+      this.display_fotos();
+    }
+  };
+
+  KNF.prototype.update_breadcrumbs = function() {
     // Update breadcrumbs
     $('#breadcrumbs').empty();
     var cur = '';
-    $.each((path ? '/'+path : '').split('/'), function(k, component) {
+    $.each((this.path ? '/'+this.path : '').split('/'), function(k, component) {
       if (component !== '') {
         $('#breadcrumbs').append(document.createTextNode(' / '));
         if (!cur) {
@@ -28,7 +48,7 @@
       }
 
       var a = $('<a></a>').text(
-        component ? component : 'fotos').appendTo('#breadcrumbs');
+          this.parents[cur] || component).appendTo('#breadcrumbs');
       var p = cur;
       a.attr('href', fotos_root+cur)
        .click(function(e) {
@@ -39,14 +59,7 @@
         return false;
       }.bind(this))
     }.bind(this));
-
-    if (!(path in this.fotos)) {
-      // Fetch fotos
-      this.fetch_fotos();
-    } else {
-      this.display_fotos();
-    }
-  };
+  }
 
   KNF.prototype.display_fotos = function() {
     if (!this.fotos[this.path])
@@ -143,9 +156,18 @@
         prev.next = c;
         c.prev = prev;
       }
-
       prev = c;
+
+      if (c.type == 'album' && !(c.path in this.parents)) {
+          this.parents[c.path] = c.title;
+      }
     }.bind(this));
+
+    for (var k in data.parents) {
+        if (!(k in this.parents)) {
+            this.parents[k] = data.parents[k];
+        }
+    }
   }
 
   KNF.prototype.pushState = function (path) {
@@ -236,6 +258,33 @@
     $('#foto').show();
   };
 
+  KNF.prototype.onedit = function(e) {
+    e.target.disabled = true;
+    var input = $('#album-title')
+    input.prop('disabled', true);
+    var path = this.path;
+    var title = input.val()
+    this.api({action: 'set-title',
+              path: path,
+              title: title},
+      function(data) {
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+        input.prop('disabled', false);
+
+        // update/clear cache
+        this.parents[path] = title;
+        if (path !== '') {
+          var parts = path.split('/');
+          delete this.fotos[parts.slice(0, parts.length-1).join('/')];
+        }
+
+        this.update_breadcrumbs();
+      }.bind(this));
+  };
+
   KNF.prototype.run = function() {
     this.onpopstate();
     $(window).bind('popstate', this.onpopstate.bind(this));
@@ -264,6 +313,8 @@
         return false;
       }
     }.bind(this));
+
+    $('#album-edit-button').click(this.onedit.bind(this));
   };
 
   $(document).ready(function(){

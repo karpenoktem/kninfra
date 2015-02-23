@@ -50,6 +50,11 @@ def by_path(p):
         pp, name = bits
     return by_path_and_name(pp, name)
 
+def is_admin(user):
+    if user is None:
+        return False
+    return bool(user.cached_groups_names & frozenset(('fotocie', 'webcie')))
+
 def resize_proportional(width, height, width_max, height_max=None):
     width = float(width)
     height = float(height)
@@ -194,6 +199,14 @@ class FotoEntity(SONWrapper):
     @property
     def original_path(self):
         return os.path.join(settings.PHOTOS_DIR, self.path, self.name)
+
+    def get_parent(self):
+        if self.path is None:
+            return None
+        return by_path(self.path)
+
+    def set_title(self, title):
+        self.title = title
 
 class FotoAlbum(FotoEntity):
     def __init__(self, data):

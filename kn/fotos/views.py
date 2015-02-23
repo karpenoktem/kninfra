@@ -26,9 +26,11 @@ def fotos(request, path=''):
     if album is None:
         raise Http404
     user = request.user if request.user.is_authenticated() else None
+
     fotos = album_json(album, user)
     return render_to_response('fotos/fotos.html',
-             {'fotos': fotos},
+             {'fotos': fotos,
+              'fotos_admin': fEs.is_admin(user)},
              context_instance=RequestContext(request))
 
 def cache(request, cache, path):
@@ -49,7 +51,7 @@ def cache(request, cache, path):
 
 @login_required
 def fotoadmin_create_event(request):
-    if not request.user.cached_groups_names & set(['fotocie', 'webcie']):
+    if not fEs.is_admin(request.user):
         raise PermissionDenied
     if request.method == 'POST':
         form = CreateEventForm(request.POST)
@@ -67,7 +69,7 @@ def fotoadmin_create_event(request):
 
 @login_required
 def fotoadmin_move(request):
-    if not request.user.cached_groups_names & set(['fotocie', 'webcie']):
+    if not fEs.is_admin(request.user):
         raise PermissionDenied
     MoveFotosForm = getMoveFotosForm()
     if request.method == 'POST':
