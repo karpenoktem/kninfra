@@ -16,6 +16,11 @@ ul#fotos {
     clear: both;
 }
 
+ul#fotos a {
+    display: block;
+    min-height: 150px;
+}
+
 ul#fotos li {
     display: inline-block;
     width: 210px;
