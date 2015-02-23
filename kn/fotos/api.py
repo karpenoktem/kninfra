@@ -26,13 +26,7 @@ def album_json(album, user):
                  'title': child.title}
         if child._type == 'foto':
             entry['largeSize'] = child.get_cache_size('large')
-            if entry['largeSize'] is None:
-                size2x = child.get_cache_size('large2x')
-                if size2x: entry['largeSize'] = [x/2 for x in size2x]
             entry['thumbnailSize'] = child.get_cache_size('thumb')
-            if entry['thumbnailSize'] is None:
-                size2x = child.get_cache_size('thumb2x')
-                if size2x: entry['thumbnailSize'] = [x/2 for x in size2x]
         json_children.append(entry)
     return {'children': json_children}
 
