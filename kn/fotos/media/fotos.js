@@ -89,6 +89,10 @@
     }
 
     $(window).lazyLoadXT();
+
+    if (this.get_hash() && this.foto === null) {
+      this.change_foto(this.fotos[this.path][this.get_hash()]);
+    }
   };
 
   KNF.prototype.cache_url = function(cache, path) {
@@ -113,9 +117,6 @@
         this.read_fotos(path, data);
 
         this.display_fotos();
-        if (path === this.path && this.get_hash() && this.foto === null) {
-          this.change_foto(this.fotos[this.path][this.get_hash()]);
-        }
       }.bind(this));
   };
 
