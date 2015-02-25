@@ -235,14 +235,6 @@ class FotoAlbum(FotoEntity):
         r = random.random()
         required_visibility = self.required_visibility(user)
         while True:
-            import pprint
-            pprint.pprint(fcol.find(
-                    {'random': {'$lt': r},
-                     'path': {'$regex': re.compile(
-                                "^%s(/|$)" % re.escape(self.full_path))},
-                     'type': 'foto',
-                     'visibility': {'$in': tuple(required_visibility)}},
-                        sort=[('random',-1)]).explain())
             f = entity(fcol.find_one(
                     {'random': {'$lt': r},
                      'path': {'$regex': re.compile(
