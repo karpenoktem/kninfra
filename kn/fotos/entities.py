@@ -92,7 +92,7 @@ class FotoEntity(SONWrapper):
     def required_visibility(self, user):
         if user is None:
             return frozenset(('world',))
-        if user == '!system' or 'webcie' in user.cached_groups_names:
+        if 'webcie' in user.cached_groups_names:
             return frozenset(('leden', 'world', 'hidden'))
         if 'leden' in user.cached_groups_names:
             return frozenset(('leden', 'world'))
@@ -224,6 +224,12 @@ class FotoAlbum(FotoEntity):
                            ).sort([('created', 1), ('name', 1)]))
 
         return albums+fotos
+
+    def list_all(self):
+        '''
+        Return all children regardless of visibility.
+        '''
+        return map(entity, fcol.find({'path': self.full_path}).sort('name', 1))
 
     def get_random_foto_for(self, user):
         r = random.random()

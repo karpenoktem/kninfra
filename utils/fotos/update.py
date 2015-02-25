@@ -16,9 +16,8 @@ extensions = {
 }
 
 def list_album(album):
-    _fotos = album.list('!system')
     fotos = {}
-    for foto in _fotos:
+    for foto in album.list_all():
         fotos[foto.name] = foto
     return fotos
 
