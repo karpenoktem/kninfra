@@ -15,7 +15,7 @@ import subprocess
 from collections import namedtuple
 
 
-cache_tuple = namedtuple('cache_tuple', ('ext', 'mimetype', 'maxwidth', 'maxheight'))
+cache_tuple = namedtuple('cache_tuple', ('ext', 'mimetype', 'maxwidth', 'maxheight', 'quality'))
 
 fcol = db['fotos']
 lcol = db['fotoLocks']
@@ -251,11 +251,11 @@ class FotoAlbum(FotoEntity):
             r = 1
 
 class Foto(FotoEntity):
-    CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg', 200, None),
-              'thumb2x': cache_tuple('jpg', 'image/jpeg', 400, None),
-              'large': cache_tuple('jpg', 'image/jpeg', 850, None),
-              'large2x': cache_tuple('jpg', 'image/jpeg', 1700, None),
-              'full': cache_tuple(None, None, None, None),
+    CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg', 200, None, 85),
+              'thumb2x': cache_tuple('jpg', 'image/jpeg', 400, None, 85),
+              'large': cache_tuple('jpg', 'image/jpeg', 850, None, 90),
+              'large2x': cache_tuple('jpg', 'image/jpeg', 1700, None, 90),
+              'full': cache_tuple(None, None, None, None, None),
               }
 
 
@@ -312,8 +312,10 @@ class Foto(FotoEntity):
         size = '%dx%d' % self.get_cache_size(cache)
         subprocess.check_call(['convert',
                          source,
+                         '-strip',
                          '-rotate', str(self.rotation),
                          '-resize', size,
+                         '-quality', str(self.CACHES[cache].quality),
                          target])
 
 
