@@ -26,14 +26,13 @@ def album_json(album, user):
                  'name': child.name,
                  'title': child.title}
         if child._type == 'foto':
-            entry['largeSize'] = child.get_cache_meta('large').get('size')
-            if entry['largeSize'] is None:
-                size2x = child.get_cache_meta('large2x').get('size')
-                if size2x: entry['largeSize'] = [x/2 for x in size2x]
-            entry['thumbnailSize'] = child.get_cache_meta('thumb').get('size')
-            if entry['thumbnailSize'] is None:
-                size2x = child.get_cache_meta('thumb2x').get('size')
-                if size2x: entry['thumbnailSize'] = [x/2 for x in size2x]
+            entry['largeSize'] = child.get_cache_size('large')
+            entry['thumbnailSize'] = child.get_cache_size('thumb')
+        elif child._type == 'album':
+            album_foto = child.get_random_foto_for(user)
+            if album_foto is not None:
+                entry['thumbnailSize'] = album_foto.get_cache_size('thumb')
+                entry['thumbnailPath'] = album_foto.full_path
         json_children.append(entry)
 
     current_album = album

@@ -15,7 +15,7 @@ import subprocess
 from collections import namedtuple
 
 
-cache_tuple = namedtuple('cache_tuple', ('ext', 'mimetype'))
+cache_tuple = namedtuple('cache_tuple', ('ext', 'mimetype', 'maxwidth', 'maxheight', 'quality'))
 
 fcol = db['fotos']
 lcol = db['fotoLocks']
@@ -55,6 +55,17 @@ def is_admin(user):
         return False
     return bool(user.cached_groups_names & frozenset(('fotocie', 'webcie')))
 
+def resize_proportional(width, height, width_max, height_max=None):
+    width = float(width)
+    height = float(height)
+    if width > width_max:
+        height *= width_max/width
+        width  *= width_max/width
+    if height_max is not None and height > height_max:
+        width  *= height_max/height
+        height *= height_max/height
+    return int(round(width)), int(round(height))
+
 class FotoEntity(SONWrapper):
     CACHES = {}
 
@@ -73,6 +84,7 @@ class FotoEntity(SONWrapper):
     title = son_property(('title',))
     created = son_property(('created',))
     rotation = son_property(('rotation',))
+    size = son_property(('size',))
 
     description = son_property(('description',))
     visibility = son_property(('visibility',))
@@ -127,9 +139,6 @@ class FotoEntity(SONWrapper):
         ret = lcol.update({'_id': self._id},
                           {'$pull': {'cacheLocks': cache}})
 
-    def get_cache_meta(self, cache):
-        return self._data.get('cacheMeta', {}).get(cache, {})
-
     def get_cache_path(self, cache):
         if cache == 'full':
             return os.path.join(settings.PHOTOS_DIR, self.path, self.name)
@@ -146,30 +155,34 @@ class FotoEntity(SONWrapper):
             return mimetype
         return mimetypes.guess_type(self.get_cache_path(cache))[0]
 
+    def get_cache_size(self, cache):
+        c = self.CACHES[cache]
+        if self.rotation in [90, 270]:
+            # rotated
+            height, width = self.size
+        else:
+            # normal
+            width, height = self.size
+        return resize_proportional(width, height, c.maxwidth, c.maxheight)
+
     def ensure_cached(self, cache):
         if not cache in self.CACHES:
             raise KeyError
-        if cache in self.caches:
+        if cache in self.caches or cache == 'full':
             return True
         if not self.lock_cache(cache):
             return False
         try:
-            meta = self._cache(cache)
-            if meta is None:
-                return False
+            self._cache(cache)
             # Normally, we would just modify _data and .save().  However,
             # as the _cache operation may take quite some time, a full
             # .save() might overwrite other changes. (Like other caches.)
             # Thus we perform the change manually.
             if not 'caches' in self._data:
                 self._data['caches'] = []
-            if not 'cacheMeta' in self._data:
-                self._data['cacheMeta'] = {}
-            self._data['cacheMeta'][cache] = meta
             self._data['caches'].append(cache)
             fcol.update({'_id': self._id},
-                        {'$addToSet': {'caches': cache},
-                         '$set': {'cacheMeta.'+cache: meta}})
+                        {'$addToSet': {'caches': cache}})
         finally:
             self.unlock_cache(cache)
         return True
@@ -238,11 +251,11 @@ class FotoAlbum(FotoEntity):
             r = 1
 
 class Foto(FotoEntity):
-    CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg'),
-              'thumb2x': cache_tuple('jpg', 'image/jpeg'),
-              'large': cache_tuple('jpg', 'image/jpeg'),
-              'large2x': cache_tuple('jpg', 'image/jpeg'),
-              'full': cache_tuple(None, None),
+    CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg', 200, None, 85),
+              'thumb2x': cache_tuple('jpg', 'image/jpeg', 400, None, 85),
+              'large': cache_tuple('jpg', 'image/jpeg', 850, None, 90),
+              'large2x': cache_tuple('jpg', 'image/jpeg', 1700, None, 90),
+              'full': cache_tuple(None, None, None, None, None),
               }
 
 
@@ -253,8 +266,8 @@ class Foto(FotoEntity):
         '''
         Load EXIF metadata from file if it hasn't been loaded yet.
         '''
-        if not None in [self.rotation, self.created]:
-            return
+        if not None in [self.rotation, self.created, self.size]:
+            return False
 
         img = Image.open(self.original_path)
         exif = {}
@@ -282,42 +295,28 @@ class Foto(FotoEntity):
             if 'DateTimeOriginal' in exif:
                 self.created = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
 
+        if self.size is None:
+            self.size = img.size
+
+        return True
 
     def _cache(self, cache):
         if cache == 'full':
-            return {}
+            return
         source = self.original_path
         target = self.get_cache_path(cache)
         target_dir = os.path.dirname(target)
         if not os.path.exists(target_dir):
             os.makedirs(target_dir)
-        if cache == 'thumb':
-            subprocess.check_call(['convert',
-                             source,
-                             '-resize', '200x',
-                             '-rotate', str(self.rotation),
-                             target])
-        elif cache == 'thumb2x':
-            subprocess.check_call(['convert',
-                             source,
-                             '-resize', '400x',
-                             '-rotate', str(self.rotation),
-                             target])
-        elif cache == 'large':
-            subprocess.check_call(['convert',
-                             source,
-                             '-resize', '850x',
-                             '-rotate', str(self.rotation),
-                             target])
-        elif cache == 'large2x':
-            subprocess.check_call(['convert',
-                             source,
-                             '-quality', '90',
-                             '-resize', '1700x',
-                             '-rotate', str(self.rotation),
-                             target])
-        # No worries: Image.open is lazy and will only read headers
-        return {'size': Image.open(target).size}
+
+        size = '%dx%d' % self.get_cache_size(cache)
+        subprocess.check_call(['convert',
+                         source,
+                         '-strip',
+                         '-rotate', str(self.rotation),
+                         '-resize', size,
+                         '-quality', str(self.CACHES[cache].quality),
+                         target])
 
 
 class Video(FotoEntity):

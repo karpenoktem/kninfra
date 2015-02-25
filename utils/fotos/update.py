@@ -57,8 +57,8 @@ def scan(album):
                 foto.save()
             else:
                 foto = fotos[name]
-                foto.update_metadata()
-                foto.save()
+                if foto.update_metadata():
+                    foto.save()
 
     # TODO deleted albums
 

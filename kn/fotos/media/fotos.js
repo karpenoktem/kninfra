@@ -68,16 +68,20 @@
     for (var name in this.fotos[this.path]) {
       (function(name) {
         var c = this.fotos[this.path][name];
-        var srcset = c.thumbnail + " 1x, " +
-                     c.thumbnail2x + " 2x";
         var thumb = $('<li><a><img class="lazy" /></a></li>');
-        $('img', thumb)
-            .attr('data-srcset', srcset)
-            .attr('data-src', c.thumbnail);
-        if (c.thumbnailSize)
+        if (c.thumbnail !== undefined) {
+          var srcset = c.thumbnail + " 1x, " +
+                       c.thumbnail2x + " 2x";
           $('img', thumb)
-              .attr('width', c.thumbnailSize[0])
-              .attr('height', c.thumbnailSize[1]);
+              .attr('data-srcset', srcset)
+              .attr('data-src', c.thumbnail);
+          if (c.thumbnailSize)
+            $('img', thumb)
+                .attr('width', c.thumbnailSize[0])
+                .attr('height', c.thumbnailSize[1]);
+        } else {
+          $('a', thumb).text('(geen thumbnail)');
+        }
         var title = c.title;
         if (!title && c.type == 'album')
           title = c.name;
@@ -138,8 +142,15 @@
 
     var prev = null;
     $.each(data.children, function(i, c) {
-      c.thumbnail = this.cache_url('thumb', c.path);
-      c.thumbnail2x = this.cache_url('thumb2x', c.path);
+      if (c.type == 'album') {
+        if (c.thumbnailPath !== undefined) {
+          c.thumbnail = this.cache_url('thumb', c.thumbnailPath);
+          c.thumbnail2x = this.cache_url('thumb2x', c.thumbnailPath);
+        }
+      } else {
+        c.thumbnail = this.cache_url('thumb', c.path);
+        c.thumbnail2x = this.cache_url('thumb2x', c.path);
+      }
       if (c.type == 'foto') {
         c.full = this.cache_url('full', c.path);
         c.large = this.cache_url('large', c.path);
