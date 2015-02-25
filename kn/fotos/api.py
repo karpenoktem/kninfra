@@ -66,7 +66,7 @@ def _set_title(data, request):
         return {'error': 'missing title attribute'}
     if not isinstance(data['title'], basestring):
         return {'error': 'title should be string'}
-    title = data['title']
+    title = data['title'] or None
 
     album = entity_from_request(data)
     if isinstance(album, basestring):
