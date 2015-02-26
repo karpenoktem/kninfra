@@ -237,8 +237,8 @@
     var fotoDiv = $('#foto > div');
     fotoDiv.empty()
     var srcset = foto.large + " 1x, " +
-                 foto.large2x + " 2x"; 
-    var navHead = $('<div></div>').appendTo(fotoDiv);
+                 foto.large2x + " 2x";
+    var navHead = $('<div class="nav"></div>').appendTo(fotoDiv);
     if (foto.prev)
       $('<a class="prev">vorige</a>')
               .attr('href', '#'+foto.prev.name)
@@ -257,7 +257,7 @@
       img.attr('width', foto.largeSize[0])
          .attr('height', foto.largeSize[1]);
     img.appendTo(fotoDiv);
-    var navFooter = $('<div></div>')
+    var navFooter = $('<div class="nav"></div>')
               .appendTo(fotoDiv);
     $('<a class="orig">origineel</a>')
             .attr('href', foto.full)
@@ -267,7 +267,36 @@
       $('<p></p>')
             .text('foto.description')
             .appendTo(navFooter);
+    this.onresize();
     $('#foto').show();
+  };
+
+  KNF.prototype.onresize = function() {
+    if (this.foto === null) return;
+
+    var width = this.foto.largeSize[0];
+    var height = this.foto.largeSize[1];
+
+    var maxWidth  = window.innerWidth;
+    var maxHeight = window.innerHeight;
+    // Keep up to date with stylesheet!
+    if (maxWidth <= 500 || maxHeight <= 500) {
+      maxHeight -= 5*2 + (15+(6*2))*2;
+    } else {
+      maxWidth -= 10*2;
+      maxHeight -= 10*2 + 40*2 + (15+(6*2))*2;
+    }
+    if (width > maxWidth) {
+        height *= maxWidth/width;
+        width  *= maxWidth/width;
+    }
+    if (height > maxHeight) {
+        width  *= maxHeight/height;
+        height *= maxHeight/height;
+    }
+    $('#foto img')
+        .attr('width', width)
+        .attr('height', height);
   };
 
   KNF.prototype.onedit = function(e) {
@@ -327,6 +356,8 @@
     }.bind(this));
 
     $('#album-edit-button').click(this.onedit.bind(this));
+
+    $(window).resize(this.onresize.bind(this));
   };
 
   $(document).ready(function(){
