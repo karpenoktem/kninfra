@@ -25,10 +25,10 @@ def ensure_indices():
     fcol.ensure_index([('type', 1), ('oldId', 1)], sparse=True)
     fcol.ensure_index([('path', 1), ('name', 1)])
     fcol.ensure_index([('type', 1), ('path', 1),
-                       ('random', 1), ('visibility', 1)])
+                       ('random', 1), ('cachedVisibility', 1)])
     fcol.ensure_index('tags', sparse=True)
     fcol.ensure_index([('caches', 1), ('type', 1)], sparse=True)
-    fcol.ensure_index([('path', 1), ('visibility', 1), ('name', 1)])
+    fcol.ensure_index([('path', 1), ('cachedVisibility', 1), ('name', 1)])
 
 def entity(d):
     if d is None:
@@ -66,6 +66,19 @@ def resize_proportional(width, height, width_max, height_max=None):
         height *= height_max/height
     return int(round(width)), int(round(height))
 
+def actual_visibility(visibility):
+    actual = frozenset(visibility)
+
+    implies = {
+        'world': frozenset(('world', 'leden', 'hidden')),
+        'leden': frozenset(('leden', 'hidden'))
+    }
+
+    for v in visibility:
+        actual |= implies.get(v, frozenset(v))
+
+    return actual
+
 class FotoEntity(SONWrapper):
     CACHES = {}
 
@@ -88,6 +101,7 @@ class FotoEntity(SONWrapper):
 
     description = son_property(('description',))
     visibility = son_property(('visibility',))
+    cached_visibility = son_property(('cachedVisibility',))
 
     def required_visibility(self, user):
         if user is None:
@@ -98,9 +112,39 @@ class FotoEntity(SONWrapper):
             return frozenset(('leden', 'world'))
         return frozenset(('world',))
 
+    def update_cached_visibility(self, parent, save=True):
+        '''
+        Update the cachedVisibility property
+        '''
+        if self.cached_visibility is not None:
+            return False
+
+        if self.path is None:
+            # root
+            parent_cached_visibility = self.visibility
+        else:
+            parent_cached_visibility = parent.cached_visibility
+
+        visibilities = actual_visibility(parent_cached_visibility) & \
+                       actual_visibility(self.visibility)
+        order = ['world', 'leden', 'hidden']+self.visibility
+        if visibilities:
+            for v in order:
+                if v in visibilities:
+                    cached_visibility = [v]
+                    break
+        else:
+            cached_visibility = []
+
+        self.cached_visibility = cached_visibility
+        if save:
+            self.save()
+
+        return True
+
     def may_view(self, user):
         return bool(self.required_visibility(user)
-                        & frozenset(self.visibility))
+                        & frozenset(self.cached_visibility))
 
     @permalink
     def get_browse_url(self):
@@ -190,11 +234,11 @@ class FotoEntity(SONWrapper):
     def _cache(self, cache):
         raise NotImplementedError
 
-    def update_metadata(self):
+    def update_metadata(self, parent):
         '''
         Load metadata from file if it doesn't exist yet
         '''
-        raise NotImplementedError
+        return self.update_cached_visibility(parent)
 
     @property
     def original_path(self):
@@ -218,11 +262,11 @@ class FotoAlbum(FotoEntity):
         required_visibility = self.required_visibility(user)
         albums = map(entity, fcol.find({'path': self.full_path,
                            'type': 'album',
-                           'visibility': {'$in': tuple(required_visibility)}},
+                           'cachedVisibility': {'$in': tuple(required_visibility)}},
                            ).sort('name', -1))
         fotos = map(entity, fcol.find({'path': self.full_path,
                            'type': {'$ne': 'album'},
-                           'visibility': {'$in': tuple(required_visibility)}},
+                           'cachedVisibility': {'$in': tuple(required_visibility)}},
                            ).sort([('created', 1), ('name', 1)]))
 
         return albums+fotos
@@ -242,13 +286,23 @@ class FotoAlbum(FotoEntity):
                      'path': {'$regex': re.compile(
                                 "^%s(/|$)" % re.escape(self.full_path))},
                      'type': 'foto',
-                     'visibility': {'$in': tuple(required_visibility)}},
+                     'cachedVisibility': {'$in': tuple(required_visibility)}},
                         sort=[('random',-1)]))
             if f is not None:
                 return f
             if r == 1:
                 return None
             r = 1
+
+    def update_cached_visibility(self, parent):
+        if not super(FotoAlbum, self).update_cached_visibility(parent):
+            # cached visibility did not change, so children won't change too
+            return False
+
+        updated = False
+        for foto in self.list_all():
+            updated = foto.update_cached_visibility(self) or updated
+        return updated
 
 class Foto(FotoEntity):
     CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg', 200, None, 85),
@@ -262,12 +316,14 @@ class Foto(FotoEntity):
     def __init__(self, data):
         super(Foto, self).__init__(data)
 
-    def update_metadata(self):
+    def update_metadata(self, parent):
         '''
         Load EXIF metadata from file if it hasn't been loaded yet.
         '''
-        if not None in [self.rotation, self.created, self.size]:
-            return False
+        updated = super(Foto, self).update_metadata(parent)
+
+        if None not in [self.rotation, self.created, self.size]:
+            return updated
 
         img = Image.open(self.original_path)
         exif = {}
