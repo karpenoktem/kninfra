@@ -112,9 +112,11 @@ class FotoEntity(SONWrapper):
             return frozenset(('leden', 'world'))
         return frozenset(('world',))
 
-    def update_effective_visibility(self, parent, save=True):
+    def update_effective_visibility(self, parent, save=True, recursive=False):
         '''
         Update the effectiveVisibility property
+
+        `recursive` keyword argument is ignored
         '''
         if self.effective_visibility is not None:
             return False
@@ -137,6 +139,7 @@ class FotoEntity(SONWrapper):
             effective_visibility = []
 
         self.effective_visibility = effective_visibility
+
         if save:
             self.save()
 
@@ -234,11 +237,11 @@ class FotoEntity(SONWrapper):
     def _cache(self, cache):
         raise NotImplementedError
 
-    def update_metadata(self, parent):
+    def update_metadata(self, parent, save=True):
         '''
         Load metadata from file if it doesn't exist yet
         '''
-        return self.update_effective_visibility(parent)
+        return self.update_effective_visibility(parent, save=save, recursive=False)
 
     @property
     def original_path(self):
@@ -255,6 +258,10 @@ class FotoEntity(SONWrapper):
             self.save()
 
     def update_visibility(self, visibility):
+        '''
+        Update the visibility, clear and recalculate effective visibility.
+        This object will be saved afterwards.
+        '''
         if self.visibility == visibility:
             return
 
@@ -314,14 +321,22 @@ class FotoAlbum(FotoEntity):
                 return None
             r = 1
 
-    def update_effective_visibility(self, parent):
-        if not super(FotoAlbum, self).update_effective_visibility(parent):
+    def update_effective_visibility(self, parent, save=True, recursive=True):
+        if not super(FotoAlbum, self).update_effective_visibility(parent, save=False):
             # effective visibility did not change, so children won't change too
             return False
 
+        if recursive and not save:
+            raise ValueError('recursion without save is not recommended')
+
         updated = False
-        for foto in self.list_all():
-            updated = foto.update_effective_visibility(self) or updated
+        if recursive:
+            for foto in self.list_all():
+                updated = foto.update_effective_visibility(self, save=save) or updated
+
+        if updated and save:
+            self.save()
+
         return updated
 
 class Foto(FotoEntity):
@@ -336,13 +351,15 @@ class Foto(FotoEntity):
     def __init__(self, data):
         super(Foto, self).__init__(data)
 
-    def update_metadata(self, parent):
+    def update_metadata(self, parent, save=True):
         '''
         Load EXIF metadata from file if it hasn't been loaded yet.
         '''
-        updated = super(Foto, self).update_metadata(parent)
+        updated = super(Foto, self).update_metadata(parent, save=False)
 
         if None not in [self.rotation, self.created, self.size]:
+            if save and updated:
+                self.save()
             return updated
 
         img = Image.open(self.original_path)
@@ -373,6 +390,9 @@ class Foto(FotoEntity):
 
         if self.size is None:
             self.size = img.size
+
+        if save:
+            self.save()
 
         return True
 

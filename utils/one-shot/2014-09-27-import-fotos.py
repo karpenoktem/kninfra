@@ -24,7 +24,7 @@ def main():
             'title': 'Karpe Noktem fotoalbum',
             'description': "De fotocollectie van Karpe Noktem",
             'visibility': ['world']})
-        root.update_metadata(None)
+        root.update_metadata(None, save=False)
         root.save()
     for oldId, name, path, humanName, visibility, description in c.fetchall():
         if visibility in ('lost', 'deleted'):
@@ -41,7 +41,7 @@ def main():
             'title': humanName,
             'description': description,
             'visibility': [visibility]})
-        album.update_metadata(album.get_parent())
+        album.update_metadata(album.get_parent(), save=False)
         album.save()
     c.execute("SELECT id, name, path, visibility, rotation FROM fa_photos")
     print 'fotos'
@@ -61,7 +61,7 @@ def main():
             'description': None,
             'visibility': [visibility],
             'rotation': rotation})
-        foto.update_metadata(foto.get_parent())
+        foto.update_metadata(foto.get_parent(), save=False)
         foto.save()
     print 'tags'
     c.execute("SELECT photo_id, username FROM fa_tags")

@@ -40,9 +40,9 @@ def scan(album):
                     'name': name,
                     'random': random.random(),
                     'visibility': ['hidden']})
-                subalbum.update_metadata(album)
+                subalbum.update_metadata(album, save=False)
                 subalbum.save()
-            elif subalbum.update_metadata(album):
+            elif subalbum.update_metadata(album, save=False):
                 subalbum.save()
             scan(subalbum)
 
@@ -56,9 +56,9 @@ def scan(album):
                     'name': name,
                     'random': random.random(),
                     'visibility': ['world']})
-                foto.update_metadata(album)
+                foto.update_metadata(album, save=False)
                 foto.save()
-            elif foto.update_metadata(album):
+            elif foto.update_metadata(album, save=False):
                 foto.save()
 
     # TODO deleted albums
