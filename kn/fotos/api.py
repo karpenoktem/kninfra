@@ -42,7 +42,8 @@ def album_json(album, user):
         current_album = current_album.get_parent()
 
     return {'children': json_children,
-            'parents': json_parents}
+            'parents': json_parents,
+            'visibility': album.visibility[0]}
 
 def entity_from_request(data):
     if 'path' not in data:
@@ -61,12 +62,18 @@ def _list(data, request):
     user = request.user if request.user.is_authenticated() else None
     return album_json(album, user)
 
-def _set_title(data, request):
+def _set_metadata(data, request):
     if 'title' not in data:
         return {'error': 'missing title attribute'}
     if not isinstance(data['title'], basestring):
         return {'error': 'title should be string'}
     title = data['title'] or None
+
+    if 'visibility' not in data:
+        return {'error': 'missing visibility attribute'}
+    if data['visibility'] not in ['world', 'leden', 'hidden']:
+        return {'error': 'visibility not recognized'}
+    visibility = data['visibility']
 
     album = entity_from_request(data)
     if isinstance(album, basestring):
@@ -77,11 +84,12 @@ def _set_title(data, request):
         raise PermissionDenied
 
     album.set_title(title)
+    album.update_visibility([visibility])
     return {'Ok': True}
 
 ACTION_HANDLER_MAP = {
         'list': _list,
-        'set-title': _set_title,
+        'set-metadata': _set_metadata,
         None: no_such_action,
         }
 

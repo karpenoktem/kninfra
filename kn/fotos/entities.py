@@ -254,6 +254,26 @@ class FotoEntity(SONWrapper):
         if save:
             self.save()
 
+    def update_visibility(self, visibility):
+        if self.visibility == visibility:
+            return
+
+        # First delete all old cached visibilities, in case something goes
+        # wrong during the update.
+        if self.path is None:
+            # root
+            query = {'path': {'$exists': True, '$ne': None}}
+        else:
+            query = {'path': {'$regex': re.compile(
+                                "^%s(/|$)" % re.escape(self.full_path))}}
+        fcol.update(query, {'$set': {'cachedVisibility': None}}, multi=True)
+
+        # And now save and recalculate cached visibilities recursively.
+        self.visibility = visibility
+        self.cached_visibility = None
+        self.save()
+        self.update_cached_visibility(self.get_parent())
+
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
         super(FotoAlbum, self).__init__(data)

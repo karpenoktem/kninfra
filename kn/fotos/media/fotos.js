@@ -17,12 +17,16 @@
 
     this.update_breadcrumbs();
 
-    // update album title edit box
-    var title_input = $('#album-title');
-    if (title_input) {
-        title_input.val(this.parents[this.path]);
-        var parts = this.path.split('/');
-        title_input.attr('placeholder', parts[parts.length-1]);
+    // update album edit box
+    var field_title = $('#album-title');
+    if (field_title) {
+      field_title.val(this.parents[this.path]);
+      var parts = this.path.split('/');
+      field_title.attr('placeholder', parts[parts.length-1]);
+    }
+    var field_visibility = $('#album-visibility');
+    if (field_visibility) {
+      field_visibility.val(this.fotos[path].visibility);
     }
 
     if (!(path in this.fotos)) {
@@ -65,9 +69,9 @@
     if (!this.fotos[this.path])
       return;
 
-    for (var name in this.fotos[this.path]) {
+    for (var name in this.fotos[this.path].children) {
       (function(name) {
-        var c = this.fotos[this.path][name];
+        var c = this.fotos[this.path].children[name];
         var thumb = $('<li><a><img class="lazy" /></a></li>');
         if (c.thumbnail !== undefined) {
           var srcset = c.thumbnail + " 1x, " +
@@ -108,7 +112,7 @@
     $(window).lazyLoadXT();
 
     if (this.get_hash() && this.foto === null) {
-      this.change_foto(this.fotos[this.path][this.get_hash()]);
+      this.change_foto(this.fotos[this.path].children[this.get_hash()]);
     }
   };
 
@@ -138,7 +142,8 @@
   };
 
   KNF.prototype.read_fotos = function(path, data) {
-    this.fotos[path] = {};
+    this.fotos[path] = {children:{},
+                        visibility: data.visibility};
 
     var prev = null;
     $.each(data.children, function(i, c) {
@@ -156,7 +161,7 @@
         c.large = this.cache_url('large', c.path);
         c.large2x = this.cache_url('large2x', c.path);
       }
-      this.fotos[path][c.name] = c;
+      this.fotos[path].children[c.name] = c;
 
       if (prev !== null) {
         prev.next = c;
@@ -203,7 +208,7 @@
   }
 
   KNF.prototype.onhashchange = function() {
-    this.change_foto(this.fotos[this.path][this.get_hash()]);
+    this.change_foto(this.fotos[this.path].children[this.get_hash()]);
   }
 
   KNF.prototype.api = function(data, cb) {
@@ -266,19 +271,27 @@
 
   KNF.prototype.onedit = function(e) {
     e.target.disabled = true;
-    var input = $('#album-title')
-    input.prop('disabled', true);
+
+    var field_visibility = $('#album-visibility')
+    field_visibility.prop('disabled', true);
+    var visibility = field_visibility.val();
+
+    var field_title = $('#album-title')
+    field_title.prop('disabled', true);
+    var title = field_title.val()
+
     var path = this.path;
-    var title = input.val()
-    this.api({action: 'set-title',
+    this.api({action: 'set-metadata',
               path: path,
-              title: title},
+              title: title,
+              visibility: visibility},
       function(data) {
         if (data.error) {
           alert(data.error);
           return;
         }
-        input.prop('disabled', false);
+        field_title.prop('disabled', false);
+        field_visibility.prop('disabled', false);
 
         // update/clear cache
         this.parents[path] = title;
