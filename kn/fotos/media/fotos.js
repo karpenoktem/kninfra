@@ -72,19 +72,25 @@
     for (var name in this.fotos[this.path].children) {
       (function(name) {
         var c = this.fotos[this.path].children[name];
-        var thumb = $('<li><a><img class="lazy" /></a></li>');
+        var thumb = $('<li><div><a><img class="lazy" /></a></div></li>');
         if (c.thumbnail !== undefined) {
           var srcset = c.thumbnail + " 1x, " +
                        c.thumbnail2x + " 2x";
           $('img', thumb)
               .attr('data-srcset', srcset)
               .attr('data-src', c.thumbnail);
-          if (c.thumbnailSize)
+          if (c.thumbnailSize) {
             $('img', thumb)
                 .attr('width', c.thumbnailSize[0])
                 .attr('height', c.thumbnailSize[1]);
+            // http://www.smashingmagazine.com/2013/09/16/responsive-images-performance-problem-case-study/
+            $('a', thumb).css('padding-bottom', c.thumbnailSize[1]/c.thumbnailSize[0]*100+'%')
+                         .css('width', c.thumbnailSize[0]);
+            $('div', thumb).css('margin', '0 ' + (200-c.thumbnailSize[0])/2/200*100 + '%');
+          }
         } else {
-          $('a', thumb).text('(geen thumbnail)');
+          $('a', thumb).text('(geen thumbnail)')
+                       .css('height', '100px');
         }
         var title = c.title;
         if (!title && c.type == 'album')
@@ -92,7 +98,7 @@
         if (title)
           $('<span></span>').text(title).appendTo(thumb);
         if (c.type == 'album') {
-          $('> a', thumb)
+          $('a', thumb)
             .attr('href', fotos_root + c.path)
             .click(function(e) {
               if (e.ctrlKey || e.shiftKey || e.metaKey || e.button != 0) {
@@ -103,7 +109,7 @@
             }.bind(this));
         }
         if (c.type == 'foto') {
-          $('> a', thumb).attr('href', '#'+c.name);
+          $('a', thumb).attr('href', '#'+c.name);
         }
         thumb.appendTo('#fotos');
       }).call(this, name);
@@ -236,8 +242,8 @@
     var fotoDiv = $('#foto > div');
     fotoDiv.empty()
     var srcset = foto.large + " 1x, " +
-                 foto.large2x + " 2x"; 
-    var navHead = $('<div></div>').appendTo(fotoDiv);
+                 foto.large2x + " 2x";
+    var navHead = $('<div class="nav"></div>').appendTo(fotoDiv);
     if (foto.prev)
       $('<a class="prev">vorige</a>')
               .attr('href', '#'+foto.prev.name)
@@ -256,7 +262,7 @@
       img.attr('width', foto.largeSize[0])
          .attr('height', foto.largeSize[1]);
     img.appendTo(fotoDiv);
-    var navFooter = $('<div></div>')
+    var navFooter = $('<div class="nav"></div>')
               .appendTo(fotoDiv);
     $('<a class="orig">origineel</a>')
             .attr('href', foto.full)
@@ -266,7 +272,36 @@
       $('<p></p>')
             .text('foto.description')
             .appendTo(navFooter);
+    this.onresize();
     $('#foto').show();
+  };
+
+  KNF.prototype.onresize = function() {
+    if (this.foto === null) return;
+
+    var width = this.foto.largeSize[0];
+    var height = this.foto.largeSize[1];
+
+    var maxWidth  = window.innerWidth;
+    var maxHeight = window.innerHeight;
+    // Keep up to date with stylesheet!
+    if (maxWidth <= 500 || maxHeight <= 500) {
+      maxHeight -= 5*2 + (15+(6*2))*2;
+    } else {
+      maxWidth -= 10*2;
+      maxHeight -= 10*2 + 40*2 + (15+(6*2))*2;
+    }
+    if (width > maxWidth) {
+        height *= maxWidth/width;
+        width  *= maxWidth/width;
+    }
+    if (height > maxHeight) {
+        width  *= maxHeight/height;
+        height *= maxHeight/height;
+    }
+    $('#foto img')
+        .attr('width', width)
+        .attr('height', height);
   };
 
   KNF.prototype.onedit = function(e) {
@@ -334,6 +369,8 @@
     }.bind(this));
 
     $('#album-edit-button').click(this.onedit.bind(this));
+
+    $(window).resize(this.onresize.bind(this));
   };
 
   $(document).ready(function(){
