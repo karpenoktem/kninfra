@@ -25,10 +25,10 @@ def ensure_indices():
     fcol.ensure_index([('type', 1), ('oldId', 1)], sparse=True)
     fcol.ensure_index([('path', 1), ('name', 1)])
     fcol.ensure_index([('type', 1), ('path', 1),
-                       ('random', 1), ('cachedVisibility', 1)])
+                       ('random', 1), ('effectiveVisibility', 1)])
     fcol.ensure_index('tags', sparse=True)
     fcol.ensure_index([('caches', 1), ('type', 1)], sparse=True)
-    fcol.ensure_index([('path', 1), ('cachedVisibility', 1), ('name', 1)])
+    fcol.ensure_index([('path', 1), ('effectiveVisibility', 1), ('name', 1)])
 
 def entity(d):
     if d is None:
@@ -101,7 +101,7 @@ class FotoEntity(SONWrapper):
 
     description = son_property(('description',))
     visibility = son_property(('visibility',))
-    cached_visibility = son_property(('cachedVisibility',))
+    effective_visibility = son_property(('effectiveVisibility',))
 
     def required_visibility(self, user):
         if user is None:
@@ -112,31 +112,31 @@ class FotoEntity(SONWrapper):
             return frozenset(('leden', 'world'))
         return frozenset(('world',))
 
-    def update_cached_visibility(self, parent, save=True):
+    def update_effective_visibility(self, parent, save=True):
         '''
-        Update the cachedVisibility property
+        Update the effectiveVisibility property
         '''
-        if self.cached_visibility is not None:
+        if self.effective_visibility is not None:
             return False
 
         if self.path is None:
             # root
-            parent_cached_visibility = self.visibility
+            parent_effective_visibility = self.visibility
         else:
-            parent_cached_visibility = parent.cached_visibility
+            parent_effective_visibility = parent.effective_visibility
 
-        visibilities = actual_visibility(parent_cached_visibility) & \
+        visibilities = actual_visibility(parent_effective_visibility) & \
                        actual_visibility(self.visibility)
         order = ['world', 'leden', 'hidden']+self.visibility
         if visibilities:
             for v in order:
                 if v in visibilities:
-                    cached_visibility = [v]
+                    effective_visibility = [v]
                     break
         else:
-            cached_visibility = []
+            effective_visibility = []
 
-        self.cached_visibility = cached_visibility
+        self.effective_visibility = effective_visibility
         if save:
             self.save()
 
@@ -144,7 +144,7 @@ class FotoEntity(SONWrapper):
 
     def may_view(self, user):
         return bool(self.required_visibility(user)
-                        & frozenset(self.cached_visibility))
+                        & frozenset(self.effective_visibility))
 
     @permalink
     def get_browse_url(self):
@@ -238,7 +238,7 @@ class FotoEntity(SONWrapper):
         '''
         Load metadata from file if it doesn't exist yet
         '''
-        return self.update_cached_visibility(parent)
+        return self.update_effective_visibility(parent)
 
     @property
     def original_path(self):
@@ -258,7 +258,7 @@ class FotoEntity(SONWrapper):
         if self.visibility == visibility:
             return
 
-        # First delete all old cached visibilities, in case something goes
+        # First delete all old effective visibilities, in case something goes
         # wrong during the update.
         if self.path is None:
             # root
@@ -266,13 +266,13 @@ class FotoEntity(SONWrapper):
         else:
             query = {'path': {'$regex': re.compile(
                                 "^%s(/|$)" % re.escape(self.full_path))}}
-        fcol.update(query, {'$set': {'cachedVisibility': None}}, multi=True)
+        fcol.update(query, {'$set': {'effectiveVisibility': None}}, multi=True)
 
-        # And now save and recalculate cached visibilities recursively.
+        # And now save and recalculate effective visibilities recursively.
         self.visibility = visibility
-        self.cached_visibility = None
+        self.effective_visibility = None
         self.save()
-        self.update_cached_visibility(self.get_parent())
+        self.update_effective_visibility(self.get_parent())
 
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
@@ -282,11 +282,11 @@ class FotoAlbum(FotoEntity):
         required_visibility = self.required_visibility(user)
         albums = map(entity, fcol.find({'path': self.full_path,
                            'type': 'album',
-                           'cachedVisibility': {'$in': tuple(required_visibility)}},
+                           'effectiveVisibility': {'$in': tuple(required_visibility)}},
                            ).sort('name', -1))
         fotos = map(entity, fcol.find({'path': self.full_path,
                            'type': {'$ne': 'album'},
-                           'cachedVisibility': {'$in': tuple(required_visibility)}},
+                           'effectiveVisibility': {'$in': tuple(required_visibility)}},
                            ).sort([('created', 1), ('name', 1)]))
 
         return albums+fotos
@@ -306,7 +306,7 @@ class FotoAlbum(FotoEntity):
                      'path': {'$regex': re.compile(
                                 "^%s(/|$)" % re.escape(self.full_path))},
                      'type': 'foto',
-                     'cachedVisibility': {'$in': tuple(required_visibility)}},
+                     'effectiveVisibility': {'$in': tuple(required_visibility)}},
                         sort=[('random',-1)]))
             if f is not None:
                 return f
@@ -314,14 +314,14 @@ class FotoAlbum(FotoEntity):
                 return None
             r = 1
 
-    def update_cached_visibility(self, parent):
-        if not super(FotoAlbum, self).update_cached_visibility(parent):
-            # cached visibility did not change, so children won't change too
+    def update_effective_visibility(self, parent):
+        if not super(FotoAlbum, self).update_effective_visibility(parent):
+            # effective visibility did not change, so children won't change too
             return False
 
         updated = False
         for foto in self.list_all():
-            updated = foto.update_cached_visibility(self) or updated
+            updated = foto.update_effective_visibility(self) or updated
         return updated
 
 class Foto(FotoEntity):
