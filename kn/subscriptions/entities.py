@@ -2,9 +2,11 @@ import decimal
 
 from django.db.models import permalink
 from django.utils.html import escape, linebreaks
+from django.core.mail import EmailMessage
 
 from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
 import kn.leden.entities as Es
+from kn.settings import MAILDOMAIN
 
 ecol = db['events']
 scol = db['event_subscriptions']
@@ -95,6 +97,10 @@ class Event(SONWrapper):
     @permalink
     def get_absolute_url(self):
         return ('event-detail', (), {'name': self.name})
+    @property
+    def messageId(self):
+        """ Unique ID to be used in e.g. References: headers """
+        return '<%s@%s>' % (self.get_absolute_url().strip('/'), MAILDOMAIN)
     def has_read_access(self, user):
         return  self.owner == user or \
             str(self.owner.name) in user.cached_groups_names or \
@@ -141,5 +147,27 @@ class Subscription(SONWrapper):
     confirmed = son_property(('confirmed',), True)
     subscribedBy_notes = son_property(('subscribedBy_notes',))
     dateConfirmed = son_property(('dateConfirmed',))
+
+    def send_notification(self, subject, body):
+        cc = [self.event._data.owner.canonical_full_email]
+        if self.subscribedBy:
+            cc.append(self.subscribedBy.canonical_full_email)
+        # See RFC5322 for a description of the References and In-Reply-To
+        # headers:
+        # https://tools.ietf.org/html/rfc5322#section-3.6.4
+        # They are used here for proper threading in mail applications.
+        email = EmailMessage(
+                subject,
+                body,
+                'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
+                [self.user.canonical_full_email],
+                cc=cc,
+                headers={
+                    'Reply-To': self.event._data.owner.canonical_full_email,
+                    'In-Reply-To': self.event._data.messageId,
+                    'References': self.event._data.messageId,
+                },
+        )
+        email.send()
 
 # vim: et:sta:bs=2:sw=4:
