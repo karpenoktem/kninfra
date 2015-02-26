@@ -1,0 +1,4 @@
+include:
+    - .mongo
+    - .kninfra
+    - .nginx
