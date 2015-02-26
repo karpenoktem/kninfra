@@ -67,7 +67,9 @@ def _set_metadata(data, request):
         return {'error': 'missing title attribute'}
     if not isinstance(data['title'], basestring):
         return {'error': 'title should be string'}
-    title = data['title'] or None
+    title = data['title'].strip()
+    if not title:
+        title = None
 
     if 'visibility' not in data:
         return {'error': 'missing visibility attribute'}
