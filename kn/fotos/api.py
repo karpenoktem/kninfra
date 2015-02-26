@@ -74,7 +74,7 @@ def _set_metadata(data, request):
     if 'visibility' not in data:
         return {'error': 'missing visibility attribute'}
     if data['visibility'] not in ['world', 'leden', 'hidden']:
-        return {'error': 'visibility not recognized'}
+        return {'error': 'visibility not valid'}
     visibility = data['visibility']
 
     album = entity_from_request(data)
