@@ -15,13 +15,24 @@ def main():
     c.execute("SELECT id, name, path, humanname, visibility, description "
                         + "FROM fa_albums")
     print 'albums'
+    if fEs.by_path('') is None:
+        root = fEs.entity({
+            'type': 'album',
+            'name': '',
+            'path': None,
+            'random': random.random(),
+            'title': 'Karpe Noktem fotoalbum',
+            'description': "De fotocollectie van Karpe Noktem",
+            'visibility': ['world']})
+        root.update_metadata(None, save=False)
+        root.save()
     for oldId, name, path, humanName, visibility, description in c.fetchall():
         if visibility in ('lost', 'deleted'):
             continue
         if fEs.by_oldId('album', oldId) is not None:
             continue
         path = path.strip('/')
-        fEs.entity({
+        album = fEs.entity({
             'type': 'album',
             'oldId': oldId,
             'random': random.random(),
@@ -29,16 +40,9 @@ def main():
             'path': path,
             'title': humanName,
             'description': description,
-            'visibility': [visibility]}).save()
-    if fEs.by_path('') is None:
-        fEs.entity({
-            'type': 'album',
-            'name': '',
-            'path': None,
-            'random': random.random(),
-            'title': 'Karpe Noktem fotoalbum',
-            'description': "De fotocollectie van Karpe Noktem",
-            'visibility': ['world']}).save()
+            'visibility': [visibility]})
+        album.update_metadata(album.get_parent(), save=False)
+        album.save()
     c.execute("SELECT id, name, path, visibility, rotation FROM fa_photos")
     print 'fotos'
     for oldId, name, path, visibility, rotation in c.fetchall():
@@ -57,7 +61,7 @@ def main():
             'description': None,
             'visibility': [visibility],
             'rotation': rotation})
-        foto.update_metadata()
+        foto.update_metadata(foto.get_parent(), save=False)
         foto.save()
     print 'tags'
     c.execute("SELECT photo_id, username FROM fa_tags")

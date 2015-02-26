@@ -25,10 +25,10 @@ def ensure_indices():
     fcol.ensure_index([('type', 1), ('oldId', 1)], sparse=True)
     fcol.ensure_index([('path', 1), ('name', 1)])
     fcol.ensure_index([('type', 1), ('path', 1),
-                       ('random', 1), ('visibility', 1)])
+                       ('random', 1), ('effectiveVisibility', 1)])
     fcol.ensure_index('tags', sparse=True)
     fcol.ensure_index([('caches', 1), ('type', 1)], sparse=True)
-    fcol.ensure_index([('path', 1), ('visibility', 1), ('name', 1)])
+    fcol.ensure_index([('path', 1), ('effectiveVisibility', 1), ('name', 1)])
 
 def entity(d):
     if d is None:
@@ -66,6 +66,19 @@ def resize_proportional(width, height, width_max, height_max=None):
         height *= height_max/height
     return int(round(width)), int(round(height))
 
+def actual_visibility(visibility):
+    actual = frozenset(visibility)
+
+    implies = {
+        'world': frozenset(('world', 'leden', 'hidden')),
+        'leden': frozenset(('leden', 'hidden'))
+    }
+
+    for v in visibility:
+        actual |= implies.get(v, frozenset(v))
+
+    return actual
+
 class FotoEntity(SONWrapper):
     CACHES = {}
 
@@ -88,19 +101,53 @@ class FotoEntity(SONWrapper):
 
     description = son_property(('description',))
     visibility = son_property(('visibility',))
+    effective_visibility = son_property(('effectiveVisibility',))
 
     def required_visibility(self, user):
         if user is None:
             return frozenset(('world',))
-        if user == '!system' or 'webcie' in user.cached_groups_names:
+        if 'webcie' in user.cached_groups_names:
             return frozenset(('leden', 'world', 'hidden'))
         if 'leden' in user.cached_groups_names:
             return frozenset(('leden', 'world'))
         return frozenset(('world',))
 
+    def update_effective_visibility(self, parent, save=True, recursive=False):
+        '''
+        Update the effectiveVisibility property
+
+        `recursive` keyword argument is ignored
+        '''
+        if self.effective_visibility is not None:
+            return False
+
+        if self.path is None:
+            # root
+            parent_effective_visibility = self.visibility
+        else:
+            parent_effective_visibility = parent.effective_visibility
+
+        visibilities = actual_visibility(parent_effective_visibility) & \
+                       actual_visibility(self.visibility)
+        order = ['world', 'leden', 'hidden']+self.visibility
+        if visibilities:
+            for v in order:
+                if v in visibilities:
+                    effective_visibility = [v]
+                    break
+        else:
+            effective_visibility = []
+
+        self.effective_visibility = effective_visibility
+
+        if save:
+            self.save()
+
+        return True
+
     def may_view(self, user):
         return bool(self.required_visibility(user)
-                        & frozenset(self.visibility))
+                        & frozenset(self.effective_visibility))
 
     @permalink
     def get_browse_url(self):
@@ -190,11 +237,11 @@ class FotoEntity(SONWrapper):
     def _cache(self, cache):
         raise NotImplementedError
 
-    def update_metadata(self):
+    def update_metadata(self, parent, save=True):
         '''
         Load metadata from file if it doesn't exist yet
         '''
-        raise NotImplementedError
+        return self.update_effective_visibility(parent, save=save, recursive=False)
 
     @property
     def original_path(self):
@@ -205,8 +252,34 @@ class FotoEntity(SONWrapper):
             return None
         return by_path(self.path)
 
-    def set_title(self, title):
+    def set_title(self, title, save=True):
         self.title = title
+        if save:
+            self.save()
+
+    def update_visibility(self, visibility):
+        '''
+        Update the visibility, clear and recalculate effective visibility.
+        This object will be saved afterwards.
+        '''
+        if self.visibility == visibility:
+            return
+
+        # First delete all old effective visibilities, in case something goes
+        # wrong during the update.
+        if self.path is None:
+            # root
+            query = {'path': {'$exists': True, '$ne': None}}
+        else:
+            query = {'path': {'$regex': re.compile(
+                                "^%s(/|$)" % re.escape(self.full_path))}}
+        fcol.update(query, {'$set': {'effectiveVisibility': None}}, multi=True)
+
+        # And now save and recalculate effective visibilities recursively.
+        self.visibility = visibility
+        self.effective_visibility = None
+        self.save()
+        self.update_effective_visibility(self.get_parent())
 
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
@@ -216,39 +289,55 @@ class FotoAlbum(FotoEntity):
         required_visibility = self.required_visibility(user)
         albums = map(entity, fcol.find({'path': self.full_path,
                            'type': 'album',
-                           'visibility': {'$in': tuple(required_visibility)}},
+                           'effectiveVisibility': {'$in': tuple(required_visibility)}},
                            ).sort('name', -1))
         fotos = map(entity, fcol.find({'path': self.full_path,
                            'type': {'$ne': 'album'},
-                           'visibility': {'$in': tuple(required_visibility)}},
+                           'effectiveVisibility': {'$in': tuple(required_visibility)}},
                            ).sort([('created', 1), ('name', 1)]))
 
         return albums+fotos
+
+    def list_all(self):
+        '''
+        Return all children regardless of visibility.
+        '''
+        return map(entity, fcol.find({'path': self.full_path}).sort('name', 1))
 
     def get_random_foto_for(self, user):
         r = random.random()
         required_visibility = self.required_visibility(user)
         while True:
-            import pprint
-            pprint.pprint(fcol.find(
-                    {'random': {'$lt': r},
-                     'path': {'$regex': re.compile(
-                                "^%s(/|$)" % re.escape(self.full_path))},
-                     'type': 'foto',
-                     'visibility': {'$in': tuple(required_visibility)}},
-                        sort=[('random',-1)]).explain())
             f = entity(fcol.find_one(
                     {'random': {'$lt': r},
                      'path': {'$regex': re.compile(
                                 "^%s(/|$)" % re.escape(self.full_path))},
                      'type': 'foto',
-                     'visibility': {'$in': tuple(required_visibility)}},
+                     'effectiveVisibility': {'$in': tuple(required_visibility)}},
                         sort=[('random',-1)]))
             if f is not None:
                 return f
             if r == 1:
                 return None
             r = 1
+
+    def update_effective_visibility(self, parent, save=True, recursive=True):
+        if not super(FotoAlbum, self).update_effective_visibility(parent, save=False):
+            # effective visibility did not change, so children won't change too
+            return False
+
+        if recursive and not save:
+            raise ValueError('recursion without save is not recommended')
+
+        updated = False
+        if recursive:
+            for foto in self.list_all():
+                updated = foto.update_effective_visibility(self, save=save) or updated
+
+        if updated and save:
+            self.save()
+
+        return updated
 
 class Foto(FotoEntity):
     CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg', 200, None, 85),
@@ -262,12 +351,16 @@ class Foto(FotoEntity):
     def __init__(self, data):
         super(Foto, self).__init__(data)
 
-    def update_metadata(self):
+    def update_metadata(self, parent, save=True):
         '''
         Load EXIF metadata from file if it hasn't been loaded yet.
         '''
-        if not None in [self.rotation, self.created, self.size]:
-            return False
+        updated = super(Foto, self).update_metadata(parent, save=False)
+
+        if None not in [self.rotation, self.created, self.size]:
+            if save and updated:
+                self.save()
+            return updated
 
         img = Image.open(self.original_path)
         exif = {}
@@ -297,6 +390,9 @@ class Foto(FotoEntity):
 
         if self.size is None:
             self.size = img.size
+
+        if save:
+            self.save()
 
         return True
 

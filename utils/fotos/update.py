@@ -16,9 +16,8 @@ extensions = {
 }
 
 def list_album(album):
-    _fotos = album.list('!system')
     fotos = {}
-    for foto in _fotos:
+    for foto in album.list_all():
         fotos[foto.name] = foto
     return fotos
 
@@ -41,24 +40,26 @@ def scan(album):
                     'name': name,
                     'random': random.random(),
                     'visibility': ['hidden']})
+                subalbum.update_metadata(album, save=False)
+                subalbum.save()
+            elif subalbum.update_metadata(album, save=False):
                 subalbum.save()
             scan(subalbum)
 
         elif os.path.splitext(name)[1][1:].lower() in extensions:
             # photo
-            if name not in fotos:
+            foto = fotos.get(name, None)
+            if foto is None:
                 foto = fEs.entity({
                     'type': 'foto',
                     'path': album.full_path,
                     'name': name,
                     'random': random.random(),
-                    'visibility': ['hidden']})
-                foto.update_metadata()
+                    'visibility': ['world']})
+                foto.update_metadata(album, save=False)
                 foto.save()
-            else:
-                foto = fotos[name]
-                if foto.update_metadata():
-                    foto.save()
+            elif foto.update_metadata(album, save=False):
+                foto.save()
 
     # TODO deleted albums
 
@@ -76,6 +77,9 @@ def main():
             'title': 'Karpe Noktem fotoalbum',
             'description': "De fotocollectie van Karpe Noktem",
             'visibility': ['world']})
+        album.update_metadata(None)
+        album.save()
+    elif album.update_metadata(None):
         album.save()
     scan(album)
 

@@ -41,6 +41,12 @@ if ('srcset' in (new Image())) {
 {% if fotos_admin %}
 <div id="album-edit">
   <form>
+    <select id="album-visibility"
+      onchange="$('#album-edit-button').prop('disabled', false)">
+      <option value="world">Publiek</option>
+      <option value="leden">Alleen leden</option>
+      <option value="hidden">Fototaggers</option>
+    </select>
     <input id="album-title" type="text" name="album-title" title="Album titel"
       oninput="$('#album-edit-button').prop('disabled', false)"/>
     <button id="album-edit-button" disabled>Ok</button>
