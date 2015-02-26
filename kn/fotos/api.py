@@ -77,7 +77,6 @@ def _set_title(data, request):
         raise PermissionDenied
 
     album.set_title(title)
-    album.save()
     return {'Ok': True}
 
 ACTION_HANDLER_MAP = {

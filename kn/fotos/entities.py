@@ -205,8 +205,10 @@ class FotoEntity(SONWrapper):
             return None
         return by_path(self.path)
 
-    def set_title(self, title):
+    def set_title(self, title, save=True):
         self.title = title
+        if save:
+            self.save()
 
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
