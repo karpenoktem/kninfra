@@ -227,6 +227,7 @@
   KNF.prototype.change_foto = function(foto) {
     if (this.foto) {
       $('#foto').hide();
+      $('#foto .foto-frame').remove();
       $('html').removeClass('noscroll');
     }
     foto = foto || null;
@@ -239,39 +240,25 @@
       location.hash = '#' + foto.name;
     }
     $('html').addClass('noscroll');
-    var fotoDiv = $('#foto > div');
-    fotoDiv.empty()
+    var frame = $('.foto-frame.template').clone().removeClass('template');
+    frame.appendTo('#foto');
+    $('.title', frame)
+        .text(foto.title ? foto.title : foto.name);
+    if (foto.prev)
+      $('.prev', frame)
+          .attr('href', '#'+foto.prev.name);
+    if (foto.next)
+      $('.next', frame)
+          .attr('href', '#'+foto.next.name);
     var srcset = foto.large + " 1x, " +
                  foto.large2x + " 2x";
-    var navHead = $('<div class="nav"></div>').appendTo(fotoDiv);
-    if (foto.prev)
-      $('<a class="prev">vorige</a>')
-              .attr('href', '#'+foto.prev.name)
-              .appendTo(navHead);
-    $('<span></span>')
-              .text(foto.title ? foto.title : foto.name)
-              .appendTo(navHead);
-    if (foto.next)
-      $('<a class="next">volgende</a>')
-              .attr('href', '#'+foto.next.name)
-              .appendTo(navHead);
-    var img = $('<img/>')
-            .attr('srcset', srcset)
-            .attr('src', foto.large);
-    if (foto.largeSize)
-      img.attr('width', foto.largeSize[0])
-         .attr('height', foto.largeSize[1]);
-    img.appendTo(fotoDiv);
-    var navFooter = $('<div class="nav"></div>')
-              .appendTo(fotoDiv);
-    $('<a class="orig">origineel</a>')
-            .attr('href', foto.full)
-            .appendTo(navFooter);
-    $('<div class="clear"></div>').appendTo(navFooter);
+    $('.img', frame)
+        .attr('srcset', srcset)
+        .attr('src', foto.large)
+    $('.orig', frame)
+        .attr('href', foto.full);
     if (foto.description)
-      $('<p></p>')
-            .text('foto.description')
-            .appendTo(navFooter);
+      $('.description', frame).text(foto.description);
     this.onresize();
     $('#foto').show();
   };
@@ -299,7 +286,7 @@
         width  *= maxHeight/height;
         height *= maxHeight/height;
     }
-    $('#foto img')
+    $('#foto .img')
         .attr('width', width)
         .attr('height', height);
   };

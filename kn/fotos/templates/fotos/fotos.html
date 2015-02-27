@@ -54,7 +54,17 @@ if ('srcset' in (new Image())) {
 </div>
 {% endif %}
 <ul id="fotos"></ul>
-<div id="foto">
-<div></div>
+<div id="foto"></div>
+<div class="template foto-frame">
+  <div class="header">
+    <a class="prev">vorige</a>
+    <span class="title"></span>
+    <a class="next">volgende</a>
+  </div>
+  <img class="img"/>
+  <div class="footer">
+    <p class="description"></p>
+    <a href="original">origineel</a>
+  </div>
 </div>
 {% endblock body %}

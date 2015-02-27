@@ -25,6 +25,8 @@ def album_json(album, user):
                  'path': child.full_path,
                  'name': child.name,
                  'title': child.title}
+        if child.description:
+            entry['description'] = child.description;
         if child._type == 'foto':
             entry['largeSize'] = child.get_cache_size('large')
             entry['thumbnailSize'] = child.get_cache_size('thumb')
