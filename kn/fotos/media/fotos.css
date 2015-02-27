@@ -59,6 +59,9 @@ img.lazy {
     visibility: hidden;
 }
 
+.template {
+    display: none;
+}
 
 /* Keep up to date with fotos.js! (onresize) */
 #foto {
@@ -95,19 +98,27 @@ img.lazy {
     min-height: 300px;
 }
 
-#foto .nav {
+#foto .header,
+#foto .footer {
     padding: 6px 0;
 }
 
-#foto .nav a {
-    display: inline-block;
-}
 #foto .prev {
     float: left;
 }
-#foto .orig,
 #foto .next {
     float: right;
+}
+#foto .header a:not([href]) {
+    display: none;
+}
+
+#foto .footer {
+    text-align: right;
+}
+#foto .description {
+    float: left;
+    margin: 0;
 }
 
 @media (max-width: 500px), (max-height: 500px) {
@@ -118,12 +129,13 @@ img.lazy {
         max-width: 100%;
         padding: 0;
     }
-    #foto .nav {
+    #foto .header,
+    #foto .footer {
         padding: 6px 5px;
     }
 }
 
-#foto img {
+#foto .img {
     padding: 0;
     margin: 0;
     border: 0;
