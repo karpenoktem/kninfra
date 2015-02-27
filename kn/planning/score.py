@@ -142,6 +142,12 @@ preferences = {
         "tijn":     (p_borrel(100,100,  0),),
         "timj":     (p_borrel(  0,100,  0),),
         "tomn":     (p_borrel(100,100,  0),),
+        "olafs":    (p_borrel(100,100,  0),),
+        "vincentw": (p_borrel(100,100,  0),),
+        "claire":   (p_borrel(100,100,  0),),
+        "maxm":     (p_borrel(100,100,  0),),
+        "greet":    (p_borrel(100,100,  0),),
+        "ids":      (p_borrel(100,100,  0),),
 },
 "draai": {
         "bart":       p_borrel(100,100,  0),

@@ -136,6 +136,8 @@ USER_DIRS = '/mnt/phassa/home/'
 LDAP_HOST = 'localhost'
 LDAP_BASE = 'ou=users,dc=karpenoktem,dc=nl'
 LDAP_USER = 'cn=giedo,dc=karpenoktem,dc=nl'
+WOLK_USER = 'wolk'
+WOLK_PATH = '/var/www/wolk'
 
 # VPN related
 # ############################################################
@@ -155,8 +157,9 @@ INTERNAL_IPS = ['195.169.216.49'] # bas
 SECRET_KEY = 'CHANGE ME'
 MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 
-WIKI_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
-FORUM_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
+WIKI_MYSQL_SECRET = None # ('HOST', 'USER', 'PWD', 'DB')
+FORUM_MYSQL_SECRET = None # ('HOST', 'USER', 'PWD', 'DB')
+WOLK_MYSQL_SECRET = None # ('HOST', 'USER', 'PWD', 'DB')
 ALLOWED_API_KEYS = ('CHANGE ME',)
 PHOTOS_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
 ALLOWED_API_KEYS = ('CHANGE ME',)
@@ -164,6 +167,6 @@ CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
 VILLANET_SECRET_API_KEY = '' # CHANGE ME
 DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
                         '<root@khandhas.karpenoktem.nl>')
-LDAP_PASS = 'CHANGE ME'
+LDAP_PASS = None # 'CHANGE ME'
 
 # vim: et:sta:bs=2:sw=4:

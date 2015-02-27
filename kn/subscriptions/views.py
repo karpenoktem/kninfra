@@ -7,7 +7,6 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group
 from django.http import Http404, HttpResponseRedirect
-from django.core.mail import EmailMessage
 from django.core.exceptions import PermissionDenied
 
 from kn.base.mail import render_then_email
@@ -80,7 +79,7 @@ def event_detail(request, name):
                 'confirmed': False,
                 'subscribedBy': _id(request.user)})
             other_subscription.save()
-            email = EmailMessage(
+            other_subscription.send_notification(
                     "Bevestig je aanmelding voor %s" % event.humanName,
                      event.subscribedByOtherMailBody % {
                         'firstName': user.first_name,
@@ -89,16 +88,7 @@ def event_detail(request, name):
                         'eventName': event.humanName,
                         'confirmationLink': ("http://karpenoktem.nl%s" %
                                 reverse('event-detail', args=(event.name,))),
-                        'owner': event.owner.humanName},
-                    'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-                    [user.canonical_full_email],
-                    [event.owner.canonical_full_email,
-                     request.user.canonical_full_email],
-                    headers={
-                        'Cc': '%s, %s' % (event.owner.canonical_full_email,
-                                        request.user.canonical_full_email),
-                        'Reply-To': event.owner.canonical_full_email})
-            email.send()
+                        'owner': event.owner.humanName})
     if (subscription is None and request.method == 'POST'
             and event.is_open and ('who' not in request.POST
                 or request.POST['who'] == str(request.user.id))):
@@ -110,20 +100,13 @@ def event_detail(request, name):
             'date': datetime.datetime.now(),
             'debit': str(event.cost)})
         subscription.save()
-        email = EmailMessage(
+        subscription.send_notification(
                 "Aanmelding %s" % event.humanName,
                  event.mailBody % {
                     'firstName': request.user.first_name,
                     'eventName': event.humanName,
                     'owner': event.owner.humanName,
-                    'notes': notes},
-                'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-                [request.user.canonical_full_email],
-                [event.owner.canonical_full_email],
-                headers={
-                    'Cc': event.owner.canonical_full_email,
-                    'Reply-To': event.owner.canonical_full_email})
-        email.send()
+                    'notes': notes})
     subscrlist = tuple(event.get_subscriptions())
     ctx = {'object': event,
            'user': request.user,
@@ -276,14 +259,20 @@ def event_new_or_edit(request, edit=None):
                     ('event-edited' if edit else 'new-event') + '.mail.txt',
                     Es.by_name('secretariaat').canonical_full_email, {
                         'event': e,
-                        'user': request.user})
+                        'user': request.user},
+                    headers={
+                        'In-Reply-To': e.messageId,
+                        'References': e.messageId,
+                    },
+            )
             return HttpResponseRedirect(reverse('event-detail', args=(e.name,)))
     elif edit is None:
         form = AddEventForm()
     else:
         d = e._data
         form = AddEventForm(d)
-    ctx = {'form': form}
+    ctx = {'form': form,
+           'edit': edit}
     return render_to_response('subscriptions/event_new_or_edit.html', ctx,
             context_instance=RequestContext(request))
 

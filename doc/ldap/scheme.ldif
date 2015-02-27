@@ -1,0 +1,8 @@
+dn: cn=kn,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: kn
+olcattributetypes: {1}( 1.3.6.1.4.1.7165.2.1.25 NAME 'sambaNTPassword' DESC 
+ 'MD4 hash of the unicode password' EQUALITY caseIgnoreIA5Match SYNTAX 1.3.6
+ .1.4.1.1466.115.121.1.26{32} SINGLE-VALUE )
+olcobjectclasses: {0}( 1.3.6.1.4.1.7165.2.2.6 NAME 'knAccount' DESC '
+ KN account' SUP top AUXILIARY MUST ( uid ) MAY ( sambaNTPassword ) )

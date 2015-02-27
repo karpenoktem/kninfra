@@ -83,9 +83,6 @@ def entity_update_primary(data, request):
 
             << {ok: true}
           ( << {ok: false, error: "Permission denied"} ) """
-    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
-    if not is_secretariaat:
-        return {'ok': False, 'error': 'Permission denied'}
     if 'id' not in data or not isinstance(data['id'], basestring):
         return {'ok': False, 'error': 'Missing argument "id"'}
     if 'type' not in data or not isinstance(data['type'], basestring):
@@ -94,6 +91,9 @@ def entity_update_primary(data, request):
         return {'ok': False, 'error': 'Missing argument "new"'}
     new = data['new']
     typ = data['type']
+    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
+    if not is_secretariaat:
+        return {'ok': False, 'error': 'Permission denied'}
     if typ in ('email', 'telephone'):
         if not isinstance(new, basestring):
             return {'ok': False, 'error': '"new" should be a string'}
@@ -103,6 +103,8 @@ def entity_update_primary(data, request):
         for attr in ('street', 'number', 'zip', 'city'):
             if attr not in new or not isinstance(new[attr], basestring):
                 return {'ok': False, 'error': 'Missing argument "new.%s"'%attr}
+    else:
+        return {'ok': False, 'error': 'Unknown update type: "%s"' % typ}
     e = Es.by_id(data['id'])
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
@@ -130,11 +132,50 @@ def entity_update_primary(data, request):
     giedo.sync_async(request)
     return {'ok': True}
 
+def entity_update_visibility(data, request):
+    """ Updates the visibility of a part of an entity (e.g. email, phone number...)
+            Example:
+            >> {action:"entity_update_visibility",id:"4e6fcc85e60edf3dc0000270",
+                property: "telephone",
+                visible: False}
+            << {ok: true}
+        or: << {ok: false, error: "Permission denied"}
+    """
+
+    if 'id' not in data or not isinstance(data['id'], basestring):
+        return {'ok': False, 'error': 'Missing argument "id"'}
+    if 'property' not in data or not isinstance(data['property'], basestring):
+        return {'ok': False, 'error': 'Missing argument "property"'}
+    if 'visible' not in data or not isinstance(data['visible'], bool):
+        return {'ok': False, 'error': 'Missing argument "visible"'}
+
+    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
+    is_user = data['id'] == request.user.id
+    if not (is_secretariaat or is_user):
+        return {'ok': False, 'error': 'Permission denied'}
+
+    property = data['property']
+    visible = data['visible']
+
+    if property not in ['telephone']:
+        return {'ok': False, 'error': 'Unknown property "%s"' % property}
+
+    e = Es.by_id(data['id'])
+    if e is None:
+        return {'ok': False, 'error': 'Entity not found'}
+
+    e.update_visibility_preference(property, visible)
+
+    giedo.sync_async(request)
+    return {'ok': True}
+
+
 ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
         'entities_by_keyword': entities_by_keyword,
         'close_note': close_note,
         'entity_update_primary':  entity_update_primary,
+        'entity_update_visibility':  entity_update_visibility,
         'get_last_synced':  get_last_synced,
         None: no_such_action,
         }
