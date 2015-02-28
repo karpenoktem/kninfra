@@ -89,18 +89,18 @@ img.lazy {
 }
 
 #foto > div {
-    width: 850px;
-    max-width: calc(100% - 20px);
-    background-color: rgba(0,0,0,0.4);
-    margin: 0 auto;
-    padding: 10px;
-    text-align: center;
+    width: 870px;
+    max-width: 100%;
     min-height: 300px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: rgba(0,0,0,0.4);
+    text-align: center;
 }
 
 #foto .header,
 #foto .footer {
-    padding: 6px 0;
+    padding: 6px 10px;
 }
 
 #foto .prev {
@@ -113,6 +113,14 @@ img.lazy {
     display: none;
 }
 
+#foto .img {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    max-width: none;
+    background-color: black;
+}
+
 #foto .footer {
     text-align: right;
 }
@@ -121,26 +129,16 @@ img.lazy {
     margin: 0;
 }
 
-@media (max-width: 500px), (max-height: 500px) {
-    #foto {
-        padding: 0;
-    }
-    #foto > div {
-        max-width: 100%;
-        padding: 0;
-    }
+@media (max-width: 500px) {
     #foto .header,
     #foto .footer {
         padding: 6px 5px;
     }
 }
-
-#foto .img {
-    padding: 0;
-    margin: 0;
-    border: 0;
-    max-width: none;
-    background-color: black;
+@media (max-height: 800px) {
+    #foto {
+        padding: 0;
+    }
 }
 
 .noscroll {

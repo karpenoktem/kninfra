@@ -272,11 +272,13 @@
     var maxWidth  = window.innerWidth;
     var maxHeight = window.innerHeight;
     // Keep up to date with stylesheet!
-    if (maxWidth <= 500 || maxHeight <= 500) {
-      maxHeight -= 5*2 + (15+(6*2))*2;
-    } else {
+    if (maxWidth > 500) {
       maxWidth -= 10*2;
+    }
+    if (maxHeight > 800) {
       maxHeight -= 10*2 + 40*2 + (15+(6*2))*2;
+    } else {
+      maxHeight -= 5*2 + (15+(6*2))*2;
     }
     if (width > maxWidth) {
         height *= maxWidth/width;
