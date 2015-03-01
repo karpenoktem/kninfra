@@ -18,6 +18,8 @@ def album_json(album, user):
     if not album.may_view(user):
         raise PermissionDenied
 
+    people = {}
+
     children = album.list(user)
     json_children = []
     for child in children:
@@ -25,6 +27,7 @@ def album_json(album, user):
                  'path': child.full_path,
                  'name': child.name,
                  'title': child.title}
+
         if child.description:
             entry['description'] = child.description;
         if child._type == 'foto':
@@ -35,6 +38,15 @@ def album_json(album, user):
             if album_foto is not None:
                 entry['thumbnailSize'] = album_foto.get_cache_size('thumb')
                 entry['thumbnailPath'] = album_foto.full_path
+        if child._type != 'album':
+            tags = []
+            tagged = child.get_tags()
+            if tagged:
+                for tag in tagged:
+                    tags.append(str(tag.name))
+                    people[str(tag.name)] = str(tag.humanName)
+            entry['tags'] = tags
+
         json_children.append(entry)
 
     current_album = album
@@ -45,7 +57,8 @@ def album_json(album, user):
 
     return {'children': json_children,
             'parents': json_parents,
-            'visibility': album.visibility[0]}
+            'visibility': album.visibility[0],
+            'people': people}
 
 def entity_from_request(data):
     if 'path' not in data:

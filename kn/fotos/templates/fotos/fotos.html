@@ -61,9 +61,19 @@ if ('srcset' in (new Image())) {
     <span class="title"></span>
     <a class="next">volgende</a>
   </div>
-  <img class="img"/>
+  <div class="middle">
+    {% spaceless %}
+    <img class="img"/>
+    <div class="sidebar">
+      Tags:
+      <ul class="tags">
+      </ul>
+    </div>
+    {% endspaceless %}
+  </div>
   <div class="footer">
     <p class="description"></p>
+    <a class="open-sidebar" href>tags</a> ·
     <a class="orig">origineel</a>
   </div>
 </div>
