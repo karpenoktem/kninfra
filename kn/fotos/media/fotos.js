@@ -26,7 +26,7 @@
     }
     var field_visibility = $('#album-visibility');
     if (field_visibility) {
-      field_visibility.val(this.fotos[path].visibility);
+      field_visibility.val('');
     }
 
     if (!(path in this.fotos)) {
@@ -68,6 +68,11 @@
   KNF.prototype.display_fotos = function() {
     if (!this.fotos[this.path])
       return;
+
+    var field_visibility = $('#album-visibility');
+    if (field_visibility) {
+      field_visibility.val(this.fotos[this.path].visibility);
+    }
 
     for (var name in this.fotos[this.path].children) {
       (function(name) {
