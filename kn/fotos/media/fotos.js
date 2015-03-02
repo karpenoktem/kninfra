@@ -306,6 +306,9 @@
         .attr('href', '/smoelen/gebruiker/' + tag + '/');
       tags.append(li);
     }
+    if (this.foto.tags.length == 0) {
+      tags.html('<i>Geen tags</i>');
+    }
 
     this.onresize();
 

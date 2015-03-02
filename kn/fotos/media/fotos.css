@@ -145,6 +145,12 @@ html.foto-sidebar #foto .sidebar {
     width: 100%;
     box-sizing: border-box;
 }
+#foto ul.tags {
+    margin-top: 0.5em;
+}
+#foto .tags a {
+    color: inherit;
+}
 #foto .save {
     float: right;
 }
