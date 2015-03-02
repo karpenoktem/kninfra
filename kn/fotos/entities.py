@@ -96,11 +96,11 @@ class FotoEntity(SONWrapper):
     _type = son_property(('type',))
     caches = son_property(('caches',), ())
     title = son_property(('title',))
+    description = son_property(('description',))
     created = son_property(('created',))
     rotation = son_property(('rotation',))
     size = son_property(('size',))
 
-    description = son_property(('description',))
     visibility = son_property(('visibility',))
     effective_visibility = son_property(('effectiveVisibility',))
 
@@ -255,6 +255,11 @@ class FotoEntity(SONWrapper):
 
     def set_title(self, title, save=True):
         self.title = title
+        if save:
+            self.save()
+
+    def set_description(self, description, save=True):
+        self.description = description
         if save:
             self.save()
 

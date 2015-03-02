@@ -70,6 +70,9 @@ if ('srcset' in (new Image())) {
 {% if fotos_admin %}
         <input type="text" class="title" name="title" title="Titel"
           oninput="$('#foto .save').prop('disabled', false)">
+        <input type="text" class="description" name="description"
+          placeholder="Beschrijving..." title="Beschrijving"
+          oninput="$('#foto .save').prop('disabled', false)">
         <select class="visibility" title="Zichtbaarheid"
           onchange="$('#foto .save').prop('disabled', false)">
           <option value="world">Publiek</option>

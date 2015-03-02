@@ -293,6 +293,9 @@
     $('.title', sidebar)
         .val(this.foto.title)
         .attr('placeholder', this.foto.name);
+    if (this.foto.description)
+      $('.description', sidebar)
+          .val(this.foto.description);
     $('select.visibility', sidebar)
         .val(this.foto.visibility);
 
@@ -335,6 +338,10 @@
     var title = field_title.val();
     field_title.prop('disabled', true);
 
+    var field_description = $('.description', sidebar)
+    var description = field_description.val();
+    field_description.prop('disabled', true);
+
     var field_visibility = $('.visibility', sidebar);
     var visibility = field_visibility.val();
     field_visibility.prop('disabled', true);
@@ -342,6 +349,7 @@
     this.api({action: 'set-metadata',
               path: foto.path,
               title: title,
+              description: description,
               visibility: visibility},
       function(data) {
         if (data.error) {
@@ -350,8 +358,10 @@
         }
 
         field_title.prop('disabled', false);
+        field_description.prop('disabled', false);
         field_visibility.prop('disabled', false);
 
+        foto.description = description;
         foto.visibility = visibility;
 
         if (title !== foto.title) {
@@ -364,6 +374,8 @@
           var frame = $('#foto .foto-frame');
           $('.title', frame)
               .text(foto.title ? foto.title : foto.name);
+          $('.description', frame)
+              .text(foto.description);
           $('.save', frame)
               .prop('disabled', true);
         }

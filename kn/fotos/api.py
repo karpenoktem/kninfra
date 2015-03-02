@@ -101,8 +101,21 @@ def _set_metadata(data, request):
     if not fEs.is_admin(user):
         raise PermissionDenied
 
-    entity.set_title(title)
+    if isinstance(entity, fEs.FotoEntity):
+        if 'description' not in data:
+            return {'error': 'missing description attribute'}
+        if not isinstance(data['description'], basestring):
+            return {'error': 'description should be string'}
+        description = data['description'].strip()
+        if not description:
+            description = None
+
     entity.update_visibility([visibility])
+    entity.set_title(title, save=False)
+    if isinstance(entity, fEs.FotoEntity):
+        entity.set_description(description, save=False)
+    # save all changes (except for visibility) in one batch
+    entity.save()
     return {'Ok': True}
 
 ACTION_HANDLER_MAP = {
