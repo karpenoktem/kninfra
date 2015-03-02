@@ -26,7 +26,8 @@ def album_json(album, user):
         entry = {'type': child._type,
                  'path': child.full_path,
                  'name': child.name,
-                 'title': child.title}
+                 'title': child.title,
+                 'visibility': child.visibility[0]}
 
         if child.description:
             entry['description'] = child.description;

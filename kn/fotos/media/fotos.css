@@ -136,6 +136,18 @@ html.foto-sidebar #foto > div {
 html.foto-sidebar #foto .sidebar {
     display: inline-block;
 }
+#foto .sidebar select,
+#foto .sidebar input {
+    display: block;
+    margin: 0 0 5px;
+}
+#foto .sidebar input {
+    width: 100%;
+    box-sizing: border-box;
+}
+#foto .save {
+    float: right;
+}
 
 #foto .footer {
     text-align: right;

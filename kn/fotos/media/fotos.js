@@ -290,6 +290,11 @@
     $('html').addClass('foto-sidebar');
 
     var sidebar = $('#foto .sidebar');
+    $('.title', sidebar)
+        .val(this.foto.title)
+        .attr('placeholder', this.foto.name);
+    $('select.visibility', sidebar)
+        .val(this.foto.visibility);
 
     var tags = $('.tags', sidebar);
     tags.empty();
@@ -303,6 +308,14 @@
     }
 
     this.onresize();
+
+    $('form', sidebar)
+        .submit(function() {
+          this.save_metadata();
+          return false;
+        }.bind(this));
+    $('.save', sidebar)
+        .submit(this.save_metadata.bind(this));
   }
 
   KNF.prototype.hide_sidebar = function() {
@@ -310,6 +323,50 @@
     $('html').removeClass('foto-sidebar');
     this.onresize();
   }
+
+  KNF.prototype.save_metadata = function () {
+    var sidebar = $('#foto .sidebar');
+    var foto = this.foto;
+
+    var field_title = $('.title', sidebar)
+    var title = field_title.val();
+    field_title.prop('disabled', true);
+
+    var field_visibility = $('.visibility', sidebar);
+    var visibility = field_visibility.val();
+    field_visibility.prop('disabled', true);
+
+    this.api({action: 'set-metadata',
+              path: foto.path,
+              title: title,
+              visibility: visibility},
+      function(data) {
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+
+        field_title.prop('disabled', false);
+        field_visibility.prop('disabled', false);
+
+        foto.visibility = visibility;
+
+        if (title !== foto.title) {
+          foto.title = title;
+          $('#fotos').empty();
+          this.display_fotos();
+        }
+
+        if (this.sidebar && foto === this.foto) {
+          var frame = $('#foto .foto-frame');
+          $('.title', frame)
+              .text(foto.title ? foto.title : foto.name);
+          $('.save', frame)
+              .prop('disabled', true);
+        }
+      }.bind(this));
+  };
+
 
   KNF.prototype.onresize = function() {
     if (this.foto === null) return;

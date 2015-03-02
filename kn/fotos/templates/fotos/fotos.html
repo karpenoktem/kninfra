@@ -65,11 +65,26 @@ if ('srcset' in (new Image())) {
     {% spaceless %}
     <img class="img"/>
     <div class="sidebar">
-      Tags:
-      <ul class="tags">
-      </ul>
-    </div>
     {% endspaceless %}
+      <form>
+{% if fotos_admin %}
+        <input type="text" class="title" name="title" title="Titel"
+          oninput="$('#foto .save').prop('disabled', false)">
+        <select class="visibility" title="Zichtbaarheid"
+          onchange="$('#foto .save').prop('disabled', false)">
+          <option value="world">Publiek</option>
+          <option value="leden">Alleen leden</option>
+          <option value="hidden">Fototaggers</option>
+        </select>
+{% endif %}
+        Tags:
+        <ul class="tags">
+        </ul>
+{% if fotos_admin %}
+        <button class="save" disabled>Opslaan</button>
+{% endif %}
+      </form>
+    </div>
   </div>
   <div class="footer">
     <p class="description"></p>
