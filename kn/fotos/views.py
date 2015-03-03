@@ -20,7 +20,7 @@ from kn.settings import PHOTOS_DIR, PHOTOS_MYSQL_SECRET
 from kn.leden import giedo
 
 import kn.fotos.entities as fEs
-from kn.fotos.api import album_json
+from kn.fotos.api import album_json, album_parents_json
 
 def fotos(request, path=''):
     album = fEs.by_path(path)
@@ -31,6 +31,19 @@ def fotos(request, path=''):
     if not album.may_view(user) and user is None:
         # user is not logged in
         return redirect_to_login(request.get_full_path())
+
+    if not album.may_view(user):
+        # user is logged in, but may not view the album
+        title = album.title
+        if not title:
+            title = album.name
+        # respond with a nice error message
+        response = render_to_response('fotos/fotos.html',
+                  {'fotos': {'parents': album_parents_json(album)},
+                   'error': 'permission-denied'},
+                  context_instance=RequestContext(request))
+        response.status_code = 403
+        return response
 
     fotos = album_json(album, user)
     return render_to_response('fotos/fotos.html',

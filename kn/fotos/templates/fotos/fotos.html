@@ -10,8 +10,10 @@
 <script type="text/javascript">
 'use strict';
 expandHeader = false;
+{% if fotos %}
 // initial data to prevent one API request
 var fotos = {{ fotos|json }};
+{% endif %}
 var fotos_root = "{% url fotos '' %}";
 var fotos_api_url = "{% url fotos-api %}";
 // Initialize Lazy Load XT
@@ -53,7 +55,11 @@ if ('srcset' in (new Image())) {
   </form>
 </div>
 {% endif %}
+{% if error == 'permission-denied' %}
+<p class="error">Je hebt niet de juiste rechten om dit album te zien. Waarschijnlijk mogen alleen <a href="{% url group-by-name 'fotocie' %}">FotoCie</a>-leden dit album zien.</p>
+{% else %}
 <ul id="fotos"></ul>
+{% endif %}
 <div id="foto"></div>
 <div class="template foto-frame">
   <div class="header">
