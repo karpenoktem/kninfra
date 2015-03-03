@@ -11,6 +11,7 @@ from django.shortcuts import render_to_response
 from django.core.exceptions import PermissionDenied
 from django.core.servers.basehttp import FileWrapper
 from django.core.paginator import EmptyPage
+from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 
@@ -27,6 +28,10 @@ def fotos(request, path=''):
         raise Http404
     user = request.user if request.user.is_authenticated() else None
 
+    if not album.may_view(user) and user is None:
+        # user is not logged in
+        return redirect_to_login(request.get_full_path())
+
     fotos = album_json(album, user)
     return render_to_response('fotos/fotos.html',
              {'fotos': fotos,
@@ -40,8 +45,11 @@ def cache(request, cache, path):
     entity = fEs.by_path(path)
     if entity is None:
         raise Http404
-    if not entity.may_view(request.user if request.user.is_authenticated()
-                        else None):
+    user = request.user if request.user.is_authenticated() else None
+    if not entity.may_view(user):
+        if user is None:
+            # user is not logged in
+            return redirect_to_login(request.get_full_path())
         raise PermissionDenied
     entity.ensure_cached(cache)
     resp = HttpResponse(FileWrapper(open(entity.get_cache_path(cache))),
