@@ -12,9 +12,7 @@ def main():
     creds = settings.PHOTOS_MYSQL_SECRET
     dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2], db=creds[3])
     c = dc.cursor()
-    c.execute("SELECT id, name, path, humanname, visibility, description "
-                        + "FROM fa_albums")
-    print 'albums'
+
     if fEs.by_path('') is None:
         root = fEs.entity({
             'type': 'album',
@@ -26,6 +24,10 @@ def main():
             'visibility': ['world']})
         root.update_metadata(None, save=False)
         root.save()
+
+    print 'albums'
+    c.execute("SELECT id, name, path, humanname, visibility, description "
+                        + "FROM fa_albums")
     for oldId, name, path, humanName, visibility, description in c.fetchall():
         if visibility == 'lost':
             continue
@@ -33,8 +35,10 @@ def main():
             visibility = []
         else:
             visibility = [visibility]
+
         if fEs.by_oldId('album', oldId) is not None:
             continue
+
         path = path.strip('/')
         album = fEs.entity({
             'type': 'album',
@@ -47,8 +51,9 @@ def main():
             'visibility': visibility})
         album.update_metadata(album.get_parent(), save=False)
         album.save()
-    c.execute("SELECT id, name, path, visibility, rotation FROM fa_photos")
+
     print 'fotos'
+    c.execute("SELECT id, name, path, visibility, rotation FROM fa_photos")
     for oldId, name, path, visibility, rotation in c.fetchall():
         if visibility == 'lost':
             continue
@@ -56,8 +61,10 @@ def main():
             visibility = []
         else:
             visibility = [visibility]
+
         if fEs.by_oldId('foto', oldId) is not None:
             continue
+
         path = path.strip('/')
         foto = fEs.entity({
             'type': 'foto',
@@ -71,20 +78,24 @@ def main():
             'rotation': rotation})
         foto.update_metadata(foto.get_parent(), save=False)
         foto.save()
+
     print 'tags'
     c.execute("SELECT photo_id, username FROM fa_tags")
     for oldId, username in c.fetchall():
         foto = fEs.by_oldId('foto', oldId)
         if foto is None:
             continue
+
         user = Es.by_name(username)
         if user is None:
             continue
+
         if not 'tags' in foto._data:
             foto._data['tags'] = []
         if not user._id in foto._data['tags']:
             foto._data['tags'].append(user._id)
             foto.save()
+
     print 'done'
 
 if __name__ == '__main__':
