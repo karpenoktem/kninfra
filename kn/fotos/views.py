@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 
 from kn.fotos.forms import CreateEventForm, getMoveFotosForm
-from kn.settings import PHOTOS_DIR, PHOTOS_MYSQL_SECRET
+from kn.settings import PHOTOS_DIR
 from kn.leden import giedo
 
 import kn.fotos.entities as fEs
