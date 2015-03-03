@@ -1,5 +1,3 @@
-import _import
-
 from kn import settings
 import kn.fotos.entities as fEs
 import kn.leden.entities as Es
@@ -21,7 +19,7 @@ def list_album(album):
         fotos[foto.name] = foto
     return fotos
 
-def scan(album):
+def scan_album(album):
     fotos = list_album(album)
 
     names = os.listdir(os.path.join(settings.PHOTOS_DIR, album.full_path))
@@ -44,7 +42,7 @@ def scan(album):
                 subalbum.save()
             elif subalbum.update_metadata(album, save=False):
                 subalbum.save()
-            scan(subalbum)
+            scan_album(subalbum)
 
         elif os.path.splitext(name)[1][1:].lower() in extensions:
             # photo
@@ -65,8 +63,7 @@ def scan(album):
 
 
 
-def main():
-    fEs.ensure_indices()
+def scan_fotos():
     album = fEs.by_path('')
     if album is None:
         album = fEs.entity({
@@ -81,9 +78,7 @@ def main():
         album.save()
     elif album.update_metadata(None):
         album.save()
-    scan(album)
+    scan_album(album)
 
+    return {'success': True}
 
-
-if __name__ == '__main__':
-    main()
