@@ -27,8 +27,12 @@ def main():
         root.update_metadata(None, save=False)
         root.save()
     for oldId, name, path, humanName, visibility, description in c.fetchall():
-        if visibility in ('lost', 'deleted'):
+        if visibility == 'lost':
             continue
+        elif visibility == 'deleted':
+            visibility = []
+        else:
+            visibility = [visibility]
         if fEs.by_oldId('album', oldId) is not None:
             continue
         path = path.strip('/')
@@ -40,14 +44,18 @@ def main():
             'path': path,
             'title': humanName,
             'description': description,
-            'visibility': [visibility]})
+            'visibility': visibility})
         album.update_metadata(album.get_parent(), save=False)
         album.save()
     c.execute("SELECT id, name, path, visibility, rotation FROM fa_photos")
     print 'fotos'
     for oldId, name, path, visibility, rotation in c.fetchall():
-        if visibility in ('lost', 'deleted'):
+        if visibility == 'lost':
             continue
+        elif visibility == 'deleted':
+            visibility = []
+        else:
+            visibility = [visibility]
         if fEs.by_oldId('foto', oldId) is not None:
             continue
         path = path.strip('/')
@@ -59,7 +67,7 @@ def main():
             'path': path,
             'title': None,
             'description': None,
-            'visibility': [visibility],
+            'visibility': visibility,
             'rotation': rotation})
         foto.update_metadata(foto.get_parent(), save=False)
         foto.save()
