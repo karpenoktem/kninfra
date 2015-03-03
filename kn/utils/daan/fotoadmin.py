@@ -23,14 +23,15 @@ def fotoadmin_create_event(daan, date, name, humanName):
     os.mkdir(path, 0775)
     os.chown(path, pwd.getpwnam('fotos').pw_uid,
                grp.getgrnam('fotos').gr_gid)
-    fEs.entity({
-        'type': album,
-        'name': event,
+    album = fEs.entity({
+        'type': 'album',
         'path': '',
+        'name': event,
         'random': random.random(),
         'visibility': ['hidden'],
-        'title': humanName,
-        'description': ''}).save()
+        'title': humanName})
+    album.update_metadata(album.get_parent(), save=False)
+    album.save()
     return {'success': True}
 
 def fotoadmin_move_fotos(daan, event, user, directory):
