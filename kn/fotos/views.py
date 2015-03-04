@@ -14,8 +14,8 @@ from django.core.paginator import EmptyPage
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 
-from kn.fotos.forms import CreateEventForm, getMoveFotosForm
-from kn.settings import PHOTOS_DIR, PHOTOS_MYSQL_SECRET
+from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
+from kn.settings import PHOTOS_DIR
 from kn.leden import giedo
 
 import kn.fotos.entities as fEs
@@ -61,10 +61,8 @@ def fotoadmin_create_event(request):
                     cd['name'], cd['fullHumanName'])
     else:
         form = CreateEventForm()
-    events = list(map(basename, glob('%s/20*' % PHOTOS_DIR)))
-    events.sort(reverse=True)
     return render_to_response('fotos/admin/create.html',
-            {'form': form, 'events': events},
+            {'form': form, 'events': list_events()},
              context_instance=RequestContext(request))
 
 @login_required
