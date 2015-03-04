@@ -2,8 +2,10 @@
 (function(){
   function KNF(data){
     this.foto = null;
+    this.sidebar = false;
     this.fotos = {};
     this.parents = {};
+    this.people = {};
     this.read_fotos(this.get_url_path(), data);
   }
 
@@ -26,7 +28,7 @@
     }
     var field_visibility = $('#album-visibility');
     if (field_visibility) {
-      field_visibility.val(this.fotos[path].visibility);
+      field_visibility.val('');
     }
 
     if (!(path in this.fotos)) {
@@ -68,6 +70,11 @@
   KNF.prototype.display_fotos = function() {
     if (!this.fotos[this.path])
       return;
+
+    var field_visibility = $('#album-visibility');
+    if (field_visibility) {
+      field_visibility.val(this.fotos[this.path].visibility);
+    }
 
     for (var name in this.fotos[this.path].children) {
       (function(name) {
@@ -176,14 +183,16 @@
       prev = c;
 
       if (c.type == 'album' && !(c.path in this.parents)) {
-          this.parents[c.path] = c.title;
+        this.parents[c.path] = c.title;
       }
     }.bind(this));
 
     for (var k in data.parents) {
-        if (!(k in this.parents)) {
-            this.parents[k] = data.parents[k];
-        }
+      this.parents[k] = data.parents[k];
+    }
+
+    for (var name in data.people) {
+      this.people[name] = data.people[name];
     }
   }
 
@@ -259,9 +268,120 @@
         .attr('href', foto.full);
     if (foto.description)
       $('.description', frame).text(foto.description);
+
+    $('a.open-sidebar').click(function() {
+      if (this.sidebar) {
+        this.hide_sidebar();
+      } else {
+        this.show_sidebar();
+      }
+      return false;
+    }.bind(this));
+    if (this.sidebar) {
+      this.show_sidebar();
+    }
+
     this.onresize();
     $('#foto').show();
   };
+
+  KNF.prototype.show_sidebar = function() {
+    this.sidebar = true;
+    $('html').addClass('foto-sidebar');
+
+    var sidebar = $('#foto .sidebar');
+    $('.title', sidebar)
+        .val(this.foto.title)
+        .attr('placeholder', this.foto.name);
+    if (this.foto.description)
+      $('.description', sidebar)
+          .val(this.foto.description);
+    $('select.visibility', sidebar)
+        .val(this.foto.visibility);
+
+    var tags = $('.tags', sidebar);
+    tags.empty();
+    for (var i=0; i<this.foto.tags.length; i++) {
+      var tag = this.foto.tags[i];
+      var li = $('<li><a></a></li>');
+      li.find('a')
+        .text(this.people[tag])
+        .attr('href', '/smoelen/gebruiker/' + tag + '/');
+      tags.append(li);
+    }
+    if (this.foto.tags.length == 0) {
+      tags.html('<i>Geen tags</i>');
+    }
+
+    this.onresize();
+
+    $('form', sidebar)
+        .submit(function() {
+          this.save_metadata();
+          return false;
+        }.bind(this));
+    $('.save', sidebar)
+        .submit(this.save_metadata.bind(this));
+  }
+
+  KNF.prototype.hide_sidebar = function() {
+    this.sidebar = false;
+    $('html').removeClass('foto-sidebar');
+    this.onresize();
+  }
+
+  KNF.prototype.save_metadata = function () {
+    var sidebar = $('#foto .sidebar');
+    var foto = this.foto;
+
+    var field_title = $('.title', sidebar)
+    var title = field_title.val();
+    field_title.prop('disabled', true);
+
+    var field_description = $('.description', sidebar)
+    var description = field_description.val();
+    field_description.prop('disabled', true);
+
+    var field_visibility = $('.visibility', sidebar);
+    var visibility = field_visibility.val();
+    field_visibility.prop('disabled', true);
+
+    this.api({action: 'set-metadata',
+              path: foto.path,
+              title: title,
+              description: description,
+              visibility: visibility},
+      function(data) {
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+
+        field_title.prop('disabled', false);
+        field_description.prop('disabled', false);
+        field_visibility.prop('disabled', false);
+
+        foto.description = description;
+        foto.visibility = visibility;
+
+        if (title !== foto.title) {
+          foto.title = title;
+          $('#fotos').empty();
+          this.display_fotos();
+        }
+
+        if (this.sidebar && foto === this.foto) {
+          var frame = $('#foto .foto-frame');
+          $('.title', frame)
+              .text(foto.title ? foto.title : foto.name);
+          $('.description', frame)
+              .text(foto.description);
+          $('.save', frame)
+              .prop('disabled', true);
+        }
+      }.bind(this));
+  };
+
 
   KNF.prototype.onresize = function() {
     if (this.foto === null) return;
@@ -272,11 +392,16 @@
     var maxWidth  = window.innerWidth;
     var maxHeight = window.innerHeight;
     // Keep up to date with stylesheet!
-    if (maxWidth <= 500 || maxHeight <= 500) {
-      maxHeight -= 5*2 + (15+(6*2))*2;
-    } else {
+    if (maxWidth > 500) {
       maxWidth -= 10*2;
+    }
+    if (maxHeight > 800) {
       maxHeight -= 10*2 + 40*2 + (15+(6*2))*2;
+    } else {
+      maxHeight -= 5*2 + (15+(6*2))*2;
+    }
+    if (this.sidebar) {
+      maxWidth -= 200;
     }
     if (width > maxWidth) {
         height *= maxWidth/width;
@@ -331,7 +456,7 @@
     $(window).bind('popstate', this.onpopstate.bind(this));
     $(window).bind('hashchange', this.onhashchange.bind(this));
     $('#foto').click(function(e) {
-      if (e.target.nodeName == 'A') return;
+      if (e.target.id !== 'foto') return;
       this.change_foto(null);
       return false;
     }.bind(this));
