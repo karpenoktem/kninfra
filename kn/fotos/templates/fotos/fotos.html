@@ -10,10 +10,8 @@
 <script type="text/javascript">
 'use strict';
 expandHeader = false;
-{% if fotos %}
 // initial data to prevent one API request
 var fotos = {{ fotos|json }};
-{% endif %}
 var fotos_root = "{% url fotos '' %}";
 var fotos_api_url = "{% url fotos-api %}";
 // Initialize Lazy Load XT
