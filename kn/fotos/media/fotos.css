@@ -95,18 +95,21 @@ img.lazy {
 }
 
 #foto > div {
-    width: 850px;
-    max-width: calc(100% - 20px);
-    background-color: rgba(0,0,0,0.4);
-    margin: 0 auto;
-    padding: 10px;
-    text-align: center;
+    width: 870px;
+    max-width: 100%;
     min-height: 300px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: rgba(0,0,0,0.4);
+    text-align: center;
+}
+html.foto-sidebar #foto > div {
+    width: 1070px;
 }
 
 #foto .header,
 #foto .footer {
-    padding: 6px 0;
+    padding: 6px 10px;
 }
 
 #foto .prev {
@@ -119,6 +122,45 @@ img.lazy {
     display: none;
 }
 
+#foto .img {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    max-width: none;
+    background-color: black;
+    vertical-align: top;
+}
+
+#foto .sidebar {
+    display: none;
+    width: 200px;
+    box-sizing: border-box;
+    text-align: left;
+    padding-left: 10px;
+    line-height: 1.3;
+}
+html.foto-sidebar #foto .sidebar {
+    display: inline-block;
+}
+#foto .sidebar select,
+#foto .sidebar input {
+    display: block;
+    margin: 0 0 5px;
+}
+#foto .sidebar input {
+    width: 100%;
+    box-sizing: border-box;
+}
+#foto ul.tags {
+    margin-top: 0.5em;
+}
+#foto .tags a {
+    color: inherit;
+}
+#foto .save {
+    float: right;
+}
+
 #foto .footer {
     text-align: right;
 }
@@ -126,27 +168,29 @@ img.lazy {
     float: left;
     margin: 0;
 }
+#foto ul.tags {
+    list-style-type: none;
+    padding-left: 1.2em;
+}
+#foto ul.tags li {
+    position: relative;
+}
+#foto ul.tags li:before {
+    content: '•';
+    position: absolute;
+    left: -0.8em;
+}
 
-@media (max-width: 500px), (max-height: 500px) {
-    #foto {
-        padding: 0;
-    }
-    #foto > div {
-        max-width: 100%;
-        padding: 0;
-    }
+@media (max-width: 500px) {
     #foto .header,
     #foto .footer {
         padding: 6px 5px;
     }
 }
-
-#foto .img {
-    padding: 0;
-    margin: 0;
-    border: 0;
-    max-width: none;
-    background-color: black;
+@media (max-height: 800px) {
+    #foto {
+        padding: 0;
+    }
 }
 
 .noscroll {

@@ -27,6 +27,8 @@ def album_json(album, user):
     if not album.may_view(user):
         raise PermissionDenied
 
+    people = {}
+
     children = album.list(user)
     json_children = []
     for child in children:
@@ -34,6 +36,10 @@ def album_json(album, user):
                  'path': child.full_path,
                  'name': child.name,
                  'title': child.title}
+
+        if fEs.is_admin(user):
+            entry['visibility'] = child.visibility[0]
+
         if child.description:
             entry['description'] = child.description;
         if child._type == 'foto':
@@ -44,11 +50,21 @@ def album_json(album, user):
             if album_foto is not None:
                 entry['thumbnailSize'] = album_foto.get_cache_size('thumb')
                 entry['thumbnailPath'] = album_foto.full_path
+        if child._type != 'album':
+            tags = []
+            tagged = child.get_tags()
+            if tagged:
+                for tag in tagged:
+                    tags.append(str(tag.name))
+                    people[str(tag.name)] = str(tag.humanName)
+            entry['tags'] = tags
+
         json_children.append(entry)
 
     return {'children': json_children,
             'parents': album_parents_json(album),
-            'visibility': album.visibility[0]}
+            'visibility': album.visibility[0],
+            'people': people}
 
 def entity_from_request(data):
     if 'path' not in data:
@@ -82,16 +98,29 @@ def _set_metadata(data, request):
         return {'error': 'visibility not valid'}
     visibility = data['visibility']
 
-    album = entity_from_request(data)
-    if isinstance(album, basestring):
-        return {'error': album}
+    entity = entity_from_request(data)
+    if isinstance(entity, basestring):
+        return {'error': entity}
 
     user = request.user if request.user.is_authenticated() else None
     if not fEs.is_admin(user):
         raise PermissionDenied
 
-    album.set_title(title)
-    album.update_visibility([visibility])
+    if isinstance(entity, fEs.FotoEntity):
+        if 'description' not in data:
+            return {'error': 'missing description attribute'}
+        if not isinstance(data['description'], basestring):
+            return {'error': 'description should be string'}
+        description = data['description'].strip()
+        if not description:
+            description = None
+
+    entity.update_visibility([visibility])
+    entity.set_title(title, save=False)
+    if isinstance(entity, fEs.FotoEntity):
+        entity.set_description(description, save=False)
+    # save all changes (except for visibility) in one batch
+    entity.save()
     return {'Ok': True}
 
 ACTION_HANDLER_MAP = {

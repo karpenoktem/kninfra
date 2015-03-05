@@ -1,4 +1,5 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property
+import kn.leden.entities as Es
 from kn import settings
 
 from django.db.models import permalink
@@ -95,11 +96,11 @@ class FotoEntity(SONWrapper):
     _type = son_property(('type',))
     caches = son_property(('caches',), ())
     title = son_property(('title',))
+    description = son_property(('description',))
     created = son_property(('created',))
     rotation = son_property(('rotation',))
     size = son_property(('size',))
 
-    description = son_property(('description',))
     visibility = son_property(('visibility',))
     effective_visibility = son_property(('effectiveVisibility',))
 
@@ -257,6 +258,11 @@ class FotoEntity(SONWrapper):
         if save:
             self.save()
 
+    def set_description(self, description, save=True):
+        self.description = description
+        if save:
+            self.save()
+
     def update_visibility(self, visibility):
         '''
         Update the visibility, clear and recalculate effective visibility.
@@ -280,6 +286,12 @@ class FotoEntity(SONWrapper):
         self.effective_visibility = None
         self.save()
         self.update_effective_visibility(self.get_parent())
+
+    def get_tags(self):
+        if not 'tags' in self._data:
+            return None
+
+        return Es.by_ids(self._data['tags']).values()
 
 class FotoAlbum(FotoEntity):
     def __init__(self, data):

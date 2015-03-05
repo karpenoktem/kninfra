@@ -6,6 +6,8 @@ from django import forms
 
 from kn.settings import PHOTOS_DIR, USER_DIRS
 
+import kn.fotos.entities as fEs
+
 def move_fotos_scan_userdirs():
     # XXX os.path.join?
     for user in os.listdir(USER_DIRS):
@@ -20,10 +22,15 @@ def move_fotos_scan_userdirs():
             n = '%s/%s' % (user, dir)
             yield (n,n)
 
-def move_fotos_list_events():
-    events = list(map(os.path.basename, glob('%s/20*' % PHOTOS_DIR)))
+def list_events():
+    events = []
+    for album in fEs.by_path('').list_all():
+        events.append(album.name)
     events.sort(reverse=True)
-    return map(lambda x: (x, x), events)
+    return events
+
+def move_fotos_list_events():
+    return map(lambda x: (x, x), list_events())
 
 class CreateEventForm(forms.Form):
     humanName = forms.CharField(label='Naam voor mensen')
