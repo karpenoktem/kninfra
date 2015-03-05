@@ -11,6 +11,7 @@ from django.shortcuts import render_to_response
 from django.core.exceptions import PermissionDenied
 from django.core.servers.basehttp import FileWrapper
 from django.core.paginator import EmptyPage
+from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 
@@ -19,13 +20,30 @@ from kn.settings import PHOTOS_DIR
 from kn.leden import giedo
 
 import kn.fotos.entities as fEs
-from kn.fotos.api import album_json
+from kn.fotos.api import album_json, album_parents_json
 
 def fotos(request, path=''):
     album = fEs.by_path(path)
     if album is None:
         raise Http404
     user = request.user if request.user.is_authenticated() else None
+
+    if not album.may_view(user) and user is None:
+        # user is not logged in
+        return redirect_to_login(request.get_full_path())
+
+    if not album.may_view(user):
+        # user is logged in, but may not view the album
+        title = album.title
+        if not title:
+            title = album.name
+        # respond with a nice error message
+        response = render_to_response('fotos/fotos.html',
+                  {'fotos': {'parents': album_parents_json(album)},
+                   'error': 'permission-denied'},
+                  context_instance=RequestContext(request))
+        response.status_code = 403
+        return response
 
     fotos = album_json(album, user)
     return render_to_response('fotos/fotos.html',
@@ -40,8 +58,11 @@ def cache(request, cache, path):
     entity = fEs.by_path(path)
     if entity is None:
         raise Http404
-    if not entity.may_view(request.user if request.user.is_authenticated()
-                        else None):
+    user = request.user if request.user.is_authenticated() else None
+    if not entity.may_view(user):
+        if user is None:
+            # user is not logged in
+            return redirect_to_login(request.get_full_path())
         raise PermissionDenied
     entity.ensure_cached(cache)
     resp = HttpResponse(FileWrapper(open(entity.get_cache_path(cache))),

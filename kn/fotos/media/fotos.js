@@ -158,6 +158,11 @@
     this.fotos[path] = {children:{},
                         visibility: data.visibility};
 
+    for (var k in data.parents) {
+      this.parents[k] = data.parents[k];
+    }
+
+    if (!data.children) return;
     var prev = null;
     $.each(data.children, function(i, c) {
       if (c.type == 'album') {
@@ -186,10 +191,6 @@
         this.parents[c.path] = c.title;
       }
     }.bind(this));
-
-    for (var k in data.parents) {
-      this.parents[k] = data.parents[k];
-    }
 
     for (var name in data.people) {
       this.people[name] = data.people[name];

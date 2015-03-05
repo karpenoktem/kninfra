@@ -9,6 +9,12 @@
 #album-edit {
     float: right;
 }
+
+p.error {
+    clear: both;
+    margin: 1em 5px;
+}
+
 ul#fotos {
     list-style: none;
     padding: 0;

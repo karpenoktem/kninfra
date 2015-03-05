@@ -14,6 +14,15 @@ def view(request):
 def no_such_action(data, request):
     return {'error': 'No such action'}
 
+def album_parents_json(album):
+    json_parents = {}
+    current_album = album
+    while current_album is not None:
+        json_parents[current_album.full_path] = current_album.title
+        current_album = current_album.get_parent()
+
+    return json_parents
+
 def album_json(album, user):
     if not album.may_view(user):
         raise PermissionDenied
@@ -52,14 +61,8 @@ def album_json(album, user):
 
         json_children.append(entry)
 
-    current_album = album
-    json_parents = {}
-    while current_album is not None:
-        json_parents[current_album.full_path] = current_album.title
-        current_album = current_album.get_parent()
-
     return {'children': json_children,
-            'parents': json_parents,
+            'parents': album_parents_json(album),
             'visibility': album.visibility[0],
             'people': people}
 

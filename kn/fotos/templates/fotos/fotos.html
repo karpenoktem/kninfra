@@ -53,7 +53,11 @@ if ('srcset' in (new Image())) {
   </form>
 </div>
 {% endif %}
+{% if error == 'permission-denied' %}
+<p class="error">Je hebt niet de juiste rechten om dit album te zien. Waarschijnlijk mogen alleen <a href="{% url group-by-name 'fotocie' %}">FotoCie</a>-leden dit album zien.</p>
+{% else %}
 <ul id="fotos"></ul>
+{% endif %}
 <div id="foto"></div>
 <div class="template foto-frame">
   <div class="header">
