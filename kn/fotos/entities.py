@@ -352,6 +352,7 @@ class FotoAlbum(FotoEntity):
         return updated
 
 class Foto(FotoEntity):
+    # keep up to date with fotos.js (onresize)
     CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg', 200, None, 85),
               'thumb2x': cache_tuple('jpg', 'image/jpeg', 400, None, 85),
               'large': cache_tuple('jpg', 'image/jpeg', 850, None, 90),
@@ -407,6 +408,12 @@ class Foto(FotoEntity):
             self.save()
 
         return True
+
+    def set_rotation(self, rotation, save=True):
+        self.rotation = rotation
+        self._data['caches'] = [] # invalidate cache
+        if save:
+            self.save()
 
     def _cache(self, cache):
         if cache == 'full':

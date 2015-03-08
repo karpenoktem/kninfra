@@ -122,11 +122,15 @@ html.foto-sidebar #foto > div {
     display: none;
 }
 
-#foto .img {
+#foto img {
     margin: 0;
     border: 0;
     padding: 0;
     max-width: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+#foto .img {
     background-color: black;
     vertical-align: top;
 }
@@ -150,6 +154,10 @@ html.foto-sidebar #foto .sidebar {
 #foto .sidebar input {
     width: 100%;
     box-sizing: border-box;
+}
+#foto .rotation a {
+    display: inline-block;
+    line-height: 1;
 }
 #foto ul.tags {
     margin-top: 0.5em;
