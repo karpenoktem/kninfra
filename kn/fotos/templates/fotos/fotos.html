@@ -83,6 +83,14 @@ if ('srcset' in (new Image())) {
           <option value="leden">Alleen leden</option>
           <option value="hidden">Fototaggers</option>
         </select>
+        <div class="rotation">
+          <a class="rotate-left" href>
+            <img src="{{ MEDIA_URL }}/fotos/rotate-left.svg" width="24" height="24"/>
+          </a>
+          <a class="rotate-right" href>
+            <img src="{{ MEDIA_URL }}/fotos/rotate-right.svg" width="24" height="24"/>
+          </a>
+        </div>
 {% endif %}
         Tags:
         <ul class="tags">

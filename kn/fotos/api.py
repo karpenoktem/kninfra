@@ -39,6 +39,7 @@ def album_json(album, user):
 
         if fEs.is_admin(user):
             entry['visibility'] = child.visibility[0]
+            entry['rotation'] = child.rotation
 
         if child.description:
             entry['description'] = child.description;
@@ -115,13 +116,26 @@ def _set_metadata(data, request):
         if not description:
             description = None
 
+        if 'rotation' not in data:
+            return {'error': 'missing rotation attribute'}
+        if not isinstance(data['rotation'], int):
+            return {'error': 'rotation should be a number'}
+        rotation = data['rotation']
+        if rotation not in [0, 90, 180, 270]:
+            return {'error': 'rotation is not valid'}
+
+    result = {'Ok': True}
+
     entity.update_visibility([visibility])
     entity.set_title(title, save=False)
     if isinstance(entity, fEs.FotoEntity):
         entity.set_description(description, save=False)
+        entity.set_rotation(rotation, save=False)
+        result['largeSize'] = entity.get_cache_size('large')
+        result['thumbnailSize'] = entity.get_cache_size('thumb')
     # save all changes (except for visibility) in one batch
     entity.save()
-    return {'Ok': True}
+    return result
 
 ACTION_HANDLER_MAP = {
         'list': _list,
