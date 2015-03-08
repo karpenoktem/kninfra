@@ -572,6 +572,16 @@
         this.change_foto(this.foto.next);
         return false;
       }
+      // [
+      if (e.which == 219) {
+        this.rotate(-90);
+        return false;
+      }
+      // ]
+      if (e.which == 221) {
+        this.rotate(90);
+        return false;
+      }
     }.bind(this));
 
     $('#album-edit-button').click(this.onedit.bind(this));
