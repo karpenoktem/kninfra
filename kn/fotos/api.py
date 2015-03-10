@@ -107,7 +107,9 @@ def _set_metadata(data, request):
     if not fEs.is_admin(user):
         raise PermissionDenied
 
-    if isinstance(entity, fEs.FotoEntity):
+    result = {'Ok': True}
+
+    if entity._type in ['foto', 'video']:
         if 'description' not in data:
             return {'error': 'missing description attribute'}
         if not isinstance(data['description'], basestring):
@@ -115,7 +117,11 @@ def _set_metadata(data, request):
         description = data['description'].strip()
         if not description:
             description = None
+        entity.set_description(description, save=False)
 
+        result['thumbnailSize'] = entity.get_cache_size('thumb')
+
+    if entity._type == 'foto':
         if 'rotation' not in data:
             return {'error': 'missing rotation attribute'}
         if not isinstance(data['rotation'], int):
@@ -123,18 +129,16 @@ def _set_metadata(data, request):
         rotation = data['rotation']
         if rotation not in [0, 90, 180, 270]:
             return {'error': 'rotation is not valid'}
-
-    result = {'Ok': True}
-
-    entity.update_visibility([visibility])
-    entity.set_title(title, save=False)
-    if isinstance(entity, fEs.FotoEntity):
-        entity.set_description(description, save=False)
         entity.set_rotation(rotation, save=False)
+
         result['largeSize'] = entity.get_cache_size('large')
-        result['thumbnailSize'] = entity.get_cache_size('thumb')
-    # save all changes (except for visibility) in one batch
+
+    entity.set_title(title, save=False)
+
+    # save changes in one batch
     entity.save()
+    # except for visibility which is much harder to save in the same batch
+    entity.update_visibility([visibility])
     return result
 
 ACTION_HANDLER_MAP = {
