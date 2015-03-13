@@ -433,8 +433,9 @@
               e.preventDefault();
               return;
             }
-            for (var i=0; i<newTags.length; i++) {
-              if (newTags[i] == name) return;
+            if (newTags.indexOf(name) >= 0) {
+              // already in list
+              return;
             }
             newTags.push(name);
             if (!(name in albumPeople)) {
