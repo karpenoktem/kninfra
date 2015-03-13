@@ -113,7 +113,7 @@ def _set_metadata(data, request):
         if 'description' not in data:
             return {'error': 'missing description attribute'}
         if not isinstance(data['description'], basestring):
-            return {'error': 'description should be string'}
+            return {'error': 'description should be a string'}
         description = data['description'].strip()
         if not description:
             description = None
