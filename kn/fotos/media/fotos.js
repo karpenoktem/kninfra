@@ -371,6 +371,22 @@
         .text(this.people[tag])
         .attr('href', '/smoelen/gebruiker/' + tag + '/');
       tags.append(li);
+      if (fotos_admin) {
+        $('<a class="remove">×</a>')
+          .data('name', tag)
+          .click(function(e) {
+            var name = $(e.target).data('name');
+            var index = this.foto.tags.indexOf(name);
+            if (index < 0) {
+              // ???
+              return; // just to be sure
+            }
+            this.foto.tags.splice(index, 1);
+            this.update_foto_tags(sidebar);
+            $('#foto .save').prop('disabled', false);
+          }.bind(this))
+          .appendTo(li);
+      }
     }
     if (this.foto.tags.length == 0) {
       tags.html('<i>Geen tags</i>');
