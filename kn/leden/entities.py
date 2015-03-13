@@ -198,6 +198,11 @@ def all():
     for m in ecol.find():
         yield entity(m)
 
+def users():
+    """ Finds all users active now or in the past """
+    for m in ecol.find({'types': 'user'}):
+        yield entity(m)
+
 def names_by_ids(ids=None):
     """ Returns an `_id => primary name' dictionary for entities with
         _id in @ids or all if @ids is None """

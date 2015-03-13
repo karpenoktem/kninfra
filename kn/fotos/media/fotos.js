@@ -44,6 +44,7 @@
     this.fotos = {};
     this.parents = {};
     this.people = {};
+    this.allpeople = [];
     this.read_fotos(this.get_url_path(), data);
   }
 
@@ -189,8 +190,9 @@
   };
 
   KNF.prototype.read_fotos = function(path, data) {
-    this.fotos[path] = {children:{},
-                        visibility: data.visibility};
+    var album = {children:{},
+                 visibility: data.visibility};
+    this.fotos[path] = album;
 
     for (var k in data.parents) {
       this.parents[k] = data.parents[k];
@@ -200,7 +202,7 @@
     var prev = null;
     $.each(data.children, function(i, c) {
       c = new Foto(c);
-      this.fotos[path].children[c.name] = c;
+      album.children[c.name] = c;
 
       if (prev !== null) {
         prev.next = c;
@@ -213,14 +215,24 @@
       }
     }.bind(this));
 
+    album.people = [];
     for (var name in data.people) {
       this.people[name] = data.people[name];
+      album.people.push(name);
+    }
+    album.people.sort();
+  };
+
+  KNF.prototype.read_people = function(people) {
+    for (var i=0; i<people.length; i++) {
+      this.people[people[i][0]] = people[i][1];
+      this.allpeople.push(people[i][0]);
     }
   }
 
   KNF.prototype.pushState = function (path) {
     history.pushState(undefined, '', fotos_root + path);
-  }
+  };
 
   // Returns the path according to the current URL
   KNF.prototype.get_url_path = function() {
@@ -326,19 +338,7 @@
     $('select.visibility', sidebar)
         .val(this.foto.visibility);
 
-    var tags = $('.tags', sidebar);
-    tags.empty();
-    for (var i=0; i<this.foto.tags.length; i++) {
-      var tag = this.foto.tags[i];
-      var li = $('<li><a></a></li>');
-      li.find('a')
-        .text(this.people[tag])
-        .attr('href', '/smoelen/gebruiker/' + tag + '/');
-      tags.append(li);
-    }
-    if (this.foto.tags.length == 0) {
-      tags.html('<i>Geen tags</i>');
-    }
+    this.update_foto_tags(sidebar);
 
     this.onresize();
 
@@ -361,6 +361,78 @@
         }.bind(this));
   };
 
+  KNF.prototype.update_foto_tags = function(sidebar) {
+    var tags = $('.tags', sidebar);
+    tags.empty();
+    for (var i=0; i<this.foto.tags.length; i++) {
+      var tag = this.foto.tags[i];
+      var li = $('<li><a></a></li>');
+      li.find('a')
+        .text(this.people[tag])
+        .attr('href', '/smoelen/gebruiker/' + tag + '/');
+      tags.append(li);
+    }
+    if (this.foto.tags.length == 0) {
+      tags.html('<i>Geen tags</i>');
+    }
+    if (fotos_admin) {
+      var people = [];
+      var fotoPeople = {};
+      var albumPeople = {};
+      for (var i=0; i<this.foto.tags.length; i++) {
+        fotoPeople[this.foto.tags[i]] = true;
+      }
+      for (var i=0; i<this.fotos[this.path].people.length; i++) {
+        var name = this.fotos[this.path].people[i];
+        albumPeople[name] = true;
+        if (name in fotoPeople) continue;
+        people.push({label: this.people[name], value: name});
+      }
+      for (var i=0; i<this.allpeople.length; i++) {
+        var name = this.allpeople[i];
+        if (name in fotoPeople) continue;
+        if (name in albumPeople) continue;
+        people.push({label: this.people[name], value: name});
+      }
+
+      var newtag = $('<li><input/></li>')
+        .appendTo(tags);
+      newtag.find('input')
+        .autocomplete({
+          source: people,
+          minLength: 0,
+          autoFocus: true,
+          delay: 0,
+          select: function(e, ui){
+            var name = ui.item.value;
+            if (!(name in this.people)) {
+              // none selected
+              e.preventDefault();
+              return;
+            }
+            for (var i=0; i<this.foto.tags.length; i++) {
+              if (this.foto.tags[i] == name) return;
+            }
+            this.foto.tags.push(name);
+            if (!(name in albumPeople)) {
+              this.fotos[this.path].people.push(name);
+            }
+            $('#foto .save').prop('disabled', false);
+            this.update_foto_tags(sidebar);
+            sidebar.find('.tags input').focus();
+          }.bind(this),
+        })
+        .keydown(function(e) {
+          if (e.keyCode !== 13) return;
+          if (e.target.value !== '' && !(e.target.value in this.people)) {
+            // Workaround to not add the first person in the list while nothing
+            // is in the input box.
+            e.preventDefault();
+          }
+        }.bind(this));
+    }
+  };
+
   KNF.prototype.hide_sidebar = function() {
     this.sidebar = false;
     $('html').removeClass('foto-sidebar');
@@ -381,11 +453,11 @@
     var sidebar = $('#foto .sidebar');
     var foto = this.foto;
 
-    var field_title = $('.title', sidebar)
+    var field_title = $('.title', sidebar);
     var title = field_title.val();
     field_title.prop('disabled', true);
 
-    var field_description = $('.description', sidebar)
+    var field_description = $('.description', sidebar);
     var description = field_description.val();
     field_description.prop('disabled', true);
 
@@ -398,12 +470,15 @@
       rotation = this.foto.rotation;
     }
 
+    $('.tags input', sidebar).prop('disabled', true);
+
     this.api({action: 'set-metadata',
               path: foto.path,
               title: title,
               description: description,
               visibility: visibility,
-              rotation: rotation},
+              rotation: rotation,
+              tags: foto.tags},
       function(data) {
         if (data.error) {
           alert(data.error);
@@ -416,6 +491,7 @@
         field_title.prop('disabled', false);
         field_description.prop('disabled', false);
         field_visibility.prop('disabled', false);
+        $('.tags input', sidebar).prop('disabled', false);
 
         foto.description = description;
         foto.visibility = visibility;
@@ -590,7 +666,11 @@
   };
 
   $(document).ready(function(){
-    (new KNF(fotos)).run();
+    var knf = new KNF(fotos);
+    if (typeof fotos_people !== 'undefined') {
+      knf.read_people(fotos_people);
+    }
+    knf.run();
   });
 })();
 

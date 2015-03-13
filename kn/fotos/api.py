@@ -119,6 +119,15 @@ def _set_metadata(data, request):
             description = None
         entity.set_description(description, save=False)
 
+        if 'tags' not in data:
+            return {'error': 'missing tags attribute'}
+        if not isinstance(data['tags'], list):
+            return {'error': 'tags should be a list'}
+        if False in map(lambda n: isinstance(n, basestring), data['tags']):
+            return {'error': 'tags may only contain strings'}
+        tags = data['tags']
+        entity.set_tags(tags, save=True)
+
         result['thumbnailSize'] = entity.get_cache_size('thumb')
 
     if entity._type == 'foto':
