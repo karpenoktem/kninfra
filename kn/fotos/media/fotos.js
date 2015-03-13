@@ -273,6 +273,7 @@
       $('#foto .foto-frame').remove();
       $('html').removeClass('noscroll');
       delete this.foto.newRotation;
+      delete this.foto.newTags;
     }
     foto = foto || null;
     this.foto = foto;
@@ -362,41 +363,47 @@
   };
 
   KNF.prototype.update_foto_tags = function(sidebar) {
-    var tags = $('.tags', sidebar);
-    tags.empty();
-    for (var i=0; i<this.foto.tags.length; i++) {
-      var tag = this.foto.tags[i];
+    var tagList = $('.tags', sidebar);
+    tagList.empty();
+
+    if (!('newTags' in this.foto)) {
+      this.foto.newTags = this.foto.tags.slice(0); // clone
+    }
+    var newTags = this.foto.newTags;
+
+    for (var i=0; i<newTags.length; i++) {
+      var tag = newTags[i];
       var li = $('<li><a></a></li>');
       li.find('a')
         .text(this.people[tag])
         .attr('href', '/smoelen/gebruiker/' + tag + '/');
-      tags.append(li);
+      tagList.append(li);
       if (fotos_admin) {
         $('<a class="remove">×</a>')
           .data('name', tag)
           .click(function(e) {
             var name = $(e.target).data('name');
-            var index = this.foto.tags.indexOf(name);
+            var index = newTags.indexOf(name);
             if (index < 0) {
               // ???
               return; // just to be sure
             }
-            this.foto.tags.splice(index, 1);
+            newTags.splice(index, 1);
             this.update_foto_tags(sidebar);
             $('#foto .save').prop('disabled', false);
           }.bind(this))
           .appendTo(li);
       }
     }
-    if (this.foto.tags.length == 0) {
-      tags.html('<i>Geen tags</i>');
+    if (newTags.length == 0) {
+      tagList.html('<li><i>Geen tags</i></li>');
     }
     if (fotos_admin) {
       var people = [];
       var fotoPeople = {};
       var albumPeople = {};
-      for (var i=0; i<this.foto.tags.length; i++) {
-        fotoPeople[this.foto.tags[i]] = true;
+      for (var i=0; i<newTags.length; i++) {
+        fotoPeople[newTags[i]] = true;
       }
       for (var i=0; i<this.fotos[this.path].people.length; i++) {
         var name = this.fotos[this.path].people[i];
@@ -411,9 +418,9 @@
         people.push({label: this.people[name], value: name});
       }
 
-      var newtag = $('<li><input/></li>')
-        .appendTo(tags);
-      newtag.find('input')
+      $('<li><input/></li>')
+        .appendTo(tagList)
+        .find('input')
         .autocomplete({
           source: people,
           minLength: 0,
@@ -426,10 +433,10 @@
               e.preventDefault();
               return;
             }
-            for (var i=0; i<this.foto.tags.length; i++) {
-              if (this.foto.tags[i] == name) return;
+            for (var i=0; i<newTags.length; i++) {
+              if (newTags[i] == name) return;
             }
-            this.foto.tags.push(name);
+            newTags.push(name);
             if (!(name in albumPeople)) {
               this.fotos[this.path].people.push(name);
             }
@@ -488,13 +495,18 @@
 
     $('.tags input', sidebar).prop('disabled', true);
 
+    var tags = this.foto.tags;
+    if ('newTags' in this.foto) {
+      tags = this.foto.newTags;
+    }
+
     this.api({action: 'set-metadata',
               path: foto.path,
               title: title,
               description: description,
               visibility: visibility,
               rotation: rotation,
-              tags: foto.tags},
+              tags: tags},
       function(data) {
         if (data.error) {
           alert(data.error);
@@ -520,6 +532,9 @@
           foto.reload_cache_urls('?rotation='+foto.rotation);
           this.update_foto_src(foto);
         }
+
+        foto.tags = tags;
+        delete foto.newTags;
 
         if (title !== foto.title || changed_rotation) {
           foto.title = title;
