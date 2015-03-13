@@ -57,7 +57,7 @@ def album_json(album, user):
             if tagged:
                 for tag in tagged:
                     tags.append(str(tag.name))
-                    people[str(tag.name)] = str(tag.humanName)
+                    people[str(tag.name)] = unicode(tag.humanName)
             entry['tags'] = tags
 
         json_children.append(entry)
