@@ -410,8 +410,11 @@ class Foto(FotoEntity):
         return True
 
     def set_rotation(self, rotation, save=True):
+        if rotation != self.rotation:
+            return
+
         self.rotation = rotation
-        self._data['caches'] = [] # invalidate cache
+        self.caches = [] # invalidate cache
         if save:
             self.save()
 
