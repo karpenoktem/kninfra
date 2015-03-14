@@ -39,7 +39,7 @@ def album_json(album, user):
             'visibility': album.visibility[0],
             'people': people}
 
-def child_json(child, user, people=None):
+def child_json(child, user, people):
     entry = {'type': child._type,
              'path': child.full_path,
              'name': child.name,
@@ -66,8 +66,7 @@ def child_json(child, user, people=None):
         if tagged:
             for tag in tagged:
                 tags.append(str(tag.name))
-                if people is not None:
-                    people[str(tag.name)] = str(tag.humanName)
+                people[str(tag.name)] = str(tag.humanName)
             entry['tags'] = tags
 
     return entry
@@ -164,10 +163,12 @@ def _search(data, request):
         return {'error': 'query should not be empty'}
 
     results = []
+    people = {}
     for entity in album.search(q, user):
-        results.append(child_json(entity, user))
+        results.append(child_json(entity, user, people))
 
-    return {'results': results}
+    return {'results': results,
+            'people': people}
 
 ACTION_HANDLER_MAP = {
         'list': _list,

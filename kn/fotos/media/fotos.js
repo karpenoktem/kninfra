@@ -103,6 +103,7 @@
             prev = foto;
             this.search_results[foto.name] = foto;
           }
+          $.extend(this.people, data.people);
           this.display_fotos();
         }.bind(this));
     } else if (!(path in this.fotos)) {
@@ -262,9 +263,7 @@
       }
     }.bind(this));
 
-    for (var name in data.people) {
-      this.people[name] = data.people[name];
-    }
+    $.extend(this.people, data.people);
   }
 
   KNF.prototype.apply_url = function (replace) {
