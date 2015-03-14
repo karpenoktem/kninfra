@@ -349,15 +349,39 @@ class FotoAlbum(FotoEntity):
 
     def search(self, q, user):
         required_visibility = self.required_visibility(user)
-        for result in db.command('text', 'fotos',
-                    search=q,
-                    filter={
-                        'path': self.mongo_path_prefix,
-                        'effectiveVisibility': {'$in': tuple(required_visibility)},
-                    },
-                    limit=96, # dividable by 2, 3 and 4
-                  )['results']:
-            yield entity(result['obj'])
+        filter={
+            'path': self.mongo_path_prefix,
+            'effectiveVisibility': {'$in': tuple(required_visibility)},
+        }
+        if q.startswith('album:'):
+            album = q[len('album:'):]
+            filter['type'] = 'album'
+            filter = {'$and': [
+                filter,
+                {'$or': [
+                    {'name': {'$regex': re.compile(re.escape(album),
+                                                   re.IGNORECASE)}},
+                    {'title': {'$regex': re.compile(re.escape(album),
+                                                    re.IGNORECASE)}}
+                ]}]}
+        elif q.startswith('tag:'):
+            _id = Es.id_by_name(q[len('tag:'):])
+            if _id is None:
+                return
+            filter['type'] = {'$ne': 'album'}
+            filter['tags'] = _id
+        else:
+            # do a full-text search
+            for result in db.command('text', 'fotos',
+                        search=q,
+                        filter=filter,
+                        limit=96, # dividable by 2, 3 and 4
+                      )['results']:
+                yield entity(result['obj'])
+
+        # search for album or tag
+        for o in fcol.find(filter):
+            yield entity(o)
 
     def update_effective_visibility(self, parent, save=True, recursive=True):
         if not super(FotoAlbum, self).update_effective_visibility(parent, save=False):
