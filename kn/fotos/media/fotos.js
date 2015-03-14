@@ -44,16 +44,16 @@
     this.fotos = {};
     this.parents = {};
     this.people = {};
+    this.path = null;
     this.read_fotos(this.get_url_path(), data);
   }
 
   KNF.prototype.change_path = function(path) {
     // Clear out the old
     $('#fotos').empty();
-    // Update state
-    this.path = path; // it is important we set path before changing location
-    if (this.get_url_path() != path)
-      this.pushState(path);
+    // Update path
+    this.path = path;
+    this.apply_url(false);
 
     this.update_breadcrumbs();
 
@@ -218,9 +218,17 @@
     }
   }
 
-  KNF.prototype.pushState = function (path) {
-    history.pushState(undefined, '', fotos_root + path);
-  }
+  KNF.prototype.apply_url = function (replace) {
+    var url = fotos_root + this.path;
+    if (this.foto) {
+      url += '#' + foto.name;
+    }
+    if (replace) {
+      history.replaceState(null, '', url);
+    } else {
+      history.pushState(null, '', url);
+    }
+  };
 
   // Returns the path according to the current URL
   KNF.prototype.get_url_path = function() {
@@ -228,10 +236,10 @@
   };
 
   KNF.prototype.onpopstate = function() {
-    var new_path = this.get_url_path();
-    if (new_path === this.path)
+    var path = this.get_url_path();
+    if (path === this.path)
       return;
-    this.change_path(new_path);
+    this.change_path(path);
   };
 
   // Returns the current photo name
@@ -265,11 +273,11 @@
     foto = foto || null;
     this.foto = foto;
     if (!foto) {
-      this.pushState(this.get_url_path());
+      this.apply_url(false);
       return;
     }
     if (this.get_hash() != foto.name) {
-      location.hash = '#' + foto.name;
+      this.apply_url(false);
     }
     $('html').addClass('noscroll');
     var frame = $('.foto-frame.template').clone().removeClass('template');
