@@ -9,6 +9,9 @@
     for (var k in data) {
       this[k] = data[k];
     }
+    if (!this.tags) {
+      this.tags = [];
+    }
 
     this.reload_cache_urls();
   };
@@ -39,6 +42,9 @@
 
 
   function KNF(data){
+    this.search_query = '';
+    this.search_timeout = null;
+    this.search_results = null;
     this.foto = null;
     this.sidebar = false;
     this.fotos = {};
@@ -46,14 +52,22 @@
     this.people = {};
     this.path = null;
     this.read_fotos(this.get_url_path(), data);
-  }
+  };
 
-  KNF.prototype.change_path = function(path) {
+  KNF.prototype.change_path = function(path, query, keep_url) {
     // Clear out the old
     $('#fotos').empty();
+
     // Update path
     this.path = path;
-    this.apply_url(false);
+    if (query !== this.search_query) {
+      this.search_query = query || '';
+      $('#search').val(this.search_query);
+    }
+
+    if (!keep_url) {
+      this.apply_url(false);
+    }
 
     this.update_breadcrumbs();
 
@@ -69,7 +83,29 @@
       field_visibility.val('');
     }
 
-    if (!(path in this.fotos)) {
+    if (this.search_query) {
+      this.api({action: 'search',
+                path: this.path,
+                q: this.search_query},
+        function(data) {
+          if (data.error) {
+            alert(data.error);
+            return;
+          }
+          this.search_results = {};
+          var prev = null;
+          for (var i=0; i<data.results.length; i++) {
+            var foto = new Foto(data.results[i]);
+            if (prev !== null) {
+              prev.next = foto;
+              foto.prev = prev;
+            }
+            prev = foto;
+            this.search_results[foto.name] = foto;
+          }
+          this.display_fotos();
+        }.bind(this));
+    } else if (!(path in this.fotos)) {
       // Fetch fotos
       this.fetch_fotos();
     } else {
@@ -79,11 +115,12 @@
 
   KNF.prototype.update_breadcrumbs = function() {
     // Update breadcrumbs
-    $('#breadcrumbs').empty();
+    var breadcrumbs = $('#breadcrumbs');
+    breadcrumbs.empty();
     var cur = '';
     $.each((this.path ? '/'+this.path : '').split('/'), function(k, component) {
       if (component !== '') {
-        $('#breadcrumbs').append(document.createTextNode(' / '));
+        breadcrumbs.append(document.createTextNode(' / '));
         if (!cur) {
           cur = component;
         } else {
@@ -92,7 +129,7 @@
       }
 
       var a = $('<a></a>').text(
-          this.parents[cur] || component).appendTo('#breadcrumbs');
+          this.parents[cur] || component).appendTo(breadcrumbs);
       var p = cur;
       a.attr('href', fotos_root+cur)
        .click(function(e) {
@@ -103,6 +140,12 @@
         return false;
       }.bind(this))
     }.bind(this));
+
+    if (this.search_query) {
+      breadcrumbs
+        .append(document.createTextNode(' / '))
+        .append($('<span>zoekresultaten</span>'));
+    }
   }
 
   KNF.prototype.display_fotos = function() {
@@ -114,9 +157,15 @@
       field_visibility.val(this.fotos[this.path].visibility);
     }
 
-    for (var name in this.fotos[this.path].children) {
-      (function(name) {
-        var c = this.fotos[this.path].children[name];
+    var fotos = [];
+    if (this.search_query) {
+      fotos = this.search_results;
+    } else {
+      fotos = this.fotos[this.path].children;
+    }
+
+    for (var name in fotos) {
+      (function(c) {
         var thumb = $('<li><div><a><img class="lazy" /></a></div></li>');
         if (c.thumbnail !== undefined) {
           var srcset = c.thumbnail + " 1x, " +
@@ -157,13 +206,13 @@
           $('a', thumb).attr('href', '#'+c.name);
         }
         thumb.appendTo('#fotos');
-      }).call(this, name);
+      }).call(this, fotos[name]);
     }
 
     $(window).lazyLoadXT();
 
     if (this.get_hash() && this.foto === null) {
-      this.change_foto(this.fotos[this.path].children[this.get_hash()]);
+      this.onhashchange();
     }
   };
 
@@ -220,6 +269,9 @@
 
   KNF.prototype.apply_url = function (replace) {
     var url = fotos_root + this.path;
+    if (this.search_query) {
+      url += '?q=' + encodeURIComponent(this.search_query);
+    }
     if (this.foto) {
       url += '#' + foto.name;
     }
@@ -235,11 +287,22 @@
     return location.pathname.substr(fotos_root.length);
   };
 
+  KNF.prototype.get_search_query = function() {
+    // Read search query from URL
+    // http://stackoverflow.com/a/901144/559350
+    var results = (new RegExp("[\\?&]q=([^&#]*)")).exec(location.search);
+    if (results !== null) {
+      return decodeURIComponent(results[1].replace(/\+/g, " ")).trim();
+    }
+    return '';
+  };
+
   KNF.prototype.onpopstate = function() {
     var path = this.get_url_path();
-    if (path === this.path)
+    var query = this.get_search_query();
+    if (path === this.path && query === this.search_query)
       return;
-    this.change_path(path);
+    this.change_path(path, query, true);
   };
 
   // Returns the current photo name
@@ -250,11 +313,17 @@
     }
 
     return hash.substr(1);
-  }
+  };
 
   KNF.prototype.onhashchange = function() {
-    this.change_foto(this.fotos[this.path].children[this.get_hash()]);
-  }
+    var name = this.get_hash();
+    if (this.search_query) {
+      var foto = this.search_results[name];
+    } else {
+      var foto = this.fotos[this.path].children[name];
+    }
+    this.change_foto(foto);
+  };
 
   KNF.prototype.api = function(data, cb) {
     $.post(fotos_api_url, {
@@ -553,8 +622,23 @@
       }.bind(this));
   };
 
+  KNF.prototype.onsearch = function() {
+    if (this.search_timeout !== null) {
+      clearTimeout(this.search_timeout);
+    }
+    this.search_timeout = setTimeout(this.search.bind(this), 200);
+  };
+
+  KNF.prototype.search = function() {
+    var oldsearch = this.search_query;
+    this.search_query = $('#search').val().trim();
+    if (oldsearch === this.search_query) {
+      return;
+    }
+    this.change_path(this.path, this.search_query);
+  };
+
   KNF.prototype.run = function() {
-    this.onpopstate();
     $(window).bind('popstate', this.onpopstate.bind(this));
     $(window).bind('hashchange', this.onhashchange.bind(this));
     $('#foto').click(function(e) {
@@ -593,8 +677,15 @@
     }.bind(this));
 
     $('#album-edit-button').click(this.onedit.bind(this));
-
+    $('#search').on('input', this.onsearch.bind(this));
     $(window).resize(this.onresize.bind(this));
+
+    var search = this.get_search_query();
+    if (search) {
+      $('#search').val(search);
+    }
+
+    this.onpopstate();
   };
 
   $(document).ready(function(){

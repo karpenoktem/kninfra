@@ -38,8 +38,9 @@ if ('srcset' in (new Image())) {
 
 {% block body %}
 <div id="breadcrumbs"></div>
+<div id="topbar">
+  <input id="search" type="search" placeholder="zoek..."/>
 {% if fotos_admin %}
-<div id="album-edit">
   <form>
     <select id="album-visibility"
       onchange="$('#album-edit-button').prop('disabled', false)">
@@ -51,8 +52,8 @@ if ('srcset' in (new Image())) {
       oninput="$('#album-edit-button').prop('disabled', false)"/>
     <button id="album-edit-button" disabled>Ok</button>
   </form>
-</div>
 {% endif %}
+</div>
 {% if error == 'permission-denied' %}
 <p class="error">Je hebt niet de juiste rechten om dit album te zien. Waarschijnlijk mogen alleen <a href="{% url group-by-name 'fotocie' %}">FotoCie</a>-leden dit album zien.</p>
 {% else %}
