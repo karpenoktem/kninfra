@@ -30,7 +30,8 @@ def ensure_indices():
     fcol.ensure_index('tags', sparse=True)
     fcol.ensure_index([('caches', 1), ('type', 1)], sparse=True)
     fcol.ensure_index([('path', 1), ('effectiveVisibility', 1), ('name', 1)])
-    fcol.ensure_index([('title', 'text'),
+    fcol.ensure_index([('name', 'text'),
+                       ('title', 'text'),
                        ('description', 'text'),
                        ('path', 1),
                        ('effectiveVisibility', 1)],
