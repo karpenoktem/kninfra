@@ -410,7 +410,7 @@ class Foto(FotoEntity):
         return True
 
     def set_rotation(self, rotation, save=True):
-        if rotation != self.rotation:
+        if rotation == self.rotation:
             return
 
         self.rotation = rotation
