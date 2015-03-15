@@ -159,12 +159,12 @@ def _search(data, request):
         raise PermissionDenied
 
     if 'q' not in data:
-        return {'error': 'missing query attribute'}
+        return {'error': 'missing q attribute'}
     if not isinstance(data['q'], basestring):
-        return {'error': 'query should be string'}
+        return {'error': 'q should be string'}
     q = data['q'].strip()
     if not q:
-        return {'error': 'query should not be empty'}
+        return {'error': 'q should not be empty'}
 
     results, people = entities_json(album.search(q, user), user)
     return {'results': results,
