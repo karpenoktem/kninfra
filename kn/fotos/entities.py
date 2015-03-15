@@ -353,10 +353,10 @@ class FotoAlbum(FotoEntity):
 
 class Foto(FotoEntity):
     # keep up to date with fotos.js (onresize)
-    CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg', 200, None, 85),
-              'thumb2x': cache_tuple('jpg', 'image/jpeg', 400, None, 85),
-              'large': cache_tuple('jpg', 'image/jpeg', 850, None, 90),
-              'large2x': cache_tuple('jpg', 'image/jpeg', 1700, None, 90),
+    CACHES = {'thumb': cache_tuple('jpg', 'image/jpeg', 200, 200, 85),
+              'thumb2x': cache_tuple('jpg', 'image/jpeg', 400, 400, 85),
+              'large': cache_tuple('jpg', 'image/jpeg', 850, 850, 90),
+              'large2x': cache_tuple('jpg', 'image/jpeg', 1700, 1700, 90),
               'full': cache_tuple(None, None, None, None, None),
               }
 
