@@ -21,7 +21,11 @@ MEDIA_URL = '/djmedia'
 DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@karpenoktem.nl>'
 
 # Globally set locale
-locale.setlocale(locale.LC_ALL, 'nl_NL.UTF-8')
+try:
+    locale.setlocale(locale.LC_ALL, 'nl_NL.UTF-8')
+except locale.Error:
+    import logging
+    logging.warn('Failed to set locale')
 
 ROOT_URLCONF = 'kn.urls'
 TEMPLATE_LOADERS = (
