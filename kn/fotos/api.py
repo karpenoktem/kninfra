@@ -27,49 +27,53 @@ def album_json(album, user):
     if not album.may_view(user):
         raise PermissionDenied
 
-    people = {}
+    children, people = entities_json(album.list(user), user)
 
-    children = album.list(user)
-    json_children = []
-    for child in children:
-        json_children.append(child_json(child, user, people))
-
-    return {'children': json_children,
+    return {'children': children,
             'parents': album_parents_json(album),
             'visibility': album.visibility[0],
             'people': people}
 
-def child_json(child, user, people):
-    entry = {'type': child._type,
-             'path': child.full_path,
-             'name': child.name,
-             'title': child.title}
+def entities_json(children, user):
+    '''
+    Return the JSON dictionary for this entity.
+    '''
 
-    if fEs.is_admin(user):
-        entry['visibility'] = child.visibility[0]
-        entry['rotation'] = child.rotation
+    entries = []
+    people = {}
+    for child in children:
+        entry = {'type': child._type,
+                 'path': child.full_path,
+                 'name': child.name,
+                 'title': child.title}
 
-    if child.description:
-        entry['description'] = child.description;
-    if child._type == 'foto':
-        entry['largeSize'] = child.get_cache_size('large')
-        entry['thumbnailSize'] = child.get_cache_size('thumb')
-    elif child._type == 'album':
-        album_foto = child.get_random_foto_for(user)
-        if album_foto is not None:
-            entry['thumbnailSize'] = album_foto.get_cache_size('thumb')
-            entry['thumbnailPath'] = album_foto.full_path
+        if fEs.is_admin(user):
+            entry['visibility'] = child.visibility[0]
+            entry['rotation'] = child.rotation
 
-    if child._type != 'album':
-        tags = []
-        tagged = child.get_tags()
-        if tagged:
-            for tag in tagged:
-                tags.append(str(tag.name))
-                people[str(tag.name)] = str(tag.humanName)
-            entry['tags'] = tags
+        if child.description:
+            entry['description'] = child.description;
+        if child._type == 'foto':
+            entry['largeSize'] = child.get_cache_size('large')
+            entry['thumbnailSize'] = child.get_cache_size('thumb')
+        elif child._type == 'album':
+            album_foto = child.get_random_foto_for(user)
+            if album_foto is not None:
+                entry['thumbnailSize'] = album_foto.get_cache_size('thumb')
+                entry['thumbnailPath'] = album_foto.full_path
 
-    return entry
+        if child._type != 'album':
+            tags = []
+            tagged = child.get_tags()
+            if tagged:
+                for tag in tagged:
+                    tags.append(str(tag.name))
+                    people[str(tag.name)] = str(tag.humanName)
+                entry['tags'] = tags
+
+        entries.append(entry)
+
+    return entries, people
 
 def entity_from_request(data):
     if 'path' not in data:
@@ -162,11 +166,7 @@ def _search(data, request):
     if not q:
         return {'error': 'query should not be empty'}
 
-    results = []
-    people = {}
-    for entity in album.search(q, user):
-        results.append(child_json(entity, user, people))
-
+    results, people = entities_json(album.search(q, user), user)
     return {'results': results,
             'people': people}
 
