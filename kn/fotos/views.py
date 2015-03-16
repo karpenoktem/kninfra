@@ -20,6 +20,7 @@ from kn.settings import PHOTOS_DIR
 from kn.leden import giedo
 
 import kn.fotos.entities as fEs
+import kn.leden.entities as Es
 from kn.fotos.api import album_json, album_parents_json
 
 def fotos(request, path=''):
@@ -45,10 +46,30 @@ def fotos(request, path=''):
         response.status_code = 403
         return response
 
+    people = None
+    if fEs.is_admin(user):
+        # Get all members (now or in the past), and sort them first by whether they
+        # are active (active members first) and then by their name.
+        humanNames = {}
+        active = []
+        inactive = []
+        for user in Es.users():
+            humanNames[str(user.name)] = unicode(user.humanName)
+            if user.is_active:
+                active.append(str(user.name))
+            else:
+                inactive.append(str(user.name))
+        active.sort()
+        inactive.sort()
+        people = []
+        for name in active+inactive:
+            people.append((name, humanNames[name]))
+
     fotos = album_json(album, user)
     return render_to_response('fotos/fotos.html',
              {'fotos': fotos,
-              'fotos_admin': fEs.is_admin(user)},
+              'fotos_admin': fEs.is_admin(user),
+              'people': people},
              context_instance=RequestContext(request))
 
 def cache(request, cache, path):

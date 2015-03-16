@@ -306,10 +306,30 @@ class FotoEntity(SONWrapper):
         self.update_effective_visibility(self.get_parent())
 
     def get_tags(self):
-        if not 'tags' in self._data:
+        '''
+        Return all tags of this entity (as User object)
+        '''
+        if 'tags' not in self._data:
             return None
 
-        return Es.by_ids(self._data['tags']).values()
+        idmap = Es.by_ids(self._data['tags'])
+        people = []
+        for id in self._data['tags']:
+            people.append(idmap[id])
+
+        return people
+
+    def set_tags(self, tags, save=True):
+        '''
+        Set tags by their usernames.
+        '''
+        name2id = Es.ids_by_names(tags)
+        self._data['tags'] = []
+        for name in tags:
+            self._data['tags'].append(name2id[name])
+
+        if save:
+            self.save()
 
 class FotoAlbum(FotoEntity):
     def __init__(self, data):

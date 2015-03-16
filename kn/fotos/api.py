@@ -68,7 +68,7 @@ def entities_json(children, user):
             if tagged:
                 for tag in tagged:
                     tags.append(str(tag.name))
-                    people[str(tag.name)] = str(tag.humanName)
+                    people[str(tag.name)] = unicode(tag.humanName)
                 entry['tags'] = tags
 
         entries.append(entry)
@@ -121,11 +121,20 @@ def _set_metadata(data, request):
         if 'description' not in data:
             return {'error': 'missing description attribute'}
         if not isinstance(data['description'], basestring):
-            return {'error': 'description should be string'}
+            return {'error': 'description should be a string'}
         description = data['description'].strip()
         if not description:
             description = None
         entity.set_description(description, save=False)
+
+        if 'tags' not in data:
+            return {'error': 'missing tags attribute'}
+        if not isinstance(data['tags'], list):
+            return {'error': 'tags should be a list'}
+        if not all(isinstance(n, basestring) for n in data['tags']):
+            return {'error': 'tags may only contain strings'}
+        tags = data['tags']
+        entity.set_tags(tags, save=True)
 
         result['thumbnailSize'] = entity.get_cache_size('thumb')
 

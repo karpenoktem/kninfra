@@ -5,12 +5,20 @@
 {% block head %}
 {{ block.super }}
 <script type="text/javascript" src="{{ MEDIA_URL }}/fotos/jquery.lazyloadxt.extra.min.js"></script>
+{% if fotos_admin %}
+<script type="text/javascript"
+        src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js" defer></script>
+{% endif %}
 <script type="text/javascript" src="{{ MEDIA_URL }}/fotos/fotos.js"></script>
 <script type="text/javascript">
 'use strict';
 expandHeader = false;
 // initial data to prevent one API request
 var fotos = {{ fotos|json }};
+var fotos_admin = {{ fotos_admin|yesno:"true,false" }};
+{% if fotos_admin %}
+var fotos_people = {{ people|json }};
+{% endif %}
 var fotos_root = "{% url fotos '' %}";
 var fotos_api_url = "{% url fotos-api %}";
 // Initialize Lazy Load XT
@@ -33,6 +41,10 @@ if ('srcset' in (new Image())) {
 {{ block.super }}
 <link rel="stylesheet" type="text/css"
         href="{{ MEDIA_URL }}/fotos/fotos.css" />
+{% if fotos_admin %}
+<link rel="stylesheet" type="text/css"
+    deferred-href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css"/>
+{% endif %}
 {% endblock styles %}
 
 {% block body %}
