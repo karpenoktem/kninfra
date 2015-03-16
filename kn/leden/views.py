@@ -157,7 +157,8 @@ def _user_detail(request, user):
     ctx.update({
             'hasPhoto': hasPhoto,
             'photoWidth': settings.SMOELEN_WIDTH,
-            'photosUrl': settings.USER_PHOTOS_URL % str(user.name)})
+            'photosUrl': reverse('fotos', kwargs={'path':''})
+                         + '?q=tag:'+str(user.name)})
     return render_to_response('leden/user_detail.html', ctx,
             context_instance=RequestContext(request))
 

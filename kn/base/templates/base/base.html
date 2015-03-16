@@ -30,7 +30,7 @@
                 <ul>
                     <li><a href="{% url agenda %}">agenda</a></li>
                     <li><a href="{% url over %}">over</a></li>
-                    <li><a href="{% external_url "fotos" %}">foto's</a></li>
+                    <li><a href="{% url fotos "" %}">foto's</a></li>
                     <li><a href="{% url contact %}">contact</a></li>
                     {% if user.is_authenticated %}
                     <li><a href="{% url logout %}">uitloggen</a></li>
