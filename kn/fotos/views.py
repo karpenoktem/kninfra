@@ -11,9 +11,10 @@ from django.shortcuts import render_to_response, redirect
 from django.core.exceptions import PermissionDenied
 from django.core.servers.basehttp import FileWrapper
 from django.core.paginator import EmptyPage
+from django.core.urlresolvers import reverse
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, QueryDict
 
 from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
 from kn.settings import PHOTOS_DIR
@@ -24,9 +25,20 @@ import kn.leden.entities as Es
 from kn.fotos.api import album_json, album_parents_json
 
 def fotos(request, path=''):
-    if 'album' in request.GET:
+    if any(k in request.GET for k in ['album', 'search_album', 'search_tag']):
         # redirect old URL
-        return redirect('fotos', path=request.GET['album'], permanent=True)
+        path = request.GET.get('album', '')
+        q = None
+        if request.GET.get('search_album'):
+            q = 'album:' + request.GET.get('search_album')
+        if request.GET.get('search_tag'):
+            q = 'tag:' + request.GET.get('search_tag')
+        url = reverse('fotos', kwargs={'path':path})
+        if q is not None:
+            qs = QueryDict('', mutable=True)
+            qs['q'] = q
+            url += '?' + qs.urlencode()
+        return redirect(url, permanent=True)
 
     album = fEs.by_path(path)
     if album is None:
