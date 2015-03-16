@@ -30,6 +30,15 @@ def ensure_indices():
     fcol.ensure_index('tags', sparse=True)
     fcol.ensure_index([('caches', 1), ('type', 1)], sparse=True)
     fcol.ensure_index([('path', 1), ('effectiveVisibility', 1), ('name', 1)])
+    fcol.ensure_index([('name', 'text'),
+                       ('title', 'text'),
+                       ('description', 'text'),
+                       ('path', 1),
+                       ('effectiveVisibility', 1)],
+                      weights={'name': 100,
+                               'comment': 50},
+                      default_language="dutch",
+                      sparse=True)
 
 def entity(d):
     if d is None:
@@ -248,6 +257,19 @@ class FotoEntity(SONWrapper):
     def original_path(self):
         return os.path.join(settings.PHOTOS_DIR, self.path, self.name)
 
+    @property
+    def mongo_path_prefix(self):
+        '''
+        Return the MongoDB query filter operator to match the path of this
+        entry and all children of this element.
+        '''
+        if self.path is None:
+            # root entity
+            return {'$exists': True, '$ne': None}
+        # non-root entity
+        return {'$regex': re.compile(
+                            "^%s(/|$)" % re.escape(self.full_path))}
+
     def get_parent(self):
         if self.path is None:
             return None
@@ -273,13 +295,9 @@ class FotoEntity(SONWrapper):
 
         # First delete all old effective visibilities, in case something goes
         # wrong during the update.
-        if self.path is None:
-            # root
-            query = {'path': {'$exists': True, '$ne': None}}
-        else:
-            query = {'path': {'$regex': re.compile(
-                                "^%s(/|$)" % re.escape(self.full_path))}}
-        fcol.update(query, {'$set': {'effectiveVisibility': None}}, multi=True)
+        fcol.update({'path': self.mongo_path_prefix},
+                    {'$set': {'effectiveVisibility': None}},
+                    multi=True)
 
         # And now save and recalculate effective visibilities recursively.
         self.visibility = visibility
@@ -332,6 +350,40 @@ class FotoAlbum(FotoEntity):
             if r == 1:
                 return None
             r = 1
+
+    def search(self, q, user):
+        required_visibility = self.required_visibility(user)
+        query_filter = {'path': self.mongo_path_prefix,
+                        'effectiveVisibility': {'$in': tuple(required_visibility)}}
+        if q.startswith('album:'):
+            album = q[len('album:'):]
+            query_filter['type'] = 'album'
+            query_filter = {'$and': [
+                query_filter,
+                {'$or': [
+                    {'name': {'$regex': re.compile(re.escape(album),
+                                                   re.IGNORECASE)}},
+                    {'title': {'$regex': re.compile(re.escape(album),
+                                                    re.IGNORECASE)}}
+                ]}]}
+        elif q.startswith('tag:'):
+            _id = Es.id_by_name(q[len('tag:'):])
+            if _id is None:
+                return
+            query_filter['type'] = {'$ne': 'album'}
+            query_filter['tags'] = _id
+        else:
+            # do a full-text search
+            for result in db.command('text', 'fotos',
+                        search=q,
+                        filter=query_filter,
+                        limit=96, # dividable by 2, 3 and 4
+                      )['results']:
+                yield entity(result['obj'])
+
+        # search for album or tag
+        for o in fcol.find(query_filter):
+            yield entity(o)
 
     def update_effective_visibility(self, parent, save=True, recursive=True):
         if not super(FotoAlbum, self).update_effective_visibility(parent, save=False):
