@@ -27,10 +27,20 @@ def album_json(album, user):
     if not album.may_view(user):
         raise PermissionDenied
 
-    people = {}
+    children, people = entities_json(album.list(user), user)
 
-    children = album.list(user)
-    json_children = []
+    return {'children': children,
+            'parents': album_parents_json(album),
+            'visibility': album.visibility[0],
+            'people': people}
+
+def entities_json(children, user):
+    '''
+    Return the JSON dictionary for this entity.
+    '''
+
+    entries = []
+    people = {}
     for child in children:
         entry = {'type': child._type,
                  'path': child.full_path,
@@ -51,6 +61,7 @@ def album_json(album, user):
             if album_foto is not None:
                 entry['thumbnailSize'] = album_foto.get_cache_size('thumb')
                 entry['thumbnailPath'] = album_foto.full_path
+
         if child._type != 'album':
             tags = []
             tagged = child.get_tags()
@@ -58,14 +69,11 @@ def album_json(album, user):
                 for tag in tagged:
                     tags.append(str(tag.name))
                     people[str(tag.name)] = unicode(tag.humanName)
-            entry['tags'] = tags
+                entry['tags'] = tags
 
-        json_children.append(entry)
+        entries.append(entry)
 
-    return {'children': json_children,
-            'parents': album_parents_json(album),
-            'visibility': album.visibility[0],
-            'people': people}
+    return entries, people
 
 def entity_from_request(data):
     if 'path' not in data:
@@ -150,9 +158,31 @@ def _set_metadata(data, request):
     entity.update_visibility([visibility])
     return result
 
+def _search(data, request):
+    album = entity_from_request(data)
+    if isinstance(album, basestring):
+        return {'error': album}
+
+    user = request.user if request.user.is_authenticated() else None
+    if not album.may_view(user):
+        raise PermissionDenied
+
+    if 'q' not in data:
+        return {'error': 'missing q attribute'}
+    if not isinstance(data['q'], basestring):
+        return {'error': 'q should be string'}
+    q = data['q'].strip()
+    if not q:
+        return {'error': 'q should not be empty'}
+
+    results, people = entities_json(album.search(q, user), user)
+    return {'results': results,
+            'people': people}
+
 ACTION_HANDLER_MAP = {
         'list': _list,
         'set-metadata': _set_metadata,
+        'search': _search,
         None: no_such_action,
         }
 

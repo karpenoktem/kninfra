@@ -9,8 +9,7 @@
 <script type="text/javascript"
         src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js" defer></script>
 {% endif %}
-<script type="text/javascript" src="{{ MEDIA_URL }}/fotos/fotos.js?v=2">
-</script>
+<script type="text/javascript" src="{{ MEDIA_URL }}/fotos/fotos.js"></script>
 <script type="text/javascript">
 'use strict';
 expandHeader = false;
@@ -50,8 +49,9 @@ if ('srcset' in (new Image())) {
 
 {% block body %}
 <div id="breadcrumbs"></div>
+<div id="topbar">
+  <input id="search" type="search" placeholder="zoek..."/>
 {% if fotos_admin %}
-<div id="album-edit">
   <form>
     <select id="album-visibility"
       onchange="$('#album-edit-button').prop('disabled', false)">
@@ -63,8 +63,8 @@ if ('srcset' in (new Image())) {
       oninput="$('#album-edit-button').prop('disabled', false)"/>
     <button id="album-edit-button" disabled>Ok</button>
   </form>
-</div>
 {% endif %}
+</div>
 {% if error == 'permission-denied' %}
 <p class="error">Je hebt niet de juiste rechten om dit album te zien. Waarschijnlijk mogen alleen <a href="{% url group-by-name 'fotocie' %}">FotoCie</a>-leden dit album zien.</p>
 {% else %}

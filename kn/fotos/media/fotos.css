@@ -2,12 +2,16 @@
     float: left;
 }
 
-#breadcrumbs > a {
+#breadcrumbs > a,
+#breadcrumbs > span {
     margin: 0 5px;
 }
 
-#album-edit {
+#topbar {
     float: right;
+}
+#topbar form {
+    display: inline;
 }
 
 p.error {
