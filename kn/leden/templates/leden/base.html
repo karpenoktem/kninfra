@@ -47,7 +47,7 @@
         </li>
         {% endif %}
         {% if "fotocie" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
-        <li><a href="{% external_url "fotos" %}">Foto's</a>
+        <li><a href="{% url fotos "" %}">Foto's</a>
             <ul>
                 <li><a href="{% url fotoadmin-move %}">Foto's verplaatsen</a></li>
             </ul>
