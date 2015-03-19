@@ -72,8 +72,6 @@ def main():
             'name': name,
             'random': random.random(),
             'path': path,
-            'title': None,
-            'description': None,
             'visibility': visibility,
             'rotation': rotation})
         foto.update_metadata(foto.get_parent(), save=False)
