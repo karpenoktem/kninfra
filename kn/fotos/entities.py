@@ -450,28 +450,44 @@ class Foto(FotoEntity):
         img = Image.open(self.original_path)
         exif = {}
         if hasattr(img, '_getexif'):
-            for k, v in img._getexif().items():
-                if k not in TAGS:
-                    continue
-                exif[TAGS[k]] = v
+            exifData = img._getexif()
+            if exifData is not None:
+                for k, v in exifData.items():
+                    if k not in TAGS:
+                        continue
+                    exif[TAGS[k]] = v
 
         if self.rotation is None:
             self.rotation = 0
-            orientation = int(exif.get('Orientation', '1'))
-            if orientation == 1:
-                self.rotation = 0
-            elif orientation == 3:
-                self.rotation = 180
-            elif orientation == 6:
-                self.rotation = 90
-            elif orientation == 8:
-                self.rotation = 270
-            # other rotations are mirrored, and won't occur much in practice
+            try:
+                orientation = int(exif.get('Orientation', '1'))
+                if orientation == 1:
+                    self.rotation = 0
+                elif orientation == 3:
+                    self.rotation = 180
+                elif orientation == 6:
+                    self.rotation = 90
+                elif orientation == 8:
+                    self.rotation = 270
+                # other rotations are mirrored, and won't occur much in practice
+            except ValueError:
+                # Rotation cannot be converted to an int (invalid input),
+                # ignore.
+                pass
 
         if self.created is None:
             self.created = settings.DT_MIN # NULL date/time
             if 'DateTimeOriginal' in exif:
-                self.created = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
+                try:
+                    self.created = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
+                except ValueError:
+                    # Ignore: the timestamp did not match the format.
+                    # For example, the year might be below year 1 (a zero
+                    # timestamp).
+                    pass
+                except TypeError:
+                    # The string might contain crazy stuff like NULL bytes.
+                    pass
 
         if self.size is None:
             self.size = img.size
