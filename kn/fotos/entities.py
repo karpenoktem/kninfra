@@ -407,22 +407,21 @@ class FotoAlbum(FotoEntity):
             yield entity(o)
 
     def _update_effective_visibility(self, parent, save=True, recursive=True):
+        if recursive and not save:
+            raise ValueError('recursion without save is not recommended')
+
         if not super(FotoAlbum, self)._update_effective_visibility(parent, save=False):
             # effective visibility did not change, so children won't change too
             return False
 
-        if recursive and not save:
-            raise ValueError('recursion without save is not recommended')
-
-        updated = False
         if recursive:
             for foto in self.list_all():
                 updated = foto._update_effective_visibility(self, save=save) or updated
 
-        if updated and save:
+        if save:
             self.save()
 
-        return updated
+        return True
 
 class Foto(FotoEntity):
     # keep up to date with fotos.js (onresize)
