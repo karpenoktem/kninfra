@@ -122,7 +122,7 @@ class FotoEntity(SONWrapper):
             return frozenset(('leden', 'world'))
         return frozenset(('world',))
 
-    def update_effective_visibility(self, parent, save=True, recursive=False):
+    def _update_effective_visibility(self, parent, save=True, recursive=False):
         '''
         Update the effectiveVisibility property
 
@@ -251,7 +251,7 @@ class FotoEntity(SONWrapper):
         '''
         Load metadata from file if it doesn't exist yet
         '''
-        return self.update_effective_visibility(parent, save=save, recursive=False)
+        return self._update_effective_visibility(parent, save=save, recursive=False)
 
     @property
     def original_path(self):
@@ -303,7 +303,7 @@ class FotoEntity(SONWrapper):
         self.visibility = visibility
         self.effective_visibility = None
         self.save()
-        self.update_effective_visibility(self.get_parent())
+        self._update_effective_visibility(self.get_parent())
 
     def get_tags(self):
         '''
@@ -406,8 +406,8 @@ class FotoAlbum(FotoEntity):
         for o in fcol.find(query_filter):
             yield entity(o)
 
-    def update_effective_visibility(self, parent, save=True, recursive=True):
-        if not super(FotoAlbum, self).update_effective_visibility(parent, save=False):
+    def _update_effective_visibility(self, parent, save=True, recursive=True):
+        if not super(FotoAlbum, self)._update_effective_visibility(parent, save=False):
             # effective visibility did not change, so children won't change too
             return False
 
@@ -417,7 +417,7 @@ class FotoAlbum(FotoEntity):
         updated = False
         if recursive:
             for foto in self.list_all():
-                updated = foto.update_effective_visibility(self, save=save) or updated
+                updated = foto._update_effective_visibility(self, save=save) or updated
 
         if updated and save:
             self.save()
