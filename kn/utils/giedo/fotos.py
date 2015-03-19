@@ -28,39 +28,42 @@ def scan_album(album):
         filepath = os.path.join(settings.PHOTOS_DIR, album.full_path, name)
         if name[0] == '.':
             continue
+        entity = fotos.get(name, None)
+        if entity is not None and entity.is_lost:
+            entity.found(album)
         if os.path.isdir(filepath):
             # album
-            subalbum = fotos.get(name, None)
-            if subalbum is None:
-                subalbum = fEs.entity({
+            if entity is None:
+                entity = fEs.entity({
                     'type': 'album',
                     'path': album.full_path,
                     'name': name,
                     'random': random.random(),
                     'visibility': ['hidden']})
-                subalbum.update_metadata(album, save=False)
-                subalbum.save()
-            elif subalbum.update_metadata(album, save=False):
-                subalbum.save()
-            scan_album(subalbum)
+                entity.update_metadata(album, save=False)
+                entity.save()
+            elif entity.update_metadata(album, save=False):
+                entity.save()
+            scan_album(entity)
 
         elif os.path.splitext(name)[1][1:].lower() in extensions:
             # photo
-            foto = fotos.get(name, None)
-            if foto is None:
-                foto = fEs.entity({
+            entity = fotos.get(name, None)
+            if entity is None:
+                entity = fEs.entity({
                     'type': 'foto',
                     'path': album.full_path,
                     'name': name,
                     'random': random.random(),
                     'visibility': ['world']})
-                foto.update_metadata(album, save=False)
-                foto.save()
-            elif foto.update_metadata(album, save=False):
-                foto.save()
+                entity.update_metadata(album, save=False)
+                entity.save()
+            elif entity.update_metadata(album, save=False):
+                entity.save()
 
-    # TODO deleted albums
-
+    for entity in fotos.values():
+        if entity.name not in names:
+            entity.lost(album)
 
 
 def scan_fotos():

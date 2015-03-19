@@ -111,6 +111,7 @@ class FotoEntity(SONWrapper):
     size = son_property(('size',))
 
     visibility = son_property(('visibility',))
+    _lost = son_property(('lost',))
     effective_visibility = son_property(('effectiveVisibility',))
 
     def required_visibility(self, user):
@@ -146,6 +147,9 @@ class FotoEntity(SONWrapper):
                     effective_visibility = [v]
                     break
         else:
+            effective_visibility = []
+
+        if self._lost:
             effective_visibility = []
 
         self.effective_visibility = effective_visibility
@@ -295,15 +299,40 @@ class FotoEntity(SONWrapper):
 
         # First delete all old effective visibilities, in case something goes
         # wrong during the update.
-        fcol.update({'path': self.mongo_path_prefix},
-                    {'$set': {'effectiveVisibility': None}},
-                    multi=True)
+        self._clear_visibility()
 
         # And now save and recalculate effective visibilities recursively.
         self.visibility = visibility
-        self.effective_visibility = None
         self.save()
         self._update_effective_visibility(self.get_parent())
+
+    def _clear_visibility(self):
+        self.effective_visibility = None
+        fcol.update({'path': self.mongo_path_prefix},
+                    {'$unset': {'effectiveVisibility': ''}},
+                    multi=True)
+
+    @property
+    def is_lost(self):
+        return bool(self._lost)
+
+    def lost(self, parent):
+        if self._lost:
+            return
+
+        self._clear_visibility()
+        self._lost = True
+        self.save()
+        self._update_effective_visibility(parent)
+
+    def found(self, parent):
+        if not self._lost:
+            return
+
+        self._clear_visibility()
+        self._lost = False
+        self.save()
+        self._update_effective_visibility(parent)
 
     def get_tags(self):
         '''
