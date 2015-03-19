@@ -380,6 +380,7 @@
 
     $('.img', frame).on('load', this.onresize.bind(this));
     this.update_foto_src(foto);
+    this.onresize();
     if (this.sidebar) {
       this.show_sidebar();
     }
