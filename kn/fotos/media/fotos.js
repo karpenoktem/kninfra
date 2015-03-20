@@ -56,13 +56,15 @@
   };
 
   KNF.prototype.change_path = function(path, query, keep_url) {
+    query = query || '';
+
     // Clear out the old
     $('#fotos').empty();
 
     // Update path
     this.path = path;
     if (query !== this.search_query) {
-      this.search_query = query || '';
+      this.search_query = query;
       $('#search').val(this.search_query);
     }
 
@@ -87,8 +89,9 @@
     if (this.search_query) {
       this.api({action: 'search',
                 path: this.path,
-                q: this.search_query},
+                q: query},
         function(data) {
+          if (this.search_query !== query) return;
           if (data.error) {
             alert(data.error);
             return;
