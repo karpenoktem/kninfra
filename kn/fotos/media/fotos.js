@@ -286,9 +286,12 @@
       url += '?q=' + encodeURIComponent(this.search_query);
     }
     if (this.foto) {
-      url += '#' + foto.name;
+      url += '#' + this.foto.name;
     }
-    if (replace) {
+    if (!('pushState' in history)) {
+      // Downwards compatibility with old browsers, primarily IE9.
+      location.href = url;
+    } else if (replace) {
       history.replaceState(null, '', url);
     } else {
       history.pushState(null, '', url);
