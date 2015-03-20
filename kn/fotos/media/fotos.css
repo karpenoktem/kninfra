@@ -104,6 +104,7 @@ img.lazy {
     min-height: 300px;
     margin: 0 auto;
     box-sizing: border-box;
+    background-color: black; /* IE8 */
     background-color: rgba(0,0,0,0.4);
     text-align: center;
 }
