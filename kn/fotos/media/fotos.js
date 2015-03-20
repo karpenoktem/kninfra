@@ -286,7 +286,7 @@
       url += '?q=' + encodeURIComponent(this.search_query);
     }
     if (this.foto) {
-      url += '#' + foto.name;
+      url += '#' + this.foto.name;
     }
     if (replace) {
       history.replaceState(null, '', url);
