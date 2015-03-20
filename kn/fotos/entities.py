@@ -471,6 +471,11 @@ class Foto(FotoEntity):
         '''
         updated = super(Foto, self).update_metadata(parent, save=False)
 
+        if self._lost:
+            if save and updated:
+                self.save()
+            return updated
+
         if None not in [self.rotation, self.created, self.size]:
             if save and updated:
                 self.save()

@@ -16,11 +16,11 @@ def main():
     if fEs.by_path('') is None:
         root = fEs.entity({
             'type': 'album',
-            'name': '',
             'path': None,
-            'random': random.random(),
+            'name': '',
             'title': 'Karpe Noktem fotoalbum',
             'description': "De fotocollectie van Karpe Noktem",
+            'random': random.random(),
             'visibility': ['world']})
         root.update_metadata(None, save=False)
         root.save()
@@ -29,51 +29,53 @@ def main():
     c.execute("SELECT id, name, path, humanname, visibility, description "
                         + "FROM fa_albums ORDER BY path")
     for oldId, name, path, humanName, visibility, description in c.fetchall():
-        if visibility == 'lost':
+        if fEs.by_oldId('album', oldId) is not None:
             continue
+
+        data = {'type': 'album',
+                'oldId': oldId,
+                'path': path.strip('/'),
+                'name': name,
+                'title': humanName,
+                'description': description,
+                'random': random.random()}
+
+        if visibility == 'lost':
+            visibility = []
+            data['lost'] = True
         elif visibility == 'deleted':
             visibility = []
         else:
             visibility = [visibility]
+        data['visibility'] = visibility
 
-        if fEs.by_oldId('album', oldId) is not None:
-            continue
-
-        path = path.strip('/')
-        album = fEs.entity({
-            'type': 'album',
-            'oldId': oldId,
-            'random': random.random(),
-            'name': name,
-            'path': path,
-            'title': humanName,
-            'description': description,
-            'visibility': visibility})
+        album = fEs.entity(data)
         album.update_metadata(album.get_parent(), save=False)
         album.save()
 
     print 'fotos'
     c.execute("SELECT id, name, path, visibility, rotation FROM fa_photos")
     for oldId, name, path, visibility, rotation in c.fetchall():
-        if visibility == 'lost':
+        if fEs.by_oldId('foto', oldId) is not None:
             continue
+
+        data = {'type': 'foto',
+                'oldId': oldId,
+                'path': path.strip('/'),
+                'name': name,
+                'random': random.random(),
+                'rotation': rotation}
+
+        if visibility == 'lost':
+            visibility = []
+            data['lost'] = True
         elif visibility == 'deleted':
             visibility = []
         else:
             visibility = [visibility]
+        data['visibility'] = visibility
 
-        if fEs.by_oldId('foto', oldId) is not None:
-            continue
-
-        path = path.strip('/')
-        foto = fEs.entity({
-            'type': 'foto',
-            'oldId': oldId,
-            'name': name,
-            'random': random.random(),
-            'path': path,
-            'visibility': visibility,
-            'rotation': rotation})
+        foto = fEs.entity(data)
         foto.update_metadata(foto.get_parent(), save=False)
         foto.save()
 
