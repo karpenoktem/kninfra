@@ -529,6 +529,10 @@ class Video(FotoEntity):
     def __init__(self, data):
         super(Video, self).__init__(data)
 
+def all():
+    for d in fcol.find():
+        yield entity(d)
+
 CACHE_TYPES = (
         'thumb',
         'thumb2x',
