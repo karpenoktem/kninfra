@@ -111,6 +111,7 @@ class FotoEntity(SONWrapper):
     size = son_property(('size',))
 
     visibility = son_property(('visibility',))
+    _lost = son_property(('lost',))
     effective_visibility = son_property(('effectiveVisibility',))
 
     def required_visibility(self, user):
@@ -122,7 +123,7 @@ class FotoEntity(SONWrapper):
             return frozenset(('leden', 'world'))
         return frozenset(('world',))
 
-    def update_effective_visibility(self, parent, save=True, recursive=False):
+    def _update_effective_visibility(self, parent, save=True, recursive=False):
         '''
         Update the effectiveVisibility property
 
@@ -146,6 +147,9 @@ class FotoEntity(SONWrapper):
                     effective_visibility = [v]
                     break
         else:
+            effective_visibility = []
+
+        if self._lost:
             effective_visibility = []
 
         self.effective_visibility = effective_visibility
@@ -251,7 +255,7 @@ class FotoEntity(SONWrapper):
         '''
         Load metadata from file if it doesn't exist yet
         '''
-        return self.update_effective_visibility(parent, save=save, recursive=False)
+        return self._update_effective_visibility(parent, save=save, recursive=False)
 
     @property
     def original_path(self):
@@ -295,15 +299,40 @@ class FotoEntity(SONWrapper):
 
         # First delete all old effective visibilities, in case something goes
         # wrong during the update.
-        fcol.update({'path': self.mongo_path_prefix},
-                    {'$set': {'effectiveVisibility': None}},
-                    multi=True)
+        self._clear_visibility()
 
         # And now save and recalculate effective visibilities recursively.
         self.visibility = visibility
-        self.effective_visibility = None
         self.save()
-        self.update_effective_visibility(self.get_parent())
+        self._update_effective_visibility(self.get_parent())
+
+    def _clear_visibility(self):
+        self.effective_visibility = None
+        fcol.update({'path': self.mongo_path_prefix},
+                    {'$unset': {'effectiveVisibility': ''}},
+                    multi=True)
+
+    @property
+    def is_lost(self):
+        return bool(self._lost)
+
+    def lost(self, parent):
+        if self._lost:
+            return
+
+        self._clear_visibility()
+        self._lost = True
+        self.save()
+        self._update_effective_visibility(parent)
+
+    def found(self, parent):
+        if not self._lost:
+            return
+
+        self._clear_visibility()
+        self._lost = False
+        self.save()
+        self._update_effective_visibility(parent)
 
     def get_tags(self):
         '''
@@ -406,23 +435,22 @@ class FotoAlbum(FotoEntity):
         for o in fcol.find(query_filter):
             yield entity(o)
 
-    def update_effective_visibility(self, parent, save=True, recursive=True):
-        if not super(FotoAlbum, self).update_effective_visibility(parent, save=False):
-            # effective visibility did not change, so children won't change too
-            return False
-
+    def _update_effective_visibility(self, parent, save=True, recursive=True):
         if recursive and not save:
             raise ValueError('recursion without save is not recommended')
 
-        updated = False
+        if not super(FotoAlbum, self)._update_effective_visibility(parent, save=False):
+            # effective visibility did not change, so children won't change too
+            return False
+
         if recursive:
             for foto in self.list_all():
-                updated = foto.update_effective_visibility(self, save=save) or updated
+                updated = foto._update_effective_visibility(self, save=save) or updated
 
-        if updated and save:
+        if save:
             self.save()
 
-        return updated
+        return True
 
 class Foto(FotoEntity):
     # keep up to date with fotos.js (onresize)
@@ -442,6 +470,11 @@ class Foto(FotoEntity):
         Load EXIF metadata from file if it hasn't been loaded yet.
         '''
         updated = super(Foto, self).update_metadata(parent, save=False)
+
+        if self._lost:
+            if save and updated:
+                self.save()
+            return updated
 
         if None not in [self.rotation, self.created, self.size]:
             if save and updated:
