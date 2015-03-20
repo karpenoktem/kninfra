@@ -27,7 +27,7 @@ def main():
 
     print 'albums'
     c.execute("SELECT id, name, path, humanname, visibility, description "
-                        + "FROM fa_albums")
+                        + "FROM fa_albums ORDER BY path")
     for oldId, name, path, humanName, visibility, description in c.fetchall():
         if visibility == 'lost':
             continue
