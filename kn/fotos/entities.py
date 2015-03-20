@@ -400,6 +400,7 @@ class FotoAlbum(FotoEntity):
                         limit=96, # dividable by 2, 3 and 4
                       )['results']:
                 yield entity(result['obj'])
+            return
 
         # search for album or tag
         for o in fcol.find(query_filter):
