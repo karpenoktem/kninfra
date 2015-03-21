@@ -164,7 +164,7 @@ WOLK_MYSQL_SECRET = ('localhost', 'wolk',
                         '{{ pillar['secrets']['mysql_wolk'] }}', 'wolk')
 ALLOWED_API_KEYS = ('{{ pillar['secrets']['apikey'] }}',)
 PHOTOS_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
-CHUCK_NORRIS_HIS_SECRET = '{{ pillar['secrets']['chucknorris'] }} '
+CHUCK_NORRIS_HIS_SECRET = '{{ pillar['secrets']['chucknorris'] }}'
 VILLANET_SECRET_API_KEY = '' # CHANGE ME
 DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
                         '<root@{{ grains['fqdn'] }}>')
