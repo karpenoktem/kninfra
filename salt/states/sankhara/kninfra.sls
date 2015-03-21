@@ -1,4 +1,4 @@
-packages:
+kninfra packages:
     pkg.installed:
         - pkgs:
             - python-django
