@@ -1,0 +1,12 @@
+{% extends "agenda/base.html" %}
+
+{% block body %}
+
+<div>
+Dit is de ZEUS-agenda, de agenda met alle grote activiteiten van onze <a href="{% url zusjes %}">zusterverenigingen</a> door heel het land.<br/>
+<a href="{% url agenda %}">Terug naar onze eigen agenda</a>.
+</div>
+
+{% include "agenda/widget.html" %}
+
+{% endblock %}
