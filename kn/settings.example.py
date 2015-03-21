@@ -98,6 +98,7 @@ EXTERNAL_URLS = {
     'wiki':      'https://karpenoktem.nl/wiki/Hoofdpagina',
     'forum':     'https://karpenoktem.nl/forum/',
 }
+GOOGLE_CALENDAR_ID = 'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com'
 
 # moderation & mailman
 MAILDOMAIN = 'karpenoktem.nl'
@@ -168,5 +169,6 @@ VILLANET_SECRET_API_KEY = '' # CHANGE ME
 DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
                         '<root@khandhas.karpenoktem.nl>')
 LDAP_PASS = None # 'CHANGE ME'
+GOOGLE_OAUTH2_KEY = None # CHANGE ME - see agenda/fetch.py
 
 # vim: et:sta:bs=2:sw=4:
