@@ -669,4 +669,23 @@ entities:
   tags: [!id '4e6fcc85e60edf3dc0000086']
   types: [tag]
 
-
+- _id: !id '4e6fcc85e60edf3dc00001d4'
+  addresses:
+  - {city: Nijmegen, from: !!timestamp '2014-1-1 00:00:00', number: 123,
+                    street: straat, until: !!timestamp '5004-09-01 00:00:00',
+                        zip: 1234 AB}
+  emailAddresses:
+  - {email: 'null@kn.cx', from: !!timestamp '2014-1-1 00:00:00',
+     until: !!timestamp '5004-09-01 00:00:00'}
+  humanNames:
+  - {human: Test Gebruiker}
+  is_active: 1
+  names: [test]
+  person:
+    dateOfBirth: 1988-8-8
+    family: Gebruiker
+    given: null
+    nick: Test
+    titles: []
+  types: [user]
+  
