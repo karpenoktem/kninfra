@@ -3,4 +3,5 @@
 *.login
 *.swp
 /.vagrant
+/salt/pillar/vagrant.sls
 .DS_Store

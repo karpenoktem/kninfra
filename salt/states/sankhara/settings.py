@@ -156,13 +156,15 @@ INTERNAL_IPS = ['195.169.216.49'] # bas
 SECRET_KEY = 'CHANGE ME'
 MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 
-WIKI_MYSQL_SECRET = None # ('HOST', 'USER', 'PWD', 'DB')
-FORUM_MYSQL_SECRET = None # ('HOST', 'USER', 'PWD', 'DB')
-WOLK_MYSQL_SECRET = None # ('HOST', 'USER', 'PWD', 'DB')
-ALLOWED_API_KEYS = ('CHANGE ME',)
+WIKI_MYSQL_SECRET = ('localhost', 'wiki',
+                        '{{ pillar['secrets']['mysql_wiki'] }}', 'wiki')
+FORUM_MYSQL_SECRET = ('localhost', 'forum',
+                        '{{ pillar['secrets']['mysql_forum'] }}', 'forum')
+WOLK_MYSQL_SECRET = ('localhost', 'wolk',
+                        '{{ pillar['secrets']['mysql_wolk'] }}', 'wolk')
+ALLOWED_API_KEYS = ('{{ pillar['secrets']['apikey'] }}',)
 PHOTOS_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
-ALLOWED_API_KEYS = ('CHANGE ME',)
-CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
+CHUCK_NORRIS_HIS_SECRET = '{{ pillar['secrets']['chucknorris'] }} '
 VILLANET_SECRET_API_KEY = '' # CHANGE ME
 DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
                         '<root@{{ grains['fqdn'] }}>')
