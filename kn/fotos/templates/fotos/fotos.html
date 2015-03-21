@@ -52,7 +52,9 @@ if ('srcset' in (new Image())) {
 <div id="topbar">
   <input id="search" type="search" placeholder="zoek..."/>
 {% if fotos_admin %}
-  <form>
+  <img id="album-edit-toggle" src="{{ MEDIA_URL }}/fotos/edit-icon.svg"
+    width="16" height="16" title="Bewerk naam en zichtbaarheid"/>
+  <form id="album-editor">
     <select id="album-visibility"
       onchange="$('#album-edit-button').prop('disabled', false)">
       <option value="world">Publiek</option>
