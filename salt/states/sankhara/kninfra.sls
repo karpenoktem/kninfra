@@ -56,6 +56,15 @@ https://github.com/karpenoktem/kninfra:
         - template: jinja
         - user: infra
         - mode: 600
+https://github.com/awesterb/koert:
+    git.latest:
+        - user: infra
+        - target: /home/infra/scm/koert
+    require:
+        - pkg: git
+/home/infra/py/koert:
+    file.symlink:
+        - target: /home/infra/scm/koert
 https://github.com/karpenoktem/regl:
     git.latest:
         - user: infra
