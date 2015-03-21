@@ -6,7 +6,8 @@ from django.utils.safestring import mark_safe
 acol = db['agenda']
 
 def ensure_indices():
-    acol.ensure_index('start')
+    acol.ensure_index([('agenda', 1),
+                       ('start', 1)])
 
 def all(agenda=None, limit=None):
     query = {}
