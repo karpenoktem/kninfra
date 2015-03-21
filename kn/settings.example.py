@@ -64,7 +64,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.contrib.messages.context_processors.messages",
-    "kn.base.context_processors.bg",
     "kn.base.context_processors.base_url",
 )
 TEMPLATE_DIRS = ()
@@ -85,8 +84,6 @@ DEFAULT_FILE_STORAGE = 'kn.base.storage.OurFileSystemStorage'
 
 # Application settings
 # ############################################################
-# base theme
-BASE_BGS = ['antal', 'park', 'band', 'weekend']
 
 # smoelen
 BASE_URL = 'https://karpenoktem.nl'
