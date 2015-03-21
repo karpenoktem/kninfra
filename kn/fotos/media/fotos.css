@@ -9,9 +9,45 @@
 
 #topbar {
     float: right;
+    position: relative;
 }
-#topbar form {
-    display: inline;
+
+img#album-edit-toggle {
+    margin: 0;
+    box-shadow: none;
+    max-width: none;
+    vertical-align: middle;
+    background: none;
+    opacity: 0.5;
+    padding: 4px;
+    z-index: 2;
+    border: 1px transparent solid;
+    border-bottom: 1px white solid;
+    position: relative;
+    bottom: -1px;
+}
+#album-edit-toggle:hover,
+#topbar.editor #album-edit-toggle {
+    opacity: 1;
+}
+#topbar.editor #album-edit-toggle {
+    background: white;
+    border-color: #aaa;
+    border-bottom: 1px white solid;
+}
+
+#album-editor {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    background: white;
+    white-space: nowrap;
+    right: -5px;
+    padding: 2px 5px;
+    border: 1px #aaa solid;
+}
+#topbar.editor #album-editor {
+    display: block;
 }
 
 p.error {
