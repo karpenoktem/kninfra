@@ -25,6 +25,8 @@ import kn.leden.entities as Es
 from kn.fotos.api import album_json, album_parents_json
 
 def fotos(request, path=''):
+    path = unquote(path)
+
     if any(k in request.GET for k in ['album', 'search_album', 'search_tag']):
         # redirect old URL
         path = request.GET.get('album', '')

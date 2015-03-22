@@ -284,7 +284,7 @@
   };
 
   KNF.prototype.apply_url = function (replace) {
-    var url = fotos_root + this.path;
+    var url = fotos_root + encodeURIComponent(this.path);
     if (this.search_query) {
       url += '?q=' + encodeURIComponent(this.search_query);
     }
@@ -303,7 +303,7 @@
 
   // Returns the path according to the current URL
   KNF.prototype.get_url_path = function() {
-    return location.pathname.substr(fotos_root.length);
+    return decodeURIComponent(location.pathname.substr(fotos_root.length));
   };
 
   KNF.prototype.get_search_query = function() {
