@@ -63,8 +63,9 @@ ul#fotos {
 }
 
 ul#fotos li {
+    margin: 1px;
     display: inline-block;
-    padding: 0 5px 12px;
+    padding: 5px 4px;
     width: 200px;
     max-width: calc(100% / 3 - 10px);
     font-family: sans-serif;
@@ -75,8 +76,11 @@ ul#fotos li {
 }
 @media (max-width: 660px) {
     ul#fotos li {
-        padding: 0 calc(0.5vw + 1.7px) calc(1.5vw + 2.1px);
+        padding: 0.75vw calc(0.5vw + 0.7px) 0.75vw;
     }
+}
+ul#fotos li.hidden {
+    background-color: rgba(0, 0, 0, 0.04);
 }
 
 ul#fotos li a {

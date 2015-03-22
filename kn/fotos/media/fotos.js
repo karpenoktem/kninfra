@@ -210,6 +210,9 @@
         if (c.type == 'foto') {
           $('a', thumb).attr('href', '#'+c.name);
         }
+        if (c.visibility === 'hidden') {
+          thumb.addClass('hidden');
+        }
         thumb.appendTo('#fotos');
       }).call(this, fotos[name]);
     }
