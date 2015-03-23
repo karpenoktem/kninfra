@@ -369,7 +369,7 @@ class FotoAlbum(FotoEntity):
         albums = map(entity, fcol.find({'path': self.full_path,
                            'type': 'album',
                            'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                           ).sort('name', -1))
+                           ).sort([('created', -1), ('name', 1)]))
         fotos = map(entity, fcol.find({'path': self.full_path,
                            'type': {'$ne': 'album'},
                            'effectiveVisibility': {'$in': tuple(required_visibility)}},
@@ -434,6 +434,25 @@ class FotoAlbum(FotoEntity):
         # search for album or tag
         for o in fcol.find(query_filter):
             yield entity(o)
+
+    def update_metadata(self, parent, save=True):
+        updated = super(FotoAlbum, self).update_metadata(parent, save=False)
+
+        if self.created is not None:
+            if save and updated:
+                self.save()
+            return updated
+
+        self.created = settings.DT_MIN # NULL date/time
+        try:
+            self.created = datetime.datetime.strptime(self.name[:10], '%Y-%m-%d')
+        except ValueError:
+            # there is no date
+            pass
+
+        if save:
+            self.save()
+        return True
 
     def _update_effective_visibility(self, parent, save=True, recursive=True):
         if recursive and not save:
