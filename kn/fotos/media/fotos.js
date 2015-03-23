@@ -136,7 +136,7 @@
       var a = $('<a></a>').text(
           this.parents[cur] || component).appendTo(breadcrumbs);
       var p = cur;
-      a.attr('href', fotos_root+cur)
+      a.attr('href', fotos_root+encodeURI(cur))
        .click(function(e) {
         if (e.ctrlKey || e.shiftKey || e.metaKey || e.button != 0) {
           return;
@@ -198,7 +198,7 @@
           $('<span></span>').text(title).appendTo(thumb);
         if (c.type == 'album') {
           $('a', thumb)
-            .attr('href', fotos_root + c.path)
+            .attr('href', fotos_root + encodeURI(c.path))
             .click(function(e) {
               if (e.ctrlKey || e.shiftKey || e.metaKey || e.button != 0) {
                 return;
@@ -287,7 +287,7 @@
   };
 
   KNF.prototype.apply_url = function (replace) {
-    var url = fotos_root + encodeURIComponent(this.path);
+    var url = fotos_root + encodeURI(this.path);
     if (this.search_query) {
       url += '?q=' + encodeURIComponent(this.search_query);
     }
@@ -306,7 +306,7 @@
 
   // Returns the path according to the current URL
   KNF.prototype.get_url_path = function() {
-    return decodeURIComponent(location.pathname.substr(fotos_root.length));
+    return decodeURI(location.pathname.substr(fotos_root.length));
   };
 
   KNF.prototype.get_search_query = function() {
