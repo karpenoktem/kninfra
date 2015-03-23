@@ -106,7 +106,7 @@ class FotoEntity(SONWrapper):
     caches = son_property(('caches',), ())
     title = son_property(('title',))
     description = son_property(('description',))
-    created = son_property(('created',))
+    date = son_property(('date',))
     rotation = son_property(('rotation',))
     size = son_property(('size',))
 
@@ -369,11 +369,11 @@ class FotoAlbum(FotoEntity):
         albums = map(entity, fcol.find({'path': self.full_path,
                            'type': 'album',
                            'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                           ).sort('name', -1))
+                           ).sort([('date', -1), ('name', 1)]))
         fotos = map(entity, fcol.find({'path': self.full_path,
                            'type': {'$ne': 'album'},
                            'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                           ).sort([('created', 1), ('name', 1)]))
+                           ).sort([('date', 1), ('name', 1)]))
 
         return albums+fotos
 
@@ -435,6 +435,25 @@ class FotoAlbum(FotoEntity):
         for o in fcol.find(query_filter):
             yield entity(o)
 
+    def update_metadata(self, parent, save=True):
+        updated = super(FotoAlbum, self).update_metadata(parent, save=False)
+
+        if self.date is not None:
+            if save and updated:
+                self.save()
+            return updated
+
+        self.date = settings.DT_MIN # NULL date/time
+        try:
+            self.date = datetime.datetime.strptime(self.name[:10], '%Y-%m-%d')
+        except ValueError:
+            # there is no date
+            pass
+
+        if save:
+            self.save()
+        return True
+
     def _update_effective_visibility(self, parent, save=True, recursive=True):
         if recursive and not save:
             raise ValueError('recursion without save is not recommended')
@@ -476,7 +495,7 @@ class Foto(FotoEntity):
                 self.save()
             return updated
 
-        if None not in [self.rotation, self.created, self.size]:
+        if None not in [self.rotation, self.date, self.size]:
             if save and updated:
                 self.save()
             return updated
@@ -509,11 +528,11 @@ class Foto(FotoEntity):
                 # ignore.
                 pass
 
-        if self.created is None:
-            self.created = settings.DT_MIN # NULL date/time
+        if self.date is None:
+            self.date = settings.DT_MIN # NULL date/time
             if 'DateTimeOriginal' in exif:
                 try:
-                    self.created = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
+                    self.date = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
                 except ValueError:
                     # Ignore: the timestamp did not match the format.
                     # For example, the year might be below year 1 (a zero
