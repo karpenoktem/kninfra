@@ -2,6 +2,7 @@ from glob import glob
 import os.path
 from os.path import basename
 from urllib import unquote
+from time import gmtime, strftime
 
 import MySQLdb
 import Image
@@ -14,7 +15,7 @@ from django.core.paginator import EmptyPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse, QueryDict
+from django.http import Http404, HttpResponse, HttpResponseNotModified, QueryDict
 
 from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
 from kn.settings import PHOTOS_DIR
@@ -104,9 +105,14 @@ def cache(request, cache, path):
             return redirect_to_login(request.get_full_path())
         raise PermissionDenied
     entity.ensure_cached(cache)
+    st = os.stat(entity.get_cache_path(cache))
+    lm = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(st.st_mtime))
+    if request.META.get('HTTP_IF_MODIFIED_SINCE', None) == lm:
+        return HttpResponseNotModified()
     resp = HttpResponse(FileWrapper(open(entity.get_cache_path(cache))),
                             mimetype=entity.get_cache_mimetype(cache))
-    resp['Content-Length'] = os.path.getsize(entity.get_cache_path(cache))
+    resp['Content-Length'] = str(st.st_size)
+    resp['Last-Modified'] = lm
     return resp
 
 def compat_view(request):

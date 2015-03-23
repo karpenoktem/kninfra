@@ -574,6 +574,7 @@ class Foto(FotoEntity):
                          '-strip',
                          '-rotate', str(self.rotation),
                          '-resize', size,
+                         '-interlace', 'Plane',
                          '-quality', str(self.CACHES[cache].quality),
                          target])
 
