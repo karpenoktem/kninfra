@@ -74,51 +74,50 @@ if ('srcset' in (new Image())) {
 {% endif %}
 <div id="foto"></div>
 <div class="template foto-frame">
-  <div class="header">
-    <a class="prev">vorige</a>
-    <span class="title"></span>
-    <a class="next">volgende</a>
-  </div>
-  <div class="middle">
-    {% spaceless %}
+  <div class="image-wrapper">
     <img class="img"/>
-    <div class="sidebar">
-    {% endspaceless %}
-      <form>
-{% if fotos_admin %}
-        <input type="text" class="title" name="title" title="Titel"
-          oninput="$('#foto .save').prop('disabled', false)">
-        <input type="text" class="description" name="description"
-          placeholder="Beschrijving..." title="Beschrijving"
-          oninput="$('#foto .save').prop('disabled', false)">
-        <select class="visibility" title="Zichtbaarheid"
-          onchange="$('#foto .save').prop('disabled', false)">
-          <option value="world">Publiek</option>
-          <option value="leden">Alleen leden</option>
-          <option value="hidden">Fototaggers</option>
-        </select>
-        <div class="rotation">
-          <a class="rotate-left" href>
-            <img src="{{ MEDIA_URL }}/fotos/rotate-left.svg" width="24" height="24"/>
-          </a>
-          <a class="rotate-right" href>
-            <img src="{{ MEDIA_URL }}/fotos/rotate-right.svg" width="24" height="24"/>
-          </a>
-        </div>
-{% endif %}
-        Tags:
-        <ul class="tags">
-        </ul>
-{% if fotos_admin %}
-        <button class="save" disabled>Opslaan</button>
-{% endif %}
-      </form>
-    </div>
+    <a class="nav prev"><img src="{{ MEDIA_URL }}/fotos/prev.svg" alt="Vorige" title="Vorige"/></a>
+    <a class="nav next"><img src="{{ MEDIA_URL }}/fotos/next.svg" alt="Volgende" title="Volgende"/></a>
+    <a class="nav close" href><img src="{{ MEDIA_URL }}/fotos/close.svg" alt="Sluiten" title="Sluiten"/></a>
   </div>
-  <div class="footer">
-    <p class="description"></p>
-    <a class="open-sidebar" href>tags</a> ·
-    <a class="orig">origineel</a>
+  <div class="sidebar">
+    <form>
+{% if fotos_admin %}
+      <input type="text" class="title" name="title" title="Titel"
+        oninput="$('#foto .save').prop('disabled', false)">
+      <textarea class="description" name="description"
+        placeholder="Beschrijving..." title="Beschrijving"
+        oninput="$('#foto .save').prop('disabled', false)"></textarea>
+      <select class="visibility" title="Zichtbaarheid"
+        onchange="$('#foto .save').prop('disabled', false)">
+        <option value="world">Publiek</option>
+        <option value="leden">Alleen leden</option>
+        <option value="hidden">Fototaggers</option>
+      </select>
+      <div class="rotation">
+        <a class="rotate-left" href>
+          <img src="{{ MEDIA_URL }}/fotos/rotate-left.svg" width="24" height="24"/>
+        </a>
+        <a class="rotate-right" href>
+          <img src="{{ MEDIA_URL }}/fotos/rotate-right.svg" width="24" height="24"/>
+        </a>
+      </div>
+{% else %}
+      <h2 class="title"></h2>
+      <p class="description"></p>
+{% endif %}
+      Tags:
+      <ul class="tags">
+      </ul>
+{% if fotos_admin %}
+      <div class="save-wrapper">
+        <button class="save" disabled>Opslaan</button>
+      </div>
+{% endif %}
+    </form>
+    <div class="footer">
+      <a class="orig">origineel</a>
+    </div>
   </div>
 </div>
 {% endblock body %}
