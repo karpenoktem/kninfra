@@ -205,6 +205,15 @@ img.lazy {
 #foto .close img {
     padding: 5px;
 }
+#foto .open-sidebar {
+    right: -10px;
+    top: 42px;
+    padding: 5px;
+    display: none;
+}
+#foto .open-sidebar img {
+    padding: 5px;
+}
 
 #foto .image-wrapper {
     flex-grow: 1;
@@ -231,6 +240,14 @@ img.lazy {
     height: 100%;
     line-height: 1.3;
     text-align: left;
+}
+@media (max-width: 700px) {
+    #foto:not(.sidebar) .sidebar {
+        display: none;
+    }
+    #foto .open-sidebar {
+        display: block;
+    }
 }
 
 #foto form {
@@ -272,17 +289,17 @@ img.lazy {
 #foto ul.tags {
     margin-top: 0.5em;
 }
-#foto .tags a {
+#foto ul.tags a {
     color: inherit;
 }
-#foto .tags .remove {
+#foto ul.tags .remove {
     float: right;
     cursor: pointer;
     font-size: 1rem;
     clear: both;
     line-height: 1;
 }
-#foto .tags .remove:hover {
+#foto ul.tags .remove:hover {
     color: white;
 }
 #foto .save-wrapper {
