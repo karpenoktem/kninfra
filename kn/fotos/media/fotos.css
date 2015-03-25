@@ -155,7 +155,8 @@ img.lazy {
 #foto a.nav {
     position: absolute;
 }
-#foto a.nav:not([href]) {
+#foto .prev:not([href]),
+#foto .next:not([href]) {
     display: none;
 }
 #foto a.nav img {
@@ -219,6 +220,7 @@ img.lazy {
     flex-grow: 1;
     position: relative;
     height: 100%; /* fallback */
+    width: calc(100% - 220px); /* fallback */
     display: inline-block;
     display: flex;
     justify-content: center;
@@ -242,6 +244,9 @@ img.lazy {
     text-align: left;
 }
 @media (max-width: 700px) {
+    #foto .image-wrapper {
+        width: 100%; /* fallback */
+    }
     #foto:not(.sidebar) .sidebar {
         display: none;
     }
