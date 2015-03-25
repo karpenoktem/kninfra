@@ -72,12 +72,12 @@ def fotos(request, path=''):
         humanNames = {}
         active = []
         inactive = []
-        for user in Es.users():
-            humanNames[str(user.name)] = unicode(user.humanName)
-            if user.is_active:
-                active.append(str(user.name))
+        for u in Es.users():
+            humanNames[str(u.name)] = unicode(u.humanName)
+            if u.is_active:
+                active.append(str(u.name))
             else:
-                inactive.append(str(user.name))
+                inactive.append(str(u.name))
         active.sort()
         inactive.sort()
         people = []
