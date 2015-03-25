@@ -103,7 +103,10 @@ def id_by_name(n, use_cache=False):
         if n in __id2name_cache:
             ret =  __id2name_cache[n]
     if ret is None:
-        ret = ecol.find_one({'names': n}, {'names':1})['_id']
+        obj = ecol.find_one({'names': n}, {'names':1})
+        if obj is None:
+            return None
+        ret = obj['_id']
         if use_cache:
             __id2name_cache[n] = ret
     return ret

@@ -1,0 +1,124 @@
+{% extends "base/base.html" %}
+
+{% load base %}
+
+{% block head %}
+{{ block.super }}
+<script type="text/javascript" src="{{ MEDIA_URL }}/fotos/jquery.lazyloadxt.extra.min.js"></script>
+{% if fotos_admin %}
+<script type="text/javascript"
+        src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js" defer></script>
+{% endif %}
+<script type="text/javascript" src="{{ MEDIA_URL }}/fotos/fotos.js"></script>
+<script type="text/javascript">
+'use strict';
+expandHeader = false;
+// initial data to prevent one API request
+var fotos = {{ fotos|json }};
+var fotos_admin = {{ fotos_admin|yesno:"true,false" }};
+{% if fotos_admin %}
+var fotos_people = {{ people|json }};
+{% endif %}
+var fotos_root = "{% url fotos '' %}";
+var fotos_api_url = "{% url fotos-api %}";
+// Initialize Lazy Load XT
+$.extend($.lazyLoadXT, {
+  autoInit: false,
+  selector: '#fotos img.lazy',
+  edgeY: 500,
+});
+$.lazyLoadXT.onshow = undefined;
+if ('srcset' in (new Image())) {
+  $.lazyLoadXT.onshow = function () {
+    var el = $(this);
+    el.attr('srcset', el.attr('data-srcset'));
+  };
+}
+</script>
+{% endblock head%}
+
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css"
+        href="{{ MEDIA_URL }}/fotos/fotos.css" />
+{% if fotos_admin %}
+<link rel="stylesheet" type="text/css"
+    deferred-href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css"/>
+{% endif %}
+{% endblock styles %}
+
+{% block body %}
+<div id="breadcrumbs"></div>
+<div id="topbar">
+  <input id="search" type="search" placeholder="zoek..."/>
+{% if fotos_admin %}
+  <img id="album-edit-toggle" src="{{ MEDIA_URL }}/fotos/edit-icon.svg"
+    width="16" height="16" title="Bewerk naam en zichtbaarheid"/>
+  <form id="album-editor">
+    <select id="album-visibility"
+      onchange="$('#album-edit-button').prop('disabled', false)">
+      <option value="world">Publiek</option>
+      <option value="leden">Alleen leden</option>
+      <option value="hidden">Fototaggers</option>
+    </select>
+    <input id="album-title" type="text" name="album-title" title="Album titel"
+      oninput="$('#album-edit-button').prop('disabled', false)"/>
+    <button id="album-edit-button" disabled>Ok</button>
+  </form>
+{% endif %}
+</div>
+{% if error == 'permission-denied' %}
+<p class="error">Je hebt niet de juiste rechten om dit album te zien. Waarschijnlijk mogen alleen <a href="{% url group-by-name 'fotocie' %}">FotoCie</a>-leden dit album zien.</p>
+{% else %}
+<ul id="fotos"></ul>
+{% endif %}
+<div id="foto"></div>
+<div class="template foto-frame">
+  <div class="header">
+    <a class="prev">vorige</a>
+    <span class="title"></span>
+    <a class="next">volgende</a>
+  </div>
+  <div class="middle">
+    {% spaceless %}
+    <img class="img"/>
+    <div class="sidebar">
+    {% endspaceless %}
+      <form>
+{% if fotos_admin %}
+        <input type="text" class="title" name="title" title="Titel"
+          oninput="$('#foto .save').prop('disabled', false)">
+        <input type="text" class="description" name="description"
+          placeholder="Beschrijving..." title="Beschrijving"
+          oninput="$('#foto .save').prop('disabled', false)">
+        <select class="visibility" title="Zichtbaarheid"
+          onchange="$('#foto .save').prop('disabled', false)">
+          <option value="world">Publiek</option>
+          <option value="leden">Alleen leden</option>
+          <option value="hidden">Fototaggers</option>
+        </select>
+        <div class="rotation">
+          <a class="rotate-left" href>
+            <img src="{{ MEDIA_URL }}/fotos/rotate-left.svg" width="24" height="24"/>
+          </a>
+          <a class="rotate-right" href>
+            <img src="{{ MEDIA_URL }}/fotos/rotate-right.svg" width="24" height="24"/>
+          </a>
+        </div>
+{% endif %}
+        Tags:
+        <ul class="tags">
+        </ul>
+{% if fotos_admin %}
+        <button class="save" disabled>Opslaan</button>
+{% endif %}
+      </form>
+    </div>
+  </div>
+  <div class="footer">
+    <p class="description"></p>
+    <a class="open-sidebar" href>tags</a> ·
+    <a class="orig">origineel</a>
+  </div>
+</div>
+{% endblock body %}

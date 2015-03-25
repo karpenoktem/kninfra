@@ -88,11 +88,8 @@ BASE_BGS = ['antal', 'park', 'band', 'weekend']
 BASE_URL = 'https://karpenoktem.nl'
 ABSOLUTE_MEDIA_URL = BASE_URL + MEDIA_URL
 SMOELEN_PHOTOS_PATH = 'smoelen'
-USER_PHOTOS_URL = 'http://karpenoktem.nl/fotos/?search_tag=%s'
 SMOELEN_WIDTH = 300
 EXTERNAL_URLS = {
-    'fotos-pdn': 'https://karpenoktem.nl/fotos/index.php?album=pdn',
-    'fotos':     'https://karpenoktem.nl/fotos/',
     'stukken':   'https://karpenoktem.nl/groups/leden/',
     'wiki':      'https://karpenoktem.nl/wiki/Hoofdpagina',
     'forum':     'https://karpenoktem.nl/forum/',
@@ -131,6 +128,7 @@ POSTFIX_SLM_MAP = '/etc/postfix/virtual/kninfra_slm_maps'
 INFRA_UID = 1002
 
 PHOTOS_DIR = '/var/fotos'
+PHOTOS_CACHE_DIR = '/var/cache/fotos'
 USER_DIRS = '/mnt/phassa/home/'
 
 LDAP_HOST = 'localhost'
@@ -161,7 +159,6 @@ WIKI_MYSQL_SECRET = None # ('HOST', 'USER', 'PWD', 'DB')
 FORUM_MYSQL_SECRET = None # ('HOST', 'USER', 'PWD', 'DB')
 WOLK_MYSQL_SECRET = None # ('HOST', 'USER', 'PWD', 'DB')
 ALLOWED_API_KEYS = ('CHANGE ME',)
-PHOTOS_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
 ALLOWED_API_KEYS = ('CHANGE ME',)
 CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
 VILLANET_SECRET_API_KEY = '' # CHANGE ME

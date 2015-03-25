@@ -33,6 +33,7 @@ from kn.utils.giedo.openvpn import create_openvpn_installer, create_openvpn_zip
 from kn.utils.giedo.siteagenda import update_site_agenda
 from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.wolk import generate_wolk_changes
+from kn.utils.giedo.fotos import scan_fotos
 
 class Giedo(WhimDaemon):
     def __init__(self):
@@ -204,14 +205,19 @@ class Giedo(WhimDaemon):
                 return {'success': True}
         elif d['type'] == 'fotoadmin-move-fotos':
             with self.operation_lock:
-                # TODO should this block Giedo?
                 ret = self.daan.send(d)
+                if 'success' not in ret:
+                    return ret
+                ret = scan_fotos()
                 if 'success' not in ret:
                     return ret
                 return self.cilia.send({
                     'type': 'fotoadmin-remove-moved-fotos',
                     'user': d['user'],
                     'dir': d['dir']})
+        elif d['type'] == 'fotoadmin-scan-fotos':
+            with self.operation_lock:
+                return scan_fotos()
         elif d['type'] == 'openvpn_create':
             with self.operation_lock:
                 # XXX hoeft niet onder de operation_lock?

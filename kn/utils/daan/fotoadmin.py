@@ -1,13 +1,14 @@
 # vim: et:sta:bs=2:sw=4:
 import subprocess
 import os.path
+import random
 import grp
 import pwd
 import os
 import re
 
-import MySQLdb
 
+import kn.fotos.entities as fEs
 from kn import settings
 
 def fotoadmin_create_event(daan, date, name, humanName):
@@ -22,15 +23,15 @@ def fotoadmin_create_event(daan, date, name, humanName):
     os.mkdir(path, 0775)
     os.chown(path, pwd.getpwnam('fotos').pw_uid,
                grp.getgrnam('fotos').gr_gid)
-    creds = settings.PHOTOS_MYSQL_SECRET
-    dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
-                db=creds[3])
-    c = dc.cursor()
-    c.execute("INSERT INTO fa_albums (name, path, humanname, visibility) "+
-          "VALUE (%s, '', %s, 'hidden')", (event, humanName))
-    c.execute("COMMIT;")
-    c.close()
-    dc.close()
+    album = fEs.entity({
+        'type': 'album',
+        'path': '',
+        'name': event,
+        'random': random.random(),
+        'visibility': ['hidden'],
+        'title': humanName})
+    album.update_metadata(album.get_parent(), save=False)
+    album.save()
     return {'success': True}
 
 def fotoadmin_move_fotos(daan, event, user, directory):
@@ -66,21 +67,4 @@ def fotoadmin_move_fotos(daan, event, user, directory):
     if subprocess.call(['find', target_path, '-type', 'd', '-exec',
             'chmod', '755', '{}', '+']) != 0:
         return {'error': 'chmod (dirs) failed'}
-    visibility = 'hidden'
-    creds = settings.PHOTOS_MYSQL_SECRET
-    dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
-                db=creds[3])
-    c = dc.cursor()
-    c.execute("SELECT visibility FROM fa_albums WHERE name=%s AND path=''",
-            (event,))
-    row = c.fetchone()
-    if row and row[0] == 'hidden':
-        visibility = 'world'
-    c.execute("INSERT INTO fa_albums (name, path, visibility) "+
-          "VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE visibility=%s",
-          (os.path.basename(target_path), event, visibility,
-                                visibility))
-    c.execute("COMMIT;")
-    c.close()
-    dc.close()
     return {'success': True}
