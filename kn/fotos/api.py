@@ -93,6 +93,10 @@ def _list(data, request):
     return album_json(album, user)
 
 def _set_metadata(data, request):
+    user = request.user if request.user.is_authenticated() else None
+    if not fEs.is_admin(user):
+        raise PermissionDenied
+
     if 'title' not in data:
         return {'error': 'missing title attribute'}
     if not isinstance(data['title'], basestring):
@@ -110,10 +114,6 @@ def _set_metadata(data, request):
     entity = entity_from_request(data)
     if isinstance(entity, basestring):
         return {'error': entity}
-
-    user = request.user if request.user.is_authenticated() else None
-    if not fEs.is_admin(user):
-        raise PermissionDenied
 
     result = {'Ok': True}
 
