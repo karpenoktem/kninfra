@@ -678,7 +678,7 @@
     var maxWidth  = window.innerWidth;
     var maxHeight = window.innerHeight;
     // Keep up to date with stylesheet!
-    if (this.sidebar || window.innerWidth > 700) {
+    if (window.innerWidth > 700) {
       maxWidth -= 220;
     }
     if (width > maxWidth) {

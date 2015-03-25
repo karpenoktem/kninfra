@@ -205,12 +205,14 @@ img.lazy {
 }
 #foto .close img {
     padding: 5px;
+    border-radius: 2px;
 }
 #foto .open-sidebar {
-    right: -10px;
-    top: 42px;
-    padding: 5px;
     display: none;
+    padding: 5px;
+    right: auto;
+    left: 0;
+    top: 0;
 }
 #foto .open-sidebar img {
     padding: 5px;
@@ -250,8 +252,27 @@ img.lazy {
     #foto:not(.sidebar) .sidebar {
         display: none;
     }
-    #foto .open-sidebar {
+    #foto .sidebar {
+        position: absolute;
+        top: 47px;
+        left: 0;
+        height: auto;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 0 2px 2px 0;
+    }
+    #foto a.open-sidebar {
         display: block;
+    }
+    #foto a.open-sidebar img {
+        border-radius: 2px;
+    }
+    #foto.sidebar a.open-sidebar img {
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 2px 2px 0 0;
+    }
+    #foto .close {
+        right: 0;
     }
 }
 
