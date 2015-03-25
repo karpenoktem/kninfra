@@ -114,6 +114,10 @@ class FotoEntity(SONWrapper):
     _lost = son_property(('lost',))
     effective_visibility = son_property(('effectiveVisibility',))
 
+    @property
+    def is_root(self):
+        return self.path is None
+
     def required_visibility(self, user):
         if user is None:
             return frozenset(('world',))
@@ -132,7 +136,7 @@ class FotoEntity(SONWrapper):
         if self.effective_visibility is not None:
             return False
 
-        if self.path is None:
+        if self.is_root:
             # root
             parent_effective_visibility = self.visibility
         else:
@@ -267,7 +271,7 @@ class FotoEntity(SONWrapper):
         Return the MongoDB query filter operator to match the path of this
         entry and all children of this element.
         '''
-        if self.path is None:
+        if self.is_root:
             # root entity
             return {'$exists': True, '$ne': None}
         # non-root entity
@@ -275,7 +279,7 @@ class FotoEntity(SONWrapper):
                             "^%s(/|$)" % re.escape(self.full_path))}
 
     def get_parent(self):
-        if self.path is None:
+        if self.is_root:
             return None
         return by_path(self.path)
 
