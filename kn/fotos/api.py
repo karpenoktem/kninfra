@@ -155,7 +155,7 @@ def _set_metadata(data, request):
     # save changes in one batch
     entity.save()
     # except for visibility which is much harder to save in the same batch
-    if entitiy.is_root:
+    if entity.is_root:
         return result
     entity.update_visibility([visibility])
     return result
