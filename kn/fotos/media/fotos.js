@@ -1,5 +1,11 @@
 'use strict';
 (function(){
+  // Same as encodeURIComponent, but does not escape '/'.  Looks prettier.
+  function encodePath(s) {
+    return encodeURIComponent(s).replace(/(%)?%2f/gi,
+        function($0, $1) { return $1 ? $0 : '/'; }); // No neg. lookbehind :-(
+  }
+
   function mod(m, n) {
     // real modulo
     return ((m % n) + n) % n;
@@ -37,7 +43,7 @@
   };
 
   Foto.prototype.cache_url = function(cache, path) {
-    return "/foto/" + cache + "/" + encodeURI(path);
+    return "/foto/" + cache + "/" + encodePath(path);
   };
 
 
@@ -141,7 +147,7 @@
       var a = $('<a></a>').text(
           this.parents[cur] || component).appendTo(breadcrumbs);
       var p = cur;
-      a.attr('href', fotos_root+encodeURI(cur))
+      a.attr('href', fotos_root+encodePath(cur))
        .click(function(e) {
         if (e.ctrlKey || e.shiftKey || e.metaKey || e.button != 0) {
           return;
@@ -203,7 +209,7 @@
           $('<span></span>').text(title).appendTo(thumb);
         if (c.type == 'album') {
           $('a', thumb)
-            .attr('href', fotos_root + encodeURI(c.path))
+            .attr('href', fotos_root + encodePath(c.path))
             .click(function(e) {
               if (e.ctrlKey || e.shiftKey || e.metaKey || e.button != 0) {
                 return;
@@ -292,7 +298,7 @@
   };
 
   KNF.prototype.apply_url = function (replace) {
-    var url = fotos_root + encodeURI(this.path);
+    var url = fotos_root + encodePath(this.path);
     if (this.search_query) {
       url += '?q=' + encodeURIComponent(this.search_query);
     }
@@ -383,10 +389,10 @@
         .text(foto.title ? foto.title : foto.name);
     if (foto.prev)
       $('.prev', frame)
-          .attr('href', '#'+foto.prev.name);
+          .attr('href', '#'+encodePath(foto.prev.name));
     if (foto.next)
       $('.next', frame)
-          .attr('href', '#'+foto.next.name);
+          .attr('href', '#'+encodePath(foto.next.name));
     $('.orig', frame)
         .attr('href', foto.full);
     if (foto.description)
