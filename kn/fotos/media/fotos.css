@@ -260,4 +260,9 @@ html.foto-sidebar #foto .sidebar {
     overflow: hidden;
 }
 
+.isroot #album-edit-toggle,
+.isroot #album-editor {
+    display: none !important; /* NSFW */
+}
+
 /* vim: set et bs=2 sw=4 sta: */

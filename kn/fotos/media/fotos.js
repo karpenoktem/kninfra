@@ -73,6 +73,11 @@
     }
 
     this.update_breadcrumbs();
+    if(this.path === '') {
+      $('body').addClass('isroot');
+    } else {
+      $('body').removeClass('isroot');
+    }
 
     // update album edit box
     var field_title = $('#album-title');
