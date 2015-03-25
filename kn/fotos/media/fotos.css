@@ -154,6 +154,8 @@ img.lazy {
 
 #foto a.nav {
     position: absolute;
+    outline: none; /* FF */
+    background: none; /* FF mobile */
 }
 #foto .prev:not([href]),
 #foto .next:not([href]) {
@@ -172,7 +174,6 @@ img.lazy {
     top: 20%;
     height: 60%;
     width: 30%;
-    outline: none;
 }
 #foto .prev img,
 #foto .next img {
