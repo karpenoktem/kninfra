@@ -156,18 +156,25 @@ img.lazy {
     position: absolute;
     outline: none; /* FF */
     background: none; /* FF mobile */
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+#foto.show-nav a.nav,
+#foto.sidebar a.nav {
+    opacity: 1;
+    transition: opacity 0.1s
 }
 #foto .prev:not([href]),
 #foto .next:not([href]) {
     display: none;
 }
 #foto a.nav img {
-    opacity: 0.25;
+    opacity: 0.7;
     transition: opacity 0.2s ease;
     background: rgba(0, 0, 0, 0.7);
 }
 #foto a.nav:hover img {
-    opacity: 0.7;
+    opacity: 0.9;
 }
 #foto .prev,
 #foto .next {

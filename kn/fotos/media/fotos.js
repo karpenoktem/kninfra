@@ -59,6 +59,7 @@
     this.people = {};
     this.allpeople = [];
     this.read_fotos(this.get_url_path(), data);
+    this.nav_timeout = null;
   };
 
   KNF.prototype.change_path = function(path, query, keep_url) {
@@ -447,6 +448,20 @@
           this.rotate(90);
           return false;
         }.bind(this));
+
+    function showhide() {
+      if (this.nav_timeout === null) {
+        $('#foto').addClass('show-nav');
+      } else {
+        clearTimeout(this.nav_timeout);
+      }
+      this.nav_timeout = setTimeout(function() {
+        this.nav_timeout = null;
+        $('#foto').removeClass('show-nav');
+      }.bind(this), 1500);
+    }
+    frame.mousemove(showhide.bind(this));
+    frame.on('touchstart', showhide.bind(this));
 
     this.onresize();
     $('#foto').show();
