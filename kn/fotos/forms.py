@@ -9,23 +9,24 @@ from kn.settings import PHOTOS_DIR, USER_DIRS, WOLK_DATA_PATH
 
 import kn.fotos.entities as fEs
 
-foto_root = namedtuple('foto_root', ('root', 'between'))
-foto_dirs = {'home': foto_root(USER_DIRS, 'fotos'),
-             'wolk': foto_root(WOLK_DATA_PATH, 'files/Photos')}
+foto_root = namedtuple('foto_root', ('base', 'between'))
+
+FOTO_ROOTS = {'home': foto_root(USER_DIRS, 'fotos'),
+              'wolk': foto_root(WOLK_DATA_PATH, 'files/Photos')}
 
 def move_fotos_scan_userdirs():
-    for source, (root, between) in foto_dirs.items():
-        for user in os.listdir(root):
+    for store, root in FOTO_ROOTS.iteritems():
+        for user in os.listdir(root.base):
             if user[0] == '.':
                 continue
-            fd = os.path.join(root, user, between)
-            if not os.path.isdir(fd):
+            fotodir = os.path.join(root.base, user, root.between)
+            if not os.path.isdir(fotodir):
                 continue
-            for dir in os.listdir(fd):
-                if fd[0] == '.' or not os.path.isdir(os.path.join(fd, dir)):
+            for name in os.listdir(fotodir):
+                if fotodir[0] == '.' or not os.path.isdir(os.path.join(fotodir, name)):
                     continue
-                n = user+'/'+dir
-                yield (source+'/'+n, n)
+                path = user+'/'+name
+                yield (store+'/'+path, path)
 
 def list_events():
     events = []
