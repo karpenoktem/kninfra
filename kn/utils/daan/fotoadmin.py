@@ -42,6 +42,8 @@ def fotoadmin_move_fotos(daan, event, store, user, directory):
         return {'error': 'Invalid user'}
     if not re.match('^[^/\\.][^/]*$', directory):
         return {'error': 'Invalid dir'}
+    if not store in foto_dirs:
+        return {'error': 'Invalid store'}
     root, between = foto_dirs[store]
     user_path = os.path.join(root, user)
     if not os.path.isdir(user_path):
