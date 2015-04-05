@@ -44,7 +44,7 @@ class Cilia(WhimDaemon):
         elif d['type'] == 'fotoadmin-remove-moved-fotos':
             with self.fotoadmin_lock:
                 return fotoadmin_remove_moved_fotos(self,
-                        d['user'], d['dir'])
+                        d['store'], d['user'], d['dir'])
         elif d['type'] == 'wolk':
             with self.wolk_lock:
                 return apply_wolk_changes(self, d['changes'])

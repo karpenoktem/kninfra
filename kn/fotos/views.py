@@ -151,8 +151,8 @@ def fotoadmin_move(request):
         form = MoveFotosForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            (user, dir) = cd['move_src'].split('/')
-            giedo.fotoadmin_move_fotos(cd['move_dst'], user, dir)
+            (store, user, dir) = cd['move_src'].split('/')
+            giedo.fotoadmin_move_fotos(cd['move_dst'], store, user, dir)
     else:
         form = MoveFotosForm()
     return render_to_response('fotos/admin/move.html',

@@ -136,6 +136,7 @@ LDAP_BASE = 'ou=users,dc=karpenoktem,dc=nl'
 LDAP_USER = 'cn=giedo,dc=karpenoktem,dc=nl'
 WOLK_USER = 'wolk'
 WOLK_PATH = '/var/www/wolk'
+WOLK_DATA_PATH = '/mnt/phassa/wolk/'
 
 # VPN related
 # ############################################################
