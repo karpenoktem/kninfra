@@ -5,13 +5,13 @@ from collections import namedtuple
 
 from django import forms
 
-from kn.settings import PHOTOS_DIR, USER_DIRS, WOLK_PATH
+from kn.settings import PHOTOS_DIR, USER_DIRS, WOLK_DATA_PATH
 
 import kn.fotos.entities as fEs
 
 foto_root = namedtuple('foto_root', ('root', 'between'))
 foto_dirs = {'home': foto_root(USER_DIRS, 'fotos'),
-             'wolk': foto_root(os.path.join(WOLK_PATH, 'data'), 'files/Photos')}
+             'wolk': foto_root(WOLK_DATA_PATH, 'files/Photos')}
 
 def move_fotos_scan_userdirs():
     for source, (root, between) in foto_dirs.items():
