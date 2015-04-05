@@ -45,6 +45,9 @@ def entity(d):
         return None
     return TYPE_MAP[d['type']](d)
 
+def by_id(the_id):
+    return entity(fcol.find_one({'_id': _id(the_id)}))
+
 def by_oldId(_type, oldId):
     return entity(fcol.find_one({'type': _type, 'oldId': oldId}))
 
