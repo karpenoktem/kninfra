@@ -187,6 +187,8 @@ class Giedo(WhimDaemon):
                 self.daan.send(d2)
                 self.cilia.send(d2)
                 return {'success': True}
+        elif d['type'] == 'ping':
+            return {'pong': True}
         elif d['type'] == 'set-villanet-password':
             with self.operation_lock:
                 u = Es.by_name(d['user'])
