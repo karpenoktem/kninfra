@@ -66,9 +66,10 @@ def fotoadmin_create_event(date, name, humanName):
         'name': name,
         'humanname': humanName})
 
-def fotoadmin_move_fotos(event, user, dir):
+def fotoadmin_move_fotos(event, store, user, dir):
     return get_giedo_connection().send({'type': 'fotoadmin-move-fotos',
         'event': event,
+        'store': store,
         'user': user,
         'dir': dir})
 

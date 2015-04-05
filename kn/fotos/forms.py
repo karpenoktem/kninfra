@@ -1,26 +1,32 @@
 import os
 from glob import glob
 from datetime import date
+from collections import namedtuple
 
 from django import forms
 
-from kn.settings import PHOTOS_DIR, USER_DIRS
+from kn.settings import PHOTOS_DIR, USER_DIRS, WOLK_DATA_PATH
 
 import kn.fotos.entities as fEs
 
+foto_root = namedtuple('foto_root', ('base', 'between'))
+
+FOTO_ROOTS = {'home': foto_root(USER_DIRS, 'fotos'),
+              'wolk': foto_root(WOLK_DATA_PATH, 'files/Photos')}
+
 def move_fotos_scan_userdirs():
-    # XXX os.path.join?
-    for user in os.listdir(USER_DIRS):
-        if user[0] == '.':
-            continue
-        fd = '%s%s/fotos/' % (USER_DIRS, user)
-        if not os.path.isdir(fd):
-            continue
-        for dir in os.listdir(fd):
-            if fd[0] == '.' or not os.path.isdir(fd + dir):
+    for store, root in FOTO_ROOTS.iteritems():
+        for user in os.listdir(root.base):
+            if user[0] == '.':
                 continue
-            n = '%s/%s' % (user, dir)
-            yield (n,n)
+            fotodir = os.path.join(root.base, user, root.between)
+            if not os.path.isdir(fotodir):
+                continue
+            for name in os.listdir(fotodir):
+                if fotodir[0] == '.' or not os.path.isdir(os.path.join(fotodir, name)):
+                    continue
+                path = user+'/'+name
+                yield (store+'/'+path, path)
 
 def list_events():
     events = []
