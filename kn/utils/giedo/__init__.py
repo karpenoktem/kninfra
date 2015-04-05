@@ -213,7 +213,6 @@ class Giedo(WhimDaemon):
                     return ret
                 return self.cilia.send({
                     'type': 'fotoadmin-remove-moved-fotos',
-                    'store': d['store'],
                     'user': d['user'],
                     'dir': d['dir']})
         elif d['type'] == 'fotoadmin-scan-fotos':
