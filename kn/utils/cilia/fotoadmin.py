@@ -3,7 +3,7 @@ import os.path
 import re
 
 from kn import settings
-from kn.fotos.forms import FOTO_ROOTS
+from kn.fotos.roots import FOTO_ROOTS
 
 def fotoadmin_remove_moved_fotos(cilia, store, user, directory):
     if not re.match('^[a-z0-9]{3,32}$', user):

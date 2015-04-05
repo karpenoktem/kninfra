@@ -1,18 +1,14 @@
 import os
 from glob import glob
 from datetime import date
-from collections import namedtuple
 
 from django import forms
 
 from kn.settings import PHOTOS_DIR, USER_DIRS, WOLK_DATA_PATH
 
 import kn.fotos.entities as fEs
+from kn.fotos.roots import FOTO_ROOTS
 
-foto_root = namedtuple('foto_root', ('base', 'between'))
-
-FOTO_ROOTS = {'home': foto_root(USER_DIRS, 'fotos'),
-              'wolk': foto_root(WOLK_DATA_PATH, 'files/Photos')}
 
 def move_fotos_scan_userdirs():
     for store, root in FOTO_ROOTS.iteritems():
