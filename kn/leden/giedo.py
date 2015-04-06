@@ -60,6 +60,9 @@ class SyncStatusMiddleware(object):
 def update_site_agenda():
     get_giedo_connection().send({'type': 'update-site-agenda'})
 
+def fotoadmin_scan_userdirs():
+    return get_giedo_connection().send({'type': 'fotoadmin-scan-userdirs'})
+
 def fotoadmin_create_event(date, name, humanName):
     return get_giedo_connection().send({'type': 'fotoadmin-create-event',
         'date': date,
