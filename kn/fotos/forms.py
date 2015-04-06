@@ -5,24 +5,11 @@ from datetime import date
 from django import forms
 
 from kn.settings import PHOTOS_DIR, USER_DIRS, WOLK_DATA_PATH
+from kn.leden import giedo
 
 import kn.fotos.entities as fEs
 from kn.fotos.roots import FOTO_ROOTS
 
-
-def move_fotos_scan_userdirs():
-    for store, root in FOTO_ROOTS.iteritems():
-        for user in os.listdir(root.base):
-            if user[0] == '.':
-                continue
-            fotodir = os.path.join(root.base, user, root.between)
-            if not os.path.isdir(fotodir):
-                continue
-            for name in os.listdir(fotodir):
-                if fotodir[0] == '.' or not os.path.isdir(os.path.join(fotodir, name)):
-                    continue
-                path = user+'/'+name
-                yield (store+'/'+path, path)
 
 def list_events():
     events = []
@@ -48,7 +35,7 @@ class CreateEventForm(forms.Form):
 def getMoveFotosForm():
     class MoveFotosForm(forms.Form):
         move_src = forms.ChoiceField(label='Verplaats',
-                choices=move_fotos_scan_userdirs())
+                choices=giedo.fotoadmin_scan_userdirs())
         move_dst = forms.ChoiceField(label='naar',
                 choices=move_fotos_list_events())
     return MoveFotosForm

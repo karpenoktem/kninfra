@@ -203,6 +203,8 @@ class Giedo(WhimDaemon):
                 pc.save()
                 self.push_changes_event.set()
                 return {'success': True}
+        elif d['type'] == 'fotoadmin-scan-userdirs':
+            return self.cilia.send(d)
         elif d['type'] == 'fotoadmin-move-fotos':
             with self.operation_lock:
                 ret = self.daan.send(d)

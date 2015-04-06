@@ -24,4 +24,20 @@ def fotoadmin_remove_moved_fotos(cilia, store, user, directory):
     subprocess.call(['rm', '-rf', fotos_path])
     return {'success': True}
 
+def fotoadmin_scan_userdirs():
+    userdirs = []
+    for store, root in FOTO_ROOTS.iteritems():
+        for user in os.listdir(root.base):
+            if user[0] == '.':
+                continue
+            fotodir = os.path.join(root.base, user, root.between)
+            if not os.path.isdir(fotodir):
+                continue
+            for name in os.listdir(fotodir):
+                if fotodir[0] == '.' or not os.path.isdir(os.path.join(fotodir, name)):
+                    continue
+                path = user+'/'+name
+                userdirs.append((store+'/'+path, path))
+    return userdirs
+
 # vim: et:sta:bs=2:sw=4:
