@@ -47,22 +47,29 @@ def parse_item_date(date):
     return parse_date(date['date']+'T00:00:00Z')
 
 
-def fetch():
-    h = httplib2.Http()
-    credentials = get_credentials()
-    credentials.authorize(h)
+def fetch_agenda(h, cal_id):
     timeMin = datetime.datetime.utcnow().date().isoformat() + 'T00:00:00Z'
     cal = build('calendar', 'v3', http=h)
-    request = cal.events().list(calendarId=settings.GOOGLE_CALENDAR_ID,
+    request = cal.events().list(calendarId=cal_id,
                                 timeMin=timeMin,
                                 fields='items(summary,description,start,end)')
     response = request.execute()
     agenda = []
     for item in response['items']:
-        agenda.append((item['summary'], item['description'],
+        agenda.append((item['summary'], item.get('description', ''),
                        parse_item_date(item['start']),
                        parse_item_date(item['end'])))
     return agenda
+
+def fetch():
+    h = httplib2.Http()
+    credentials = get_credentials()
+    credentials.authorize(h)
+
+    agendas = {}
+    for key, cal_id in settings.GOOGLE_CALENDAR_IDS.items():
+        agendas[key] = fetch_agenda(h, cal_id)
+    return agendas
 
 
 if __name__ == '__main__':
