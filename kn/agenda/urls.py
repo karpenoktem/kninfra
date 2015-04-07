@@ -6,7 +6,6 @@ import django.views.generic as generic
 
 urlpatterns = patterns('',
     url(r'^agenda/?$', views.agenda, name='agenda'),
-    url(r'^agenda/zeus/?$', views.agenda_zeus, name='agenda-zeus'),
     url(r'^ledenmail-template/?$', views.ledenmail_template,
                     name='ledenmail-template'),
 )

@@ -6,31 +6,25 @@ from django.utils.safestring import mark_safe
 acol = db['agenda']
 
 def ensure_indices():
-    acol.ensure_index([('agenda', 1),
-                       ('start', 1)])
+    acol.ensure_index('start')
 
-def all(agenda=None, limit=None):
-    query = {}
-    if agenda is not None:
-        query['agenda'] = agenda
-    cursor = acol.find(query).sort('start')
+def all(limit=None):
+    cursor = acol.find().sort('start')
     if limit is not None:
         cursor = cursor.limit(limit)
     for m in cursor:
         yield AgendaEvent(m)
 
-def update(agendas):
-    """ Clear all current agenda events and replace by `agendas', which is a
-        dictionary with agendas, where each agenda contains a list of events:
-        quadrupels (title, description, start, end). See fetch.fetch. """
+def update(events):
+    """ Clear all current agenda events and replace by events, which is
+        a list of quadrupels (title, description, start, end).
+        See fetch.fetch. """
     acol.remove()
-    for key, events in agendas.items():
-        for title, description, start, end in events:
-            AgendaEvent({'agenda': key,
-                         'title': title,
-                         'description': description,
-                         'start': start,
-                         'end': end}).save()
+    for title, description, start, end in events:
+        AgendaEvent({'title': title,
+                     'description': description,
+                     'start': start,
+                     'end': end}).save()
 
 class AgendaEvent(SONWrapper):
     def __init__(self, data):
