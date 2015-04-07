@@ -29,7 +29,7 @@
         enctype="multipart/form-data">
 {% csrf_token %}
 <input type="hidden" name="id" value="{{ object.id }}" />
-<input type="file" name="smoel" />
+<input type="file" name="smoel" accept="image/*" />
 <input type="submit" value="upload smoel" />
 </form>
 {% endif %} {# "secretariaat" in user.cached_groups_names #}
