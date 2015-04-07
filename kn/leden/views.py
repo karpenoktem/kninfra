@@ -148,6 +148,7 @@ def _entity_detail(request, e):
                 'groups': groups,
                 'may_add_related': True,
                 'may_add_rrelated': True})
+    ctx['may_upload_smoel'] = request.user.may_upload_smoel_for(e)
     if e.is_tag:
         ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
                         cmp=Es.entity_cmp_humanName)})
@@ -280,13 +281,13 @@ def users_underage(request):
 
 @login_required
 def ik_chsmoel(request):
-    if not 'secretariaat' in request.user.cached_groups_names:
-        raise PermissionDenied
-    if not 'id' in request.POST:
-        raise ValueError, "Missing `id' in POST"
     if not 'smoel' in request.FILES:
         raise ValueError, "Missing `smoel' in FILES"
+    if not 'id' in request.POST:
+        raise ValueError, "Missing `id' in POST"
     user = Es.by_id(request.POST['id'])
+    if not request.user.may_upload_smoel_for(request.user):
+        raise PermissionDenied
     img = Image.open(request.FILES['smoel'])
     smoelen_width = settings.SMOELEN_WIDTH * 2
     img = img.resize((smoelen_width,

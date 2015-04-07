@@ -23,7 +23,7 @@
 <input type="submit" value="stuur nieuw wachtwoord" />
 </form>
 {% endif %}{# "secretariaat" in user.cached_groups_names #}
-{% if "secretariaat" in user.cached_groups_names %}
+{% if may_upload_smoel %}
 <h4>Nieuwe smoel uploaden</h4>
 <form method="post" action="{% url ik-chsmoel  %}"
         enctype="multipart/form-data">
