@@ -123,7 +123,7 @@ def _entity_detail(request, e):
            'object': e,
            'chiefs': [],
            'pipos': [],
-           'agents': [] }
+           'reps': [] }
     for r in rrelated:
         if r['how'] and Es.relation_is_active(r):
             if str(r['how'].name) == '!brand-hoofd':
@@ -134,7 +134,7 @@ def _entity_detail(request, e):
                 ctx['pipos'].append(r)
             if str(r['how'].name) == '!brand-vertegenwoordiger':
                 r['hidden'] = True
-                ctx['agents'].append(r)
+                ctx['reps'].append(r)
     # Is request.user allowed to add (r)relations?
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):

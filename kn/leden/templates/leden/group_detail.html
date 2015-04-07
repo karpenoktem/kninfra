@@ -43,16 +43,16 @@
         </dd>
         {% endif %}{# pipos #}
 
-        {% if agents %}
-        <dt>Vertegenwoordiger{% if agents|length > 1 %}s{% endif %}</dt>
+        {% if reps %}
+        <dt>Vertegenwoordiger{% if reps|length > 1 %}s{% endif %}</dt>
         <dd>
-        {% for agent in agents %}
+        {% for rep in reps %}
         {% if not forloop.first %}<br/>{% endif %}
-        <a href="{{ agent.who.get_absolute_url }}">{{ agent.who.humanName }}</a>
-        {{ agent|rel_when }}
-        {% endfor %}{# agent in agents #}
+        <a href="{{ rep.who.get_absolute_url }}">{{ rep.who.humanName }}</a>
+        {{ rep|rel_when }}
+        {% endfor %}{# rep in reps #}
         </dd>
-        {% endif %}{# agents #}
+        {% endif %}{# reps #}
 </dl>
 {% if isFreeToJoin %}
 {% if relation_with_group %}
