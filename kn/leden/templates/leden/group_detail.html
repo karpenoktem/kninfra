@@ -42,6 +42,17 @@
         {% endfor %}{# pipo in pipos #}
         </dd>
         {% endif %}{# pipos #}
+
+        {% if agents %}
+        <dt>Vertegenwoordiger{% if agents|length > 1 %}s{% endif %}</dt>
+        <dd>
+        {% for agent in agents %}
+        {% if not forloop.first %}<br/>{% endif %}
+        <a href="{{ agent.who.get_absolute_url }}">{{ agent.who.humanName }}</a>
+        {{ agent|rel_when }}
+        {% endfor %}{# agent in agents #}
+        </dd>
+        {% endif %}{# agents #}
 </dl>
 {% if isFreeToJoin %}
 {% if relation_with_group %}
