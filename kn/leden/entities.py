@@ -901,6 +901,8 @@ class User(Entity):
     @property
     def humanName(self):
         return self.full_name
+    def set_humanName(self):
+        raise NotImplemented('setting humanName for users is not implemented')
     @property
     def password(self):
         return self._data.get('password', None)
