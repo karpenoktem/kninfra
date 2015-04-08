@@ -763,6 +763,14 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def set_humanName(self, humanName, save=True):
+        if len(self._data['humanNames']) < 1:
+            # does not appear to occur in practice
+            raise ValueError('there are no humanNames yet')
+        self._data['humanNames'][0]['human'] = humanName
+        if save:
+            self.save()
+
     def set_description(self, description, save=True):
         self._data['description'] = description
         if save:

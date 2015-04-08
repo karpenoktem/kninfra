@@ -24,7 +24,14 @@ var leden_api_url = '{% url leden-api %}';
 {% block body %}
 
 {% block entity_head %}
-<h2>{{ object.humanName }}</h2>
+<h2>
+	{% if "secretariaat" in user.cached_groups_names %}
+	<button class="change-humanName"
+		onclick="api_set_property('{{ object.id }}', 'humanName',
+				prompt('Wijzig naam', $('.humanName').text()));">Wijzig naam</button>
+	{% endif %}{# "secretariaat" in user.cached_groups_names #}
+	<span class="humanName">{{ object.humanName }}</span>
+</h2>
 <p>
 	{% if "secretariaat" in user.cached_groups_names %}
 	<button class="change-description"

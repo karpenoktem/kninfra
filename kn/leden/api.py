@@ -189,6 +189,8 @@ def entity_set_property(data, request):
 
     if property == 'description':
         e.set_description(value)
+    elif property == 'humanName':
+        e.set_humanName(value)
     else:
         return {'ok': False, 'error': 'Unknown property "%s"' % property}
 
