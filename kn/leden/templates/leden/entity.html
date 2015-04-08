@@ -16,14 +16,24 @@ $(function(){
         create_entityChoiceField('relation_begin2_who', {type: 'user'});
         create_entityChoiceField('relation_begin2_how', {type: 'brand'});
 });
+var leden_api_url = '{% url leden-api %}';
 </script>
+<script src="{{ MEDIA_URL }}/leden/entity_detail.js" defer></script>
 {% endblock head %}
 
 {% block body %}
 
 {% block entity_head %}
 <h2>{{ object.humanName }}</h2>
-<p>{{ object.description }}</p>
+<p>
+	{% if "secretariaat" in user.cached_groups_names %}
+	<button class="change-description"
+		onclick="api_set_property('{{ object.id }}', 'description',
+				prompt('Nieuwe beschrijving', $('.description').text()));">
+		Wijzig beschrijving</button>
+	{% endif %}{# "secretariaat" in user.cached_groups_names #}
+	<span class="description">{{ object.description }}</span>
+</p>
 {% endblock entity_head %}
 
 {% block entity_body %}{% endblock entity_body %}

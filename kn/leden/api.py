@@ -169,11 +169,37 @@ def entity_update_visibility(data, request):
     giedo.sync_async(request)
     return {'ok': True}
 
+def entity_set_property(data, request):
+    if 'id' not in data or not isinstance(data['id'], basestring):
+        return {'ok': False, 'error': 'Missing argument "id"'}
+    if 'property' not in data or not isinstance(data['property'], basestring):
+        return {'ok': False, 'error': 'Missing argument "property"'}
+    if 'value' not in data or not isinstance(data['value'], basestring):
+        return {'ok': False, 'error': 'Missing argument "value"'}
+
+    if not 'secretariaat' in request.user.cached_groups_names:
+        return {'ok': False, 'error': 'Permission denied'}
+
+    property = data['property']
+    value = data['value']
+
+    e = Es.by_id(data['id'])
+    if e is None:
+        return {'ok': False, 'error': 'Entity not found'}
+
+    if property == 'description':
+        e.set_description(value)
+    else:
+        return {'ok': False, 'error': 'Unknown property "%s"' % property}
+
+    return {'ok': True}
+
 
 ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
         'entities_by_keyword': entities_by_keyword,
         'close_note': close_note,
+        'entity_set_property': entity_set_property,
         'entity_update_primary':  entity_update_primary,
         'entity_update_visibility':  entity_update_visibility,
         'get_last_synced':  get_last_synced,

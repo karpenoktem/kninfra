@@ -763,6 +763,11 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def set_description(self, description, save=True):
+        self._data['description'] = description
+        if save:
+            self.save()
+
     @property
     def canonical_full_email(self):
         """ Returns the string
