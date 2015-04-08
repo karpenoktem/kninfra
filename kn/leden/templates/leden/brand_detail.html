@@ -1,9 +1,7 @@
-{% extends "leden/entity_base.html" %}
+{% extends "leden/entity.html" %}
 {% load base %}
 
-{% block body %}
-<h2>{{ object.humanName }}</h2>
-<p>{{ object.description }}</p>
+{% block entity_body %}
 <ul>
 {% for r in rels %}
 {% if not r.virtual %}
@@ -27,5 +25,4 @@ tot {{ r.until.date }}
 {% endif %}{# not r.virtual #}
 {% endfor %}{# rels #}
 </ul>
-{{ block.super }}
-{% endblock %}
+{% endblock entity_body %}
