@@ -2,12 +2,6 @@
 {% load base %}
 <!-- TODO stub -->
 
-{% block styles %}
-{{ block.super }}
-<link href="{{ MEDIA_URL }}/leden/user_detail.css"
-	rel="stylesheet" type="text/css" />
-{% endblock styles %}
-
 {% block body %}
 {% if hasPhoto %}
 <div class="smoel"><a href="{{ photosUrl }}"><img

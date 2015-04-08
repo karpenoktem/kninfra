@@ -2,6 +2,11 @@
 {% load leden %}
 {% load base %}
 
+{% block styles %}
+{{ block.super }}
+<link href="{{ MEDIA_URL }}/leden/entity_detail.css" rel="stylesheet" />
+{% endblock styles %}
+
 {% block body %}
 
 <script type="text/javascript">//<!--
