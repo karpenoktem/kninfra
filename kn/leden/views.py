@@ -295,6 +295,7 @@ def ik_chsmoel(request):
             Image.ANTIALIAS)
     img.save(default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
             str(user.name)) + ".jpg", 'w'), "JPEG")
+    Es.notify_informacie('set_smoel', request.user, entity=user)
     return redirect_to_referer(request)
 
 @login_required
