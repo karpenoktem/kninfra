@@ -504,7 +504,7 @@ def secr_add_user(request):
             render_then_email("leden/welcome.mail.txt",
                         u.canonical_full_email, {
                             'u': u})
-            Es.notify_informacie('adduser', entity=u._id)
+            Es.notify_informacie('adduser', request.user, entity=u._id)
             return HttpResponseRedirect(reverse('user-by-name',
                     args=(nm,)))
     else:
@@ -542,7 +542,7 @@ def secr_add_group(request):
                 'tags': [_id(fd['parent'])]})
             logging.info("Added group %s" % nm)
             g.save()
-            Es.notify_informacie('addgroup', entity=g._id)
+            Es.notify_informacie('addgroup', request.user, entity=g._id)
             giedo.sync_async(request)
             request.user.push_message("Groep toegevoegd.")
             return HttpResponseRedirect(reverse('group-by-name', args=(nm,)))
@@ -561,11 +561,8 @@ def relation_end(request, _id):
     Es.end_relation(_id)
 
     # Notify informacie
-    if request.user == rel['who']:
-        Es.notify_informacie('relation_ended', relation=_id)
-    else:
-        # TODO (rik) leave out 'als lid'
-        Es.notify_informacie('relation_end', relation=_id)
+    # TODO (rik) leave out 'als lid'
+    Es.notify_informacie('relation_end', request.user, relation=_id)
 
     giedo.sync_async(request)
     return redirect_to_referer(request)
@@ -601,11 +598,8 @@ def relation_begin(request):
     relation_id = Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
 
     # Notify informacie
-    if request.user._id == d['who']:
-        Es.notify_informacie('relation_begun', relation=relation_id)
-    else:
-        # TODO (rik) leave out 'als lid'
-        Es.notify_informacie('relation_begin', relation=relation_id)
+    # TODO (rik) leave out 'als lid'
+    Es.notify_informacie('relation_begin', request.user, relation=relation_id)
 
     giedo.sync_async(request)
     return redirect_to_referer(request)
