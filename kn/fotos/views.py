@@ -15,6 +15,7 @@ from django.core.paginator import EmptyPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import Http404, HttpResponse, HttpResponseNotModified, QueryDict
 
 from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
@@ -134,8 +135,13 @@ def fotoadmin_create_event(request):
         form = CreateEventForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            giedo.fotoadmin_create_event(str(cd['date']),
+            ret = giedo.fotoadmin_create_event(str(cd['date']),
                     cd['name'], cd['fullHumanName'])
+            if ret.get('success', False):
+                messages.info(request, 'Fotoalbum aangemaakt!')
+            else:
+                messages.error(request, 'Er is een fout opgetreden: %s' %
+                                ret.get('error', 'geen foutmelding'))
     else:
         form = CreateEventForm()
     return render_to_response('fotos/admin/create.html',

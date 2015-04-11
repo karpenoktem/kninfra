@@ -20,6 +20,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+from django.contrib import messages
 
 from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
 from kn.leden.auth import login_or_basicauth_required
@@ -314,7 +315,7 @@ def _ik_chpasswd_handle_valid_form(request, form):
     newpw = form.cleaned_data['new_password']
     giedo.change_password(str(request.user.name), oldpw, newpw)
     t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."""
-    request.user.push_message(t % request.user.first_name)
+    messages.info(request, t % request.user.first_name)
     return HttpResponseRedirect(reverse('smoelen-home'))
 
 @login_required
@@ -349,7 +350,7 @@ def ik_chpasswd_villanet(request):
                         newpw)
                 t = ("Lieve %s, maar natuurlijk, jouw wachtwoord voor het "+
                         "villa-netwerk is veranderd.")
-                request.user.push_message(t % request.user.first_name)
+                messages.info(request, t % request.user.first_name)
                 return HttpResponseRedirect(reverse('smoelen-home'))
             except giedo.ChangePasswordError as e:
                 errl.extend(e.args)
@@ -544,7 +545,7 @@ def secr_add_group(request):
             g.save()
             Es.notify_informacie('addgroup', request.user, entity=g._id)
             giedo.sync_async(request)
-            request.user.push_message("Groep toegevoegd.")
+            messages.info(request, 'Groep toegevoegd.')
             return HttpResponseRedirect(reverse('group-by-name', args=(nm,)))
     else:
         form = AddGroupForm()
@@ -616,7 +617,7 @@ def user_reset_password(request, _id):
                         u.canonical_full_email, {
                             'user': u,
                             'password': pwd})
-    request.user.push_message("Wachtwoord gereset!")
+    messages.info(request, "Wachtwoord gereset!")
     return redirect_to_referer(request)
 
 @login_required
@@ -641,7 +642,7 @@ def secr_update_site_agenda(request):
         if 'secretariaat' not in request.user.cached_groups_names:
                 raise PermissionDenied
         giedo.update_site_agenda()
-        request.user.push_message("Agenda geupdate!")
+        messages.info(request, "Agenda geupdate!")
         return redirect_to_referer(request)
 
 @login_required
@@ -655,8 +656,8 @@ def ik_openvpn(request):
                     request.POST['password'])
             giedo.openvpn_create(str(request.user.name),
                     request.POST['want'])
-            request.user.push_message("Je verzoek wordt verwerkt. "+
-                "Verwacht binnen 5 minuten een e-mail.")
+            messages.info(request, "Je verzoek wordt verwerkt. "
+                    "Verwacht binnen 5 minuten een e-mail.")
             return HttpResponseRedirect(reverse('smoelen-home'))
         else:
             password_incorrect = True
