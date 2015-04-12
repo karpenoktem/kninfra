@@ -17,7 +17,6 @@ from kn import settings
 ecol = db['entities']   # entities: users, group, tags, studies, ...
 rcol = db['relations']  # relations: "giedo is chairman of bestuur from
             #             date A until date B"
-mcol = db['messages']   # message: used for old code
 ncol = db['notes']      # notes on entities by the secretaris
 pcol = db['push_changes'] # Changes to be pushed to remote systems
 incol = db['informacie_notifications'] # human readable list of notifications 
@@ -46,8 +45,6 @@ def ensure_indices():
     rcol.ensure_index('tags', sparse=True)
     rcol.ensure_index([('until',1),
                ('from',-1)])
-    # messages
-    mcol.ensure_index('entity')
     # notes
     ncol.ensure_index([('on', 1),
                        ('at', 1)])
@@ -902,14 +899,6 @@ class User(Entity):
         return self == user or \
                 'secretariaat' in self.cached_groups_names or \
                 'bestuur' in self.cached_groups_names
-    def push_message(self, msg):
-        mcol.insert({'entity': self._id,
-                 'data': msg})
-    def pop_messages(self):
-        msgs = list(mcol.find({'entity': self._id}))
-        mcol.remove({'_id': {'$in': [m['_id'] for m in msgs]}})
-        return [m['data'] for m in msgs]
-    get_and_delete_messages = pop_messages
     @property
     def primary_email(self):
         # the primary email address is always the first one;

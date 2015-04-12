@@ -114,7 +114,7 @@ class FotoEntity(SONWrapper):
     def required_visibility(self, user):
         if user is None:
             return frozenset(('world',))
-        if 'webcie' in user.cached_groups_names:
+        if is_admin(user):
             return frozenset(('leden', 'world', 'hidden'))
         if 'leden' in user.cached_groups_names:
             return frozenset(('leden', 'world'))
