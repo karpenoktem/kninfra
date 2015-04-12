@@ -1,5 +1,6 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property
 import kn.leden.entities as Es
+from kn.fotos.utils import resize_proportional
 from kn import settings
 
 from django.db.models import permalink
@@ -67,17 +68,6 @@ def is_admin(user):
     if user is None:
         return False
     return bool(user.cached_groups_names & frozenset(('fotocie', 'webcie')))
-
-def resize_proportional(width, height, width_max, height_max=None):
-    width = float(width)
-    height = float(height)
-    if width > width_max:
-        height *= width_max/width
-        width  *= width_max/width
-    if height_max is not None and height > height_max:
-        width  *= height_max/height
-        height *= height_max/height
-    return int(round(width)), int(round(height))
 
 def actual_visibility(visibility):
     actual = frozenset(visibility)

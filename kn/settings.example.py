@@ -89,6 +89,7 @@ BASE_URL = 'https://karpenoktem.nl'
 ABSOLUTE_MEDIA_URL = BASE_URL + MEDIA_URL
 SMOELEN_PHOTOS_PATH = 'smoelen'
 SMOELEN_WIDTH = 300
+SMOELEN_HEIGHT = 300
 EXTERNAL_URLS = {
     'stukken':   'https://karpenoktem.nl/groups/leden/',
     'wiki':      'https://karpenoktem.nl/wiki/Hoofdpagina',

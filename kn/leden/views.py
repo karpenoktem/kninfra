@@ -33,6 +33,8 @@ from kn.base.http import redirect_to_referer
 from kn.base.mail import render_then_email
 from kn.base.text import humanized_enum
 
+from kn.fotos.utils import resize_proportional
+
 from kn.settings import DT_MIN, DT_MAX
 from kn import settings
 
@@ -155,15 +157,21 @@ def _entity_detail(request, e):
     return ctx
 
 def _user_detail(request, user):
-    hasPhoto = default_storage.exists('%s.jpg' %
-            path.join(settings.SMOELEN_PHOTOS_PATH,
-                    str(user.name)))
     ctx = _entity_detail(request, user)
-    ctx.update({
-            'hasPhoto': hasPhoto,
-            'photoWidth': settings.SMOELEN_WIDTH,
-            'photosUrl': reverse('fotos', kwargs={'path':''})
-                         + '?q=tag:'+str(user.name)})
+    ctx['photosUrl'] = reverse('fotos', kwargs={'path':''}) + \
+                                        '?q=tag:'+str(user.name)
+    photos_path = path.join(settings.SMOELEN_PHOTOS_PATH, str(user.name))+'.jpg'
+    if default_storage.exists(photos_path):
+        img = Image.open(default_storage.open(photos_path))
+        width, height = img.size
+        if width > settings.SMOELEN_WIDTH:
+            # smoel was created as higher-resolution image
+            width /= 2
+            height /= 2
+        ctx.update({
+                'hasPhoto': True,
+                'photoWidth': width,
+                'photoHeight': height})
     return render_to_response('leden/user_detail.html', ctx,
             context_instance=RequestContext(request))
 
@@ -289,10 +297,10 @@ def ik_chsmoel(request):
     if not request.user.may_upload_smoel_for(request.user):
         raise PermissionDenied
     img = Image.open(request.FILES['smoel'])
-    smoelen_width = settings.SMOELEN_WIDTH * 2
-    img = img.resize((smoelen_width,
-        int(float(smoelen_width) / img.size[0] * img.size[1])),
-            Image.ANTIALIAS)
+    width, height = resize_proportional(img.size[0], img.size[1],
+                                        settings.SMOELEN_WIDTH*2,
+                                        settings.SMOELEN_HEIGHT*2)
+    img = img.resize((width, height), Image.ANTIALIAS)
     img.save(default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
             str(user.name)) + ".jpg", 'w'), "JPEG")
     Es.notify_informacie('set_smoel', request.user, entity=user)

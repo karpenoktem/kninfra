@@ -12,7 +12,7 @@
 {% if hasPhoto %}
 <div class="smoel"><a href="{{ photosUrl }}"><img
                 src="{% url user-smoel object.name %}"
-                width="{{ photoWidth }}" /></a></div>
+                width="{{ photoWidth }}" height="{{ photoHeight }}"/></a></div>
 {% else %}
 <div class="nosmoel"><a href="{{ photosUrl }}">Foto's</a></div>
 {% endif %}
