@@ -10,52 +10,52 @@ Wijzigingen aan de ledenadministratie
 <ul>
 {% for nt in ntfs %}
 {% if nt.event == 'adduser' %}
-	<li><a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}">
-			{{ nt.entity.humanName }}</a>
+	<li><a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}"
+			>{{ nt.entity.humanName }}</a>
 		is ingeschreven als lid.
 	</li>
 {% elif nt.event == 'addgroup' %}
 	<li>De groep
-		<a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}">
-			{{ nt.entity.humanName }}</a>
+		<a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}"
+			>{{ nt.entity.humanName }}</a>
 		is opgericht.
 	</li>
 {% elif nt.event == 'relation_begin' %}
-	<li><a href="{{ BASE_URL }}{{ nt.rel.who.get_absolute_url }}">
-			{{ nt.rel.who.humanName}}</a>
+	<li><a href="{{ BASE_URL }}{{ nt.rel.who.get_absolute_url }}"
+			>{{ nt.rel.who.humanName}}</a>
 		{% if nt.user == nt.rel.who %}
 			heeft zich ingeschreven als
 		{% else %}
 			is nu
 		{% endif%}
 		{% if nt.rel.how %}
-			<a href="{{ BASE_URL }}{{ nt.rel.how.get_absolute_url }}">
-				{{ nt.rel.how.humanName }}</a>
+			<a href="{{ BASE_URL }}{{ nt.rel.how.get_absolute_url }}"
+				>{{ nt.rel.how.humanName }}</a>
 		{% else %}
 			lid
 		{% endif %}
 		{{ nt.rel.with.humanName.genitive_prefix }}
-		<a href="{{ BASE_URL }}{{ nt.rel.with.get_absolute_url }}">
-			{{ nt.rel.with.humanName }}</a>.
+		<a href="{{ BASE_URL }}{{ nt.rel.with.get_absolute_url }}"
+			>{{ nt.rel.with.humanName }}</a>.
 	</li>
 {% elif nt.event == 'relation_end' %}
-	<li><a href="{{ BASE_URL }}{{ nt.rel.who.get_absolute_url }}">
-			{{ nt.rel.who.humanName}}</a>
+	<li><a href="{{ BASE_URL }}{{ nt.rel.who.get_absolute_url }}"
+			>{{ nt.rel.who.humanName}}</a>
 		{% if nt.user == nt.rel.who %}
 			heeft zich uitgeschreven als
 		{% else %}
 			is geen
 		{% endif%}
 		{% if nt.rel.how %}
-			<a href="{{ BASE_URL }}{{ nt.rel.how.get_absolute_url }}">
-				{{ nt.rel.how.humanName }}</a>
+			<a href="{{ BASE_URL }}{{ nt.rel.how.get_absolute_url }}"
+				>{{ nt.rel.how.humanName }}</a>
 		{% else %}
 			lid
 		{% endif %}
 		{% if nt.user != nt.rel.who %} meer {% endif %}
 		{{ nt.rel.with.humanName.genitive_prefix }}
-		<a href="{{ BASE_URL }}{{ nt.rel.with.get_absolute_url }}">
-			{{ nt.rel.with.humanName }}</a>.
+		<a href="{{ BASE_URL }}{{ nt.rel.with.get_absolute_url }}"
+			>{{ nt.rel.with.humanName }}</a>.
 	</li>
 {% endif %}
 {% endfor %}
