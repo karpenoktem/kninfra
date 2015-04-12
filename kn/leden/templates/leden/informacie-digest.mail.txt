@@ -52,7 +52,8 @@ Wijzigingen aan de ledenadministratie
 		{% else %}
 			lid
 		{% endif %}
-		meer {{ nt.rel.with.humanName.genitive_prefix }}
+		{% if nt.user != nt.rel.who %} meer {% endif %}
+		{{ nt.rel.with.humanName.genitive_prefix }}
 		<a href="{{ BASE_URL }}{{ nt.rel.with.get_absolute_url }}">
 			{{ nt.rel.with.humanName }}</a>.
 	</li>
