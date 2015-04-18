@@ -185,7 +185,7 @@ def _group_detail(request, group):
 
 def _tag_detail(request, tag):
     ctx = _entity_detail(request, tag)
-    return render_to_response('leden/entity.html', ctx,
+    return render_to_response('leden/tag_detail.html', ctx,
             context_instance=RequestContext(request))
 def _brand_detail(request, brand):
     ctx = _entity_detail(request, brand)
