@@ -161,14 +161,23 @@ def _user_detail(request, user):
     ctx = _entity_detail(request, user)
     ctx['photosUrl'] = reverse('fotos', kwargs={'path':''}) + \
                                         '?q=tag:'+str(user.name)
-    photos_path = path.join(settings.SMOELEN_PHOTOS_PATH, str(user.name))+'.jpg'
-    if default_storage.exists(photos_path):
-        img = Image.open(default_storage.open(photos_path))
+    photos_path = path.join(settings.SMOELEN_PHOTOS_PATH, str(user.name))
+    if default_storage.exists(photos_path + '.jpg'):
+        img = Image.open(default_storage.open(photos_path + '.jpg'))
         width, height = img.size
-        if width > settings.SMOELEN_WIDTH:
-            # smoel was created as higher-resolution image
+        if default_storage.exists(photos_path + '.orig'):
+            # smoel was created using newer strategy. Shrink until it fits the
+            # requirements.
+            width, height = resize_proportional(img.size[0], img.size[1],
+                                                settings.SMOELEN_WIDTH,
+                                                settings.SMOELEN_HEIGHT)
+        elif width > settings.SMOELEN_WIDTH:
+            # smoel was created as high-resolution image, probably 600px wide
             width /= 2
             height /= 2
+        else:
+            # smoel was created as normal image, probably 300px wide
+            pass
         ctx.update({
                 'hasPhoto': True,
                 'photoWidth': width,
@@ -297,7 +306,12 @@ def ik_chsmoel(request):
     user = Es.by_id(request.POST['id'])
     if not request.user.may_upload_smoel_for(request.user):
         raise PermissionDenied
-    img = Image.open(request.FILES['smoel'])
+    original = default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
+            str(user.name)) + ".orig", 'wb+')
+    for chunk in request.FILES['smoel'].chunks():
+        original.write(chunk)
+    original.seek(0)
+    img = Image.open(original)
     width, height = resize_proportional(img.size[0], img.size[1],
                                         settings.SMOELEN_WIDTH*2,
                                         settings.SMOELEN_HEIGHT*2)
