@@ -280,7 +280,7 @@ class Giedo(WhimDaemon):
         ret = ret.strip()
         if ret[:4] == 'OK: ':
             return (True, ret[4:])
-        else:
-            return (False, ret)
+        logging.warning("villanet_request: %s", repr(ret))
+        return (False, ret)
 
 # vim: et:sta:bs=2:sw=4:
