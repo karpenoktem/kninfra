@@ -96,7 +96,10 @@ EXTERNAL_URLS = {
     'wiki':      'https://karpenoktem.nl/wiki/Hoofdpagina',
     'forum':     'https://karpenoktem.nl/forum/',
 }
-GOOGLE_CALENDAR_ID = 'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com'
+GOOGLE_CALENDAR_IDS = {
+    'kn':   'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com',
+    'zeus': 'a9jl7tuhqg7oe8stapcu9uhvk8@group.calendar.google.com',
+}
 
 # moderation & mailman
 MAILDOMAIN = 'karpenoktem.nl'
