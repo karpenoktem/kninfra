@@ -1,0 +1,54 @@
+{% extends "static/base.html" %}
+{% load short_agenda %}
+
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet"
+  href="{{ MEDIA_URL }}/agenda/agenda.css" />
+<link rel="stylesheet"
+  href="{{ MEDIA_URL }}/static/style/home.css" />
+{% endblock styles %}
+
+{% block head %}
+{{ block.super }}
+<script type="text/javascript"
+  src="{{ MEDIA_URL }}/static/jquery.nivo.slider.pack.js" defer></script>
+<link rel="stylesheet" type="text/css" deferred-href="{{ MEDIA_URL }}/static/style/nivo-slider.css" />
+<link rel="stylesheet" deferred-href="{{ MEDIA_URL }}/static/nivo-slider/default.css" type="text/css" media="screen" />
+{% endblock %}
+
+
+{% block body %}
+<div id="random-text">
+<p>Welkom op de website van <strong>Alternatieve studenten&shy;vereniging
+      Karpe Noktem</strong>.</p>
+</div>
+
+<div id="slider-wrapper" class="slider-wrapper theme-default">
+  <div id="slider" class="nivoSlider">
+    {% for image in slideshow_images %}
+    <img src="{{ image }}" alt="" />
+    {% endfor %}
+  </div>
+</div>
+
+<div id="agenda-wrapper">
+{% show_short_agenda %}
+</div>
+
+<script type="text/javascript">
+$(window).load(function() {
+  $('#slider').nivoSlider({
+    effect: 'sliceDown',
+    animSpeed: 750,
+    pauseTime: 5000,
+    pauseOnHover: true,
+    prevText: 'vorige',
+    nextText: 'volgende',
+    directionNav: true,
+    randomStart: false
+  });
+});
+</script>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}

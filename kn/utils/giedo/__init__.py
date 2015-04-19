@@ -23,13 +23,17 @@ import kn.leden.entities as Es
 from kn.leden.date import now
 
 from kn.utils.giedo.db import update_db
-from kn.utils.giedo.postfix import generate_postfix_map
+from kn.utils.giedo.postfix import generate_postfix_map, \
+                                   generate_postfix_slm_map
 from kn.utils.giedo.mailman import generate_mailman_changes
 from kn.utils.giedo.wiki import generate_wiki_changes
 from kn.utils.giedo.forum import generate_forum_changes
 from kn.utils.giedo.unix import generate_unix_map
 from kn.utils.giedo.openvpn import create_openvpn_installer, create_openvpn_zip
 from kn.utils.giedo.siteagenda import update_site_agenda
+from kn.utils.giedo._ldap import generate_ldap_changes
+from kn.utils.giedo.wolk import generate_wolk_changes
+from kn.utils.giedo.fotos import scan_fotos
 
 class Giedo(WhimDaemon):
     def __init__(self):
@@ -47,13 +51,25 @@ class Giedo(WhimDaemon):
                 "villanet.pem"))
         self.ss_actions = (
                   ('postfix', self.daan, self._gen_postfix),
+                  ('postfix-slm', self.daan, self._gen_postfix_slm),
                   ('mailman', self.daan, self._gen_mailman),
                   ('forum', self.daan, self._gen_forum),
                   ('unix', self.cilia, self._gen_unix),
-                  ('wiki', self.daan, self._gen_wiki))
+                  ('wiki', self.daan, self._gen_wiki),
+                  ('ldap', self.daan, self._gen_ldap),
+                  ('wolk', self.cilia, self._gen_wolk))
         self.push_changes_event.set()
 
 
+    def _gen_wolk(self):
+        return {'type': 'wolk',
+                'changes': generate_wolk_changes(self)}
+    def _gen_ldap(self):
+        return {'type': 'ldap',
+                'changes': generate_ldap_changes(self)}
+    def _gen_postfix_slm(self):
+        return {'type': 'postfix-slm',
+            'map': generate_postfix_slm_map(self)}
     def _gen_postfix(self):
         return {'type': 'postfix',
             'map': generate_postfix_map(self)}
@@ -126,7 +142,10 @@ class Giedo(WhimDaemon):
         todo_event = threading.Event()
 
         def _sync_action(func, *args):
-            func(*args)
+            try:
+                func(*args)
+            except Exception as e:
+                logging.exception("Uncaught exception")
             with todo_lock:
                 todo[0] -= 1
                 if todo[0] == 0:
@@ -168,6 +187,8 @@ class Giedo(WhimDaemon):
                 self.daan.send(d2)
                 self.cilia.send(d2)
                 return {'success': True}
+        elif d['type'] == 'ping':
+            return {'pong': True}
         elif d['type'] == 'set-villanet-password':
             with self.operation_lock:
                 u = Es.by_name(d['user'])
@@ -184,16 +205,24 @@ class Giedo(WhimDaemon):
                 pc.save()
                 self.push_changes_event.set()
                 return {'success': True}
+        elif d['type'] == 'fotoadmin-scan-userdirs':
+            return self.cilia.send(d)
         elif d['type'] == 'fotoadmin-move-fotos':
             with self.operation_lock:
-                # TODO should this block Giedo?
                 ret = self.daan.send(d)
+                if 'success' not in ret:
+                    return ret
+                ret = scan_fotos()
                 if 'success' not in ret:
                     return ret
                 return self.cilia.send({
                     'type': 'fotoadmin-remove-moved-fotos',
+                    'store': d['store'],
                     'user': d['user'],
                     'dir': d['dir']})
+        elif d['type'] == 'fotoadmin-scan-fotos':
+            with self.operation_lock:
+                return scan_fotos()
         elif d['type'] == 'openvpn_create':
             with self.operation_lock:
                 # XXX hoeft niet onder de operation_lock?
@@ -242,7 +271,7 @@ class Giedo(WhimDaemon):
     def villanet_request(self, params):
         params['apikey'] = settings.VILLANET_SECRET_API_KEY
         url = "http://www.vvs-nijmegen.nl/knapi.php?"+ urlencode(params)
-        ret = urllib2.urlopen(url).read()
+        ret = urllib2.urlopen(url, timeout=1).read()
         ret = ret.strip()
         if ret[:4] == 'OK: ':
             return (True, ret[4:])

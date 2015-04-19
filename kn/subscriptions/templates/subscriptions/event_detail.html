@@ -4,10 +4,6 @@
 {% block head %}
 {{ block.super }}
 <script type="text/javascript">
-$(function(){
-        $.defaultText();
-});
-
 _api = function(data, cb) {
         data.csrfmiddlewaretoken = "{{ csrf_token }}";
         $.post("{% url api %}", data, cb, "json");
@@ -80,7 +76,9 @@ copy_emailaddresses_to_clipboard = function() {
 {% endif %}{# subscription.confirmed #}
 {% endif %}{# subscription #}
 <h1>{{ object.humanName }}</h1>
-<blockquote>{{ object.description_html|safe }}</blockquote>
+<div id="subscription-description">
+{{ object.description_html|safe }}
+</div>
 <dl>
         {% if object.date %}
         <dt>Datum</dt>
@@ -98,7 +96,8 @@ copy_emailaddresses_to_clipboard = function() {
 </dl>
 
 {% if object.is_open and has_write_access %}
-<button onclick="close_event()">Sluit inschrijvingen</button>
+<button onclick="close_event()">Sluit inschrijvingen</button> –
+<a href="{% url event-edit edit=object.name %}">Bewerk activiteit</a>
 {% endif %}{# object.is_open and has_write_access #}
 
 {% if not subscription or may_subscribe_others or not subscription.confirmed %}
@@ -110,9 +109,12 @@ copy_emailaddresses_to_clipboard = function() {
                 >{{ subscription.subscribedBy.full_name }}</a>
         aangemeld, maar hebt dit nog niet bevestigd.</p>
         {% endif %}{# subscription and not subscription.confirmed #}
+        <!--[if lte IE 9]>
+        Opmerkingen:<br/>
+        <![endif]-->
         <textarea class="default" name="notes"
                 style="width: 200px; height: 70px;"
-                title="Opmerkingen"></textarea><br/>
+                placeholder="Opmerkingen"></textarea><br/>
         {% if subscription and not subscription.confirmed %}
         <button type="button" onclick="confirm_subscription()"
                 >Aanmelding bevestigen!</button></p>

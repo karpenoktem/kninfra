@@ -4,8 +4,20 @@
 }
 
 .nosmoel {
-	position: relative;
-	top: 50px;
+	margin-top: 50px;
 	width: 200px;
 	text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+	.smoel {
+		float: none;
+		margin: 10px 0;
+	}
+
+	.nosmoel {
+		float: right;
+		margin-top: 20px;
+		width: auto; /* initial */
+	}
 }

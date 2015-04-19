@@ -1,0 +1,101 @@
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #000;
+	color: #102020;
+	line-height: 1.6em;
+	font-family: serif;
+}
+
+/* links -- kleuren overgenomen van MediaWiki */
+a {
+	text-decoration: none;
+}
+a:link {
+	color: #3366BB;
+}
+a:visited {
+	color: #663366;
+}
+a:active {
+	color: #FAA700;
+}
+a:hover, a:focus {
+	text-decoration: underline;
+}
+
+.clear {
+	clear: both;
+}
+
+/* container */
+.container {
+	margin: 0 auto;
+	max-width: 850px;
+	padding: 0 15px;
+}
+
+#footer {
+	padding: 0.25em 0;
+	background-color: #000;
+	font-family: sans-serif;
+	font-size: 16px;
+	font-size: 14px;
+	box-shadow: 0px -2px 3px 0px #a31e1b;
+	color: #929292;
+}
+
+/* content */
+#content {
+	min-height: 300px;
+}
+@media screen and (min-width: 801px) {
+	#content {
+		padding-top: 20px;
+	}
+}
+@media screen and (max-width: 800px) {
+	#content {
+		padding-top: 30px;
+		top: 442px;
+	}
+}
+
+#content img {
+	padding: 4px;
+	border: solid 1px #aaa;
+	background-color: #f8f8f8;
+	box-shadow: 0px 0px 2px #a31e1b;
+	margin: 4px 8px;
+	/* box-sizing doesn't work for images that have a width= attribute */
+	/* 100% - (margin + border + padding) * 2 */
+	max-width: calc(100% - (8px + 1px + 4px) * 2);
+}
+
+.right {
+	float: right;
+}
+.left {
+	float: left;
+}
+@media screen and (max-width: 450px) {
+	.right {
+		float: none;
+	}
+}
+a img {
+	border: none; /* IE normalization */
+}
+
+/* omhoog-scroll knopje */
+#footer #scrollUp {
+	float: right;
+}
+@media screen and (max-width: 550px) {
+	#footer #scrollUp {
+		display: none;
+	}
+}

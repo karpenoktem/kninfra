@@ -1,0 +1,70 @@
+#random-text,
+#slider-wrapper {
+	max-width: 475px;
+	float: left;
+}
+#agenda-wrapper {
+	margin-left: 525px;
+}
+#agenda-wrapper h1 {
+	margin: 0;
+}
+@media screen and (max-width: 850px) {
+	#random-text,
+	#slider-wrapper {
+		float: none; /* initial */
+	}
+	#random-text {
+		max-width: none; /* initial */
+	}
+	#agenda-wrapper {
+		margin-left: 0; /* initial */
+		margin-bottom: 26px;
+	}
+
+	/* reverse the order of agenda and slider
+	 * Only some browsers support this, but the rest will simply ignore it. */
+	#body {
+		display: -webkit-flex;
+		display: flex;
+		-webkit-flex-direction: column;
+		flex-direction: column;
+	}
+	#slider-wrapper {
+		-webkit-order: 1;
+		order: 1;
+	}
+}
+/* CSS hack to exclude IE10+
+ * IE has a very buggy implementation of flexbox (even IE11), and causes a lot
+ * of whitespace beneath the NivoSlider.
+ * http://www.limecanvas.com/css-hacks-targeting-ie-10/
+ */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+	#body {
+		display: block;
+	}
+}
+
+/* photoslider properties */
+.nivoSlider {
+	z-index: 0;
+}
+.nivoSlider img {
+	border-radius: 4px;
+	/* reset properties used for normal images */
+	padding: 0 !important;
+	border: 0 !important;
+	background-color: transparent !important;
+	margin: 0 !important;
+}
+/* This prevents strange resizes in Internet Explorer
+ * See http://stackoverflow.com/a/15073788 */
+.nivo-main-image {
+	height: auto;
+}
+
+/* do not show Nivo Slider images until the slider has fully loaded */
+.nivoSlider img {
+	display: none;
+}

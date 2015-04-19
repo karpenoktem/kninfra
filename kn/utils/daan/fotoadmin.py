@@ -1,13 +1,15 @@
 # vim: et:sta:bs=2:sw=4:
 import subprocess
 import os.path
+import random
 import grp
 import pwd
 import os
 import re
 
-import MySQLdb
 
+import kn.fotos.entities as fEs
+from kn.fotos.forms import FOTO_ROOTS
 from kn import settings
 
 def fotoadmin_create_event(daan, date, name, humanName):
@@ -22,28 +24,31 @@ def fotoadmin_create_event(daan, date, name, humanName):
     os.mkdir(path, 0775)
     os.chown(path, pwd.getpwnam('fotos').pw_uid,
                grp.getgrnam('fotos').gr_gid)
-    creds = settings.PHOTOS_MYSQL_SECRET
-    dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
-                db=creds[3])
-    c = dc.cursor()
-    c.execute("INSERT INTO fa_albums (name, path, humanname, visibility) "+
-          "VALUE (%s, '', %s, 'hidden')", (event, humanName))
-    c.execute("COMMIT;")
-    c.close()
-    dc.close()
+    album = fEs.entity({
+        'type': 'album',
+        'path': '',
+        'name': event,
+        'random': random.random(),
+        'visibility': ['hidden'],
+        'title': humanName})
+    album.update_metadata(album.get_parent(), save=False)
+    album.save()
     return {'success': True}
 
-def fotoadmin_move_fotos(daan, event, user, directory):
+def fotoadmin_move_fotos(daan, event, store, user, directory):
     if not re.match('^20\d{2}-\d{2}-\d{2}-[a-z0-9-]{3,64}$', event):
         return {'error': 'Invalid event'}
     if not re.match('^[a-z0-9]{3,32}$', user):
         return {'error': 'Invalid user'}
     if not re.match('^[^/\\.][^/]*$', directory):
         return {'error': 'Invalid dir'}
-    user_path = os.path.join(settings.USER_DIRS, user)
+    if not store in FOTO_ROOTS:
+        return {'error': 'Invalid store'}
+    root = FOTO_ROOTS[store]
+    user_path = os.path.join(root.base, user)
     if not os.path.isdir(user_path):
         return {'error': 'Invalid user'}
-    fotos_path = os.path.join(user_path, 'fotos', directory)
+    fotos_path = os.path.join(user_path, root.between, directory)
     if not os.path.isdir(fotos_path):
         return {'error': 'Invalid fotodir'}
     if not os.path.realpath(fotos_path).startswith(user_path):
@@ -66,21 +71,4 @@ def fotoadmin_move_fotos(daan, event, user, directory):
     if subprocess.call(['find', target_path, '-type', 'd', '-exec',
             'chmod', '755', '{}', '+']) != 0:
         return {'error': 'chmod (dirs) failed'}
-    visibility = 'hidden'
-    creds = settings.PHOTOS_MYSQL_SECRET
-    dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
-                db=creds[3])
-    c = dc.cursor()
-    c.execute("SELECT visibility FROM fa_albums WHERE name=%s AND path=''",
-            (event,))
-    row = c.fetchone()
-    if row and row[0] == 'hidden':
-        visibility = 'world'
-    c.execute("INSERT INTO fa_albums (name, path, visibility) "+
-          "VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE visibility=%s",
-          (os.path.basename(target_path), event, visibility,
-                                visibility))
-    c.execute("COMMIT;")
-    c.close()
-    dc.close()
     return {'success': True}

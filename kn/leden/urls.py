@@ -49,6 +49,8 @@ urlpatterns = patterns('',
         views.entities_by_year_of_birth, name='entities-by-year-of-birth'),
     url(r'^smoel/(?P<name>[^.]+).jpg$',
         views.user_smoel, name='user-smoel'),
+    url(r'^geenalcohol/$',
+        views.users_underage, name='users-underage'),
     url(r'^ik/wachtwoord$', views.ik_chpasswd, name="chpasswd"),
     url(r'^ik/wachtwoord/villanet/$', views.ik_chpasswd_villanet,
         name="chpasswd-villanet"),
@@ -72,6 +74,12 @@ urlpatterns = patterns('',
         views.relation_begin, name='relation-begin'),
     url(r'^noteer$',
         views.note_add, name='add-note'),
+
+    # style
+    url(r'^styles/leden/$',
+        generic.simple.direct_to_template,
+        {'template':'leden/base.css',
+         'mimetype':'text/css'}, name='leden-base'),
 )
 
 # vim: et:sta:bs=2:sw=4:

@@ -15,7 +15,7 @@ def generate_mailman_changes(giedo):
     # Get the groups that need a mailing list and the members of those
     # groups.
     dt_now = now()
-    mm_groups = [g for g in Es.groups() if g.got_mailman_list]
+    mm_groups = [g for g in Es.groups() if g.got_mailman_list and g.name]
     mm_rels = Es.query_relations(_with=mm_groups, how=None, _from=dt_now,
             until=dt_now, deref_who=True)
     # TODO do we want to cache these?

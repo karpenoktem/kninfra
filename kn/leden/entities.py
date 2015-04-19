@@ -17,7 +17,6 @@ from kn import settings
 ecol = db['entities']   # entities: users, group, tags, studies, ...
 rcol = db['relations']  # relations: "giedo is chairman of bestuur from
             #             date A until date B"
-mcol = db['messages']   # message: used for old code
 ncol = db['notes']      # notes on entities by the secretaris
 pcol = db['push_changes'] # Changes to be pushed to remote systems
 incol = db['informacie_notifications'] # human readable list of notifications 
@@ -46,8 +45,6 @@ def ensure_indices():
     rcol.ensure_index('tags', sparse=True)
     rcol.ensure_index([('until',1),
                ('from',-1)])
-    # messages
-    mcol.ensure_index('entity')
     # notes
     ncol.ensure_index([('on', 1),
                        ('at', 1)])
@@ -103,7 +100,10 @@ def id_by_name(n, use_cache=False):
         if n in __id2name_cache:
             ret =  __id2name_cache[n]
     if ret is None:
-        ret = ecol.find_one({'names': n}, {'names':1})['_id']
+        obj = ecol.find_one({'names': n}, {'names':1})
+        if obj is None:
+            return None
+        ret = obj['_id']
         if use_cache:
             __id2name_cache[n] = ret
     return ret
@@ -175,9 +175,22 @@ def get_years_of_birth():
 
 def by_year_of_birth(year):
     """ Finds entities by year of birth """
-    for m in ecol.find({'person.dateOfBirth': {
+    for m in ecol.find({'types': 'user',
+                        'person.dateOfBirth': {
                                 '$lt': datetime.datetime(year + 1, 1, 1),
                                 '$gte': datetime.datetime(year, 1, 1) }}):
+        yield entity(m)
+
+def by_age(max_age=None):
+    """ Finds entities under a certain age """
+    # This function could be extended to allow for a range of ages (e.g. adding
+    # a min_age argument)
+    date = datetime.date.today()
+    date = date.replace(year=date.year-max_age)
+    dt = datetime.datetime.combine(date, datetime.time(0, 0, 0, 0))
+    for m in ecol.find({'types': 'user',
+                        'person.dateOfBirth': {
+                                '$gt': dt}}):
         yield entity(m)
 
 def all():
@@ -309,11 +322,11 @@ def add_relation(who, _with, how=None, _from=None, until=None):
         _from = DT_MIN
     if until is None:
         until = DT_MAX
-    rcol.insert({'who': _id(who),
-             'with': _id(_with),
-             'how': None if how is None else _id(how),
-             'from': _from,
-             'until': until})
+    return rcol.insert({'who': _id(who),
+                     'with': _id(_with),
+                     'how': None if how is None else _id(how),
+                     'from': _from,
+                     'until': until})
 
 def disj_query_relations(queries, deref_who=False, deref_with=False,
         deref_how=False):
@@ -480,9 +493,16 @@ def get_open_notes():
 # Functions to work with informacie-notifications
 # ######################################################################
 
-def notify_informacie(text):
-    incol.insert({'text': text,
-                  'when': now()})
+def notify_informacie(event, user, entity=None, relation=None):
+    data = {'when': now(), 'event': event}
+    data['user'] = _id(user)
+    if relation is not None:
+        data['rel'] = _id(relation)
+    elif entity is not None:
+        data['entity'] = _id(entity)
+    else:
+        raise ValueError('supply either entity or relation')
+    incol.insert(data)
 
 def pop_all_informacie_notifications():
     ntfs = list(incol.find({}, sort=[('when',1)]))
@@ -524,8 +544,11 @@ class EntityHumanName(object):
     def humanName(self):
         return self._data['human']
     @property
+    def genitive_prefix(self):
+        return self._data.get('genitive_prefix', 'van de')
+    @property
     def genitive(self):
-        return self._data.get('genitive_prefix', 'van de') + ' ' + unicode(self)
+        return self.genitive_prefix + ' ' + unicode(self)
     def __unicode__(self):
         return self.humanName
     def __repr__(self):
@@ -567,6 +590,7 @@ class Entity(SONWrapper):
                     str(n) for n in g.names])
         return self._groups_names_cache
 
+    # get reverse-related
     def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                 deref_with=True, deref_how=True):
         return query_relations(-1, self, how, _from, until, deref_who,
@@ -721,6 +745,22 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def update_visibility_preference(self, key, value, save=True):
+        """ Update a single visibility preference """
+
+        if 'preferences' not in self._data:
+            self._data['preferences'] = {}
+        preferences = self._data['preferences']
+
+        if 'visibility' not in preferences or type(preferences['visibility']) == list:
+            preferences['visibility'] = {}
+        visprefs = preferences['visibility']
+
+        visprefs[key] = value
+
+        if save:
+            self.save()
+
     @property
     def canonical_full_email(self):
         """ Returns the string
@@ -736,7 +776,7 @@ class Entity(SONWrapper):
     def canonical_email(self):
         if self.type in ('institute', 'study', 'brand', 'tag'):
             return None
-        name = self.name if self.name else self.id
+        name = str(self.name if self.name else self.id)
         return "%s@%s" % (name, MAILDOMAIN)
 
     @property
@@ -805,8 +845,7 @@ class Group(Entity):
         for rel in self.get_rrelated(how=None, deref_with=False):
             _all.add(rel['who'])
             if ((rel['until'] is None or rel['until'] >= dt) and
-                    rel['from'] is None
-                    or rel['from'] <= dt):
+                    (rel['from'] is None or rel['from'] <= dt)):
                 cur.add(rel['who'])
         return (cur, _all - cur)
     def get_members(self):
@@ -856,14 +895,6 @@ class User(Entity):
     def is_authenticated(self):
         # required by django's auth
         return True
-    def push_message(self, msg):
-        mcol.insert({'entity': self._id,
-                 'data': msg})
-    def pop_messages(self):
-        msgs = list(mcol.find({'entity': self._id}))
-        mcol.remove({'_id': {'$in': [m['_id'] for m in msgs]}})
-        return [m['data'] for m in msgs]
-    get_and_delete_messages = pop_messages
     @property
     def primary_email(self):
         # the primary email address is always the first one;
@@ -890,7 +921,7 @@ class User(Entity):
         return self._data.get('person',{}).get('family')
     @property
     def gender(self):
-        return self._data('person',{}).get('gender')
+        return self._data.get('person',{}).get('gender')
     @property
     def telephones(self):
         ret = []
@@ -971,6 +1002,13 @@ class User(Entity):
     def dateOfBirth(self):
         return self._data.get('person',{}).get('dateOfBirth')
     @property
+    def age(self):
+        # age is a little difficult to calculate because of leap years
+        # see http://stackoverflow.com/a/9754466
+        today = datetime.date.today()
+        born = self.dateOfBirth
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    @property
     def got_unix_user(self):
         if 'has_unix_user' in self._data:
             return self._data['has_unix_user']
@@ -997,6 +1035,14 @@ class User(Entity):
                 a['until'] = None
             ret.append(a)
         return ret
+
+    @property
+    def preferences(self):
+        return self._data.get('preferences', {})
+
+    @property
+    def visibility(self):
+        return self.preferences.get('visibility', {})
 
 class Tag(Entity):
     @permalink
@@ -1082,7 +1128,16 @@ class InformacieNotification(SONWrapper):
     def __init__(self, data):
         super(InformacieNotification, self).__init__(data, incol)
 
-    text = son_property(('text', ))
+    def user(self):
+        return by_id(self._data['user'])
+
+    def rel(self):
+        return relation_by_id(self._data['rel'])
+
+    def entity(self):
+        return by_id(self._data['entity'])
+
+    event = son_property(('event', ))
     when = son_property(('when', ))
 
 class PushChange(SONWrapper):

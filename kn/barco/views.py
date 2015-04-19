@@ -1,9 +1,9 @@
 from cStringIO import StringIO
 import subprocess
 import os.path
-import locale
 import json
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -189,7 +189,7 @@ def barco_enterform(request, repos, formname):
             subprocess.call(['/usr/bin/git', 'push'], cwd=repopath)
 
             # and get back to the user:
-            request.user.push_message("Opgeslagen!")
+            messages.info(request, "Opgeslagen!")
             return HttpResponseRedirect(reverse('barco-enterform', 
                 args=(repos,formname)))
     form = formspec.django_form()

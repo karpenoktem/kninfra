@@ -1,0 +1,10 @@
+<h1><a href="{% url agenda %}">agenda</a></h1>
+
+{% include "agenda/widget.html" with agenda=short_agenda type="small" %}
+
+{% if has_more %}
+<div class="more">
+  <a href="{% url agenda %}">Meer...</a>
+</div>
+{% endif %}
+{# vim: set sw=2 ts=2 et: #}

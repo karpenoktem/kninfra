@@ -1,0 +1,14 @@
+#lustrumAgenda dt {
+	font-weight: bold;
+	border-bottom: 1px solid gray;
+}
+
+#lustrumAgenda dd {
+	margin-bottom: 1em;
+	margin-left: 0;
+}
+
+#lustrumAgenda .date {
+       font-style: italic;
+       float: right;
+}

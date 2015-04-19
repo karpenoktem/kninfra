@@ -1,0 +1,18 @@
+{% extends "base/bare.html" %}
+
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet"
+  href="{{ MEDIA_URL }}/static/style/openweekPoster2013.css" />
+{% endblock styles %}
+
+{% block body %}
+<a href="{% url home %}" title="Naar de website" />
+     <img src="{{ MEDIA_URL }}/static/img/openweekposter2013.jpg"
+        alt="Poster open week 2013. Klik hier om verder te gaan naar de website"
+        title="Poster open week 2013" 
+        class="boilerplate" /></a>
+<p class="wrappingtext">(<a href="{% url home %}"
+    >ga naar de website</a>)</p>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}

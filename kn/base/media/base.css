@@ -1,0 +1,504 @@
+html {
+	overflow-y: scroll; /* always show the scrollbar */
+	height: 100%;
+}
+
+body {
+	box-sizing: border-box;
+	height: 100%;
+	padding-top: 70px;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+@media screen and (max-width: 800px) {
+	body {
+		padding-top: 112px;
+	}
+}
+@media screen and (min-width: 801px) {
+	body.header-expanded {
+		padding-top: 400px;
+	}
+	body.viewedBefore {
+		height: calc(100% + 330px); /* prevent jumping around with short pages */
+	}
+}
+
+/* header */
+#header {
+	z-index: 5;
+	position: absolute;
+	top: -330px;
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 400px;
+	width: 100%;
+	margin: 0;
+	background-size: 900px;
+	background-color: #000;
+	font-family: sans-serif;
+	font-size: 16px;
+}
+
+@media screen and (min-width: 801px) {
+	body.header-expanded #header {
+		top: 0;
+		position: absolute;
+	}
+	body #header.fixed {
+		position: fixed;
+		top: -330px;
+	}
+
+	#header {
+		box-shadow: 0px 2px 3px #a31e1b;
+		position: fixed;
+	}
+	/* reduce flicker on page load by loading the page with the header collapsed
+	 * and expanding it with JS while scrolling to the right position */
+	#header.expanded {
+		position: absolute;
+		top: 0;
+	}
+}
+#header > * {
+	position: relative;
+	height: 100%;
+}
+#header #logo {
+	display: block;
+	position: absolute;
+	bottom: 8px;
+	line-height: 0;
+}
+@media screen and (max-width: 800px) {
+	#header #logo {
+		left: 10px;
+		right: 10px;
+	}
+	#header #logo img {
+		max-width: 100%;
+	}
+}
+
+/* navigator */
+#navigator {
+	position: absolute;
+	height: 42px;
+	margin: 0;
+	padding: 0;
+	font-variant: small-caps;
+	right: 10px;
+	bottom: 0px;
+	background-color: rgba(0, 0, 0, 0.75);
+}
+#navigator > ul { /* hack for #loginButton positioning */
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+}
+#navigator ul {
+	list-style: none;
+	margin: 0;
+}
+#navigator ul, #navigator li > a {
+	padding: 8px 6px;
+}
+#navigator li {
+	display: inline;
+	margin: 0 6px;
+}
+#navigator li > a {
+	border-bottom: solid 3px transparent;
+}
+#navigator li > a:link,
+#navigator li > a:visited {
+	color: #a0a0a0;
+	text-decoration: none;
+}
+#navigator li > a:hover {
+	border-bottom: solid 3px #a31e1b;
+	color: #f0f0f0;
+}
+#navigator li > a:active {
+	color: #f0f0f0;
+	text-decoration: underline;
+}
+#navigator li > a.active {
+	color: #f0f0f0;
+	font-weight: bold;
+}
+@media screen and (min-width: 801px) {
+	#navigator {
+		right: 10px;
+		bottom: 0px;
+	}
+}
+@media screen and (max-width: 800px) {
+	#navigator {
+		left: 0px;
+		right: 0px;
+		bottom: -42px;
+		box-shadow: 0px 1px 4px #a31e1b;
+	}
+	#navigator ul {
+		background-color: rgba(0, 0, 0, 0.90);
+		padding: 8px 5px;
+	}
+}
+@media screen and (max-width: 550px) {
+	#navigator li {
+		margin: 0;
+	}
+	#navigator li > a {
+		padding: 8px 4px;
+	}
+	#loginButton .label {
+		/* not enough space */
+		display: none;
+	}
+	#navigator img {
+		vertical-align: middle;
+	}
+}
+
+/* content */
+#content {
+	padding-bottom: 6px; /* prevent collapsing of margins */
+	background-color: #f0f0f0;
+	background-image: url('uiltje.png');
+    background-size: 400px;
+	background-repeat: no-repeat;
+	background-position: 100% 0%;
+	background-attachment: scroll;
+	-webkit-flex-grow: 1;
+	flex-grow: 1;
+	-webkit-flex-shrink: 0;
+	flex-shrink: 0;
+}
+@media screen and (min-width: 801px) {
+	#content {
+		padding-top: 20px;
+	}
+}
+@supports (display: flex) {
+	#content {
+		min-height: 0; /* initial */
+	}
+}
+
+/* content */
+#content h1, #content h2 {
+	color: #404040;
+	font-variant: small-caps;
+	font-family: sans-serif;
+	padding: 4px 0;
+	margin-top: 0;
+	margin-bottom: 1rem;
+}
+#content h1 a {
+	color: #404040;
+}
+#content h1 a:hover {
+	text-decoration: none;
+}
+#content .nivoSlider img {
+	max-width: none; /* initial */
+}
+#content hr {
+	background-color: #a31e1b;
+	height: 3px;
+	width: 5em;
+	border: none;
+	margin: 8px auto;
+}
+
+.email {
+	font-family: monospace;
+}
+.email.obfuscated {
+	visibility: hidden;
+}
+
+/* submenu */
+
+#submenu-wrapper {
+	text-align: right;
+}
+
+#submenu {
+	display: inline-block;
+	margin: 0;
+	line-height: 1;
+	padding: 0;
+}
+
+#submenu li {
+	list-style-type: none;
+	display: inline-block;
+	position: relative;
+}
+
+#submenu a {
+	text-decoration: underline;
+}
+
+#submenu a,
+#submenu span {
+	display: inline-block;
+	padding: 4px 8px 8px;
+	font-variant: small-caps;
+	font-family: sans-serif;
+	text-transform: lowercase;
+}
+
+#submenu.has-dropdown li:hover > a,
+#submenu.has-dropdown li:hover > span {
+	background: white;
+}
+#submenu a:hover {
+	text-decoration: none;
+}
+#submenu a.active {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#submenu li ul { /* dropdown menu */
+	left: -9999px;
+	position: absolute;
+	text-align: left;
+	background: white;
+	padding-left: 0;
+}
+#submenu li:hover ul {
+	left: auto;
+	background: white;
+}
+#submenu li li { /* 2nd level */
+	display: block;
+}
+
+#submenu li li a {
+	min-width: 10em;
+}
+
+#_searchfield {
+	margin: 4px 8px 8px;
+}
+
+#submenu-button {
+	display: none;
+}
+
+@media screen and (min-width: 551px) {
+	#submenu a,
+	#submenu span,
+	#submenu a.active {
+		color: #000;
+	}
+}
+
+@media screen and (max-width: 550px) {
+	#submenu-wrapper {
+		direction: rtl;
+	}
+	#submenu-wrapper > * {
+		direction: ltr;
+	}
+	#submenu-button {
+		display: inline-block;
+		position: relative;
+		top: 1px;
+		z-index: 1;
+		width: 32px;
+		height: 32px;
+
+		margin-left: 10px;
+		padding: 4px 8px;
+		color: black;
+		text-decoration: none;
+		font-size: 20px;
+		border: 1px solid rgba(127, 127, 127, 0.5);
+		border-radius: 2px;
+		background: white url('menu.svg') no-repeat 8px 4px;
+	}
+	#submenu-wrapper.open a#submenu-button {
+		border-bottom-color: white;
+		border-radius: 2px 2px 0 0;
+	}
+	#submenu {
+		display: block;
+		min-width: 200px;
+		position: absolute;
+		left: -9999px;
+
+		text-align: left;
+		background: white;
+		padding: 16px 12px;
+		border: 1px solid rgba(127, 127, 127, 0.5);
+	}
+	#submenu-wrapper.open #submenu {
+		left: auto;
+		right: 0;
+	}
+	#submenu li {
+		display: list-item;
+		position: static;
+	}
+	#submenu a,
+	#submenu span {
+		display: inline;
+		font-variant: normal;
+		text-transform: none;
+		text-decoration: none;
+		vertical-align: middle;
+		line-height: 1.8;
+	}
+	#submenu a:hover {
+		text-decoration: underline;
+	}
+	#submenu li ul {
+		position: static;
+		padding-left: 1em;
+	}
+	#submenu li li {
+		display: list-item;
+	}
+	#submenu li li::before {
+		content: "▶";
+		font-size: 9px;
+		vertical-align: middle;
+		color: #777;
+	}
+
+	/* monkey-patching to make the autocomplete work on small screens */
+	.ui-autocomplete {
+		left: 0 !important;
+		width: 98% !important;
+		width: calc(100% - 6px) !important;
+	}
+	.ui-autocomplete .ui-menu-item a {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+	.container {
+		padding: 0 10px;
+	}
+}
+
+/* we willen alle tekst input-veldjes wat cleaner hebben */
+input:not([type=submit]):not([type=file]):not([type=checkbox]),
+textarea {
+	border: solid 1px #b0b0b0;
+	padding: 2px;
+	color: #102020;
+}
+@media screen and (max-width: 550px) {
+	input:not([type=submit]):not([type=file]) {
+		max-width: 9em;
+	}
+	input:not([type=submit]):not([type=file]),
+	textarea {
+		font-size: 1em; /* don't zoom when focusing the field */
+	}
+}
+
+#loginButton {
+	position: relative;
+}
+
+#loginButtonLink:hover img {
+	-webkit-filter: brightness(115%);
+}
+#loginButton.open #loginButtonLink img {
+	-webkit-filter: brightness(150%);
+}
+
+#loginWindow {
+	display: none;
+
+	position: absolute;
+	top: auto;
+	right: -12px;
+	margin-top: 8px;
+	max-width: 290px;
+	padding: 11px 20px 15px;
+	border-radius: 0 0 4px 4px;
+	box-shadow: 0px 0px 3px #a31e1b;
+
+	background-color: #000; /* IE8 */
+	background-color: rgba(0, 0, 0, 0.92);
+	color: #afafaf;
+	text-transform: none;
+	font-variant: normal;
+}
+
+#loginButton.open #loginWindow {
+	display: block;
+}
+
+@media screen and (max-width: 800px) {
+	#loginButton {
+		float: right;
+	}
+}
+@media screen and (max-width: 400px) {
+	#loginButton {
+		position: static;
+	}
+	#loginWindow {
+		right: 0px;
+	}
+}
+
+#loginWindow h2 {
+	padding: 4px 0;
+	margin: 0;
+	font-size: 1em;
+	text-transform: uppercase;
+	font-family: sans-serif;
+}
+
+#loginWindow input[type=text],
+#loginWindow input[type=password] {
+	width: 160px;
+}
+
+#lustrumAgenda .date {
+	padding-top: 1em;
+}
+
+#lustrumAgenda dt {
+	font-size: 1.2em;
+	color: #404040;
+	font-variant: small-caps;
+	font-family: sans-serif;
+	font-weight: bold;
+	border-bottom: 1px #404040 solid;
+	margin-bottom: 3px;
+}
+
+#lustrumAgenda dd {
+	margin-left: 0;
+}
+
+form.top-aligned p {
+	max-width: 400px;
+}
+
+form.top-aligned input,
+form.top-aligned textarea {
+	display: block;
+	margin: 2px 0;
+}
+form.top-aligned textarea {
+	box-sizing: border-box;
+	width: 100%;
+}
+form.top-aligned input[type=checkbox] {
+	float: right;
+}

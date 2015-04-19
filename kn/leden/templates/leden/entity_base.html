@@ -1,5 +1,6 @@
 {% extends "leden/base.html" %}
 {% load leden %}
+{% load base %}
 
 {% block body %}
 
@@ -68,12 +69,12 @@ lid
 {% endif %}{# may_add_related #}
 
 {% if rrelated %}
-<h3>Leden</h3>
+<h3>Leden ({{ year_counts.this }})</h3>
 <ul>
 {% for r in rrelated %}
 {% ifchanged r.until_year %}
 {% if r.until_year %}
-</ul><h4>Tot jaar {{ r.until_year }}</h4><ul>
+</ul><h4>Tot jaar {{ r.until_year }} ({{ year_counts|lookup:r.until_year }})</h4><ul>
 {% endif %}
 {% endifchanged %} {% if not r.hidden %}
 <li>
@@ -140,7 +141,7 @@ lid
 {% endif %}
 
 {% if "secretariaat" in user.cached_groups_names %}
-<h3>Notitites</h3>
+<h3>Notities</h3>
 <ul>
 {% for n in object.get_notes %}
 <li>{{ n.at.date }}

@@ -1,3 +1,5 @@
+from html2text import HTML2Text
+
 import django.template
 import django.template.loader
 import django.core.mail
@@ -5,7 +7,7 @@ import django.core.mail
 from kn import settings
 
 def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
-                        reply_to=None):
+                        reply_to=None, headers=None):
     """ Render an e-mail from a template and send it. """
     # Normalize arguments
     if isinstance(to, basestring):
@@ -14,6 +16,8 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
         cc = [cc]
     if isinstance(bcc, basestring):
         bcc = [bcc]
+    if headers is None:
+        headers = {}
     # Render template
     template = django.template.loader.get_template(template_name)
     rendered_nodes = {}
@@ -27,10 +31,10 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
         rendered_nodes[node.name] = node.render(context)
     if not 'subject' in rendered_nodes:
         raise KeyError, "Missing subject block"
-    if not 'plain' in rendered_nodes:
-        raise KeyError, "Missing plain block"
+    if not 'plain' in rendered_nodes and not 'html' in rendered_nodes:
+        raise KeyError, "Missing plain or html block"
+
     # Set up e-mail
-    headers = {}
     if cc:
         headers['CC'] = ', '.join(cc)
     if reply_to:
@@ -38,12 +42,24 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
     if not from_email:
         from_email = rendered_nodes.get('from',
                 settings.DEFAULT_FROM_EMAIL).strip()
-    email = django.core.mail.EmailMessage(rendered_nodes['subject'].strip(),
-                                          rendered_nodes['plain'].strip(),
-                                          from_email,
-                                          to,
-                                          headers=headers,
-                                          bcc=(cc + bcc))
+
+    if 'plain' in rendered_nodes:
+        plain = rendered_nodes['plain'].strip()
+    else:
+        h = HTML2Text()
+        h.ignore_links = True
+        plain = h.handle(rendered_nodes['html']).strip()
+
+    email = django.core.mail.EmailMultiAlternatives(rendered_nodes['subject'].strip(),
+                          plain,
+                          from_email,
+                          to,
+                          headers=headers,
+                          bcc=(cc + bcc))
+
+    if 'html' in rendered_nodes:
+        email.attach_alternative(rendered_nodes['html'].strip(), "text/html")
+
     # And send!
     email.send()
 

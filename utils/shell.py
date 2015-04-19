@@ -8,6 +8,7 @@ except ImportError:
 import time
 import datetime
 import kn.leden.entities as Es
+import kn.fotos.entities as fEs
 import kn.reglementen.entities as regl_Es
 import kn.poll.entities as poll_Es
 import kn.subscriptions.entities as subscr_Es
@@ -89,3 +90,7 @@ def qe(keyword):
     """ Queries entities by keyword """
     for e in Es.by_keyword(keyword):
         print "%-20s %s" % (_id(e), unicode(e.humanName))
+
+def create_study(name):
+    return Es.ecol.insert({'types': ['study'],
+                           'humanNames': [{'human': name}]})
