@@ -6,7 +6,7 @@
 {% if hasPhoto %}
 <div class="smoel"><a href="{{ photosUrl }}"><img
                 src="{% url user-smoel object.name %}"
-                width="{{ photoWidth }}" /></a></div>
+                width="{{ photoWidth }}" height="{{ photoHeight }}"/></a></div>
 {% else %}
 <div class="nosmoel"><a href="{{ photosUrl }}">Foto's</a></div>
 {% endif %}
@@ -20,13 +20,13 @@
 <input type="submit" value="stuur nieuw wachtwoord" />
 </form>
 {% endif %}{# "secretariaat" in user.cached_groups_names #}
-{% if "secretariaat" in user.cached_groups_names %}
+{% if may_upload_smoel %}
 <h4>Nieuwe smoel uploaden</h4>
 <form method="post" action="{% url ik-chsmoel  %}"
         enctype="multipart/form-data">
 {% csrf_token %}
 <input type="hidden" name="id" value="{{ object.id }}" />
-<input type="file" name="smoel" />
+<input type="file" name="smoel" accept="image/*" />
 <input type="submit" value="upload smoel" />
 </form>
 {% endif %} {# "secretariaat" in user.cached_groups_names #}
