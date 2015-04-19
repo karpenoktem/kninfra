@@ -1025,6 +1025,9 @@ class User(Entity):
     def is_authenticated(self):
         # required by django's auth
         return True
+    def get_username(self):
+        # implements Django's User object
+        return str(self.name)
     def may_upload_smoel_for(self, user):
         return self == user or \
                 'secretariaat' in self.cached_groups_names or \
