@@ -1,9 +1,7 @@
 {% extends "leden/entity_base.html" %}
 {% load base %}
 
-{% block body %}
-<h2>{{ object.humanName }}</h2>
-<p>{{ object.description }}</p>
+{% block entity_body %}
 <h3>Studenten</h3>
 <ul>
 {% for student in students %}
@@ -22,5 +20,4 @@ tot {{ student.until.date }}
 </li>
 {% endfor %}{# student in students #}
 </ul>
-{{ block.super }}
-{% endblock %}
+{% endblock entity_body %}

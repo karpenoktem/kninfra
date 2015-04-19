@@ -2,13 +2,7 @@
 {% load base %}
 <!-- TODO stub -->
 
-{% block styles %}
-{{ block.super }}
-<link href="{{ MEDIA_URL }}/leden/user_detail.css"
-	rel="stylesheet" type="text/css" />
-{% endblock styles %}
-
-{% block body %}
+{% block entity_head %}
 {% if hasPhoto %}
 <div class="smoel"><a href="{{ photosUrl }}"><img
                 src="{% url user-smoel object.name %}"
@@ -17,6 +11,9 @@
 <div class="nosmoel"><a href="{{ photosUrl }}">Foto's</a></div>
 {% endif %}
 <h1>{{ object.full_name }}</h1>
+{% endblock entity_head %}
+
+{% block entity_body %}
 {% if "secretariaat" in user.cached_groups_names %}
 <form method="post" action="{% url user-reset-password _id=object.id %}">
 {% csrf_token %}
@@ -224,5 +221,4 @@
 	</dd>
 	{% endif %}
 </dl>
-{{ block.super }}
-{% endblock %}
+{% endblock entity_body %}

@@ -2,9 +2,7 @@
 {% load base %}
 {% load leden %}
 
-{% block body %}
-<h1>{{ object.humanName }}</h1>
-<p>{{ object.description }}</p>
+{% block entity_body %}
 <dl>
 	<dt>Korte namen</dt>
 	<dd>
@@ -71,5 +69,4 @@
 </form>
 {% endif %}
 {% endif %}
-{{ block.super }}
-{% endblock %}
+{% endblock entity_body %}
