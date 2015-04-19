@@ -30,7 +30,7 @@ from kn.leden.mongo import _id
 from kn.leden import giedo
 
 from kn.base._random import pseudo_randstr
-from kn.base.http import redirect_to_referer
+from kn.base.http import redirect_to_referer, JsonHttpResponse
 from kn.base.mail import render_then_email
 from kn.base.text import humanized_enum
 
@@ -447,6 +447,15 @@ def rauth(request):
         request.REQUEST['url'],
         '?' if request.REQUEST['url'].find('?') == -1 else '&',
         str(request.user.name), token))
+
+def accounts_api(request):
+    if request.user.is_authenticated():
+        ret = {'valid': True,
+               'name': request.user.get_username()}
+    else:
+        ret = {'valid': False}
+
+    return JsonHttpResponse(ret)
 
 def api_users(request):
     if not request.REQUEST['key'] in settings.ALLOWED_API_KEYS:
