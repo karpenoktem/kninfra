@@ -718,6 +718,7 @@
   };
 
   KNF.prototype.onedit = function(e) {
+    e.preventDefault();
     e.target.disabled = true;
 
     var field_visibility = $('#album-visibility')
