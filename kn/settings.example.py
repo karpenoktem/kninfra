@@ -94,7 +94,8 @@ SMOELEN_WIDTH = 300
 SMOELEN_HEIGHT = 300
 EXTERNAL_URLS = {
     'stukken':   'https://karpenoktem.nl/groups/leden/',
-    'wiki':      'https://karpenoktem.nl/wiki/Hoofdpagina',
+    'wiki':      'https://karpenoktem.nl/wiki',
+    'wiki-home': 'https://karpenoktem.nl/wiki/Hoofdpagina',
     'forum':     'https://karpenoktem.nl/forum/',
 }
 GOOGLE_CALENDAR_IDS = {
