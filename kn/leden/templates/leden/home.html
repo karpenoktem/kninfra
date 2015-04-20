@@ -1,22 +1,50 @@
 {% extends "leden/base.html" %}
+{% load base %}
 
 {% block body %}
 <h1>Smoelenboek</h1>
-<p>Hallo <a href="{{ user.get_absolute_url }}">{{user.full_name }}</a>,</p>
-<p>je kunt hier onder andere</p>
+<p>Hallo <a href="{{ user.get_absolute_url }}">{{user.first_name }}</a>,</p>
+
+<p>Karpe Noktem heeft diverse digitale diensten, op deze website en daar
+	buiten:</p>
+
 <ul>
-	<li><a href="{% url entity-by-name name="leden"  %}"
-		>alle leden en oud-leden</a>,</li>
-	<li><a href="{% url tag-by-name name="comms" %}"
-		>alle commissies</a>,</li>
-	<li><a href="{% url entity-by-name name="groepen" %}"
-		>alle groepen</a> en</li>
-	<li>de <a href="{% url entity-by-name name="lists" %}"
-		>e-maillijsten</a></li>
+	<li>De ledenadministratie aka het <a href="{% url smoelen-home %}">
+			smoelenboek</a> (dit hier!). Hier houden we van alles bij, zoals:
+		<ul>
+			<li><a href="{% url entity-by-name name="leden"  %}"
+				>alle leden en oud-leden</a>,</li>
+			<li><a href="{% url tag-by-name name="comms" %}"
+				>alle commissies</a>,</li>
+			<li><a href="{% url entity-by-name name="groepen" %}"
+				>alle groepen</a> en</li>
+			<li>de <a href="{% url entity-by-name name="lists" %}"
+				>e-maillijsten</a>.</li>
+		</ul>
+	</li>
+	<li>Wifi op de villa, zie <a href="{% external_url "wiki" %}/Wifi">
+			het wiki-artikel</a>.</li>
+	<li>Het <a href="{% url fotos "" %}">fotoboek</a>. Je kunt hier ook
+		<a href="{% external_url "wiki" %}/Handleiding:FotosUploaden">
+			foto's naar uploaden</a>!</li>
+	<li>Een <a href="{% external_url "wiki-home" %}">wiki</a> waar iedereen
+		voor de vereniging nuttige informatie op kan plempen.</a>
+	<li>Het <a href="{% external_url "forum" %}">forum</a>, dat helaas
+		nauwelijks meer wordt gebruikt.</li>
+	<li>Een <a href="https://www.facebook.com/groups/170930412922856/">
+			Karpe Noktem groep op Facebook</a>.</li>
+	<li>Het <a href="https://www.facebook.com/groups/279385195413570/">
+			zusjesgroepje op Facebook</a>.</li>
 </ul>
-<p>vinden en jouw 
-<a href="{% url chpasswd %}">Karpe Noktem-wachtwoord veranderen</a>;</p>
-<p>of een <a href="{% url chpasswd-villanet %}">wachtwoord voor het
-villa-netwerk instellen.</a></p>
+
+<h2>Instellingen</h2>
+
+<ul>
+	<li><a href="{{ user.get_absolute_url }}">Verander je profiel
+			(profielfoto, zichbaarheid telefoonnummer)</a></li>
+	<li><a href="{% url chpasswd %}">Verander je wachtwoord</a></li>
+	<li><a href="{% url chpasswd-villanet %}">Stel een wachtwoord in voor wifi
+			op de villa</a></li>
+</ul>
 
 {% endblock %}
