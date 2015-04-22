@@ -11,6 +11,7 @@ kninfra packages:
             - python-mysqldb
             - python-imaging
             - python-pip
+            - python-html2text
 mirte:
     pip.installed
 sarah:
