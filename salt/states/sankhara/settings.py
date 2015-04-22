@@ -88,14 +88,20 @@ DEFAULT_FILE_STORAGE = 'kn.base.storage.OurFileSystemStorage'
 BASE_URL = 'https://{{ grains['fqdn'] }}'
 ABSOLUTE_MEDIA_URL = BASE_URL + MEDIA_URL
 SMOELEN_PHOTOS_PATH = 'smoelen'
-USER_PHOTOS_URL = 'http://{{ grains['fqdn'] }}/fotos/?search_tag=%s'
 SMOELEN_WIDTH = 300
+SMOELEN_HEIGHT = 300
 EXTERNAL_URLS = {
     'fotos-pdn': 'https://{{ grains['fqdn'] }}/fotos/index.php?album=pdn',
     'fotos':     'https://{{ grains['fqdn'] }}/fotos/',
     'stukken':   'https://{{ grains['fqdn'] }}/groups/leden/',
-    'wiki':      'https://{{ grains['fqdn'] }}/wiki/Hoofdpagina',
+    'wiki':      'https://{{ grains['fqdn'] }}/wiki',
+    'wiki-home': 'https://{{ grains['fqdn'] }}/wiki/Hoofdpagina',
     'forum':     'https://{{ grains['fqdn'] }}/forum/',
+}
+
+GOOGLE_CALENDAR_IDS = {
+    'kn':   'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com',
+    'zeus': 'a9jl7tuhqg7oe8stapcu9uhvk8@group.calendar.google.com',
 }
 
 # moderation & mailman
@@ -130,6 +136,7 @@ POSTFIX_SLM_MAP = '/etc/postfix/virtual/kninfra_slm_maps'
 INFRA_UID = 1002
 
 PHOTOS_DIR = '/var/fotos'
+PHOTOS_CACHE_DIR = '/var/cache/fotos'
 USER_DIRS = '/mnt/phassa/home/'
 
 LDAP_HOST = 'localhost'
@@ -137,6 +144,7 @@ LDAP_BASE = 'ou=users,dc=karpenoktem,dc=nl'
 LDAP_USER = 'cn=giedo,dc=karpenoktem,dc=nl'
 WOLK_USER = 'wolk'
 WOLK_PATH = '/var/www/wolk'
+WOLK_DATA_PATH = '/mnt/phassa/wolk'
 
 # VPN related
 # ############################################################
@@ -163,7 +171,6 @@ FORUM_MYSQL_SECRET = ('localhost', 'forum',
 WOLK_MYSQL_SECRET = ('localhost', 'wolk',
                         '{{ pillar['secrets']['mysql_wolk'] }}', 'wolk')
 ALLOWED_API_KEYS = ('{{ pillar['secrets']['apikey'] }}',)
-PHOTOS_MYSQL_SECRET = ('HOST', 'USER', 'PWD', 'DB')
 CHUCK_NORRIS_HIS_SECRET = '{{ pillar['secrets']['chucknorris'] }}'
 VILLANET_SECRET_API_KEY = '' # CHANGE ME
 DEFAULT_FROM_EMAIL = ('Karpe Noktems ledenadministratie '+
