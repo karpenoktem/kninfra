@@ -779,6 +779,8 @@
     $(document).keydown(function(e) {
       if (!this.foto)
         return;
+      if (e.target.nodeName === 'INPUT')
+        return;
       // Escape
       if (e.which == 27) {
         this.change_foto(null);
