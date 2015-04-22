@@ -20,6 +20,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+from django.contrib import messages
 
 from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
 from kn.leden.auth import login_or_basicauth_required
@@ -29,9 +30,11 @@ from kn.leden.mongo import _id
 from kn.leden import giedo
 
 from kn.base._random import pseudo_randstr
-from kn.base.http import redirect_to_referer
+from kn.base.http import redirect_to_referer, JsonHttpResponse
 from kn.base.mail import render_then_email
 from kn.base.text import humanized_enum
+
+from kn.fotos.utils import resize_proportional
 
 from kn.settings import DT_MIN, DT_MAX
 from kn import settings
@@ -122,7 +125,8 @@ def _entity_detail(request, e):
            'tags': sorted(tags, Es.entity_cmp_humanName),
            'object': e,
            'chiefs': [],
-           'pipos': [] }
+           'pipos': [],
+           'reps': [] }
     for r in rrelated:
         if r['how'] and Es.relation_is_active(r):
             if str(r['how'].name) == '!brand-hoofd':
@@ -131,6 +135,9 @@ def _entity_detail(request, e):
             if str(r['how'].name) == '!brand-bestuurspipo':
                 r['hidden'] = True
                 ctx['pipos'].append(r)
+            if str(r['how'].name) == '!brand-vertegenwoordiger':
+                r['hidden'] = True
+                ctx['reps'].append(r)
     # Is request.user allowed to add (r)relations?
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):
@@ -144,20 +151,37 @@ def _entity_detail(request, e):
                 'groups': groups,
                 'may_add_related': True,
                 'may_add_rrelated': True})
+    ctx['may_upload_smoel'] = request.user.may_upload_smoel_for(e)
     if e.is_tag:
         ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
                         cmp=Es.entity_cmp_humanName)})
     return ctx
 
 def _user_detail(request, user):
-    hasPhoto = default_storage.exists('%s.jpg' %
-            path.join(settings.SMOELEN_PHOTOS_PATH,
-                    str(user.name)))
     ctx = _entity_detail(request, user)
-    ctx.update({
-            'hasPhoto': hasPhoto,
-            'photoWidth': settings.SMOELEN_WIDTH,
-            'photosUrl': settings.USER_PHOTOS_URL % str(user.name)})
+    ctx['photosUrl'] = reverse('fotos', kwargs={'path':''}) + \
+                                        '?q=tag:'+str(user.name)
+    photos_path = path.join(settings.SMOELEN_PHOTOS_PATH, str(user.name))
+    if default_storage.exists(photos_path + '.jpg'):
+        img = Image.open(default_storage.open(photos_path + '.jpg'))
+        width, height = img.size
+        if default_storage.exists(photos_path + '.orig'):
+            # smoel was created using newer strategy. Shrink until it fits the
+            # requirements.
+            width, height = resize_proportional(img.size[0], img.size[1],
+                                                settings.SMOELEN_WIDTH,
+                                                settings.SMOELEN_HEIGHT)
+        elif width > settings.SMOELEN_WIDTH:
+            # smoel was created as high-resolution image, probably 600px wide
+            width /= 2
+            height /= 2
+        else:
+            # smoel was created as normal image, probably 300px wide
+            pass
+        ctx.update({
+                'hasPhoto': True,
+                'photoWidth': width,
+                'photoHeight': height})
     return render_to_response('leden/user_detail.html', ctx,
             context_instance=RequestContext(request))
 
@@ -275,20 +299,26 @@ def users_underage(request):
 
 @login_required
 def ik_chsmoel(request):
-    if not 'secretariaat' in request.user.cached_groups_names:
-        raise PermissionDenied
-    if not 'id' in request.POST:
-        raise ValueError, "Missing `id' in POST"
     if not 'smoel' in request.FILES:
         raise ValueError, "Missing `smoel' in FILES"
+    if not 'id' in request.POST:
+        raise ValueError, "Missing `id' in POST"
     user = Es.by_id(request.POST['id'])
-    img = Image.open(request.FILES['smoel'])
-    smoelen_width = settings.SMOELEN_WIDTH * 2
-    img = img.resize((smoelen_width,
-        int(float(smoelen_width) / img.size[0] * img.size[1])),
-            Image.ANTIALIAS)
+    if not request.user.may_upload_smoel_for(request.user):
+        raise PermissionDenied
+    original = default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
+            str(user.name)) + ".orig", 'wb+')
+    for chunk in request.FILES['smoel'].chunks():
+        original.write(chunk)
+    original.seek(0)
+    img = Image.open(original)
+    width, height = resize_proportional(img.size[0], img.size[1],
+                                        settings.SMOELEN_WIDTH*2,
+                                        settings.SMOELEN_HEIGHT*2)
+    img = img.resize((width, height), Image.ANTIALIAS)
     img.save(default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
             str(user.name)) + ".jpg", 'w'), "JPEG")
+    Es.notify_informacie('set_smoel', request.user, entity=user)
     return redirect_to_referer(request)
 
 @login_required
@@ -309,7 +339,7 @@ def _ik_chpasswd_handle_valid_form(request, form):
     newpw = form.cleaned_data['new_password']
     giedo.change_password(str(request.user.name), oldpw, newpw)
     t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."""
-    request.user.push_message(t % request.user.first_name)
+    messages.info(request, t % request.user.first_name)
     return HttpResponseRedirect(reverse('smoelen-home'))
 
 @login_required
@@ -344,7 +374,7 @@ def ik_chpasswd_villanet(request):
                         newpw)
                 t = ("Lieve %s, maar natuurlijk, jouw wachtwoord voor het "+
                         "villa-netwerk is veranderd.")
-                request.user.push_message(t % request.user.first_name)
+                messages.info(request, t % request.user.first_name)
                 return HttpResponseRedirect(reverse('smoelen-home'))
             except giedo.ChangePasswordError as e:
                 errl.extend(e.args)
@@ -417,6 +447,15 @@ def rauth(request):
         request.REQUEST['url'],
         '?' if request.REQUEST['url'].find('?') == -1 else '&',
         str(request.user.name), token))
+
+def accounts_api(request):
+    if request.user.is_authenticated():
+        ret = {'valid': True,
+               'name': request.user.get_username()}
+    else:
+        ret = {'valid': False}
+
+    return JsonHttpResponse(ret)
 
 def api_users(request):
     if not request.REQUEST['key'] in settings.ALLOWED_API_KEYS:
@@ -499,7 +538,7 @@ def secr_add_user(request):
             render_then_email("leden/welcome.mail.txt",
                         u.canonical_full_email, {
                             'u': u})
-            Es.notify_informacie('adduser', entity=u._id)
+            Es.notify_informacie('adduser', request.user, entity=u._id)
             return HttpResponseRedirect(reverse('user-by-name',
                     args=(nm,)))
     else:
@@ -537,9 +576,9 @@ def secr_add_group(request):
                 'tags': [_id(fd['parent'])]})
             logging.info("Added group %s" % nm)
             g.save()
-            Es.notify_informacie('addgroup', entity=g._id)
+            Es.notify_informacie('addgroup', request.user, entity=g._id)
             giedo.sync_async(request)
-            request.user.push_message("Groep toegevoegd.")
+            messages.info(request, 'Groep toegevoegd.')
             return HttpResponseRedirect(reverse('group-by-name', args=(nm,)))
     else:
         form = AddGroupForm()
@@ -556,11 +595,8 @@ def relation_end(request, _id):
     Es.end_relation(_id)
 
     # Notify informacie
-    if request.user == rel['who']:
-        Es.notify_informacie('relation_ended', relation=_id)
-    else:
-        # TODO (rik) leave out 'als lid'
-        Es.notify_informacie('relation_end', relation=_id)
+    # TODO (rik) leave out 'als lid'
+    Es.notify_informacie('relation_end', request.user, relation=_id)
 
     giedo.sync_async(request)
     return redirect_to_referer(request)
@@ -596,11 +632,8 @@ def relation_begin(request):
     relation_id = Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
 
     # Notify informacie
-    if request.user._id == d['who']:
-        Es.notify_informacie('relation_begun', relation=relation_id)
-    else:
-        # TODO (rik) leave out 'als lid'
-        Es.notify_informacie('relation_begin', relation=relation_id)
+    # TODO (rik) leave out 'als lid'
+    Es.notify_informacie('relation_begin', request.user, relation=relation_id)
 
     giedo.sync_async(request)
     return redirect_to_referer(request)
@@ -617,7 +650,7 @@ def user_reset_password(request, _id):
                         u.canonical_full_email, {
                             'user': u,
                             'password': pwd})
-    request.user.push_message("Wachtwoord gereset!")
+    messages.info(request, "Wachtwoord gereset!")
     return redirect_to_referer(request)
 
 @login_required
@@ -642,7 +675,7 @@ def secr_update_site_agenda(request):
         if 'secretariaat' not in request.user.cached_groups_names:
                 raise PermissionDenied
         giedo.update_site_agenda()
-        request.user.push_message("Agenda geupdate!")
+        messages.info(request, "Agenda geupdate!")
         return redirect_to_referer(request)
 
 @login_required
@@ -656,8 +689,8 @@ def ik_openvpn(request):
                     request.POST['password'])
             giedo.openvpn_create(str(request.user.name),
                     request.POST['want'])
-            request.user.push_message("Je verzoek wordt verwerkt. "+
-                "Verwacht binnen 5 minuten een e-mail.")
+            messages.info(request, "Je verzoek wordt verwerkt. "
+                    "Verwacht binnen 5 minuten een e-mail.")
             return HttpResponseRedirect(reverse('smoelen-home'))
         else:
             password_incorrect = True

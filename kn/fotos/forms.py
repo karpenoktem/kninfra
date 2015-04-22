@@ -4,26 +4,22 @@ from datetime import date
 
 from django import forms
 
-from kn.settings import PHOTOS_DIR, USER_DIRS
+from kn.settings import PHOTOS_DIR, USER_DIRS, WOLK_DATA_PATH
+from kn.leden import giedo
 
-def move_fotos_scan_userdirs():
-    # XXX os.path.join?
-    for user in os.listdir(USER_DIRS):
-        if user[0] == '.':
-            continue
-        fd = '%s%s/fotos/' % (USER_DIRS, user)
-        if not os.path.isdir(fd):
-            continue
-        for dir in os.listdir(fd):
-            if fd[0] == '.' or not os.path.isdir(fd + dir):
-                continue
-            n = '%s/%s' % (user, dir)
-            yield (n,n)
+import kn.fotos.entities as fEs
+from kn.fotos.roots import FOTO_ROOTS
+
+
+def list_events():
+    events = []
+    for album in fEs.by_path('').list_all():
+        events.append(album.name)
+    events.sort(reverse=True)
+    return events
 
 def move_fotos_list_events():
-    events = list(map(os.path.basename, glob('%s/20*' % PHOTOS_DIR)))
-    events.sort(reverse=True)
-    return map(lambda x: (x, x), events)
+    return map(lambda x: (x, x), list_events())
 
 class CreateEventForm(forms.Form):
     humanName = forms.CharField(label='Naam voor mensen')
@@ -39,7 +35,7 @@ class CreateEventForm(forms.Form):
 def getMoveFotosForm():
     class MoveFotosForm(forms.Form):
         move_src = forms.ChoiceField(label='Verplaats',
-                choices=move_fotos_scan_userdirs())
+                choices=giedo.fotoadmin_scan_userdirs())
         move_dst = forms.ChoiceField(label='naar',
                 choices=move_fotos_list_events())
     return MoveFotosForm

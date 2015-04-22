@@ -1,14 +1,8 @@
-{% extends "static/base.html" %}
-
-{% block styles %}
-{{ block.super }}
-<link rel="stylesheet"
-  href="{{ MEDIA_URL }}/agenda/agenda.css" />
-{% endblock styles %}
+{% extends "agenda/base.html" %}
 
 {% block body %}
 <div>
-  <a href="http://www.google.com/calendar/embed?src=vssp95jliss0lpr768ec9spbd8%40group.calendar.google.com&amp;ctz=Europe/Paris" target="_blank"
+  <a href="https://www.google.com/calendar/embed?src=vssp95jliss0lpr768ec9spbd8%40group.calendar.google.com&amp;ctz=Europe/Amsterdam" target="_blank"
     >Ook op Google Calendar</a>.
   Ben je geen lid, maar wil je wel op de hoogte blijven van onze activiteiten?
   Zet jezelf op de geïnteresseerden-e-maillijst
@@ -18,7 +12,7 @@
       <input name="email" type="text" placeholder="jouw@email.com" />
       <input type="submit" value="voeg toe" />
   </form>
-  <p>We hebben ook een <a href="https://www.google.com/calendar/embed?src=a9jl7tuhqg7oe8stapcu9uhvk8%40group.calendar.google.com&ctz=Europe/Amsterdam">gezamelijke agenda</a> met onze <a href="{% url zusjes %}">zusjes</a>!</p>
+  <p>We hebben ook een <a href="{% url agenda-zeus %}">gezamelijke agenda</a> met onze <a href="{% url zusjes %}">zusjes</a>!</p>
 </div>
 
 {% include "agenda/widget.html" %}

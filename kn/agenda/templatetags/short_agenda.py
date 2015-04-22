@@ -6,7 +6,7 @@ MAX_ITEMS = 10;
 
 @register.inclusion_tag('agenda/short_agenda.html')
 def show_short_agenda():
-    items = list(Es_a.all(limit=MAX_ITEMS + 1));
+    items = list(Es_a.all(agenda='kn', limit=MAX_ITEMS + 1));
     return {'short_agenda': items[0:MAX_ITEMS],
             'has_more': len(items) > MAX_ITEMS}
 

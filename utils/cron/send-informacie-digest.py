@@ -4,4 +4,4 @@ import _import
 from kn.leden.cron import send_informacie_digest
 
 if __name__ == '__main__':
-        send_informacie_digest()
+    send_informacie_digest()

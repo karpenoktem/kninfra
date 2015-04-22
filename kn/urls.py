@@ -20,14 +20,15 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', auth.views.login, name='login'),
     url(r'^accounts/logout/$', auth.views.logout_then_login, name='logout'),
     url(r'^accounts/rauth/$', 'kn.leden.views.rauth', name='rauth'),
+    url(r'^accounts/api/$', 'kn.leden.views.accounts_api', name='auth-api'),
     url(r'^favicon.ico$', redirect_to,
             {'url': settings.MEDIA_URL + '/base/favicon.ico'}),
     (r'^moderatie/', include('kn.moderation.urls')),
-    (r'^fotos/', include('kn.fotos.urls')),
     (r'^planning/', include('kn.planning.urls')),
     (r'^barco/', include('kn.barco.urls')),
     (r'', include('kn.agenda.urls')),
     (r'', include('kn.static.urls')),
+    (r'', include('kn.fotos.urls')),
 )
 
 # vim: et:sta:bs=2:sw=4:

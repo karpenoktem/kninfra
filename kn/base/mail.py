@@ -1,3 +1,5 @@
+from html2text import HTML2Text
+
 import django.template
 import django.template.loader
 import django.core.mail
@@ -29,8 +31,8 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
         rendered_nodes[node.name] = node.render(context)
     if not 'subject' in rendered_nodes:
         raise KeyError, "Missing subject block"
-    if not 'plain' in rendered_nodes:
-        raise KeyError, "Missing plain block"
+    if not 'plain' in rendered_nodes and not 'html' in rendered_nodes:
+        raise KeyError, "Missing plain or html block"
 
     # Set up e-mail
     if cc:
@@ -41,17 +43,20 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
         from_email = rendered_nodes.get('from',
                 settings.DEFAULT_FROM_EMAIL).strip()
 
-    Email = django.core.mail.EmailMessage
-    if 'html' in rendered_nodes:
-        Email = django.core.mail.EmailMultiAlternatives
-    email = Email(rendered_nodes['subject'].strip(),
-                          rendered_nodes['plain'].strip(),
+    if 'plain' in rendered_nodes:
+        plain = rendered_nodes['plain'].strip()
+    else:
+        h = HTML2Text()
+        h.ignore_links = True
+        plain = h.handle(rendered_nodes['html']).strip()
+
+    email = django.core.mail.EmailMultiAlternatives(rendered_nodes['subject'].strip(),
+                          plain,
                           from_email,
                           to,
                           headers=headers,
                           bcc=(cc + bcc))
 
-    # whether this email contains a HTML version
     if 'html' in rendered_nodes:
         email.attach_alternative(rendered_nodes['html'].strip(), "text/html")
 

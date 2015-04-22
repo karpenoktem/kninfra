@@ -124,7 +124,7 @@ urlpatterns = patterns('',
             name='intro2010'),
 
     # legacy redirect URLs
-    url(r'^hink-stap/(?P<name>fotos-pdn|fotos|wiki|forum|stukken)$',
+    url(r'^hink-stap/(?P<name>wiki|forum|stukken)$',
             views.hink_stap),
 
     # Backwards compatibility

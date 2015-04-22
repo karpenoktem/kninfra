@@ -7,6 +7,7 @@ Vindt onder
 
  * `kn/static`. Homepage
  * `kn/leden`. Smoelenboek (en ledenadministratie)
+ * `kn/fotos`. Fotoboek
  * `kn/base`. Gedeeld
  * `kn/utils/giedo` en `kn/utils/daan` Synchronisatie met maillijsten, wiki, forum, etc.
  * `kn/planning`. Tappers planning

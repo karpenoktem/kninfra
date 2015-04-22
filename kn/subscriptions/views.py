@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Group
 from django.http import Http404, HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
+from django.contrib import messages
 
 from kn.base.mail import render_then_email
 from kn.base.http import JsonHttpResponse
@@ -62,7 +63,7 @@ def event_detail(request, name):
             raise PermissionDenied
         # Is the other already subscribed
         if other_subscription is not None:
-            request.user.push_message("%s is al aangemeld" % (
+            messages.error(request, "%s is al aangemeld" % (
                 Es.by_id(request.POST['who']).full_name))
         else:
             # Find the user to subscribe
