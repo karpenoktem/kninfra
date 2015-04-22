@@ -45,11 +45,11 @@ def entities_json(children, user):
         entry = {'type': child._type,
                  'path': child.full_path,
                  'name': child.name,
-                 'title': child.title}
+                 'title': child.title,
+                 'rotation': child.rotation}
 
         if fEs.is_admin(user):
             entry['visibility'] = child.visibility[0]
-            entry['rotation'] = child.rotation
 
         if child.description:
             entry['description'] = child.description;

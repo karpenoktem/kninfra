@@ -19,13 +19,11 @@
       this.tags = [];
     }
 
-    this.reload_cache_urls();
+    this.calculate_cache_urls();
   };
 
-  Foto.prototype.reload_cache_urls = function(query) {
-    if (query === undefined) {
-      query = '';
-    }
+  Foto.prototype.calculate_cache_urls = function() {
+    var query = '?rot=' + this.rotation;
     if (this.type == 'album') {
       if (this.thumbnailPath !== undefined) {
         this.thumbnail = this.cache_url('thumb', this.thumbnailPath) + query;
@@ -629,7 +627,7 @@
         delete foto.newRotation;
         if (changed_rotation) {
           // invalidate cached cache urls
-          foto.reload_cache_urls('?rotation='+foto.rotation);
+          foto.calculate_cache_urls();
           this.update_foto_src(foto);
         }
 
