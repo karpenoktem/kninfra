@@ -220,9 +220,6 @@ html.foto-sidebar #foto .sidebar {
 #foto .tags .remove:hover {
     color: white;
 }
-#foto .save {
-    float: right;
-}
 
 #foto .footer {
     text-align: right;
@@ -242,6 +239,20 @@ html.foto-sidebar #foto .sidebar {
     content: '•';
     position: absolute;
     left: -0.8em;
+}
+
+#foto .sidebar .hidden-submit {
+    /* http://stackoverflow.com/a/6602788/559350 */
+    width: 0;
+    height: 0;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#foto .status {
+    color: #aaa;
 }
 
 @media (max-width: 500px) {
