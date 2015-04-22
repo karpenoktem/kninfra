@@ -589,6 +589,7 @@
   };
 
   KNF.prototype.rotate = function(degrees) {
+    if (!fotos_admin) return;
     if (!('oldRotation' in this.foto)) {
       this.foto.oldRotation = this.foto.rotation;
     }
