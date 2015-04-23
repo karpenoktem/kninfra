@@ -193,8 +193,6 @@ def defaultSettings(glbls):
     except locale.Error:
         pass
 
-    return locals()
-
 class DEFAULTS(object):
     def __init__(self, dct):
         self.__dict__['d'] = dct
