@@ -46,6 +46,8 @@ def defaultSettings(glbls):
     d.WOLK_DATA_PATH = '/mnt/phassa/srv/wolk'
     d.INFRA_UID = 1002
 
+    d.SCHEME = 'https'
+
     # Maybe you want to change these
     # ############################################################
 
@@ -53,7 +55,7 @@ def defaultSettings(glbls):
     d.STORAGE_ROOT = d.INFRA_HOME + '/storage'
     d.GOOGLE_OAUTH2_KEY = d.INFRA_HOME + '/google-oauth-key.json'
 
-    d.BASE_URL = 'https://' + d.DOMAINNAME
+    d.BASE_URL = d.SCHEME + '://' + d.DOMAINNAME
     d.PHOTOS_CACHE_DIR = '/var/cache/fotos'
     d.MAILDOMAIN = d.DOMAINNAME
 
@@ -70,7 +72,7 @@ def defaultSettings(glbls):
     d.MODERATORS_GROUP = 'moderators'
     d.MOD_UI_URI = '/mailman/admindb/%s'
     d.MOD_RENEW_INTERVAL = datetime.timedelta(0, 15*60)
-    d.MOD_DESIRED_URI_PREFIX = 'https://www.' + d.DOMAINNAME
+    d.MOD_DESIRED_URI_PREFIX = d.SCHEME + '://www.' + d.DOMAINNAME
 
     d.MEDIAWIKI_PATH = '/srv/' + d.DOMAINNAME + '/htdocs/mediawiki'
 
