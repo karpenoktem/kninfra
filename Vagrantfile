@@ -37,7 +37,7 @@ def ensure_secrets_are_generated
                 'mysql_wiki', 'mysql_wolk', 'apikey']
 
     path = File.join(File.dirname(__FILE__), 'salt', 'pillar', 'vagrant.sls')
-    return if File.exists? path
+    return if File.exists?(path) and File.mtime(path) >= File.mtime(__FILE__)
 
     puts 'Generating passwords ...'
     pillar = {'secrets' => {}}
