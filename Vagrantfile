@@ -33,8 +33,9 @@ require 'yaml'
 require 'securerandom'
 
 def ensure_secrets_are_generated
-    names = ['chucknorris', 'mysql_forum',
-                'mysql_wiki', 'mysql_wolk', 'apikey']
+    names = ['chucknorris', 'mysql_forum', 'django_secret_key',
+                'mysql_wiki', 'mysql_wolk', 'apikey',
+                'mailman_default', 'ldap_infra']
 
     path = File.join(File.dirname(__FILE__), 'salt', 'pillar', 'vagrant.sls')
     return if File.exists?(path) and File.mtime(path) >= File.mtime(__FILE__)
