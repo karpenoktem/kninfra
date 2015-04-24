@@ -67,12 +67,7 @@ copy_emailaddresses_to_clipboard = function() {
 {% block body %}
 {% if subscription %}
 {% if subscription.confirmed %}
-{% if subscription.debit > 0 %}
-<div class="message">Je bent aangemeld, maar moet nog wel
-                {{ subscription.debit }} euro betalen.</div>
-{% else %}{# subscription.debit > 0 #}
 <div class="message">Je bent aangemeld.</div>
-{% endif %}{# subscription.debit > 0 #}
 {% endif %}{# subscription.confirmed #}
 {% endif %}{# subscription #}
 <h1>{{ object.humanName }}</h1>
