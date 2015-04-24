@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
 
 from django.core.urlresolvers import reverse
@@ -10,7 +12,7 @@ def ensure_indices():
                        ('start', 1)])
 
 def all(agenda=None, limit=None):
-    query = {}
+    query = {'start': {'$gte': datetime.now()}}
     if agenda is not None:
         query['agenda'] = agenda
     cursor = acol.find(query).sort('start')
