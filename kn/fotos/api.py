@@ -136,8 +136,6 @@ def _set_metadata(data, request):
         tags = data['tags']
         entity.set_tags(tags, save=True)
 
-        result['thumbnailSize'] = entity.get_cache_size('thumb')
-
     if entity._type == 'foto':
         if 'rotation' not in data:
             return {'error': 'missing rotation attribute'}
@@ -149,6 +147,8 @@ def _set_metadata(data, request):
         entity.set_rotation(rotation, save=False)
 
         result['largeSize'] = entity.get_cache_size('large')
+
+    result['thumbnailSize'] = entity.get_cache_size('thumb')
 
     entity.set_title(title, save=False)
 
