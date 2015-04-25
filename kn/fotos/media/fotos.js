@@ -830,10 +830,4 @@
   });
 })();
 
-$(document).ready(function() {
-  $('#album-edit-toggle').click(function() {
-    $('#topbar').toggleClass('editor');
-  });
-});
-
 /* vim: set et sta bs=2 sw=2 : */

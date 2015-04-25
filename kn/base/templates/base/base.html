@@ -37,12 +37,12 @@
                     <li id="loginButton"><a href="{% url smoelen-home %}">{{ user.name }}</a></li>
                     {% else %}{# user.is_authenticated #}
                     <li><a href="{% url lidworden %}">lid worden</a></li>
-                    <li id="loginButton">
-                        <a id="loginButtonLink" href="{% url login %}">
+                    <li id="loginButton" class="toggle">
+                        <a id="loginButtonLink" href="{% url login %}" class="toggle-button">
                             <img src="{{ MEDIA_URL }}/base/login.svg" width="13" height="15" alt=""/>
                             <span class="label">leden</span>
                         </a>
-                        <div id="loginWindow">
+                        <div id="loginWindow" class="toggle-window">
                             <h2>Inloggen voor leden</h2>
                             <p>
                                 Leden kunnen hier inloggen om o.a. het smoelenboek, de wiki en

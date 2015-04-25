@@ -27,27 +27,24 @@ img#album-edit-toggle {
     bottom: -1px;
 }
 #album-edit-toggle:hover,
-#topbar.editor #album-edit-toggle {
+#topbar.toggle-open #album-edit-toggle {
     opacity: 1;
 }
-#topbar.editor #album-edit-toggle {
+#topbar.toggle-open #album-edit-toggle {
     background: white;
     border-color: #aaa;
     border-bottom: 1px white solid;
 }
 
 #album-editor {
-    display: none;
-    position: absolute;
     z-index: 1;
     background: white;
     white-space: nowrap;
-    right: -5px;
     padding: 2px 5px;
     border: 1px #aaa solid;
 }
-#topbar.editor #album-editor {
-    display: block;
+#topbar.toggle-open #album-editor {
+    right: -5px;
 }
 
 p.error {
