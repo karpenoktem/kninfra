@@ -3,7 +3,7 @@ from django.core.mail import EmailMessage
 import kn.leden.entities as Es
 
 def send_reminder(vacancy, update=True):
-    to = vacancy.assignee.get_user()
+    to = vacancy.assignee
     e = vacancy.event
     p = vacancy.pool
     edate = e.date.strftime('%A %d %B')

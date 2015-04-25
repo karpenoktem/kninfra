@@ -1,5 +1,6 @@
 {% extends "leden/base.html" %}
 {% load base %}
+{% load planning %}
 
 {% block body %}
 <script type="text/javascript">
@@ -60,8 +61,8 @@
         id="more_element_{{ vacancy.formField.name }}">more...</a><span
         style="display: none" id="more_{{ vacancy.formField.name }}">{% endif %}
         <a href="javascript:set_select_by_id('id_{{ vacancy.formField.name }}', '{{ suggestion.scorer.id }}');" 
-                title="{{ suggestion.score }} - {{ suggestion.scorer.last_shift }}"
-                >{{ suggestion.scorer.get_user.name }}</a>{% if not forloop.last %},{% endif %}
+                title="{{ suggestion.score }} - {{ suggestion.scorer|last_shift:pool }}"
+                >{{ suggestion.scorer.name }}</a>{% if not forloop.last %},{% endif %}
 {% if forloop.last and forloop.counter > 5 %}</span>{% endif %}
 {% endfor %}
             </td>
@@ -69,7 +70,7 @@
 {% empty %}
         <tr>
             <td colspan="2">
-                    Er zijn geen diensten voor de pool {{ pool }}.
+                    Er zijn geen diensten voor de pool {{ pool.name }}.
             </td>
         </tr>
 {% endfor %}
