@@ -128,24 +128,21 @@ $(document).ready(function() {
 
     sessionStorage['visited'] = 'true';
 
-    $('#loginButtonLink').bind('click', function (event) {
-        var loginButton = $('#loginButton');
-        loginButton.toggleClass('open');
-        event.preventDefault();
-        event.stopPropagation();
+    $('.toggle').each(function(i, toggle) {
+        toggle = $(toggle);
+        var btn = $('.toggle-button', toggle);
+        btn.bind('click', function (e) {
+            toggle.toggleClass('toggle-open');
+            e.preventDefault();
+            e.stopPropagation();
+        });
     });
 
-    $(document.body).bind('click', function (event) {
-        $('#loginButton').removeClass('open');
-    });
-
-    $('#loginWindow').bind('click', function (event) {
-        event.stopPropagation();
-    });
-
-    $('#submenu-button').bind('click', function(event) {
-        event.preventDefault();
-        $('#submenu-wrapper').toggleClass('open');
+    $(document.body).bind('click', function (e) {
+        var target = $(e.target);
+        if (target.hasClass('toggle-window') ||
+            target.parents('.toggle-window').length) return;
+        $('.toggle').removeClass('toggle-open');
     });
 });
 

@@ -15,9 +15,9 @@
 {% endblock head %}
 
 {% block submenu %}
-<div id="submenu-wrapper">
-    <a id="submenu-button" href="">&nbsp;</a>
-    <ul id="submenu" class="has-dropdown">
+<div id="submenu-wrapper" class="toggle">
+    <a id="submenu-button" class="toggle-button" href="">&nbsp;</a>
+    <ul id="submenu" class="has-dropdown toggle-window">
         <li><a href="{% url smoelen-home %}">Smoelenboek</a>
           <ul>
               <li><a href="{% url entity-by-name name="leden" %}"

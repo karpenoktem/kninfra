@@ -49,12 +49,13 @@ if ('srcset' in (new Image())) {
 
 {% block body %}
 <div id="breadcrumbs"></div>
-<div id="topbar">
+<div id="topbar" class="toggle">
   <input id="search" type="search" placeholder="zoek..."/>
 {% if fotos_admin %}
-  <img id="album-edit-toggle" src="{{ MEDIA_URL }}/fotos/edit-icon.svg"
-    width="16" height="16" title="Bewerk naam en zichtbaarheid"/>
-  <form id="album-editor">
+  <img id="album-edit-toggle" class="toggle-button"
+    src="{{ MEDIA_URL }}/fotos/edit-icon.svg" width="16" height="16"
+    title="Bewerk naam en zichtbaarheid"/>
+  <form id="album-editor" class="toggle-window">
     <select id="album-visibility"
       onchange="$('#album-edit-button').prop('disabled', false)">
       <option value="world">Publiek</option>
