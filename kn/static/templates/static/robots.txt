@@ -1,6 +1,5 @@
 User-agent: *
-Disallow: /site/js/common.js
-Disallow: {{ MEDIA_URL }}/base/
+Disallow: {{ MEDIA_URL }}/base/common.js
 Disallow: /fotos/
 Disallow: /foto/
 Disallow: /~bas/
