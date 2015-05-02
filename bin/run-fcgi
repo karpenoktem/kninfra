@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd $HOME/repo/kn &> /dev/null
+pushd $HOME/repo &> /dev/null
 
 if [ -e $HOME/fcgi.pid ]; then
         kill `cat $HOME/fcgi.pid`
