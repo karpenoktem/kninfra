@@ -9,22 +9,22 @@
 	buiten:</p>
 
 <ul>
-	<li>De ledenadministratie aka het <a href="{% url smoelen-home %}">
+	<li>De ledenadministratie aka het <a href="{% url "smoelen-home" %}">
 			smoelenboek</a> (dit hier!). Hier houden we van alles bij, zoals:
 		<ul>
-			<li><a href="{% url entity-by-name name="leden"  %}"
+			<li><a href="{% url "entity-by-name" name="leden"  %}"
 				>alle leden en oud-leden</a>,</li>
-			<li><a href="{% url tag-by-name name="comms" %}"
+			<li><a href="{% url "tag-by-name" name="comms" %}"
 				>alle commissies</a>,</li>
-			<li><a href="{% url entity-by-name name="groepen" %}"
+			<li><a href="{% url "entity-by-name" name="groepen" %}"
 				>alle groepen</a> en</li>
-			<li>de <a href="{% url entity-by-name name="lists" %}"
+			<li>de <a href="{% url "entity-by-name" name="lists" %}"
 				>e-maillijsten</a>.</li>
 		</ul>
 	</li>
 	<li>Wifi op de villa, zie <a href="{% external_url "wiki" %}/Wifi">
 			het wiki-artikel</a>.</li>
-	<li>Het <a href="{% url fotos "" %}">fotoboek</a>. Je kunt hier ook
+	<li>Het <a href="{% url "fotos" "" %}">fotoboek</a>. Je kunt hier ook
 		<a href="{% external_url "wiki" %}/Handleiding:FotosUploaden">
 			foto's naar uploaden</a>!</li>
 	<li>Een <a href="{% external_url "wiki-home" %}">wiki</a> waar iedereen
@@ -42,8 +42,8 @@
 <ul>
 	<li><a href="{{ user.get_absolute_url }}">Verander je profiel
 			(profielfoto, zichbaarheid telefoonnummer)</a></li>
-	<li><a href="{% url chpasswd %}">Verander je wachtwoord</a></li>
-	<li><a href="{% url chpasswd-villanet %}">Stel een wachtwoord in voor wifi
+	<li><a href="{% url "chpasswd" %}">Verander je wachtwoord</a></li>
+	<li><a href="{% url "chpasswd-villanet" %}">Stel een wachtwoord in voor wifi
 			op de villa</a></li>
 </ul>
 

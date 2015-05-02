@@ -19,8 +19,8 @@ var fotos_admin = {{ fotos_admin|yesno:"true,false" }};
 {% if fotos_admin %}
 var fotos_people = {{ people|json }};
 {% endif %}
-var fotos_root = "{% url fotos '' %}";
-var fotos_api_url = "{% url fotos-api %}";
+var fotos_root = "{% url "fotos" '' %}";
+var fotos_api_url = "{% url "fotos-api" %}";
 // Initialize Lazy Load XT
 $.extend($.lazyLoadXT, {
   autoInit: false,
@@ -69,7 +69,7 @@ if ('srcset' in (new Image())) {
 {% endif %}
 </div>
 {% if error == 'permission-denied' %}
-<p class="error">Je hebt niet de juiste rechten om dit album te zien. Waarschijnlijk mogen alleen <a href="{% url group-by-name 'fotocie' %}">FotoCie</a>-leden dit album zien.</p>
+<p class="error">Je hebt niet de juiste rechten om dit album te zien. Waarschijnlijk mogen alleen <a href="{% url "group-by-name" 'fotocie' %}">FotoCie</a>-leden dit album zien.</p>
 {% else %}
 <ul id="fotos"></ul>
 {% endif %}
