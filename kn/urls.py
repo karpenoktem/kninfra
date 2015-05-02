@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     url(r'^accounts/rauth/$', 'kn.leden.views.rauth', name='rauth'),
     url(r'^accounts/api/$', 'kn.leden.views.accounts_api', name='auth-api'),
     url(r'^favicon.ico$', RedirectView.as_view(
-            url=settings.MEDIA_URL + '/base/favicon.ico')),
+            url=settings.MEDIA_URL + 'base/favicon.ico')),
     (r'^moderatie/', include('kn.moderation.urls')),
     (r'^planning/', include('kn.planning.urls')),
     (r'^barco/', include('kn.barco.urls')),

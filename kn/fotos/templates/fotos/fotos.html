@@ -4,12 +4,12 @@
 
 {% block head %}
 {{ block.super }}
-<script type="text/javascript" src="{{ MEDIA_URL }}/fotos/jquery.lazyloadxt.extra.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}fotos/jquery.lazyloadxt.extra.min.js"></script>
 {% if fotos_admin %}
 <script type="text/javascript"
-        src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js" defer></script>
+        src="{{ MEDIA_URL }}base/jquery-ui-1.8.22/the.js" defer></script>
 {% endif %}
-<script type="text/javascript" src="{{ MEDIA_URL }}/fotos/fotos.js?v=2"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}fotos/fotos.js?v=2"></script>
 <script type="text/javascript">
 'use strict';
 expandHeader = false;
@@ -40,10 +40,10 @@ if ('srcset' in (new Image())) {
 {% block styles %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css"
-        href="{{ MEDIA_URL }}/fotos/fotos.css" />
+        href="{{ MEDIA_URL }}fotos/fotos.css" />
 {% if fotos_admin %}
 <link rel="stylesheet" type="text/css"
-    deferred-href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css"/>
+    deferred-href="{{ MEDIA_URL }}base/jquery-ui-1.8.22/the.css"/>
 {% endif %}
 {% endblock styles %}
 
@@ -53,7 +53,7 @@ if ('srcset' in (new Image())) {
   <input id="search" type="search" placeholder="zoek..."/>
 {% if fotos_admin %}
   <img id="album-edit-toggle" class="toggle-button"
-    src="{{ MEDIA_URL }}/fotos/edit-icon.svg" width="16" height="16"
+    src="{{ MEDIA_URL }}fotos/edit-icon.svg" width="16" height="16"
     title="Bewerk naam en zichtbaarheid"/>
   <form id="album-editor" class="toggle-window">
     <select id="album-visibility"
@@ -97,10 +97,10 @@ if ('srcset' in (new Image())) {
         </select>
         <div class="rotation">
           <a class="rotate-left" href>
-            <img src="{{ MEDIA_URL }}/fotos/rotate-left.svg" width="24" height="24"/>
+            <img src="{{ MEDIA_URL }}fotos/rotate-left.svg" width="24" height="24"/>
           </a>
           <a class="rotate-right" href>
-            <img src="{{ MEDIA_URL }}/fotos/rotate-right.svg" width="24" height="24"/>
+            <img src="{{ MEDIA_URL }}fotos/rotate-right.svg" width="24" height="24"/>
           </a>
         </div>
 {% endif %}

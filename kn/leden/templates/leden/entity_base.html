@@ -4,7 +4,7 @@
 
 {% block styles %}
 {{ block.super }}
-<link href="{{ MEDIA_URL }}/leden/entity_detail.css" rel="stylesheet" />
+<link href="{{ MEDIA_URL }}leden/entity_detail.css" rel="stylesheet" />
 {% endblock styles %}
 
 {% block head %}
@@ -17,7 +17,7 @@ $(function(){
         create_entityChoiceField('relation_begin2_how', {type: 'brand'});
 });
 </script>
-<script src="{{ MEDIA_URL }}/leden/entity_detail.js" defer></script>
+<script src="{{ MEDIA_URL }}leden/entity_detail.js" defer></script>
 {% endblock head %}
 
 {% block body %}

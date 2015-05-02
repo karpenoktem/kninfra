@@ -4,7 +4,7 @@
 
 {% block styles %}
 {{ block.super }}
-<link href="{{ MEDIA_URL }}/base/base.css"
+<link href="{{ MEDIA_URL }}base/base.css"
     rel="stylesheet" type="text/css" />
 {% endblock styles %}
 
@@ -22,7 +22,7 @@
 <div id="header">
         <div class="container">
                 <a href="{% url "home" %}" id="logo">
-                        <img width="310" src="{{ MEDIA_URL }}/base/logo.png"
+                        <img width="310" src="{{ MEDIA_URL }}base/logo.png"
                                 alt="Karpe Noktem" />
                 </a>
                 <div id="navigator" class="container">
@@ -39,7 +39,7 @@
                     <li><a href="{% url "lidworden" %}">lid worden</a></li>
                     <li id="loginButton" class="toggle">
                         <a id="loginButtonLink" href="{% url "login" %}" class="toggle-button">
-                            <img src="{{ MEDIA_URL }}/base/login.svg" width="13" height="15" alt=""/>
+                            <img src="{{ MEDIA_URL }}base/login.svg" width="13" height="15" alt=""/>
                             <span class="label">leden</span>
                         </a>
                         <div id="loginWindow" class="toggle-window">
