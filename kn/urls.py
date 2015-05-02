@@ -1,7 +1,8 @@
 from django.contrib import auth
 from django.conf import settings
 from django.conf.urls.defaults import *
-from django.views.generic.simple import redirect_to
+from django.conf.urls.static import static
+from django.views.generic import RedirectView
 import django.contrib.auth.views
 
 from kn.leden import views
@@ -18,8 +19,8 @@ urlpatterns = patterns('',
     url(r'^accounts/logout/$', auth.views.logout_then_login, name='logout'),
     url(r'^accounts/rauth/$', 'kn.leden.views.rauth', name='rauth'),
     url(r'^accounts/api/$', 'kn.leden.views.accounts_api', name='auth-api'),
-    url(r'^favicon.ico$', redirect_to,
-            {'url': settings.MEDIA_URL + '/base/favicon.ico'}),
+    url(r'^favicon.ico$', RedirectView.as_view(
+            url=settings.MEDIA_URL + '/base/favicon.ico')),
     (r'^moderatie/', include('kn.moderation.urls')),
     (r'^planning/', include('kn.planning.urls')),
     (r'^barco/', include('kn.barco.urls')),

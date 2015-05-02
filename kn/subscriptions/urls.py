@@ -1,6 +1,5 @@
 from django.conf.urls.defaults import *
 from django.contrib.auth.decorators import login_required
-import django.views.generic.list_detail
 
 from kn.subscriptions import views
 

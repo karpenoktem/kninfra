@@ -1,14 +1,13 @@
 from django.conf.urls.defaults import *
 from django.contrib.auth.decorators import login_required
-import django.views.generic as generic
-import django.views.generic.simple
+from django.views.generic import TemplateView
 
 from kn.leden import views, api
 
 urlpatterns = patterns('',
     url(r'^$',
-    login_required(generic.simple.direct_to_template),
-       {'template': 'leden/home.html'}, name='smoelen-home'),
+    login_required(TemplateView.as_view(template_name='leden/home.html')),
+               name='smoelen-home'),
     url(r'^gebruikers/(?:p/(?P<page>[0-9]+)/)?$',
         views.user_list, name='user-list'),
     url(r'^naamdrager/(?P<name>[^/]+)/$',
@@ -77,9 +76,8 @@ urlpatterns = patterns('',
 
     # style
     url(r'^styles/leden/$',
-        generic.simple.direct_to_template,
-        {'template':'leden/base.css',
-         'mimetype':'text/css'}, name='leden-base'),
+        TemplateView.as_view(template_name='leden/base.css',
+                             content_type='text/css'), name='leden-base'),
 )
 
 # vim: et:sta:bs=2:sw=4:
