@@ -41,7 +41,7 @@ def defaultSettings(glbls):
     d.INFRA_HOME = '/home/infra'
     d.INFRA_REPO = d.INFRA_HOME + '/repo'
 
-    d.MEDIA_URL = '/djmedia'
+    d.MEDIA_URL = '/djmedia/'
     d.STORAGE_URL = '/djmedia/storage'
     d.WOLK_DATA_PATH = '/mnt/phassa/srv/wolk'
     d.INFRA_UID = 1002
