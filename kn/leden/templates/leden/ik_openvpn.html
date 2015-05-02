@@ -2,7 +2,7 @@
 
 {% block body %}
 <h1>OpenVPN installeren</h1>
-<form method="post" action="{% url ik-openvpn %}">
+<form method="post" action="{% url "ik-openvpn" %}">
 {% csrf_token %}
 {% if password_incorrect %}
 <p>Wachtwoord incorrect.</p>

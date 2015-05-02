@@ -65,7 +65,7 @@ lid
 <a href="{{ r.with.get_absolute_url }}">{{ r.with.humanName }}</a>
 {{ r|rel_when }}
 {% if r.may_end %}
-<form action="{% url relation-end _id=r.id %}" style="display:inline"
+<form action="{% url "relation-end" _id=r.id %}" style="display:inline"
         method="post"
         onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
         wil uitschrijven als \
@@ -83,7 +83,7 @@ lid
 {% endif %}
 {% if may_add_related %}
 {% if related or object.is_user %}
-<form action="{% url relation-begin %}" method="post" style="display: inline" \
+<form action="{% url "relation-begin" %}" method="post" style="display: inline" \
         onsubmit="return confirm('Weet je zeker dat je {{ object.humanName }} \
         wil inschrijven als \
         '+ (entityChoiceField_get('relation_begin1_how') ?
@@ -118,7 +118,7 @@ lid
 {% endif %}
 {{ r|rel_when }}
 {% if r.may_end %}
-<form action="{% url relation-end _id=r.id %}" style="display:inline"
+<form action="{% url "relation-end" _id=r.id %}" style="display:inline"
         method="post"
         onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
         wil uitschrijven als \
@@ -135,7 +135,7 @@ lid
 {% endif %}
 {% if may_add_rrelated %}
 {% if rrelated or object.is_group %}
-<form action="{% url relation-begin %}" method="post" style="display: inline"
+<form action="{% url "relation-begin" %}" method="post" style="display: inline"
         onsubmit="return confirm('Weet je zeker dat je '+
         entityChoiceField_get('relation_begin2_who') +' \
         wil inschrijven als \
@@ -182,7 +182,7 @@ lid
 {% endif %}{# n.by #}
 <blockquote>{{ n.note }}</blockquote>
 {% if n.open %}
-<button onclick="$.post('{% url leden-api %}', {
+<button onclick="$.post('{% url "leden-api" %}', {
                         'csrfmiddlewaretoken': csrf_token,
                         data: JSON.stringify({
                                 action: 'close_note',
@@ -200,7 +200,7 @@ lid
 </li>
 {% endfor %}{# n in object.get_notes #}
 </ul>
-<form method="post" action="{% url add-note %}">
+<form method="post" action="{% url "add-note" %}">
 {% csrf_token %}
 <input type="hidden" name="on" value="{{ object.id }}" />
 <textarea name="note">

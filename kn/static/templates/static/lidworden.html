@@ -5,9 +5,9 @@
 {% block body %}
 <p>
   Kom eens een keer langs bij een van onze
-  <a href="{% url activiteiten %}">activiteiten</a>,
+  <a href="{% url "activiteiten" %}">activiteiten</a>,
     bijvoorbeeld de maandagavond
-  borrels in de <a href="{% url route %}">Villa van Schaeck</a>, of stuur een
+  borrels in de <a href="{% url "route" %}">Villa van Schaeck</a>, of stuur een
   e-mailtje naar {% filter email %}secretaris@karpenoktem.nl{% endfilter %}
   en dan is het zo geregeld!
 </p>
