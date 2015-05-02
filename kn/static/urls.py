@@ -1,6 +1,6 @@
 import os.path
 
-from django.conf.urls.defaults import *
+from django.conf.urls import url
 from django.conf import settings
 from django.views.generic import TemplateView, RedirectView
 from kn.base.views import direct_to_folder
@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse_lazy
 
 from kn.static import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^home/?$', views.home, name='home'),
     url(r'^default/?$', views.home),
     url(r'^/?$', views.home),
@@ -134,6 +134,6 @@ urlpatterns = patterns('',
     url(r'^styles/static/$',
         TemplateView.as_view(template_name='static/base.css',
                              content_type='text/css'), name='static-base'),
-)
+        ]
 
 # vim: et:sta:bs=2:sw=4:

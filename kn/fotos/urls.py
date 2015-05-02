@@ -1,11 +1,11 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import RedirectView
 
 from kn.fotos import views
 from kn.fotos import api
 
-urlpatterns = patterns('',
+urlpatterns = [
         # backwards compatibility with knfotos
         url(r'^fotos/view\.php$', views.compat_view),
         url(r'^fotos/foto\.php$', views.compat_foto),
@@ -26,6 +26,6 @@ urlpatterns = patterns('',
         # NOTE keep up to date with media/fotos.js
         url(r'^foto/(?P<cache>[^/]+)/(?P<path>.*)$',
             views.cache, name='fotos-cache'),
-)
+        ]
 
 # vim: et:sta:bs=2:sw=4:

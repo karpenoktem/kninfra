@@ -1,10 +1,10 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
 from kn.leden import views, api
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$',
     login_required(TemplateView.as_view(template_name='leden/home.html')),
                name='smoelen-home'),
@@ -78,6 +78,6 @@ urlpatterns = patterns('',
     url(r'^styles/leden/$',
         TemplateView.as_view(template_name='leden/base.css',
                              content_type='text/css'), name='leden-base'),
-)
+        ]
 
 # vim: et:sta:bs=2:sw=4:
