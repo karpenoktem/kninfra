@@ -5,7 +5,6 @@ from django.views.generic.simple import redirect_to
 import django.contrib.auth.views
 
 from kn.leden import views
-from kn.base.views import direct_to_folder
 
 urlpatterns = patterns('',
     url(r'^groups/(?P<subdir>[^/]+)/(?P<path>.*)',
@@ -15,8 +14,6 @@ urlpatterns = patterns('',
     (r'^activiteit/', include('kn.subscriptions.urls')),
     (r'^reglementen/', include('kn.reglementen.urls')),
     (r'^poll/', include('kn.poll.urls')),
-    (r'^djmedia/(?P<subdir>.*)', direct_to_folder,
-        {'root': settings.MEDIA_ROOT}),
     url(r'^accounts/login/$', auth.views.login, name='login'),
     url(r'^accounts/logout/$', auth.views.logout_then_login, name='logout'),
     url(r'^accounts/rauth/$', 'kn.leden.views.rauth', name='rauth'),
@@ -29,6 +26,6 @@ urlpatterns = patterns('',
     (r'', include('kn.agenda.urls')),
     (r'', include('kn.static.urls')),
     (r'', include('kn.fotos.urls')),
-)
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # vim: et:sta:bs=2:sw=4:
