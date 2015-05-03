@@ -42,7 +42,7 @@ def homedir(request, root, subdir, path):
         if os.stat(p).st_mode & 4 != 4:
             raise Http404
         response = HttpResponse(FileWrapper(open(p)),
-                mimetype=mimetypes.guess_type(p)[0])
+                content_type=mimetypes.guess_type(p)[0])
         response['Content-Length'] = os.path.getsize(p)
         return response
     l = set()
