@@ -1,6 +1,6 @@
 include:
+    - .nginx
     - .mail
     - .mongo
     - .kninfra
-    - .nginx
     - .initializeDb
