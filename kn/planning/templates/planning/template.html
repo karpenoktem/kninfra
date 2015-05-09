@@ -12,7 +12,7 @@
 {% for assignee in vacancy.assignees %}
 {% if not forloop.first %}+{% endif %}
 {% if assignee %}
-            {{ assignee.user.humanName }}
+            {{ assignee.humanName }}
 {% else %}
             <span style="color: red">Iemand</span>
 {% endif %}

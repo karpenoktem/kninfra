@@ -6,7 +6,6 @@ import kn.leden.entities as Es
 
 from pymongo import DESCENDING
 
-wcol = db['planning_workers']
 pcol = db['planning_pools']
 ecol = db['planning_events']
 vcol = db['planning_vacancies']
@@ -15,64 +14,12 @@ vcol = db['planning_vacancies']
 
 # ---
 def ensure_indices():
-    wcol.ensure_index('user')
-    wcol.ensure_index('pools')
     vcol.ensure_index('pool')
     vcol.ensure_index('begin')
     vcol.ensure_index('event')
     vcol.ensure_index([('reminder_needed',1), ('event',1)])
     pcol.ensure_index('name')
     ecol.ensure_index('date')
-
-
-class Worker(SONWrapper):
-    def __init__(self, data):
-        super(Worker, self).__init__(data, wcol)
-    @classmethod
-    def from_data(cls, data):
-        if data is None:
-            return None
-        return cls(data)
-    pools = son_property(('pools',))
-    user_id = son_property(('user',))
-
-    @classmethod
-    def all(cls):
-        for m in wcol.find():
-            yield cls.from_data(m)
-
-    @classmethod
-    def all_in_pool(cls, p):
-        for m in wcol.find({'pools':  _id(p)}):
-            yield cls.from_data(m)
-
-    @classmethod
-    def by_id(cls, id):
-        return cls.from_data(wcol.find_one({'_id':  _id(id)}))
-
-    @property
-    def id(self):
-        return self._id
-
-    def get_user(self):
-        return Es.by_id(self.user_id)
-    def set_user(self, x):
-        self.user_id = _id(x)
-    user = property(get_user, set_user)
-
-    @property
-    def username(self):
-        return str(self.user.name)
-
-    def last_shift_in(self, pool):
-        self.last_shift = None
-        for v in vcol.find({'assignee': _id(self), 'pool': _id(pool)},
-                sort=[('begin', DESCENDING)], limit=1):
-            return Vacancy(v).begin.date()
-
-    # last_shift is used in a template
-    def set_last_shift(self, pool):
-        self.last_shift = self.last_shift_in(pool)
 
 
 class Event(SONWrapper):
@@ -137,8 +84,22 @@ class Pool(SONWrapper):
     def by_id(cls, id):
         return cls.from_data(pcol.find_one({'_id': _id(id)}))
 
+    def workers(self):
+        return self.group.get_members()
+
     def vacancies(self):
         return Vacancy.all_in_pool(self)
+
+    def last_shift(self, worker):
+        for v in vcol.find({'assignee': _id(worker), 'pool': _id(self)},
+                sort=[('begin', DESCENDING)], limit=1):
+            return Vacancy(v).begin.date()
+
+    def last_shifts(self):
+        shifts = {}
+        for worker in self.workers():
+            shifts[_id(worker)] = self.last_shift(worker)
+        return shifts
 
     @property
     def group(self):
@@ -215,7 +176,7 @@ class Vacancy(SONWrapper):
         aid = self.assignee_id
         if aid is None:
             return None
-        return Worker.by_id(self.assignee_id)
+        return Es.by_id(self.assignee_id)
 
     def set_assignee(self, value):
         if value is None:
