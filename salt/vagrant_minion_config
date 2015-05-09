@@ -1,0 +1,4 @@
+file_client: local
+state_verbose: False
+grains:
+    vagrant: true

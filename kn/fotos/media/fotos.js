@@ -19,13 +19,11 @@
       this.tags = [];
     }
 
-    this.reload_cache_urls();
+    this.calculate_cache_urls();
   };
 
-  Foto.prototype.reload_cache_urls = function(query) {
-    if (query === undefined) {
-      query = '';
-    }
+  Foto.prototype.calculate_cache_urls = function() {
+    var query = '?rot=' + this.rotation;
     if (this.type == 'album') {
       if (this.thumbnailPath !== undefined) {
         this.thumbnail = this.cache_url('thumb', this.thumbnailPath) + query;
@@ -54,6 +52,7 @@
     this.path = null;
     this.foto = null;
     this.sidebar = false;
+    this.saving_status = 0; /* enum: none, saved, saving, saving+queue */
     this.fotos = {};
     this.parents = {};
     this.people = {};
@@ -365,12 +364,23 @@
     }, cb, "json");
   };
 
-  KNF.prototype.change_foto = function(foto) {
+  KNF.prototype.change_foto = function(foto, confirmed) {
     if (this.foto) {
+      if (this.saving_status >= 2 && !confirmed) {
+        // Usually changes are saved within 100ms, so wait that time and try
+        // again.
+        setTimeout(function() {
+          if (this.saving_status < 2) {
+            this.change_foto(foto);
+          } else if (confirm('Wijzigingen zijn niet opgeslagen.\nDoorgaan?')) {
+            this.change_foto(foto, true);
+          }
+        }.bind(this), 100);
+        return;
+      }
       $('#foto').hide();
       $('#foto .foto-frame').remove();
       $('html').removeClass('noscroll');
-      delete this.foto.newRotation;
       delete this.foto.newTags;
     }
     foto = foto || null;
@@ -447,8 +457,24 @@
           this.save_metadata();
           return false;
         }.bind(this));
-    $('.save', sidebar)
-        .submit(this.save_metadata.bind(this));
+    $('input.title', sidebar)
+        .blur(function(e) {
+          if (this.foto.title === e.target.value) return;
+          this.save_metadata();
+          return false;
+        }.bind(this));
+    $('input.description', sidebar)
+        .blur(function(e) {
+          if (this.foto.description === e.target.value) return;
+          this.save_metadata();
+          return false;
+        }.bind(this));
+    $('select', sidebar)
+        .change(function(e) {
+          if (this.foto.visibility === e.target.value) return;
+          this.save_metadata();
+          return false;
+        }.bind(this));
     $('a.rotate-left', sidebar)
         .click(function() {
           this.rotate(-90);
@@ -489,7 +515,7 @@
             }
             newTags.splice(index, 1);
             this.update_foto_tags(sidebar);
-            $('#foto .save').prop('disabled', false);
+            this.save_metadata();
           }.bind(this))
           .appendTo(li);
       }
@@ -540,8 +566,8 @@
             if (!(name in albumPeople)) {
               this.fotos[this.path].people.push(name);
             }
-            $('#foto .save').prop('disabled', false);
             this.update_foto_tags(sidebar);
+            this.save_metadata();
             sidebar.find('.tags input').focus();
           }.bind(this),
         })
@@ -563,37 +589,34 @@
   };
 
   KNF.prototype.rotate = function(degrees) {
-    if (!('newRotation' in this.foto)) {
-      this.foto.newRotation = this.foto.rotation;
+    if (!fotos_admin) return;
+    if (!('oldRotation' in this.foto)) {
+      this.foto.oldRotation = this.foto.rotation;
     }
-    this.foto.newRotation = mod(this.foto.newRotation + degrees, 360);
-
-    $('#foto .save').prop('disabled', false);
-    this.onresize();
+    this.foto.rotation = mod(this.foto.rotation + degrees, 360);
+    this.save_metadata();
   };
 
   KNF.prototype.save_metadata = function () {
     var sidebar = $('#foto .sidebar');
     var foto = this.foto;
 
+    if (this.saving_status >= 2) {
+      // Save again when the current save is done.
+      this.saving_status = 3;
+      return;
+    }
+    this.saving_status = 2;
+    $('.status', sidebar).text('opslaan...');
+
     var field_title = $('.title', sidebar);
     var title = field_title.val();
-    field_title.prop('disabled', true);
 
     var field_description = $('.description', sidebar);
     var description = field_description.val();
-    field_description.prop('disabled', true);
 
     var field_visibility = $('.visibility', sidebar);
     var visibility = field_visibility.val();
-    field_visibility.prop('disabled', true);
-
-    var rotation = this.foto.newRotation;
-    if (rotation == undefined) {
-      rotation = this.foto.rotation;
-    }
-
-    $('.tags input', sidebar).prop('disabled', true);
 
     var tags = this.foto.tags;
     if ('newTags' in this.foto) {
@@ -605,39 +628,47 @@
               title: title,
               description: description,
               visibility: visibility,
-              rotation: rotation,
+              rotation: foto.rotation,
               tags: tags},
       function(data) {
         if (data.error) {
+          // Should only happen when there's an issue with our API request.
           alert(data.error);
           return;
         }
 
+        if (this.saving_status === 3) {
+          this.saving_status = 1;
+          this.save_metadata();
+          return;
+        }
+
+        this.saving_status = 1;
+        $('.status', sidebar).text('opgeslagen!');
+        setTimeout(function() {
+          if (this.saving_status !== 1) return;
+          this.saving_status = 0;
+          $('.status', sidebar).html('&nbsp;');
+        }.bind(this), 1000);
+
         foto.thumbnailSize = data.thumbnailSize;
         foto.largeSize = data.largeSize;
-
-        field_title.prop('disabled', false);
-        field_description.prop('disabled', false);
-        field_visibility.prop('disabled', false);
-        $('.tags input', sidebar).prop('disabled', false);
 
         foto.description = description;
         foto.visibility = visibility;
 
-        var changed_rotation = rotation !== foto.rotation;
-        foto.rotation = rotation;
-        delete foto.newRotation;
-        if (changed_rotation) {
-          // invalidate cached cache urls
-          foto.reload_cache_urls('?rotation='+foto.rotation);
+        foto.calculate_cache_urls();
+        if (foto == this.foto) {
           this.update_foto_src(foto);
         }
 
         foto.tags = tags;
         delete foto.newTags;
 
-        if (title !== foto.title || changed_rotation) {
+        if (title !== foto.title
+            || 'oldRotation' in foto && foto.oldRotation !== foto.rotation) {
           foto.title = title;
+          delete foto.oldRotation;
           $('#fotos').empty();
           this.display_fotos();
         }
@@ -648,8 +679,6 @@
               .text(foto.title ? foto.title : foto.name);
           $('.description', frame)
               .text(foto.description);
-          $('.save', frame)
-              .prop('disabled', true);
         }
       }.bind(this));
   };
@@ -660,15 +689,6 @@
 
     var width = this.foto.largeSize[0];
     var height = this.foto.largeSize[1];
-
-    var rotated = 'newRotation' in this.foto &&
-        (this.foto.newRotation - this.foto.rotation) % 180 != 0;
-    if (rotated) {
-      // swap width and height
-      var h = height;
-      height = width;
-      width = h;
-    }
 
     var maxWidth  = window.innerWidth;
     var maxHeight = window.innerHeight;
@@ -692,32 +712,13 @@
       width  *= maxHeight/height;
       height *= maxHeight/height;
     }
-    // keep up to date with entities.py
-    if (rotated && width > 850) {
-      height *= 850/width;
-      width  *= 850/width;
-    }
-    var margin = '';
-    var transform = '';
-    if ('newRotation' in this.foto &&
-        this.foto.newRotation !== this.foto.rotation) {
-      transform = 'rotate(' + mod(this.foto.newRotation - this.foto.rotation, 360) + 'deg)';
-    }
-    if (rotated) {
-      var offset = (height-width)/2;
-      margin = offset+'px ' + -offset+'px';
-      var h = height;
-      height = width;
-      width = h;
-    }
     $('#foto .img')
         .css({'width': width,
-              'height': height,
-              'margin': margin,
-              'transform': transform});
+              'height': height});
   };
 
   KNF.prototype.onedit = function(e) {
+    e.preventDefault();
     e.target.disabled = true;
 
     var field_visibility = $('#album-visibility')
@@ -779,6 +780,8 @@
     $(document).keydown(function(e) {
       if (!this.foto)
         return;
+      if (e.target.nodeName === 'INPUT')
+        return;
       // Escape
       if (e.which == 27) {
         this.change_foto(null);
@@ -826,11 +829,5 @@
     knf.run();
   });
 })();
-
-$(document).ready(function() {
-  $('#album-edit-toggle').click(function() {
-    $('#topbar').toggleClass('editor');
-  });
-});
 
 /* vim: set et sta bs=2 sw=2 : */

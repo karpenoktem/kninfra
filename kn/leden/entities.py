@@ -12,15 +12,130 @@ from kn.settings import DT_MIN, DT_MAX, MAILDOMAIN
 from kn.base._random import pseudo_randstr
 from kn import settings
 
+# ######################################################################
 # The collections
 # ######################################################################
 ecol = db['entities']   # entities: users, group, tags, studies, ...
+
+# Example of a user
+# ----------------------------------------------------------------------
+# {"_id" : ObjectId("4e6fcc85e60edf3dc0000270"),
+#  "addresses" : [ { "city" : "Nijmegen",
+#                    "zip" : "...",
+#                    "number" : "...",
+#                    "street" : "...",
+#                    "from" : ISODate("2004-..."),
+#                    "until" : DT_MAX) } ],
+#   "types" : [ "user" ],
+#   "names" : [ "giedo" ],
+#   "humanNames" : [ { "human" : "Giedo Jansen" } ],
+#   "person" : { "given" : null,
+#                "family" : "Jansen",
+#                "nick" : "Giedo",
+#                "gender" : "m",
+#                "dateOfBirth" : ISODate("..."),
+#                "titles" : [ ] },
+#   "is_active" : 0,
+#   "emailAddresses" : [ { "email" : "...",
+#                          "from" : ISODate("2004-08-31T00:00:00Z"),
+#                          "until" : DT_MAX } ],
+#   "password" : {"hash" : "...","salt" : "...", "algorithm" : "sha1" },
+#   "studies" : [ { "institute" : ObjectId("4e6fcc85e60edf3dc000001d"),
+#                   "study" : ObjectId("4e6fcc85e60edf3dc0000030"),
+#                   "number" : "...",
+#                   "from" : ...,
+#                   "until" : DT_MAX } ],
+#   "telephones" : [ { "number" : "...",
+#                      "from" : ISODate("2004-08-31T00:00:00Z"),
+#                      "until" : ISODate("5004-09-01T00:00:00Z") } ] },
+#   "preferences" : {
+#       "visibility" : {
+#           "telephone" : false
+#       }
+#   }
+# }
+
+# Example of a tag
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000004"),
+#   "types" : [ "tag" ],
+#   "names" : [ "!year-group" ],
+#   "humanNames" : [ { "name" : "!year-group", "human" : "Jaargroep" } ],
+#   "tags" : [ ObjectId("4e6fcc85e60edf3dc0000000") ]
+# }
+
+# Example of a study
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000033"),
+#   "humanNames" : [ { "human" : "Geschiedenis" } ],
+#   "types" : [ "study" ]
+# }
+
+# Example of an institute
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000016"),
+#   "humanNames" : [ { "human" : "Radboud Universiteit Nijmegen" } ],
+#   "types" : [ "institute" ]
+# }
+
+# Example of a group
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000067"),
+#   "types" : [ "group", "tag" ],
+#   "description" : "Het bestuur",
+#   "names" : [ "bestuur", "bestuul", "parkhangen", "festivals", "b" ],
+#   "humanNames" : [ { "name" : "bestuur",
+#                      "human" : "Bestuur",
+#                      "genitive_prefix" : "van het" } ],
+#   "tags" : [ ObjectId("4e6fcc85e60edf3dc0000004") ]
+# }
+
+# Example of a brand
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000bcb"),
+#   "types" : [ "brand" ],
+#   "tags" : [ ObjectId("4e6fcc85e60edf3dc0000003") ],
+#   "humanNames" : [ { "human" : "Vice-voorzitter" } ],
+#   "sofa_suffix" : "vicevoorzitter",
+#   "names" : [ ]
+# }
+
 rcol = db['relations']  # relations: "giedo is chairman of bestuur from
-            #             date A until date B"
+                        #             date A until date B"
+# Example of a brand
+# ----------------------------------------------------------------------
+# This is the relation: "mike is chair (voorzitter) of the soco from
+#   2012-02-07 to 2013-03-11, but he should not be put in soco9
+#   (which is forced by the year-override tag)". 
+# { "_id" : ObjectId("4f3086270032a05bfd000005"),
+#   "from" : ISODate("2012-02-07T03:02:15.130Z"),
+#   "how" : ObjectId("4e6fcc85e60edf3dc0000bc8"),
+#   "tags" : [ ObjectId("5038e25b0032a04438000000") ],
+#   "until" : ISODate("2013-03-11T20:16:36.203Z"),
+#   "who" : ObjectId("4e6fcc85e60edf3dc0000356"),
+#   "with" : ObjectId("4e6fcc85e60edf3dc0000077")
+# }
+
 ncol = db['notes']      # notes on entities by the secretaris
+# Example of a note
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e99b5460032a006e3000013"),
+#   "on" : ObjectId("4e6fcc85e60edf3dc000029d"),
+#   "closed_by" : ObjectId("4e6fcc85e60edf3dc00001d4"),
+#   "note" : "Adres veranderd. Was:  (...) Nijmegen",
+#   "at" : ISODate("2011-03-24T00:00:00Z"),
+#   "closed_at" : ISODate("2012-08-25T14:53:17.413Z"),
+#   "open" : false,
+#   "by" : ObjectId("4e6fcc85e60edf3dc0000410")
+# }
+
 pcol = db['push_changes'] # Changes to be pushed to remote systems
+# TODO add example
+
 incol = db['informacie_notifications'] # human readable list of notifications 
                                         #for informacie group
+# TODO add example
+
 def get_hexdigest(algorithm, salt, raw_password):
     assert algorithm == 'sha1'
     return hashlib.sha1(salt + raw_password).hexdigest()
@@ -761,6 +876,19 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def set_humanName(self, humanName, save=True):
+        if len(self._data['humanNames']) < 1:
+            # does not appear to occur in practice
+            raise ValueError('there are no humanNames yet')
+        self._data['humanNames'][0]['human'] = humanName
+        if save:
+            self.save()
+
+    def set_description(self, description, save=True):
+        self._data['description'] = description
+        if save:
+            self.save()
+
     @property
     def canonical_full_email(self):
         """ Returns the string
@@ -855,6 +983,7 @@ class Group(Entity):
     @property
     def is_virtual(self):
         return 'virtual' in self._data
+
 class User(Entity):
     def __init__(self, data):
         super(User,self).__init__(data)
@@ -886,6 +1015,8 @@ class User(Entity):
     @property
     def humanName(self):
         return self.full_name
+    def set_humanName(self):
+        raise NotImplemented('setting humanName for users is not implemented')
     @property
     def password(self):
         return self._data.get('password', None)
@@ -895,6 +1026,17 @@ class User(Entity):
     def is_authenticated(self):
         # required by django's auth
         return True
+    # Required by Django's auth. framework
+    @property
+    def pk(self):
+        return str(_id(self))
+    def get_username(self):
+        # implements Django's User object
+        return str(self.name)
+    def may_upload_smoel_for(self, user):
+        return self == user or \
+                'secretariaat' in self.cached_groups_names or \
+                'bestuur' in self.cached_groups_names
     @property
     def primary_email(self):
         # the primary email address is always the first one;

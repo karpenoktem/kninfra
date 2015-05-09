@@ -110,10 +110,15 @@ def cache(request, cache, path):
     lm = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(st.st_mtime))
     if request.META.get('HTTP_IF_MODIFIED_SINCE', None) == lm:
         return HttpResponseNotModified()
+    cc = 'max-age=30780000' # Cache-Control header
+    if not entity.may_view(None):
+        # not publicly cacheable
+        cc = 'private, ' + cc
     resp = HttpResponse(FileWrapper(open(entity.get_cache_path(cache))),
-                            mimetype=entity.get_cache_mimetype(cache))
+                            content_type=entity.get_cache_mimetype(cache))
     resp['Content-Length'] = str(st.st_size)
     resp['Last-Modified'] = lm
+    resp['Cache-Control'] = cc
     return resp
 
 def compat_view(request):

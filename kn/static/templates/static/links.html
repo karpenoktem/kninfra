@@ -15,14 +15,14 @@
   <li><a href="http://karpenoktem.hyves.nl/">Hyves</a> en</li>
   <li><a href="http://www.flickr.com/photos/12267979@N04/">Flickr</a> (kijk
   voor de nieuwe foto's op
-  <a href="{% url fotos "" %}">onze eigen site</a>).</li>
+  <a href="{% url "fotos" "" %}">onze eigen site</a>).</li>
 </ul>
 
 <p>Maar vergeet niet</p>
 <ul>
-  <li><a href="{% external_url "wiki" %}">onze wiki</a>,</li>
+  <li><a href="{% external_url "wiki-home" %}">onze wiki</a>,</li>
   <li><a href="{% external_url "forum" %}">ons forum</a> en</li>
-  <li>de <a href="{% url zusjes %}">zusjes</a>.</li>
+  <li>de <a href="{% url "zusjes" %}">zusjes</a>.</li>
 </ul>
 
 {% endblock %}

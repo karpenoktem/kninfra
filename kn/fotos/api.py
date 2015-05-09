@@ -45,11 +45,11 @@ def entities_json(children, user):
         entry = {'type': child._type,
                  'path': child.full_path,
                  'name': child.name,
-                 'title': child.title}
+                 'title': child.title,
+                 'rotation': child.rotation}
 
         if fEs.is_admin(user):
             entry['visibility'] = child.visibility[0]
-            entry['rotation'] = child.rotation
 
         if child.description:
             entry['description'] = child.description;
@@ -117,6 +117,18 @@ def _set_metadata(data, request):
 
     result = {'Ok': True}
 
+    if entity._type == 'foto':
+        if 'rotation' not in data:
+            return {'error': 'missing rotation attribute'}
+        if not isinstance(data['rotation'], int):
+            return {'error': 'rotation should be a number'}
+        rotation = data['rotation']
+        if rotation not in [0, 90, 180, 270]:
+            return {'error': 'rotation is not valid'}
+        entity.set_rotation(rotation, save=False)
+
+        result['largeSize'] = entity.get_cache_size('large')
+
     if entity._type in ['foto', 'video']:
         if 'description' not in data:
             return {'error': 'missing description attribute'}
@@ -137,18 +149,6 @@ def _set_metadata(data, request):
         entity.set_tags(tags, save=True)
 
         result['thumbnailSize'] = entity.get_cache_size('thumb')
-
-    if entity._type == 'foto':
-        if 'rotation' not in data:
-            return {'error': 'missing rotation attribute'}
-        if not isinstance(data['rotation'], int):
-            return {'error': 'rotation should be a number'}
-        rotation = data['rotation']
-        if rotation not in [0, 90, 180, 270]:
-            return {'error': 'rotation is not valid'}
-        entity.set_rotation(rotation, save=False)
-
-        result['largeSize'] = entity.get_cache_size('large')
 
     entity.set_title(title, save=False)
 

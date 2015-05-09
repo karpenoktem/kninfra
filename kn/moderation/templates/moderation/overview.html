@@ -13,7 +13,7 @@
 	<tbody>
 {% for l in lists %}
 <tr>
-	<td><a href="{% url entity-by-name l.name %}"
+	<td><a href="{% url "entity-by-name" l.name %}"
 			>{{ l.real_name }}</a></td>
 	<td>
 		{% if l.modmode %}
@@ -26,7 +26,7 @@
 		{% endif %}
 		{% if l.queue %}
 		{% if is_moderator %}
-		<a href="{% url moderation-redirect l.name %}">
+		<a href="{% url "moderation-redirect" l.name %}">
 		{% endif %}
 		({{ l.queue }} in wachtrij)
 		{% if is_moderator %}

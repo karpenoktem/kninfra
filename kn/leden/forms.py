@@ -50,7 +50,9 @@ class EntityChoiceField(forms.CharField):
         super(EntityChoiceField, self).__init__(*args, **kwargs)
 
 class AddUserForm(forms.Form):
-    last_name = forms.CharField(label="Achternaam")
+    last_name = forms.CharField(label="Achternaam",
+                    widget=forms.TextInput(attrs={
+                        'placeholder': 'bijv.: Vaart, van der'}))
     first_name = forms.CharField(label="Voornaam")
     sex = forms.ChoiceField(label="Geslacht", choices=(('m', 'Man'),
                                ('v', 'Vrouw')))
@@ -60,7 +62,9 @@ class AddUserForm(forms.Form):
     addr_number = forms.CharField(label="Huisnummer")
     addr_zip = forms.CharField(label="Postcode")
     addr_city = forms.CharField(label="Woonplaats")
-    telephone = forms.CharField(label="Telefoonnummer")
+    telephone = forms.CharField(label="Telefoonnummer",
+                    widget=forms.TextInput(attrs={
+                        'placeholder': 'bijv.: +31612345678'}))
     study_number = forms.CharField(label="Studentnummer")
     study_inst = EntityChoiceField(label="Onderwijs instelling",
             _type='institute')

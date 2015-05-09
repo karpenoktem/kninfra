@@ -5,7 +5,7 @@
 {% block body %}
 <p class="imageDisplay">
 <img width="800"
-     src="{{ MEDIA_URL }}/static/img/bestuur11.jpg?v=2" /><br/>
+     src="{{ MEDIA_URL }}static/img/bestuur11.jpg?v=2" /><br/>
      <small>Van links naar rechts:
            Jeffry (secretaris);
            Henk (vice-voorzitter);
@@ -42,6 +42,6 @@ Margot is overigens ook te benaderen via
 {% filter email %}khaleesi@karpenoktem.nl{% endfilter %}.
 
 <p>&lArr; Het vorige,
-<a href="{% url bestuur10 %}">tiende bestuur.</a>
+<a href="{% url "bestuur10" %}">tiende bestuur.</a>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

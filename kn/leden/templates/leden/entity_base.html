@@ -2,17 +2,49 @@
 {% load leden %}
 {% load base %}
 
-{% block body %}
+{% block styles %}
+{{ block.super }}
+<link href="{{ MEDIA_URL }}leden/entity_detail.css" rel="stylesheet" />
+{% endblock styles %}
 
-<script type="text/javascript">//<!--
+{% block head %}
+{{ block.super }}
+<script>
 $(function(){
         create_entityChoiceField('relation_begin1_with', {type: 'group'});
         create_entityChoiceField('relation_begin1_how', {type: 'brand'});
         create_entityChoiceField('relation_begin2_who', {type: 'user'});
         create_entityChoiceField('relation_begin2_how', {type: 'brand'});
 });
-// --></script>
+</script>
+<script src="{{ MEDIA_URL }}leden/entity_detail.js" defer></script>
+{% endblock head %}
 
+{% block body %}
+
+{% block entity_head %}
+<h2>
+	{% if "secretariaat" in user.cached_groups_names %}
+	<button class="change-humanName"
+		onclick="api_set_property('{{ object.id }}', 'humanName',
+				prompt('Wijzig naam', $('.humanName').text()));">Wijzig naam</button>
+	{% endif %}{# "secretariaat" in user.cached_groups_names #}
+	<span class="humanName">{{ object.humanName }}</span>
+</h2>
+<p>
+	{% if "secretariaat" in user.cached_groups_names %}
+	<button class="change-description"
+		onclick="api_set_property('{{ object.id }}', 'description',
+				prompt('Nieuwe beschrijving', $('.description').text()));">
+		Wijzig beschrijving</button>
+	{% endif %}{# "secretariaat" in user.cached_groups_names #}
+	<span class="description">{{ object.description }}</span>
+</p>
+{% endblock entity_head %}
+
+{% block entity_body %}{% endblock entity_body %}
+
+{% block entity_related %}
 {% if related %}
 <h3>Lidmaatschap</h3>
 <ul>
@@ -33,7 +65,7 @@ lid
 <a href="{{ r.with.get_absolute_url }}">{{ r.with.humanName }}</a>
 {{ r|rel_when }}
 {% if r.may_end %}
-<form action="{% url relation-end _id=r.id %}" style="display:inline"
+<form action="{% url "relation-end" _id=r.id %}" style="display:inline"
         method="post"
         onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
         wil uitschrijven als \
@@ -51,7 +83,7 @@ lid
 {% endif %}
 {% if may_add_related %}
 {% if related or object.is_user %}
-<form action="{% url relation-begin %}" method="post" style="display: inline" \
+<form action="{% url "relation-begin" %}" method="post" style="display: inline" \
         onsubmit="return confirm('Weet je zeker dat je {{ object.humanName }} \
         wil inschrijven als \
         '+ (entityChoiceField_get('relation_begin1_how') ?
@@ -86,7 +118,7 @@ lid
 {% endif %}
 {{ r|rel_when }}
 {% if r.may_end %}
-<form action="{% url relation-end _id=r.id %}" style="display:inline"
+<form action="{% url "relation-end" _id=r.id %}" style="display:inline"
         method="post"
         onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
         wil uitschrijven als \
@@ -103,7 +135,7 @@ lid
 {% endif %}
 {% if may_add_rrelated %}
 {% if rrelated or object.is_group %}
-<form action="{% url relation-begin %}" method="post" style="display: inline"
+<form action="{% url "relation-begin" %}" method="post" style="display: inline"
         onsubmit="return confirm('Weet je zeker dat je '+
         entityChoiceField_get('relation_begin2_who') +' \
         wil inschrijven als \
@@ -150,7 +182,7 @@ lid
 {% endif %}{# n.by #}
 <blockquote>{{ n.note }}</blockquote>
 {% if n.open %}
-<button onclick="$.post('{% url leden-api %}', {
+<button onclick="$.post('{% url "leden-api" %}', {
                         'csrfmiddlewaretoken': csrf_token,
                         data: JSON.stringify({
                                 action: 'close_note',
@@ -168,7 +200,7 @@ lid
 </li>
 {% endfor %}{# n in object.get_notes #}
 </ul>
-<form method="post" action="{% url add-note %}">
+<form method="post" action="{% url "add-note" %}">
 {% csrf_token %}
 <input type="hidden" name="on" value="{{ object.id }}" />
 <textarea name="note">
@@ -176,5 +208,7 @@ lid
 <input type="submit" value="Voeg notitie toe" />
 </form>
 {% endif %}{# "secretariaat" in user.cached_groups_names #}
+
+{% endblock entity_related %}
 
 {% endblock %}

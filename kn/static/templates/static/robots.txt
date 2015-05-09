@@ -1,7 +1,7 @@
 User-agent: *
-Disallow: /site/js/common.js
-Disallow: /archief/
+Disallow: {{ MEDIA_URL }}base/common.js
 Disallow: /fotos/
+Disallow: /foto/
 Disallow: /~bas/
 Disallow: /mailman/archives/
 Disallow: /groups/leden/aktas/

@@ -77,7 +77,7 @@
 Lijst van bestaande activiteiten:
 <ul>
 {% for dir in events %}
-    <li><a href="{% url fotos dir %}">{{ dir }}</a></li>
+    <li><a href="{% url "fotos" dir %}">{{ dir }}</a></li>
 {% endfor %}
 		</ul>
 {% endblock %}

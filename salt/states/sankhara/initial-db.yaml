@@ -1,0 +1,691 @@
+entities:
+- _id: !id '4e6fcc85e60edf3dc0000000'
+  humanNames:
+  - {human: Systeemstempels, name: '!system'}
+  names: ['!system']
+  tags: []
+  types: [tag]
+- _id: !id '4e6fcc85e60edf3dc0000001'
+  humanNames:
+  - {human: Jaarlidmaatschapstempels, name: '!year-overrides'}
+  names: ['!year-overrides']
+  tags: [!id '4e6fcc85e60edf3dc0000000']
+  types: [tag]
+- _id: !id '4e6fcc85e60edf3dc0000002'
+  humanNames:
+  - {human: Virtuele groep, name: '!virtual-group'}
+  names: ['!virtual-group']
+  tags: [!id '4e6fcc85e60edf3dc0000000']
+  types: [tag]
+- _id: !id '4e6fcc85e60edf3dc0000003'
+  humanNames:
+  - {human: Sofa merk, name: '!sofa-brand'}
+  names: ['!sofa-brand']
+  tags: [!id '4e6fcc85e60edf3dc0000000']
+  types: [tag]
+- _id: !id '4e6fcc85e60edf3dc0000004'
+  humanNames:
+  - {human: Jaargroep, name: '!year-group'}
+  names: ['!year-group']
+  tags: [!id '4e6fcc85e60edf3dc0000000']
+  types: [tag]
+- _id: !id '4e6fcc85e60edf3dc0000005'
+  humanNames:
+  - {human: Wel jaar 1}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: true, year: 1}
+- _id: !id '4e6fcc85e60edf3dc0000006'
+  humanNames:
+  - {human: Niet jaar 1}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: false, year: 1}
+- _id: !id '4e6fcc85e60edf3dc0000007'
+  humanNames:
+  - {human: Wel jaar 2}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: true, year: 2}
+- _id: !id '4e6fcc85e60edf3dc0000008'
+  humanNames:
+  - {human: Niet jaar 2}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: false, year: 2}
+- _id: !id '4e6fcc85e60edf3dc0000009'
+  humanNames:
+  - {human: Wel jaar 3}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: true, year: 3}
+- _id: !id '4e6fcc85e60edf3dc000000a'
+  humanNames:
+  - {human: Niet jaar 3}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: false, year: 3}
+- _id: !id '4e6fcc85e60edf3dc000000b'
+  humanNames:
+  - {human: Wel jaar 4}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: true, year: 4}
+- _id: !id '4e6fcc85e60edf3dc000000c'
+  humanNames:
+  - {human: Niet jaar 4}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: false, year: 4}
+- _id: !id '4e6fcc85e60edf3dc000000d'
+  humanNames:
+  - {human: Wel jaar 5}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: true, year: 5}
+- _id: !id '4e6fcc85e60edf3dc000000e'
+  humanNames:
+  - {human: Niet jaar 5}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: false, year: 5}
+- _id: !id '4e6fcc85e60edf3dc000000f'
+  humanNames:
+  - {human: Wel jaar 6}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: true, year: 6}
+- _id: !id '4e6fcc85e60edf3dc0000010'
+  humanNames:
+  - {human: Niet jaar 6}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: false, year: 6}
+- _id: !id '4e6fcc85e60edf3dc0000011'
+  humanNames:
+  - {human: Wel jaar 7}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: true, year: 7}
+- _id: !id '4e6fcc85e60edf3dc0000012'
+  humanNames:
+  - {human: Niet jaar 7}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: false, year: 7}
+- _id: !id '4e6fcc85e60edf3dc0000013'
+  humanNames:
+  - {human: Wel jaar 8}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: true, year: 8}
+- _id: !id '4e6fcc85e60edf3dc0000014'
+  humanNames:
+  - {human: Niet jaar 8}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: false, year: 8}
+
+- humanNames:
+  - {human: Culturele Maatschappelijke Vorming}
+  types: [study]
+- humanNames:
+  - {human: Natuur- en Sterrenkunde}
+  types: [study]
+- humanNames:
+  - {human: Bedrijfswetenschappen}
+  types: [study]
+- humanNames:
+  - {human: Wiskunde}
+  types: [study]
+- humanNames:
+  - {human: Journalistiek}
+  types: [study]
+- humanNames:
+  - {human: Medische biologie}
+  types: [study]
+- humanNames:
+  - {human: Sociologie}
+  types: [study]
+- humanNames:
+  - {human: Communicatiewetenschap}
+  types: [study]
+- humanNames:
+  - {human: Moleculaire Levenswetenschappen}
+  types: [study]
+- humanNames:
+  - {human: Psychologie}
+  types: [study]
+- humanNames:
+  - {human: "Commerci\xEBle Economie"}
+  types: [study]
+- humanNames:
+  - {human: Geneeskunde}
+  types: [study]
+- humanNames:
+  - {human: Recht}
+  types: [study]
+- humanNames:
+  - {human: Algemene Cultuurwetenschappen}
+  types: [study]
+- humanNames:
+  - {human: Informatiekunde}
+  types: [study]
+- humanNames:
+  - {human: Scheikunde}
+  types: [study]
+- humanNames:
+  - {human: Afgestudeerd}
+  types: [study]
+- humanNames:
+  - {human: Maatschappelijk Werk en Dienstverlening}
+  types: [study]
+- humanNames:
+  - {human: <Studeert niet>}
+  types: [study]
+- humanNames:
+  - {human: Geschiedenis}
+  types: [study]
+- humanNames:
+  - {human: Sociaal Pedagogische Hulpverlening}
+  types: [study]
+- humanNames:
+  - {human: Filosofie}
+  types: [study]
+- humanNames:
+  - {human: Docentenopleiding Biologie}
+  types: [study]
+- humanNames:
+  - {human: Amerikanistiek}
+  types: [study]
+- humanNames:
+  - {human: Geschiedenis en Religiewetenschappen}
+  types: [study]
+- humanNames:
+  - {human: Kunstgeschiedenis}
+  types: [study]
+- humanNames:
+  - {human: Informatica}
+  types: [study]
+- humanNames:
+  - {human: Toegepaste psychologie}
+  types: [study]
+- humanNames:
+  - {human: Tandheelkunde}
+  types: [study]
+- humanNames:
+  - {human: <Onbekend>}
+  types: [study]
+- humanNames:
+  - {human: Natuurwetenschappen}
+  types: [study]
+- humanNames:
+  - {human: Horeca-ondernemerschap & -management}
+  types: [study]
+- humanNames:
+  - {human: Griekse en Latijnse Taal en Cultuur}
+  types: [study]
+- humanNames:
+  - {human: Muziektherapie}
+  types: [study]
+- humanNames:
+  - {human: Docent Geschiedenis}
+  types: [study]
+- humanNames:
+  - {human: Pedagogiek}
+  types: [study]
+- humanNames:
+  - {human: Logopedie}
+  types: [study]
+- humanNames:
+  - {human: Ergotherapie}
+  types: [study]
+- humanNames:
+  - {human: HLO}
+  types: [study]
+- humanNames:
+  - {human: Kunstmatige Intelligentie}
+  types: [study]
+- humanNames:
+  - {human: Biologie}
+  types: [study]
+- humanNames:
+  - {human: Politicologie}
+  types: [study]
+- humanNames:
+  - {human: Embedded Systems Engineering}
+  types: [study]
+- humanNames:
+  - {human: Werktuigbouwkunde}
+  types: [study]
+- humanNames:
+  - {human: Industrial Design}
+  types: [study]
+- humanNames:
+  - {human: HAVO}
+  types: [study]
+- humanNames:
+  - {human: 'Management, Economie en Recht'}
+  types: [study]
+- humanNames:
+  - {human: Fysiotherapie}
+  types: [study]
+- humanNames:
+  - {human: Communicatie}
+  types: [study]
+- humanNames:
+  - {human: Docent Beeldende Kunst en Vormgeving}
+  types: [study]
+- humanNames:
+  - {human: Medische Laboratorium Techniek}
+  types: [study]
+- humanNames:
+  - {human: Verpleegkunde}
+  types: [study]
+- humanNames:
+  - {human: ILS}
+  types: [study]
+- humanNames:
+  - {human: Natuurkunde & Scheikunde lerarenopleiding tweede graad}
+  types: [study]
+- humanNames:
+  - {human: 'Computer, Science and Engineering'}
+  types: [study]
+- humanNames:
+  - {human: Franse taal en cultuur}
+  types: [study]
+- humanNames:
+  - {human: Religiestudies}
+  types: [study]
+- humanNames:
+  - {human: Bedrijfscommunicatie}
+  types: [study]
+- humanNames:
+  - {human: Duitse taal en cultuur}
+  types: [study]
+- humanNames:
+  - {human: Rechtsgeleerdheid}
+  types: [study]
+- humanNames:
+  - {human: Bestuurskunde}
+  types: [study]
+- humanNames:
+  - {human: Nederlandse Taal en Cultuur}
+  types: [study]
+- humanNames:
+  - {human: Taalwetenschap}
+  types: [study]
+- humanNames:
+  - {human: Taal- en cultuurstudies}
+  types: [study]
+- humanNames:
+  - {human: Management & Technologie}
+  types: [study]
+- humanNames:
+  - {human: Life Sciences}
+  types: [study]
+- humanNames:
+  - {human: 'Geografie, Planologie en Milieu'}
+  types: [study]
+- humanNames:
+  - {human: Docent Natuurkunde}
+  types: [study]
+- humanNames:
+  - {human: Science}
+  types: [study]
+- humanNames:
+  - {human: Bedrijfskunde}
+  types: [study]
+- humanNames:
+  - {human: Docent Engels}
+  types: [study]
+- description: Het bestuur
+  humanNames:
+  - {genitive_prefix: van het, human: Bestuur, name: bestuur}
+  names: [bestuur, bestuul, parkhangen, festivals]
+  tags: [!id '4e6fcc85e60edf3dc0000004']
+  types: [group, tag]
+- description: De kascontrolecommissie
+  humanNames:
+  - {genitive_prefix: van de, human: Kascontrolecommissie, name: kasco}
+  names: [kasco, kasko, casco, casko, kascco, cascco]
+  tags: [!id '4e6fcc85e60edf3dc0000004']
+  types: [group, tag]
+- description: De FotoCommissie
+  humanNames:
+  - {genitive_prefix: van de, human: FotoCie, name: fotocie}
+  names: [fotocie, fotos]
+  tags: [!id '4e6fcc85e60edf3dc000007e']
+  types: [group, tag]
+- description: De hoofden van de commissies van Karpe Noktem.
+  humanNames:
+  - {genitive_prefix: van de, human: Hoofden, name: hoofden}
+  names: [hoofden]
+  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  types: [group, tag]
+- description: De mannelijke leden van Karpe Noktem.
+  humanNames:
+  - {genitive_prefix: van de, human: Mannen, name: mannen}
+  names: [mannen]
+  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  types: [group, tag]
+- description: De vrouwelijke leden van Karpe Noktem.
+  humanNames:
+  - {genitive_prefix: van de, human: Vrouwen, name: vrouwen}
+  names: [vrouwen]
+  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  types: [group, tag]
+- description: Frequent impulsief uitgaande mensen
+  humanNames:
+  - {genitive_prefix: van de, human: Uit, name: uit}
+  names: [uit, sex, bier, parijs]
+  tags: [!id '4e6fcc85e60edf3dc00000bc', !id '4ea9ce060032a04a41000001']
+  types: [group, tag]
+- description: Alle commissies van Karpe Noktem.
+  humanNames:
+  - {genitive_prefix: van de, human: Commissies, name: comms}
+  names: [comms]
+  tags: [!id '4e6fcc85e60edf3dc0000086']
+  types: [tag]
+- description: Alle overige mailinglists.
+  humanNames:
+  - {genitive_prefix: van de, human: Groepen, name: groepen}
+  names: [groepen]
+  tags: [!id '4e6fcc85e60edf3dc0000086']
+  types: [tag]
+- description: Categorieen van onderverdelingen der leden.
+  humanNames:
+  - {genitive_prefix: van de, human: Onderverdelingen, name: root}
+  names: [root, sms-gateway]
+  tags: [!id '4e6fcc85e60edf3dc0000086']
+  types: [tag]
+- description: Besturen der ASV Karpe Noktem.
+  humanNames:
+  - {genitive_prefix: van de, human: Besturen, name: besturen}
+  names: [besturen]
+  tags: [!id '4e6fcc85e60edf3dc0000086']
+  types: [tag]
+- description: De wortel van de WebCie.
+  humanNames:
+  - {genitive_prefix: van de, human: Wortel, name: wortel}
+  names: [wortel, gotroot]
+  tags: [!id '4e6fcc85e60edf3dc0000069']
+  types: [group, tag]
+- description: De eerstejaars leden
+  humanNames:
+  - {genitive_prefix: van de, human: EersteJaars, name: eerstejaars}
+  names: [eerstejaars]
+  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  types: [group, tag]
+- description: De Fotografen.
+  humanNames:
+  - {genitive_prefix: van de, human: Fotografen, name: fotografen}
+  names: [fotografen]
+  tags: [!id '4e6fcc85e60edf3dc0000073']
+  types: [group, tag]
+- description: De Foto Taggers.
+  humanNames:
+  - {genitive_prefix: van de, human: Foto Taggers, name: fototaggers}
+  names: [fototaggers, fotohulpjes]
+  tags: [!id '4e6fcc85e60edf3dc0000073']
+  types: [group, tag]
+- description: De redacterende commissie.
+  humanNames:
+  - {genitive_prefix: van de, human: Moderators, name: moderators}
+  names: [moderators, veiligheid, mods, censuur, forum-abuse, spellingscontrole]
+  tags: [!id '4e6fcc85e60edf3dc000007e']
+  types: [group, tag]
+- description: De platen draaiende groep.
+  humanNames:
+  - {genitive_prefix: van de, human: Draai, name: draai}
+  names: [draai]
+  tags: [!id '4e6fcc85e60edf3dc000006d']
+  types: [group, tag]
+- description: De DJ's.
+  humanNames:
+  - {genitive_prefix: van de, human: DJs, name: djs}
+  names: [djs]
+  tags: [!id '4ef0ed2b0032a03c9d000000']
+  types: [group, tag]
+- description: De niet-meer-ongeredacteerde mailinglijst voor discussie.
+  humanNames:
+  - {genitive_prefix: van de, human: Discussie, name: discussie}
+  names: [discussie]
+  tags: [!id '4e6fcc85e60edf3dc00000bc', !id '4ea9ce060032a04a41000001']
+  types: [group, tag]
+- description: De E-Mail Lijsten.
+  humanNames:
+  - {genitive_prefix: van de, human: E-Mail Lijsten, name: lists}
+  names: [lists]
+  tags: [!id '4e6fcc85e60edf3dc0000086']
+  types: [tag]
+- description: "De e-maillijst met de ge\xEFnteresseerde oud leden."
+  humanNames:
+  - {genitive_prefix: van de, human: Oud, name: oud}
+  names: [oud]
+  tags: [!id '4e6fcc85e60edf3dc00000bc']
+  types: [group, tag]
+- description: E-Maillijsten waarvan lidmaatschap automatisch wordt bepaald.
+  humanNames:
+  - {genitive_prefix: van de, human: Automatische E-Maillijsten, name: lists-auto}
+  names: [lists-auto]
+  tags: [!id '4e6fcc85e60edf3dc00000b9']
+  types: [tag]
+- description: De e-maillijsten waar je zelf lid van kunt worden.
+  humanNames:
+  - {genitive_prefix: van de, human: Vrijwillige E-Maillijsten, name: lists-opted}
+  names: [lists-opted]
+  tags: [!id '4e6fcc85e60edf3dc00000b9']
+  types: [tag]
+- description: "De re\xFCnisten van onze vereniging."
+  humanNames:
+  - {genitive_prefix: van de, human: "Re\xFCnisten", name: reunisten}
+  names: [reunisten]
+  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  types: [group, tag]
+- description: De tappers van de Barco.
+  humanNames:
+  - {genitive_prefix: van de, human: Tappers, name: tappers}
+  names: [tappers]
+  tags: [!id '4e6fcc85e60edf3dc000006b']
+  types: [group, tag]
+- description: De ereleden van onze vereniging.
+  humanNames:
+  - {genitive_prefix: van de, human: Ereleden, name: ereleden}
+  names: [ereleden]
+  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  types: [group, tag]
+- description: Andere e-maillijsten of doorverwijzingen
+  humanNames:
+  - {genitive_prefix: van de, human: Andere E-Maillijsten, name: lists-other}
+  names: [lists-other]
+  tags: [!id '4e6fcc85e60edf3dc00000b9']
+  types: [tag]
+- humanNames:
+  - {human: Wel jaar 10}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: true, year: 10}
+- humanNames:
+  - {human: Niet jaar 10}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: false, year: 10}
+- humanNames:
+  - {human: ILS wiskunde}
+  types: [study]
+- humanNames:
+  - {human: Biologie en medisch laboratoriumonderzoek}
+  types: [study]
+- humanNames:
+  - {human: TBK}
+  types: [study]
+- humanNames:
+  - {human: Business IT & Management}
+  types: [study]
+- humanNames:
+  - {human: Creative Therapie}
+  types: [study]
+- humanNames:
+  - {human: Docent Economie}
+  types: [study]
+- description: De logboek lezende groep
+  humanNames:
+  - {genitive_prefix: van de, human: Logboeklezers, name: logs}
+  names: [logs]
+  tags: [!id '4e6fcc85e60edf3dc0000069']
+  types: [group, tag]
+- description: De financiele boeken lezende groep
+  humanNames:
+  - {genitive_prefix: van de, human: Boekenlezers, name: boekenlezers}
+  names: [boekenlezers]
+  tags: [!id '4e6fcc85e60edf3dc000007e']
+  types: [group, tag]
+- description: Secretariaat
+  humanNames:
+  - {genitive_prefix: van het, human: Secretariaat, name: secretariaat}
+  names: [secretariaat]
+  tags: [!id '4e6fcc85e60edf3dc000007e']
+  types: [group, tag]
+- description: De lezers van de ledenadministratie
+  humanNames:
+  - {genitive_prefix: van de, human: Administratielezers, name: admlezers}
+  names: [admlezers]
+  tags: [!id '4e6fcc85e60edf3dc000007e']
+  types: [group, tag]
+- description: Alle groepen die met "Vrijelijk betreedbaar" zijn getagged kun je zelf
+    in en uit gaan.
+  humanNames:
+  - {human: Vrijelijk betreedbaar, name: '!free-to-join'}
+  names: ['!free-to-join']
+  tags: [!id '4e6fcc85e60edf3dc0000000']
+  types: [tag]
+- description: De drankboekhouding lezende groep
+  humanNames:
+  - {genitive_prefix: van de, human: Dranklezers, name: dranklezers}
+  names: [dranklezers]
+  tags: [!id '4e6fcc85e60edf3dc000007e']
+  types: [group, tag]
+- description: De InformaCie wordt op de hoogte gesteld van wijzigingen aan de ledenadministratie
+  humanNames:
+  - {genitive_prefix: van de, human: InformaCie, name: informacie}
+  names: [informacie]
+  tags: [!id '4ea9ce060032a04a41000001', !id '4e6fcc85e60edf3dc00000bc']
+  types: [group, tag]
+- description: De Pluk de Nacht Weekend organiserende groep
+  humanNames:
+  - {genitive_prefix: van het, human: Pluk de Nacht Weekend, name: pdn}
+  names: [pdn, plukdenacht]
+  tags: [!id '4e6fcc85e60edf3dc0000094', !id '4e6fcc85e60edf3dc0000004']
+  types: [group, tag]
+- description: Beheerders van de foto's in het smoelenboek
+  humanNames:
+  - {genitive_prefix: van de, human: Smoelen, name: smoelenboek}
+  names: [smoelenboek, smoelen]
+  tags: [!id '4e6fcc85e60edf3dc00000de']
+  types: [group, tag]
+- humanNames:
+  - {human: Niet jaar 9}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: false, year: 9}
+- humanNames:
+  - {human: Wel jaar 9}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: true, year: 9}
+- humanNames:
+  - {human: Spaanse Taal en Cultuur}
+  types: [study]
+- humanNames:
+  - {human: Paraveterinair}
+  types: [study]
+- humanNames:
+  - {human: Cognitive Neuroscience}
+  types: [study]
+- humanNames:
+  - {human: Communication and Multimedia Design}
+  types: [study]
+- humanNames:
+  - {human: Chemie}
+  types: [study]
+- description: Onze lieve (en andere) leden
+  humanNames:
+  - {genitive_prefix: van de, human: Leden, name: leden}
+  names: [leden]
+  tags: [!id '4e6fcc85e60edf3dc00000bb', !id '4e6fcc85e60edf3dc0000004']
+  types: [group, tag]
+- description: De WebCie regelt de digitale voorzieningen voor Karpe Noktem
+  humanNames:
+  - {genitive_prefix: van de, human: Webcie, name: webcie}
+  names: [webcie, rtfm, rscie, rsci, ianal, webmaster, webhamster, khandhas-infra,
+    sankhara-infra]
+  tags: [!id '4e6fcc85e60edf3dc000007d']
+  types: [group, tag]
+- humanNames:
+  - {human: Technical Artificial Intelligence}
+  types: [study]
+- humanNames:
+  - {human: Sociale Geografie en Planologie}
+  types: [study]
+- humanNames:
+  - {human: Engelstalige Letterkunde}
+  types: [study]
+- humanNames:
+  - {human: Plantteelt}
+  types: [study]
+- humanNames:
+  - {human: 'Handhaving, toezicht en veiligheid'}
+  types: [study]
+- humanNames:
+  - {human: Hotelmanagement}
+  types: [study]
+- humanNames:
+  - {human: Biomedische wetenschap}
+  types: [study]
+- humanNames:
+  - {human: Niet jaar 11}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: false, year: 11}
+- humanNames:
+  - {human: Wel jaar 11}
+  tags: [!id '4e6fcc85e60edf3dc0000001']
+  types: [tag]
+  year-override: {type: true, year: 11}
+- humanNames:
+  - {human: System Dynamics}
+  types: [study]
+- humanNames:
+  - {human: Bio-informatica}
+  types: [study]
+- humanNames:
+  - {human: <Anders>}
+  types: [study]
+- description: De disputen van Karpe Noktem
+  humanNames:
+  - {genitive_prefix: van de, human: Disputen, name: disputen}
+  names: [disputen]
+  tags: [!id '4e6fcc85e60edf3dc0000086']
+  types: [tag]
+
+- _id: !id '4e6fcc85e60edf3dc00001d4'
+  addresses:
+  - {city: Nijmegen, from: !!timestamp '2014-1-1 00:00:00', number: 123,
+                    street: straat, until: !!timestamp '5004-09-01 00:00:00',
+                        zip: 1234 AB}
+  emailAddresses:
+  - {email: 'null@kn.cx', from: !!timestamp '2014-1-1 00:00:00',
+     until: !!timestamp '5004-09-01 00:00:00'}
+  humanNames:
+  - {human: Test Gebruiker}
+  is_active: 1
+  names: [test]
+  person:
+    dateOfBirth: 1988-8-8
+    family: Gebruiker
+    given: null
+    nick: Test
+    titles: []
+  types: [user]
+  

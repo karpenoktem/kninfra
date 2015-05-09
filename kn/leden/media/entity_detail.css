@@ -21,3 +21,8 @@
 		width: auto; /* initial */
 	}
 }
+
+.change-humanName,
+.change-description {
+	float: right;
+}

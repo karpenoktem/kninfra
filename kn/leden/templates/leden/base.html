@@ -5,65 +5,66 @@
 {% block styles %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css"
-    deferred-href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css"/>
+    deferred-href="{{ MEDIA_URL }}base/jquery-ui-1.8.22/the.css"/>
 {% endblock styles %}
 
 {% block head %}
 {{ block.super }}
 <script type="text/javascript"
-        src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js" defer></script>
+        src="{{ MEDIA_URL }}base/jquery-ui-1.8.22/the.js" defer></script>
 {% endblock head %}
 
 {% block submenu %}
-<div id="submenu-wrapper">
-    <a id="submenu-button" href="">&nbsp;</a>
-    <ul id="submenu" class="has-dropdown">
-        <li><a href="{% url smoelen-home %}">Smoelenboek</a>
+<div id="submenu-wrapper" class="toggle">
+    <a id="submenu-button" class="toggle-button" href="">&nbsp;</a>
+    <ul id="submenu" class="has-dropdown toggle-window">
+        <li><a href="{% url "smoelen-home" %}">Smoelenboek</a>
           <ul>
-              <li><a href="{% url entity-by-name name="leden" %}"
+              <li><a href="{% url "entity-by-name" name="leden" %}"
                   >Leden</a></li>
-              <li><a href="{% url entity-by-name name="comms" %}"
+              <li><a href="{% url "entity-by-name" name="comms" %}"
                   >Commissies</a></li>
-              <li><a href="{% url entity-by-name name="groepen" %}"
+              <li><a href="{% url "entity-by-name" name="groepen" %}"
                   >Groepen</a></li>
-              <li><a href="{% url entity-by-name name="lists" %}"
+              <li><a href="{% url "entity-by-name" name="lists" %}"
                   >E-maillijsten</a></li>
               </ul>
           </li>
-        <li><a href="{% url event-list %}">Activiteiten</a>
+        <li><a href="{% url "event-list" %}">Activiteiten</a>
             <ul>
-                <li><a href="{% url event-new  %}">Aanmaken</a></li>
+                <li><a href="{% url "event-new"  %}">Aanmaken</a></li>
             </ul>
         </li>
 
         {% if "secretariaat" in user.cached_groups_names %}
         <li><span>Secretariaat</span>
             <ul>
-                <li><a href="{% url secr-add-user  %}">Lid inschrijven</a></li>
-                <li><a href="{% url secr-add-group  %}">Groep aanmaken</a></li>
-                <li><a href="{% url secr-update-site-agenda  %}">Agenda updaten</a></li>
-                <li><a href="{% url secr-notes  %}">Openstaande notities</a></li>
+                <li><a href="{% url "secr-add-user"  %}">Lid inschrijven</a></li>
+                <li><a href="{% url "secr-add-group"  %}">Groep aanmaken</a></li>
+                <li><a href="{% url "secr-update-site-agenda"  %}">Agenda updaten</a></li>
+                <li><a href="{% url "secr-notes"  %}">Openstaande notities</a></li>
             </ul>
         </li>
         {% endif %}
         {% if "fotocie" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
-        <li><a href="{% url fotos "" %}">Foto's</a>
+        <li><a href="{% url "fotos" "" %}">Foto's</a>
             <ul>
-                <li><a href="{% url fotoadmin-move %}">Foto's verplaatsen</a></li>
+                <li><a href="{% url "fotoadmin-move" %}">Foto's verplaatsen</a></li>
             </ul>
         </li>
         {% endif %}
 
-        <li><a href="{% url planning-home  %}">Planning</a>
+        <li><a href="{% url "planning-home"  %}">Planning</a>
             {% if "bestuur" in user.cached_groups_names or "barco" in user.cached_groups_names or "disco" in user.cached_groups_names or "chef" in user.cached_groups_names or "secretariaat" in user.cached_groups_names %}
             <ul>
-                <li><a href="{% url planning-poollist %}">Beheer</a></li>
-                <li><a href="{% url planning-event-create %}">Nieuw</a></li>
+                <li><a href="{% url "planning-poollist" %}">Beheer</a></li>
+                <li><a href="{% url "planning-event-create" %}">Nieuw</a></li>
             </ul>
             {% endif %}
         </li>
 
-        <li><a href="{% external_url "wiki" %}">Wiki</a></li>
+        <li><a href="{% external_url "wiki-home" %}">Wiki</a></li>
+        <li><a href="{% external_url "forum" %}">Forum</a></li>
         <li><a href="{% external_url "stukken" %}">Stukken</a></li>
     </ul>
 
