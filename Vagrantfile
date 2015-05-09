@@ -3,10 +3,10 @@ def configure_vagrant
     Vagrant.configure(2) do |config|
         # See https://docs.vagrantup.com/v2/multi-machine/
         def common(config, hostname)
-            config.vm.box = "chef/debian-7.7"
+            config.vm.box = "debian/jessie64"
             config.vm.hostname = "vagrant-" + hostname
-            config.vm.box_url = "https://atlas.hashicorp.com/chef/boxes/" \
-                   + "debian-7.7/versions/1.0.0/providers/virtualbox.box"
+            config.vm.box_url = "https://atlas.hashicorp.com/debian/boxes/" \
+                   + "jessie64/versions/8.0.0/providers/virtualbox.box"
             config.vm.synced_folder "salt/states", "/srv/salt"
             config.vm.synced_folder "salt/pillar", "/srv/pillar"
             config.vm.provision :salt do |salt|
