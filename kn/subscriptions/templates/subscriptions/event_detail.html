@@ -6,7 +6,7 @@
 <script type="text/javascript">
 _api = function(data, cb) {
         data.csrfmiddlewaretoken = "{{ csrf_token }}";
-        $.post("{% url api %}", data, cb, "json");
+        $.post("{% url "api" %}", data, cb, "json");
 };
 
 close_event = function() {
@@ -92,7 +92,7 @@ copy_emailaddresses_to_clipboard = function() {
 
 {% if object.is_open and has_write_access %}
 <button onclick="close_event()">Sluit inschrijvingen</button> –
-<a href="{% url event-edit edit=object.name %}">Bewerk activiteit</a>
+<a href="{% url "event-edit" edit=object.name %}">Bewerk activiteit</a>
 {% endif %}{# object.is_open and has_write_access #}
 
 {% if not subscription or may_subscribe_others or not subscription.confirmed %}

@@ -983,6 +983,7 @@ class Group(Entity):
     @property
     def is_virtual(self):
         return 'virtual' in self._data
+
 class User(Entity):
     def __init__(self, data):
         super(User,self).__init__(data)
@@ -1025,6 +1026,10 @@ class User(Entity):
     def is_authenticated(self):
         # required by django's auth
         return True
+    # Required by Django's auth. framework
+    @property
+    def pk(self):
+        return str(_id(self))
     def get_username(self):
         # implements Django's User object
         return str(self.name)

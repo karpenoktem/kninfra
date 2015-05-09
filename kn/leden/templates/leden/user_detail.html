@@ -5,7 +5,7 @@
 {% block entity_head %}
 {% if hasPhoto %}
 <div class="smoel"><a href="{{ photosUrl }}"><img
-                src="{% url user-smoel object.name %}"
+                src="{% url "user-smoel" object.name %}"
                 width="{{ photoWidth }}" height="{{ photoHeight }}"/></a></div>
 {% else %}
 <div class="nosmoel"><a href="{{ photosUrl }}">Foto's</a></div>
@@ -15,14 +15,14 @@
 
 {% block entity_body %}
 {% if "secretariaat" in user.cached_groups_names %}
-<form method="post" action="{% url user-reset-password _id=object.id %}">
+<form method="post" action="{% url "user-reset-password" _id=object.id %}">
 {% csrf_token %}
 <input type="submit" value="stuur nieuw wachtwoord" />
 </form>
 {% endif %}{# "secretariaat" in user.cached_groups_names #}
 {% if may_upload_smoel %}
 <h4>Nieuwe smoel uploaden</h4>
-<form method="post" action="{% url ik-chsmoel  %}"
+<form method="post" action="{% url "ik-chsmoel"  %}"
         enctype="multipart/form-data">
 {% csrf_token %}
 <input type="hidden" name="id" value="{{ object.id }}" />
@@ -46,7 +46,7 @@
         {% if "secretariaat" in user.cached_groups_names %}
         <button onclick="var new_address = prompt('Nieuw e-mail adres');
                          if (!new_address) return false;
-                         $.post('{% url leden-api %}', {
+                         $.post('{% url "leden-api" %}', {
                                 'csrfmiddlewaretoken': csrf_token,
                                 data: JSON.stringify({
                                         action: 'entity_update_primary',
@@ -97,7 +97,7 @@
                 {% else %}
                 <span title="Alleen zichtbaar voor secretariaat en admlezers">niet zichtbaar</span>
                 {% endif %}
-                <button onclick="$.post('{% url leden-api %}', {
+                <button onclick="$.post('{% url "leden-api" %}', {
                                         'csrfmiddlewaretoken': csrf_token,
                                         data: JSON.stringify({
                                                 action: 'entity_update_visibility',
@@ -113,7 +113,7 @@
         {% if "secretariaat" in user.cached_groups_names %}
         <button onclick="var new_phone = prompt('Nieuw telefoonnummer');
                          if (!new_phone) return false;
-                         $.post('{% url leden-api %}', {
+                         $.post('{% url "leden-api" %}', {
                                 'csrfmiddlewaretoken': csrf_token,
                                 data: JSON.stringify({
                                         action: 'entity_update_primary',
@@ -169,7 +169,7 @@
                          var addr_number = $.trim(addr[1]);
                          var addr_zip    = $.trim(addr[2]);
                          var addr_city   = $.trim(addr[3]);
-                         $.post('{% url leden-api %}', {
+                         $.post('{% url "leden-api" %}', {
                                 'csrfmiddlewaretoken': csrf_token,
                                 data: JSON.stringify({
                                         action: 'entity_update_primary',
@@ -209,14 +209,14 @@
         {% if object.dateOfBirth %}
 	<dt>Geboortedatum</dt>
 	<dd>
-        <a href="{% url entities-by-year-of-birth year=object.dateOfBirth.year %}"
+        <a href="{% url "entities-by-year-of-birth" year=object.dateOfBirth.year %}"
                 >{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth.month }}-{{ object.dateOfBirth.day }}
 	</dd>
         {% endif %}
 	{% if object.dateJoined %}
 	<dt>Lid sinds</dt>
 	<dd>
-	<a href="{% url jaar year=object.dateJoined.year %}"
+	<a href="{% url "jaar" year=object.dateJoined.year %}"
 		>{{ object.dateJoined.year }}</a>-{{ object.dateJoined.month }}-{{ object.dateJoined.day }}
 	</dd>
 	{% endif %}

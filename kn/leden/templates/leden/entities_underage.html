@@ -8,7 +8,7 @@
   <li>
     {{ user.age }}:
     <a href="{{ user.get_absolute_url }}">{{ user.full_name }}</a>
-    (<a href="{% url entities-by-year-of-birth year=user.dateOfBirth.year %}"
+    (<a href="{% url "entities-by-year-of-birth" year=user.dateOfBirth.year %}"
                 >{{ user.dateOfBirth.year }}</a>-{{ user.dateOfBirth.month }}-{{ user.dateOfBirth.day }})
   </li>
 {% endfor %}

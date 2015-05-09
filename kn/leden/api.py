@@ -1,7 +1,7 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.core.validators import email_re
+from kn.base.validators import email_re
 
 from kn.base.http import JsonHttpResponse
 from kn.base.mail import render_then_email

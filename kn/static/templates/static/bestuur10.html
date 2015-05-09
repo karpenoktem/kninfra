@@ -4,7 +4,7 @@
 
 {% block body %}
 <p class="imageDisplay">
-<img src="{{ MEDIA_URL }}/static/img/bestuur10.jpg" />
+<img src="{{ MEDIA_URL }}static/img/bestuur10.jpg" />
   <table style="font-size: smaller">
     <tr><td>Liza Boon<br/>Pandcommissaris</td>
       <td>Amirouche Chemim<br/>Vice-voorzitter</td><td></td>
@@ -34,8 +34,8 @@
  </p>
 
 <p>&lArr; Het vorige,
-<a href="{% url bestuur9 %}">negende bestuur</a>;
+<a href="{% url "bestuur9" %}">negende bestuur</a>;
 het volgende,
-<a href="{% url bestuur11 %}">elfde bestuur</a> &rArr;</p>
+<a href="{% url "bestuur11" %}">elfde bestuur</a> &rArr;</p>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

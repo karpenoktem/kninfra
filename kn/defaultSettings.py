@@ -41,7 +41,7 @@ def defaultSettings(glbls):
     d.INFRA_HOME = '/home/infra'
     d.INFRA_REPO = d.INFRA_HOME + '/repo'
 
-    d.MEDIA_URL = '/djmedia'
+    d.MEDIA_URL = '/djmedia/'
     d.STORAGE_URL = '/djmedia/storage'
     d.WOLK_DATA_PATH = '/mnt/phassa/srv/wolk'
     d.INFRA_UID = 1002
@@ -189,6 +189,9 @@ def defaultSettings(glbls):
     d.TEMPLATE_DEBUG = d.DEBUG
 
     d.ABSOLUTE_MEDIA_URL = d.BASE_URL + d.MEDIA_URL
+
+    # http://daniel.hepper.net/blog/2014/04/fixing-1_6-w001-when-upgrading
+    TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
     try:
         locale.setlocale(locale.LC_ALL, d.LOCALE)

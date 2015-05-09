@@ -6,5 +6,5 @@ Nieuwe activiteit "{{ event.name }}" door {{ user.full_name }}
 {{ user.full_name }} heeft een nieuwe activiteit aangemaakt
 
    "{{ event.name }}"
-   {{ BASE_URL }}{% url event-detail name=event.name %}
+   {{ BASE_URL }}{% url "event-detail" name=event.name %}
 {% endblock %}

@@ -6,5 +6,5 @@ Activiteit "{{ event.name }}" is door {{ user.full_name }} bewerkt
 {{ user.full_name }} heeft de volgende activiteit bewerkt.
 
    "{{ event.name }}"
-   {{ BASE_URL }}{% url event-detail name=event.name %}
+   {{ BASE_URL }}{% url "event-detail" name=event.name %}
 {% endblock %}

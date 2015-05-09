@@ -332,7 +332,7 @@ def user_smoel(request, name):
             str(user.name)) + ".jpg")
     except IOError:
         raise Http404
-    return HttpResponse(FileWrapper(img), mimetype="image/jpeg")
+    return HttpResponse(FileWrapper(img), content_type="image/jpeg")
 
 def _ik_chpasswd_handle_valid_form(request, form):
     oldpw = form.cleaned_data['old_password']
@@ -463,7 +463,7 @@ def api_users(request):
     ret = {}
     for m in Es.users():
         ret[str(m.name)] = m.full_name
-    return HttpResponse(json.dumps(ret), mimetype="text/json")
+    return HttpResponse(json.dumps(ret), content_type="text/json")
 
 @login_required
 def secr_add_user(request):
@@ -712,7 +712,7 @@ def ik_openvpn_download(request, filename):
     if not default_storage.exists(p):
         raise Http404
     response = HttpResponse(FileWrapper(default_storage.open(p)),
-            mimetype=mimetypes.guess_type(default_storage.path(p))[0])
+            content_type=mimetypes.guess_type(default_storage.path(p))[0])
     response['Content-Length'] = default_storage.size(p)
     # XXX use ETags and returns 304's
     return response

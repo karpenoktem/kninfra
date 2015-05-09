@@ -4,7 +4,7 @@
 
 {% block styles %}
 {{ block.super }}
-<link href="{{ MEDIA_URL }}/base/base.css"
+<link href="{{ MEDIA_URL }}base/base.css"
     rel="stylesheet" type="text/css" />
 {% endblock styles %}
 
@@ -21,25 +21,25 @@
 {{ block.super }}
 <div id="header">
         <div class="container">
-                <a href="{% url home %}" id="logo">
-                        <img width="310" src="{{ MEDIA_URL }}/base/logo.png"
+                <a href="{% url "home" %}" id="logo">
+                        <img width="310" src="{{ MEDIA_URL }}base/logo.png"
                                 alt="Karpe Noktem" />
                 </a>
                 <div id="navigator" class="container">
                 {% block topmenu %}
                 <ul>
-                    <li><a href="{% url agenda %}">agenda</a></li>
-                    <li><a href="{% url over %}">over</a></li>
-                    <li><a href="{% url fotos "" %}">foto's</a></li>
-                    <li><a href="{% url contact %}">contact</a></li>
+                    <li><a href="{% url "agenda" %}">agenda</a></li>
+                    <li><a href="{% url "over" %}">over</a></li>
+                    <li><a href="{% url "fotos" "" %}">foto's</a></li>
+                    <li><a href="{% url "contact" %}">contact</a></li>
                     {% if user.is_authenticated %}
-                    <li><a href="{% url logout %}">uitloggen</a></li>
-                    <li id="loginButton"><a href="{% url smoelen-home %}">{{ user.name }}</a></li>
+                    <li><a href="{% url "logout" %}">uitloggen</a></li>
+                    <li id="loginButton"><a href="{% url "smoelen-home" %}">{{ user.name }}</a></li>
                     {% else %}{# user.is_authenticated #}
-                    <li><a href="{% url lidworden %}">lid worden</a></li>
+                    <li><a href="{% url "lidworden" %}">lid worden</a></li>
                     <li id="loginButton" class="toggle">
-                        <a id="loginButtonLink" href="{% url login %}" class="toggle-button">
-                            <img src="{{ MEDIA_URL }}/base/login.svg" width="13" height="15" alt=""/>
+                        <a id="loginButtonLink" href="{% url "login" %}" class="toggle-button">
+                            <img src="{{ MEDIA_URL }}base/login.svg" width="13" height="15" alt=""/>
                             <span class="label">leden</span>
                         </a>
                         <div id="loginWindow" class="toggle-window">

@@ -28,7 +28,9 @@ class SONWrapper(object):
         assert self._data['_id'] is not None
         self._collection.remove({
             '_id': self._data['_id']})
-    def save(self):
+    # We take the keyword argument update_fields to be compatible with
+    # Django's Model.save.  However, we do not use it, yet.
+    def save(self, update_fields=NotImplemented):
         if self._parent is None:
             if '_id' in self._data:
                 self._collection.update({

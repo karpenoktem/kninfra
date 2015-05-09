@@ -4,7 +4,7 @@
 <h2>Bouwjaren</h2>
 <ul>
 {% for year in years %}
-<li><a href="{% url entities-by-year-of-birth year=year %}">{{ year }}</a></li>
+<li><a href="{% url "entities-by-year-of-birth" year=year %}">{{ year }}</a></li>
 {% endfor %}
 </ul>
 
