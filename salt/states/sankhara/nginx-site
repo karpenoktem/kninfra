@@ -1,5 +1,9 @@
 server {
+	{% if grains['vagrant'] %}
+	server_name _;
+	{% else %}
 	server_name {{ grains['fqdn'] }};
+	{% endif %}
 
 	location / {
         include /etc/nginx/fastcgi_params;
