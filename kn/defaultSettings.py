@@ -191,7 +191,7 @@ def defaultSettings(glbls):
     d.ABSOLUTE_MEDIA_URL = d.BASE_URL + d.MEDIA_URL
 
     # http://daniel.hepper.net/blog/2014/04/fixing-1_6-w001-when-upgrading
-    TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+    d.TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
     try:
         locale.setlocale(locale.LC_ALL, d.LOCALE)
