@@ -10,6 +10,8 @@ import imp
 import os.path
 import warnings
 
+import django
+
 def setup_virtual_package(name, path=os.curdir):
     """ Sets up a package at the given path with a given
         name """
@@ -26,3 +28,4 @@ if __name__ != '__main__':
         os.path.realpath(__file__[:-1] if __file__[-4:] in
             ('.pyc', '.pyo') else __file__))), '../kn'))
     setup_virtual_package('kn', path)
+    django.setup()
