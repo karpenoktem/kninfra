@@ -20,7 +20,7 @@ infra:
     user.present:
         - home: /home/infra
         - uid: 2000
-        - guid: 2000
+        - gid: 2000
         - shell: /bin/bash
 interinfra:
     group.present:
