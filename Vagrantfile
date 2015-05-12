@@ -25,6 +25,11 @@ def configure_vagrant
             common config, "phassa"
             config.vm.network :public_network
         end
+
+        # vagrant plugin install vagrant-cachier
+        if Vagrant.has_plugin? "vagrant-cachier"
+            config.cache.scope = :box
+        end
     end
 end
 
