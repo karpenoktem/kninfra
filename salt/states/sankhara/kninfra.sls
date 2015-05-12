@@ -25,6 +25,9 @@ infra:
         - shell: /bin/bash
         - groups:
             - infra
+            {% if grains['vagrant'] %}
+            - sudo
+            {% endif %}
 interinfra:
     group.present:
         - gid: 3000
@@ -91,3 +94,11 @@ https://github.com/karpenoktem/regl:
 /home/infra/repo/bin/run-fcgi:
     cmd.run:
         - user: infra
+{% if grains['vagrant'] %}
+/home/vagrant/.bash_login:
+    file.managed:
+        - contents: cd /home/infra && exec sudo su infra
+/etc/sudoers.d/vagrant-infra:
+    file.managed:
+        - contents: infra ALL=NOPASSWD:ALL
+{% endif %}
