@@ -7,6 +7,7 @@ adminutils packages:
             - ncdu
             - vim
             - ipython
+            - psmisc
 /etc/vim/vimrc.local:
     file.managed:
         - source: salt://common/vimrc
