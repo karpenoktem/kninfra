@@ -21,6 +21,7 @@ infra:
         - home: /home/infra
         - uid: 2000
         - guid: 2000
+        - shell: /bin/bash
 interinfra:
     group.present:
         - gid: 3000
