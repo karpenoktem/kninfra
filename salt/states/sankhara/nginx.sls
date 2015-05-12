@@ -10,3 +10,5 @@ nginx:
 nginx running:
     service.running:
         - name: nginx
+        - watch:
+            - file: /etc/nginx/sites-enabled/sankhara
