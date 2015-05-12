@@ -17,11 +17,14 @@ mirte:
 sarah:
     pip.installed
 infra:
+    group.present:
+        - gid: 2000
     user.present:
         - home: /home/infra
         - uid: 2000
-        - gid: 2000
         - shell: /bin/bash
+        - groups:
+            - infra
 interinfra:
     group.present:
         - gid: 3000
