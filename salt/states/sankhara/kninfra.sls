@@ -26,6 +26,7 @@ infra:
         - groups:
             - infra
             - interinfra
+            - list
             {% if grains['vagrant'] %}
             - sudo
             {% endif %}
