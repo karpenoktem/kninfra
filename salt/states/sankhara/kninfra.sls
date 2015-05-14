@@ -92,7 +92,7 @@ https://github.com/karpenoktem/regl:
 {% if grains['vagrant'] %}
 /home/vagrant/.bash_login:
     file.managed:
-        - contents: cd /home/infra && exec sudo su infra
+        - contents: cd /home/infra && exec sudo su - infra
 /etc/sudoers.d/vagrant-infra:
     file.managed:
         - contents: infra ALL=NOPASSWD:ALL
