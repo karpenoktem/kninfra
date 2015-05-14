@@ -1,4 +1,5 @@
 include:
+    - .interinfra
     - .nginx
     - .mail
     - .mongo

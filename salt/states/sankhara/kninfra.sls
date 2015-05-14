@@ -25,15 +25,10 @@ infra:
         - shell: /bin/bash
         - groups:
             - infra
+            - interinfra
             {% if grains['vagrant'] %}
             - sudo
             {% endif %}
-interinfra:
-    group.present:
-        - gid: 3000
-        - addusers:
-            - infra
-            - www-data
 /home/infra/.profile:
     file.managed:
         - source: salt://sankhara/profile
