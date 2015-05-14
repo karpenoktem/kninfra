@@ -22,9 +22,11 @@ computer te testen:
  1. Installeer [vagrant](https://www.vagrantup.com).
  2. Maak een kopie van deze *repository*
 
-        git clone https://github.com/karpenoktem/kninfra
+        $ git clone https://github.com/karpenoktem/kninfra
 
  3. Start vagrant:
 
-        cd pad/naar/kninfra
-        vagrant up
+        $ cd pad/naar/kninfra
+        $ vagrant up
+           (...)
+        $ vagrant ssh
