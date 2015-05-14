@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import os.path
 
 from kn.base.runtime import setup_virtual_package
