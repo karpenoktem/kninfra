@@ -3,3 +3,4 @@ include:
     - .sshd
     - .adminutils
     - .git
+    - .motd
