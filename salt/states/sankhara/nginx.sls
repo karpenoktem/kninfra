@@ -3,6 +3,7 @@ nginx packages:
         - pkgs:
             - nginx
             - php5-fpm
+            - php-apc
 /etc/nginx/sites-enabled/default:
     file.absent
 /etc/nginx/sites-enabled/sankhara:
