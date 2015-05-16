@@ -48,8 +48,14 @@ def ensure_secrets_are_generated
     return if File.exists?(path) and File.mtime(path) >= File.mtime(__FILE__)
 
     puts 'Generating passwords ...'
-    pillar = {'secrets' => {}}
+    if File.exists? path
+        pillar = YAML.load_file(path)
+    else
+        pillar = {'secrets' => {}}
+    end
+
     for name in names
+        next if pillar['secrets'].include? name
         pillar['secrets'][name] = SecureRandom.hex
     end
 
