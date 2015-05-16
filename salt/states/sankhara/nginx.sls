@@ -9,6 +9,9 @@ nginx packages:
     file.managed:
         - source: salt://sankhara/nginx-site
         - template: jinja
+/etc/php5/fpm/php.ini:
+    file.managed:
+        - source: salt://sankhara/php.ini
 nginx running:
     service.running:
         - name: nginx
@@ -17,3 +20,5 @@ nginx running:
 php running:
     service.running:
         - name: php5-fpm
+        - watch:
+            - file: /etc/php5/fpm/php.ini
