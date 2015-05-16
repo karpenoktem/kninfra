@@ -37,11 +37,22 @@ infra:
 /home/infra/repo:
     file.symlink:
         - target: /vagrant
+/root/kninfra:
+    file.symlink:
+        - target: /vagrant
 {% else %}
-https://github.com/karpenoktem/kninfra:
+"kninfra clone infra":
     git.latest:
+        - name: https://github.com/karpenoktem/kninfra
         - target: /home/infra/repo
         - user: infra
+    require:
+        - pkg: git
+"kninfra clone root":
+    git.latest:
+        - name: https://github.com/karpenoktem/kninfra
+        - target: /root/kninfra
+        - user: root
     require:
         - pkg: git
 {% endif %}
@@ -54,6 +65,12 @@ https://github.com/karpenoktem/kninfra:
 /home/infra/bin:
     file.symlink:
         - target: /home/infra/repo/bin
+/root/settings.py:
+    file.managed:
+        - source: salt://sankhara/settings-daan.py
+        - template: jinja
+        - user: root
+        - mode: 600
 /home/infra/settings.py:
     file.managed:
         - source: salt://sankhara/settings.py
