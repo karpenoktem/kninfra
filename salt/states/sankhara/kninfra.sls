@@ -108,6 +108,10 @@ https://github.com/karpenoktem/regl:
 /home/infra/repo/bin/run-fcgi:
     cmd.run:
         - user: infra
+/etc/nginx/sankhara.d/90-kninfra.conf:
+    file.managed:
+        - source: salt://sankhara/kninfra.nginx.conf
+        - template: jinja
 {% if grains['vagrant'] %}
 /home/vagrant/.bash_login:
     file.managed:
