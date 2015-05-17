@@ -29,6 +29,7 @@ infra:
             - list
             {% if grains['vagrant'] %}
             - sudo
+            - vagrant
             {% endif %}
 /home/infra/.profile:
     file.managed:
