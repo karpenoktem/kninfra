@@ -8,6 +8,11 @@ nginx packages:
     file.absent
 /etc/nginx/sankhara.d:
     file.directory
+/etc/nginx/backends:
+    file.directory
+/etc/nginx/backends/php:
+    file.managed:
+        - source: salt://sankhara/php.nginx-backend
 /etc/nginx/sites-enabled/sankhara.conf:
     file.managed:
         - source: salt://sankhara/site.nginx.conf
