@@ -2,78 +2,11 @@
 {% load base %}
 {% block body %}
 <h1>Nieuwe activiteit</h1>
-<form method="post" action="?">
+<form method="post" action="?" class="top-aligned">
         {% csrf_token %}
-        <table>
-        <tbody>
-                <tr>
-                        <td colspan="2">{{ form.name.errors }}</td>
-                </tr>
-                <tr>
-                        <td><label for="id_name">Korte naam</label></td>
-                        <td>{{ form.name }}</td>
-                </tr>
-                <tr>
-                        <td colspan="2">{{ form.humanName.errors }}</td>
-                </tr>
-                <tr>
-                        <td><label for="id_name">Naam</label></td>
-                        <td>{{ form.humanName }}</td>
-                </tr>
-                <tr>
-                        <td colspan="2">{{ form.description.errors }}</td>
-                </tr>
-                <tr>
-                        <td><label for="id_name">Beschrijving</label></td>
-                        <td>{{ form.description }}</td>
-                </tr>
-                <tr>
-                        <td colspan="2">{{ form.cost.errors }}</td>
-                </tr>
-                <tr>
-                        <td><label for="id_name">Kosten</label></td>
-                        <td>€ {{ form.cost }}</td>
-                </tr>
-                <tr>
-                        <td colspan="2">{{ form.when.errors }}</td>
-                </tr>
-                <tr>
-                        <td><label for="id_name">Datum</label></td>
-                        <td>{{ form.when }}</td>
-                </tr>
-                <tr>
-                        <td colspan="2">{{ form.owner.errors }}</td>
-                </tr>
-                <tr>
-                        <td><label for="id_name">Eigenaar</label></td>
-                        <td>{{ form.owner }}</td>
-                </tr>
-                <tr>
-                        <td colspan="2">{{ form.has_public_subscriptions.errors }}</td>
-                </tr>
-                <tr>
-                        <td><label for="id_name">Inschrijvingen openbaar</label></td>
-                        <td>{{ form.has_public_subscriptions }}</td>
-                </tr>
-                <tr>
-                        <td colspan="2">{{ form.has_public_subscriptions.errors }}</td>
-                </tr>
-                <tr>
-                        <td><label for="id_name">Inschrijvingen openbaar</label></td>
-                        <td>{{ form.has_public_subscriptions }}</td>
-                </tr>
-                <tr>
-                        <td colspan="2">{{ form.has_public_subscriptions.errors }}</td>
-                </tr>
-                <tr>
-                        <td><label for="id_name">Inschrijvingen openbaar</label></td>
-                        <td>{{ form.has_public_subscriptions }}</td>
-                </tr>
-        </tbody>
-        <tfoot>
-                <tr colspan="2"><td>
-                        <input type="submit" value="Maak aan!"/></td></tr>
-        </table>
-        </tfoot>
+        {{ form.as_p }}
+        <input type="submit" value="Maak aan!"/>
 </form>
 {% endblock %}
+
+{# vim: et:sta:bs=2:sw=4: #}
