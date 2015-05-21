@@ -20,7 +20,6 @@ def get_add_event_form(user, superuser=False):
         description = forms.CharField(
                 label='Beschrijving',
                 widget=forms.Textarea(attrs={
-                    'cols': '75',
                     'rows': '5'})
         )
         msg_subscribed = forms.CharField(
