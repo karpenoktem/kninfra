@@ -6,7 +6,7 @@ def configure_vagrant
             config.vm.box = "debian/jessie64"
             config.vm.hostname = "vagrant-" + hostname
             # config.vm.box_url = "https://atlas.hashicorp.com/debian/boxes/" \
-            #        + "jessie64/versions/8.0.0/providers/virtualbox.box"
+            #        + "jessie64/versions/8.0.3/providers/virtualbox.box"
             config.vm.synced_folder "salt/states", "/srv/salt"
             config.vm.synced_folder "salt/pillar", "/srv/pillar"
             config.vm.provision :salt do |salt|
