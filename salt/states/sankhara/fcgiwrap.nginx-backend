@@ -1,0 +1,5 @@
+fastcgi_pass unix:/run/fcgiwrap.socket;
+
+fastcgi_read_timeout 720;
+
+include fastcgi_params;

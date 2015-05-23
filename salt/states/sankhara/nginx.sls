@@ -2,6 +2,7 @@ nginx packages:
     pkg.installed:
         - pkgs:
             - nginx
+            - fcgiwrap
             - php5-fpm
             - php-apc
 /etc/nginx/sites-enabled/default:
@@ -10,6 +11,9 @@ nginx packages:
     file.directory
 /etc/nginx/backends:
     file.directory
+/etc/nginx/backends/fcgiwrap:
+    file.managed:
+        - source: salt://sankhara/fcgiwrap.nginx-backend
 /etc/nginx/backends/php:
     file.managed:
         - source: salt://sankhara/php.nginx-backend
