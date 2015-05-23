@@ -5,6 +5,7 @@ include:
     - .phpmyadmin
     - .wiki
     - .mail
+    - .mailman
     - .mongo
     - .kninfra
     - .initializeDb
