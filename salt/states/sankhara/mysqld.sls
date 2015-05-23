@@ -1,6 +1,9 @@
-mysql-server:
-    pkg:
-        - installed
+mysql packages:
+    pkg.installed:
+        - pkgs:
+            - mysql-server
+            - mysql-client
+            - python-mysqldb
 mysql:
     service:
         - running
