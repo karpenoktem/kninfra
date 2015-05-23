@@ -3,6 +3,7 @@ include:
     - .nginx
     - .mysqld
     - .phpmyadmin
+    - .wiki
     - .mail
     - .mongo
     - .kninfra
