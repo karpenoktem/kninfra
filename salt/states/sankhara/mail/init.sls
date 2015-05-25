@@ -2,6 +2,7 @@ mail packages:
     pkg.installed:
         - pkgs:
             - postfix
+            - postfix-pcre
 postfix:
     service:
         - running
@@ -23,7 +24,13 @@ postfix:
             - service: postfix
         - require:
             - file: /etc/postfix/sasl
-{% for file in ['transport', 'sender_access', 'sender_canonical_map',
+/etc/postfix/sender_canonical_map:
+    file.managed:
+        - source: salt://sankhara/mail/sender_canonical_map
+        - template: jinja
+        - watch_in:
+            - service: postfix
+{% for file in ['transport', 'sender_access',
                 'virtual/domains', 'virtual/pre-maps', 'virtual/post-maps'] %}
 /etc/postfix/{{ file }}:
     file.managed:
