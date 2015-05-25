@@ -1,7 +1,6 @@
 mail packages:
     pkg.installed:
         - pkgs:
-            - postfix
             - postfix-pcre
 postfix:
     service:
