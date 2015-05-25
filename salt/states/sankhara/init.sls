@@ -7,5 +7,7 @@ include:
     - .mail
     - .mailman
     - .mongo
+    - .ldap
+    - .freeradius
     - .kninfra
     - .initializeDb
