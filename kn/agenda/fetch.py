@@ -8,9 +8,13 @@ import httplib2
 
 from iso8601 import parse_date
 
-# pip install google-api-python-client
+try:
+    # Debian package python-googleapi
+    from apiclient.discovery import build
+except ImportError:
+    # pip package google-api-python-client
+    from googleapiclient.discovery import build
 from oauth2client.client import SignedJwtAssertionCredentials
-from googleapiclient.discovery import build
 
 # How to configure the agenda:
 #
