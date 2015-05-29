@@ -3,8 +3,16 @@ ldap packages:
         - pkgs:
             - slapd
             - phpldapadmin
+            - ldap-utils
 /etc/nginx/sankhara.d/10-phpldapadmin.conf:
     file.managed:
         - source: salt://sankhara/phpldapadmin.nginx.conf
         - template: jinja
-# TODO
+salt://sankhara/initialize-ldap.py:
+    cmd.script:
+        - creates: /root/.ldap-initialized
+        - args: >-
+            {{ grains['fqdn'] }} {{ pillar['secrets']['ldap_admin'] }}
+            {{ pillar['secrets']['ldap_infra'] }}
+            {{ pillar['secrets']['ldap_daan'] }}
+            {{ pillar['secrets']['ldap_freeradius'] }}

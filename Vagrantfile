@@ -42,7 +42,8 @@ require 'securerandom'
 def ensure_secrets_are_generated
     names = ['chucknorris', 'django_secret_key', 'apikey', 'mysql_giedo',
                 'mysql_wiki', 'mysql_wolk', 'mysql_forum', 'mysql_root',
-                'mysql_daan', 'mailman_default', 'ldap_infra', 'ldap_daan',
+                'mysql_daan', 'mailman_default', 'ldap_infra',
+                'ldap_daan', 'ldap_freeradius', 'ldap_admin',
                 'wiki_key', 'wiki_upgrade_key', 'wiki_admin']
 
     path = File.join(File.dirname(__FILE__), 'salt', 'pillar', 'vagrant.sls')
