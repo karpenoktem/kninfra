@@ -14,6 +14,7 @@ kninfra packages:
             - python-html2text
             - python-httplib2
             - python-googleapi
+            - python-ldap
 mirte:
     pip.installed
 sarah:
