@@ -4,6 +4,10 @@ ldap packages:
             - slapd
             - phpldapadmin
             - ldap-utils
+/etc/phpldapadmin/config.php:
+    file.managed:
+        - source: salt://sankhara/phpldapadmin-config.php
+        - template: jinja
 /etc/nginx/sankhara.d/10-phpldapadmin.conf:
     file.managed:
         - source: salt://sankhara/phpldapadmin.nginx.conf
