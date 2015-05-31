@@ -1,8 +1,0 @@
-dn: olcDatabase={1}hdb,cn=config
-changetype: modify
-add: olcAccess
-olcAccess: {1}to attrs=sambaNTPassword
-  by dn="cn=daan,dc=karpenoktem,dc=nl" write
-  by dn="cn=freeradius,dc=karpenoktem,dc=nl" read
-  by self write
-  by * none
