@@ -13,6 +13,7 @@ kninfra packages:
             - python-pip
             - python-html2text
             - python-httplib2
+            - python-googleapi
 mirte:
     pip.installed
 sarah:
