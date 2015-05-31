@@ -100,6 +100,9 @@ class Giedo(WhimDaemon):
             generate_openvpn_zips(self)
 
     def _sync_villanet(self):
+        if not settings.VILLANET_SECRET_API_KEY:
+            logging.warn("VILLANET_SECRET_API_KEY not set")
+            return
         ret = self.villanet_request({'action': 'listUsers'})
         if not ret[0]:
             return
@@ -269,7 +272,7 @@ class Giedo(WhimDaemon):
             self.push_changes_event.clear()
             for pc in Es.pcol.find():
                 if pc['system'] == 'villanet':
-                    if settings.VILLANET_SECRET_API_KEY == '':
+                    if not settings.VILLANET_SECRET_API_KEY:
                         logging.warn("VILLANET_SECRET_API_KEY not set")
                         continue
                     params = pc['data']
