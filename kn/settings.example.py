@@ -28,7 +28,7 @@ MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 # Do not remove the following
 #
 
-from defaultSettings import defaultSettings
+from kn.defaultSettings import defaultSettings
 defaultSettings(globals())
 
 # vim: et:sta:bs=2:sw=4:

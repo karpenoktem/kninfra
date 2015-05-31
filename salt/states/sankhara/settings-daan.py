@@ -12,5 +12,5 @@ LDAP_PASS = '{{ pillar['secrets']['ldap_daan'] }}'
 DOMAIN = '{{ grains['fqdn'] }}'
 INFRA_UID = 2000 # Keep in synch. with kninfra.sls
 
-from defaultSettings import defaultSettings
+from kn.defaultSettings import defaultSettings
 defaultSettings(globals())
