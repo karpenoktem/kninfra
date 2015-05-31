@@ -542,6 +542,7 @@ entities:
   tags: [!id '4e6fcc85e60edf3dc000007e']
   types: [group, tag]
 - description: Secretariaat
+  _id: &secretariaat_id !id 'aaaaaaaaaaaaaaaaaaa00002'
   humanNames:
   - {genitive_prefix: van het, human: Secretariaat, name: secretariaat}
   names: [secretariaat]
@@ -610,6 +611,7 @@ entities:
   - {human: Chemie}
   types: [study]
 - description: Onze lieve (en andere) leden
+  _id: &leden_id !id 'aaaaaaaaaaaaaaaaaaa00001'
   humanNames:
   - {genitive_prefix: van de, human: Leden, name: leden}
   names: [leden]
@@ -669,23 +671,57 @@ entities:
   tags: [!id '4e6fcc85e60edf3dc0000086']
   types: [tag]
 
-- _id: !id '4e6fcc85e60edf3dc00001d4'
+- _id: &test_id !id '4e6fcc85e60edf3dc00001d4'
   addresses:
-  - {city: Nijmegen, from: !!timestamp '2014-1-1 00:00:00', number: 123,
-                    street: straat, until: !!timestamp '5004-09-01 00:00:00',
-                        zip: 1234 AB}
+  - {city: Nijmegen, from:  &dt_min !!timestamp '2014-1-1 00:00:00',
+                    until: &dt_max !!timestamp '5004-09-01 00:00:00',
+                    number: 123, street: straat, zip: 1234 AB}
   emailAddresses:
-  - {email: 'null@kn.cx', from: !!timestamp '2014-1-1 00:00:00',
-     until: !!timestamp '5004-09-01 00:00:00'}
+  - {email: 'webcie@kn.cx', from: *dt_min, until: *dt_max}
   humanNames:
   - {human: Test Gebruiker}
   is_active: 1
   names: [test]
   person:
-    dateOfBirth: 1988-8-8
+    dateOfBirth: !!timestamp 1988-8-8 00:00:00
     family: Gebruiker
     given: null
     nick: Test
     titles: []
   types: [user]
-  
+- _id: &admin_id !id '4e6fcc85e60edf3dc00001d5'
+  addresses:
+  - {city: Nijmegen, from: *dt_min, number: 123,
+                    street: straat, until: *dt_max,
+                        zip: 1234 AB}
+  emailAddresses:
+  - {email: 'webcie@kn.cx', from: *dt_min,
+     until: *dt_max}
+  humanNames:
+  - {human: Test Admin}
+  is_active: 1
+  names: [admin]
+  person:
+    dateOfBirth: !!timestamp 1988-8-8 00:00:00
+    family: Admin
+    given: null
+    nick: Test
+    titles: []
+  types: [user]
+relations:
+- who: *test_id
+  with: *leden_id
+  how: null
+  from: *dt_min
+  until: *dt_max
+- who: *admin_id
+  with: *leden_id
+  how: null
+  from: *dt_min
+  until: *dt_max
+- who: *admin_id
+  with: *secretariaat_id
+  how: null
+  from: *dt_min
+  until: *dt_max
+
