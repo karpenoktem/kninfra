@@ -4,13 +4,13 @@ import datetime
 import functools
 import email.utils
 
+from django.conf import settings
 from django.db.models import permalink
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
-from kn.settings import DT_MIN, DT_MAX, MAILDOMAIN
 from kn.base._random import pseudo_randstr
-from kn import settings
+from kn.settings import DT_MIN, DT_MAX
 
 # ######################################################################
 # The collections
@@ -907,7 +907,7 @@ class Entity(SONWrapper):
         if self.type in ('institute', 'study', 'brand', 'tag'):
             return None
         name = str(self.name if self.name else self.id)
-        return "%s@%s" % (name, MAILDOMAIN)
+        return "%s@%s" % (name, settings.MAILDOMAIN)
 
     @property
     def got_mailman_list(self):

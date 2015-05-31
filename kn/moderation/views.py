@@ -12,7 +12,7 @@ import kn.leden.entities as Es
 import kn.moderation.entities as mod_Es
 from kn.utils.mailman import import_mailman
 from kn.base.mail import render_then_email
-from kn import settings
+from django.conf import settings
 
 import_mailman()
 

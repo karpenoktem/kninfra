@@ -16,7 +16,7 @@ from M2Crypto import RSA
 
 from django.core.files.storage import default_storage
 
-from kn import settings
+from django.conf import settings
 from kn.utils.whim import WhimDaemon, WhimClient
 from kn.base._random import pseudo_randstr
 import kn.leden.entities as Es

@@ -2,7 +2,7 @@ from subprocess import call
 import logging
 import os
 
-from kn import settings
+from django.conf import settings
 
 from kn.utils.mailman import import_mailman
 import_mailman()

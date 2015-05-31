@@ -1,7 +1,7 @@
 # vim: et:sta:bs=2:sw=4:
 import _import
 
-from kn import settings
+from django.conf import settings
 from kn.utils.mailman import import_mailman
 
 import_mailman()

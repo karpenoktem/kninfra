@@ -17,7 +17,7 @@ from kn.utils.daan.live import live_update_knsite, live_update_knfotos
 from kn.utils.daan.fotoadmin import fotoadmin_create_event, fotoadmin_move_fotos
 from kn.utils.daan._ldap import apply_ldap_changes, ldap_setpass
 
-from kn import settings
+from django.conf import settings
 
 class Daan(WhimDaemon):
     def __init__(self):

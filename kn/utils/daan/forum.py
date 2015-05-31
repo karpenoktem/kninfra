@@ -5,7 +5,7 @@ import time
 
 import MySQLdb
 
-from kn import settings
+from django.conf import settings
 from kn.base._random import pseudo_randstr
 
 def forum_setpass(daan, user, password):

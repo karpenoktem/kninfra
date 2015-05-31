@@ -10,7 +10,7 @@ from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 
 import kn.leden.entities as Es
-from kn import settings
+from django.conf import settings
 
 class CreateCertificateException(Exception):
     pass

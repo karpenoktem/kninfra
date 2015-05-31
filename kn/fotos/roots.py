@@ -1,4 +1,4 @@
-from kn import settings
+from django.conf import settings
 
 from collections import namedtuple
 foto_root = namedtuple('foto_root', ('base', 'between'))
