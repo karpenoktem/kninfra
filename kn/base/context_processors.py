@@ -1,7 +1,8 @@
 import random
-from kn.settings import ABSOLUTE_MEDIA_URL
+
+from django.conf import settings
 
 def base_url(request):
-    return {'ABSOLUTE_MEDIA_URL': ABSOLUTE_MEDIA_URL}
+    return {'ABSOLUTE_MEDIA_URL': settings.ABSOLUTE_MEDIA_URL}
 
 # vim: et:sta:bs=2:sw=4:

@@ -1,7 +1,7 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property
 import kn.leden.entities as Es
 from kn.fotos.utils import resize_proportional
-from kn import settings
+from django.conf import settings
 
 from django.db.models import permalink
 

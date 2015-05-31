@@ -1,6 +1,6 @@
 import time
 
-from kn import settings
+from django.conf import settings
 
 from kn.utils.whim import WhimDaemon, WhimClient
 

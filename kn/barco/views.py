@@ -12,7 +12,7 @@ from django.template import RequestContext
 
 from koert.drank.rikf import open_rikf_ar
 
-from kn import settings
+from django.conf import settings
 from kn.barco.forms import BarformMeta, InvCountMeta
 
 settings.DRANK_REPOSITORIES = ['drank6', 'drank7', 'drank8', 'drank9']

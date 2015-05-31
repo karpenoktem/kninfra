@@ -1,14 +1,10 @@
-import os
-from glob import glob
 from datetime import date
 
 from django import forms
 
-from kn.settings import PHOTOS_DIR, USER_DIRS, WOLK_DATA_PATH
 from kn.leden import giedo
 
 import kn.fotos.entities as fEs
-from kn.fotos.roots import FOTO_ROOTS
 
 
 def list_events():

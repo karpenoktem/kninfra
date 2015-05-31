@@ -5,7 +5,7 @@ import os.path
 import logging
 import subprocess
 
-from kn import settings
+from django.conf import settings
 
 def wolk_setpass(cilia, user, passwd):
     wolk_script = os.path.join(os.path.dirname(os.path.realpath(__file__)),

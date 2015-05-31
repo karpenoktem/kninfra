@@ -16,7 +16,8 @@ from kn.leden.mongo import _id, ObjectId
 from kn.leden import giedo
 from kn.leden.date import now
 from kn.utils.mailman import import_mailman
-from kn.settings import DT_MIN, DT_MAX
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
 
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
     """ Queries relations """

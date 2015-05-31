@@ -4,7 +4,7 @@ import _import
 from common import *
 from kn.leden.models import OldKnUser
 from django.core.files.storage import default_storage
-from kn.settings import SMOELEN_PHOTOS_PATH
+from django.conf import settings
 from os import path
 import sys
 import subprocess
@@ -12,7 +12,7 @@ import subprocess
 def main(username, photo):
     user = OldKnUser.objects.get(username=username)
     subprocess.call(['convert', '-resize', '200x', photo,
-            "jpg:%s.jpg" % (path.join(SMOELEN_PHOTOS_PATH,
+            "jpg:%s.jpg" % (path.join(settings.SMOELEN_PHOTOS_PATH,
                     user.username))])
 
 if __name__ == '__main__':

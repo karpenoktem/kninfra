@@ -6,7 +6,7 @@ import select
 import json
 import os
 
-from kn import settings
+from django.conf import settings
 
 from kn.utils.whim import WhimDaemon
 from kn.utils.cilia.unix import set_unix_map, unix_setpass

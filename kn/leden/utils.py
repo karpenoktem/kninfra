@@ -1,5 +1,5 @@
 import kn.leden.entities as Es
-from kn import settings
+from django.conf import settings
 
 def find_name_for_user(first_name, last_name):
     """ Given the first and the last name of a user, find a free name """

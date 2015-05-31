@@ -1,6 +1,6 @@
 import _import
 
-from kn import settings
+from django.conf import settings
 import kn.fotos.entities as fEs
 import kn.leden.entities as Es
 import multiprocessing

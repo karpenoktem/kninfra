@@ -4,7 +4,7 @@ import django.template
 import django.template.loader
 import django.core.mail
 
-from kn import settings
+from django.conf import settings
 
 def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
                         reply_to=None, headers=None):

@@ -4,10 +4,11 @@ import MySQLdb
 from tarjan.tc import tc
 
 import kn.leden.entities as Es
-from kn.settings import DT_MIN
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
 from kn.leden.date import now
 
-from kn import settings
+from django.conf import settings
 
 def generate_wolk_changes(giedo):
     creds = settings.WOLK_MYSQL_SECRET

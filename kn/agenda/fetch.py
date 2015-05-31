@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import kn.settings as settings
+from django.conf import settings
 
 import json
 import datetime

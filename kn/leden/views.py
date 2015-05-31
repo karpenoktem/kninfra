@@ -36,8 +36,9 @@ from kn.base.text import humanized_enum
 
 from kn.fotos.utils import resize_proportional
 
-from kn.settings import DT_MIN, DT_MAX
-from kn import settings
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
+from django.conf import settings
 
 import kn.leden.entities as Es
 

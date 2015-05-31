@@ -4,7 +4,7 @@ import itertools
 import MySQLdb
 
 import kn.leden.entities as Es
-from kn import settings
+from django.conf import settings
 
 def generate_wiki_changes(self):
     creds = settings.WIKI_MYSQL_SECRET

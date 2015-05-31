@@ -5,10 +5,10 @@ try:
 except ImportError:
     from bson import ObjectId
 
-from kn.settings import MONGO_DB, MONGO_HOST
+from django.conf import settings
 
-conn = pymongo.Connection(MONGO_HOST)
-db = conn[MONGO_DB]
+conn = pymongo.Connection(settings.MONGO_HOST)
+db = conn[settings.MONGO_DB]
 
 def _id(obj):
     if isinstance(obj, ObjectId):
