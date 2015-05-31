@@ -12,6 +12,7 @@ kninfra packages:
             - python-imaging
             - python-pip
             - python-html2text
+            - python-httplib2
 mirte:
     pip.installed
 sarah:
