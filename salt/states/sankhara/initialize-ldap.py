@@ -100,6 +100,11 @@ def main():
             objectClass: organization
             o: %s""" % (suffix, host, host),
                 'ldapadd')
+    ldif("""dn: ou=users,%s
+            ou: users
+            objectClass: organizationalUnit
+            objectClass: top""" % (suffix,),
+                'ldapadd')
     ldif("""dn: cn=freeradius,%s
             cn: freeradius
             objectClass: organizationalRole
