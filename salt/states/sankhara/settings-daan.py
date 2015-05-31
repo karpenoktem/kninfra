@@ -10,6 +10,7 @@ WOLK_MYSQL_SECRET = ('localhost', 'wolk',
                         '{{ pillar['secrets']['mysql_wolk'] }}', 'wolk')
 LDAP_PASS = '{{ pillar['secrets']['ldap_daan'] }}'
 DOMAIN = '{{ grains['fqdn'] }}'
+INFRA_UID = 2000 # Keep in synch. with kninfra.sls
 
 from defaultSettings import defaultSettings
 defaultSettings(globals())
