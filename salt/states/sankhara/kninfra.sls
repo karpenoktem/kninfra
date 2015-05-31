@@ -39,7 +39,11 @@ infra:
             {% endif %}
 /home/infra/.profile:
     file.managed:
-        - source: salt://sankhara/profile
+        - source: salt://sankhara/infra.profile
+/root/.profile:
+    file.managed:
+        - source: salt://sankhara/root.profile
+        - template: jinja
 {% if grains['vagrant'] %}
 /home/infra/repo:
     file.symlink:
@@ -47,6 +51,15 @@ infra:
 /root/kninfra:
     file.symlink:
         - target: /vagrant
+/root/py:
+    file.directory
+/root/py/vagrantSettingsHack:
+    file.directory
+/root/py/vagrantSettingsHack/__init__.py:
+    file.managed
+/root/py/vagrantSettingsHack/settings.py:
+    file.symlink:
+        - target: /root/settings.py
 {% else %}
 "kninfra clone infra":
     git.latest:
