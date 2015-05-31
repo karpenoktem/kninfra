@@ -41,9 +41,9 @@ wiki mysql grant 2:
     mysql_grants.present:
         - grant: select
         - database: wiki.user
-        - user: infra
+        - user: giedo
 wiki mysql grant 3:
     mysql_grants.present:
         - grant: select
         - database: wiki.user_groups
-        - user: infra
+        - user: giedo
