@@ -111,6 +111,11 @@ https://github.com/karpenoktem/regl:
         - user: vagrant
         - group: vagrant
         {% endif %}
+/var/run/infra:
+    file.directory:
+        - user: root
+        - group: interinfra
+        - mode: 770
 /home/infra/repo/bin/run-fcgi:
     cmd.run:
         - user: infra
