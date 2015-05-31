@@ -38,9 +38,17 @@ from kn.utils.giedo.fotos import scan_fotos
 class Giedo(WhimDaemon):
     def __init__(self):
         super(Giedo, self).__init__(settings.GIEDO_SOCKET)
+        self.l = logging.getLogger('giedo')
         self.last_sync_ts = 0
-        self.daan = WhimClient(settings.DAAN_SOCKET)
-        self.cilia = WhimClient(settings.CILIA_SOCKET)
+        self.daan, self.cilia = None, None
+        try:
+            self.daan = WhimClient(settings.DAAN_SOCKET)
+        except:
+            self.l.exception("Couldn't connect to daan")
+        try:
+            self.cilia = WhimClient(settings.CILIA_SOCKET)
+        except:
+            self.l.exception("Couldn't connect to cilia")
         self.mirte = mirte.get_a_manager()
         self.threadPool = self.mirte.get_a('threadPool')
         self.operation_lock = threading.Lock()
