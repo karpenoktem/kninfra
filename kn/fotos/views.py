@@ -19,7 +19,6 @@ from django.contrib import messages
 from django.http import Http404, HttpResponse, HttpResponseNotModified, QueryDict
 
 from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
-from kn.settings import PHOTOS_DIR
 from kn.leden import giedo
 
 import kn.fotos.entities as fEs

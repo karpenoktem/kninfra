@@ -4,7 +4,7 @@ import itertools
 from tarjan.tc import tc        # transitive closure of a graph
 
 import kn.leden.entities as Es
-from kn.settings import DT_MIN
+from kn.settings import DT_MIN, DT_MAX
 from kn.leden.date import now
 
 def generate_unix_map(giedo):

@@ -3,10 +3,10 @@ import decimal
 from django.db.models import permalink
 from django.utils.html import escape, linebreaks
 from django.core.mail import EmailMessage
+from django.conf import settings
 
 from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
 import kn.leden.entities as Es
-from kn.settings import MAILDOMAIN
 
 ecol = db['events']
 scol = db['event_subscriptions']
@@ -100,7 +100,8 @@ class Event(SONWrapper):
     @property
     def messageId(self):
         """ Unique ID to be used in e.g. References: headers """
-        return '<%s@%s>' % (self.get_absolute_url().strip('/'), MAILDOMAIN)
+        return '<%s@%s>' % (self.get_absolute_url().strip('/'),
+                        settings.MAILDOMAIN)
     def has_read_access(self, user):
         return  self.owner == user or \
             str(self.owner.name) in user.cached_groups_names or \

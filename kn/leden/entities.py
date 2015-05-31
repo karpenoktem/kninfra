@@ -10,6 +10,7 @@ from django.db.models import permalink
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
 from kn.base._random import pseudo_randstr
+
 from kn.settings import DT_MIN, DT_MAX
 
 # ######################################################################
