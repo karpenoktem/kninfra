@@ -29,11 +29,12 @@ def defaultSettings(glbls):
     d.FORUM_MYSQL_SECRET = None
     d.WOLK_MYSQL_SECRET = None
 
-    d.LDAP_HOST = 'localhost'
-    d.LDAP_BASE = 'ou=users,dc=karpenoktem,dc=nl'
-    d.LDAP_USER = 'cn=daan,dc=karpenoktem,dc=nl'
-    d.LDAP_PASS = None
     d.DOMAINNAME = 'karpenoktem.nl'
+    d.LDAP_HOST = 'localhost'
+    d.LDAP_SUFFIX = 'dc='+ ',dc='.join(d.DOMAINNAME.split('.'))
+    d.LDAP_BASE = 'ou=users,' + d.LDAP_SUFFIX
+    d.LDAP_USER = 'cn=infra,' + d.LDAP_SUFFIX
+    d.LDAP_PASS = None
 
     # Settings you probably want to change
     # ############################################################
