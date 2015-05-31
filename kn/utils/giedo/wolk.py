@@ -4,7 +4,8 @@ import MySQLdb
 from tarjan.tc import tc
 
 import kn.leden.entities as Es
-from kn.settings import DT_MIN, DT_MAX
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
 from kn.leden.date import now
 
 from django.conf import settings

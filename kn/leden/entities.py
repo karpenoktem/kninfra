@@ -11,7 +11,8 @@ from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
 from kn.base._random import pseudo_randstr
 
-from kn.settings import DT_MIN, DT_MAX
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
 
 # ######################################################################
 # The collections

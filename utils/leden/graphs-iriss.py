@@ -12,7 +12,8 @@ import _import
 import datetime
 
 import kn.leden.entities as Es
-from kn.settings import DT_MIN, DT_MAX
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
 from kn.leden.mongo import _id
 
 llut = dict()
