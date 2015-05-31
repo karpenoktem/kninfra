@@ -9,7 +9,7 @@ import re
 
 
 import kn.fotos.entities as fEs
-from kn.fotos.forms import FOTO_ROOTS
+from kn.fotos.roots import FOTO_ROOTS
 from django.conf import settings
 
 def fotoadmin_create_event(daan, date, name, humanName):
