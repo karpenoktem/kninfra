@@ -3,16 +3,9 @@
 # Initializes the LDAP database
 
 import sys
+import textwrap
 import subprocess
 
-def ldif(s, what='ldapmodify'):
-    s = '\n'.join([l.strip() for l in s.split('\n')])
-    pipe = subprocess.Popen([what, '-Y', 'EXTERNAL', '-H', 'ldapi:///'],
-                            stdin=subprocess.PIPE)
-    pipe.stdin.write(s)
-    pipe.stdin.close()
-    if not pipe.wait() == 0:
-        raise Exception("%s failed" % what)
 
 def main():
     if not len(sys.argv) == 6:
@@ -25,106 +18,122 @@ def main():
     admin_pw, infra_pw, daan_pw, freeradius_pw = [
                 subprocess.check_output(['slappasswd', '-s', pw]).strip()
                         for pw in sys.argv[2:6]]
-    ldif("""dn: olcDatabase={1}mdb,cn=config
+    local = '"gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth"'
+    def ldif(s, what='ldapmodify'):
+        first_line, rest = s.split('\n', 1)
+        s = first_line + '\n' + textwrap.dedent(rest)
+        s = s.format(suffix=suffix, host=host, admin_pw=admin_pw,
+                        daan_pw=daan_pw, freeradius_pw=freeradius_pw,
+                        infra_pw=infra_pw, local=local)
+        pipe = subprocess.Popen([what, '-Y', 'EXTERNAL', '-H', 'ldapi:///'],
+                                stdin=subprocess.PIPE)
+        pipe.stdin.write(s)
+        pipe.stdin.close()
+        if not pipe.wait() == 0:
+            raise Exception("%s failed" % what)
+    ldif("""dn: olcDatabase={{1}}mdb,cn=config
             changetype: modify
             replace: olcSuffix
-            olcSuffix: %s""" % suffix)
-    ldif("""dn: olcDatabase={1}mdb,cn=config
+            olcSuffix: {suffix}""")
+    ldif("""dn: olcDatabase={{1}}mdb,cn=config
             changetype: modify
             replace: olcRootDN
-            olcRootDN: cn=admin,%s""" % suffix)
-    ldif("""dn: olcDatabase={1}mdb,cn=config
+            olcRootDN: cn=admin,{suffix}""")
+    ldif("""dn: olcDatabase={{1}}mdb,cn=config
             changetype: modify
             replace: olcRootPW
-            olcRootPW: %s""" % admin_pw)
+            olcRootPW: {admin_pw}""")
     ldif("""dn: cn=kn,cn=schema,cn=config
             objectClass: olcSchemaConfig
-            cn: kn\n"""+
-            "olcattributetypes: {1}( 1.3.6.1.4.1.7165.2.1.25 NAME "+
-            "'sambaNTPassword' DESC 'MD4 hash of the unicode password' "+
-            "EQUALITY caseIgnoreIA5Match SYNTAX 1.3.6.1.4.1.1466.115.12"+
-            "1.1.26{32} SINGLE-VALUE )\n"+
-            " olcobjectclasses: {0}( 1.3.6.1.4"+
-            ".1.7165.2.2.6 NAME 'knAccount' DESC 'KN account' SUP top "+
-            "AUXILIARY MUST ( uid ) MAY ( sambaNTPassword ) )\n",
+            cn: kn
+            olcattributetypes: {{1}}( 1.3.6.1.4.1.7165.2.1.25 NAME
+              'sambaNTPassword' DESC 'MD4 hash of the unicode password'
+              EQUALITY caseIgnoreIA5Match SYNTAX
+              1.3.6.1.4.1.1466.115.121.1.26{{32}} SINGLE-VALUE )
+            olcobjectclasses: {{0}}( 1.3.6.1.4.1.7165.2.2.6 NAME
+              'knAccount' DESC 'KN account' SUP top 
+              AUXILIARY MUST ( uid ) MAY ( sambaNTPassword ) )""",
                 'ldapadd')
-    ldif("""dn: olcDatabase={1}mdb,cn=config
+    ldif("""dn: olcDatabase={{1}}mdb,cn=config
             changetype: modify
             delete: olcAccess""")
-    ldif("""dn: olcDatabase={1}mdb,cn=config
+    ldif("""dn: olcDatabase={{1}}mdb,cn=config
             changetype: modify
-            add: olcAccess\n"""+
-            'olcAccess: {0}to *'+
-            ' by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,'+
-                    'cn=auth" write'+
-            ' by * none')
-    ldif(("""dn: olcDatabase={1}mdb,cn=config
+            add: olcAccess
+            olcAccess: {{0}}to dn.subtree="ou=users,{suffix}"
+              attrs=userPassword,shadowLastChange
+              by dn="cn=infra,{suffix}" read
+              by dn="cn=daan,{suffix}" write
+              by dn="cn=admin,{suffix}" write
+              by dn.base={local} write
+              by anonymous auth
+              by * none""")
+    ldif("""dn: olcDatabase={{1}}mdb,cn=config
             changetype: modify
-            add: olcAccess\n"""+
-            'olcAccess: {1}to dn.subtree="ou=users,%s"'+
-            ' attrs=userPassword,shadowLastChange'+
-            ' by dn="cn=infra,%s" read'+
-            ' by dn="cn=daan,%s" write'+
-            ' by dn="cn=admin,%s" write'+
-            ' by anonymous auth'+
-            ' by * none') % (suffix, suffix, suffix, suffix))
-    ldif(("""dn: olcDatabase={1}mdb,cn=config
+            add: olcAccess
+            olcAccess: {{1}}to attrs=sambaNTPassword
+              by dn="cn=daan,{suffix}" write
+              by dn="cn=freeradius,{suffix}" read
+              by dn.base={local} write
+              by self write
+              by * none""")
+    ldif("""dn: olcDatabase={{1}}mdb,cn=config
             changetype: modify
-            add: olcAccess\n"""+
-            'olcAccess: {2}to attrs=sambaNTPassword'+
-            ' by dn="cn=daan,%s" write'+
-            ' by dn="cn=freeradius,%s" read'+
-            ' by self write'+
-            ' by * none') % (suffix, suffix))
-    ldif(("""dn: olcDatabase={1}mdb,cn=config
+            add: olcAccess
+            olcAccess: {{2}}to attrs=userPassword,shadowLastChange
+              by self write
+              by dn.base={local} write
+              by anonymous auth
+              by dn="cn=admin,{suffix}" write
+              by * none""")
+    ldif("""dn: olcDatabase={{1}}mdb,cn=config
             changetype: modify
-            add: olcAccess\n"""+
-            'olcAccess: {3}to attrs=userPassword,shadowLastChange'+
-            ' by self write'+
-            ' by anonymous auth'+
-            ' by dn="cn=admin,%s" write'+
-            ' by * none') % (suffix,))
-    ldif(("""dn: olcDatabase={1}mdb,cn=config
+            add: olcAccess
+            olcAccess: {{3}}to dn.subtree="ou=users,{suffix}"
+              by dn="cn=freeradius,{suffix}" read
+              by dn="cn=infra,{suffix}" read
+              by dn="cn=daan,{suffix}" write
+              by dn="cn=admin,{suffix}" write
+              by dn.base={local} write
+              by * none""")
+    ldif("""dn: olcDatabase={{1}}mdb,cn=config
             changetype: modify
-            add: olcAccess\n"""+
-            'olcAccess: {1}to dn.subtree="ou=users,%s"'+
-            ' by dn="cn=freeradius,%s" read'+
-            ' by dn="cn=infra,%s" read'+
-            ' by dn="cn=daan,%s" write'+
-            ' by dn="cn=admin,%s" write'+
-            ' by * none') % (suffix, suffix, suffix, suffix, suffix))
-    ldif("""dn: %s
-            dc: %s
+            add: olcAccess
+            olcAccess: {{4}}to *
+              by dn.base={local} write
+              by * none""")
+    ldif("""dn: {suffix}
+            dc: {host}
             objectClass: dcObject
             objectClass: top
             objectClass: organization
-            o: %s""" % (suffix, host, host),
+            o: {host}""",
                 'ldapadd')
-    ldif("""dn: ou=users,%s
+    ldif("""dn: ou=users,{suffix}
             ou: users
             objectClass: organizationalUnit
-            objectClass: top""" % (suffix,),
+            objectClass: top""",
                 'ldapadd')
-    ldif("""dn: cn=freeradius,%s
+    ldif("""dn: cn=freeradius,{suffix}
             cn: freeradius
             objectClass: organizationalRole
             objectClass: top
             objectClass: simpleSecurityObject
-            userPassword: %s""" % (suffix, freeradius_pw),
+            userPassword: {freeradius_pw}""",
                 'ldapadd')
-    ldif("""dn: cn=daan,%s
+    ldif("""dn: cn=daan,{suffix}
             cn: daan
             objectClass: organizationalRole
             objectClass: top
             objectClass: simpleSecurityObject
-            userPassword: %s""" % (suffix, daan_pw),
+            userPassword: {daan_pw}""",
                 'ldapadd')
-    ldif("""dn: cn=infra,%s
+    ldif("""dn: cn=infra,{suffix}
             cn: infra
             objectClass: organizationalRole
             objectClass: top
             objectClass: simpleSecurityObject
-            userPassword: %s""" % (suffix, infra_pw),
+            userPassword: {infra_pw}""",
                 'ldapadd')
     with open('/root/.ldap-initialized', 'w') as f:
         pass
