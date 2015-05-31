@@ -447,6 +447,8 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
         deref_how=False):
     """ Find relations matching any one of @queries.
         See @query_relations. """
+    if not queries:
+        return []
     bits = []
     for query in queries:
         for attr in ('with', 'how', 'who'):
