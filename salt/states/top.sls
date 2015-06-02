@@ -1,5 +1,5 @@
 base:
     '*':
         - common
-    '*sankhara':
+    '*sankhara*':
         - sankhara
