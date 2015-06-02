@@ -14,3 +14,5 @@ INFRA_UID = 2000 # Keep in synch. with kninfra.sls
 
 from kn.defaultSettings import defaultSettings
 defaultSettings(globals())
+
+LDAP_USER = 'cn=daan,' + LDAP_SUFFIX
