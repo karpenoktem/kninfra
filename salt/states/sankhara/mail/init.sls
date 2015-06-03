@@ -2,6 +2,8 @@ mail packages:
     pkg.installed:
         - pkgs:
             - postfix-pcre
+            - libsasl2-modules
+            - sasl2-bin
 postfix:
     service:
         - running
@@ -45,3 +47,7 @@ postfix:
             - file: /etc/postfix/virtual
             - pkg: mail packages
 {% endfor %}
+/etc/saslauthd.conf:
+    file.managed:
+        - source: salt://sankhara/mail/saslauthd.conf
+        - template: jinja

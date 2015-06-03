@@ -4,10 +4,10 @@ include:
     - .mysqld
     - .phpmyadmin
     - .wiki
+    - .ldap
     - .mail
     - .mailman
     - .mongo
-    - .ldap
     - .freeradius
     - .kninfra
     - .initializeDb

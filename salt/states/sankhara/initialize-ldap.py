@@ -8,23 +8,25 @@ import subprocess
 
 
 def main():
-    if not len(sys.argv) == 6:
+    if not len(sys.argv) == 7:
         sys.stderr.write('[domain] [admin password] [infra password] '+
-                                '[daan password] [freeradius password]\n')
+                                '[daan password] [freeradius password] '+
+                                '[saslauthd password]\n')
         sys.exit(-1)
     domain = sys.argv[1]
     suffix = 'dc='+ ',dc='.join(domain.split('.'))
     host = domain.split('.')[0]
-    admin_pw, infra_pw, daan_pw, freeradius_pw = [
+    admin_pw, infra_pw, daan_pw, freeradius_pw, saslauthd_pw = [
                 subprocess.check_output(['slappasswd', '-s', pw]).strip()
-                        for pw in sys.argv[2:6]]
+                        for pw in sys.argv[2:7]]
     local = '"gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth"'
     def ldif(s, what='ldapmodify'):
         first_line, rest = s.split('\n', 1)
         s = first_line + '\n' + textwrap.dedent(rest)
         s = s.format(suffix=suffix, host=host, admin_pw=admin_pw,
                         daan_pw=daan_pw, freeradius_pw=freeradius_pw,
-                        infra_pw=infra_pw, local=local)
+                        infra_pw=infra_pw, saslauthd_pw=saslauthd_pw,
+                        local=local)
         pipe = subprocess.Popen([what, '-Y', 'EXTERNAL', '-H', 'ldapi:///'],
                                 stdin=subprocess.PIPE)
         pipe.stdin.write(s)
@@ -83,6 +85,7 @@ def main():
             olcAccess: {{2}}to attrs=userPassword,shadowLastChange
               by self write
               by dn.base={local} write
+              by dn="cn=saslauthd,{suffix}" auth
               by anonymous auth
               by dn="cn=admin,{suffix}" write
               by * none""")
@@ -91,6 +94,7 @@ def main():
             add: olcAccess
             olcAccess: {{3}}to dn.subtree="ou=users,{suffix}"
               by dn="cn=freeradius,{suffix}" read
+              by dn="cn=saslauthd,{suffix}" read
               by dn="cn=infra,{suffix}" read
               by dn="cn=daan,{suffix}" write
               by dn="cn=admin,{suffix}" write
@@ -113,6 +117,13 @@ def main():
             ou: users
             objectClass: organizationalUnit
             objectClass: top""",
+                'ldapadd')
+    ldif("""dn: cn=saslauthd,{suffix}
+            cn: saslauthd
+            objectClass: organizationalRole
+            objectClass: top
+            objectClass: simpleSecurityObject
+            userPassword: {saslauthd_pw}""",
                 'ldapadd')
     ldif("""dn: cn=freeradius,{suffix}
             cn: freeradius

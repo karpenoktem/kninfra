@@ -20,3 +20,4 @@ salt://sankhara/initialize-ldap.py:
             {{ pillar['secrets']['ldap_infra'] }}
             {{ pillar['secrets']['ldap_daan'] }}
             {{ pillar['secrets']['ldap_freeradius'] }}
+            {{ pillar['secrets']['ldap_saslauthd'] }}

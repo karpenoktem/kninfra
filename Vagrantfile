@@ -49,7 +49,8 @@ def ensure_pillar_is_generated
                 'mysql_wiki', 'mysql_wolk', 'mysql_forum', 'mysql_root',
                 'mysql_daan', 'mailman_default', 'ldap_infra',
                 'ldap_daan', 'ldap_freeradius', 'ldap_admin',
-                'wiki_key', 'wiki_upgrade_key', 'wiki_admin']
+                'ldap_saslauthd', 'wiki_key', 'wiki_upgrade_key',
+                'wiki_admin']
 
     path = File.join(File.dirname(__FILE__), 'salt', 'pillar', 'vagrant.sls')
     return if File.exists?(path) and File.mtime(path) >= File.mtime(__FILE__)
