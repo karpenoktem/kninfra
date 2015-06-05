@@ -7,6 +7,9 @@ mail packages:
 postfix:
     service:
         - running
+saslauthd:
+    service:
+        - running
 /etc/postfix/main.cf:
     file.managed:
         - source: salt://sankhara/mail/main.cf
@@ -47,7 +50,14 @@ postfix:
             - file: /etc/postfix/virtual
             - pkg: mail packages
 {% endfor %}
+/etc/default/saslauthd:
+    file.managed:
+        - source: salt://sankhara/mail/saslauthd.default
+        - watch_in:
+            - service: saslauthd
 /etc/saslauthd.conf:
     file.managed:
         - source: salt://sankhara/mail/saslauthd.conf
         - template: jinja
+        - watch_in:
+            - service: saslauthd
