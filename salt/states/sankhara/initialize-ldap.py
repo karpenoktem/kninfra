@@ -86,6 +86,7 @@ def main():
               by self write
               by dn.base={local} write
               by dn="cn=saslauthd,{suffix}" auth
+              by dn="cn=daan,{suffix}" write
               by anonymous auth
               by dn="cn=admin,{suffix}" write
               by * none""")
