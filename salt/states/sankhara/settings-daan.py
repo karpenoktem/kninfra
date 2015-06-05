@@ -16,3 +16,4 @@ from kn.defaultSettings import defaultSettings
 defaultSettings(globals())
 
 LDAP_USER = 'cn=daan,' + LDAP_SUFFIX
+MEDIAWIKI_PATH = '/var/lib/mediawiki'
