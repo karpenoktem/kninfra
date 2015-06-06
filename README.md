@@ -30,3 +30,9 @@ computer te testen:
         $ vagrant up
            (...)
         $ vagrant ssh
+
+Salt
+----
+
+De servers worden geinstalleerd met [saltstack](http://saltstack.com).
+De beschrijvingen daarvan zijn te vinden onder de map `salt`.
