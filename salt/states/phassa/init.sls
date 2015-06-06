@@ -1,3 +1,4 @@
 include:
+    - .ssh
     - .nginx
     - .cilia
