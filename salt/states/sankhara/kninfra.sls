@@ -118,8 +118,8 @@ https://github.com/karpenoktem/regl:
 /home/infra/py/regl:
     file.symlink:
         - target: /home/infra/scm/regl
-{# We cannot set user/group on /vagrant.  Thus also not on /home/infra/repo.
- # We circumvent by using a symlink #}
+# We cannot set user/group on /vagrant.  Thus also not on /home/infra/repo.
+# We circumvent by using a symlink
 /home/infra/repo/kn/settings.py:
     file.symlink:
         - target: /home/infra/settings.py
@@ -154,6 +154,7 @@ daan:
         - source: salt://sankhara/kninfra.nginx.conf
         - template: jinja
 {% if grains['vagrant'] %}
+# If using vagrant, redirect the login to `vagrant' to the `infra' user.
 /home/vagrant/.bash_login:
     file.managed:
         - contents: cd /home/infra && exec sudo su - infra
