@@ -21,16 +21,16 @@ def configure_vagrant
 
         int = preferred_interface
 
-        config.vm.define "sankhara", primary: true do |config|
-            common config, "sankhara"
-            config.vm.network :public_network, :bridge => int
-            config.vm.network :private_network, ip: $sankhara_ip
-        end
-
         config.vm.define "phassa" do |config|
             common config, "phassa"
             config.vm.network :public_network, :bridge => int
             config.vm.network :private_network, ip: $phassa_ip
+        end
+
+        config.vm.define "sankhara", primary: true do |config|
+            common config, "sankhara"
+            config.vm.network :public_network, :bridge => int
+            config.vm.network :private_network, ip: $sankhara_ip
         end
 
         # vagrant plugin install vagrant-cachier
