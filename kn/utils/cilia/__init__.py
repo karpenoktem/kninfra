@@ -6,11 +6,6 @@ import select
 import json
 import os
 
-import sys
-sys.stderr.write(repr(os.environ))
-sys.stderr.write("\n")
-sys.stderr.flush()
-
 from django.conf import settings
 
 from kn.utils.whim import WhimDaemon
