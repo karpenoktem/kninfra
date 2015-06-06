@@ -141,10 +141,19 @@ https://github.com/karpenoktem/regl:
     file.managed:
         - source: salt://sankhara/daan.default
         - template: jinja
+/etc/default/giedo:
+    file.managed:
+        - source: salt://sankhara/giedo.default
 /etc/systemd/system/daan.service:
     file.managed:
         - source: salt://sankhara/daan.service
-daan:
+/etc/systemd/system/cilia-tunnel.service:
+    file.managed:
+        - source: salt://sankhara/cilia-tunnel.service
+/etc/systemd/system/giedo.service:
+    file.managed:
+        - source: salt://sankhara/giedo.service
+giedo:
     service.running
 /home/infra/repo/bin/run-fcgi:
     cmd.run:

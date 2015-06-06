@@ -1,0 +1,12 @@
+[Unit]
+Description=Giedo figures out what to change
+Requires=daan.service cilia-tunnel.service
+
+[Service]
+ExecStart=/home/infra/bin/giedo
+EnvironmentFile=-/etc/default/giedo
+User=infra
+
+[Install]
+WantedBy=multi-user.target
+
