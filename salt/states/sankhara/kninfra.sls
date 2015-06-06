@@ -155,6 +155,16 @@ https://github.com/karpenoktem/regl:
         - source: salt://sankhara/giedo.service
 giedo:
     service.running
+initial giedo-sync:
+    cmd.run:
+        - user: infra
+        - creates: /home/infra/.initial-giedo-sync-run
+        - timeout: 1
+        - name: >
+            giedo-sync
+            touch /home/infra/.initial-giedo-sync-run
+    require:
+        - service: giedo
 /home/infra/repo/bin/run-fcgi:
     cmd.run:
         - user: infra
