@@ -8,7 +8,7 @@ nginx packages:
     file.directory
 /etc/nginx/sites-enabled/phassa.conf:
     file.managed:
-        - source: salt://sankhara/site.nginx.conf
+        - source: salt://phassa/site.nginx.conf
         - template: jinja
 nginx running:
     service.running:
