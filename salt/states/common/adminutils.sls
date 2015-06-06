@@ -8,6 +8,7 @@ adminutils packages:
             - vim
             - ipython
             - psmisc
+            - socat
 /etc/vim/vimrc.local:
     file.managed:
         - source: salt://common/vimrc
