@@ -1,4 +1,5 @@
 include:
+    - .ssh
     - .interinfra
     - .nginx
     - .mysqld
