@@ -10,9 +10,12 @@ nginx packages:
     file.managed:
         - source: salt://phassa/site.nginx.conf
         - template: jinja
+/etc/nginx/phassa.d/20-userdirs.conf:
+    file.managed:
+        - source: salt://phassa/userdirs.nginx.conf
 nginx running:
     service.running:
         - name: nginx
         - watch:
             - file: /etc/nginx/sites-enabled/phassa.conf
-            # - file: /etc/nginx/phassa.d/*.conf
+            - file: /etc/nginx/phassa.d/*.conf
