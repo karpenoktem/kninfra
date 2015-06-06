@@ -7,4 +7,12 @@ Initialize database:
         - source: salt://sankhara/initializeDb.py
         - onchanges:
             - file: /home/infra/initial-db.yaml
+initial giedo-sync:
+    cmd.run:
+        - user: infra
+        - creates: /home/infra/.initial-giedo-sync-run
+        - timeout: 1
+        - name: >
+            giedo-sync
+            touch /home/infra/.initial-giedo-sync-run
 {% endif %}
