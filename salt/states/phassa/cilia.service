@@ -1,5 +1,5 @@
 [Unit]
-Description=Cilia applies changes on phassa thought up by Daan
+Description=Cilia applies changes on phassa thought up by Giedo
 
 [Service]
 ExecStart=/root/bin/cilia
