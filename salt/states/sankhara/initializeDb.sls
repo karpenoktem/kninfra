@@ -11,7 +11,7 @@ initial giedo-sync:
     cmd.run:
         - user: infra
         - creates: /home/infra/.initial-giedo-sync-run
-        - timeout: 1
+        # - timeout: 1
         - name: >
             giedo-sync
             touch /home/infra/.initial-giedo-sync-run
