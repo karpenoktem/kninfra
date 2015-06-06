@@ -1,0 +1,10 @@
+[Unit]
+Description=Cilia applies changes on phassa thought up by Daan
+
+[Service]
+ExecStart=/root/bin/cilia
+EnvironmentFile=-/etc/default/cilia
+
+[Install]
+WantedBy=multi-user.target
+

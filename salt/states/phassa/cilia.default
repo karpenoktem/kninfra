@@ -1,0 +1,5 @@
+{% if grains['vagrant'] %}
+DJANGO_SETTINGS_MODULE=vagrantSettingsHack.settings
+{% endif %}
+
+PYTHONPATH="/root/py:$PYTHONPATH"

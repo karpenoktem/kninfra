@@ -51,3 +51,12 @@ sarah:
 /var/run/infra:
     file.directory:
         - user: root
+/etc/default/cilia:
+    file.managed:
+        - source: salt://phassa/cilia.default
+        - template: jinja
+/etc/systemd/system/cilia.service:
+    file.managed:
+        - source: salt://phassa/cilia.service
+cilia:
+    service.running
