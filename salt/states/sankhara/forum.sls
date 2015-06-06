@@ -10,8 +10,8 @@ forum mysql grant 1:
         - grant: all privileges
         - database: forum.*
         - user: forum
-forum mysql grant 2:
-    mysql_grants.present:
-        - grant: select
-        - database: forum.users
-        - user: giedo
+# forum mysql grant 2:
+#     mysql_grants.present:
+#         - grant: select
+#         - database: forum.users
+#         - user: giedo
