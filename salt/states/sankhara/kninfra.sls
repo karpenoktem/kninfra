@@ -85,6 +85,9 @@ infra:
 /home/infra/bin:
     file.symlink:
         - target: /home/infra/repo/bin
+/root/bin:
+    file.symlink:
+        - target: /root/kninfra/bin
 /root/settings.py:
     file.managed:
         - source: salt://sankhara/settings-daan.py
@@ -134,6 +137,15 @@ https://github.com/karpenoktem/regl:
         - user: root
         - group: interinfra
         - mode: 770
+/etc/default/daan:
+    file.managed:
+        - source: salt://sankhara/daan.default
+        - template: jinja
+/etc/systemd/system/daan.service:
+    file.managed:
+        - source: salt://sankhara/daan.service
+daan:
+    service.running
 /home/infra/repo/bin/run-fcgi:
     cmd.run:
         - user: infra

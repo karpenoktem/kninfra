@@ -1,0 +1,10 @@
+[Unit]
+Description=Daan applies changes on phassa thought up by Giedo
+
+[Service]
+ExecStart=/root/bin/daan
+EnvironmentFile=-/etc/default/daan
+
+[Install]
+WantedBy=multi-user.target
+
