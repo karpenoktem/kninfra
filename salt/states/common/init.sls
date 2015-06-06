@@ -1,4 +1,5 @@
 include:
+    - .hosts
     - .mail
     - .locale
     - .sshd
