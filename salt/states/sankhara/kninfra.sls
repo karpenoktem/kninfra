@@ -132,6 +132,10 @@ https://github.com/karpenoktem/regl:
         - host: localhost
         - name: giedo
         - password: {{ pillar['secrets']['mysql_giedo'] }}
+/home/infra/vpnkeys:
+    file.directory:
+        - user: infra
+        - mode: 700
 /var/run/infra:
     file.directory:
         - user: root
