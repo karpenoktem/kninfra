@@ -1,4 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
+from __future__ import absolute_import
+
 import _import
 
 import datetime
