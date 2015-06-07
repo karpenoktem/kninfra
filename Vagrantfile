@@ -19,17 +19,17 @@ def configure_vagrant
             end
         end
 
-        int = preferred_interface
+        int = public_interface
 
         config.vm.define "phassa" do |config|
             common config, "phassa"
-            config.vm.network :public_network, :bridge => int
+            config.vm.network :public_network, :bridge => int if int
             config.vm.network :private_network, ip: $phassa_ip
         end
 
         config.vm.define "sankhara", primary: true do |config|
             common config, "sankhara"
-            config.vm.network :public_network, :bridge => int
+            config.vm.network :public_network, :bridge => int if int
             config.vm.network :private_network, ip: $sankhara_ip
         end
 
@@ -79,7 +79,7 @@ def ensure_pillar_is_generated
     end
 end
 
-def preferred_interface
+def public_interface
     path = File.join(File.dirname(__FILE__), '.vagrant-network-interface')
     return false unless File.exists? path
     return File.open(path).read.strip
