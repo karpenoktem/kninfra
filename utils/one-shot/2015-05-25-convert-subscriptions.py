@@ -21,7 +21,6 @@ def main():
         users = {s['user'] for s in subscriptions}
         for subscription in scol.find({'event': event['_id']}):
             scount += 1
-            print subscription # DEBUG TODO
             if subscription['user'] in users:
                 raise ValueError('user already in set')
             users.add(subscription['user'])
