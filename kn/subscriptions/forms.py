@@ -47,7 +47,7 @@ def get_add_event_form(user, superuser=False):
         has_public_subscriptions = forms.BooleanField(required=False,
                 label='Inschrijvingen openbaar')
         everyone_can_subscribe_others = forms.BooleanField(required=False,
-                label='Iedereen kan iedereen inschrijven')
+                label='Iedereen kan iedereen uitnodigen')
     return AddEventForm
 
 # vim: et:sta:bs=2:sw=4:

@@ -1,6 +1,11 @@
 {% extends "leden/base.html" %}
 {% load base %}
 
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet" href="{{ MEDIA_URL }}subscriptions/event_detail.css" />
+{% endblock styles %}
+
 {% block head %}
 {{ block.super }}
 <script type="text/javascript">
@@ -15,26 +20,6 @@ close_event = function() {
                 return;
         _api({'action': 'close-event',
                    'id': '{{ object.id }}' },
-                        function(d) {
-                if(d.success) window.location.reload();
-                if(d.error) alert(d.error);
-        });
-};
-
-confirm_subscription = function() {
-        _api({'action': 'confirm-subscription',
-              'id': '{{ object.id }}',
-              'notes': $('#notes').text()},
-                        function(d) {
-                if(d.success) window.location.reload();
-                if(d.error) alert(d.error);
-        });
-};
-
-change_debit = function(id) {
-        _api({'action': 'change-debit',
-                   'id': id,
-                   'debit': prompt("Nieuw debet")},
                         function(d) {
                 if(d.success) window.location.reload();
                 if(d.error) alert(d.error);
@@ -65,11 +50,6 @@ copy_emailaddresses_to_clipboard = function() {
 {% endblock %}
 
 {% block body %}
-{% if subscription %}
-{% if subscription.confirmed %}
-<div class="message">Je bent aangemeld.</div>
-{% endif %}{# subscription.confirmed #}
-{% endif %}{# subscription #}
 <h1>{{ object.humanName }}</h1>
 <div id="subscription-description">
 {{ object.description_html|safe }}
@@ -90,98 +70,100 @@ copy_emailaddresses_to_clipboard = function() {
 	{% endif %}
 </dl>
 
-{% if object.is_open and has_write_access %}
-<button onclick="close_event()">Sluit inschrijvingen</button> –
-<a href="{% url "event-edit" edit=object.name %}">Bewerk activiteit</a>
-{% endif %}{# object.is_open and has_write_access #}
+{% if subscription.subscribed %}
+<div class="message">Je bent aangemeld.</div>
+{% endif %}{# subscription.subscribed #}
 
-{% if not subscription or may_subscribe_others or not subscription.confirmed %}
+{% if may_subscribe_others or not subscription.subscribed %}
 {% if object.is_open %}
-<form method="post" action="">
-        {% if subscription and not subscription.confirmed %}
-        <p>Je bent door
-        <a href="{{ subscription.subscribedBy.get_absolute_url }}"
-                >{{ subscription.subscribedBy.full_name }}</a>
-        aangemeld, maar hebt dit nog niet bevestigd.</p>
-        {% endif %}{# subscription and not subscription.confirmed #}
+<form class="subscribe" method="POST" action="">
+        {% csrf_token %}
+        {% if subscription.invited and not subscription.state %}
+        <div class="message">Je bent door
+        <a href="{{ subscription.inviter.get_absolute_url }}"
+                >{{ subscription.inviter.full_name }}</a>
+        uitgenodigd.</div>
+        {% endif %}{# subscription.invited and not subscription.state #}
         <!--[if lte IE 9]>
         Opmerkingen:<br/>
         <![endif]-->
-        <textarea class="default" name="notes"
-                style="width: 200px; height: 70px;"
-                placeholder="Opmerkingen"></textarea><br/>
-        {% if subscription and not subscription.confirmed %}
-        <button type="button" onclick="confirm_subscription()"
-                >Aanmelding bevestigen!</button></p>
-        {% endif %}{# subscription and not subscription.confirmed #}
+        <textarea class="default" name="notes" cols="30" rows="4"
+                placeholder="Opmerkingen"></textarea>
+        {% if subscription.invited and not subscription.state %}
+        <input type="submit" name="subscribe"
+                value="Aanmelden bevestigen"/><br/>
+        {% elif not subscription.subscribed %}
+        <input type="submit" name="subscribe" value="Aanmelden"/><br/>
+        {% endif %}
         {% if may_subscribe_others %}
-        <select name="who">
-        {% for u in users %}
-        <option value="{{ u.id }}"
-                {% if u == user and not subscription %}
-                selected="true"
-                {% endif %}{# u == user #}
-                >{{ u.full_name }}</option>
-        {% endfor %}{# u in users #}
-        <input type="submit" value="aanmelden!" />
-        </select>
-        {% else %}{# may_subscribe_others #}
-        {% if not subscription %}
-	<input type="submit" value="{{ user.full_name }} aanmelden!" /> 
-        {% endif %}{# not subscription #}
-        {% endif %}{# may_subscribe_others #}
-	{% csrf_token %}
-</form>
-{% else %}{# object.is_open #}
-<p><em>Je kunt je niet meer aanmelden.</em></p>
-{% endif %}{# object.is_open #}
-{% endif %}{# not subscription or may_subscribe_others or not subscription.confirmed#}
+        <div>
+                <select name="who">
+                {% for u in users %}
+                <option value="{{ u.id }}">{{ u.full_name }}</option>
+                {% endfor %}{# u in users #}
+                </select>
+                <input type="submit" name="invite" value="Uitnodigen" />
+        </div>
+        {% endif %}
+</div>
+{% endif %}
+{% endif %}
 
-{% if has_read_access or has_debit_access or object.has_public_subscriptions %}
-	<h2>Aanmeldingen ({{ subscrlist_count }})</h2>
-{% if has_debit_access %}
-	<p>Er staan nog {{ subscrcount_debit }} betalingen open.</p>
-{% endif %}{# has_debit_access #}
-	<ul>
-	{% for subscr in subscrlist %}
-	<li><a href="{{ subscr.user.get_absolute_url }}"
-                >{{ subscr.user.full_name }}</a>
-                {% if has_debit_access or has_read_access %}
-                [debet: &euro;
-                {{ subscr.debit }}
-                {% endif %}{# has_debit_access or has_read_access #}
-                {% if has_debit_access %}
-                <button onclick="change_debit('{{ subscr.id }}')"
-                        >wijzig</button
-                >{% endif %}{# has_debit_access #}
-                {% if has_debit_access or has_read_access %}
-                        ]
-                {% endif %}{# has_debit_access or has_read_access #}
-                {% if subscr.date %}
-                        <small>{{ subscr.date.date }}</small>
-                {% endif %}{# subscr.date #}</li>
-                {% if subscr.subscribedBy %}
-                aangemeld door
-                <a href="{{ subscr.subscribedBy.get_absolute_url }}"
-                        >{{ subscr.subscribedBy.full_name }}</a>
-                {% if subscr.subscribedBy_notes %}
-                <blockquote>{{ subscr.subscribedBy_notes }}</blockquote>
-                {% endif %}{# subscr.subscribedBy_notes #}
-                {% if subscr.confirmed %}
-                bevestigd op {{ subscr.dateConfirmed.date }}
-                {% else %}{# subscr.confirmed #}
-                nog onbevestigd
-                {% endif %}{# subscr.confirmed #}
-                {% endif %}{# subscr.subscribedBy #}
-                {% if has_read_access %}
-                {% if subscr.userNotes %}
-                <blockquote>{{ subscr.userNotes }}</blockquote>
-                {% endif %}
-                {% endif %}{# has_read_access #}
-	{% endfor %}
-	</ul>
+{% if object.is_open and has_write_access %}
+<div>
+        <button onclick="close_event()">Sluit inschrijvingen</button> –
+        <a href="{% url "event-edit" edit=object.name %}">Bewerk activiteit</a>
+</div>
+{% endif %}{# object.is_open and has_write_access #}
+
+{% if has_read_access or object.has_public_subscriptions %}
         <button onclick="copy_emailaddresses_to_clipboard()">
                 Toon e-mail adressen van de ingeschrevenen
         </button>
-{% endif %}{# has_read_access or has_debit_access or object.has_public_subscriptions#}
+	<h2>Aanmeldingen ({{ subscriptions|length }})</h2>
+	<ul>
+	{% for subscr in subscriptions %}
+	<li><a href="{{ subscr.user.get_absolute_url }}"
+                >{{ subscr.user.full_name }}</a>
+                {% if subscr.date %}
+                        <small>{{ subscr.date.date }}</small>
+                {% endif %}{# subscr.date #}<br/>
+                {% if has_read_access %}
+                {% if subscr.userNotes %}
+                <blockquote>{{ subscr.userNotes }}</blockquote>
+                {% endif %}{# subscr.userNotes #}
+                {% endif %}{# has_read_access #}
+                {% if subscr.inviter %}
+                uitgenodigd door
+                <a href="{{ subscr.inviter.get_absolute_url }}"
+                        >{{ subscr.inviter.full_name }}</a>
+                {% if has_read_access %}
+                {% if subscr.inviterNotes %}
+                <blockquote>{{ subscr.inviterNotes }}</blockquote>
+                {% endif %}{# subscr.inviterNotes #}
+                {% endif %}{# has_read_access #}
+                {% endif %}{# subscr.inviter #}
+                </li>
+	{% endfor %}
+	</ul>
+
+        {% if invitations %}
+        <h2>Uitnodigingen ({{ invitations|length }})</h2>
+        <ul>
+        {% for invt in invitations %}
+                <li><a href="{{ invt.user.get_absolute_url }}"
+                       >{{ invt.user.full_name }}</a>
+                <small>{{ invt.inviteDate.date }}</small><br/>
+                uitgenodigd door
+                <a href="{{ invt.inviter.get_absolute_url }}"
+                        >{{ invt.inviter.full_name }}</a>
+                {% if has_read_access %}
+                {% if invt.notes %}
+                <blockquote>{{ invt.notes }}</blockquote>
+                {% endif %}{# invt.notes #}
+                {% endif %}{# has_read_access #}
+        {% endfor %}
+        </ul>
+        {% endif %}
+{% endif %}{# has_read_access or object.has_public_subscriptions#}
 {% endblock %}

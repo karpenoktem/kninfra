@@ -1,0 +1,13 @@
+
+form.subscribe {
+	overflow: hidden; /* clearfix */
+}
+form.subscribe textarea {
+	float: left;
+	margin-right: 5px;
+}
+
+li blockquote {
+	margin-top: 0;
+	margin-bottom: 0;
+}
