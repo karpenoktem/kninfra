@@ -48,6 +48,9 @@ ecol = db['events']
 #   "has_public_subscriptions" : true
 # }
 
+class SubscriptionError(Exception):
+    pass
+
 def ensure_indices():
     ecol.ensure_index('name', unique=True)
     ecol.ensure_index('owner')
@@ -214,7 +217,7 @@ class Subscription(SONWrapper):
 
     def subscribe(self, notes):
         if self.subscribed:
-            raise ValueError('User already subscribed')
+            raise SubscriptionError('User already subscribed')
         self.update_stateObject({
             'state': 'subscribed',
             'notes': notes,
@@ -229,7 +232,7 @@ class Subscription(SONWrapper):
                     'notes': notes})
     def invite(self, inviter, notes):
         if self.invited or self.state:
-            raise ValueError('Cannot invite user')
+            raise SubscriptionError('Cannot invite user')
         self._data['inviter'] = _id(inviter)
         self._data['inviteDate'] = datetime.datetime.now()
         self._data['inviterNotes'] = notes
