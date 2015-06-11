@@ -46,7 +46,7 @@ def event_detail(request, name):
     if event is None:
         raise Http404
     # Has the user already subscribed?
-    subscription = event.subscription(request.user)
+    subscription = event.get_subscription(request.user)
     # What are our permissions?
     has_read_access = event.has_read_access(request.user)
     has_write_access = event.has_write_access(request.user)
@@ -72,7 +72,7 @@ def event_detail(request, name):
         if not user or not user.is_user:
             raise Http404
         # Is the other already subscribed?
-        if event.subscription(user) is not None:
+        if event.get_subscription(user) is not None:
             messages.error(request, "%s is al aangemeld" % user.full_name)
         else:
             notes = request.POST['notes']
@@ -89,7 +89,7 @@ def event_detail(request, name):
            'has_read_access': has_read_access,
            'has_write_access': has_write_access}
     if may_subscribe_others:
-        users = filter(lambda u: event.subscription(u) is None and \
+        users = filter(lambda u: event.get_subscription(u) is None and \
                                  u != request.user,
                        Es.by_name('leden').get_members())
         users = sorted(users, lambda x,y: cmp(unicode(x.humanName),

@@ -92,7 +92,7 @@ class Event(SONWrapper):
     def invitations(self):
         return filter(lambda s: s.invited and not s.state,
                       self._subscriptions.values())
-    def subscription(self, user):
+    def get_subscription(self, user):
         return self._subscriptions.get(str(_id(user)))
     @property
     def description_html(self):
@@ -145,7 +145,7 @@ class Event(SONWrapper):
         return subscription
     def create_subscription(self, user):
         ''' Create or return Subscription for user '''
-        subscription = self.subscription(user)
+        subscription = self.get_subscription(user)
         if subscription:
             return subscription
         if 'subscriptions' not in self._data:
@@ -153,7 +153,7 @@ class Event(SONWrapper):
         d = {'user': _id(user)}
         self._data['subscriptions'].append(d)
         self._subscriptions[str(d['user'])] = Subscription(d, self)
-        return self.subscription(user)
+        return self.get_subscription(user)
 
 class Subscription(SONWrapper):
     def __init__(self, data, event):
