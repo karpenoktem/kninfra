@@ -7,7 +7,7 @@ from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
-from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
+from kn.leden.mongo import db, SONWrapper, _id, son_property
 import kn.leden.entities as Es
 
 ecol = db['events']
