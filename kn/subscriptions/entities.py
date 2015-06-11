@@ -11,7 +11,6 @@ from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
 import kn.leden.entities as Es
 
 ecol = db['events']
-scol = db['event_subscriptions']
 
 def ensure_indices():
     ecol.ensure_index('name', unique=True)
