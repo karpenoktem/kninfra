@@ -12,6 +12,42 @@ import kn.leden.entities as Es
 
 ecol = db['events']
 
+# Example of an event
+# ------------------
+# { "_id" : ObjectId("55631d03ed25c3345751714a"),
+#   "humanName" : "Activiteit van de LoCo",
+#   "cost" : "0",
+#   "is_open" : true,
+#   "owner" : ObjectId("4e6fcc85e60edf3dc000006f"),
+#   "is_official" : false,
+#   "description_html" : "<p>Beschrijving van de activiteit (in <strong>Markdown</strong>).</p>",
+#   "mailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je aangemeld voor %(eventName)s.\r\n\r\nJe opmerkingen waren:\r\n%(notes)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
+#   "description" : "Beschrijving van de activiteit (in **Markdown**).",
+#   "subscriptions" : [
+#       { "user" : ObjectId("4e6fcc85e60edf3dc0000b9f"),
+#         "inviter" : ObjectId("50f29894d4080076aa541de2"),
+#         "inviterNotes" : "foo",
+#         "inviteDate" : ISODate("2015-06-10T19:36:50.352Z"),
+#         "history" : [ { "date" : ISODate("2015-06-10T19:37:01.992Z"),
+#                         "state" : "subscribed",
+#                         "notes" : "bar" } ] },
+#       { "user" : ObjectId("50f29894d4080076aa541de2"),
+#         "history" : [ { "date" : ISODate("2015-06-10T19:37:24.555Z"),
+#                         "state" : "subscribed",
+#                         "notes" : "" } ] },
+#       { "user" : ObjectId("4e6fcc85e60edf3dc00001d4"),
+#         "inviter" : ObjectId("50f29894d4080076aa541de2"),
+#         "inviterNotes" : "",
+#         "inviteDate" : ISODate("2015-06-10T19:37:32.514Z") } ],
+#   "createdBy" : ObjectId("50f29894d4080076aa541de2"),
+#   "date" : ISODate("2015-05-25T00:00:00Z"),
+#   "confirmationMailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je aanmelding voor %(eventName)s bevestigd.\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
+#   "everyone_can_subscribe_others" : true,
+#   "name" : "loco-activiteit",
+#   "subscribedByOtherMailBody" : "Hallo %(firstName)s,\r\n\r\nJe bent door %(by_firstName)s aangemeld voor %(eventName)s.\r\n\r\n%(by_firstName)s opmerkingen waren:\r\n%(by_notes)s\r\n\r\nOm deze aanmelding te bevestigen, bezoek:\r\n  %(confirmationLink)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
+#   "has_public_subscriptions" : true
+# }
+
 def ensure_indices():
     ecol.ensure_index('name', unique=True)
     ecol.ensure_index('owner')
