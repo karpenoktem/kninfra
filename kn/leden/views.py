@@ -299,6 +299,10 @@ def users_underage(request):
             context_instance=RequestContext(request))
 
 @login_required
+def ik(request):
+    return HttpResponseRedirect(request.user.get_absolute_url())
+
+@login_required
 def ik_chsmoel(request):
     if not 'smoel' in request.FILES:
         raise ValueError, "Missing `smoel' in FILES"
