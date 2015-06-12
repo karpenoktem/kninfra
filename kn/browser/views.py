@@ -44,6 +44,7 @@ def homedir(request, root, subdir, path):
         response = HttpResponse(FileWrapper(open(p)),
                 content_type=mimetypes.guess_type(p)[0])
         response['Content-Length'] = os.path.getsize(p)
+        response['Content-Disposition'] = 'attachment'
         return response
     l = set()
     if os.path.isdir(p1):
