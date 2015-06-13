@@ -95,7 +95,7 @@ class Event(SONWrapper):
         return Es.by_id(self._data['createdBy'])
     @property
     def subscriptions(self):
-        return filter(lambda s: s.subscribed, self._subscriptions.values())
+        return [s for s in self._subscriptions.values() if s.subscribed]
     @property
     def invitations(self):
         return filter(lambda s: s.invited and not s.state,
