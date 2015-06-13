@@ -100,8 +100,20 @@ class Event(SONWrapper):
     def invitations(self):
         return filter(lambda s: s.invited and not s.state,
                       self._subscriptions.values())
-    def get_subscription(self, user):
-        return self._subscriptions.get(str(_id(user)))
+    def get_subscription(self, user, create=False):
+        '''
+        Return Subscription for user, creating it if it doesn't already exist.
+        '''
+        subscription = self._subscriptions.get(str(_id(user)))
+        if subscription or not create:
+            return subscription
+        if 'subscriptions' not in self._data:
+            self._data['subscriptions'] = []
+        d = {'user': _id(user)}
+        self._data['subscriptions'].append(d)
+        subscription = Subscription(d, self)
+        self._subscriptions[str(_id(user))] = subscription
+        return subscription
     @property
     def description(self):
         return self._data['description']
@@ -147,24 +159,13 @@ class Event(SONWrapper):
                'secretariaat' in user.cached_groups_names
 
     def subscribe(self, user, notes):
-        subscription = self.create_subscription(user)
+        subscription = self.get_subscription(user, create=True)
         subscription.subscribe(notes)
         return subscription
     def invite(self, user, notes, inviter):
-        subscription = self.create_subscription(user)
+        subscription = self.get_subscription(user, create=True)
         subscription.invite(inviter, notes)
         return subscription
-    def create_subscription(self, user):
-        ''' Create or return Subscription for user '''
-        subscription = self.get_subscription(user)
-        if subscription:
-            return subscription
-        if 'subscriptions' not in self._data:
-            self._data['subscriptions'] = []
-        d = {'user': _id(user)}
-        self._data['subscriptions'].append(d)
-        self._subscriptions[str(d['user'])] = Subscription(d, self)
-        return self.get_subscription(user)
 
 class Subscription(SONWrapper):
     def __init__(self, data, event):
