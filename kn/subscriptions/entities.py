@@ -15,14 +15,18 @@ ecol = db['events']
 # Example of an event
 # ------------------
 # { "_id" : ObjectId("55631d03ed25c3345751714a"),
+#   "name" : "loco-activiteit",
 #   "humanName" : "Activiteit van de LoCo",
-#   "cost" : "0",
+#   "date" : ISODate("2015-05-25T00:00:00Z"),
+#   "cost" : "3",
 #   "is_open" : true,
+#   "createdBy" : ObjectId("50f29894d4080076aa541de2"),
 #   "owner" : ObjectId("4e6fcc85e60edf3dc000006f"),
 #   "is_official" : false,
-#   "description_html" : "<p>Beschrijving van de activiteit (in <strong>Markdown</strong>).</p>",
-#   "mailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je aangemeld voor %(eventName)s.\r\n\r\nJe opmerkingen waren:\r\n%(notes)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
-#   "description" : "Beschrijving van de activiteit (in **Markdown**).",
+#   "description" : "Beschrijving (in **Markdown**).",
+#   "description_html" : "<p>Beschrijving (in <strong>Markdown</strong>).</p>",
+#   "everyone_can_subscribe_others" : true,
+#   "has_public_subscriptions" : true,
 #   "subscriptions" : [
 #       { "user" : ObjectId("4e6fcc85e60edf3dc0000b9f"),
 #         "inviter" : ObjectId("50f29894d4080076aa541de2"),
@@ -39,13 +43,9 @@ ecol = db['events']
 #         "inviter" : ObjectId("50f29894d4080076aa541de2"),
 #         "inviterNotes" : "",
 #         "inviteDate" : ISODate("2015-06-10T19:37:32.514Z") } ],
-#   "createdBy" : ObjectId("50f29894d4080076aa541de2"),
-#   "date" : ISODate("2015-05-25T00:00:00Z"),
+#   "mailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je aangemeld voor %(eventName)s.\r\n\r\nJe opmerkingen waren:\r\n%(notes)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
 #   "confirmationMailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je aanmelding voor %(eventName)s bevestigd.\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
-#   "everyone_can_subscribe_others" : true,
-#   "name" : "loco-activiteit",
-#   "subscribedByOtherMailBody" : "Hallo %(firstName)s,\r\n\r\nJe bent door %(by_firstName)s aangemeld voor %(eventName)s.\r\n\r\n%(by_firstName)s opmerkingen waren:\r\n%(by_notes)s\r\n\r\nOm deze aanmelding te bevestigen, bezoek:\r\n  %(confirmationLink)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
-#   "has_public_subscriptions" : true
+#   "subscribedByOtherMailBody" : "Hallo %(firstName)s,\r\n\r\nJe bent door %(by_firstName)s aangemeld voor %(eventName)s.\r\n\r\n%(by_firstName)s opmerkingen waren:\r\n%(by_notes)s\r\n\r\nOm deze aanmelding te bevestigen, bezoek:\r\n  %(confirmationLink)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s"
 # }
 
 class SubscriptionError(Exception):
