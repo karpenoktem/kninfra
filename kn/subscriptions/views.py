@@ -92,8 +92,7 @@ def event_detail(request, name):
         users = filter(lambda u: event.get_subscription(u) is None and \
                                  u != request.user,
                        Es.by_name('leden').get_members())
-        users = sorted(users, lambda x,y: cmp(unicode(x.humanName),
-                                              unicode(y.humanName)))
+        users.sort(key=lambda u: unicode(u.humanName))
         ctx['users'] = users
     return render_to_response('subscriptions/event_detail.html', ctx,
             context_instance=RequestContext(request))
