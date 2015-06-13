@@ -47,6 +47,15 @@ ecol = db['events']
 #   "confirmationMailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je aanmelding voor %(eventName)s bevestigd.\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
 #   "subscribedByOtherMailBody" : "Hallo %(firstName)s,\r\n\r\nJe bent door %(by_firstName)s aangemeld voor %(eventName)s.\r\n\r\n%(by_firstName)s opmerkingen waren:\r\n%(by_notes)s\r\n\r\nOm deze aanmelding te bevestigen, bezoek:\r\n  %(confirmationLink)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s"
 # }
+#
+# Possible states:
+#   * "subscribed"
+#   * "unsubscribed" (unimplemented)
+#   * "reserve"      (unimplemented)
+# When someone has a subscription but no history that person is only invited,
+# not subscribed.
+#
+# Cost: decimal string how much participating in the event will cost.
 
 class SubscriptionError(Exception):
     pass
