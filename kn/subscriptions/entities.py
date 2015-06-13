@@ -84,7 +84,6 @@ class Event(SONWrapper):
     name = son_property(('name',))
     humanName = son_property(('humanName',))
     date = son_property(('date',))
-    description = son_property(('description',))
     @property
     def id(self):
         return str(self._data['_id'])
@@ -103,6 +102,9 @@ class Event(SONWrapper):
                       self._subscriptions.values())
     def get_subscription(self, user):
         return self._subscriptions.get(str(_id(user)))
+    @property
+    def description(self):
+        return self._data['description']
     @property
     def description_html(self):
         return self._data.get('description_html',
