@@ -196,33 +196,33 @@ class Subscription(SONWrapper):
             return None
         return Es.by_id(self._data['inviter'])
     @property
-    def stateObject(self):
+    def lastMutation(self):
         if not self.history:
             return {}
         return self.history[-1]
-    def update_stateObject(self, stateObject):
+    def push_mutation(self, mutation):
         if not self.history:
             self.history = []
-        self.history.append(stateObject)
+        self.history.append(mutation)
     @property
     def state(self):
-        return self.stateObject.get('state')
+        return self.lastMutation.get('state')
     @property
     def subscribed(self):
         return self.state == 'subscribed'
     @property
     def date(self):
         # last change date
-        return self.stateObject.get('date') or self.inviteDate
+        return self.lastMutation.get('date') or self.inviteDate
     @property
     def userNotes(self):
-        return self.stateObject.get('notes')
+        return self.lastMutation.get('notes')
     @property
     def notes(self):
         return self.userNotes or self.inviterNotes
     @property
     def subscriber(self):
-        subscriber = self.stateObject.get('subscriber')
+        subscriber = self.lastMutation.get('subscriber')
         if subscriber is not None:
             return Es.by_id(subscriber)
         return self.user
@@ -230,7 +230,7 @@ class Subscription(SONWrapper):
     def subscribe(self, notes):
         if self.subscribed:
             raise SubscriptionError('User already subscribed')
-        self.update_stateObject({
+        self.push_mutation({
             'state': 'subscribed',
             'notes': notes,
             'date': datetime.datetime.now()})
