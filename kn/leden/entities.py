@@ -263,6 +263,7 @@ def by_name(n):
 
 def by_id(n):
     """ Finds an entity by id """
+    if n is None: return None
     return entity(ecol.find_one({'_id': _id(n)}))
 
 def by_study(study):
