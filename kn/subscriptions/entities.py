@@ -54,9 +54,6 @@ ecol = db['events']
 # When someone has a subscription but no history that person is only invited,
 # not subscribed.
 
-class SubscriptionError(Exception):
-    pass
-
 def ensure_indices():
     ecol.ensure_index('name', unique=True)
     ecol.ensure_index('owner')
@@ -221,8 +218,7 @@ class Subscription(SONWrapper):
         return self.user
 
     def subscribe(self, notes):
-        if self.subscribed:
-            raise SubscriptionError('User already subscribed')
+        assert not self.subscribed
         self.push_mutation({
             'state': 'subscribed',
             'notes': notes,
@@ -236,8 +232,7 @@ class Subscription(SONWrapper):
                     'owner': self.event.owner.humanName,
                     'notes': notes})
     def invite(self, inviter, notes):
-        if self.invited or self.state:
-            raise SubscriptionError('Cannot invite user')
+        assert not self.invited and not self.state
         self._data['inviter'] = _id(inviter)
         self._data['inviteDate'] = datetime.datetime.now()
         self._data['inviterNotes'] = notes
