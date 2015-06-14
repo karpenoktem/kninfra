@@ -25,7 +25,6 @@ ecol = db['events']
 #   "is_official" : false,
 #   "description" : "Beschrijving (in **Markdown**).",
 #   "description_html" : "<p>Beschrijving (in <strong>Markdown</strong>).</p>",
-#   "everyone_can_subscribe_others" : true,
 #   "has_public_subscriptions" : true,
 #   "subscriptions" : [
 #       { "user" : ObjectId("4e6fcc85e60edf3dc0000b9f"),
@@ -132,8 +131,6 @@ class Event(SONWrapper):
     mailBody = son_property(('mailBody',))
     subscribedByOtherMailBody = son_property(('subscribedByOtherMailBody',))
     confirmationMailBody = son_property(('confirmationMailBody',))
-    everyone_can_subscribe_others = son_property(
-            ('everyone_can_subscribe_others',), False)
 
     def __unicode__(self):
         return unicode('%s (%s)' % (self.humanName, self.owner))

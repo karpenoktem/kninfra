@@ -74,7 +74,6 @@ copy_emailaddresses_to_clipboard = function() {
 <div class="message">Je bent aangemeld.</div>
 {% endif %}{# subscription.subscribed #}
 
-{% if may_subscribe_others or not subscription.subscribed %}
 {% if object.is_open %}
 <form class="subscribe" method="POST" action="">
         {% csrf_token %}
@@ -95,7 +94,6 @@ copy_emailaddresses_to_clipboard = function() {
         {% elif not subscription.subscribed %}
         <input type="submit" name="subscribe" value="Aanmelden"/><br/>
         {% endif %}
-        {% if may_subscribe_others %}
         <div>
                 <select name="who">
                 {% for u in users %}
@@ -104,10 +102,8 @@ copy_emailaddresses_to_clipboard = function() {
                 </select>
                 <input type="submit" name="invite" value="Uitnodigen" />
         </div>
-        {% endif %}
 </div>
-{% endif %}
-{% endif %}
+{% endif %}{# object.is_open #}
 
 {% if object.is_open and has_write_access %}
 <div>

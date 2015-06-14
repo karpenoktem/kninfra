@@ -50,8 +50,6 @@ def event_detail(request, name):
     # What are our permissions?
     has_read_access = event.has_read_access(request.user)
     has_write_access = event.has_write_access(request.user)
-    may_subscribe_others = (has_write_access or
-                        event.everyone_can_subscribe_others)
     if request.method == 'POST' and 'subscribe' in request.POST:
         if not event.is_open:
             raise PermissionDenied
@@ -64,8 +62,6 @@ def event_detail(request, name):
                                             args=(event.name,)))
     elif request.method == 'POST' and 'invite' in request.POST:
         if not event.is_open:
-            raise PermissionDenied
-        if not may_subscribe_others:
             raise PermissionDenied
         # Find the other user
         user = Es.by_id(request.POST['who'])
@@ -80,20 +76,19 @@ def event_detail(request, name):
         return HttpResponseRedirect(reverse('event-detail',
                                             args=(event.name,)))
 
+    users = filter(lambda u: event.get_subscription(u) is None and \
+                             u != request.user,
+                   Es.by_name('leden').get_members())
+    users.sort(key=lambda u: unicode(u.humanName))
+
     ctx = {'object': event,
            'user': request.user,
+           'users': users,
            'subscription': subscription,
            'subscriptions': event.subscriptions,
            'invitations': event.invitations,
-           'may_subscribe_others': may_subscribe_others,
            'has_read_access': has_read_access,
            'has_write_access': has_write_access}
-    if may_subscribe_others:
-        users = filter(lambda u: event.get_subscription(u) is None and \
-                                 u != request.user,
-                       Es.by_name('leden').get_members())
-        users.sort(key=lambda u: unicode(u.humanName))
-        ctx['users'] = users
     return render_to_response('subscriptions/event_detail.html', ctx,
             context_instance=RequestContext(request))
 
@@ -170,8 +165,6 @@ def event_new_or_edit(request, edit=None):
                 'mailBody': fd['mailBody'],
                 'subscribedByOtherMailBody': fd['subscribedByOtherMailBody'],
                 'confirmationMailBody': fd['confirmationMailBody'],
-                'everyone_can_subscribe_others':
-                        fd['everyone_can_subscribe_others'],
                 'has_public_subscriptions': fd['has_public_subscriptions'],
                 'humanName': fd['humanName'],
                 'createdBy': request.user._id,
