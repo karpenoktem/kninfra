@@ -192,9 +192,7 @@ class Subscription(SONWrapper):
         return 'inviter' in self._data
     @property
     def inviter(self):
-        if not self.invited:
-            return None
-        return Es.by_id(self._data['inviter'])
+        return Es.by_id(self._data.get('inviter'))
     @property
     def lastMutation(self):
         if not self.history:

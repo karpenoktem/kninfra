@@ -133,7 +133,7 @@ copy_emailaddresses_to_clipboard = function() {
                 <blockquote>{{ subscr.userNotes }}</blockquote>
                 {% endif %}{# subscr.userNotes #}
                 {% endif %}{# has_read_access #}
-                {% if subscr.inviter %}
+                {% if subscr.invited %}
                 uitgenodigd door
                 <a href="{{ subscr.inviter.get_absolute_url }}"
                         >{{ subscr.inviter.full_name }}</a>
@@ -142,7 +142,7 @@ copy_emailaddresses_to_clipboard = function() {
                 <blockquote>{{ subscr.inviterNotes }}</blockquote>
                 {% endif %}{# subscr.inviterNotes #}
                 {% endif %}{# has_read_access #}
-                {% endif %}{# subscr.inviter #}
+                {% endif %}{# subscr.invited #}
                 </li>
 	{% endfor %}
 	</ul>
