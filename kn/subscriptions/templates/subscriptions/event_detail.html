@@ -88,10 +88,7 @@ copy_emailaddresses_to_clipboard = function() {
         <![endif]-->
         <textarea class="default" name="notes" cols="30" rows="4"
                 placeholder="Opmerkingen"></textarea>
-        {% if subscription.invited and not subscription.state %}
-        <input type="submit" name="subscribe"
-                value="Aanmelden bevestigen"/><br/>
-        {% elif not subscription.subscribed %}
+        {% if not subscription.subscribed %}
         <input type="submit" name="subscribe" value="Aanmelden"/><br/>
         {% endif %}
         <div>
