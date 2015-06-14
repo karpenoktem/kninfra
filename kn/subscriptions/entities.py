@@ -18,7 +18,7 @@ ecol = db['events']
 #   "name" : "loco-activiteit",
 #   "humanName" : "Activiteit van de LoCo",
 #   "date" : ISODate("2015-05-25T00:00:00Z"),
-#   "cost" : "3",
+#   "cost" : "3.40",
 #   "is_open" : true,
 #   "createdBy" : ObjectId("50f29894d4080076aa541de2"),
 #   "owner" : ObjectId("4e6fcc85e60edf3dc000006f"),
@@ -54,8 +54,6 @@ ecol = db['events']
 #   * "reserve"      (unimplemented)
 # When someone has a subscription but no history that person is only invited,
 # not subscribed.
-#
-# Cost: decimal string how much participating in the event will cost.
 
 class SubscriptionError(Exception):
     pass
