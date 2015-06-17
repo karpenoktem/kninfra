@@ -92,7 +92,7 @@ class Event(SONWrapper):
         return [s for s in self._subscriptions.values() if s.subscribed]
     @property
     def invitations(self):
-        return filter(lambda s: s.invited and not s.state,
+        return filter(lambda s: s.invited and not s.has_mutations,
                       self._subscriptions.values())
     def get_subscription(self, user, create=False):
         '''
@@ -195,11 +195,14 @@ class Subscription(SONWrapper):
             self.history = []
         self.history.append(mutation)
     @property
-    def state(self):
+    def _state(self):
         return self.lastMutation.get('state')
     @property
+    def has_mutations(self):
+        return self._state is not None
+    @property
     def subscribed(self):
-        return self.state == 'subscribed'
+        return self._state == 'subscribed'
     @property
     def date(self):
         # last change date
@@ -232,7 +235,7 @@ class Subscription(SONWrapper):
                     'owner': self.event.owner.humanName,
                     'notes': notes})
     def invite(self, inviter, notes):
-        assert not self.invited and not self.state
+        assert not self.invited and not self.has_mutations
         self._data['inviter'] = _id(inviter)
         self._data['inviteDate'] = datetime.datetime.now()
         self._data['inviterNotes'] = notes

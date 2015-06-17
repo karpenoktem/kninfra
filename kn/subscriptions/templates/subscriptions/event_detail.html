@@ -77,12 +77,12 @@ copy_emailaddresses_to_clipboard = function() {
 {% if object.is_open %}
 <form class="subscribe" method="POST" action="">
         {% csrf_token %}
-        {% if subscription.invited and not subscription.state %}
+        {% if subscription.invited and not subscription.has_mutations %}
         <div class="message">Je bent door
         <a href="{{ subscription.inviter.get_absolute_url }}"
                 >{{ subscription.inviter.full_name }}</a>
         uitgenodigd.</div>
-        {% endif %}{# subscription.invited and not subscription.state #}
+        {% endif %}{# subscription.invited and not subscription.has_mutations #}
         <!--[if lte IE 9]>
         Opmerkingen:<br/>
         <![endif]-->
