@@ -42,9 +42,8 @@ ecol = db['events']
 #         "inviter" : ObjectId("50f29894d4080076aa541de2"),
 #         "inviterNotes" : "",
 #         "inviteDate" : ISODate("2015-06-10T19:37:32.514Z") } ],
-#   "mailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je aangemeld voor %(eventName)s.\r\n\r\nJe opmerkingen waren:\r\n%(notes)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
-#   "confirmationMailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je aanmelding voor %(eventName)s bevestigd.\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
-#   "subscribedByOtherMailBody" : "Hallo %(firstName)s,\r\n\r\nJe bent door %(by_firstName)s aangemeld voor %(eventName)s.\r\n\r\n%(by_firstName)s opmerkingen waren:\r\n%(by_notes)s\r\n\r\nOm deze aanmelding te bevestigen, bezoek:\r\n  %(confirmationLink)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s"
+#   "subscribedMailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je aangemeld voor %(eventName)s.\r\n\r\nJe opmerkingen waren:\r\n%(notes)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
+#   "invitedMailBody" : "Hallo %(firstName)s,\r\n\r\nJe bent door %(by_firstName)s aangemeld voor %(eventName)s.\r\n\r\n%(by_firstName)s opmerkingen waren:\r\n%(by_notes)s\r\n\r\nOm deze aanmelding te bevestigen, bezoek:\r\n  %(confirmationLink)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s"
 # }
 #
 # Possible states:
@@ -125,9 +124,8 @@ class Event(SONWrapper):
     is_official = son_property(('is_official',), True)
     has_public_subscriptions = son_property(('has_public_subscriptions',),
                                     False)
-    mailBody = son_property(('mailBody',))
-    subscribedByOtherMailBody = son_property(('subscribedByOtherMailBody',))
-    confirmationMailBody = son_property(('confirmationMailBody',))
+    subscribedMailBody = son_property(('subscribedMailBody',))
+    invitedMailBody = son_property(('invitedMailBody',))
 
     def __unicode__(self):
         return unicode('%s (%s)' % (self.humanName, self.owner))
@@ -229,7 +227,7 @@ class Subscription(SONWrapper):
         self.save()
         self.send_notification(
                 "Aanmelding %s" % self.event.humanName,
-                 self.event.mailBody % {
+                 self.event.subscribedMailBody % {
                     'firstName': self.user.first_name,
                     'eventName': self.event.humanName,
                     'owner': self.event.owner.humanName,
@@ -242,7 +240,7 @@ class Subscription(SONWrapper):
         self.save()
         self.send_notification(
                 "Uitnodiging " + self.event.humanName,
-                 self.event.subscribedByOtherMailBody % {
+                 self.event.invitedMailBody % {
                     'firstName': self.user.first_name,
                     'by_firstName': inviter.first_name,
                     'by_notes': notes,

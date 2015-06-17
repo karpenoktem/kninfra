@@ -17,7 +17,9 @@ def main():
     for event in events:
         ecount += 1
         print 'Event:', event.get('name')
-        subscriptions = event.get('subscriptions', [])
+        if not 'subscriptions' in event:
+            event['subscriptions'] = []
+        subscriptions = event['subscriptions']
         users = {s['user'] for s in subscriptions}
         for subscription in scol.find({'event': event['_id']}):
             scount += 1
@@ -44,7 +46,13 @@ def main():
             if 'userNotes' in subscription:
                 subscription2['history'][0]['notes'] = subscription['userNotes']
             subscriptions.append(subscription2)
-        ecol.update({'_id': event['_id']}, {'$set': {'subscriptions': subscriptions}})
+        if 'mailBody' in event:
+            event['subscribedMailBody'] = event['mailBody']
+            del event['mailBody']
+        if 'subscribedByOtherMailBody' in event:
+            event['invitedMailBody'] = event['subscribedByOtherMailBody']
+            del event['subscribedByOtherMailBody']
+        ecol.update({'_id': event['_id']}, event)
         scol.remove({'event': event['_id']})
     print 'Moved %d subscriptions into %d events.' % (scount, ecount)
 

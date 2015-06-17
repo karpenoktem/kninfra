@@ -9,7 +9,7 @@ def get_add_event_form(user, superuser=False):
         humanName = forms.CharField(label='Naam')
         description = forms.CharField(label='Beschrijving',
                 widget=forms.Textarea)
-        mailBody = forms.CharField(label='E-Mail wanneer aangemeld',
+        subscribedMailBody = forms.CharField(label='E-Mail wanneer aangemeld',
             widget=forms.Textarea,
             initial="Hallo %(firstName)s,\n\n"+
                 "Je hebt je aangemeld voor %(eventName)s.\n"+
@@ -19,26 +19,19 @@ def get_add_event_form(user, superuser=False):
                 "\n"+
                 "Met een vriendelijke groet,\n\n"+
                 "%(owner)s")
-        subscribedByOtherMailBody = forms.CharField(
-            label='E-Mail wanneer aangemeld door een ander',
+        invitedMailBody = forms.CharField(
+            label='E-Mail wanneer uitgenodigd',
             widget=forms.Textarea,
             initial="Hallo %(firstName)s,\n\n"+
-                "Je bent door %(by_firstName)s aangemeld "+
+                "Je bent door %(by_firstName)s uitgenodigd "+
                     "voor %(eventName)s.\n"+
                 "\n"+
                 "%(by_firstName)s opmerkingen waren:\n"+
                 "%(by_notes)s\n"+
                 "\n"+
-                "Om deze aanmelding te bevestigen, bezoek:\n"
+                "Om deze uitnodiging te bevestigen, bezoek:\n"
                 "  %(confirmationLink)s\n"+
                 "\n"+
-                "Met een vriendelijke groet,\n\n"+
-                "%(owner)s")
-        confirmationMailBody = forms.CharField(
-            label='E-Mail wanneer aanmelding is bevestigd',
-            widget=forms.Textarea,
-            initial="Hallo %(firstName)s,\n\n"+
-                "Je hebt je aanmelding voor %(eventName)s bevestigd.\n\n"+
                 "Met een vriendelijke groet,\n\n"+
                 "%(owner)s")
         cost = forms.DecimalField(label='Kosten')

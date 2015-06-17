@@ -162,9 +162,8 @@ def event_new_or_edit(request, edit=None):
                 'description': fd['description'],
                 'description_html': kn.utils.markdown.parser.convert(
                                                 fd['description']),
-                'mailBody': fd['mailBody'],
-                'subscribedByOtherMailBody': fd['subscribedByOtherMailBody'],
-                'confirmationMailBody': fd['confirmationMailBody'],
+                'subscribedMailBody': fd['subscribedMailBody'],
+                'invitedMailBody': fd['invitedMailBody'],
                 'has_public_subscriptions': fd['has_public_subscriptions'],
                 'humanName': fd['humanName'],
                 'createdBy': request.user._id,
