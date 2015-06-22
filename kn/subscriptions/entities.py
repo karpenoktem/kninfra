@@ -157,6 +157,11 @@ class Event(SONWrapper):
         subscription.invite(inviter, notes)
         return subscription
 
+# A Subscription is the relation between a user and an event. When anything
+# happens between the user and the event (invitation, subscription,
+# unsubscription) a Subscription is created or updated. That means a
+# subscription can also be 'unsubscribed' (see _state).
+# You could also call this an RSVP.
 class Subscription(SONWrapper):
     def __init__(self, data, event):
         super(Subscription, self).__init__(data, ecol, event)
