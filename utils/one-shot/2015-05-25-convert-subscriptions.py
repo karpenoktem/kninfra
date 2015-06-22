@@ -21,10 +21,11 @@ def main():
             event['subscriptions'] = []
         subscriptions = event['subscriptions']
         users = {s['user'] for s in subscriptions}
-        for subscription in scol.find({'event': event['_id']}):
+        for subscription in scol.find({'event': event['_id']}).sort('date'):
             scount += 1
             if subscription['user'] in users:
-                raise ValueError('user already in set')
+                print 'WARNING: duplicate subscription for user:', subscription['user']
+                continue
             users.add(subscription['user'])
             subscription2 = {
                 'user': subscription['user']
@@ -39,10 +40,12 @@ def main():
                         'date': subscription['dateConfirmed'],
                     }]
             else:
-                subscription2['history'] = [{
+                mutation = {
                     'state': 'subscribed',
-                    'date': subscription['date'],
-                }]
+                }
+                if 'date' in subscription:
+                    mutation['date'] = subscription['date']
+                subscription2['history'] = [mutation]
             if 'userNotes' in subscription:
                 subscription2['history'][0]['notes'] = subscription['userNotes']
             subscriptions.append(subscription2)
