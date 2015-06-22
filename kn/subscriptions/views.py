@@ -80,13 +80,17 @@ def event_detail(request, name):
                              u != request.user,
                    Es.by_name('leden').get_members())
     users.sort(key=lambda u: unicode(u.humanName))
+    subscriptions = event.subscriptions
+    subscriptions.sort(key=lambda s: s.date)
+    invitations = event.invitations
+    invitations.sort(key=lambda i: i.date)
 
     ctx = {'object': event,
            'user': request.user,
            'users': users,
            'subscription': subscription,
-           'subscriptions': event.subscriptions,
-           'invitations': event.invitations,
+           'subscriptions': subscriptions,
+           'invitations': invitations,
            'has_read_access': has_read_access,
            'has_write_access': has_write_access}
     return render_to_response('subscriptions/event_detail.html', ctx,
