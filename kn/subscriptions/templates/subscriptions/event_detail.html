@@ -130,6 +130,7 @@ copy_emailaddresses_to_clipboard = function() {
                 uitgenodigd door
                 <a href="{{ subscr.inviter.get_absolute_url }}"
                         >{{ subscr.inviter.full_name }}</a>
+                op {{ subscr.inviteDate.date }}<br/>
                 {% if has_read_access %}
                 {% if subscr.inviterNotes %}
                 <blockquote>{{ subscr.inviterNotes }}</blockquote>
