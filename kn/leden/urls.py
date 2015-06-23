@@ -50,7 +50,7 @@ urlpatterns = [
         views.user_smoel, name='user-smoel'),
     url(r'^geenalcohol/$',
         views.users_underage, name='users-underage'),
-    url(r'^ik', views.ik, name='ik'),
+    url(r'^ik/?$', views.ik, name='ik'),
     url(r'^ik/wachtwoord$', views.ik_chpasswd, name="chpasswd"),
     url(r'^ik/wachtwoord/villanet/$', views.ik_chpasswd_villanet,
         name="chpasswd-villanet"),
