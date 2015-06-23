@@ -130,7 +130,7 @@ copy_emailaddresses_to_clipboard = function() {
                 uitgenodigd door
                 <a href="{{ subscr.inviter.get_absolute_url }}"
                         >{{ subscr.inviter.full_name }}</a>
-                op {{ subscr.inviteDate.date }}<br/>
+                op {{ subscr.inviteDate.date }}
                 {% if has_read_access %}
                 {% if subscr.inviterNotes %}
                 <blockquote>{{ subscr.inviterNotes }}</blockquote>
@@ -151,6 +151,7 @@ copy_emailaddresses_to_clipboard = function() {
                 uitgenodigd door
                 <a href="{{ invt.inviter.get_absolute_url }}"
                         >{{ invt.inviter.full_name }}</a>
+                op {{ invt.inviteDate.date }}
                 {% if has_read_access %}
                 {% if invt.notes %}
                 <blockquote>{{ invt.notes }}</blockquote>
