@@ -429,7 +429,7 @@ class FotoAlbum(FotoEntity):
             return
 
         # search for album or tag
-        for o in fcol.find(query_filter):
+        for o in fcol.find(query_filter).sort('date', -1):
             yield entity(o)
 
     def update_metadata(self, parent, save=True):
