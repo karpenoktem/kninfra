@@ -113,52 +113,12 @@ copy_emailaddresses_to_clipboard = function() {
         <button onclick="copy_emailaddresses_to_clipboard()">
                 Toon e-mail adressen van de ingeschrevenen
         </button>
-	<h2>Aanmeldingen ({{ subscriptions|length }})</h2>
-	<ul>
-	{% for subscr in subscriptions %}
-	<li><a href="{{ subscr.user.get_absolute_url }}"
-                >{{ subscr.user.full_name }}</a>
-                {% if subscr.date %}
-                        <small>{{ subscr.date.date }}</small>
-                {% endif %}{# subscr.date #}<br/>
-                {% if has_read_access %}
-                {% if subscr.userNotes %}
-                <blockquote>{{ subscr.userNotes }}</blockquote>
-                {% endif %}{# subscr.userNotes #}
-                {% endif %}{# has_read_access #}
-                {% if subscr.invited %}
-                uitgenodigd door
-                <a href="{{ subscr.inviter.get_absolute_url }}"
-                        >{{ subscr.inviter.full_name }}</a>
-                op {{ subscr.inviteDate.date }}
-                {% if has_read_access %}
-                {% if subscr.inviterNotes %}
-                <blockquote>{{ subscr.inviterNotes }}</blockquote>
-                {% endif %}{# subscr.inviterNotes #}
-                {% endif %}{# has_read_access #}
-                {% endif %}{# subscr.invited #}
-                </li>
-	{% endfor %}
-	</ul>
+        <h2>Aanmeldingen ({{ subscriptions|length }})</h2>
+        {% include "subscriptions/include_list.html" with list=subscriptions %}
 
         {% if invitations %}
         <h2>Uitnodigingen ({{ invitations|length }})</h2>
-        <ul>
-        {% for invt in invitations %}
-                <li><a href="{{ invt.user.get_absolute_url }}"
-                       >{{ invt.user.full_name }}</a>
-                <small>{{ invt.inviteDate.date }}</small><br/>
-                uitgenodigd door
-                <a href="{{ invt.inviter.get_absolute_url }}"
-                        >{{ invt.inviter.full_name }}</a>
-                op {{ invt.inviteDate.date }}
-                {% if has_read_access %}
-                {% if invt.notes %}
-                <blockquote>{{ invt.notes }}</blockquote>
-                {% endif %}{# invt.notes #}
-                {% endif %}{# has_read_access #}
-        {% endfor %}
-        </ul>
+        {% include "subscriptions/include_list.html" with list=invitations %}
         {% endif %}
 {% endif %}{# has_read_access or object.has_public_subscriptions#}
 {% endblock %}
