@@ -23,6 +23,8 @@ $wgEnotifUserTalk      = false;
 $wgEnotifWatchlist     = false;
 $wgEmailAuthentication = true;
 
+$wgFileExtensions = array( 'png', 'gif', 'jpg', 'jpeg', 'pdf' );
+
 $wgDBtype           = "mysql";
 $wgDBserver         = "localhost";
 $wgDBname           = "wiki";
