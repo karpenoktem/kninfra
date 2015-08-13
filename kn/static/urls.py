@@ -76,7 +76,7 @@ urlpatterns = [
 
     url(r'^introPoster2015/?$', TemplateView.as_view(
             template_name='static/introPoster2015.html'),
-            name='introPoster2014'),
+            name='introPoster2015'),
     url(r'^introPoster2014/?$', TemplateView.as_view(
             template_name='static/introPoster2014.html'),
             name='introPoster2014'),
