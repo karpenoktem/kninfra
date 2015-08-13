@@ -75,6 +75,9 @@ urlpatterns = [
     url(r'^bestuur/?$', RedirectView.as_view(
             url='/bestuur11'), name='bestuur'),
 
+    url(r'^introPoster2015/?$', TemplateView.as_view(
+            template_name='static/introPoster2015.html'),
+            name='introPoster2014'),
     url(r'^introPoster2014/?$', TemplateView.as_view(
             template_name='static/introPoster2014.html'),
             name='introPoster2014'),
