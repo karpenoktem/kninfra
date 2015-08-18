@@ -46,6 +46,16 @@ def fotos(request, path=''):
 
     album = fEs.by_path(path)
     if album is None:
+        bits = path.rsplit('/', 1)
+        if len(bits) == 2:
+            path = bits[0]
+            name = bits[1].replace('+', ' ')
+            entity = fEs.by_path_and_name(path, name)
+            if entity is not None:
+                # Zen Photo used + signs in the filename part of the URL.
+                url = reverse('fotos', kwargs={'path':path}) \
+                        + '#'+filepath_to_uri(name)
+                return redirect(url, permanent=True)
         raise Http404
 
     if album._type != 'album':
