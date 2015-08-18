@@ -218,7 +218,7 @@
             }.bind(this));
         }
         if (c.type == 'foto') {
-          $('a', thumb).attr('href', '#'+c.name);
+          $('a', thumb).attr('href', '#'+encodePath(c.name));
         }
         if (c.visibility === 'hidden') {
           thumb.addClass('hidden');
@@ -344,7 +344,7 @@
       return '';
     }
 
-    return hash.substr(1);
+    return decodeURIComponent(hash.substr(1));
   };
 
   KNF.prototype.onhashchange = function() {
