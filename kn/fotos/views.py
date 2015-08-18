@@ -17,6 +17,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import Http404, HttpResponse, HttpResponseNotModified, QueryDict
+from django.utils.encoding import filepath_to_uri
 
 from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
 from kn.leden import giedo
@@ -46,6 +47,14 @@ def fotos(request, path=''):
     album = fEs.by_path(path)
     if album is None:
         raise Http404
+
+    if album._type != 'album':
+        # This is a photo, not an album.
+        # Backwards compatibility, probably to Zen Photo.
+        url = reverse('fotos', kwargs={'path':album.path}) \
+                + '#'+filepath_to_uri(album.name)
+        return redirect(url, permanent=True)
+
     user = request.user if request.user.is_authenticated() else None
 
     if not album.may_view(user) and user is None:
