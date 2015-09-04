@@ -30,12 +30,12 @@ body {
 /* generic classes */
 
 .toggle-window {
-	left: -9999px;
 	position: absolute;
-	top: auto;
+	left: auto;
+        display: none;
 }
 .toggle.toggle-open .toggle-window {
-	left: auto;
+        display: block;
 }
 
 
