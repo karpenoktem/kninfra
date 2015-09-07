@@ -48,6 +48,8 @@ urlpatterns = [
             template_name='static/media.html'), name='media'),
     url(r'^links/?$', TemplateView.as_view(
             template_name='static/links.html'), name='links'),
+    url(r'^irc/?$', TemplateView.as_view(
+            template_name='static/irc.html')),
     url(r'^robots.txt/?$', TemplateView.as_view(
             template_name='static/robots.txt',
             content_type='text/plain')),
