@@ -24,6 +24,19 @@ nginx packages:
     file.managed:
         - source: salt://sankhara/site.nginx.conf
         - template: jinja
+/etc/nginx/conf.d:
+    file.directory
+/etc/nginx/conf.d/20-ssl.conf:
+    file.managed:
+        - source: salt://sankhara/ssl.nginx.conf
+/etc/nginx/certs:
+    file.directory
+/etc/nginx/certs/dhparam.pem:
+    file.managed:
+        - source: salt://sankhara/ssl.dhparam.pem
+/etc/nginx/certs/ocsp-stapler.crt:
+    file.managed:
+        - source: salt://sankhara/ssl.ocsp-stapler.crt
 /etc/php5/fpm/php.ini:
     file.managed:
         - source: salt://sankhara/php.ini
