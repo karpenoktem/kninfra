@@ -522,9 +522,12 @@ def secr_add_user(request):
             logging.info("Added user %s" % nm)
             u.save()
             # Then, add the relations.
-            Es.add_relation(u, Es.id_by_name('leden',
-                            use_cache=True),
-                    _from=date_to_dt(fd['dateJoined']))
+            groups = ['leden']
+            groups.append({'m': 'mannen', 'v': 'vrouwen'}.get(fd['gender']))
+            for group in groups:
+                Es.add_relation(u, Es.id_by_name(group,
+                                use_cache=True),
+                        _from=date_to_dt(fd['dateJoined']))
             for l in fd['addToList']:
                 Es.add_relation(u, Es.id_by_name(l, use_cache=True),
                     _from=now())
