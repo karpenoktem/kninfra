@@ -71,8 +71,10 @@ class AddUserForm(forms.Form):
             _type='study')
     dateJoined = forms.DateField(label="Datum van inschrijving",
             initial=datetime.date.today)
-    addToList = forms.MultipleChoiceField(label="Voeg toe aan maillijsten",
-            choices=[('aan', "aan"), ('uit', "uit")], initial=['aan'],
+    addToList = forms.MultipleChoiceField(label="Voeg toe aan groepen",
+            choices=[('eerstejaars', 'Eerstejaars'), ('aan', "Aan"),
+                     ('uit', "Uit"), ('zooi', 'Zooi')],
+            initial=['leden', 'eerstejaars', 'aan'],
             widget=forms.CheckboxSelectMultiple())
 
 class AddGroupForm(forms.Form):
