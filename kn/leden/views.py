@@ -491,7 +491,7 @@ def secr_add_user(request):
                     'nick': fd['first_name'],
                     'given': None,
                     'family': fd['last_name'],
-                    'gender': fd['sex'],
+                    'gender': fd['gender'],
                     'dateOfBirth': date_to_dt(
                         fd['dateOfBirth'])
                 },

@@ -53,7 +53,7 @@ class AddUserForm(forms.Form):
                     widget=forms.TextInput(attrs={
                         'placeholder': 'bijv.: Vaart, van der'}))
     first_name = forms.CharField(label="Voornaam")
-    sex = forms.ChoiceField(label="Geslacht", choices=(('m', 'Man'),
+    gender = forms.ChoiceField(label="Geslacht", choices=(('m', 'Man'),
                                ('v', 'Vrouw')))
     email = forms.EmailField(label="E-Mail adres")
     dateOfBirth = forms.DateField(label="Geboortedatum")
