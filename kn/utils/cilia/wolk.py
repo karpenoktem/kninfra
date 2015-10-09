@@ -8,6 +8,9 @@ import subprocess
 from django.conf import settings
 
 def wolk_setpass(cilia, user, passwd):
+    if hasattr(settings, 'WOLK_PATH'):
+        logging.warning('wolk: no path available, skipping')
+        return None
     wolk_script = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                     'wolk.php')
     proc = subprocess.Popen(['sudo', '-u', settings.WOLK_USER, 'php',
