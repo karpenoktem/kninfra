@@ -99,6 +99,7 @@ def defaultSettings(glbls):
     d.USER_DIRS = '/mnt/phassa/home/'
 
     d.VPN_COMMONNAME_POSTFIX = '.vpn.' + d.DOMAINNAME
+    d.VPN_OPENSSL_CONFIG = 'kn-openssl.cnf'
     d.VPN_KEYSTORE = d.INFRA_HOME + '/vpnkeys'
     d.VPN_INSTALLER_STORAGE = d.STORAGE_ROOT + '/openvpn'
     d.VPN_INSTALLER_PATH = 'openvpn'

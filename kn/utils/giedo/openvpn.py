@@ -48,10 +48,14 @@ def create_certificate(user):
         'KEY_NAME': filter(lambda x: x in string.printable, user.humanName),
         'KEY_CN': commonName})
 
+    if not os.path.isfile(settings.VPN_OPENSSL_CONFIG):
+        logging.warning('vpn: no config file available, skipping')
+        return False
     ph = subprocess.Popen(['openssl', 'req', '-batch', '-days', '1000',
         '-nodes', '-new', '-newkey', 'rsa:1024', '-keyout', commonName +
-        '.key', '-out', commonName + '.csr', '-config', 'kn-openssl.cnf'
-        ], cwd=settings.VPN_KEYSTORE, env=env, stdout=subprocess.PIPE,
+        '.key', '-out', commonName + '.csr', '-config',
+        settings.VPN_OPENSSL_CONFIG],
+        cwd=settings.VPN_KEYSTORE, env=env, stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT)
     ph.communicate()
     if ph.returncode != 0:
@@ -78,7 +82,8 @@ def create_openvpn_installer(giedo, user):
     copytree(os.path.join(settings.VPN_INSTALLER_REPOS, 'installer/'), _dir)
     # Create the certificate
     if not user_has_certificate(user):
-        create_certificate(user)
+        if not create_certificate(user):
+            return False
     commonName = get_commonName(user)
     # Personalize the installer and config-file
     ## Check the git-revision
@@ -140,7 +145,8 @@ def _create_zip(user):
     os.mkdir(os.path.join(_dir, 'config'))
     # Create the certificate
     if not user_has_certificate(user):
-        create_certificate(user)
+        if not create_certificate(user):
+            return False
     commonName = get_commonName(user)
     # Personalize the installer and config-file
     ## Write the OpenVPN config
