@@ -53,7 +53,7 @@ class AddUserForm(forms.Form):
                     widget=forms.TextInput(attrs={
                         'placeholder': 'bijv.: Vaart, van der'}))
     first_name = forms.CharField(label="Voornaam")
-    sex = forms.ChoiceField(label="Geslacht", choices=(('m', 'Man'),
+    gender = forms.ChoiceField(label="Geslacht", choices=(('m', 'Man'),
                                ('v', 'Vrouw')))
     email = forms.EmailField(label="E-Mail adres")
     dateOfBirth = forms.DateField(label="Geboortedatum")
@@ -71,8 +71,11 @@ class AddUserForm(forms.Form):
             _type='study')
     dateJoined = forms.DateField(label="Datum van inschrijving",
             initial=datetime.date.today)
-    addToList = forms.MultipleChoiceField(label="Voeg toe aan maillijsten",
-            choices=[('aan', "aan"), ('uit', "uit")], initial=['aan'],
+    incasso = forms.BooleanField(label='Incasso', required=False)
+    addToList = forms.MultipleChoiceField(label="Voeg toe aan groepen",
+            choices=[('eerstejaars', 'Eerstejaars'), ('aan', "Aan"),
+                     ('uit', "Uit"), ('zooi', 'Zooi')],
+            initial=['leden', 'eerstejaars', 'aan'],
             widget=forms.CheckboxSelectMultiple())
 
 class AddGroupForm(forms.Form):
