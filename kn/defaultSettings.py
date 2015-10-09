@@ -179,6 +179,7 @@ def defaultSettings(glbls):
         'wiki':      d.BASE_URL+'/wiki',
         'wiki-home': d.BASE_URL+'/wiki/Hoofdpagina',
         'forum':     d.BASE_URL+'/forum/',
+        'irc':       d.BASE_URL+'/irc',
     }
 
     d.DT_MIN = datetime.datetime(2004,8,31)
