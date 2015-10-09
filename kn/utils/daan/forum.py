@@ -10,6 +10,9 @@ from kn.base._random import pseudo_randstr
 
 def forum_setpass(daan, user, password):
     creds = settings.FORUM_MYSQL_SECRET
+    if not creds:
+        logging.warning('forum: no credentials available, skipping')
+        return None
     dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2], db=creds[3])
     c = dc.cursor()
     salt = pseudo_randstr()
