@@ -105,6 +105,8 @@ def defaultSettings(glbls):
     d.VPN_INSTALLER_PATH = 'openvpn'
     d.VPN_INSTALLER_REPOS = d.INFRA_HOME + '/openvpn'
 
+    d.QUASSEL_CONFIGDIR = '/var/lib/quassel'
+
     d.INTERNAL_IPS = ['83.162.203.144'] # bas
     d.LOCALE = 'nl_NL.UTF-8'
 

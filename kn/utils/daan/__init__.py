@@ -16,6 +16,7 @@ from kn.utils.daan.forum import apply_forum_changes, forum_setpass
 from kn.utils.daan.live import live_update_knsite, live_update_knfotos
 from kn.utils.daan.fotoadmin import fotoadmin_create_event, fotoadmin_move_fotos
 from kn.utils.daan._ldap import apply_ldap_changes, ldap_setpass
+from kn.utils.daan.quassel import apply_quassel_changes, quassel_setpass
 
 from django.conf import settings
 
@@ -26,6 +27,7 @@ class Daan(WhimDaemon):
         self.postfix_slm_lock = threading.Lock()
         self.mailman_lock = threading.Lock()
         self.wiki_lock = threading.Lock()
+        self.quassel_lock = threading.Lock()
         self.forum_lock = threading.Lock()
         self.ldap_lock = threading.Lock()
         self.update_knsite_lock = threading.Lock()
@@ -46,6 +48,9 @@ class Daan(WhimDaemon):
         elif d['type'] == 'mailman':
             with self.mailman_lock:
                 return apply_mailman_changes(self, d['changes'])
+        elif d['type'] == 'quassel':
+            with self.quassel_lock:
+                return apply_quassel_changes(self, d['changes'])
         elif d['type'] == 'wiki':
             with self.wiki_lock:
                 return apply_wiki_changes(self, d['changes'])
@@ -60,6 +65,8 @@ class Daan(WhimDaemon):
                 ldap_setpass(self, d['user'], d['pass'])
             with self.wiki_lock:
                 wiki_setpass(self, d['user'], d['pass'])
+            with self.quassel_lock:
+                quassel_setpass(self, d['user'], d['pass'])
             with self.forum_lock:
                 forum_setpass(self, d['user'], d['pass'])
         elif d['type'] == 'update-knsite':

@@ -12,5 +12,6 @@ include:
     - .mailman
     - .mongo
     - .freeradius
+    - .quasselcore
     - .kninfra
     - .initializeDb
