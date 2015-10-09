@@ -71,6 +71,7 @@ class AddUserForm(forms.Form):
             _type='study')
     dateJoined = forms.DateField(label="Datum van inschrijving",
             initial=datetime.date.today)
+    incasso = forms.BooleanField(label='Incasso', required=False)
     addToList = forms.MultipleChoiceField(label="Voeg toe aan groepen",
             choices=[('eerstejaars', 'Eerstejaars'), ('aan', "Aan"),
                      ('uit', "Uit"), ('zooi', 'Zooi')],

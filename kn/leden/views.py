@@ -524,6 +524,10 @@ def secr_add_user(request):
             # Then, add the relations.
             groups = ['leden']
             groups.append({'m': 'mannen', 'v': 'vrouwen'}.get(fd['gender']))
+            if fd['incasso']:
+                groups.append('incasso')
+            else:
+                groups.append('geen-incasso')
             for group in groups:
                 Es.add_relation(u, Es.id_by_name(group,
                                 use_cache=True),
