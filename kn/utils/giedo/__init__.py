@@ -33,6 +33,7 @@ from kn.utils.giedo.openvpn import create_openvpn_installer, create_openvpn_zip,
 from kn.utils.giedo.siteagenda import update_site_agenda
 from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.wolk import generate_wolk_changes
+from kn.utils.giedo.quassel import generate_quassel_changes
 from kn.utils.giedo.fotos import scan_fotos
 
 class Giedo(WhimDaemon):
@@ -66,10 +67,14 @@ class Giedo(WhimDaemon):
                   ('unix', self.cilia, self._gen_unix),
                   ('wiki', self.daan, self._gen_wiki),
                   ('ldap', self.daan, self._gen_ldap),
-                  ('wolk', self.cilia, self._gen_wolk))
+                  ('wolk', self.cilia, self._gen_wolk),
+                  ('quassel', self.daan, self._gen_quassel))
         self.push_changes_event.set()
 
 
+    def _gen_quassel(self):
+        return {'type': 'quassel',
+                'changes': generate_quassel_changes(self)}
     def _gen_wolk(self):
         return {'type': 'wolk',
                 'changes': generate_wolk_changes(self)}
