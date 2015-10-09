@@ -104,7 +104,7 @@ def defaultSettings(glbls):
     d.VPN_INSTALLER_PATH = 'openvpn'
     d.VPN_INSTALLER_REPOS = d.INFRA_HOME + '/openvpn'
 
-    d.INTERNAL_IPS = ['195.169.216.49'] # bas
+    d.INTERNAL_IPS = ['83.162.203.144'] # bas
     d.LOCALE = 'nl_NL.UTF-8'
 
     # You probably won't change this
