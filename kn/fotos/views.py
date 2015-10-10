@@ -4,7 +4,6 @@ from os.path import basename
 from urllib import unquote
 from time import gmtime, strftime
 
-import MySQLdb
 import Image
 
 from django.template import RequestContext
