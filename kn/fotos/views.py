@@ -4,7 +4,6 @@ from os.path import basename
 from urllib import unquote
 from time import gmtime, strftime
 
-import MySQLdb
 import Image
 
 from django.template import RequestContext
@@ -165,6 +164,7 @@ def fotoadmin_create_event(request):
             else:
                 messages.error(request, 'Er is een fout opgetreden: %s' %
                                 ret.get('error', 'geen foutmelding'))
+            return redirect('fotoadmin-move')
     else:
         form = CreateEventForm()
     return render_to_response('fotos/admin/create.html',
