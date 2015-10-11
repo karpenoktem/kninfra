@@ -113,6 +113,9 @@ urlpatterns = [
     url(r'^openweekPoster2015/?$', TemplateView.as_view(
             template_name='static/openweekPoster2015.html'),
             name='openweekPoster2015'),
+    url(r'^openweek2Poster2015/?$', TemplateView.as_view(
+            template_name='static/openweek2Poster2015.html'),
+            name='openweek2Poster2015'),
 
     url(r'^lustrum/?$', TemplateView.as_view(
             template_name='static/lustrum.html'),
