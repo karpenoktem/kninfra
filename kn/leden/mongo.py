@@ -23,11 +23,11 @@ def _id(obj):
     raise ValueError
 
 class SONWrapper(object):
-    def __init__(self, data, collection, parent=None, versioned=False):
+    def __init__(self, data, collection, parent=None, detect_race=False):
         self._data = data
         self._collection = collection
         self._parent = parent
-        self._versioned = versioned
+        self._detect_race = detect_race
     def delete(self):
         assert self._data['_id'] is not None
         # TODO check version
@@ -38,7 +38,7 @@ class SONWrapper(object):
     def save(self, update_fields=NotImplemented):
         if self._parent is None:
             if '_id' in self._data:
-                if self._versioned:
+                if self._detect_race:
                     self._data['_version'] += 1
                     result = self._collection.update({
                         '_id': self._data['_id'],
@@ -50,7 +50,7 @@ class SONWrapper(object):
                     self._collection.update({
                         '_id': self._data['_id']}, self._data)
             else:
-                if self._versioned:
+                if self._detect_race:
                     self._data['_version'] = 1
                 self._data['_id'] = self._collection.insert(
                         self._data)

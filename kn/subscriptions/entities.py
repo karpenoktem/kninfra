@@ -72,7 +72,7 @@ def event_by_id(__id):
 
 class Event(SONWrapper):
     def __init__(self, data):
-        super(Event, self).__init__(data, ecol, versioned=True)
+        super(Event, self).__init__(data, ecol, detect_race=True)
         self._subscriptions = {str(d['user']): Subscription(d, self)
                                for d in data.get('subscriptions', [])}
     name = son_property(('name',))
