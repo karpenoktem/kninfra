@@ -26,7 +26,7 @@ ircd packages:
 inspircd running:
     service.running:
         - name: inspircd
-        - reload: True
+        #- reload: True # ExecReload directive missing in systemd unit file
         - watch:
             - file: /etc/inspircd/inspircd.conf
             - file: /etc/inspircd/inspircd.motd
