@@ -10,7 +10,7 @@ from django.conf import settings
 conn = pymongo.Connection(settings.MONGO_HOST)
 db = conn[settings.MONGO_DB]
 
-class MongoWrapperException(Exception):
+class RaceCondition(Exception):
     pass
 
 def _id(obj):
@@ -44,8 +44,7 @@ class SONWrapper(object):
                         '_id': self._data['_id'],
                         '_version': self._data['_version']-1}, self._data, w=1)
                     if result['n'] < 1:
-                        raise MongoWrapperException(
-                            'Could not save - version mismatch?')
+                        raise RaceCondition('Document was not saved')
                 else:
                     self._collection.update({
                         '_id': self._data['_id']}, self._data)
