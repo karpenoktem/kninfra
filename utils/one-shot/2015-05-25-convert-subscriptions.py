@@ -19,6 +19,8 @@ def main():
         print 'Event:', event.get('name')
         if not 'subscriptions' in event:
             event['subscriptions'] = []
+        if not '_version' in event:
+            event['_version'] = 1
         subscriptions = event['subscriptions']
         users = {s['user'] for s in subscriptions}
         for subscription in scol.find({'event': event['_id']}).sort('date'):

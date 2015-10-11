@@ -15,6 +15,7 @@ ecol = db['events']
 # Example of an event
 # ------------------
 # { "_id" : ObjectId("55631d03ed25c3345751714a"),
+#   "_version" : 1,
 #   "name" : "loco-activiteit",
 #   "humanName" : "Activiteit van de LoCo",
 #   "date" : ISODate("2015-05-25T00:00:00Z"),
@@ -71,7 +72,7 @@ def event_by_id(__id):
 
 class Event(SONWrapper):
     def __init__(self, data):
-        super(Event, self).__init__(data, ecol)
+        super(Event, self).__init__(data, ecol, detect_race=True)
         self._subscriptions = {str(d['user']): Subscription(d, self)
                                for d in data.get('subscriptions', [])}
     name = son_property(('name',))
