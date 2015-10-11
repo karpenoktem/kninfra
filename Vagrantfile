@@ -23,8 +23,6 @@ def configure_vagrant
             end
 
             # Work-around symlink problem in windows.
-            # Vagrant must be run with administrator privileges
-            # TODO Check during provisioning whether problem is fixed.
             # See http://stackoverflow.com/questions/24200333/symbolic-links-and-synced-folders-in-vagrant
             if Vagrant::Util::Platform.windows?
                 config.vm.provider "virtualbox" do |v|
@@ -102,6 +100,29 @@ def public_interface
     return File.open(path).read.strip
 end
 
+def check_environment
+    if Vagrant::Util::Platform.windows?
+        def elevated?
+            whoami = `whoami /groups` rescue nil
+            return true if whoami =~ /S-1-16-12288/
+            admin =`net localgroup administrators | find "%USERNAME%"` rescue ""
+            admin.empty? ? false : true
+        end
+
+        if not elevated?
+            puts
+            puts
+            puts "On Windows, vagrant needs to be run with administrative"
+            puts "privileges.  Otherwise symlinks will not work."
+            puts "See http://stackoverflow.com/questions/24200333/symbolic-links-and-synced-folders-in-vagrant"
+            puts
+            puts "   sorry..."
+            exit -1
+        end
+    end
+end
+
+check_environment
 ensure_pillar_is_generated
 configure_vagrant
 
