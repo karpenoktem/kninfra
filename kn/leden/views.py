@@ -317,6 +317,14 @@ def ik_chsmoel(request):
         original.write(chunk)
     original.seek(0)
     img = Image.open(original)
+    if img._getexif() is not None:
+        orientation = int(img._getexif().get(274, '1')) # Orientation
+        if orientation == 3:
+            img = img.transpose(Image.ROTATE_180)
+        elif orientation == 6:
+            img = img.transpose(Image.ROTATE_270)
+        elif orientation == 8:
+            img = img.transpose(Image.ROTATE_90)
     width, height = resize_proportional(img.size[0], img.size[1],
                                         settings.SMOELEN_WIDTH*2,
                                         settings.SMOELEN_HEIGHT*2)

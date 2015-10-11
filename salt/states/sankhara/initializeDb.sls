@@ -13,6 +13,6 @@ initial giedo-sync:
         - creates: /home/infra/.initial-giedo-sync-run
         # - timeout: 1
         - name: >
-            giedo-sync
+            giedo-sync &&
             touch /home/infra/.initial-giedo-sync-run
 {% endif %}
