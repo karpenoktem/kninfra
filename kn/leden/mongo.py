@@ -24,6 +24,11 @@ def _id(obj):
 
 class SONWrapper(object):
     def __init__(self, data, collection, parent=None, detect_race=False):
+        '''
+            parent:      SONWrapper can be nested. This is the parent.
+            detect_race: Add a _version field which is incremented with each
+                         update to detect (and fail on) race conditions.
+        '''
         self._data = data
         self._collection = collection
         self._parent = parent
