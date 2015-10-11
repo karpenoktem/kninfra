@@ -102,11 +102,14 @@ end
 
 def check_environment
     if Vagrant::Util::Platform.windows?
+        require 'win32/registry'
         def elevated?
-            whoami = `whoami /groups` rescue nil
-            return true if whoami =~ /S-1-16-12288/
-            admin =`net localgroup administrators | find "%USERNAME%"` rescue ""
-            admin.empty? ? false : true
+            begin
+                Win32::Registry::HKEY_USERS.open('S-1-5-19') { | reg | }
+                return true
+            rescue
+            end
+            return false
         end
 
         if not elevated?
