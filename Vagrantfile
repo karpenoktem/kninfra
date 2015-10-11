@@ -16,7 +16,22 @@ def configure_vagrant
                 salt.run_highstate = true
                 salt.verbose = true
                 salt.minion_config = "salt/vagrant_minion_config"
-                salt.bootstrap_options = "-F -c /tmp/ -P"		
+
+                # Workaround for mitchellh/vagrant#5973,
+                # see https://github.com/mitchellh/vagrant/issues/5973#issuecomment-137276605
+                salt.bootstrap_options = "-F -c /tmp/ -P"
+            end
+
+            # Work-around symlink problem in windows.
+            # Vagrant must be run with administrator privileges
+            # TODO Check during provisioning whether problem is fixed.
+            # See http://stackoverflow.com/questions/24200333/symbolic-links-and-synced-folders-in-vagrant
+            if Vagrant::Util::Platform.windows?
+                config.vm.provider "virtualbox" do |v|
+                    v.customize ["setextradata", :id,
+                        "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root",
+                                                                        "1"]
+                end
             end
         end
 
