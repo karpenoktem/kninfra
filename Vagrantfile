@@ -16,6 +16,7 @@ def configure_vagrant
                 salt.run_highstate = true
                 salt.verbose = true
                 salt.minion_config = "salt/vagrant_minion_config"
+                salt.bootstrap_options = "-F -c /tmp/ -P"		
             end
         end
 
