@@ -427,7 +427,7 @@ class FotoAlbum(FotoEntity):
             # operations in MongoDB 2.4, we join and sort them by hand. MongoDB
             # 2.6+ has this feature.
 
-            # Text search (name and description)
+            # Text search (name, title and description)
             results = map(lambda r: r['obj'],
                 db.command('text', 'fotos',
                         search=q,
