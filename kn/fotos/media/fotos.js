@@ -44,6 +44,15 @@
     return "/foto/" + cache + "/" + encodePath(path);
   };
 
+  Foto.prototype.anchor = function() {
+    if ('relpath' in this) {
+      // search result
+      return this.relpath;
+    }
+    // normal photo
+    return this.name;
+  }
+
 
   function KNF(data){
     this.search_query = '';
@@ -115,7 +124,9 @@
               foto.prev = prev;
             }
             prev = foto;
-            this.search_results[foto.name] = foto;
+            foto.relpath = foto.path.substr(
+                this.path.length !== 0 ? this.path.length + 1 : 0);
+            this.search_results[foto.relpath] = foto;
           }
           $.extend(this.people, data.people);
           this.display_fotos();
@@ -216,9 +227,8 @@
               this.change_path(c.path);
               return false;
             }.bind(this));
-        }
-        if (c.type == 'foto') {
-          $('a', thumb).attr('href', '#'+encodePath(c.name));
+        } else {
+          $('a', thumb).attr('href', '#'+encodePath(c.anchor()));
         }
         if (c.visibility === 'hidden') {
           thumb.addClass('hidden');
@@ -389,7 +399,7 @@
       this.apply_url(false);
       return;
     }
-    if (this.get_hash() != foto.name) {
+    if (this.get_hash() != foto.anchor()) {
       this.apply_url(false);
     }
     $('html').addClass('noscroll');
@@ -399,10 +409,10 @@
         .text(foto.title ? foto.title : foto.name);
     if (foto.prev)
       $('.prev', frame)
-          .attr('href', '#'+encodePath(foto.prev.name));
+          .attr('href', '#'+encodePath(foto.prev.anchor()));
     if (foto.next)
       $('.next', frame)
-          .attr('href', '#'+encodePath(foto.next.name));
+          .attr('href', '#'+encodePath(foto.next.anchor()));
     $('.orig', frame)
         .attr('href', foto.full);
     if (foto.description)
