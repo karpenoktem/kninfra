@@ -445,9 +445,8 @@ class FotoAlbum(FotoEntity):
                     continue
                 if user.first_name.lower() in words_set or user.last_name.lower() in words_set:
                     users.append(_id(user))
-            for r in fcol.find({'$and': [query_filter,
-                                         {'tags': {'$in': users}}]}):
-                results.append(r)
+            results.extend(fcol.find({'$and': [query_filter,
+                                               {'tags': {'$in': users}}]}))
 
             # The sort key does some magic.
             # The first element is to sort on type first: albums go first, then
