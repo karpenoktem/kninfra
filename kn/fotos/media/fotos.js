@@ -119,11 +119,13 @@
           var prev = null;
           for (var i=0; i<data.results.length; i++) {
             var foto = new Foto(data.results[i]);
-            if (prev !== null) {
-              prev.next = foto;
-              foto.prev = prev;
+            if (foto.type != 'album') {
+              if (prev !== null) {
+                prev.next = foto;
+                foto.prev = prev;
+              }
+              prev = foto;
             }
-            prev = foto;
             foto.relpath = foto.path.substr(
                 this.path.length !== 0 ? this.path.length + 1 : 0);
             this.search_results[foto.relpath] = foto;
