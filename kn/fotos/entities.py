@@ -1,6 +1,6 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property
 import kn.leden.entities as Es
-from kn.fotos.utils import resize_proportional
+from kn.fotos.utils import resize_proportional, split_words
 from django.conf import settings
 
 from django.db.models import permalink
@@ -401,6 +401,7 @@ class FotoAlbum(FotoEntity):
         required_visibility = self.required_visibility(user)
         query_filter = {'path': self.mongo_path_prefix,
                         'effectiveVisibility': {'$in': tuple(required_visibility)}}
+
         if q.startswith('album:'):
             album = q[len('album:'):]
             query_filter['type'] = 'album'
@@ -412,20 +413,73 @@ class FotoAlbum(FotoEntity):
                     {'title': {'$regex': re.compile(re.escape(album),
                                                     re.IGNORECASE)}}
                 ]}]}
+
         elif q.startswith('tag:'):
-            _id = Es.id_by_name(q[len('tag:'):])
-            if _id is None:
+            user_id = Es.id_by_name(q[len('tag:'):])
+            if user_id is None:
                 return
             query_filter['type'] = {'$ne': 'album'}
-            query_filter['tags'] = _id
+            query_filter['tags'] = user_id
+
         else:
-            # do a full-text search
-            for result in db.command('text', 'fotos',
+            # Do a full-text search.
+            # Because full-text search can't be combined with other query
+            # operations, we join them by hand.
+
+            # Produce results of the text search, sorted on the inverse date
+            # (new to old).
+            textResults = map(lambda r: r['obj'],
+                db.command('text', 'fotos',
                         search=q,
                         filter=query_filter,
                         limit=96, # dividable by 2, 3 and 4
-                      )['results']:
-                yield entity(result['obj'])
+                      )['results'])
+            textResults.sort(key=lambda r: r['date'], reverse=True)
+
+            # Search in (user) tags, sorting the result on the inverse date (new
+            # to old, just like textResults).
+            words = split_words(q.lower())
+            users = []
+            words_set = set(words)
+            for user in Es.users():
+                if user.first_name is None:
+                    # One (test) entity doesn't have a first_name
+                    continue
+                if user.first_name.lower() in words_set or user.last_name.lower() in words_set:
+                    users.append(_id(user))
+            queryResults = []
+            for r in fcol.find({'$and': [
+                                    query_filter,
+                                    {'tags': {'$in': users}}]}).sort('date', -1):
+                queryResults.append(r)
+
+            # Join textResults and queryResults, so the result is also sorted
+            # the same way (new to old).
+            textIndex = 0
+            queryIndex = 0
+            while textIndex < len(textResults) or queryIndex < len(queryResults):
+                if textIndex >= len(textResults):
+                    # queryResults list still has objects
+                    yield entity(queryResults[queryIndex])
+                    queryIndex += 1
+                elif queryIndex >= len(queryResults):
+                    # textResults list still has objects
+                    yield entity(textResults[textIndex])
+                    textIndex += 1
+                else:
+                    # two entities at the same position
+                    if textResults[textIndex]['_id'] == queryResults[queryIndex]['_id']:
+                        # same entity
+                        yield entity(textResults[textIndex])
+                        queryIndex += 1
+                        textIndex += 1
+                    elif textResults[textIndex]['date'] < queryResults[queryIndex]['date']:
+                        yield entity(queryResults[queryIndex])
+                        queryIndex += 1
+                    else: # textResults[textIndex]['date'] >= queryResults[queryIndex]['date']
+                        yield entity(textResults[textIndex])
+                        textIndex += 1
+
             return
 
         # search for album or tag
