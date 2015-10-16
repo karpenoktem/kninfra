@@ -424,20 +424,18 @@ class FotoAlbum(FotoEntity):
         else:
             # Do a full-text search.
             # Because full-text search can't be combined with other query
-            # operations, we join them by hand.
+            # operations in MongoDB 2.4, we join and sort them by hand. MongoDB
+            # 2.6+ has this feature.
 
-            # Produce results of the text search, sorted on the inverse date
-            # (new to old).
-            textResults = map(lambda r: r['obj'],
+            # Text search (name and description)
+            results = map(lambda r: r['obj'],
                 db.command('text', 'fotos',
                         search=q,
                         filter=query_filter,
                         limit=96, # dividable by 2, 3 and 4
                       )['results'])
-            textResults.sort(key=lambda r: r['date'], reverse=True)
 
-            # Search in (user) tags, sorting the result on the inverse date (new
-            # to old, just like textResults).
+            # Tag search
             words = split_words(q.lower())
             users = []
             words_set = set(words)
@@ -447,38 +445,27 @@ class FotoAlbum(FotoEntity):
                     continue
                 if user.first_name.lower() in words_set or user.last_name.lower() in words_set:
                     users.append(_id(user))
-            queryResults = []
-            for r in fcol.find({'$and': [
-                                    query_filter,
-                                    {'tags': {'$in': users}}]}).sort('date', -1):
-                queryResults.append(r)
+            for r in fcol.find({'$and': [query_filter,
+                                         {'tags': {'$in': users}}]}):
+                results.append(r)
 
-            # Join textResults and queryResults, so the result is also sorted
-            # the same way (new to old).
-            textIndex = 0
-            queryIndex = 0
-            while textIndex < len(textResults) or queryIndex < len(queryResults):
-                if textIndex >= len(textResults):
-                    # queryResults list still has objects
-                    yield entity(queryResults[queryIndex])
-                    queryIndex += 1
-                elif queryIndex >= len(queryResults):
-                    # textResults list still has objects
-                    yield entity(textResults[textIndex])
-                    textIndex += 1
-                else:
-                    # two entities at the same position
-                    if textResults[textIndex]['_id'] == queryResults[queryIndex]['_id']:
-                        # same entity
-                        yield entity(textResults[textIndex])
-                        queryIndex += 1
-                        textIndex += 1
-                    elif textResults[textIndex]['date'] < queryResults[queryIndex]['date']:
-                        yield entity(queryResults[queryIndex])
-                        queryIndex += 1
-                    else: # textResults[textIndex]['date'] >= queryResults[queryIndex]['date']
-                        yield entity(textResults[textIndex])
-                        textIndex += 1
+            # The sort key does some magic.
+            # The first element is to sort on type first: albums go first, then
+            # other types (photos): True > False in Python
+            # The second is just a sort on date.
+            # We want to sort on date, but have the albums first in the list.
+            results.sort(key=lambda r: (r['type'] == 'album', r['date']), reverse=True)
+
+            # Remove duplicates.
+            # Note that this has a very small race condition: if the date or
+            # type is changed between the two queries above, the _id may not be
+            # sorted the same. This shouldn't occur in practice.
+            previous = None
+            for r in results:
+                if previous and previous['_id'] == r['_id']:
+                    continue
+                yield entity(r)
+                previous = r
 
             return
 
