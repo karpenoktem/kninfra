@@ -1,6 +1,22 @@
 $sankhara_ip = '10.107.110.2'
 $phassa_ip = '10.107.110.3'
 
+POST_UP_MSG = <<-EOM
+The virtual machines sankhara and phassa should be running:
+
+   http://%{sankhara_ip}
+   KN user: admin    password: %{chucknorris}
+
+To get a shell on sankhara, run `vagrant ssh'.  On the VM, run
+
+    `run-fcgi'                        after changing the site and
+    `sudo salt-call state.highstate'  after changing salt config
+
+See `salt/pillar/vagrant.sls' for other auto-generated passwords.
+EOM
+
+Vagrant.require_version ">= 1.6.0"
+
 # Configuration of vagrant
 def configure_vagrant
     Vagrant.configure(2) do |config|
@@ -45,6 +61,10 @@ def configure_vagrant
             common config, "sankhara"
             config.vm.network :public_network, :bridge => int if int
             config.vm.network :private_network, ip: $sankhara_ip
+
+            config.vm.post_up_message = POST_UP_MSG % {
+                        sankhara_ip: $sankhara_ip,
+                        chucknorris: vagrant_pillar['secrets']['chucknorris'] }
         end
 
         # vagrant plugin install vagrant-cachier
@@ -58,6 +78,14 @@ end
 require 'yaml'
 require 'securerandom'
 
+def vagrant_pillar
+    return YAML.load_file(vagrant_pillar_path)
+end
+
+def vagrant_pillar_path
+    return File.join(File.dirname(__FILE__), 'salt', 'pillar', 'vagrant.sls')
+end
+
 def ensure_pillar_is_generated
     names = ['chucknorris', 'django_secret_key', 'apikey', 'mysql_giedo',
                 'mysql_wiki', 'mysql_wolk', 'mysql_forum', 'mysql_root',
@@ -67,7 +95,7 @@ def ensure_pillar_is_generated
                 'wiki_admin', 'irc_services_secret', 'irc_die_pass',
                 'irc_restart_pass']
 
-    path = File.join(File.dirname(__FILE__), 'salt', 'pillar', 'vagrant.sls')
+    path = vagrant_pillar_path
     return if File.exists?(path) and File.mtime(path) >= File.mtime(__FILE__)
 
     puts 'Generating passwords ...'
