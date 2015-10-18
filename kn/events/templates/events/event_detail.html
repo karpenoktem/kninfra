@@ -1,0 +1,179 @@
+{% extends "events/base.html" %}
+{% load base %}
+
+{% block body %}
+<h1>{{ event.humanName }}</h1>
+<blockquote>{{ event.description_html|safe }}</blockquote>
+<dl>
+    <dt>Datum</dt>
+    <dd>{{ event.when.date }}</dd>
+    {% if event.owner %}
+    <dt>Georganiseerd door</dt>
+    <dd><a href="{{ event.owner.get_absolute_url }}"
+            >{{ event.owner.humanName }}</a></dd>
+    {% endif %}{# event.owner #}
+    {% if event.cost %}
+    <dt>Kosten</dt>
+    <dd>&euro; {{ event.cost }}</dd>
+    {% endif %}{# event.cost #}
+</dl>
+
+{% if not subscribed %}
+{% endif %}{# subscribed #}
+
+{% if may_see_subscriptions %}
+<h2>Aanmeldingen</h2>
+
+{% if event.subscribed %}
+<ol>
+{% for sub in event.subscribed %}
+<li><a href="{{ sub.who.get_absolute_url }}"
+        >{{ sub.who.humanName }}</a>
+    <ul>
+    {% for change in sub.changes %}
+        <li>
+            {% if change.type == 'invited' %}
+                uitgenodigd
+            {% endif %}{# change.type == 'invited' #}
+            {% if change.type == 'subscribed' %}
+                aangemeld
+            {% endif %}{# change.type == 'subscribed' #}
+            {% if change.type == 'confirmed' %}
+                bevestigd
+            {% endif %}{# change.type == 'confirmed' #}
+            {% if change.type == 'unsubscribed' %}
+                afgemeld
+            {% endif %}{# change.type == 'unsubscribed' #}
+            op {{ change.when.date }}
+            {% if change.by %}
+            door <a href="{{ change.by.get_absolute_url }}"
+                    >{{ change.by.humanName }}</a>
+            {% endif %}{# change.by #}
+            {% if change.notes and may_see_notes %}
+            <blockquote>{{ change.notes }}</blockquote>
+            {% endif %}{# change.notes and may_see_notes #}
+        </li>
+    {% endfor %}{# change in sub.changes #}
+    </ul>
+</li>
+{% endfor %} {# sub in event.subscribed #}
+</ol>
+{% else %}{# event.subscribed #}
+    <p>Er zijn geen aanmeldingen.</p>
+{% endif %}{# event.subscribed #}
+
+{% if event.reservists %}
+<h2>Reservelijst</h2>
+<ol>
+{% for sub in event.reservists %}
+<li><a href="{{ sub.who.get_absolute_url }}"
+        >{{ sub.who.humanName }}</a>
+    <ul>
+    {% for change in sub.changes %}
+        <li>
+            {% if change.type == 'invited' %}
+                uitgenodigd
+            {% endif %}{# change.type == 'invited' #}
+            {% if change.type == 'subscribed' %}
+                aangemeld
+            {% endif %}{# change.type == 'subscribed' #}
+            {% if change.type == 'confirmed' %}
+                bevestigd
+            {% endif %}{# change.type == 'confirmed' #}
+            {% if change.type == 'unsubscribed' %}
+                afgemeld
+            {% endif %}{# change.type == 'unsubscribed' #}
+            op {{ change.when.date }}
+            {% if change.by %}
+            door <a href="{{ change.by.get_absolute_url }}"
+                    >{{ change.by.humanName }}</a>
+            {% endif %}{# change.by #}
+            {% if change.notes and may_see_notes %}
+            <blockquote>{{ change.notes }}</blockquote>
+            {% endif %}{# change.notes and may_see_notes #}
+        </li>
+    {% endfor %}{# change in sub.changes #}
+    </ul>
+</li>
+{% endfor %} {# sub in event.reservists #}
+</ol>
+{% endif %}{# event.reservists #}
+
+{% if event.unconfirmed %}
+<h2>Onbevestigd</h2>
+<ul>
+{% for sub in event.unconfirmed %}
+<li><a href="{{ sub.who.get_absolute_url }}"
+        >{{ sub.who.humanName }}</a>
+    <ul>
+    {% for change in sub.changes %}
+        <li>
+            {% if change.type == 'invited' %}
+                uitgenodigd
+            {% endif %}{# change.type == 'invited' #}
+            {% if change.type == 'subscribed' %}
+                aangemeld
+            {% endif %}{# change.type == 'subscribed' #}
+            {% if change.type == 'confirmed' %}
+                bevestigd
+            {% endif %}{# change.type == 'confirmed' #}
+            {% if change.type == 'unsubscribed' %}
+                afgemeld
+            {% endif %}{# change.type == 'unsubscribed' #}
+            op {{ change.when.date }}
+            {% if change.by %}
+            door <a href="{{ change.by.get_absolute_url }}"
+                    >{{ change.by.humanName }}</a>
+            {% endif %}{# change.by #}
+            {% if change.notes and may_see_notes %}
+            <blockquote>{{ change.notes }}</blockquote>
+            {% endif %}{# change.notes and may_see_notes #}
+        </li>
+    {% endfor %}{# change in sub.changes #}
+    </ul>
+</li>
+{% endfor %} {# sub in event.unconfirmed #}
+</ul>
+{% endif %}{# event.unconfirmed #}
+
+{% if event.unsubscribed %}
+<h2>Afmeldingen</h2>
+<ul>
+{% for sub in event.unsubscribed %}
+<li><a href="{{ sub.who.get_absolute_url }}"
+        >{{ sub.who.humanName }}</a>
+    <ul>
+    {% for change in sub.changes %}
+        <li>
+            {% if change.type == 'invited' %}
+                uitgenodigd
+            {% endif %}{# change.type == 'invited' #}
+            {% if change.type == 'subscribed' %}
+                aangemeld
+            {% endif %}{# change.type == 'subscribed' #}
+            {% if change.type == 'confirmed' %}
+                bevestigd
+            {% endif %}{# change.type == 'confirmed' #}
+            {% if change.type == 'unsubscribed' %}
+                afgemeld
+            {% endif %}{# change.type == 'unsubscribed' #}
+            op {{ change.when.date }}
+            {% if change.by %}
+            door <a href="{{ change.by.get_absolute_url }}"
+                    >{{ change.by.humanName }}</a>
+            {% endif %}{# change.by #}
+            {% if change.notes and may_see_notes %}
+            <blockquote>{{ change.notes }}</blockquote>
+            {% endif %}{# change.notes and may_see_notes #}
+        </li>
+    {% endfor %}{# change in sub.changes #}
+    </ul>
+</li>
+{% endfor %} {# sub in event.unsubscribed #}
+</ul>
+{% endif %}{# event.unsubscribed #}
+
+
+{% endif %}{# may_see_subscriptions #}
+{% endblock %}
+{# vim: set et sta bs=2 sw=4 : #}

@@ -1,0 +1,12 @@
+{% extends "leden/base.html" %}
+
+{% block head %}
+{{ block.super }}
+<script type="text/javascript"
+        src="{{ MEDIA_URL }}events/common.js"></script>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+var events_api_url = "{% url "events-api" %}";
+{% endblock %}

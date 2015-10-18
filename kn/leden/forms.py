@@ -34,7 +34,7 @@ class EntityChoiceFieldWidget(forms.TextInput):
                 });//--></script>'''
                 %{'name': json.dumps(name),
                   'id': json.dumps(final_attrs['id']),
-                  'params': json.dumps({'type': self.type}),
+                  'params': json.dumps({'type': self.type, 'attrs': final_attrs}),
                   'code_set_value': code_set_value})
 
 
@@ -45,7 +45,8 @@ class EntityChoiceField(forms.CharField):
             del kwargs['_type']
         else:
             _type = None
-        kwargs['widget'] = EntityChoiceFieldWidget(_type=_type)
+        if kwargs.get('widget') is None:
+            kwargs['widget'] = EntityChoiceFieldWidget(_type=_type)
         super(EntityChoiceField, self).__init__(*args, **kwargs)
 
 class AddUserForm(forms.Form):

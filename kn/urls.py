@@ -12,6 +12,7 @@ urlpatterns = [
                 name='groupfolder'),
     url(r'^smoelen/', include('kn.leden.urls')),
     url(r'^activiteit/', include('kn.subscriptions.urls')),
+    url(r'^activiteit2/', include('kn.events.urls')),
     url(r'^reglementen/', include('kn.reglementen.urls')),
     url(r'^poll/', include('kn.poll.urls')),
     url(r'^accounts/login/$', auth.views.login, name='login'),
