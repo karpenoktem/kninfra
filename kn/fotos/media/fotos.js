@@ -423,35 +423,8 @@
       return false;
     }.bind(this));
 
-    $('#foto').show();
-  };
-
-  KNF.prototype.update_foto_src = function (foto) {
-    var srcset = foto.large + " 1x, " +
-                 foto.large2x + " 2x";
-    $('#foto .img')
-        .attr('srcset', srcset)
-        .attr('src', foto.large);
-  };
-
-  KNF.prototype.show_sidebar = function() {
-    this.sidebar = true;
-    $('html').addClass('foto-sidebar');
-
+    // Define these events here, not in show_sidebar, otherwise they fire twice.
     var sidebar = $('#foto .sidebar');
-    $('.title', sidebar)
-        .val(this.foto.title)
-        .attr('placeholder', this.foto.name);
-    if (this.foto.description)
-      $('.description', sidebar)
-          .val(this.foto.description);
-    $('select.visibility', sidebar)
-        .val(this.foto.visibility);
-
-    this.update_foto_tags(sidebar);
-
-    this.onresize();
-
     $('form', sidebar)
         .submit(function() {
           this.save_metadata();
@@ -485,6 +458,35 @@
           this.rotate(90);
           return false;
         }.bind(this));
+
+    $('#foto').show();
+  };
+
+  KNF.prototype.update_foto_src = function (foto) {
+    var srcset = foto.large + " 1x, " +
+                 foto.large2x + " 2x";
+    $('#foto .img')
+        .attr('srcset', srcset)
+        .attr('src', foto.large);
+  };
+
+  KNF.prototype.show_sidebar = function() {
+    this.sidebar = true;
+    $('html').addClass('foto-sidebar');
+
+    var sidebar = $('#foto .sidebar');
+    $('.title', sidebar)
+        .val(this.foto.title)
+        .attr('placeholder', this.foto.name);
+    if (this.foto.description)
+      $('.description', sidebar)
+          .val(this.foto.description);
+    $('select.visibility', sidebar)
+        .val(this.foto.visibility);
+
+    this.update_foto_tags(sidebar);
+
+    this.onresize();
   };
 
   KNF.prototype.update_foto_tags = function(sidebar) {
