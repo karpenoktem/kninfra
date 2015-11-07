@@ -16,6 +16,7 @@ kninfra packages:
             - python-googleapi
             - python-ldap
             - python-smbpasswd
+            - python-m2crypto
 mirte:
     pip.installed
 sarah:
