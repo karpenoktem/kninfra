@@ -1,0 +1,9 @@
+{% extends "leden/base.html" %}
+{% load base %}
+
+{% block body %}
+<h1>Statistieken</h1>
+
+<img src="{% url "graph-member-count" %}" />
+
+{% endblock %}
