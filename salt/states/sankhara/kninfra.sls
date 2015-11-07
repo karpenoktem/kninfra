@@ -17,6 +17,7 @@ kninfra packages:
             - python-ldap
             - python-smbpasswd
             - python-m2crypto
+            - python-pyx
 mirte:
     pip.installed
 sarah:
