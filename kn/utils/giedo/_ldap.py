@@ -4,9 +4,12 @@ import ldap
 
 import kn.leden.entities as Es
 
-from kn import settings
+from django.conf import settings
 
 def generate_ldap_changes(giedo):
+    if not settings.LDAP_PASS:
+        logging.warning('ldap: no credentials available, skipping')
+        return None
     todo = {'upsert': [], 'remove': []}
     l = ldap.open(settings.LDAP_HOST)
     l.bind_s(settings.LDAP_USER, settings.LDAP_PASS)

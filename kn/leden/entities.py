@@ -4,24 +4,140 @@ import datetime
 import functools
 import email.utils
 
+from django.conf import settings
 from django.db.models import permalink
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
-from kn.settings import DT_MIN, DT_MAX, MAILDOMAIN
 from kn.base._random import pseudo_randstr
-from kn import settings
 
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
+
+# ######################################################################
 # The collections
 # ######################################################################
 ecol = db['entities']   # entities: users, group, tags, studies, ...
+
+# Example of a user
+# ----------------------------------------------------------------------
+# {"_id" : ObjectId("4e6fcc85e60edf3dc0000270"),
+#  "addresses" : [ { "city" : "Nijmegen",
+#                    "zip" : "...",
+#                    "number" : "...",
+#                    "street" : "...",
+#                    "from" : ISODate("2004-..."),
+#                    "until" : DT_MAX) } ],
+#   "types" : [ "user" ],
+#   "names" : [ "giedo" ],
+#   "humanNames" : [ { "human" : "Giedo Jansen" } ],
+#   "person" : { "given" : null,
+#                "family" : "Jansen",
+#                "nick" : "Giedo",
+#                "gender" : "m",
+#                "dateOfBirth" : ISODate("..."),
+#                "titles" : [ ] },
+#   "is_active" : 0,
+#   "emailAddresses" : [ { "email" : "...",
+#                          "from" : ISODate("2004-08-31T00:00:00Z"),
+#                          "until" : DT_MAX } ],
+#   "password" : {"hash" : "...","salt" : "...", "algorithm" : "sha1" },
+#   "studies" : [ { "institute" : ObjectId("4e6fcc85e60edf3dc000001d"),
+#                   "study" : ObjectId("4e6fcc85e60edf3dc0000030"),
+#                   "number" : "...",
+#                   "from" : ...,
+#                   "until" : DT_MAX } ],
+#   "telephones" : [ { "number" : "...",
+#                      "from" : ISODate("2004-08-31T00:00:00Z"),
+#                      "until" : ISODate("5004-09-01T00:00:00Z") } ] },
+#   "preferences" : {
+#       "visibility" : {
+#           "telephone" : false
+#       }
+#   }
+# }
+
+# Example of a tag
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000004"),
+#   "types" : [ "tag" ],
+#   "names" : [ "!year-group" ],
+#   "humanNames" : [ { "name" : "!year-group", "human" : "Jaargroep" } ],
+#   "tags" : [ ObjectId("4e6fcc85e60edf3dc0000000") ]
+# }
+
+# Example of a study
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000033"),
+#   "humanNames" : [ { "human" : "Geschiedenis" } ],
+#   "types" : [ "study" ]
+# }
+
+# Example of an institute
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000016"),
+#   "humanNames" : [ { "human" : "Radboud Universiteit Nijmegen" } ],
+#   "types" : [ "institute" ]
+# }
+
+# Example of a group
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000067"),
+#   "types" : [ "group", "tag" ],
+#   "description" : "Het bestuur",
+#   "names" : [ "bestuur", "bestuul", "parkhangen", "festivals", "b" ],
+#   "humanNames" : [ { "name" : "bestuur",
+#                      "human" : "Bestuur",
+#                      "genitive_prefix" : "van het" } ],
+#   "tags" : [ ObjectId("4e6fcc85e60edf3dc0000004") ]
+# }
+
+# Example of a brand
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000bcb"),
+#   "types" : [ "brand" ],
+#   "tags" : [ ObjectId("4e6fcc85e60edf3dc0000003") ],
+#   "humanNames" : [ { "human" : "Vice-voorzitter" } ],
+#   "sofa_suffix" : "vicevoorzitter",
+#   "names" : [ ]
+# }
+
 rcol = db['relations']  # relations: "giedo is chairman of bestuur from
-            #             date A until date B"
-mcol = db['messages']   # message: used for old code
+                        #             date A until date B"
+# Example of a brand
+# ----------------------------------------------------------------------
+# This is the relation: "mike is chair (voorzitter) of the soco from
+#   2012-02-07 to 2013-03-11, but he should not be put in soco9
+#   (which is forced by the year-override tag)". 
+# { "_id" : ObjectId("4f3086270032a05bfd000005"),
+#   "from" : ISODate("2012-02-07T03:02:15.130Z"),
+#   "how" : ObjectId("4e6fcc85e60edf3dc0000bc8"),
+#   "tags" : [ ObjectId("5038e25b0032a04438000000") ],
+#   "until" : ISODate("2013-03-11T20:16:36.203Z"),
+#   "who" : ObjectId("4e6fcc85e60edf3dc0000356"),
+#   "with" : ObjectId("4e6fcc85e60edf3dc0000077")
+# }
+
 ncol = db['notes']      # notes on entities by the secretaris
+# Example of a note
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e99b5460032a006e3000013"),
+#   "on" : ObjectId("4e6fcc85e60edf3dc000029d"),
+#   "closed_by" : ObjectId("4e6fcc85e60edf3dc00001d4"),
+#   "note" : "Adres veranderd. Was:  (...) Nijmegen",
+#   "at" : ISODate("2011-03-24T00:00:00Z"),
+#   "closed_at" : ISODate("2012-08-25T14:53:17.413Z"),
+#   "open" : false,
+#   "by" : ObjectId("4e6fcc85e60edf3dc0000410")
+# }
+
 pcol = db['push_changes'] # Changes to be pushed to remote systems
+# TODO add example
+
 incol = db['informacie_notifications'] # human readable list of notifications 
                                         #for informacie group
+# TODO add example
+
 def get_hexdigest(algorithm, salt, raw_password):
     assert algorithm == 'sha1'
     return hashlib.sha1(salt + raw_password).hexdigest()
@@ -46,8 +162,6 @@ def ensure_indices():
     rcol.ensure_index('tags', sparse=True)
     rcol.ensure_index([('until',1),
                ('from',-1)])
-    # messages
-    mcol.ensure_index('entity')
     # notes
     ncol.ensure_index([('on', 1),
                        ('at', 1)])
@@ -103,7 +217,10 @@ def id_by_name(n, use_cache=False):
         if n in __id2name_cache:
             ret =  __id2name_cache[n]
     if ret is None:
-        ret = ecol.find_one({'names': n}, {'names':1})['_id']
+        obj = ecol.find_one({'names': n}, {'names':1})
+        if obj is None:
+            return None
+        ret = obj['_id']
         if use_cache:
             __id2name_cache[n] = ret
     return ret
@@ -146,6 +263,7 @@ def by_name(n):
 
 def by_id(n):
     """ Finds an entity by id """
+    if n is None: return None
     return entity(ecol.find_one({'_id': _id(n)}))
 
 def by_study(study):
@@ -175,9 +293,22 @@ def get_years_of_birth():
 
 def by_year_of_birth(year):
     """ Finds entities by year of birth """
-    for m in ecol.find({'person.dateOfBirth': {
+    for m in ecol.find({'types': 'user',
+                        'person.dateOfBirth': {
                                 '$lt': datetime.datetime(year + 1, 1, 1),
                                 '$gte': datetime.datetime(year, 1, 1) }}):
+        yield entity(m)
+
+def by_age(max_age=None):
+    """ Finds entities under a certain age """
+    # This function could be extended to allow for a range of ages (e.g. adding
+    # a min_age argument)
+    date = datetime.date.today()
+    date = date.replace(year=date.year-max_age)
+    dt = datetime.datetime.combine(date, datetime.time(0, 0, 0, 0))
+    for m in ecol.find({'types': 'user',
+                        'person.dateOfBirth': {
+                                '$gt': dt}}):
         yield entity(m)
 
 def all():
@@ -319,6 +450,8 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
         deref_how=False):
     """ Find relations matching any one of @queries.
         See @query_relations. """
+    if not queries:
+        return []
     bits = []
     for query in queries:
         for attr in ('with', 'how', 'who'):
@@ -480,14 +613,15 @@ def get_open_notes():
 # Functions to work with informacie-notifications
 # ######################################################################
 
-def notify_informacie(event, entity=None, relation=None):
+def notify_informacie(event, user, entity=None, relation=None):
     data = {'when': now(), 'event': event}
+    data['user'] = _id(user)
     if relation is not None:
         data['rel'] = _id(relation)
     elif entity is not None:
         data['entity'] = _id(entity)
     else:
-        raise ValueError, 'supply either entity or relation'
+        raise ValueError('supply either entity or relation')
     incol.insert(data)
 
 def pop_all_informacie_notifications():
@@ -731,6 +865,35 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def update_visibility_preference(self, key, value, save=True):
+        """ Update a single visibility preference """
+
+        if 'preferences' not in self._data:
+            self._data['preferences'] = {}
+        preferences = self._data['preferences']
+
+        if 'visibility' not in preferences or type(preferences['visibility']) == list:
+            preferences['visibility'] = {}
+        visprefs = preferences['visibility']
+
+        visprefs[key] = value
+
+        if save:
+            self.save()
+
+    def set_humanName(self, humanName, save=True):
+        if len(self._data['humanNames']) < 1:
+            # does not appear to occur in practice
+            raise ValueError('there are no humanNames yet')
+        self._data['humanNames'][0]['human'] = humanName
+        if save:
+            self.save()
+
+    def set_description(self, description, save=True):
+        self._data['description'] = description
+        if save:
+            self.save()
+
     @property
     def canonical_full_email(self):
         """ Returns the string
@@ -747,7 +910,7 @@ class Entity(SONWrapper):
         if self.type in ('institute', 'study', 'brand', 'tag'):
             return None
         name = str(self.name if self.name else self.id)
-        return "%s@%s" % (name, MAILDOMAIN)
+        return "%s@%s" % (name, settings.MAILDOMAIN)
 
     @property
     def got_mailman_list(self):
@@ -825,6 +988,7 @@ class Group(Entity):
     @property
     def is_virtual(self):
         return 'virtual' in self._data
+
 class User(Entity):
     def __init__(self, data):
         super(User,self).__init__(data)
@@ -856,6 +1020,8 @@ class User(Entity):
     @property
     def humanName(self):
         return self.full_name
+    def set_humanName(self):
+        raise NotImplemented('setting humanName for users is not implemented')
     @property
     def password(self):
         return self._data.get('password', None)
@@ -865,14 +1031,17 @@ class User(Entity):
     def is_authenticated(self):
         # required by django's auth
         return True
-    def push_message(self, msg):
-        mcol.insert({'entity': self._id,
-                 'data': msg})
-    def pop_messages(self):
-        msgs = list(mcol.find({'entity': self._id}))
-        mcol.remove({'_id': {'$in': [m['_id'] for m in msgs]}})
-        return [m['data'] for m in msgs]
-    get_and_delete_messages = pop_messages
+    # Required by Django's auth. framework
+    @property
+    def pk(self):
+        return str(_id(self))
+    def get_username(self):
+        # implements Django's User object
+        return str(self.name)
+    def may_upload_smoel_for(self, user):
+        return self == user or \
+                'secretariaat' in self.cached_groups_names or \
+                'bestuur' in self.cached_groups_names
     @property
     def primary_email(self):
         # the primary email address is always the first one;
@@ -980,6 +1149,13 @@ class User(Entity):
     def dateOfBirth(self):
         return self._data.get('person',{}).get('dateOfBirth')
     @property
+    def age(self):
+        # age is a little difficult to calculate because of leap years
+        # see http://stackoverflow.com/a/9754466
+        today = datetime.date.today()
+        born = self.dateOfBirth
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    @property
     def got_unix_user(self):
         if 'has_unix_user' in self._data:
             return self._data['has_unix_user']
@@ -1006,6 +1182,14 @@ class User(Entity):
                 a['until'] = None
             ret.append(a)
         return ret
+
+    @property
+    def preferences(self):
+        return self._data.get('preferences', {})
+
+    @property
+    def visibility(self):
+        return self.preferences.get('visibility', {})
 
 class Tag(Entity):
     @permalink
@@ -1091,8 +1275,8 @@ class InformacieNotification(SONWrapper):
     def __init__(self, data):
         super(InformacieNotification, self).__init__(data, incol)
 
-    def event(self):
-        return self._data.get('event')
+    def user(self):
+        return by_id(self._data['user'])
 
     def rel(self):
         return relation_by_id(self._data['rel'])
@@ -1100,6 +1284,7 @@ class InformacieNotification(SONWrapper):
     def entity(self):
         return by_id(self._data['entity'])
 
+    event = son_property(('event', ))
     when = son_property(('when', ))
 
 class PushChange(SONWrapper):

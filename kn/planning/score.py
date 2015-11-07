@@ -175,7 +175,7 @@ preferences = {
 }}
 
 def planning_vacancy_worker_score(vacancy, worker):
-    un = worker.username
+    un = str(worker.name)
     pn = vacancy.pool.name
     if pn not in preferences or un not in preferences[pn]:
         # If the preferences of a worker have not been set,

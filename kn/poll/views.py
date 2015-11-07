@@ -2,6 +2,7 @@ import datetime
 
 from django import forms
 from django.http import Http404
+from django.contrib import messages
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.forms.formsets import formset_factory
@@ -51,9 +52,9 @@ def vote(request, name):
             form = create_questionForm(question)(**form_kwargs)
         forms.append(form)
     if request.method == 'POST' and not poll.is_open:
-        request.user.push_message("De enquete is gesloten")
+        messages.error(request, "De enquete is gesloten")
     elif allValid and request.method == 'POST':
-        request.user.push_message('Veranderingen opgeslagen!')
+        messages.info(request, "Veranderingen opgeslagen!")
         for q_id, form in enumerate(forms):
             filling.answers[q_id] = int(form.cleaned_data['answer'])
         filling.date = datetime.datetime.now()

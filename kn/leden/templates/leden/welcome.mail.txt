@@ -16,7 +16,7 @@ overgenomen.  Kun je controleren of deze kloppen?
 
 Bij voorbaat dank,
 
-  Jeffry Huntjens
+  Bas van Wijk
 
 
 Personalia  {{ u.full_name }}

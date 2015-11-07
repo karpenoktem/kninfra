@@ -2,9 +2,10 @@ import logging
 
 from tarjan.tc import tc
 
+from django.conf import settings
+
 import kn.leden.entities as Es
 from kn.leden.date import now
-from kn.settings import LISTS_MAILDOMAIN, MAILDOMAIN
 
 # TODO (issue #7) handle cycles properly.
 
@@ -19,19 +20,19 @@ def generate_postfix_map(giedo):
             continue
         id2email[e._id] = e.canonical_email
         for nm in e.other_names:
-            tbl["%s@%s" % (nm, MAILDOMAIN)] = (e.canonical_email,)
+            tbl["%s@%s" % (nm, settings.MAILDOMAIN)] = (e.canonical_email,)
         if e.type == 'user':
             tbl[e.canonical_email] = (e.primary_email,)
         elif e.type == 'group':
             if e.got_mailman_list and e.name:
                 tbl[e.canonical_email] = ('%s@%s' % (
-                    str(e.name), LISTS_MAILDOMAIN),)
+                    str(e.name), settings.LISTS_MAILDOMAIN),)
             else:
                 tbl[e.canonical_email] = []
                 non_mailman_groups[e._id] = e
         else:
             logging.warn("postfix: unhandled type: %s" % e.type)
-        id_email = "%s@%s" % (e.id, MAILDOMAIN)
+        id_email = "%s@%s" % (e.id, settings.MAILDOMAIN)
         if not id_email in tbl:
             tbl[id_email] = (e.canonical_email,)
     # handle the non-mailman groups
@@ -100,7 +101,7 @@ def generate_postfix_slm_map(giedo):
     for name, users in tbl.iteritems():
         if not users:
             continue
-        ret["%s@%s" % (name, MAILDOMAIN)] = tuple(users)
+        ret["%s@%s" % (name, settings.MAILDOMAIN)] = tuple(users)
     return ret
 
 # vim: et:sta:bs=2:sw=4:

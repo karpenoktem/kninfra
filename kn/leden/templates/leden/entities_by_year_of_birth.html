@@ -9,12 +9,12 @@
 </ul>
 
 {% if previous_year %}
-<a href="{% url entities-by-year-of-birth year=previous_year %}"
+<a href="{% url "entities-by-year-of-birth" year=previous_year %}"
                 >&laquo; {{ previous_year }}</a>
 {% endif %}
-<a href="{% url years-of-birth %}">geboortejaren</a>
+<a href="{% url "years-of-birth" %}">geboortejaren</a>
 {% if next_year %}
-<a href="{% url entities-by-year-of-birth year=next_year %}"
+<a href="{% url "entities-by-year-of-birth" year=next_year %}"
                 >{{ next_year }} &raquo;</a>
 {% endif %}
 

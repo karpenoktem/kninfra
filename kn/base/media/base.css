@@ -26,6 +26,19 @@ body {
 	}
 }
 
+
+/* generic classes */
+
+.toggle-window {
+	position: absolute;
+	left: auto;
+        display: none;
+}
+.toggle.toggle-open .toggle-window {
+        display: block;
+}
+
+
 /* header */
 #header {
 	z-index: 5;
@@ -196,9 +209,9 @@ body {
 	color: #404040;
 	font-variant: small-caps;
 	font-family: sans-serif;
-	margin-bottom: 0;
 	padding: 4px 0;
-	margin: 0;
+	margin-top: 0;
+	margin-bottom: 1rem;
 }
 #content h1 a {
 	color: #404040;
@@ -231,10 +244,12 @@ body {
 }
 
 #submenu {
+	position: static;
 	display: inline-block;
 	margin: 0;
 	line-height: 1;
 	padding: 0;
+	left: auto;
 }
 
 #submenu li {
@@ -327,7 +342,7 @@ body {
 		border-radius: 2px;
 		background: white url('menu.svg') no-repeat 8px 4px;
 	}
-	#submenu-wrapper.open a#submenu-button {
+	#submenu-wrapper.toggle-open a#submenu-button {
 		border-bottom-color: white;
 		border-radius: 2px 2px 0 0;
 	}
@@ -342,7 +357,7 @@ body {
 		padding: 16px 12px;
 		border: 1px solid rgba(127, 127, 127, 0.5);
 	}
-	#submenu-wrapper.open #submenu {
+	#submenu-wrapper.toggle-open #submenu {
 		left: auto;
 		right: 0;
 	}
@@ -415,16 +430,14 @@ textarea {
 
 #loginButtonLink:hover img {
 	-webkit-filter: brightness(115%);
+	filter: brightness(115%);
 }
-#loginButton.open #loginButtonLink img {
+#loginButton.toggle-open #loginButtonLink img {
 	-webkit-filter: brightness(150%);
+	filter: brightness(150%);
 }
 
 #loginWindow {
-	display: none;
-
-	position: absolute;
-	top: auto;
 	right: -12px;
 	margin-top: 8px;
 	max-width: 290px;
@@ -437,10 +450,6 @@ textarea {
 	color: #afafaf;
 	text-transform: none;
 	font-variant: normal;
-}
-
-#loginButton.open #loginWindow {
-	display: block;
 }
 
 @media screen and (max-width: 800px) {

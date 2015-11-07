@@ -1,6 +1,8 @@
 # vim: et:sta:bs=2:sw=4:
 # checks for inconsistencies
 
+from __future__ import absolute_import
+
 import _import
 from common import *
 from datetime import datetime, date

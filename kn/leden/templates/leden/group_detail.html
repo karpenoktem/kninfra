@@ -2,9 +2,7 @@
 {% load base %}
 {% load leden %}
 
-{% block body %}
-<h1>{{ object.humanName }}</h1>
-<p>{{ object.description }}</p>
+{% block entity_body %}
 <dl>
 	<dt>Korte namen</dt>
 	<dd>
@@ -42,16 +40,27 @@
         {% endfor %}{# pipo in pipos #}
         </dd>
         {% endif %}{# pipos #}
+
+        {% if reps %}
+        <dt>Vertegenwoordiger{% if reps|length > 1 %}s{% endif %}</dt>
+        <dd>
+        {% for rep in reps %}
+        {% if not forloop.first %}<br/>{% endif %}
+        <a href="{{ rep.who.get_absolute_url }}">{{ rep.who.humanName }}</a>
+        {{ rep|rel_when }}
+        {% endfor %}{# rep in reps #}
+        </dd>
+        {% endif %}{# reps #}
 </dl>
 {% if isFreeToJoin %}
 {% if relation_with_group %}
-<form action="{% url relation-end _id=relation_with_group %}"
+<form action="{% url "relation-end" _id=relation_with_group %}"
         style="display:inline" method="post">
 {% csrf_token %}
 <input type="submit" value="Verlaat" />
 </form>
 {% else %}
-<form action="{% url relation-begin %}" method="POST">
+<form action="{% url "relation-begin" %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="with" value="{{ object.id }}" />
         <input type="hidden" name="how" value="null" />
@@ -60,5 +69,4 @@
 </form>
 {% endif %}
 {% endif %}
-{{ block.super }}
-{% endblock %}
+{% endblock entity_body %}

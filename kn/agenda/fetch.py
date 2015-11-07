@@ -1,47 +1,80 @@
-from datetime import datetime, timedelta
+#!/usr/bin/python
+
+from django.conf import settings
+
+import json
+import datetime
+import httplib2
+
 from iso8601 import parse_date
 
-import gdata
-import gdata.calendar
-import gdata.calendar.service
+try:
+    # Debian package python-googleapi
+    from apiclient.discovery import build
+except ImportError:
+    # pip package google-api-python-client
+    from googleapiclient.discovery import build
+from oauth2client.client import SignedJwtAssertionCredentials
 
-DEFAULT_CID = 'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com'
+# How to configure the agenda:
+#
+#  - Go to https://console.developers.google.com/project and make a new project.
+#  - Under APIs & auth / APIs, enable the Calendar API (you can disable all
+#    other APIs).
+#  - Under APIs & auth / Credentials, create a new Client ID, with type
+#    Service account.
+#  - Download a key using 'Generate new JSON key' and remove the p12 key file
+#    and fingerprint.
+#  - Store the JSON file in a safe location (it should not be public) and
+#    update settings.py to point to it (GOOGLE_OAUTH2_KEY is the path to the
+#    JSON file).
+#
+# Note that this script itself should be run with the repository (for example
+# /home/infra/repo) in PYTHONPATH.
 
-def parse_date_range(start, end):
-    """ Ugly hack to properly parse gdata date ranges """
-    hack_on_end = False
-    if start.find('T') == -1:
-        start += 'T00:00:00.000'
-    if end.find('T') == -1:
-        end += 'T23:59:59.000'
-        hack_on_end = True
-    if hack_on_end:
-        the_end_date = parse_date(end) - timedelta(1,0,0)
-    else:
-        the_end_date = parse_date(end)
-    return (parse_date(start),
-            the_end_date )
+# See https://developers.google.com/api-client-library/python/apis/calendar/v3
+# for documentation about the APIs used here.
 
-def fetch(cid=None):
-    # TODO move to settings.py
-    if cid is None:
-        cid = DEFAULT_CID
-    r = []
-    now = datetime.now()
-    cs = gdata.calendar.service.CalendarService()
-    q = gdata.calendar.service.CalendarEventQuery(cid, 'public', 'full')
-    q.start_min = "%s-%s-%s" % (now.year,
-                                str(now.month).zfill(2),
-                                str(now.day).zfill(2))
-    feed = cs.CalendarQuery(q)
-    for i, an_event in enumerate(feed.entry):
-        if not an_event.when:
-            continue
-        r.append((an_event.title.text,
-                  an_event.content.text,)+
-                  parse_date_range(an_event.when[0].start_time,
-                  an_event.when[0].end_time))
-    return r
+def get_credentials():
+    key = json.loads(open(settings.GOOGLE_OAUTH2_KEY, 'r').read())
+    return SignedJwtAssertionCredentials(
+                    service_account_name=key['client_email'],
+                    private_key=key['private_key'],
+                    scope='https://www.googleapis.com/auth/calendar.readonly',
+                    user_agent='Karpe Noktem agenda fetcher')
+
+def parse_item_date(date):
+    # dateTime: specific time
+    if 'dateTime' in date:
+        return parse_date(date['dateTime'])
+    # date: all-day event
+    return parse_date(date['date']+'T00:00:00Z')
+
+
+def fetch_agenda(h, cal_id):
+    timeMin = datetime.datetime.utcnow().date().isoformat() + 'T00:00:00Z'
+    cal = build('calendar', 'v3', http=h)
+    request = cal.events().list(calendarId=cal_id,
+                                timeMin=timeMin,
+                                fields='items(summary,description,start,end)')
+    response = request.execute()
+    agenda = []
+    for item in response['items']:
+        agenda.append((item['summary'], item.get('description', ''),
+                       parse_item_date(item['start']),
+                       parse_item_date(item['end'])))
+    return agenda
+
+def fetch():
+    h = httplib2.Http()
+    credentials = get_credentials()
+    credentials.authorize(h)
+
+    agendas = {}
+    for key, cal_id in settings.GOOGLE_CALENDAR_IDS.items():
+        agendas[key] = fetch_agenda(h, cal_id)
+    return agendas
+
 
 if __name__ == '__main__':
     from kn.agenda.entities import update

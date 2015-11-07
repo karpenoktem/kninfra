@@ -10,6 +10,8 @@ import imp
 import os.path
 import warnings
 
+import django
+
 def setup_virtual_package(name, path=os.curdir):
     """ Sets up a package at the given path with a given
         name """
@@ -21,8 +23,9 @@ def setup_virtual_package(name, path=os.curdir):
 
 
 if __name__ != '__main__':
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'kn.settings'
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kn.settings")
     path = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(
         os.path.realpath(__file__[:-1] if __file__[-4:] in
             ('.pyc', '.pyo') else __file__))), '../kn'))
     setup_virtual_package('kn', path)
+    django.setup()

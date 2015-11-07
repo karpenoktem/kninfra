@@ -1,4 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
+from __future__ import absolute_import
+
 import _import
 try:
     import Mailman.MailList
@@ -8,6 +10,7 @@ except ImportError:
 import time
 import datetime
 import kn.leden.entities as Es
+import kn.fotos.entities as fEs
 import kn.reglementen.entities as regl_Es
 import kn.poll.entities as poll_Es
 import kn.subscriptions.entities as subscr_Es
@@ -15,7 +18,8 @@ from kn.leden.mongo import _id, ObjectId
 from kn.leden import giedo
 from kn.leden.date import now
 from kn.utils.mailman import import_mailman
-from kn.settings import DT_MIN, DT_MAX
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
 
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
     """ Queries relations """

@@ -1,6 +1,7 @@
 var collapsedHeaderHeight = 70;
 var headerHeight = 400;
 var headerCollapsed = true;
+var expandHeader = true;
 
 function email(t, d, u) {
     var email = u + '@' + d + '.' + t;
@@ -88,60 +89,60 @@ $(document).ready(function() {
         return false;
     });
 
-    /* reduce flicker on page load by loading the page with the header collapsed
-     * and expanding it with JS while scrolling to the right position */
-    $(document.body).addClass('header-expanded');
-    var headerFixedThreshold = headerHeight - collapsedHeaderHeight;
+    if (expandHeader) {
+        /* reduce flicker on page load by loading the page with the header collapsed
+         * and expanding it with JS while scrolling to the right position */
+        $(document.body).addClass('header-expanded');
+        var headerFixedThreshold = headerHeight - collapsedHeaderHeight;
 
-    // Skip to content after first view.
-    // Scrolling needs the media queries to work. Media queries don't work in
-    // IE8, and getComputedStyle doesn't work either so this is a test to
-    // exclude old browsers.
-    if (sessionStorage['visited'] && window.getComputedStyle &&
-        getComputedStyle(document.body).paddingTop == headerHeight + "px") {
-        $(document.body).addClass('viewedBefore');
-        // <html> for Firefox, <body> for other browsers
-        document.documentElement.scrollTop = headerFixedThreshold;
-        document.body.scrollTop = headerFixedThreshold;
-    }
-    sessionStorage['visited'] = 'true';
+        // Skip to content after first view.
+        // Scrolling needs the media queries to work. Media queries don't work in
+        // IE8, and getComputedStyle doesn't work either so this is a test to
+        // exclude old browsers.
+        if (sessionStorage['visited'] && window.getComputedStyle &&
+            getComputedStyle(document.body).paddingTop == headerHeight + "px") {
+            $(document.body).addClass('viewedBefore');
+            // <html> for Firefox, <body> for other browsers
+            document.documentElement.scrollTop = headerFixedThreshold;
+            document.body.scrollTop = headerFixedThreshold;
+        }
 
-    function fixHeader() {
-        var shouldBeCollapsed = $(window).scrollTop() > headerFixedThreshold;
-        if (headerCollapsed !== shouldBeCollapsed) {
-            // don't touch the DOM if that's not needed!
-            headerCollapsed = shouldBeCollapsed;
-            if (shouldBeCollapsed) {
-                $('#header').addClass('fixed');
-            } else {
-                $('#header').removeClass('fixed');
+        function fixHeader() {
+            var shouldBeCollapsed = $(window).scrollTop() > headerFixedThreshold;
+            if (headerCollapsed !== shouldBeCollapsed) {
+                // don't touch the DOM if that's not needed!
+                headerCollapsed = shouldBeCollapsed;
+                if (shouldBeCollapsed) {
+                    $('#header').addClass('fixed');
+                } else {
+                    $('#header').removeClass('fixed');
+                }
             }
         }
+        // Menubar half-fixed
+        if (! isMobile()) {
+            $(window).scroll(fixHeader);
+            fixHeader();
+        }
     }
-    // Menubar half-fixed
-    if (! isMobile()) {
-        $(window).scroll(fixHeader);
-        fixHeader();
-    }
 
-    $('#loginButtonLink').bind('click', function (event) {
-        var loginButton = $('#loginButton');
-        loginButton.toggleClass('open');
-        event.preventDefault();
-        event.stopPropagation();
+    sessionStorage['visited'] = 'true';
+
+    $('.toggle').each(function(i, toggle) {
+        toggle = $(toggle);
+        var btn = $('.toggle-button', toggle);
+        btn.bind('click', function (e) {
+            toggle.toggleClass('toggle-open');
+            e.preventDefault();
+            e.stopPropagation();
+        });
     });
 
-    $(document.body).bind('click', function (event) {
-        $('#loginButton').removeClass('open');
-    });
-
-    $('#loginWindow').bind('click', function (event) {
-        event.stopPropagation();
-    });
-
-    $('#submenu-button').bind('click', function(event) {
-        event.preventDefault();
-        $('#submenu-wrapper').toggleClass('open');
+    $(document.body).bind('click', function (e) {
+        var target = $(e.target);
+        if (target.hasClass('toggle-window') ||
+            target.parents('.toggle-window').length) return;
+        $('.toggle').removeClass('toggle-open');
     });
 
     if (!window.SVGSVGElement) {

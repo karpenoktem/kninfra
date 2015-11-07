@@ -1,4 +1,5 @@
 import os
+import string
 import logging
 import subprocess
 from glob import glob
@@ -9,7 +10,7 @@ from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 
 import kn.leden.entities as Es
-from kn import settings
+from django.conf import settings
 
 class CreateCertificateException(Exception):
     pass
@@ -40,20 +41,26 @@ def create_certificate(user):
     assert not user_has_certificate(user)
     commonName = get_commonName(user)
 
-    env = os.environ.update({
+    env = dict(os.environ)
+    env.update({
         'KEY_DIR': settings.VPN_KEYSTORE,
-        'KEY_NAME': user.humanName,
+        # This filters accents
+        'KEY_NAME': filter(lambda x: x in string.printable, user.humanName),
         'KEY_CN': commonName})
 
-    ph = subprocess.Popen(['openssl', 'req', '-batch', '-days', 1000,
+    if not os.path.isfile(settings.VPN_OPENSSL_CONFIG):
+        logging.warning('vpn: no config file available, skipping')
+        return False
+    ph = subprocess.Popen(['openssl', 'req', '-batch', '-days', '1000',
         '-nodes', '-new', '-newkey', 'rsa:1024', '-keyout', commonName +
-        '.key', '-out', commonName + '.csr', '-config', 'kn-openssl.cnf'
-        ], cwd=settings.VPN_KEYSTORE, env=env, stdout=subprocess.PIPE,
+        '.key', '-out', commonName + '.csr', '-config',
+        settings.VPN_OPENSSL_CONFIG],
+        cwd=settings.VPN_KEYSTORE, env=env, stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT)
     ph.communicate()
     if ph.returncode != 0:
         raise CreateCertificateException, "CSR creation failed"
-    ph = subprocess.Popen(['openssl', 'ca', '-batch', '-days', 1000, '-out',
+    ph = subprocess.Popen(['openssl', 'ca', '-batch', '-days', '1000', '-out',
         commonName + '.crt', '-in', commonName + '.csr', '-md', 'sha1',
         '-config', 'kn-openssl.cnf'
         ], cwd=settings.VPN_KEYSTORE, env=env, stdout=subprocess.PIPE,
@@ -75,8 +82,9 @@ def create_openvpn_installer(giedo, user):
     copytree(os.path.join(settings.VPN_INSTALLER_REPOS, 'installer/'), _dir)
     # Create the certificate
     if not user_has_certificate(user):
-        create_certificate(user)
-    commonName = str(user.name) + settings.VPN_COMMONNAME_POSTFIX
+        if not create_certificate(user):
+            return False
+    commonName = get_commonName(user)
     # Personalize the installer and config-file
     ## Check the git-revision
     ph = subprocess.Popen(['git', 'reflog'],
@@ -131,18 +139,15 @@ def create_openvpn_installer(giedo, user):
     mail_result(user, fn)
     return True
 
-def create_openvpn_zip(giedo, user):
-    # Remove old .zip's
-    _file = 'openvpn-config-%s.zip' % str(user.name)
-    if os.path.exists(_file):
-        os.unlink(_file)
+def _create_zip(user):
     # Create a temporary working directory
     _dir = mkdtemp(prefix='openvpn-zip-')
     os.mkdir(os.path.join(_dir, 'config'))
     # Create the certificate
     if not user_has_certificate(user):
-        create_certificate(user)
-    commonName = str(user.name) + settings.VPN_COMMONNAME_POSTFIX
+        if not create_certificate(user):
+            return False
+    commonName = get_commonName(user)
     # Personalize the installer and config-file
     ## Write the OpenVPN config
     with open(os.path.join(settings.VPN_INSTALLER_REPOS,
@@ -156,6 +161,9 @@ def create_openvpn_zip(giedo, user):
         os.path.join(_dir, 'config/'))
     copy2(os.path.join(settings.VPN_KEYSTORE, commonName + '.crt'),
         os.path.join(_dir, 'config/'))
+    ## Add ca.crt
+    copy2(os.path.join(settings.VPN_KEYSTORE, 'ca.crt'),
+        os.path.join(_dir, 'config/'))
     ## Run zip
     ph = subprocess.Popen(['zip', '-r', os.path.join(
         settings.VPN_INSTALLER_STORAGE,
@@ -166,9 +174,25 @@ def create_openvpn_zip(giedo, user):
         raise CreateInstallerException, "Zip failed"
     # Clean up
     rmtree(_dir)
+
+def create_openvpn_zip(giedo, user):
+    # Remove old .zip's
+    _file = 'openvpn-config-%s.zip' % str(user.name)
+    if os.path.exists(_file):
+        os.unlink(_file)
+    # Create the zipfile
+    _create_zip(user)
     # Return
     mail_result(user, _file)
     return True
+
+def generate_openvpn_zips(giedo):
+    for u in Es.users():
+        if not u.is_active:
+            continue
+        if not os.path.isfile(os.path.join(settings.VPN_INSTALLER_STORAGE,
+            'openvpn-config-%s.zip' % str(u.name))):
+            _create_zip(u)
 
 if __name__ == '__main__':
     create_openvpn_installer(None, Es.by_name('jille'))

@@ -3,16 +3,16 @@
 {% block styles %}
 {{ block.super }}
 <link rel="stylesheet"
-  href="{{ MEDIA_URL }}/static/style/introPoster2011.css" />
+  href="{{ MEDIA_URL }}static/style/introPoster2011.css" />
 {% endblock styles %}
 
 {% block body %}
-<a href="{% url home %}" title="Naar de website" />
-     <img src="{{ MEDIA_URL }}/static/img/introposter2011-2.jpg"
+<a href="{% url "home" %}" title="Naar de website" />
+     <img src="{{ MEDIA_URL }}static/img/introposter2011-2.jpg"
         alt="Intro Poster 2011. Klik hier om verder te gaan naar de website"
         title="Intro Poster 2011" 
         class="boilerplate" /></a>
-<p class="wrappingtext">(<a href="{% url home %}"
+<p class="wrappingtext">(<a href="{% url "home" %}"
     >ga naar de website</a>)</p>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

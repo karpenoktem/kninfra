@@ -1,0 +1,6 @@
+root@{{ grains['fqdn'] }} wortel@{{ grains['fqdn'] }}
+postmaster@{{ grains['fqdn'] }} wortel@{{ grains['fqdn'] }}
+geinteresseerden@{{ grains['fqdn'] }} geinteresseerden@lists.{{ grains['fqdn'] }}
+devnull@{{ grains['fqdn'] }} devnull@localhost
+@{{ grains['fqdn'] }} catchall@lists.{{ grains['fqdn'] }}
+@mail.{{ grains['fqdn'] }} @{{ grains ['fqdn'] }}

@@ -3,6 +3,7 @@ import subprocess
 import os.path
 import json
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -11,7 +12,7 @@ from django.template import RequestContext
 
 from koert.drank.rikf import open_rikf_ar
 
-from kn import settings
+from django.conf import settings
 from kn.barco.forms import BarformMeta, InvCountMeta
 
 settings.DRANK_REPOSITORIES = ['drank6', 'drank7', 'drank8', 'drank9']
@@ -188,7 +189,7 @@ def barco_enterform(request, repos, formname):
             subprocess.call(['/usr/bin/git', 'push'], cwd=repopath)
 
             # and get back to the user:
-            request.user.push_message("Opgeslagen!")
+            messages.info(request, "Opgeslagen!")
             return HttpResponseRedirect(reverse('barco-enterform', 
                 args=(repos,formname)))
     form = formspec.django_form()

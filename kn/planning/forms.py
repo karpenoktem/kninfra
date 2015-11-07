@@ -3,12 +3,12 @@ import datetime
 from django import forms
 
 import kn.leden.entities as Es
-from kn.planning.entities import Pool, Worker
+from kn.planning.entities import Pool
 
 class WorkerChoiceField(forms.ChoiceField):
     def __init__(self, *args, **kwargs):
         # TODO Reduce these queries into one.
-        kwargs['choices'] = [(e._id, unicode(e.get_user().humanName))
+        kwargs['choices'] = [(e._id, unicode(e.humanName))
                     for e in kwargs['choices']]
         if kwargs.get('sort_choices', False):
             kwargs['choices'].sort(key=lambda x: x[1])
@@ -26,7 +26,7 @@ class ManagePlanningForm(forms.Form):
         for vacancy in vacancies:
             field = WorkerChoiceField(label='%s - %s' % (
                     vacancy.begin_time, vacancy.end_time),
-                    choices=Worker.all_in_pool(pool),
+                    choices=pool.workers(),
                     sort_choices=True,
                     initial=vacancy.assignee_id,
                     required=False)

@@ -37,7 +37,8 @@ class SlashNewlineStrippingTemplateLoader(BaseLoader):
                                                     name, dirs)
                 else:
                     template, display_name = loader(name, dirs)
-                return (template, make_origin(display_name, loader, name, dirs))
+                return (template, make_origin(display_name,
+                            loader.load_template_source, name, dirs))
             except TemplateDoesNotExist:
                 pass
         raise TemplateDoesNotExist(name)

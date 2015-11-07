@@ -49,9 +49,11 @@ class EntityChoiceField(forms.CharField):
         super(EntityChoiceField, self).__init__(*args, **kwargs)
 
 class AddUserForm(forms.Form):
-    last_name = forms.CharField(label="Achternaam")
+    last_name = forms.CharField(label="Achternaam",
+                    widget=forms.TextInput(attrs={
+                        'placeholder': 'bijv.: Vaart, van der'}))
     first_name = forms.CharField(label="Voornaam")
-    sex = forms.ChoiceField(label="Geslacht", choices=(('m', 'Man'),
+    gender = forms.ChoiceField(label="Geslacht", choices=(('m', 'Man'),
                                ('v', 'Vrouw')))
     email = forms.EmailField(label="E-Mail adres")
     dateOfBirth = forms.DateField(label="Geboortedatum")
@@ -59,7 +61,9 @@ class AddUserForm(forms.Form):
     addr_number = forms.CharField(label="Huisnummer")
     addr_zip = forms.CharField(label="Postcode")
     addr_city = forms.CharField(label="Woonplaats")
-    telephone = forms.CharField(label="Telefoonnummer")
+    telephone = forms.CharField(label="Telefoonnummer",
+                    widget=forms.TextInput(attrs={
+                        'placeholder': 'bijv.: +31612345678'}))
     study_number = forms.CharField(label="Studentnummer")
     study_inst = EntityChoiceField(label="Onderwijs instelling",
             _type='institute')
@@ -67,8 +71,11 @@ class AddUserForm(forms.Form):
             _type='study')
     dateJoined = forms.DateField(label="Datum van inschrijving",
             initial=datetime.date.today)
-    addToList = forms.MultipleChoiceField(label="Voeg toe aan maillijsten",
-            choices=[('aan', "aan"), ('uit', "uit")], initial=['aan'],
+    incasso = forms.BooleanField(label='Incasso', required=False)
+    addToList = forms.MultipleChoiceField(label="Voeg toe aan groepen",
+            choices=[('eerstejaars', 'Eerstejaars'), ('aan', "Aan"),
+                     ('uit', "Uit"), ('zooi', 'Zooi')],
+            initial=['leden', 'eerstejaars', 'aan'],
             widget=forms.CheckboxSelectMultiple())
 
 class AddGroupForm(forms.Form):

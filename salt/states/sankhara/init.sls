@@ -1,0 +1,18 @@
+include:
+    - .ssh
+    - .nfs
+    - .interinfra
+    - .nginx
+    - .mysqld
+    - .phpmyadmin
+    - .wiki
+    - .forum
+    - .ldap
+    - .mail
+    - .mailman
+    - .mongo
+    - .freeradius
+    - .ircd
+    - .quasselcore
+    - .kninfra
+    - .initializeDb

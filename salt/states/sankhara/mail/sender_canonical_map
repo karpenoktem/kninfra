@@ -1,0 +1,1 @@
+/^(?!.*-(admin|bounces|confirm|join|leave|owner|request|subscribe|unsubscribe)@)(.*)@lists.{{ grains['fqdn'] }}$/ ${2}@{{ grains['fqdn'] }}

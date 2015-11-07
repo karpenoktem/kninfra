@@ -12,7 +12,7 @@ from kn.leden.date import date_to_dt, now, date_to_midnight
 from kn.leden.mongo import _id
 
 from kn.planning.forms import *
-from kn.planning.entities import Pool, Worker, Event, Vacancy
+from kn.planning.entities import Pool, Event, Vacancy
 from kn.planning.score import planning_vacancy_worker_score
 from kn.planning.utils import send_reminder
 
@@ -111,7 +111,7 @@ def planning_view(request):
                 'begin': v.begin,
                 'begin_time': v.begin_time,
                 'end_time': v.end_time,
-                'assignee': v.assignee.get_user().humanName
+                'assignee': v.assignee.humanName
                         if v.assignee else "?"})
         for idx in poolid2idx.values():
             ei['vacancies'][idx].sort(key=lambda x: x['begin'])
@@ -168,13 +168,12 @@ def planning_manage(request, poolname):
                         vacancy.reminder_needed = now() + delta < e.date
                         vacancy.assignee_id = _id(worker)
                 vacancy.save()
-    workers = list(Worker.all_in_pool(pool))
-    for worker in workers:
-        # XXX het is cooler de shift dichtstbijzijnd aan de vacancy te
-        # zoeken.  Stel dat iemand over een half-jaar al is ingepland
-        # dan is dat niet zo boeiend.  Terwijl hij nu geen enkele
-        # bardienst meer zou krijgen
-        worker.set_last_shift(pool)
+    workers = pool.workers()
+    # XXX het is cooler de shift dichtstbijzijnd aan de vacancy te
+    # zoeken.  Stel dat iemand over een half-jaar al is ingepland
+    # dan is dat niet zo boeiend.  Terwijl hij nu geen enkele
+    # bardienst meer zou krijgen
+    shifts = pool.last_shifts()
     for eid in events:
         for vacancy in events[eid]['vacancies']:
             vacancy.suggestions = list()
@@ -190,15 +189,14 @@ def planning_manage(request, poolname):
             for score in found_scores:
                 scorers = workers_by_score[score]
                 shuffle(scorers)
-                scorers.sort(key=lambda x: x.last_shift,
-                        cmp=cmp_None)
+                scorers.sort(key=lambda x: shifts[_id(x)], cmp=cmp_None)
                 for scorer in scorers:
                     vacancy.suggestions.append({'scorer': scorer, 'score': score})
 
     events = list(events.values())
     events.sort(key=lambda e: e['date'])
     return render_to_response('planning/manage.html',
-            {'events': events, 'pool': poolname},
+            {'events': events, 'pool': pool},
            context_instance=RequestContext(request))
 
 @login_required
@@ -287,7 +285,7 @@ def event_edit(request, eventid):
     vacancies = list()
     for v in e.vacancies():
         v.poolname = pools[v.pool_id].name
-        v.assignee_text = str(v.assignee.get_user().name) if v.assignee else "-"
+        v.assignee_text = str(v.assignee.name) if v.assignee else "-"
         v.vid = str(v._id)
         vacancies.append(v)
     vacancies.sort(key=lambda x: str(x.pool_id) + str(x.begin))

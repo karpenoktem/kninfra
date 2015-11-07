@@ -4,7 +4,7 @@
 
 {% block body %}
 <p class="imageDisplay">
-  <img src="{{ MEDIA_URL }}/static/img/bestuur9.jpg" /><br/>
+  <img src="{{ MEDIA_URL }}static/img/bestuur9.jpg" /><br/>
        <small>Van links naar rechts: Astrid (secretaris), Annemiek (voorzitter),
       Loesje (vicevoorzitter), Peter (pandcommissaris) en Carlien
       (penningmeester)</small>
@@ -28,8 +28,8 @@ Schaeck.</p>
 @karpenoktem.nl, behalve Peter, die is bereikbaar
 op {% filter email %}petervdv@karpenoktem.nl{% endfilter %}.
 <p>&lArr; Het vorige,
-<a href="{% url bestuur8 %}">achtste bestuur</a>;
+<a href="{% url "bestuur8" %}">achtste bestuur</a>;
 het volgende,
-<a href="{% url bestuur10 %}">tiende bestuur</a> &rArr;</p>
+<a href="{% url "bestuur10" %}">tiende bestuur</a> &rArr;</p>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}
