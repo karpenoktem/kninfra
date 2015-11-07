@@ -1,6 +1,6 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property
 import kn.leden.entities as Es
-from kn.fotos.utils import resize_proportional
+from kn.fotos.utils import resize_proportional, split_words
 from django.conf import settings
 
 from django.db.models import permalink
@@ -411,6 +411,7 @@ class FotoAlbum(FotoEntity):
         required_visibility = self.required_visibility(user)
         query_filter = {'path': self.mongo_path_prefix,
                         'effectiveVisibility': {'$in': tuple(required_visibility)}}
+
         if q.startswith('album:'):
             album = q[len('album:'):]
             query_filter['type'] = 'album'
@@ -422,20 +423,59 @@ class FotoAlbum(FotoEntity):
                     {'title': {'$regex': re.compile(re.escape(album),
                                                     re.IGNORECASE)}}
                 ]}]}
+
         elif q.startswith('tag:'):
-            _id = Es.id_by_name(q[len('tag:'):])
-            if _id is None:
+            user_id = Es.id_by_name(q[len('tag:'):])
+            if user_id is None:
                 return
             query_filter['type'] = {'$ne': 'album'}
-            query_filter['tags'] = _id
+            query_filter['tags'] = user_id
+
         else:
-            # do a full-text search
-            for result in db.command('text', 'fotos',
+            # Do a full-text search.
+            # Because full-text search can't be combined with other query
+            # operations in MongoDB 2.4, we join and sort them by hand. MongoDB
+            # 2.6+ has this feature.
+
+            # Text search (name, title and description)
+            results = map(lambda r: r['obj'],
+                db.command('text', 'fotos',
                         search=q,
                         filter=query_filter,
                         limit=96, # dividable by 2, 3 and 4
-                      )['results']:
-                yield entity(result['obj'])
+                      )['results'])
+
+            # Tag search
+            words = split_words(q.lower())
+            users = []
+            words_set = set(words)
+            for user in Es.users():
+                if user.first_name is None:
+                    # One (test) entity doesn't have a first_name
+                    continue
+                if user.first_name.lower() in words_set or user.last_name.lower() in words_set:
+                    users.append(_id(user))
+            results.extend(fcol.find({'$and': [query_filter,
+                                               {'tags': {'$in': users}}]}))
+
+            # The sort key does some magic.
+            # The first element is to sort on type first: albums go first, then
+            # other types (photos): True > False in Python
+            # The second is just a sort on date.
+            # We want to sort on date, but have the albums first in the list.
+            results.sort(key=lambda r: (r['type'] == 'album', r['date']), reverse=True)
+
+            # Remove duplicates.
+            # Note that this has a very small race condition: if the date or
+            # type is changed between the two queries above, the _id may not be
+            # sorted the same. This shouldn't occur in practice.
+            previous = None
+            for r in results:
+                if previous and previous['_id'] == r['_id']:
+                    continue
+                yield entity(r)
+                previous = r
+
             return
 
         # search for album or tag
