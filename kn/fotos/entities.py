@@ -34,6 +34,7 @@ def ensure_indices():
     fcol.ensure_index([('name', 'text'),
                        ('title', 'text'),
                        ('description', 'text'),
+                       ('search_text', 'text'),
                        ('path', 1),
                        ('effectiveVisibility', 1)],
                       weights={'name': 100,
@@ -102,6 +103,7 @@ class FotoEntity(SONWrapper):
     date = son_property(('date',))
     rotation = son_property(('rotation',))
     size = son_property(('size',))
+    _search_text = son_property(('search_text',))
 
     visibility = son_property(('visibility',))
     _lost = son_property(('lost',))
@@ -254,6 +256,12 @@ class FotoEntity(SONWrapper):
         '''
         return self._update_effective_visibility(parent, save=save, recursive=False)
 
+    def update_search_text(self, save=True):
+        self._search_text = ''
+
+        if save:
+            self.save()
+
     @property
     def original_path(self):
         return os.path.join(settings.PHOTOS_DIR, self.path, self.name)
@@ -353,6 +361,8 @@ class FotoEntity(SONWrapper):
         self._data['tags'] = []
         for name in tags:
             self._data['tags'].append(name2id[name])
+
+        self.update_search_text(save=False)
 
         if save:
             self.save()
@@ -546,6 +556,17 @@ class Foto(FotoEntity):
             self.save()
 
         return True
+
+    def update_search_text(self, save=True):
+        super(Foto, self).update_search_text(save=False)
+        if 'tags' in self._data:
+            tags = []
+            for user_id, user in Es.by_ids(self._data['tags']).iteritems():
+                tags.extend((user.first_name, user.last_name))
+            self._search_text += ' '.join(filter(bool, tags))
+
+        if save:
+            self.save()
 
     def set_rotation(self, rotation, save=True):
         if rotation == self.rotation:
