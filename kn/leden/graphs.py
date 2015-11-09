@@ -55,7 +55,8 @@ def update_member_count(base_path):
         os.chdir(temp_dir)
         # Write PDF.  Prevent its call to f.close().
         g.writePDFfile('graph')
-        subprocess.call(['convert', 'graph.pdf', 'graph.png'])
+        subprocess.call(['convert', '-density', '300', 'graph.pdf',
+                            '-resize', '1600x', 'graph.png'])
         shutil.move('graph.pdf', base_path + 'pdf')
         shutil.move('graph.png', base_path + 'png')
     finally:
