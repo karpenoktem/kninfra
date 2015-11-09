@@ -77,8 +77,8 @@ urlpatterns = [
 
     url(r'^statistieken/?$', login_required(TemplateView.as_view(
             template_name='leden/stats.html')), name='stats'),
-    url(r'^grafiek/leden-aantal/?$',
-        graphs.member_count, name='graph-member-count'),
+    url(r'^grafiek/(?P<graph>[-a-z/]+)\.(?P<ext>[a-z]+)/?$',
+        graphs.view, name='graphs'),
 
     # style
     url(r'^styles/leden/$',

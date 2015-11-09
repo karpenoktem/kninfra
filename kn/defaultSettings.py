@@ -177,6 +177,8 @@ def defaultSettings(glbls):
     d.SMOELEN_WIDTH = 300
     d.SMOELEN_HEIGHT = 300
 
+    d.GRAPHS_PATH = 'graphs'
+
     d.EXTERNAL_URLS = {
         'stukken':   d.BASE_URL+'/groups/leden/',
         'wiki':      d.BASE_URL+'/wiki',

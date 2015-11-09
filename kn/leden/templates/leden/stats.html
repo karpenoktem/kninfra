@@ -4,6 +4,7 @@
 {% block body %}
 <h1>Statistieken</h1>
 
-<img src="{% url "graph-member-count" %}" />
+<a href="{% url "graphs" graph='member-count' ext='pdf' %}"><img
+        src="{% url "graphs" graph='member-count' ext='png' %}" /></a>
 
 {% endblock %}
