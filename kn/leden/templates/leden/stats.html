@@ -4,7 +4,10 @@
 {% block body %}
 <h1>Statistieken</h1>
 
-<a href="{% url "graphs" graph='member-count' ext='pdf' %}"><img
-        src="{% url "graphs" graph='member-count' ext='png' %}" width="800" /></a>
+<a href="{% url "graphs" graph='member-count' ext='pdf' %}">
+    <img src="{% url "graphs" graph='member-count' ext='png' %}"
+         alt="grafiek van ledenaantallen over de jaren heen"
+         style="width: 800px;" />
+</a>
 
 {% endblock %}
