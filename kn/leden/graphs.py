@@ -34,7 +34,7 @@ def view(request, graph, ext):
         update(default_storage.path(
                     os.path.join(settings.GRAPHS_PATH, graph)))
     return HttpResponse(FileWrapper(default_storage.open(path)),
-                                content_type=mimetypes.guess_type(path))
+                                content_type=mimetypes.guess_type(path)[0])
 
 def update_member_count(base_path):
     """
