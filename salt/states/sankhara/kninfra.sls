@@ -143,6 +143,15 @@ https://github.com/karpenoktem/regl:
         - user: root
         - group: interinfra
         - mode: 770
+/home/infra/storage:
+    file.directory:
+        - user: infra
+/home/infra/storage/smoelen:
+    file.directory:
+        - user: infra
+/home/infra/storage/graphs:
+    file.directory:
+        - user: infra
 /etc/default/daan:
     file.managed:
         - source: salt://sankhara/daan.default
