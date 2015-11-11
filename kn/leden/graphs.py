@@ -66,10 +66,6 @@ def update_member_count(base_path):
         subprocess.call(['convert', '-density', '300', 'graph.pdf',
                          '-resize', '1600x', 'graph.png'])
 
-        dirname = os.path.dirname(base_path)
-        if not os.path.isdir(dirname):
-            os.makedirs(dirname)
-
         shutil.move('graph.pdf', "%s.pdf" % base_path)
         shutil.move('graph.png', "%s.png" % base_path)
     finally:
