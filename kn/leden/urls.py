@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
-from kn.leden import views, api
+from kn.leden import views, api, graphs
 
 urlpatterns = [
     url(r'^$',
@@ -74,6 +74,11 @@ urlpatterns = [
         views.relation_begin, name='relation-begin'),
     url(r'^noteer$',
         views.note_add, name='add-note'),
+
+    url(r'^statistieken/?$', login_required(TemplateView.as_view(
+            template_name='leden/stats.html')), name='stats'),
+    url(r'^grafiek/(?P<graph>[-a-z/]+)\.(?P<ext>[a-z]+)/?$',
+        graphs.view, name='graphs'),
 
     # style
     url(r'^styles/leden/$',
