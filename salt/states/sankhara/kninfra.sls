@@ -18,6 +18,7 @@ kninfra packages:
             - python-smbpasswd
             - python-m2crypto
             - python-pyx
+            - python-unidecode
 mirte:
     pip.installed
 sarah:
