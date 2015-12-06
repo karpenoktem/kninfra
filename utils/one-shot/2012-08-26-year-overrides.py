@@ -34,7 +34,7 @@ def main():
             if 'tags' not in rel:
                 rel['tags'] = []
             rel['tags'].append(year_overrides[(False, year-1)])
-            print Es.by_id(rel['who']).name, year
+            print Es.by_id(rel['who']).name, '-'+str(year-1)
             # UNCOMMENT the following line for the code to commit its
             #           changes.  Check the changes first!
             #Es.rcol.save(rel)
