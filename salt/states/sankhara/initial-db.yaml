@@ -352,6 +352,7 @@ entities:
   tags: [!id '4e6fcc85e60edf3dc0000004']
   types: [group, tag]
 - description: De FotoCommissie
+  _id: &fotocie_id !id 'aaaaaaaaaaaaaaaaaaa00003'
   humanNames:
   - {genitive_prefix: van de, human: FotoCie, name: fotocie}
   names: [fotocie, fotos]
@@ -721,6 +722,11 @@ relations:
   until: *dt_max
 - who: *admin_id
   with: *secretariaat_id
+  how: null
+  from: *dt_min
+  until: *dt_max
+- who: *admin_id
+  with: *fotocie_id
   how: null
   from: *dt_min
   until: *dt_max
