@@ -1,3 +1,0 @@
-#!/bin/sh
-
-echo '{"type":"update-knfotos"}' | $HOME/bin/whim-client /var/run/infra/S-giedo

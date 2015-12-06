@@ -258,8 +258,7 @@ class Giedo(WhimDaemon):
         elif d['type'] == 'update-site-agenda':
             with self.operation_lock:
                 return update_site_agenda(self)
-        elif d['type'] in ['update-knsite', 'update-knfotos',
-                    'fotoadmin-create-event']:
+        elif d['type'] in ['fotoadmin-create-event']:
             with self.operation_lock:
                 return self.daan.send(d)
         elif d['type'] == 'last-synced?':

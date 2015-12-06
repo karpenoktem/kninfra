@@ -13,7 +13,6 @@ from kn.utils.daan.postfix import set_postfix_map, set_postfix_slm_map
 from kn.utils.daan.mailman import apply_mailman_changes
 from kn.utils.daan.wiki import apply_wiki_changes, wiki_setpass
 from kn.utils.daan.forum import apply_forum_changes, forum_setpass
-from kn.utils.daan.live import live_update_knsite, live_update_knfotos
 from kn.utils.daan.fotoadmin import fotoadmin_create_event, fotoadmin_move_fotos
 from kn.utils.daan._ldap import apply_ldap_changes, ldap_setpass
 from kn.utils.daan.quassel import apply_quassel_changes, quassel_setpass
@@ -30,8 +29,6 @@ class Daan(WhimDaemon):
         self.quassel_lock = threading.Lock()
         self.forum_lock = threading.Lock()
         self.ldap_lock = threading.Lock()
-        self.update_knsite_lock = threading.Lock()
-        self.update_knfotos_lock = threading.Lock()
         self.fotoadmin_lock = threading.Lock()
 
     def pre_mainloop(self):
@@ -69,12 +66,6 @@ class Daan(WhimDaemon):
                 quassel_setpass(self, d['user'], d['pass'])
             with self.forum_lock:
                 forum_setpass(self, d['user'], d['pass'])
-        elif d['type'] == 'update-knsite':
-            with self.update_knsite_lock:
-                return live_update_knsite(self)
-        elif d['type'] == 'update-knfotos':
-            with self.update_knfotos_lock:
-                return live_update_knfotos(self)
         elif d['type'] == 'fotoadmin-create-event':
             with self.fotoadmin_lock:
                 return fotoadmin_create_event(self, d['date'],
