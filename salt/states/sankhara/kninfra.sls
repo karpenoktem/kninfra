@@ -167,6 +167,11 @@ https://github.com/karpenoktem/regl:
     file.directory:
         - user: fotos
         - group: fotos
+{% if grains['vagrant'] %}
+/var/fotos/test:
+    file.symlink:
+        - target: /home/infra/repo/kn/static/media/img
+{% endif %}
 /var/cache/fotos:
     file.directory:
         - user: infra
