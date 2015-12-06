@@ -77,7 +77,14 @@ ul#fotos li {
     }
 }
 ul#fotos li.hidden {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: #fcc;
+    border-top: 1px solid #faa;
+    border-bottom: 1px solid #faa;
+}
+ul#fotos li.leden {
+    background-color: #cfc;
+    border-top: 1px solid #afa;
+    border-bottom: 1px solid #afa;
 }
 
 ul#fotos li a {

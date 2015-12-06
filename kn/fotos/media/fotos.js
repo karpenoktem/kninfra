@@ -232,9 +232,10 @@
         } else {
           $('a', thumb).attr('href', '#'+encodePath(c.anchor()));
         }
-        if (c.visibility === 'hidden') {
+        if (c.visibility === 'hidden')
           thumb.addClass('hidden');
-        }
+        if (c.visibility === 'leden')
+          thumb.addClass('leden');
         thumb.appendTo('#fotos');
       }).call(this, fotos[name]);
     }
