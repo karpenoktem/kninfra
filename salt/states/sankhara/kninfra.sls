@@ -40,6 +40,16 @@ infra:
             - sudo
             - vagrant
             {% endif %}
+fotos:
+    group.present:
+        - system: true
+    user.present:
+        - home: /var/fotos
+        - system: true
+        - shell: /bin/bash
+        - createhome: false
+        - groups:
+            - fotos
 /home/infra/.profile:
     file.managed:
         - source: salt://sankhara/infra.profile
@@ -153,6 +163,14 @@ https://github.com/karpenoktem/regl:
 /home/infra/storage/graphs:
     file.directory:
         - user: infra
+/var/fotos:
+    file.directory:
+        - user: fotos
+        - group: fotos
+/var/cache/fotos:
+    file.directory:
+        - user: infra
+        - group: infra
 /etc/default/daan:
     file.managed:
         - source: salt://sankhara/daan.default

@@ -15,4 +15,11 @@ initial giedo-sync:
         - name: >
             giedo-sync &&
             touch /home/infra/.initial-giedo-sync-run
+initial scan-fotos:
+    cmd.run:
+        - user: infra
+        - creates: /home/infra/.initial-scan-fotos-run
+        - name: >
+            scan-fotos &&
+            touch /home/infra/.initial-scan-fotos-run
 {% endif %}
