@@ -28,11 +28,8 @@ def view(request, graph, ext):
     graph_fn = graph + '.' + ext
     path = os.path.join(settings.GRAPHS_PATH, graph_fn)
     # Check if we should update the graph
-    if (not default_storage.exists(path) or
-            datetime.datetime.now() - default_storage.created_time(path)
-                > datetime.timedelta(seconds=timeout)):
-        update(default_storage.path(
-                    os.path.join(settings.GRAPHS_PATH, graph)))
+    update(default_storage.path(
+                os.path.join(settings.GRAPHS_PATH, graph)))
     return HttpResponse(FileWrapper(default_storage.open(path)),
                                 content_type=mimetypes.guess_type(path)[0])
 
@@ -48,7 +45,11 @@ def update_member_count(base_path):
     g = pyx.graph.graphxy(width=20, x=pyx.graph.axis.linear(min=1,
                     painter=pyx.graph.axis.painter.regular(
                             gridattrs=[pyx.attr.changelist([
-                                pyx.color.gray(0.8)])])))
+                                pyx.color.gray(0.8)])])),
+                y=pyx.graph.axis.linear(
+                    painter=pyx.graph.axis.painter.regular(
+                            gridattrs=[pyx.attr.changelist([
+                                pyx.color.gray(0.8), None])])))
     g.plot(pyx.graph.data.points(ret,x=1,y=2),
                 [pyx.graph.style.symbol(size=0.03,
                         symbol=pyx.graph.style.symbol.plus)])
