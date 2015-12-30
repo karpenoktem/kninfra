@@ -97,3 +97,10 @@ def qe(keyword):
 def create_study(name):
     return Es.ecol.insert({'types': ['study'],
                            'humanNames': [{'human': name}]})
+
+def create_brand(suffix, name):
+    Es.ecol.insert({'humanNames': [{'human': name}],
+                    'names': [],
+                    'sofa_suffix': suffix,
+                    'tags': [Es.id_by_name('!sofa-brand')],
+                    'types': ['brand']})
