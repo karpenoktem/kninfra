@@ -160,6 +160,20 @@ def _set_metadata(data, request):
     entity.update_visibility([visibility])
     return result
 
+def _remove(data, request):
+    user = request.user if request.user.is_authenticated() else None
+    if not fEs.is_admin(user):
+        raise PermissionDenied
+
+    foto = entity_from_request(data)
+    if isinstance(foto, basestring):
+        return {'error': foto}
+
+    # No visibility equals removal.
+    foto.update_visibility([])
+
+    return {'Ok': True}
+
 def _search(data, request):
     album = entity_from_request(data)
     if isinstance(album, basestring):
@@ -184,6 +198,7 @@ def _search(data, request):
 ACTION_HANDLER_MAP = {
         'list': _list,
         'set-metadata': _set_metadata,
+        'remove': _remove,
         'search': _search,
         None: no_such_action,
         }
