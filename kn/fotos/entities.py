@@ -68,7 +68,7 @@ def by_path(p):
 def is_admin(user):
     if user is None:
         return False
-    return bool(user.cached_groups_names & frozenset(('fotocie', 'webcie')))
+    return bool(user.cached_groups_names & frozenset(('fotocie', 'secretariaat')))
 
 def actual_visibility(visibility):
     actual = frozenset(visibility)
