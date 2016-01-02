@@ -246,6 +246,11 @@
     }
   };
 
+  KNF.prototype.refresh_fotos = function() {
+    $('#fotos').empty();
+    this.display_fotos();
+  };
+
   KNF.prototype.fetch_fotos = function() {
     var path = this.path;
     if (this.fotos[path] === null) {
@@ -460,6 +465,11 @@
           this.save_metadata();
           return false;
         }.bind(this));
+    $('.remove', sidebar)
+        .click(function(e) {
+          this.removeFoto();
+          return false;
+        }.bind(this));
     $('a.rotate-left', sidebar)
         .click(function() {
           this.rotate(-90);
@@ -602,6 +612,29 @@
     this.onresize();
   };
 
+  KNF.prototype.removeFoto = function() {
+    if (!confirm('Weet je zeker dat je deze foto wilt verwijderen?')) return;
+    var foto = this.foto;
+    this.api({action: 'remove',
+              path: foto.path},
+      function(data) {
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+        // Foto successfully removed.
+      });
+    if (foto.prev) {
+      foto.prev.next = foto.next;
+    }
+    if (foto.next) {
+      foto.next.prev = foto.prev;
+    }
+    delete this.fotos[this.path].children[foto.name];
+    this.change_foto(this.foto.next);
+    this.refresh_fotos();
+  };
+
   KNF.prototype.rotate = function(degrees) {
     if (!fotos_admin) return;
     if (!('oldRotation' in this.foto)) {
@@ -683,8 +716,7 @@
             || 'oldRotation' in foto && foto.oldRotation !== foto.rotation) {
           foto.title = title;
           delete foto.oldRotation;
-          $('#fotos').empty();
-          this.display_fotos();
+          this.refresh_fotos();
         }
 
         if (this.sidebar && foto === this.foto) {

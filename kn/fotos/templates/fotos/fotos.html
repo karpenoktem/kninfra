@@ -87,14 +87,17 @@ if ('srcset' in (new Image())) {
     {% endspaceless %}
       <form>
 {% if fotos_admin %}
-        <input type="text" class="title" name="title" title="Titel"/>
-        <input type="text" class="description" name="description"
+        <input type="text" class="row title" name="title" title="Titel"/>
+        <input type="text" class="row description" name="description"
           placeholder="Beschrijving..." title="Beschrijving"/>
-        <select class="visibility" title="Zichtbaarheid">
-          <option value="world">Publiek</option>
-          <option value="leden">Alleen leden</option>
-          <option value="hidden">Fototaggers</option>
-        </select>
+        <div class="row">
+          <select class="visibility" title="Zichtbaarheid">
+            <option value="world">Publiek</option>
+            <option value="leden">Alleen leden</option>
+            <option value="hidden">Fototaggers</option>
+          </select>
+          <button class="remove">Verwijder</button>
+        </div>
         <div class="rotation">
           <a class="rotate-left" href>
             <img src="{{ MEDIA_URL }}fotos/rotate-left.svg" width="24" height="24"/>
