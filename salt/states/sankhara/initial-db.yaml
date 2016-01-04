@@ -127,6 +127,10 @@ entities:
   year-override: {type: false, year: 8}
 
 - humanNames:
+  - {human: <Geen>}
+  types: [institute]
+
+- humanNames:
   - {human: Culturele Maatschappelijke Vorming}
   types: [study]
 - humanNames:
@@ -466,7 +470,8 @@ entities:
   names: [oud]
   tags: [!id '4e6fcc85e60edf3dc00000bc']
   types: [group, tag]
-- description: E-Maillijsten waarvan lidmaatschap automatisch wordt bepaald.
+- _id: !id '4e6fcc85e60edf3dc0000094'
+  description: E-Maillijsten waarvan lidmaatschap automatisch wordt bepaald.
   humanNames:
   - {genitive_prefix: van de, human: Automatische E-Maillijsten, name: lists-auto}
   names: [lists-auto]
@@ -612,7 +617,7 @@ entities:
   - {human: Chemie}
   types: [study]
 - description: Onze lieve (en andere) leden
-  _id: &leden_id !id 'aaaaaaaaaaaaaaaaaaa00001'
+  _id: &leden_id !id '4e6fcc85e60edf3dc0000089'
   humanNames:
   - {genitive_prefix: van de, human: Leden, name: leden}
   names: [leden]
