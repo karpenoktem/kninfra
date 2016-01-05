@@ -28,8 +28,11 @@ def view(request, graph, ext):
     graph_fn = graph + '.' + ext
     path = os.path.join(settings.GRAPHS_PATH, graph_fn)
     # Check if we should update the graph
-    update(default_storage.path(
-                os.path.join(settings.GRAPHS_PATH, graph)))
+    if (not default_storage.exists(path) or
+            datetime.datetime.now() - default_storage.created_time(path)
+                > datetime.timedelta(seconds=timeout)):
+        update(default_storage.path(
+                    os.path.join(settings.GRAPHS_PATH, graph)))
     return HttpResponse(FileWrapper(default_storage.open(path)),
                                 content_type=mimetypes.guess_type(path)[0])
 
