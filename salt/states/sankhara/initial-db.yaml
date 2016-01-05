@@ -127,6 +127,10 @@ entities:
   year-override: {type: false, year: 8}
 
 - humanNames:
+  - {human: <Geen>}
+  types: [institute]
+
+- humanNames:
   - {human: Culturele Maatschappelijke Vorming}
   types: [study]
 - humanNames:
@@ -358,6 +362,13 @@ entities:
   names: [fotocie, fotos]
   tags: [!id '4e6fcc85e60edf3dc000007e']
   types: [group, tag]
+- _id: !id '4e6fcc85e60edf3dc000006f'
+  description: De loze activiteitencommissie.
+  humanNames:
+  - {genitive_prefix: van de, human: LoCo, name: loco}
+  names: [loco]
+  tags: [!id '4e6fcc85e60edf3dc0000092']
+  types: [group, tag]
 - description: De hoofden van de commissies van Karpe Noktem.
   humanNames:
   - {genitive_prefix: van de, human: Hoofden, name: hoofden}
@@ -466,7 +477,8 @@ entities:
   names: [oud]
   tags: [!id '4e6fcc85e60edf3dc00000bc']
   types: [group, tag]
-- description: E-Maillijsten waarvan lidmaatschap automatisch wordt bepaald.
+- _id: !id '4e6fcc85e60edf3dc0000094'
+  description: E-Maillijsten waarvan lidmaatschap automatisch wordt bepaald.
   humanNames:
   - {genitive_prefix: van de, human: Automatische E-Maillijsten, name: lists-auto}
   names: [lists-auto]
@@ -612,7 +624,7 @@ entities:
   - {human: Chemie}
   types: [study]
 - description: Onze lieve (en andere) leden
-  _id: &leden_id !id 'aaaaaaaaaaaaaaaaaaa00001'
+  _id: &leden_id !id '4e6fcc85e60edf3dc0000089'
   humanNames:
   - {genitive_prefix: van de, human: Leden, name: leden}
   names: [leden]
@@ -731,3 +743,20 @@ relations:
   from: *dt_min
   until: *dt_max
 
+events:
+- _id: !id '55631d03ed25c3345751714a'
+  _version: 1
+  name: loco-activiteit
+  humanName: Activiteit van de LoCo
+  date: !!timestamp 2015-05-25 00:00:00
+  cost: 3
+  is_open: true
+  createdBy: !id '50f29894d4080076aa541de2'
+  owner: !id 4e6fcc85e60edf3dc000006f
+  is_official: false
+  description: Beschrijving (in **Markdown**).
+  description_html: <p>Beschrijving (in <strong>Markdown</strong>).</p>
+  has_public_subscriptions: true
+  subscriptions: []
+  subscribedMailBody: Hallo %(firstName)s,\r\n\r\nJe hebt je aangemeld voor %(eventName)s.\r\n\r\nJe opmerkingen waren:\r\n%(notes)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s
+  invitedMailBody: Hallo %(firstName)s,\r\n\r\nJe bent door %(by_firstName)s aangemeld voor %(eventName)s.\r\n\r\n%(by_firstName)s opmerkingen waren:\r\n%(by_notes)s\r\n\r\nOm deze aanmelding te bevestigen, bezoek:\r\n  %(confirmationLink)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s

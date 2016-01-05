@@ -188,10 +188,9 @@ html.foto-sidebar #foto > div {
 html.foto-sidebar #foto .sidebar {
     display: inline-block;
 }
-#foto .sidebar select,
-#foto .sidebar input {
+#foto .sidebar .row {
     display: block;
-    margin: 0 0 5px;
+    margin: 0 0 5px 0;
 }
 #foto .sidebar input {
     width: 100%;
