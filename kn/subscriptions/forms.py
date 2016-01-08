@@ -3,6 +3,8 @@ from django import forms
 from kn.leden.forms import EntityChoiceField
 import kn.leden.entities as Es
 
+import textwrap
+
 def get_add_event_form(user, superuser=False):
     class AddEventForm(forms.Form):
         name = forms.RegexField(label='Korte naam', regex=r'^[a-z0-9-]+$')
@@ -22,18 +24,22 @@ def get_add_event_form(user, superuser=False):
         invitedMailBody = forms.CharField(
             label='E-Mail wanneer uitgenodigd',
             widget=forms.Textarea,
-            initial="Hallo %(firstName)s,\n\n"+
-                "Je bent door %(by_firstName)s uitgenodigd "+
-                    "voor %(eventName)s.\n"+
-                "\n"+
-                "%(by_firstName)s opmerkingen waren:\n"+
-                "%(by_notes)s\n"+
-                "\n"+
-                "Om deze uitnodiging te bevestigen, bezoek:\n"
-                "  %(confirmationLink)s\n"+
-                "\n"+
-                "Met een vriendelijke groet,\n\n"+
-                "%(owner)s")
+            initial=textwrap.dedent("""
+                Hallo %(firstName)s,
+
+                Je bent door %(by_firstName)s uitgenodigd voor %(eventName)s.
+
+                %(by_firstName)s opmerkingen waren:
+
+                  %(by_notes)s
+
+                Om je aanmelding te bevestigen, ga naar de volgende pagina
+                en druk op `aanmelden'.
+
+                  %(confirmationLink)s
+
+                %(owner)s
+                """).strip())
         cost = forms.DecimalField(label='Kosten')
         date = forms.DateField(label='Datum')
         owner = EntityChoiceField(label="Eigenaar")
