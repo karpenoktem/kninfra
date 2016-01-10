@@ -26,16 +26,16 @@ $(function(){
 <h2>
 	{% if "secretariaat" in user.cached_groups_names %}
 	<button class="change-humanName"
-		onclick="api_set_property('{{ object.id }}', 'humanName',
-				prompt('Wijzig naam', $('.humanName').text()));">Wijzig naam</button>
+		onclick="promptNewProperty('{{ object.id }}', 'humanName',
+				'Wijzig naam', $('.humanName').text());">Wijzig naam</button>
 	{% endif %}{# "secretariaat" in user.cached_groups_names #}
 	<span class="humanName">{{ object.humanName }}</span>
 </h2>
 <p>
 	{% if "secretariaat" in user.cached_groups_names %}
 	<button class="change-description"
-		onclick="api_set_property('{{ object.id }}', 'description',
-				prompt('Nieuwe beschrijving', $('.description').text()));">
+		onclick="promptNewProperty('{{ object.id }}', 'description',
+				'Nieuwe beschrijving', $('.description').text());">
 		Wijzig beschrijving</button>
 	{% endif %}{# "secretariaat" in user.cached_groups_names #}
 	<span class="description">{{ object.description }}</span>

@@ -1,7 +1,9 @@
 'use strict';
 
-function api_set_property(id, property, value) {
-	if (value === null) return;
+
+function promptNewProperty(id, property, message, oldValue) {
+	var value = prompt(message, oldValue);
+	if (!value) return;
 	leden_api({
 			action: 'entity_set_property',
 			id: id,
