@@ -8,45 +8,11 @@
 
 {% block head %}
 {{ block.super }}
-<script type="text/javascript">
-_api = function(data, cb) {
-        data.csrfmiddlewaretoken = "{{ csrf_token }}";
-        $.post("{% url "api" %}", data, cb, "json");
-};
-
-close_event = function() {
-        if(!confirm("Weet je zeker dat je de activiteit wilt sluiten? "+
-                                "Je kunt dit niet zelf ongedaan maken."))
-                return;
-        _api({'action': 'close-event',
-                   'id': '{{ object.id }}' },
-                        function(d) {
-                if(d.success) window.location.reload();
-                if(d.error) alert(d.error);
-        });
-};
-
-copy_emailaddresses_to_clipboard = function() {
-        _api({'action': 'get-email-addresses',
-              'id': '{{ object.id }}'},
-              function(d) {
-                if(d.error) {
-                        alert(d.error);
-                        return;
-                }
-                var s = '';
-                var first = true;
-                for(var i = 0; i < d.addresses.length; i++) {
-                        if (first) first = false;
-                        else s += ', '
-                        s += d.addresses[i];
-                }
-                prompt("Dit zijn de e-mail adressen", s);
-              });
-        return false;
-};
-
+<script>
+var events_api_url = '{% url "api" %}';
+var event_object_id = '{{ object.id }}';
 </script>
+<script src="{{ MEDIA_URL }}subscriptions/event_detail.js"></script>
 {% endblock %}
 
 {% block body %}
