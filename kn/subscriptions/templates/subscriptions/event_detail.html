@@ -21,10 +21,10 @@ var event_object_id = '{{ object.id }}';
 {{ object.description_html|safe }}
 </div>
 <dl>
-        {% if object.date %}
-        <dt>Datum</dt>
-        <dd>{{ object.date.date }}</dd>
-        {% endif %}{# object.date #}
+	{% if object.date %}
+	<dt>Datum</dt>
+	<dd>{{ object.date.date }}</dd>
+	{% endif %}{# object.date #}
 	{% if object.owner %}
 	<dt>Georganiseerd door</dt>
 	<dd><a href="{{ object.owner.get_absolute_url }}"
@@ -42,49 +42,49 @@ var event_object_id = '{{ object.id }}';
 
 {% if object.is_open %}
 <form class="subscribe" method="POST" action="">
-        {% csrf_token %}
-        {% if subscription.invited and not subscription.has_mutations %}
-        <div class="message">Je bent door
-        <a href="{{ subscription.inviter.get_absolute_url }}"
-                >{{ subscription.inviter.full_name }}</a>
-        uitgenodigd.</div>
-        {% endif %}{# subscription.invited and not subscription.has_mutations #}
-        <!--[if lte IE 9]>
-        Opmerkingen:<br/>
-        <![endif]-->
-        <textarea class="default" name="notes" cols="30" rows="4"
-                placeholder="Opmerkingen"></textarea>
-        {% if not subscription.subscribed %}
-        <input type="submit" name="subscribe" value="Aanmelden"/><br/>
-        {% endif %}
-        <div>
-                <select name="who">
-                {% for u in users %}
-                <option value="{{ u.id }}">{{ u.full_name }}</option>
-                {% endfor %}{# u in users #}
-                </select>
-                <input type="submit" name="invite" value="Uitnodigen" />
-        </div>
+	{% csrf_token %}
+	{% if subscription.invited and not subscription.has_mutations %}
+	<div class="message">Je bent door
+	<a href="{{ subscription.inviter.get_absolute_url }}"
+		>{{ subscription.inviter.full_name }}</a>
+	uitgenodigd.</div>
+	{% endif %}{# subscription.invited and not subscription.has_mutations #}
+	<!--[if lte IE 9]>
+	Opmerkingen:<br/>
+	<![endif]-->
+	<textarea class="default" name="notes" cols="30" rows="4"
+		placeholder="Opmerkingen"></textarea>
+	{% if not subscription.subscribed %}
+	<input type="submit" name="subscribe" value="Aanmelden"/><br/>
+	{% endif %}
+	<div>
+		<select name="who">
+		{% for u in users %}
+		<option value="{{ u.id }}">{{ u.full_name }}</option>
+		{% endfor %}{# u in users #}
+		</select>
+		<input type="submit" name="invite" value="Uitnodigen" />
+	</div>
 </div>
 {% endif %}{# object.is_open #}
 
 {% if object.is_open and has_write_access %}
 <div>
-        <button onclick="close_event()">Sluit inschrijvingen</button> –
-        <a href="{% url "event-edit" edit=object.name %}">Bewerk activiteit</a>
+	<button onclick="close_event()">Sluit inschrijvingen</button> –
+	<a href="{% url "event-edit" edit=object.name %}">Bewerk activiteit</a>
 </div>
 {% endif %}{# object.is_open and has_write_access #}
 
 {% if has_read_access or object.has_public_subscriptions %}
-        <button onclick="copy_emailaddresses_to_clipboard()">
-                Toon e-mail adressen van de ingeschrevenen
-        </button>
-        <h2>Aanmeldingen ({{ subscriptions|length }})</h2>
-        {% include "subscriptions/include_list.html" with list=subscriptions %}
+	<button onclick="copy_emailaddresses_to_clipboard()">
+		Toon e-mail adressen van de ingeschrevenen
+	</button>
+	<h2>Aanmeldingen ({{ subscriptions|length }})</h2>
+	{% include "subscriptions/include_list.html" with list=subscriptions %}
 
-        {% if invitations %}
-        <h2>Uitnodigingen ({{ invitations|length }})</h2>
-        {% include "subscriptions/include_list.html" with list=invitations %}
-        {% endif %}
+	{% if invitations %}
+	<h2>Uitnodigingen ({{ invitations|length }})</h2>
+	{% include "subscriptions/include_list.html" with list=invitations %}
+	{% endif %}
 {% endif %}{# has_read_access or object.has_public_subscriptions#}
 {% endblock %}
