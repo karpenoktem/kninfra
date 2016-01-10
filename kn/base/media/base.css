@@ -38,6 +38,29 @@ body {
         display: block;
 }
 
+.tabs > .tabHeads > .tabHead {
+	display: inline-block;
+	cursor: default;
+	border-bottom: solid 2px transparent;
+	padding: 4px;
+	line-height: 1;
+}
+.tabs > .tabHeads > .tabHead:hover {
+	border-bottom: solid 2px #a31e1b;
+	background: rgba(255, 255, 255, 0.5);
+}
+.tabs > .tabHeads > .tabHead.selected {
+	background: #fff;
+}
+.tabs > .tabBody {
+	background: #fff;
+	overflow: hidden;
+	padding: 4px;
+}
+.tabs > .tabBody:not(.selected) {
+	display: none;
+}
+
 
 /* header */
 #header {

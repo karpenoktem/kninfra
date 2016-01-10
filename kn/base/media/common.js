@@ -148,6 +148,25 @@ $(document).ready(function() {
     if (!window.SVGSVGElement) {
         $(document.documentElement).addClass('no-svg');
     }
+
+    $('.tabs').each(function(i, tabBox) {
+        $('.tabHead', tabBox).each(function(j, tabHeader) {
+            tabHeader = $(tabHeader);
+            var tabBody = $('#'+tabHeader.data('for'));
+            if (tabHeader.hasClass('selected')) {
+                tabBody.addClass('selected');
+            }
+            tabHeader.on('click', function() {
+                var oldHeader = $('.tabHead.selected', tabBox);
+                if (tabHeader.is(oldHeader)) return;
+                oldHeader.removeClass('selected');
+                tabHeader.addClass('selected');
+                var oldBody = $('.tabBody.selected', tabBox);
+                oldBody.removeClass('selected');
+                tabBody.addClass('selected');
+            });
+        });
+    });
 });
 
 // Implement rot13 for email obscurification
