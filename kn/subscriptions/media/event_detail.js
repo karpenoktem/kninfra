@@ -30,7 +30,7 @@ function copy_emailaddresses_to_clipboard () {
             var first = true;
             for(var i = 0; i < d.addresses.length; i++) {
                 if (first) first = false;
-                else s += ', '
+                else s += ', ';
                 s += d.addresses[i];
             }
             prompt("Dit zijn de e-mail adressen", s);
