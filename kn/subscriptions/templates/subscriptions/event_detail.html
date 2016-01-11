@@ -8,45 +8,11 @@
 
 {% block head %}
 {{ block.super }}
-<script type="text/javascript">
-_api = function(data, cb) {
-        data.csrfmiddlewaretoken = "{{ csrf_token }}";
-        $.post("{% url "api" %}", data, cb, "json");
-};
-
-close_event = function() {
-        if(!confirm("Weet je zeker dat je de activiteit wilt sluiten? "+
-                                "Je kunt dit niet zelf ongedaan maken."))
-                return;
-        _api({'action': 'close-event',
-                   'id': '{{ object.id }}' },
-                        function(d) {
-                if(d.success) window.location.reload();
-                if(d.error) alert(d.error);
-        });
-};
-
-copy_emailaddresses_to_clipboard = function() {
-        _api({'action': 'get-email-addresses',
-              'id': '{{ object.id }}'},
-              function(d) {
-                if(d.error) {
-                        alert(d.error);
-                        return;
-                }
-                var s = '';
-                var first = true;
-                for(var i = 0; i < d.addresses.length; i++) {
-                        if (first) first = false;
-                        else s += ', '
-                        s += d.addresses[i];
-                }
-                prompt("Dit zijn de e-mail adressen", s);
-              });
-        return false;
-};
-
+<script>
+var events_api_url = '{% url "api" %}';
+var event_object_id = '{{ object.id }}';
 </script>
+<script src="{{ MEDIA_URL }}subscriptions/event_detail.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -55,70 +21,90 @@ copy_emailaddresses_to_clipboard = function() {
 {{ object.description_html|safe }}
 </div>
 <dl>
-        {% if object.date %}
-        <dt>Datum</dt>
-        <dd>{{ object.date.date }}</dd>
-        {% endif %}{# object.date #}
-	{% if object.owner %}
-	<dt>Georganiseerd door</dt>
-	<dd><a href="{{ object.owner.get_absolute_url }}"
-		>{{ object.owner.humanName }}</a></dd>
-	{% endif %}
-	{% if object.cost %}
-	<dt>Kosten</dt>
-	<dd>&euro; {{ object.cost }}</dd>
-	{% endif %}
+    {% if object.date %}
+    <dt>Datum</dt>
+    <dd>{{ object.date.date }}</dd>
+    {% endif %}{# object.date #}
+    {% if object.owner %}
+    <dt>Georganiseerd door</dt>
+    <dd><a href="{{ object.owner.get_absolute_url }}"
+        >{{ object.owner.humanName }}</a></dd>
+    {% endif %}
+    {% if object.cost %}
+    <dt>Kosten</dt>
+    <dd>&euro; {{ object.cost }}</dd>
+    {% endif %}
 </dl>
 
-{% if subscription.subscribed %}
-<div class="message">Je bent aangemeld.</div>
-{% endif %}{# subscription.subscribed #}
 
 {% if object.is_open %}
-<form class="subscribe" method="POST" action="">
-        {% csrf_token %}
-        {% if subscription.invited and not subscription.has_mutations %}
-        <div class="message">Je bent door
-        <a href="{{ subscription.inviter.get_absolute_url }}"
+<div class="tabs">
+    <div class="tabHeads">
+        <div class="tabHead {% if not subscription.subscribed %} selected{% endif %}"
+            data-for="tab-subscribe">Aanmelden</div>
+        <div class="tabHead {% if subscription.subscribed %} selected{% endif %}"
+            data-for="tab-invite">Uitnodigen</div>
+    </div>
+    <div class="tabBody" id="tab-subscribe">
+        <form class="subscribe" method="POST" action="">
+            {% csrf_token %}
+            {% if subscription.subscribed %}
+            <div class="message">Je bent al aangemeld.</div>
+            {% elif subscription.invited and not subscription.has_mutations %}
+            <div class="message">Je bent door
+            <a href="{{ subscription.inviter.get_absolute_url }}"
                 >{{ subscription.inviter.full_name }}</a>
-        uitgenodigd.</div>
-        {% endif %}{# subscription.invited and not subscription.has_mutations #}
-        <!--[if lte IE 9]>
-        Opmerkingen:<br/>
-        <![endif]-->
-        <textarea class="default" name="notes" cols="30" rows="4"
+            uitgenodigd.</div>
+            {% endif %}
+
+            {% if not subscription.subscribed %}
+            <!--[if lte IE 9]>
+            Opmerkingen:<br/>
+            <![endif]-->
+            <textarea class="default" name="notes" cols="30" rows="4"
                 placeholder="Opmerkingen"></textarea>
-        {% if not subscription.subscribed %}
-        <input type="submit" name="subscribe" value="Aanmelden"/><br/>
-        {% endif %}
-        <div>
-                <select name="who">
+            <input type="submit" name="subscribe" value="Aanmelden"/><br/>
+            {% endif %}{# subscription.subscribed #}
+        </form>
+    </div>
+
+    <div class="tabBody" id="tab-invite">
+        <form class="subscribe" method="POST" action="">
+            {% csrf_token %}
+            <!--[if lte IE 9]>
+            Opmerkingen:<br/>
+            <![endif]-->
+            <textarea class="default" name="notes" cols="30" rows="4"
+                placeholder="Opmerkingen"></textarea>
+            <select name="who" required>
+                <option selected disabled hidden value=""></option>
                 {% for u in users %}
                 <option value="{{ u.id }}">{{ u.full_name }}</option>
                 {% endfor %}{# u in users #}
-                </select>
-                <input type="submit" name="invite" value="Uitnodigen" />
-        </div>
+            </select>
+            <input type="submit" name="invite" value="Uitnodigen" />
+        </form>
+    </div>
 </div>
 {% endif %}{# object.is_open #}
 
 {% if object.is_open and has_write_access %}
 <div>
-        <button onclick="close_event()">Sluit inschrijvingen</button> –
-        <a href="{% url "event-edit" edit=object.name %}">Bewerk activiteit</a>
+    <button onclick="close_event()">Sluit inschrijvingen</button> –
+    <a href="{% url "event-edit" edit=object.name %}">Bewerk activiteit</a>
 </div>
 {% endif %}{# object.is_open and has_write_access #}
 
 {% if has_read_access or object.has_public_subscriptions %}
-        <button onclick="copy_emailaddresses_to_clipboard()">
-                Toon e-mail adressen van de ingeschrevenen
-        </button>
-        <h2>Aanmeldingen ({{ subscriptions|length }})</h2>
-        {% include "subscriptions/include_list.html" with list=subscriptions %}
+    <button onclick="copy_emailaddresses_to_clipboard()">
+        Toon e-mail adressen van de ingeschrevenen
+    </button>
+    <h2>Aanmeldingen ({{ subscriptions|length }})</h2>
+    {% include "subscriptions/include_list.html" with list=subscriptions %}
 
-        {% if invitations %}
-        <h2>Uitnodigingen ({{ invitations|length }})</h2>
-        {% include "subscriptions/include_list.html" with list=invitations %}
-        {% endif %}
+    {% if invitations %}
+    <h2>Uitnodigingen ({{ invitations|length }})</h2>
+    {% include "subscriptions/include_list.html" with list=invitations %}
+    {% endif %}
 {% endif %}{# has_read_access or object.has_public_subscriptions#}
 {% endblock %}
