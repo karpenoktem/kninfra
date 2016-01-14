@@ -51,7 +51,7 @@ def event_detail(request, name):
     has_read_access = event.has_read_access(request.user)
     has_write_access = event.has_write_access(request.user)
     if request.method == 'POST' and 'subscribe' in request.POST:
-        if not event.is_open:
+        if not event.can_subscribe:
             raise PermissionDenied
         if subscription is not None and subscription.subscribed:
             messages.error(request, "Je bent al aangemeld")
@@ -173,6 +173,7 @@ def event_new_or_edit(request, edit=None):
                 'createdBy': request.user._id,
                 'name': name,
                 'cost': str(fd['cost']),
+                'max_subscriptions': fd['max_subscriptions'],
                 'is_open': True,
                 'is_official': superuser}
             if edit is None:

@@ -42,6 +42,8 @@ def get_add_event_form(user, superuser=False):
                 """).strip())
         cost = forms.DecimalField(label='Kosten')
         date = forms.DateField(label='Datum')
+        max_subscriptions = forms.IntegerField(required=False,
+                label='Maximum aantal deelnemers (mag leeg zijn)')
         owner = EntityChoiceField(label="Eigenaar")
         has_public_subscriptions = forms.BooleanField(required=False,
                 label='Inschrijvingen openbaar')
