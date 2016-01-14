@@ -20,6 +20,7 @@ ecol = db['events']
 #   "humanName" : "Activiteit van de LoCo",
 #   "date" : ISODate("2015-05-25T00:00:00Z"),
 #   "cost" : "3.40",
+#   "max_subscriptions": 24,
 #   "is_open" : true,
 #   "createdBy" : ObjectId("50f29894d4080076aa541de2"),
 #   "owner" : ObjectId("4e6fcc85e60edf3dc000006f"),
@@ -121,6 +122,7 @@ class Event(SONWrapper):
     def cost(self):
         return decimal.Decimal(self._data['cost'])
 
+    max_subscriptions = son_property(('max_subscriptions',))
     is_open = son_property(('is_open',))
     is_official = son_property(('is_official',), True)
     has_public_subscriptions = son_property(('has_public_subscriptions',),
@@ -148,6 +150,12 @@ class Event(SONWrapper):
         return self.owner == user or \
             str(self.owner.name) in user.cached_groups_names or \
                'secretariaat' in user.cached_groups_names
+    @property
+    def can_subscribe(self):
+        if self.max_subscriptions is not None and \
+                len(self.subscriptions) >= self.max_subscriptions:
+            return False
+        return self.is_open
 
     def subscribe(self, user, notes):
         subscription = self.get_subscription(user, create=True)

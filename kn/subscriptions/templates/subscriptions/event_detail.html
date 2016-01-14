@@ -30,6 +30,10 @@ var event_object_id = '{{ object.id }}';
     <dd><a href="{{ object.owner.get_absolute_url }}"
         >{{ object.owner.humanName }}</a></dd>
     {% endif %}
+    {% if object.max_subscriptions != None %}
+    <dt>Maximum aantal deelnemers:</dt>
+    <dd>{{ object.max_subscriptions }} personen</dd>
+    {% endif %}
     {% if object.cost %}
     <dt>Kosten</dt>
     <dd>&euro; {{ object.cost }}</dd>
@@ -58,12 +62,16 @@ var event_object_id = '{{ object.id }}';
             {% endif %}
 
             {% if not subscription.subscribed %}
+            {% if object.can_subscribe %}
             <!--[if lte IE 9]>
             Opmerkingen:<br/>
             <![endif]-->
             <textarea class="default" name="notes" cols="30" rows="4"
                 placeholder="Opmerkingen"></textarea>
             <input type="submit" name="subscribe" value="Aanmelden"/><br/>
+            {% else %}
+            Je kunt je helaas niet meer aanmelden.
+            {% endif %}{# object.can_subscribe #}
             {% endif %}{# subscription.subscribed #}
         </form>
     </div>
@@ -76,6 +84,9 @@ var event_object_id = '{{ object.id }}';
             <![endif]-->
             <textarea class="default" name="notes" cols="30" rows="4"
                 placeholder="Opmerkingen"></textarea>
+            {% if not object.can_subscribe %}
+            <div class="message">Let op: je kunt je niet meer aanmelden!</div>
+            {% endif %}{# object.can_subscribe #}
             <select name="who" required>
                 <option selected disabled hidden value=""></option>
                 {% for u in users %}
