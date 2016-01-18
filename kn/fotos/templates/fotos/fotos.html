@@ -65,6 +65,11 @@ if ('srcset' in (new Image())) {
     <input id="album-title" type="text" name="album-title" title="Album titel"
       oninput="$('#album-edit-button').prop('disabled', false)"/>
     <button id="album-edit-button" disabled>Ok</button>
+    <hr class="slight"/>
+    <label>
+      Duidelijke zichtbaarheid:
+      <input type="checkbox" id="highlight" value="checked"/>
+    </label>
   </form>
 {% endif %}
 </div>

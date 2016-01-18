@@ -47,6 +47,11 @@ img#album-edit-toggle {
     right: -5px;
 }
 
+#album-editor label {
+    display: flex;
+    justify-content: space-between;
+}
+
 p.error {
     clear: both;
     margin: 1em 5px;
@@ -76,8 +81,24 @@ ul#fotos li {
         padding: 0.75vw calc(0.5vw + 0.7px) 0.75vw;
     }
 }
-ul#fotos li.hidden {
+ul#fotos li.visibility-hidden {
     background-color: rgba(0, 0, 0, 0.04);
+}
+html.fotos-highlight ul#fotos li {
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+html.fotos-highlight ul#fotos li.visibility-hidden {
+    background-color: #fcc;
+    border-color: #f88;
+}
+html.fotos-highlight ul#fotos li.visibility-leden {
+    background-color: #fea;
+    border-color: #ed0;
+}
+html.fotos-highlight ul#fotos li.visibility-world {
+    background-color: #cfc;
+    border-color: #8f8;
 }
 
 ul#fotos li a {

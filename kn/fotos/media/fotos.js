@@ -232,9 +232,7 @@
         } else {
           $('a', thumb).attr('href', '#'+encodePath(c.anchor()));
         }
-        if (c.visibility === 'hidden') {
-          thumb.addClass('hidden');
-        }
+        thumb.addClass('visibility-' + c.visibility);
         thumb.appendTo('#fotos');
       }).call(this, fotos[name]);
     }
@@ -799,6 +797,11 @@
       }.bind(this));
   };
 
+  KNF.prototype.onhighlight = function() {
+    $('html').toggleClass('fotos-highlight',
+        $('#highlight').prop('checked'));
+  };
+
   KNF.prototype.onsearch = function() {
     if (this.search_timeout !== null) {
       clearTimeout(this.search_timeout);
@@ -856,6 +859,7 @@
     }.bind(this));
 
     $('#album-edit-button').click(this.onedit.bind(this));
+    $('#highlight').on('change', this.onhighlight.bind(this));
     $('#search').on('input', this.onsearch.bind(this));
     $(window).resize(this.onresize.bind(this));
 
