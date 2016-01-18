@@ -288,9 +288,8 @@ html.foto-sidebar #foto .sidebar {
     overflow: hidden;
 }
 
-.isroot #album-edit-toggle,
-.isroot #album-editor {
-    display: none !important; /* NSFW */
+.isroot #album-editor .album-options {
+    display: none;
 }
 
 /* vim: set et bs=2 sw=4 sta: */
