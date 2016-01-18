@@ -245,12 +245,10 @@ body {
 #content .nivoSlider img {
 	max-width: none; /* initial */
 }
-#content hr {
-	background-color: #a31e1b;
-	height: 3px;
-	width: 5em;
-	border: none;
-	margin: 8px auto;
+#content hr.slight {
+	border-style: none;
+	height: 1px;
+	background: #ccc;
 }
 
 .email {

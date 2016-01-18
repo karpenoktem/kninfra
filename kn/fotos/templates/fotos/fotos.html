@@ -56,15 +56,22 @@ if ('srcset' in (new Image())) {
     src="{{ MEDIA_URL }}fotos/edit-icon.svg" width="16" height="16"
     title="Bewerk naam en zichtbaarheid"/>
   <form id="album-editor" class="toggle-window">
-    <select id="album-visibility"
-      onchange="$('#album-edit-button').prop('disabled', false)">
-      <option value="world">Publiek</option>
-      <option value="leden">Alleen leden</option>
-      <option value="hidden">Fototaggers</option>
-    </select>
-    <input id="album-title" type="text" name="album-title" title="Album titel"
-      oninput="$('#album-edit-button').prop('disabled', false)"/>
-    <button id="album-edit-button" disabled>Ok</button>
+    <div class="album-options">
+      <select id="album-visibility"
+        onchange="$('#album-edit-button').prop('disabled', false)">
+        <option value="world">Publiek</option>
+        <option value="leden">Alleen leden</option>
+        <option value="hidden">Fototaggers</option>
+      </select>
+      <input id="album-title" type="text" name="album-title" title="Album titel"
+        oninput="$('#album-edit-button').prop('disabled', false)"/>
+      <button id="album-edit-button" disabled>Ok</button>
+      <hr class="slight"/>
+    </div>
+    <label>
+      Duidelijke zichtbaarheid:
+      <input type="checkbox" id="highlight" value="checked"/>
+    </label>
   </form>
 {% endif %}
 </div>
