@@ -174,9 +174,9 @@ def event_new_or_edit(request, edit=None):
                 'name': name,
                 'cost': str(fd['cost']),
                 'max_subscriptions': fd['max_subscriptions'],
-                'is_open': True,
                 'is_official': superuser}
             if edit is None:
+                d['is_open'] = True # default for new events
                 e = subscr_Es.Event(d)
             else:
                 e._data.update(d)
