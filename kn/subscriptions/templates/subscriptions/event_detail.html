@@ -30,6 +30,11 @@ var event_object_id = '{{ object.id }}';
     <dd><a href="{{ object.owner.get_absolute_url }}"
         >{{ object.owner.humanName }}</a></dd>
     {% endif %}
+    {% if object.createdBy and object.createdBy != object.owner %}
+    <dt>Activiteit gemaakt door</dt>
+    <dd><a href="{{ object.createdBy.get_absolute_url }}"
+        >{{ object.createdBy.humanName }}</a></dd>
+    {% endif %}
     {% if object.max_subscriptions != None %}
     <dt>Maximum aantal deelnemers:</dt>
     <dd>{{ object.max_subscriptions }} personen</dd>
