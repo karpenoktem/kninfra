@@ -96,15 +96,20 @@ def event_detail(request, name):
     return render_to_response('subscriptions/event_detail.html', ctx,
             context_instance=RequestContext(request))
 
-def _api_close_event(request):
-    if not 'id' in request.REQUEST:
-        return JsonHttpResponse({'error': 'missing argument'})
+def _api_event_set_opened(request):
+    if not 'id' in request.REQUEST or not isinstance(request.REQUEST['id'], basestring):
+        return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
     e = subscr_Es.event_by_id(request.REQUEST['id'])
     if not e:
         raise Http404
     if not e.has_write_access(request.user):
         raise PermissionDenied
-    e.is_open = False
+
+    opened = {'true': True, 'false': False}.get(request.REQUEST.get('opened'))
+    if  not isinstance(opened, bool):
+        return JsonHttpResponse({'error': 'invalid or missing argument "opened"'})
+    e.is_open = opened
+
     e.save()
     return JsonHttpResponse({'success': True})
 
@@ -128,8 +133,8 @@ def api(request):
     action = request.REQUEST.get('action')
     if action == 'get-email-addresses':
         return _api_get_email_addresses(request)
-    elif action == 'close-event':
-        return _api_close_event(request)
+    elif action == 'event-set-opened':
+        return _api_event_set_opened(request)
     else:
         return JsonHttpResponse({'error': 'unknown action'})
 
