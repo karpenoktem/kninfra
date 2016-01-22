@@ -156,6 +156,11 @@ class Event(SONWrapper):
                 len(self.subscriptions) >= self.max_subscriptions:
             return False
         return self.is_open
+    @property
+    def is_member_activity(self):
+        if self.is_official:
+            return False
+        return self.owner.id == self.createdBy.id
 
     def subscribe(self, user, notes):
         subscription = self.get_subscription(user, create=True)
