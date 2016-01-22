@@ -148,16 +148,9 @@ def event_new_or_edit(request, edit=None):
         form = AddEventForm(request.POST)
         if form.is_valid():
             fd = form.cleaned_data
-            # The superuser may do everything, and when you yourself are the
-            # owner that's always okay too.
-            if not superuser and fd['owner'] != request.user.id:
-                # Check some more constraints.
-                owner = Es.by_id(fd['owner'])
-                if not request.user.is_related_with(owner):
-                    raise PermissionDenied('User not related with owner')
-                if not owner.has_tag(Es.by_name('act-comms')) and \
-                   not owner.has_tag(Es.by_name('fac-comms')):
-                    raise PermissionDenied('Owner is not in "comms"')
+            if not superuser and not request.user.is_related_with(
+                    fd['owner']) and not fd['owner'] == request.user.id:
+                raise PermissionDenied
             name = fd['name']
             # If not secretariaat, then prefix name with the username
             if fd['owner'] == request.user.id:
