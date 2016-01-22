@@ -1,0 +1,12 @@
+
+Korte notities wat betreft de coding style die we gebruiken.
+Nogal wat code is niet consistent hierin, maar probeer je er in nieuwe code aan
+te houden.
+
+Algemeen (Python, HTML, JavaScript):
+ - Niet meer dan 80 tekens per regel.
+ - Inspringen met 4 spaties (de-facto standaard van Python).
+
+CSS:
+ - Meestal worden hier toch tabs in plaats van spaties gebruikt voor het
+   inspringen.
