@@ -349,6 +349,12 @@ entities:
   names: [bestuur, bestuul, parkhangen, festivals]
   tags: [!id '4e6fcc85e60edf3dc0000004']
   types: [group, tag]
+- _id: !id '4e6fcc85e60edf3dc000007e'
+  description: Alle overige mailinglists.
+  humanNames:
+  - {genitive_prefix: van de, human: Groepen, name: groepen}
+  names: [groepen]
+  types: [tag]
 - description: De kascontrolecommissie
   humanNames:
   - {genitive_prefix: van de, human: Kascontrolecommissie, name: kasco}
@@ -367,7 +373,7 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: LoCo, name: loco}
   names: [loco]
-  tags: [!id '4e6fcc85e60edf3dc0000092']
+  tags: [!id '4e6fcc85e60edf3dc000007d']
   types: [group, tag]
 - description: De hoofden van de commissies van Karpe Noktem.
   humanNames:
@@ -393,7 +399,8 @@ entities:
   names: [uit, sex, bier, parijs]
   tags: [!id '4e6fcc85e60edf3dc00000bc', !id '4ea9ce060032a04a41000001']
   types: [group, tag]
-- description: Alle commissies van Karpe Noktem.
+- _id: !id '4e6fcc85e60edf3dc000007d'
+  description: Alle commissies van Karpe Noktem.
   humanNames:
   - {genitive_prefix: van de, human: Commissies, name: comms}
   names: [comms]
@@ -405,7 +412,8 @@ entities:
   names: [groepen]
   tags: [!id '4e6fcc85e60edf3dc0000086']
   types: [tag]
-- description: Categorieen van onderverdelingen der leden.
+- _id: !id '4e6fcc85e60edf3dc0000086'
+  description: Categorieen van onderverdelingen der leden.
   humanNames:
   - {genitive_prefix: van de, human: Onderverdelingen, name: root}
   names: [root, sms-gateway]
