@@ -194,7 +194,9 @@ def event_new_or_edit(request, edit=None):
             )
             return HttpResponseRedirect(reverse('event-detail', args=(e.name,)))
     elif edit is None:
-        form = AddEventForm()
+        form = AddEventForm(initial={'owner': request.user.id,
+                                     'cost': 0,
+                                     'has_public_subscriptions': True})
     else:
         d = e._data
         form = AddEventForm(d)
