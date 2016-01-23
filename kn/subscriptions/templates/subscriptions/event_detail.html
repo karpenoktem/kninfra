@@ -57,7 +57,7 @@ var event_object_id = '{{ object.id }}';
     <div class="tabBody" id="tab-subscribe">
         <form class="subscribe" method="POST" action="">
             {% csrf_token %}
-            {% if subscription.subscribed %}
+            {% if subscription.subscribed and object.can_unsubscribe %}
             <div class="message"><strong>Je bent al aangemeld</strong>, maar je
                 kunt je nog afmelden.</div>
             {% elif subscription.invited and not subscription.has_mutations %}
@@ -67,19 +67,19 @@ var event_object_id = '{{ object.id }}';
             uitgenodigd.</div>
             {% endif %}
 
-            {% if object.can_subscribe %}
+            {% if object.can_subscribe and not subscription.subscribed or object.can_unsubscribe and not subscription.unsubscribed %}
             <!--[if lte IE 9]>
             Opmerkingen:<br/>
             <![endif]-->
             <textarea class="default" name="notes" cols="30" rows="4"
                 placeholder="Opmerkingen"></textarea>
-            {% if not subscription.subscribed %}
-            <input type="submit" name="subscribe" value="Aanmelden"/><br/>
-            {% else %}
+            {% if subscription.subscribed %}
             <input type="submit" name="unsubscribe" value="Afmelden"/><br/>
+            {% elif subscription.unsubscribed %}
+            <input type="submit" name="subscribe" value="Aanmelden"/><br/>
             {% endif %}{# subscription.subscribed #}
             {% else %}
-            Je kunt je helaas niet meer aanmelden.
+            Je kunt je helaas niet meer aanmelden of afmelden.
             {% endif %}{# object.can_subscribe #}
         </form>
     </div>
