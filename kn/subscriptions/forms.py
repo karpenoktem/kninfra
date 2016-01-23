@@ -21,6 +21,16 @@ def get_add_event_form(user, superuser=False):
                 "\n"+
                 "Met een vriendelijke groet,\n\n"+
                 "%(owner)s")
+        unsubscribedMailBody = forms.CharField(label='E-Mail wanneer afgemeld',
+            widget=forms.Textarea,
+            initial="Hallo %(firstName)s,\n\n"+
+                "Je hebt je afgemeld voor %(eventName)s.\n"+
+                "\n"+
+                "Je opmerkingen waren:\n"+
+                "%(notes)s\n"+
+                "\n"+
+                "Met een vriendelijke groet,\n\n"+
+                "%(owner)s")
         invitedMailBody = forms.CharField(
             label='E-Mail wanneer uitgenodigd',
             widget=forms.Textarea,

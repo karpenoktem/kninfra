@@ -58,7 +58,8 @@ var event_object_id = '{{ object.id }}';
         <form class="subscribe" method="POST" action="">
             {% csrf_token %}
             {% if subscription.subscribed %}
-            <div class="message">Je bent al aangemeld.</div>
+            <div class="message"><strong>Je bent al aangemeld</strong>, maar je
+                kunt je nog afmelden.</div>
             {% elif subscription.invited and not subscription.has_mutations %}
             <div class="message">Je bent door
             <a href="{{ subscription.inviter.get_absolute_url }}"
@@ -66,18 +67,20 @@ var event_object_id = '{{ object.id }}';
             uitgenodigd.</div>
             {% endif %}
 
-            {% if not subscription.subscribed %}
             {% if object.can_subscribe %}
             <!--[if lte IE 9]>
             Opmerkingen:<br/>
             <![endif]-->
             <textarea class="default" name="notes" cols="30" rows="4"
                 placeholder="Opmerkingen"></textarea>
+            {% if not subscription.subscribed %}
             <input type="submit" name="subscribe" value="Aanmelden"/><br/>
+            {% else %}
+            <input type="submit" name="unsubscribe" value="Afmelden"/><br/>
+            {% endif %}{# subscription.subscribed #}
             {% else %}
             Je kunt je helaas niet meer aanmelden.
             {% endif %}{# object.can_subscribe #}
-            {% endif %}{# subscription.subscribed #}
         </form>
     </div>
 
@@ -115,12 +118,21 @@ var event_object_id = '{{ object.id }}';
     <button onclick="copy_emailaddresses_to_clipboard()">
         Toon e-mail adressen van de ingeschrevenen
     </button>
-    <h2>Aanmeldingen ({{ subscriptions|length }})</h2>
-    {% include "subscriptions/include_list.html" with list=subscriptions %}
+    {% if listSubscribed %}
+    <h2>Aanmeldingen ({{ listSubscribed|length }})</h2>
+    {% include "subscriptions/include_list.html" with list=listSubscribed %}
+    {% else %}
+    <p>Er zijn (nog) geen aanmeldingen.</p>
+    {% endif %}{# listSubscribed #}
 
-    {% if invitations %}
-    <h2>Uitnodigingen ({{ invitations|length }})</h2>
-    {% include "subscriptions/include_list.html" with list=invitations %}
-    {% endif %}
+    {% if listUnsubscribed %}
+    <h2>Afmeldingen ({{ listUnsubscribed|length }})</h2>
+    {% include "subscriptions/include_list.html" with list=listUnsubscribed %}
+    {% endif %}{# listUnsubscribed #}
+
+    {% if listInvited %}
+    <h2>Uitnodigingen ({{ listInvited|length }})</h2>
+    {% include "subscriptions/include_list.html" with list=listInvited %}
+    {% endif %}{# listInvited #}
 {% endif %}{# has_read_access or object.has_public_subscriptions#}
 {% endblock %}

@@ -45,12 +45,13 @@ ecol = db['events']
 #         "inviterNotes" : "",
 #         "inviteDate" : ISODate("2015-06-10T19:37:32.514Z") } ],
 #   "subscribedMailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je aangemeld voor %(eventName)s.\r\n\r\nJe opmerkingen waren:\r\n%(notes)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
+#   "unsubscribedMailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je afgemeld voor %(eventName)s.\r\n\r\nJe opmerkingen waren:\r\n%(notes)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
 #   "invitedMailBody" : "Hallo %(firstName)s,\r\n\r\nJe bent door %(by_firstName)s aangemeld voor %(eventName)s.\r\n\r\n%(by_firstName)s opmerkingen waren:\r\n%(by_notes)s\r\n\r\nOm deze aanmelding te bevestigen, bezoek:\r\n  %(confirmationLink)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s"
 # }
 #
 # Possible states:
 #   * "subscribed"
-#   * "unsubscribed" (unimplemented)
+#   * "unsubscribed"
 #   * "reserve"      (unimplemented)
 # When someone has a subscription but no history that person is only invited,
 # not subscribed.
@@ -89,10 +90,13 @@ class Event(SONWrapper):
     def createdBy(self):
         return Es.by_id(self._data['createdBy'])
     @property
-    def subscriptions(self):
+    def listSubscribed(self):
         return [s for s in self._subscriptions.values() if s.subscribed]
     @property
-    def invitations(self):
+    def listUnsubscribed(self):
+        return [s for s in self._subscriptions.values() if s.unsubscribed]
+    @property
+    def listInvited(self):
         return filter(lambda s: s.invited and not s.has_mutations,
                       self._subscriptions.values())
     def get_subscription(self, user, create=False):
@@ -128,6 +132,7 @@ class Event(SONWrapper):
     has_public_subscriptions = son_property(('has_public_subscriptions',),
                                     False)
     subscribedMailBody = son_property(('subscribedMailBody',))
+    unsubscribedMailBody = son_property(('unsubscribedMailBody',))
     invitedMailBody = son_property(('invitedMailBody',))
 
     def __unicode__(self):
@@ -156,10 +161,17 @@ class Event(SONWrapper):
                 len(self.subscriptions) >= self.max_subscriptions:
             return False
         return self.is_open
+    @property
+    def can_unsubscribe(self):
+        return self.is_open
 
     def subscribe(self, user, notes):
         subscription = self.get_subscription(user, create=True)
         subscription.subscribe(notes)
+        return subscription
+    def unsubscribe(self, user, notes):
+        subscription = self.get_subscription(user, create=True)
+        subscription.unsubscribe(notes)
         return subscription
     def invite(self, user, notes, inviter):
         subscription = self.get_subscription(user, create=True)
@@ -216,6 +228,9 @@ class Subscription(SONWrapper):
     def subscribed(self):
         return self._state == 'subscribed'
     @property
+    def unsubscribed(self):
+        return self._state == 'unsubscribed'
+    @property
     def date(self):
         # last change date
         return self.lastMutation.get('date') or self.inviteDate
@@ -242,6 +257,20 @@ class Subscription(SONWrapper):
         self.send_notification(
                 "Aanmelding %s" % self.event.humanName,
                  self.event.subscribedMailBody % {
+                    'firstName': self.user.first_name,
+                    'eventName': self.event.humanName,
+                    'owner': self.event.owner.humanName,
+                    'notes': notes})
+    def unsubscribe(self, notes):
+        assert self.subscribed
+        self.push_mutation({
+            'state': 'unsubscribed',
+            'notes': notes,
+            'date': datetime.datetime.now()})
+        self.save()
+        self.send_notification(
+                "Afmelding %s" % self.event.humanName,
+                 self.event.unsubscribedMailBody % {
                     'firstName': self.user.first_name,
                     'eventName': self.event.humanName,
                     'owner': self.event.owner.humanName,
