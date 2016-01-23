@@ -40,6 +40,22 @@ var event_object_id = '{{ object.id }}';
     {% endif %}
 </dl>
 
+{% if object.history %}
+Geschiedenis:
+<ul>
+    {% for historyEvent in object.history %}
+    <li>Activiteit
+        {% if historyEvent.action == 'opened' %}geopend
+        {% elif historyEvent.action == 'closed' %}gesloten
+        {% elif historyEvent.action == 'edited' %}bewerkt
+        {% endif %}
+        op {{ historyEvent.date.date }}
+        door <a href="{{ historyEvent.user.get_absolute_url }}"
+                                   >{{ historyEvent.user.humanName }}</a>.</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 
 {% if object.is_open %}
 <div class="tabs">

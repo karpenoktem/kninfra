@@ -133,6 +133,10 @@ class Event(SONWrapper):
     def __unicode__(self):
         return unicode('%s (%s)' % (self.humanName, self.owner))
 
+    @property
+    def history(self):
+        return [HistoryEvent(d, self) for d in self._data.get('history', [])]
+
     @permalink
     def get_absolute_url(self):
         return ('event-detail', (), {'name': self.name})
@@ -165,6 +169,53 @@ class Event(SONWrapper):
         subscription = self.get_subscription(user, create=True)
         subscription.invite(inviter, notes)
         return subscription
+
+    def pushHistory(self, historyEvent):
+        if not 'history' in self._data:
+            self._data['history'] = []
+        self._data['history'].append(historyEvent)
+    def open(self, user, save=True):
+        if self.is_open:
+            return
+        self.is_open = True
+        self.pushHistory({
+            'action': 'opened',
+            'date': datetime.datetime.now(),
+            'by': _id(user)})
+        if save:
+            self.save()
+    def close(self, user, save=True):
+        if not self.is_open:
+            return
+        self.is_open = False
+        self.pushHistory({
+            'action': 'closed',
+            'date': datetime.datetime.now(),
+            'by': _id(user)})
+        if save:
+            self.save()
+    def update(self, data, user, save=True):
+        self._data.update(data)
+        self.pushHistory({
+            'action': 'edited',
+            'date': datetime.datetime.now(),
+            'by': _id(user)})
+        if save:
+            self.save()
+
+# Edit events in the event: 'opened', 'closed', 'edited'.
+class HistoryEvent(SONWrapper):
+    def __init__(self, data, event):
+        super(HistoryEvent, self).__init__(data, ecol, event)
+        self.event = event
+
+    action = son_property(('action',))
+    date = son_property(('date',))
+
+    @property
+    def user(self):
+        return Es.by_id(self._data['by'])
+
 
 # A Subscription is the relation between a user and an event. When anything
 # happens between the user and the event (invitation, subscription,

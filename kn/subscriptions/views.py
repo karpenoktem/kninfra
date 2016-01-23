@@ -106,11 +106,13 @@ def _api_event_set_opened(request):
         raise PermissionDenied
 
     opened = {'true': True, 'false': False}.get(request.REQUEST.get('opened'))
-    if  not isinstance(opened, bool):
+    if opened is True:
+        e.open(request.user)
+    elif opened is False:
+        e.close(request.user)
+    else:
         return JsonHttpResponse({'error': 'invalid or missing argument "opened"'})
-    e.is_open = opened
 
-    e.save()
     return JsonHttpResponse({'success': True})
 
 def _api_get_email_addresses(request):
@@ -184,7 +186,7 @@ def event_new_or_edit(request, edit=None):
                 d['is_open'] = True # default for new events
                 e = subscr_Es.Event(d)
             else:
-                e._data.update(d)
+                e.update(d, request.user, save=False)
             e.save()
             render_then_email('subscriptions/' +
                     ('event-edited' if edit else 'new-event') + '.mail.txt',
