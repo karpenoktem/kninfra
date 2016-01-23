@@ -523,6 +523,7 @@ form.top-aligned p {
 }
 
 form.top-aligned input,
+form.top-aligned select,
 form.top-aligned textarea {
 	display: block;
 	margin: 2px 0;
