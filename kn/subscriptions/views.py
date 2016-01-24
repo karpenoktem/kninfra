@@ -96,16 +96,23 @@ def event_detail(request, name):
     return render_to_response('subscriptions/event_detail.html', ctx,
             context_instance=RequestContext(request))
 
-def _api_close_event(request):
-    if not 'id' in request.REQUEST:
-        return JsonHttpResponse({'error': 'missing argument'})
+def _api_event_set_opened(request):
+    if not 'id' in request.REQUEST or not isinstance(request.REQUEST['id'], basestring):
+        return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
     e = subscr_Es.event_by_id(request.REQUEST['id'])
     if not e:
         raise Http404
     if not e.has_write_access(request.user):
         raise PermissionDenied
-    e.is_open = False
-    e.save()
+
+    opened = {'true': True, 'false': False}.get(request.REQUEST.get('opened'))
+    if opened is True:
+        e.open(request.user)
+    elif opened is False:
+        e.close(request.user)
+    else:
+        return JsonHttpResponse({'error': 'invalid or missing argument "opened"'})
+
     return JsonHttpResponse({'success': True})
 
 def _api_get_email_addresses(request):
@@ -128,8 +135,8 @@ def api(request):
     action = request.REQUEST.get('action')
     if action == 'get-email-addresses':
         return _api_get_email_addresses(request)
-    elif action == 'close-event':
-        return _api_close_event(request)
+    elif action == 'event-set-opened':
+        return _api_event_set_opened(request)
     else:
         return JsonHttpResponse({'error': 'unknown action'})
 
@@ -180,12 +187,12 @@ def event_new_or_edit(request, edit=None):
                 'name': name,
                 'cost': str(fd['cost']),
                 'max_subscriptions': fd['max_subscriptions'],
-                'is_open': True,
                 'is_official': superuser}
             if edit is None:
+                d['is_open'] = True # default for new events
                 e = subscr_Es.Event(d)
             else:
-                e._data.update(d)
+                e.update(d, request.user, save=False)
             e.save()
             render_then_email('subscriptions/' +
                     ('event-edited' if edit else 'new-event') + '.mail.txt',

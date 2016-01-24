@@ -45,6 +45,22 @@ var event_object_id = '{{ object.id }}';
     {% endif %}
 </dl>
 
+{% if object.history %}
+Geschiedenis:
+<ul>
+    {% for historyEvent in object.history %}
+    <li>Activiteit
+        {% if historyEvent.action == 'opened' %}geopend
+        {% elif historyEvent.action == 'closed' %}gesloten
+        {% elif historyEvent.action == 'edited' %}bewerkt
+        {% endif %}
+        op {{ historyEvent.date.date }}
+        door <a href="{{ historyEvent.user.get_absolute_url }}"
+                                   >{{ historyEvent.user.humanName }}</a>.</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 
 {% if object.is_open %}
 <div class="tabs">
@@ -104,12 +120,16 @@ var event_object_id = '{{ object.id }}';
 </div>
 {% endif %}{# object.is_open #}
 
-{% if object.is_open and has_write_access %}
+{% if has_write_access %}
 <div>
-    <button onclick="close_event()">Sluit inschrijvingen</button> –
-    <a href="{% url "event-edit" edit=object.name %}">Bewerk activiteit</a>
+    {% if object.is_open %}
+    <button onclick="close_event()">Sluit inschrijvingen</button>
+    {% else %}
+    <button onclick="reopen_event()">Heropen inschrijvingen</button>
+    {% endif %}{# object.is_open #}
+    – <a href="{% url "event-edit" edit=object.name %}">Bewerk activiteit</a>
 </div>
-{% endif %}{# object.is_open and has_write_access #}
+{% endif %}{# has_write_access #}
 
 {% if has_read_access or object.has_public_subscriptions %}
     <button onclick="copy_emailaddresses_to_clipboard()">
