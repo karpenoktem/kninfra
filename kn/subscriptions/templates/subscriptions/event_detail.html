@@ -75,7 +75,7 @@ var event_object_id = '{{ object.id }}';
                 placeholder="Opmerkingen"></textarea>
             {% if subscription.subscribed %}
             <input type="submit" name="unsubscribe" value="Afmelden"/><br/>
-            {% elif subscription.unsubscribed %}
+            {% else %}
             <input type="submit" name="subscribe" value="Aanmelden"/><br/>
             {% endif %}{# subscription.subscribed #}
             {% else %}
