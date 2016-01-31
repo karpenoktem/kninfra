@@ -766,5 +766,3 @@ events:
   description_html: <p>Beschrijving (in <strong>Markdown</strong>).</p>
   has_public_subscriptions: true
   subscriptions: []
-  subscribedMailBody: Hallo %(firstName)s,\r\n\r\nJe hebt je aangemeld voor %(eventName)s.\r\n\r\nJe opmerkingen waren:\r\n%(notes)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s
-  invitedMailBody: Hallo %(firstName)s,\r\n\r\nJe bent door %(by_firstName)s aangemeld voor %(eventName)s.\r\n\r\n%(by_firstName)s opmerkingen waren:\r\n%(by_notes)s\r\n\r\nOm deze aanmelding te bevestigen, bezoek:\r\n  %(confirmationLink)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s

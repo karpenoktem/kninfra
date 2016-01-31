@@ -14,7 +14,7 @@
         op {{ mutation.date.date }}
         {% endif %}{# mutation.date #}
         {% if mutation.notes %}
-        <blockquote>{{ mutation.notes }}</blockquote>
+        <blockquote class="notes">{{ mutation.notes }}</blockquote>
         {% endif %}{# mutation.notes #}
         </div>
         {% endfor %}{# subscr.history #}
@@ -25,7 +25,7 @@
             >{{ subscr.inviter.full_name }}</a>
         op {{ subscr.inviteDate.date }}
         {% if subscr.inviterNotes %}
-        <blockquote>{{ subscr.inviterNotes }}</blockquote>
+        <blockquote class="notes">{{ subscr.inviterNotes }}</blockquote>
         {% endif %}{# subscr.inviterNotes #}
         </div>
         {% endif %}{# subscr.invited #}

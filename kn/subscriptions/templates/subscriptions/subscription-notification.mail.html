@@ -1,0 +1,46 @@
+{% block from %}
+Karpe Noktem Activiteiten <root@karpenoktem.nl>
+{% endblock from %}
+
+{% block subject %}
+Activiteit: {{ event.humanName }}
+{% endblock subject %}
+
+{% block html %}
+<p>Hallo {{ subscription.user.first_name }},</p>
+
+{% if mutation.state != "invited" %}
+<p>Je hebt je
+{% if mutation.state == "subscribed" %}aangemeld
+{% elif mutation.state == "unsubscribed" %}afgemeld
+{% endif %}
+voor <a href="{{ BASE_URL }}{{ event.get_absolute_url }}">{{ event.humanName }}</a>.</p>
+
+{% if mutation.notes %}
+<p>Je opmerkingen waren:
+<blockquote>{{ mutation.notes|linebreaksbr }}</blockquote>
+</p>
+{% else %}
+<p>Je had geen opmerkingen.</p>
+{% endif %}{# mutation.notes #}
+
+{% else %}
+
+<p>Je bent door {{ subscription.inviter.first_name }} uitgenodigd voor
+<a href="{{ BASE_URL }}{{ event.get_absolute_url }}">{{ event.humanName }}</a>.</p>
+
+{% if subscription.inviterNotes %}
+<p>{{ subscription.inviter.first_name }}'s opmerkingen waren:
+<blockquote>{{ subscription.inviterNotes|linebreaksbr }}</blockquote>
+</p>
+{% endif %}
+
+<p>Om deze uitnodiging te bevestigen, bezoek:<br/>
+&nbsp;&nbsp; <a href="{{ BASE_URL }}{{ event.get_absolute_url }}"
+                >{{ BASE_URL }}{{ event.get_absolute_url }}</a></p>
+{% endif %}{# mutation.state == "invited" #}
+
+<p>Met een vriendelijke groet,<br/>
+{{ event.owner.humanName }}
+</p>
+{% endblock html %}
