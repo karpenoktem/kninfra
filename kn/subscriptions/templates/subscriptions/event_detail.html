@@ -77,9 +77,20 @@ var event_object_id = '{{ object.id }}';
             <input type="submit" name="unsubscribe" value="Afmelden"/><br/>
             {% else %}
             <input type="submit" name="subscribe" value="Aanmelden"/><br/>
+            {% if not object.may_unsubscribe %}
+            (je kunt je daarna niet meer afmelden)<br/>
+            {% endif %}{# object.may_unsubscribe #}
             {% endif %}{# subscription.subscribed #}
             {% else %}
-            Je kunt je helaas niet meer aanmelden of afmelden.
+            {% if not object.is_open %}
+            De activiteit is gesloten, je kunt je niet meer aanmelden of
+            afmelden.
+            {% else %}
+            Je kunt je helaas niet meer aanmelden{% if object.may_unsubscribe %}
+                of afmelden{% endif %}.<br/>
+            {% endif %}{# object.is_open #}
+            Stuur een mailtje naar <a href="mailto:{{ object.owner.canonical_email }}"
+                >{{ object.owner.canonical_email }}</a> voor vragen.
             {% endif %}{# object.can_subscribe #}
         </form>
     </div>

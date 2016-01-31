@@ -28,6 +28,7 @@ ecol = db['events']
 #   "description" : "Beschrijving (in **Markdown**).",
 #   "description_html" : "<p>Beschrijving (in <strong>Markdown</strong>).</p>",
 #   "has_public_subscriptions" : true,
+#   "may_unsubscribe": true,
 #   "subscriptions" : [
 #       { "user" : ObjectId("4e6fcc85e60edf3dc0000b9f"),
 #         "inviter" : ObjectId("50f29894d4080076aa541de2"),
@@ -80,6 +81,7 @@ class Event(SONWrapper):
     name = son_property(('name',))
     humanName = son_property(('humanName',))
     date = son_property(('date',))
+    may_unsubscribe = son_property(('may_unsubscribe',))
     @property
     def id(self):
         return str(self._data['_id'])
@@ -163,7 +165,7 @@ class Event(SONWrapper):
         return self.is_open
     @property
     def can_unsubscribe(self):
-        return self.is_open
+        return self.is_open and self.may_unsubscribe
 
     def subscribe(self, user, notes):
         subscription = self.get_subscription(user, create=True)

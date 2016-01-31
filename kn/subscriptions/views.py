@@ -186,6 +186,7 @@ def event_new_or_edit(request, edit=None):
                 'unsubscribedMailBody': fd['unsubscribedMailBody'],
                 'invitedMailBody': fd['invitedMailBody'],
                 'has_public_subscriptions': fd['has_public_subscriptions'],
+                'may_unsubscribe': fd['may_unsubscribe'],
                 'humanName': fd['humanName'],
                 'createdBy': request.user._id,
                 'name': name,

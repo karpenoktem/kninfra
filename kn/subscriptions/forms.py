@@ -57,6 +57,8 @@ def get_add_event_form(user, superuser=False):
         owner = EntityChoiceField(label="Eigenaar")
         has_public_subscriptions = forms.BooleanField(required=False,
                 label='Inschrijvingen openbaar')
+        may_unsubscribe = forms.BooleanField(required=False, initial=True,
+                label='Leden mogen zichzelf afmelden')
     return AddEventForm
 
 # vim: et:sta:bs=2:sw=4:
