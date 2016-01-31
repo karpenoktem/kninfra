@@ -1,8 +1,12 @@
 #!/bin/bash
-
+#
+# This is a script to install a development environment without Vagrant, if you
+# want to use your own VM, for example.
+#
 # Before this script is run, make sure to configure the following:
 #  * A user 'infra' exists
-#  * The 'kninfra' repository is cloned into /vagrant, and owned by the user infra.
+#  * The 'kninfra' repository is cloned into /vagrant, and owned by the user
+#    infra.
 #
 # You can do this with the following commands (as root):
 #    adduser infra
