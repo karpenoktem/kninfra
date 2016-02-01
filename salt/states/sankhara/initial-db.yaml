@@ -29,6 +29,12 @@ entities:
   names: ['!year-group']
   tags: [!id '4e6fcc85e60edf3dc0000000']
   types: [tag]
+- _id: !id 56af677edef5152cf39aa2bc
+  humanNames:
+  - {human: Mag officiële activiteiten organiseren, name: '!can-organize-official-events'}
+  names: ['!can-organize-official-events']
+  tags: [!id '4e6fcc85e60edf3dc0000000']
+  types: [tag]
 - _id: !id '4e6fcc85e60edf3dc0000005'
   humanNames:
   - {human: Wel jaar 1}
@@ -373,7 +379,7 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: Galagroep, name: galagroep}
   names: [galagroep]
-  tags: [!id '4e6fcc85e60edf3dc000007e']
+  tags: [!id '4e6fcc85e60edf3dc000007e', !id 56af677edef5152cf39aa2bc]
   types: [group, tag]
 - _id: !id '4e6fcc85e60edf3dc000006f'
   description: De loze activiteitencommissie.

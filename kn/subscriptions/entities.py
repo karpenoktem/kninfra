@@ -76,7 +76,9 @@ def is_superuser(user):
 def may_set_owner(user, owner):
     if is_superuser(owner):
         return True
-    return owner.has_tag(Es.id_by_name('comms', use_cache=True))
+    comms = Es.id_by_name('comms', use_cache=True)
+    allowTag = Es.id_by_name('!can-organize-official-events', use_cache=True)
+    return owner.has_tag(comms) or owner.has_tag(allowTag)
 
 
 class Event(SONWrapper):
