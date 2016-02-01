@@ -70,6 +70,17 @@ def event_by_id(__id):
     tmp = ecol.find_one({'_id': _id(__id)})
     return None if tmp is None else Event(tmp)
 
+def is_superuser(user):
+    return 'secretariaat' in user.cached_groups_names
+
+def may_set_owner(user, owner):
+    if is_superuser(owner):
+        return True
+    comms = Es.id_by_name('comms', use_cache=True)
+    allowTag = Es.id_by_name('!can-organize-official-events', use_cache=True)
+    return owner.has_tag(comms) or owner.has_tag(allowTag)
+
+
 class Event(SONWrapper):
     def __init__(self, data):
         super(Event, self).__init__(data, ecol, detect_race=True)

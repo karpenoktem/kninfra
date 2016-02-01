@@ -29,6 +29,12 @@ entities:
   names: ['!year-group']
   tags: [!id '4e6fcc85e60edf3dc0000000']
   types: [tag]
+- _id: !id 56af677edef5152cf39aa2bc
+  humanNames:
+  - {human: Mag officiële activiteiten organiseren, name: '!can-organize-official-events'}
+  names: ['!can-organize-official-events']
+  tags: [!id '4e6fcc85e60edf3dc0000000']
+  types: [tag]
 - _id: !id '4e6fcc85e60edf3dc0000005'
   humanNames:
   - {human: Wel jaar 1}
@@ -368,6 +374,13 @@ entities:
   names: [fotocie, fotos]
   tags: [!id '4e6fcc85e60edf3dc000007e']
   types: [group, tag]
+- _id: !id 50bcaaec0032a07ed8000000
+  description: Organisatie van het kerstgala
+  humanNames:
+  - {genitive_prefix: van de, human: Galagroep, name: galagroep}
+  names: [galagroep]
+  tags: [!id '4e6fcc85e60edf3dc000007e', !id 56af677edef5152cf39aa2bc]
+  types: [group, tag]
 - _id: !id '4e6fcc85e60edf3dc000006f'
   description: De loze activiteitencommissie.
   humanNames:
@@ -492,7 +505,8 @@ entities:
   names: [lists-auto]
   tags: [!id '4e6fcc85e60edf3dc00000b9']
   types: [tag]
-- description: De e-maillijsten waar je zelf lid van kunt worden.
+- _id: !id 4e6fcc85e60edf3dc00000bc
+  description: De e-maillijsten waar je zelf lid van kunt worden.
   humanNames:
   - {genitive_prefix: van de, human: Vrijwillige E-Maillijsten, name: lists-opted}
   names: [lists-opted]
@@ -575,7 +589,8 @@ entities:
   names: [admlezers]
   tags: [!id '4e6fcc85e60edf3dc000007e']
   types: [group, tag]
-- description: Alle groepen die met "Vrijelijk betreedbaar" zijn getagged kun je zelf
+- _id: !id 4ea9ce060032a04a41000001
+  description: Alle groepen die met "Vrijelijk betreedbaar" zijn getagged kun je zelf
     in en uit gaan.
   humanNames:
   - {human: Vrijelijk betreedbaar, name: '!free-to-join'}

@@ -3,6 +3,7 @@ from django import forms
 from kn.leden.forms import EntityChoiceField
 from kn.leden.mongo import _id
 import kn.leden.entities as Es
+import kn.subscriptions.entities as subscr_Es
 
 import textwrap
 
@@ -11,10 +12,9 @@ def get_allowed_owners(user):
     Get the entities (often groups) that this owner is allowed to use.
     Does not check for superuser capabilities (which may select any entity).
     '''
-    # Warning: the actual checking is done in views.event_new_or_edit!
-    comms = Es.by_name('comms')
-    entities = [user] + \
-                [g for g in user.cached_groups if g.has_tag(comms)]
+
+    entities = [user] + [g for g in user.cached_groups
+                           if subscr_Es.may_set_owner(user, g)]
     return entities
 
 
