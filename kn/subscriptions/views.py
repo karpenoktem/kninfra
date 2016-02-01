@@ -152,7 +152,7 @@ def api(request):
 
 @login_required
 def event_new_or_edit(request, edit=None):
-    superuser = 'secretariaat' in request.user.cached_groups_names
+    superuser = subscr_Es.is_superuser(request.user)
     if edit is not None:
         e = subscr_Es.event_by_name(edit)
         if e is None:
@@ -172,8 +172,8 @@ def event_new_or_edit(request, edit=None):
                 owner = Es.by_id(fd['owner'])
                 if not request.user.is_related_with(owner):
                     raise PermissionDenied('User not related with owner')
-                if not owner.has_tag(Es.id_by_name('comms')):
-                    raise PermissionDenied('Owner is not in "comms"')
+                if not subscr_Es.may_set_owner(request.user, owner):
+                    raise PermissionDenied('Owner is not allowed')
             name = fd['name']
             # If not secretariaat, then prefix name with the username
             if fd['owner'] == request.user.id:
