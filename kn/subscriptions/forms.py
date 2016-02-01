@@ -36,7 +36,7 @@ def get_add_event_form(user, superuser=False):
                                                for e in get_allowed_owners(user)])
         has_public_subscriptions = forms.BooleanField(required=False,
                 label='Inschrijvingen openbaar')
-        may_unsubscribe = forms.BooleanField(required=False, initial=True,
+        may_unsubscribe = forms.BooleanField(required=False, initial=False,
                 label='Leden mogen zichzelf afmelden')
     return AddEventForm
 
