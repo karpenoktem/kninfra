@@ -60,6 +60,16 @@ def event_detail(request, name):
             subscription = event.subscribe(request.user, notes)
         return HttpResponseRedirect(reverse('event-detail',
                                             args=(event.name,)))
+    elif request.method == 'POST' and 'unsubscribe' in request.POST:
+        if not event.can_unsubscribe:
+            raise PermissionDenied
+        if not subscription.subscribed:
+            messages.error(request, "Je bent al afgemeld")
+        else:
+            notes = request.POST['notes']
+            subscription = event.unsubscribe(request.user, notes)
+        return HttpResponseRedirect(reverse('event-detail',
+                                            args=(event.name,)))
     elif request.method == 'POST' and 'invite' in request.POST:
         if not event.is_open:
             raise PermissionDenied
@@ -80,17 +90,17 @@ def event_detail(request, name):
                              u != request.user,
                    Es.by_name('leden').get_members())
     users.sort(key=lambda u: unicode(u.humanName))
-    subscriptions = event.subscriptions
-    subscriptions.sort(key=lambda s: s.date)
-    invitations = event.invitations
-    invitations.sort(key=lambda i: i.date)
+    listSubscribed = sorted(event.listSubscribed, key=lambda s: s.date)
+    listUnsubscribed = sorted(event.listUnsubscribed, key=lambda s: s.date)
+    listInvited = sorted(event.listInvited, key=lambda s: s.date)
 
     ctx = {'object': event,
            'user': request.user,
            'users': users,
            'subscription': subscription,
-           'subscriptions': subscriptions,
-           'invitations': invitations,
+           'listSubscribed': listSubscribed,
+           'listUnsubscribed': listUnsubscribed,
+           'listInvited': listInvited,
            'has_read_access': has_read_access,
            'has_write_access': has_write_access}
     return render_to_response('subscriptions/event_detail.html', ctx,
@@ -179,9 +189,8 @@ def event_new_or_edit(request, edit=None):
                 'description': fd['description'],
                 'description_html': kn.utils.markdown.parser.convert(
                                                 fd['description']),
-                'subscribedMailBody': fd['subscribedMailBody'],
-                'invitedMailBody': fd['invitedMailBody'],
                 'has_public_subscriptions': fd['has_public_subscriptions'],
+                'may_unsubscribe': fd['may_unsubscribe'],
                 'humanName': fd['humanName'],
                 'createdBy': request.user._id,
                 'name': name,
