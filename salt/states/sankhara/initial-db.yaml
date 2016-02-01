@@ -492,7 +492,8 @@ entities:
   names: [lists-auto]
   tags: [!id '4e6fcc85e60edf3dc00000b9']
   types: [tag]
-- description: De e-maillijsten waar je zelf lid van kunt worden.
+- _id: !id 4e6fcc85e60edf3dc00000bc
+  description: De e-maillijsten waar je zelf lid van kunt worden.
   humanNames:
   - {genitive_prefix: van de, human: Vrijwillige E-Maillijsten, name: lists-opted}
   names: [lists-opted]
@@ -575,7 +576,8 @@ entities:
   names: [admlezers]
   tags: [!id '4e6fcc85e60edf3dc000007e']
   types: [group, tag]
-- description: Alle groepen die met "Vrijelijk betreedbaar" zijn getagged kun je zelf
+- _id: !id 4ea9ce060032a04a41000001
+  description: Alle groepen die met "Vrijelijk betreedbaar" zijn getagged kun je zelf
     in en uit gaan.
   humanNames:
   - {human: Vrijelijk betreedbaar, name: '!free-to-join'}
