@@ -2,6 +2,7 @@ from html2text import HTML2Text
 
 import django.template
 import django.template.loader
+from django.template.loader_tags import BlockNode
 import django.core.mail
 
 from django.conf import settings
@@ -24,11 +25,8 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
     ctx['BASE_URL'] = settings.BASE_URL
     context = django.template.Context(ctx)
     for node in template.nodelist:
-        if node.__class__.__name__ != 'BlockNode':
-            # XXX importing BlockNode from django.template.loader_tags fails.
-            #     Hence this workaround.
-            continue
-        rendered_nodes[node.name] = node.render(context)
+        if isinstance(node, BlockNode):
+            rendered_nodes[node.name] = node.render(context)
     if not 'subject' in rendered_nodes:
         raise KeyError, "Missing subject block"
     if not 'plain' in rendered_nodes and not 'html' in rendered_nodes:
