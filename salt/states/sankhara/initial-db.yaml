@@ -368,6 +368,13 @@ entities:
   names: [fotocie, fotos]
   tags: [!id '4e6fcc85e60edf3dc000007e']
   types: [group, tag]
+- _id: !id 50bcaaec0032a07ed8000000
+  description: Organisatie van het kerstgala
+  humanNames:
+  - {genitive_prefix: van de, human: Galagroep, name: galagroep}
+  names: [galagroep]
+  tags: [!id '4e6fcc85e60edf3dc000007e']
+  types: [group, tag]
 - _id: !id '4e6fcc85e60edf3dc000006f'
   description: De loze activiteitencommissie.
   humanNames:
