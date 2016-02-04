@@ -138,7 +138,7 @@ def _api_get_email_addresses(request):
     return JsonHttpResponse({
             'success': True,
             'addresses': [s.user.canonical_full_email
-                    for s in event.subscriptions]})
+                    for s in event.listSubscribed]})
 
 @login_required
 def api(request):
