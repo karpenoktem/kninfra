@@ -169,7 +169,7 @@ class Event(SONWrapper):
     @property
     def can_subscribe(self):
         if self.max_subscriptions is not None and \
-                len(self.subscriptions) >= self.max_subscriptions:
+                len(self.listSubscribed) >= self.max_subscriptions:
             return False
         return self.is_open
     @property
