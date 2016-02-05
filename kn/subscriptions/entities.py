@@ -3,10 +3,10 @@ import datetime
 
 from django.db.models import permalink
 from django.utils.html import escape, linebreaks
-from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
+from kn.base.mail import render_then_email
 from kn.leden.mongo import db, SONWrapper, _id, son_property
 import kn.leden.entities as Es
 
@@ -28,6 +28,7 @@ ecol = db['events']
 #   "description" : "Beschrijving (in **Markdown**).",
 #   "description_html" : "<p>Beschrijving (in <strong>Markdown</strong>).</p>",
 #   "has_public_subscriptions" : true,
+#   "may_unsubscribe": true,
 #   "subscriptions" : [
 #       { "user" : ObjectId("4e6fcc85e60edf3dc0000b9f"),
 #         "inviter" : ObjectId("50f29894d4080076aa541de2"),
@@ -43,14 +44,12 @@ ecol = db['events']
 #       { "user" : ObjectId("4e6fcc85e60edf3dc00001d4"),
 #         "inviter" : ObjectId("50f29894d4080076aa541de2"),
 #         "inviterNotes" : "",
-#         "inviteDate" : ISODate("2015-06-10T19:37:32.514Z") } ],
-#   "subscribedMailBody" : "Hallo %(firstName)s,\r\n\r\nJe hebt je aangemeld voor %(eventName)s.\r\n\r\nJe opmerkingen waren:\r\n%(notes)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s",
-#   "invitedMailBody" : "Hallo %(firstName)s,\r\n\r\nJe bent door %(by_firstName)s aangemeld voor %(eventName)s.\r\n\r\n%(by_firstName)s opmerkingen waren:\r\n%(by_notes)s\r\n\r\nOm deze aanmelding te bevestigen, bezoek:\r\n  %(confirmationLink)s\r\n\r\nMet een vriendelijke groet,\r\n\r\n%(owner)s"
+#         "inviteDate" : ISODate("2015-06-10T19:37:32.514Z") } ]
 # }
 #
 # Possible states:
 #   * "subscribed"
-#   * "unsubscribed" (unimplemented)
+#   * "unsubscribed"
 #   * "reserve"      (unimplemented)
 # When someone has a subscription but no history that person is only invited,
 # not subscribed.
@@ -71,6 +70,17 @@ def event_by_id(__id):
     tmp = ecol.find_one({'_id': _id(__id)})
     return None if tmp is None else Event(tmp)
 
+def is_superuser(user):
+    return 'secretariaat' in user.cached_groups_names
+
+def may_set_owner(user, owner):
+    if is_superuser(owner):
+        return True
+    comms = Es.id_by_name('comms', use_cache=True)
+    allowTag = Es.id_by_name('!can-organize-official-events', use_cache=True)
+    return owner.has_tag(comms) or owner.has_tag(allowTag)
+
+
 class Event(SONWrapper):
     def __init__(self, data):
         super(Event, self).__init__(data, ecol, detect_race=True)
@@ -79,6 +89,7 @@ class Event(SONWrapper):
     name = son_property(('name',))
     humanName = son_property(('humanName',))
     date = son_property(('date',))
+    may_unsubscribe = son_property(('may_unsubscribe',))
     @property
     def id(self):
         return str(self._data['_id'])
@@ -89,10 +100,13 @@ class Event(SONWrapper):
     def createdBy(self):
         return Es.by_id(self._data['createdBy'])
     @property
-    def subscriptions(self):
+    def listSubscribed(self):
         return [s for s in self._subscriptions.values() if s.subscribed]
     @property
-    def invitations(self):
+    def listUnsubscribed(self):
+        return [s for s in self._subscriptions.values() if s.unsubscribed]
+    @property
+    def listInvited(self):
         return filter(lambda s: s.invited and not s.has_mutations,
                       self._subscriptions.values())
     def get_subscription(self, user, create=False):
@@ -127,11 +141,13 @@ class Event(SONWrapper):
     is_official = son_property(('is_official',), True)
     has_public_subscriptions = son_property(('has_public_subscriptions',),
                                     False)
-    subscribedMailBody = son_property(('subscribedMailBody',))
-    invitedMailBody = son_property(('invitedMailBody',))
 
     def __unicode__(self):
         return unicode('%s (%s)' % (self.humanName, self.owner))
+
+    @property
+    def history(self):
+        return [HistoryEvent(d, self) for d in self._data.get('history', [])]
 
     @permalink
     def get_absolute_url(self):
@@ -153,9 +169,12 @@ class Event(SONWrapper):
     @property
     def can_subscribe(self):
         if self.max_subscriptions is not None and \
-                len(self.subscriptions) >= self.max_subscriptions:
+                len(self.listSubscribed) >= self.max_subscriptions:
             return False
         return self.is_open
+    @property
+    def can_unsubscribe(self):
+        return self.is_open and self.may_unsubscribe
     @property
     def is_member_activity(self):
         if self.is_official:
@@ -166,10 +185,61 @@ class Event(SONWrapper):
         subscription = self.get_subscription(user, create=True)
         subscription.subscribe(notes)
         return subscription
+    def unsubscribe(self, user, notes):
+        subscription = self.get_subscription(user, create=True)
+        subscription.unsubscribe(notes)
+        return subscription
     def invite(self, user, notes, inviter):
         subscription = self.get_subscription(user, create=True)
         subscription.invite(inviter, notes)
         return subscription
+
+    def pushHistory(self, historyEvent):
+        if not 'history' in self._data:
+            self._data['history'] = []
+        self._data['history'].append(historyEvent)
+    def open(self, user, save=True):
+        if self.is_open:
+            return
+        self.is_open = True
+        self.pushHistory({
+            'action': 'opened',
+            'date': datetime.datetime.now(),
+            'by': _id(user)})
+        if save:
+            self.save()
+    def close(self, user, save=True):
+        if not self.is_open:
+            return
+        self.is_open = False
+        self.pushHistory({
+            'action': 'closed',
+            'date': datetime.datetime.now(),
+            'by': _id(user)})
+        if save:
+            self.save()
+    def update(self, data, user, save=True):
+        self._data.update(data)
+        self.pushHistory({
+            'action': 'edited',
+            'date': datetime.datetime.now(),
+            'by': _id(user)})
+        if save:
+            self.save()
+
+# Edit events in the event: 'opened', 'closed', 'edited'.
+class HistoryEvent(SONWrapper):
+    def __init__(self, data, event):
+        super(HistoryEvent, self).__init__(data, ecol, event)
+        self.event = event
+
+    action = son_property(('action',))
+    date = son_property(('date',))
+
+    @property
+    def user(self):
+        return Es.by_id(self._data['by'])
+
 
 # A Subscription is the relation between a user and an event. When anything
 # happens between the user and the event (invitation, subscription,
@@ -221,6 +291,9 @@ class Subscription(SONWrapper):
     def subscribed(self):
         return self._state == 'subscribed'
     @property
+    def unsubscribed(self):
+        return self._state == 'unsubscribed'
+    @property
     def date(self):
         # last change date
         return self.lastMutation.get('date') or self.inviteDate
@@ -239,36 +312,32 @@ class Subscription(SONWrapper):
 
     def subscribe(self, notes):
         assert not self.subscribed
-        self.push_mutation({
+        mutation = {
             'state': 'subscribed',
             'notes': notes,
-            'date': datetime.datetime.now()})
+            'date': datetime.datetime.now()}
+        self.push_mutation(mutation)
         self.save()
-        self.send_notification(
-                "Aanmelding %s" % self.event.humanName,
-                 self.event.subscribedMailBody % {
-                    'firstName': self.user.first_name,
-                    'eventName': self.event.humanName,
-                    'owner': self.event.owner.humanName,
-                    'notes': notes})
+        self.send_notification(mutation)
+    def unsubscribe(self, notes):
+        assert self.subscribed
+        mutation = {
+            'state': 'unsubscribed',
+            'notes': notes,
+            'date': datetime.datetime.now()}
+        self.push_mutation(mutation)
+        self.save()
+        self.send_notification(mutation)
     def invite(self, inviter, notes):
         assert not self.invited and not self.has_mutations
         self._data['inviter'] = _id(inviter)
         self._data['inviteDate'] = datetime.datetime.now()
         self._data['inviterNotes'] = notes
         self.save()
-        self.send_notification(
-                "Uitnodiging " + self.event.humanName,
-                 self.event.invitedMailBody % {
-                    'firstName': self.user.first_name,
-                    'by_firstName': inviter.first_name,
-                    'by_notes': notes,
-                    'eventName': self.event.humanName,
-                    'confirmationLink': (settings.BASE_URL +
-                            reverse('event-detail', args=(self.event.name,))),
-                    'owner': self.event.owner.humanName})
+        self.send_notification({'state': 'invited'})
 
-    def send_notification(self, subject, body):
+    def send_notification(self, mutation,
+            template='subscriptions/subscription-notification.mail.html'):
         cc = [self.event.owner.canonical_full_email]
         if self.invited:
             cc.append(self.inviter.canonical_full_email)
@@ -276,18 +345,18 @@ class Subscription(SONWrapper):
         # headers:
         # https://tools.ietf.org/html/rfc5322#section-3.6.4
         # They are used here for proper threading in mail applications.
-        email = EmailMessage(
-                subject,
-                body,
-                'Karpe Noktem Activiteiten <root@karpenoktem.nl>',
-                [self.user.canonical_full_email],
+        render_then_email(template,
+                self.user.canonical_full_email,
+                ctx={
+                    'mutation': mutation,
+                    'subscription': self,
+                    'event': self.event,
+                },
                 cc=cc,
+                reply_to=self.event.owner.canonical_full_email,
                 headers={
-                    'Reply-To': self.event.owner.canonical_full_email,
                     'In-Reply-To': self.event.messageId,
                     'References': self.event.messageId,
-                },
-        )
-        email.send()
+                })
 
 # vim: et:sta:bs=2:sw=4:

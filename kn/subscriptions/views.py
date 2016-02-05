@@ -55,6 +55,16 @@ def event_detail(request, name):
             subscription = event.subscribe(request.user, notes)
         return HttpResponseRedirect(reverse('event-detail',
                                             args=(event.name,)))
+    elif request.method == 'POST' and 'unsubscribe' in request.POST:
+        if not event.can_unsubscribe:
+            raise PermissionDenied
+        if not subscription.subscribed:
+            messages.error(request, "Je bent al afgemeld")
+        else:
+            notes = request.POST['notes']
+            subscription = event.unsubscribe(request.user, notes)
+        return HttpResponseRedirect(reverse('event-detail',
+                                            args=(event.name,)))
     elif request.method == 'POST' and 'invite' in request.POST:
         if not event.is_open:
             raise PermissionDenied
@@ -75,32 +85,39 @@ def event_detail(request, name):
                              u != request.user,
                    Es.by_name('leden').get_members())
     users.sort(key=lambda u: unicode(u.humanName))
-    subscriptions = event.subscriptions
-    subscriptions.sort(key=lambda s: s.date)
-    invitations = event.invitations
-    invitations.sort(key=lambda i: i.date)
+    listSubscribed = sorted(event.listSubscribed, key=lambda s: s.date)
+    listUnsubscribed = sorted(event.listUnsubscribed, key=lambda s: s.date)
+    listInvited = sorted(event.listInvited, key=lambda s: s.date)
 
     ctx = {'object': event,
            'user': request.user,
            'users': users,
            'subscription': subscription,
-           'subscriptions': subscriptions,
-           'invitations': invitations,
+           'listSubscribed': listSubscribed,
+           'listUnsubscribed': listUnsubscribed,
+           'listInvited': listInvited,
            'has_read_access': has_read_access,
            'has_write_access': has_write_access}
     return render_to_response('subscriptions/event_detail.html', ctx,
             context_instance=RequestContext(request))
 
-def _api_close_event(request):
-    if not 'id' in request.REQUEST:
-        return JsonHttpResponse({'error': 'missing argument'})
+def _api_event_set_opened(request):
+    if not 'id' in request.REQUEST or not isinstance(request.REQUEST['id'], basestring):
+        return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
     e = subscr_Es.event_by_id(request.REQUEST['id'])
     if not e:
         raise Http404
     if not e.has_write_access(request.user):
         raise PermissionDenied
-    e.is_open = False
-    e.save()
+
+    opened = {'true': True, 'false': False}.get(request.REQUEST.get('opened'))
+    if opened is True:
+        e.open(request.user)
+    elif opened is False:
+        e.close(request.user)
+    else:
+        return JsonHttpResponse({'error': 'invalid or missing argument "opened"'})
+
     return JsonHttpResponse({'success': True})
 
 def _api_get_email_addresses(request):
@@ -116,21 +133,21 @@ def _api_get_email_addresses(request):
     return JsonHttpResponse({
             'success': True,
             'addresses': [s.user.canonical_full_email
-                    for s in event.subscriptions]})
+                    for s in event.listSubscribed]})
 
 @login_required
 def api(request):
     action = request.REQUEST.get('action')
     if action == 'get-email-addresses':
         return _api_get_email_addresses(request)
-    elif action == 'close-event':
-        return _api_close_event(request)
+    elif action == 'event-set-opened':
+        return _api_event_set_opened(request)
     else:
         return JsonHttpResponse({'error': 'unknown action'})
 
 @login_required
 def event_new_or_edit(request, edit=None):
-    superuser = 'secretariaat' in request.user.cached_groups_names
+    superuser = subscr_Es.is_superuser(request.user)
     if edit is not None:
         e = subscr_Es.event_by_name(edit)
         if e is None:
@@ -150,8 +167,8 @@ def event_new_or_edit(request, edit=None):
                 owner = Es.by_id(fd['owner'])
                 if not request.user.is_related_with(owner):
                     raise PermissionDenied('User not related with owner')
-                if not owner.has_tag(Es.id_by_name('comms')):
-                    raise PermissionDenied('Owner is not in "comms"')
+                if not subscr_Es.may_set_owner(request.user, owner):
+                    raise PermissionDenied('Owner is not allowed')
             name = fd['name']
             # If not secretariaat, then prefix name with the username
             if fd['owner'] == request.user.id:
@@ -167,20 +184,19 @@ def event_new_or_edit(request, edit=None):
                 'description': fd['description'],
                 'description_html': kn.utils.markdown.parser.convert(
                                                 fd['description']),
-                'subscribedMailBody': fd['subscribedMailBody'],
-                'invitedMailBody': fd['invitedMailBody'],
                 'has_public_subscriptions': fd['has_public_subscriptions'],
+                'may_unsubscribe': fd['may_unsubscribe'],
                 'humanName': fd['humanName'],
                 'createdBy': request.user._id,
                 'name': name,
                 'cost': str(fd['cost']),
                 'max_subscriptions': fd['max_subscriptions'],
-                'is_open': True,
                 'is_official': superuser}
             if edit is None:
+                d['is_open'] = True # default for new events
                 e = subscr_Es.Event(d)
             else:
-                e._data.update(d)
+                e.update(d, request.user, save=False)
             e.save()
             render_then_email('subscriptions/' +
                     ('event-edited' if edit else 'new-event') + '.mail.txt',
