@@ -1,6 +1,102 @@
 {% extends "leden/base.html" %}
 {% load base %}
 
+{% block head %}
+{{ block.super }}
+<script>
+'use strict';
+var userNames = {{ userNames|json }};
+var userFullNames = {{ userFullNames|json }};
+var USERNAME_CHARS = {{ USERNAME_CHARS|json }};
+
+function find_name_for_user(first_name, last_name) {
+    // Given the first and the last name of a user, find a free name
+    function clean(s, last_name, capitalize_tussenvoegsels) {
+        // Cleans a first or last name.  We do some extra things for last
+        // names and optionally capitalize letters that came
+        // from tussenvoegsels.
+        if (last_name && s.indexOf(',') > -1) {
+            var bits  = s.split(',', 2);
+            s = bits[1] + ' ' + bits[0];
+        }
+        s = s.toLowerCase();
+        // filter chars
+        var s2 = ''
+        for (var i=0; i<s.length; i++) {
+            if (USERNAME_CHARS.indexOf(s.charAt(i)) > -1) {
+                s2 += s.charAt(i);
+            }
+        }
+        s = s2;
+        if (last_name) {
+            s = s.replace('van ', 'V ');
+            s = s.replace('der ', 'D ');
+            s = s.replace('de ', 'D ');
+            s = s.replace('den ', 'D ');
+            if (!capitalize_tussenvoegsels) {
+                s = s.toLowerCase();
+            }
+        }
+        return s.replace(' ', '');
+    }
+
+    var fn = clean(first_name);
+    var ln_ctv = clean(last_name, true, true);
+    var ln = clean(last_name, true);
+    // Others users with this firstname
+    var users_with_same_fn = [];
+    for (var i=0; i<userFullNames.length; i++) {
+        if (clean(userFullNames[i][0]) === fn) {
+            users_with_same_fn.push(userFullNames[i]);
+        }
+    }
+    // Try first_name or first_name with a few letters of the last_name appended
+    for (var i=0; i<=ln.length; i++) {
+        var n = fn + ln.substring(0, i);
+        // Don't try giedov, but directly giedovdm if the name is derived
+        // from `Giedo van der Meer'.
+        if (i && ln_ctv.substring(i-1, 1) ==
+                ln_ctv.substring(i-1, 1).toUpperCase()) {
+            continue;
+        }
+        if (userNames.indexOf(n) > -1) {
+            continue;
+        }
+        // Recall `Giedo Jansen' has the username `giedo'.  Suppose there is
+        // a new member called `Giedo Joosten'. In this case we want to give
+        // him the username `giedojo' instead of `giedoj'.
+        var ok = true;
+        for (var i=0; i<users_with_same_fn.length; i++) {
+            var u = users_with_same_fn[i];
+            var un = clean(u[0]) + clean(u[1], true);
+            if (un == un.substr(n.length-1)) {
+                ok = false;
+                break;
+            }
+        }
+        if (ok) {
+            return n;
+        }
+    }
+    // Last resort: try <first_name><last_name><i> for i in {2,3,...}
+    var i = 1;
+    while (true) {
+        i += 1
+        var n = fn + ln + i;
+        if (userNames.indexOf(n) == -1) {
+            return n;
+        }
+    }
+}
+function update_username() {
+    var first_name = document.querySelector('#id_first_name').value;
+    var last_name = document.querySelector('#id_last_name').value;
+    var username = find_name_for_user(first_name, last_name);
+    document.querySelector('#id_username').value = username;
+}
+</script>
+{% endblock head %}
+
 {% block body %}
 <form method="post" action="?">{% csrf_token %}
 <table>

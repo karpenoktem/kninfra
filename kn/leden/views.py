@@ -24,7 +24,6 @@ from django.contrib import messages
 
 from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
 from kn.leden.auth import login_or_basicauth_required
-from kn.leden.utils import find_name_for_user
 from kn.leden.date import now, date_to_dt
 from kn.leden.mongo import _id
 from kn.leden import giedo
@@ -486,8 +485,7 @@ def secr_add_user(request):
         form = AddUserForm(request.POST)
         if form.is_valid():
             fd = form.cleaned_data
-            nm = find_name_for_user(fd['first_name'],
-                        fd['last_name'])
+            nm = fd['username']
             # First, create the entity.
             u = Es.User({
                 'types': ['user'],
@@ -564,7 +562,10 @@ def secr_add_user(request):
     else:
         form = AddUserForm()
     return render_to_response('leden/secr_add_user.html',
-            {'form': form},
+            {'form': form,
+             'userNames': list(Es.names()),
+             'userFullNames': [(u.first_name, u.last_name) for u in Es.users()],
+             'USERNAME_CHARS': settings.USERNAME_CHARS},
             context_instance=RequestContext(request))
 
 @login_required
