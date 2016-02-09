@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.forms.widgets import flatatt
 from django.core.exceptions import ValidationError
 from django.utils.html import escape
+from django.conf import settings
 from django import forms
 
 import kn.leden.entities as Es
@@ -52,6 +53,8 @@ class EntityChoiceField(forms.CharField):
 def validate_username(username):
     if username in Es.names():
         raise ValidationError('Gebruikersnaam is al in gebruik')
+    if any(map(lambda c: c not in settings.USERNAME_CHARS, username)):
+        raise ValidationError('Gebruikersnaam heeft niet toegestaan karakter')
 
 class AddUserForm(forms.Form):
     last_name = forms.CharField(label="Achternaam",
