@@ -83,7 +83,7 @@ Geschiedenis:
             uitgenodigd.</div>
             {% endif %}
 
-            {% if object.can_subscribe and not subscription.subscribed or object.can_unsubscribe and not subscription.unsubscribed %}
+            {% if object.can_subscribe and not subscription.subscribed or object.can_unsubscribe and subscription.subscribed %}
             <!--[if lte IE 9]>
             Opmerkingen:<br/>
             <![endif]-->
