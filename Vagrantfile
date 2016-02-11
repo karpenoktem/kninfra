@@ -26,8 +26,11 @@ def configure_vagrant
             config.vm.hostname = "vagrant-" + hostname + ".lan"
             config.vm.box_url = "https://atlas.hashicorp.com/debian/boxes/" \
                    + "jessie64/versions/8.2.0/providers/virtualbox.box"
-            config.vm.synced_folder "salt/states", "/srv/salt"
-            config.vm.synced_folder "salt/pillar", "/srv/pillar"
+            config.vm.synced_folder "salt/states", "/srv/salt", \
+                                    type: "virtualbox"
+            config.vm.synced_folder "salt/pillar", "/srv/pillar", \
+                                    type: "virtualbox"
+            config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
             config.vm.provision :salt do |salt|
                 salt.run_highstate = true
                 salt.verbose = true
