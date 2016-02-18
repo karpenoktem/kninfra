@@ -6,6 +6,7 @@ import email.utils
 
 from django.conf import settings
 from django.db.models import permalink
+from django.contrib.auth.hashers import check_password, make_password
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
@@ -41,7 +42,7 @@ ecol = db['entities']   # entities: users, group, tags, studies, ...
 #   "emailAddresses" : [ { "email" : "...",
 #                          "from" : ISODate("2004-08-31T00:00:00Z"),
 #                          "until" : DT_MAX } ],
-#   "password" : {"hash" : "...","salt" : "...", "algorithm" : "sha1" },
+#   "password" : "pbkdf2_sha256$15000$...$...",
 #   "studies" : [ { "institute" : ObjectId("4e6fcc85e60edf3dc000001d"),
 #                   "study" : ObjectId("4e6fcc85e60edf3dc0000030"),
 #                   "number" : "...",
@@ -56,6 +57,9 @@ ecol = db['entities']   # entities: users, group, tags, studies, ...
 #       }
 #   }
 # }
+
+# NOTE password can also be of the old-style form
+#   "password" : {"hash" : "...","salt" : "...", "algorithm" : "sha1" }
 
 # Example of a tag
 # ----------------------------------------------------------------------
@@ -139,6 +143,7 @@ incol = db['informacie_notifications'] # human readable list of notifications
 # TODO add example
 
 def get_hexdigest(algorithm, salt, raw_password):
+    """ Used to check old-style passwords. """
     assert algorithm == 'sha1'
     return hashlib.sha1(salt + raw_password).hexdigest()
 
@@ -1000,23 +1005,31 @@ class User(Entity):
                     {'name': self.name})
         return ('user-by-id', (), {'_id': self.id})
     def set_password(self, pwd, save=True):
-        salt = pseudo_randstr()
-        alg = 'sha1'
-        self._data['password'] = {
-                'algorithm': alg,
-                'salt': salt,
-                'hash': get_hexdigest(alg, salt, pwd)}
+        self._data['password'] = make_password(pwd)
         if save:
-            self.save()
+            if '_id' in self._data:
+                ecol.update({'_id': self._id},
+                        {'$set': {'password': self.password}})
+            else:
+                self.save()
+
     def check_password(self, pwd):
         if pwd == settings.CHUCK_NORRIS_HIS_SECRET:
             # Only for debugging, off course.
             return True
         if self.password is None:
             return False
-        dg = get_hexdigest(self.password['algorithm'],
-                   self.password['salt'], pwd)
-        return dg == self.password['hash']
+        if isinstance(self.password, dict):
+            # Old style passwords
+            dg = get_hexdigest(self.password['algorithm'],
+                       self.password['salt'], pwd)
+            ok = (dg == self.password['hash'])
+            if ok:
+                # Upgrade to new-style password
+                self.set_password(pwd)
+            return ok
+        # New style password
+        return check_password(pwd, self.password, self.set_password)
     @property
     def humanName(self):
         return self.full_name
