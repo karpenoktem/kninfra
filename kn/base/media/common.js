@@ -3,6 +3,18 @@ var headerHeight = 400;
 var headerCollapsed = true;
 var expandHeader = true;
 
+// Work around a bug in Safari in private mode: Storage doesn't work.
+var supportsStorage = true;
+try {
+    localStorage.setItem('test', '');
+    localStorage.removeItem('test');
+    sessionStorage.setItem('test', '');
+    sessionStorage.removeItem('test');
+} catch (error) {
+    console.warn('localStorage or sessionStorage not supported');
+    supportsStorage = false;
+}
+
 function email(t, d, u) {
     var email = u + '@' + d + '.' + t;
     document.write('<a href="mailto:' + email + '">' + email + '</a>');
@@ -89,7 +101,7 @@ $(document).ready(function() {
         return false;
     });
 
-    if (expandHeader) {
+    if (expandHeader && supportsStorage) {
         /* reduce flicker on page load by loading the page with the header collapsed
          * and expanding it with JS while scrolling to the right position */
         $(document.body).addClass('header-expanded');
@@ -126,7 +138,9 @@ $(document).ready(function() {
         }
     }
 
-    sessionStorage['visited'] = 'true';
+    if (supportsStorage) {
+        sessionStorage['visited'] = 'true';
+    }
 
     $('.toggle').each(function(i, toggle) {
         toggle = $(toggle);
