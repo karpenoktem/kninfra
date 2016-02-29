@@ -11,9 +11,9 @@ from kn.static import views
 urlpatterns = [
     url(r'^home/?$', views.home, name='home'),
     url(r'^default/?$', views.home),
-    #url(r'^/?$', views.home),
-    url(r'^/?$', RedirectView.as_view(
-               url=reverse_lazy('openweekPoster2016'))),
+    url(r'^/?$', views.home),
+    #url(r'^/?$', RedirectView.as_view(
+    #           url=reverse_lazy('openweek2Poster2015'))),
     # TODO we have to specify a separate url entry to make the reverse URL work
     #      for pages with several names.  Is there a way to do this without
     #      the duplication.
