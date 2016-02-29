@@ -7,6 +7,7 @@ import email.utils
 from django.conf import settings
 from django.db.models import permalink
 from django.contrib.auth.hashers import check_password, make_password
+from django.utils.crypto import constant_time_compare
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
@@ -1014,7 +1015,7 @@ class User(Entity):
                 self.save()
 
     def check_password(self, pwd):
-        if pwd == settings.CHUCK_NORRIS_HIS_SECRET:
+        if constant_time_compare(pwd, settings.CHUCK_NORRIS_HIS_SECRET):
             # Only for debugging, off course.
             return True
         if self.password is None:
