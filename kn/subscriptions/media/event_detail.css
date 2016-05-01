@@ -4,11 +4,30 @@ form.subscribe {
 }
 form.subscribe textarea {
 	float: left;
-	margin-right: 5px;
+	width: 300px;
+	box-sizing: border-box;
 }
 
 blockquote.notes {
 	margin-top: 0;
 	margin-bottom: 0;
 	white-space: pre-line;
+}
+
+.button-text {
+	margin-left: 308px;
+}
+
+@media (max-width: 600px) {
+	/* 600px is a semi-random number */
+	/* align .button-text under textarea on small screens */
+	form.subscribe textarea {
+		float: none;
+		width: 100%;
+		max-width: 400px;
+		resize: vertical;
+	}
+	.button-text {
+		margin-left: 0;
+	}
 }
