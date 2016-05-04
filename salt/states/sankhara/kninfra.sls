@@ -25,6 +25,8 @@ sarah:
     pip.installed
 tarjan:
     pip.installed
+reserved:
+    pip.installed
 infra:
     group.present:
         - gid: 2000

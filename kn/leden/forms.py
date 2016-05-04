@@ -1,5 +1,6 @@
 import datetime
 import json
+import reserved
 
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
@@ -54,6 +55,8 @@ def validate_username(username):
         raise forms.ValidationError('Gebruikersnaam is al in gebruik')
     if any(map(lambda c: c not in settings.USERNAME_CHARS, username)):
         raise forms.ValidationError('Gebruikersnaam heeft niet-toegestaan karakter')
+    if not reserved.allowed(username):
+        raise forms.ValidationError('Gebruikersnaam is niet toegestaan')
 
 class AddUserForm(forms.Form):
     last_name = forms.CharField(label="Achternaam",
@@ -85,6 +88,7 @@ class AddUserForm(forms.Form):
             choices=[('eerstejaars', 'Eerstejaars'), ('aan', "Aan"),
                      ('uit', "Uit"), ('zooi', 'Zooi')],
             initial=['leden', 'eerstejaars', 'aan'],
+            required=False,
             widget=forms.CheckboxSelectMultiple())
 
 class AddGroupForm(forms.Form):
