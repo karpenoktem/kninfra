@@ -803,6 +803,11 @@ planning_pools:
   reminder_cc: []
   administrator: bestuur
   name: bestuur
+- _id: !id '5729ed1cb26fc6674d557bbf'
+  reminder_format: "Dag %(firstName)s,\n\nDenk je eraan dat je %(date)s moet %(vacancyName)s?\nBekijk voor meer info de planning: http://karpenoktem.nl/planning\n\nMet geautomatiseerde groet,\nDe planrobot"
+  reminder_cc: []
+  administrator: bestuur
+  name: sooscie
 - _id: !id '504c883d22516e0cccaf202a'
   reminder_format: "Dag %(firstName)s,\n\nDenk je aan de %(eventName)s, %(date)s?\nBekijk voor meer info de planning: http://karpenoktem.nl/planning\n\nMet geautomatiseerde groet,\nDe planrobot"
   reminder_cc: []
