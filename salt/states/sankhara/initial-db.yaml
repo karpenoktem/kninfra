@@ -406,6 +406,20 @@ entities:
   names: [vrouwen]
   tags: [!id '4e6fcc85e60edf3dc00000bb']
   types: [group, tag]
+- _id: !id '4e6fcc85e60edf3dc00000a4'
+  description: Leden die een incassoformulier hebben getekend.
+  humanNames:
+  - {genitive_prefix: van de, human: Incasso, name: incasso}
+  names: [incasso]
+  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  types: [group, tag]
+- _id: !id '4e6fcc85e60edf3dc00000a5'
+  description: Leden die geen incassoformulier hebben getekend.
+  humanNames:
+  - {genitive_prefix: van de, human: Geen Incasso, name: geen-incasso}
+  names: [geen-incasso]
+  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  types: [group, tag]
 - description: Frequent impulsief uitgaande mensen
   humanNames:
   - {genitive_prefix: van de, human: Uit, name: uit}
@@ -419,7 +433,8 @@ entities:
   names: [comms]
   tags: [!id '4e6fcc85e60edf3dc0000086']
   types: [tag]
-- description: Alle overige mailinglists.
+- _id: !id '4e6fcc85e60edf3dc000007e'
+  description: Alle overige mailinglists.
   humanNames:
   - {genitive_prefix: van de, human: Groepen, name: groepen}
   names: [groepen]
