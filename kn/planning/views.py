@@ -91,35 +91,47 @@ def planning_view(request):
     else:
         lookbehind = 1
     pools = list(Pool.all())
-    poolid2idx = dict()
+    poolid2index = dict()
+    poolids = set()
+    for pool in pools:
+        poolids.add(_id(pool))
+    # TODO reduce number of queries
+    event_entities = list(Event.all_since_datetime(date_to_midnight(now())
+            - datetime.timedelta(days=lookbehind)))
+    used_pools = set()
+    for e in event_entities:
+        for v in e.vacancies():
+            used_pools.add(v.pool_id)
+    pools_tpl = []
     i = 0
     for pool in pools:
-        poolid2idx[pool._id] = i
+        if _id(pool) not in used_pools:
+            continue
+        poolid2index[pool._id] = i
+        pools_tpl.append(pool)
         i += 1
     events = list()
-    # TODO reduce number of queries
-    for e in Event.all_since_datetime(date_to_midnight(now())
-            - datetime.timedelta(days=lookbehind)):
+    for e in event_entities:
         ei = {  'name': e.name,
                 'datetime': e.date,
                 'kind': e.kind,
             'vacancies': dict()}
-        for idx in poolid2idx.values():
-            ei['vacancies'][idx] = list()
+        for index in poolid2index.values():
+            ei['vacancies'][index] = list()
         for v in e.vacancies():
-            ei['vacancies'][poolid2idx[v.pool_id]].append({
+            ei['vacancies'][poolid2index[v.pool_id]].append({
                 'begin': v.begin,
                 'begin_time': v.begin_time,
                 'end_time': v.end_time,
                 'assignee': v.assignee.humanName
                         if v.assignee else "?"})
-        for idx in poolid2idx.values():
-            ei['vacancies'][idx].sort(key=lambda x: x['begin'])
+        for index in poolid2index.values():
+            ei['vacancies'][index].sort(key=lambda x: x['begin'])
         events.append(ei)
     events.sort(key=lambda x: x['datetime'])
     return render_to_response('planning/overview.html',
             {'events': events,
-             'pools': pools},
+             'pools': pools_tpl},
             context_instance=RequestContext(request))
 
 # extends cmp with None as bottom
