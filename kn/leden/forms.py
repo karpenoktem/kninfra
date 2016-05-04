@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.forms.widgets import flatatt
 from django.utils.html import escape
 from django import forms
+from django.conf import settings
 
 import kn.leden.entities as Es
 
@@ -48,11 +49,19 @@ class EntityChoiceField(forms.CharField):
         kwargs['widget'] = EntityChoiceFieldWidget(_type=_type)
         super(EntityChoiceField, self).__init__(*args, **kwargs)
 
+def validate_username(username):
+    if username in Es.names():
+        raise forms.ValidationError('Gebruikersnaam is al in gebruik')
+    if any(map(lambda c: c not in settings.USERNAME_CHARS, username)):
+        raise forms.ValidationError('Gebruikersnaam heeft niet-toegestaan karakter')
+
 class AddUserForm(forms.Form):
     last_name = forms.CharField(label="Achternaam",
                     widget=forms.TextInput(attrs={
                         'placeholder': 'bijv.: Vaart, van der'}))
     first_name = forms.CharField(label="Voornaam")
+    username = forms.CharField(label="Gebruikersnaam",
+                    validators=[validate_username])
     gender = forms.ChoiceField(label="Geslacht", choices=(('m', 'Man'),
                                ('v', 'Vrouw')))
     email = forms.EmailField(label="E-Mail adres")
