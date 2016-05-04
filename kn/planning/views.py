@@ -119,8 +119,7 @@ def planning_view(request):
     events.sort(key=lambda x: x['datetime'])
     return render_to_response('planning/overview.html',
             {'events': events,
-             'pools': pools,
-             'poolcount': len(pools)},
+             'pools': pools},
             context_instance=RequestContext(request))
 
 # extends cmp with None as bottom
