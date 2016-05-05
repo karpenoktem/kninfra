@@ -24,7 +24,6 @@ from django.contrib import messages
 
 from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
 from kn.leden.auth import login_or_basicauth_required
-from kn.leden.utils import find_name_for_user
 from kn.leden.date import now, date_to_dt
 from kn.leden.mongo import _id
 from kn.leden import giedo
@@ -486,12 +485,10 @@ def secr_add_user(request):
         form = AddUserForm(request.POST)
         if form.is_valid():
             fd = form.cleaned_data
-            nm = find_name_for_user(fd['first_name'],
-                        fd['last_name'])
             # First, create the entity.
             u = Es.User({
                 'types': ['user'],
-                'names': [nm],
+                'names': [fd['username']],
                 'humanNames': [{'human': fd['first_name']+' '+
                              fd['last_name']}],
                 'person': {
@@ -527,7 +524,7 @@ def secr_add_user(request):
                 'is_active': True,
                 'password': None
                 })
-            logging.info("Added user %s" % nm)
+            logging.info("Added user %s" % fd['username'])
             u.save()
             # Then, add the relations.
             groups = ['leden']
@@ -560,7 +557,7 @@ def secr_add_user(request):
                             'u': u})
             Es.notify_informacie('adduser', request.user, entity=u._id)
             return HttpResponseRedirect(reverse('user-by-name',
-                    args=(nm,)))
+                    args=(fd['username'],)))
     else:
         form = AddUserForm()
     return render_to_response('leden/secr_add_user.html',

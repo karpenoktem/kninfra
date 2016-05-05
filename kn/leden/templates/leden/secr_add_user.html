@@ -1,6 +1,60 @@
 {% extends "leden/base.html" %}
 {% load base %}
 
+{% block head %}
+{{ block.super }}
+<script>
+'use strict';
+
+var previous_username = null;
+var username_timeout = null;
+
+// Implement automatically suggesting a username:
+//   * with a delay of 300ms
+//   * without running two requests in parallel
+//   * only when the username field hasn't been modified
+function update_username() {
+    if (username_timeout === -1) {
+        // a request is pending
+        return;
+    }
+    var username_input = $('#id_username');
+    if (previous_username !== null &&
+            previous_username !== username_input.val() &&
+            username_input.val()) {
+        return;
+    }
+
+    clearTimeout(username_timeout);
+    setTimeout(function() {
+        var last_name = $('#id_last_name').val();
+        var first_name = $('#id_first_name').val();
+        username_timeout = -1;
+        leden_api({
+                action: 'adduser_suggest_username',
+                last_name: last_name,
+                first_name: first_name},
+            function(data) {
+                username_timeout = null;
+                if (!data.ok) {
+                    alert(data.error);
+                } else {
+                    username_input.val(data.username);
+                    previous_username = data.username;
+                }
+            });
+    }, 300);
+}
+
+$(function() {
+    previous_username = $('#id_username').val();
+    console.log('previous', previous_username);
+    $('#id_last_name').on('input', update_username);
+    $('#id_first_name').on('input', update_username);
+})
+</script>
+{% endblock head %}
+
 {% block body %}
 <form method="post" action="?">{% csrf_token %}
 <table>

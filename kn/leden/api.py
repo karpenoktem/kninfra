@@ -8,6 +8,7 @@ from kn.base.mail import render_then_email
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
 from kn.leden import giedo
+from kn.leden.utils import find_name_for_user
 
 @login_required
 def view(request):
@@ -196,6 +197,17 @@ def entity_set_property(data, request):
 
     return {'ok': True}
 
+def adduser_suggest_username(data, request):
+    if 'first_name' not in data or not isinstance(data['first_name'], basestring):
+        return {'ok': False, 'error': 'Missing argument "first_name"'}
+    if 'last_name' not in data or not isinstance(data['last_name'], basestring):
+        return {'ok': False, 'error': 'Missing argument "last_name"'}
+
+    if not 'secretariaat' in request.user.cached_groups_names:
+        return {'ok': False, 'error': 'Permission denied'}
+
+    return {'ok': True,
+            'username': find_name_for_user(data['first_name'], data['last_name'])}
 
 ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
@@ -205,6 +217,7 @@ ACTION_HANDLER_MAP = {
         'entity_update_primary':  entity_update_primary,
         'entity_update_visibility':  entity_update_visibility,
         'get_last_synced':  get_last_synced,
+        'adduser_suggest_username': adduser_suggest_username,
         None: no_such_action,
         }
 
