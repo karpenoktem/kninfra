@@ -112,7 +112,8 @@ def planning_view(request):
         i += 1
     events = list()
     for e in event_entities:
-        ei = {  'name': e.name,
+        ei = {  'id': _id(e),
+                'name': e.name,
                 'datetime': e.date,
                 'kind': e.kind,
             'vacancies': dict()}
