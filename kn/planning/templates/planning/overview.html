@@ -31,10 +31,11 @@
         <tr>
             {# TODO move into stylesheet #}
             <td
-                colspan="{{ poolcount }}"
+                colspan="{{ pools|length }}"
                 class="poolHeader">
-                <strong>{{ event.datetime|date:"l j F Y" }}</strong>
-                 - {{ event.name }}
+                <a href="{% url "planning-event-edit" eventid=event.id %}">
+                    <strong>{{ event.datetime|date:"l j F Y" }}</strong>
+                    - {{ event.name }}</a>
             </td>
         </tr>
         <tr>

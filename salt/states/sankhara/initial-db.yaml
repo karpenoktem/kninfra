@@ -796,3 +796,35 @@ events:
   description_html: <p>Beschrijving (in <strong>Markdown</strong>).</p>
   has_public_subscriptions: true
   subscriptions: []
+
+planning_pools:
+- _id: !id '504c882f22516e0cccaf2029'
+  reminder_format: "Dag %(firstName)s,\n\nDenk je eraan dat je %(date)s moet %(vacancyName)s?\nBekijk voor meer info de planning: http://karpenoktem.nl/planning\n\nMet geautomatiseerde groet,\nDe planrobot"
+  reminder_cc: []
+  administrator: bestuur
+  name: bestuur
+- _id: !id '5729ed1cb26fc6674d557bbf'
+  reminder_format: "Dag %(firstName)s,\n\nDenk je eraan dat je %(date)s moet %(vacancyName)s?\nBekijk voor meer info de planning: http://karpenoktem.nl/planning\n\nMet geautomatiseerde groet,\nDe planrobot"
+  reminder_cc: []
+  administrator: bestuur
+  name: sooscie
+- _id: !id '504c883d22516e0cccaf202a'
+  reminder_format: "Dag %(firstName)s,\n\nDenk je aan de %(eventName)s, %(date)s?\nBekijk voor meer info de planning: http://karpenoktem.nl/planning\n\nMet geautomatiseerde groet,\nDe planrobot"
+  reminder_cc: []
+  administrator: barco
+  name: barco
+- _id: !id '504c884722516e0cccaf202b'
+  reminder_format: "Dag %(firstName)s,\n\nDenk je eraan dat je %(date)s moet draaien vanaf %(time)s?\nBekijk voor meer info de planning: http://karpenoktem.nl/planning\n\nMet geautomatiseerde groet,\nDe DisCo"
+  reminder_cc: [ "disco-hoofd" ]
+  administrator: disco
+  name: draai
+- _id: !id '504caa6bd4080034087b1e77'
+  reminder_cc: [ "chef" ]
+  administrator: chef
+  name: cocks
+  reminder_format: "Dag %(firstName)s,\n\nDenk je eraan dat je %(date)s moet koken vanaf %(time)s?\nBekijk voor meer info de planning: http://karpenoktem.nl/planning\n\nMet geautomatiseerde groet,\nDe CHEF"
+- _id: !id '504c881e22516e0cccaf2028'
+  reminder_format: "Dag %(firstName)s,\n\nDenk je eraan dat je %(date)s moet tappen vanaf %(time)s?\nBekijk voor meer info de planning: http://karpenoktem.nl/planning\n\nMet geautomatiseerde groet,\nDe BarCo"
+  reminder_cc: [ "barco" ]
+  administrator: barco
+  name: tappers
