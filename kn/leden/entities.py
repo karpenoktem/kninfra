@@ -452,6 +452,9 @@ def add_relation(who, _with, how=None, _from=None, until=None):
                      'from': _from,
                      'until': until})
 
+def user_may_add_tag(user, group, tag):
+    return 'secretariaat' in user.cached_groups_names
+
 def disj_query_relations(queries, deref_who=False, deref_with=False,
         deref_how=False):
     """ Find relations matching any one of @queries.
@@ -671,6 +674,9 @@ class EntityHumanName(object):
     @property
     def genitive(self):
         return self.genitive_prefix + ' ' + unicode(self)
+    @property
+    def definite_article(self):
+        return self.genitive_prefix.split()[-1]
     def __unicode__(self):
         return self.humanName
     def __repr__(self):
@@ -744,6 +750,14 @@ class Entity(SONWrapper):
             yield Tag(m)
     def has_tag(self, tag):
         return _id(tag) in self._data.get('tags', ())
+    def add_tag(self, tag, save=True):
+        if self.has_tag(tag):
+            raise ValueError('This entity already has this tag')
+        if 'tags' not in self._data:
+            self._data['tags'] = []
+        self._data['tags'].append(_id(tag))
+        if save:
+            self.save()
     @property
     def names(self):
         for n in self._data.get('names',()):
@@ -1290,6 +1304,9 @@ class InformacieNotification(SONWrapper):
 
     def relation(self):
         return relation_by_id(self._data['relation'])
+
+    def tag(self):
+        return by_id(self._data['tag'])
 
     def entity(self):
         return by_id(self._data['entity'])

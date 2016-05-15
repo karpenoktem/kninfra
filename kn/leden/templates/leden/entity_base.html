@@ -15,6 +15,7 @@ $(function(){
         create_entityChoiceField('relation_begin1_how', {type: 'brand'});
         create_entityChoiceField('relation_begin2_who', {type: 'user'});
         create_entityChoiceField('relation_begin2_how', {type: 'brand'});
+        create_entityChoiceField('group_tag', {type: 'tag'});
 });
 </script>
 <script src="{{ MEDIA_URL }}leden/entity_detail.js" defer></script>
@@ -162,6 +163,22 @@ lid
 {% endfor %}
 </ul>
 {% endif %}
+
+{% if may_add_tag %}
+{% if object.is_group %}
+<form action="{% url "add-tag" %}" method="post"
+        onsubmit="return confirm('Weet je zeker dat je de stempel '+
+        entityChoiceField_get('group_tag') +
+        ' wilt toevoegen aan {{ object.humanName }}?');">
+        {% csrf_token %}
+        <input type="hidden" name="group" value="{{ object.id }}" />
+        Voeg de stempel
+        <input type="hidden" name="tag" id="group_tag" />
+        toe
+        <input type="submit" value="verstuur" />
+</form>{# add-tag #}
+{% endif %}{# object.is_group #}
+{% endif %}{# may_add_tag #}
 
 {% if tag_bearers %}
 <h3>Dragers van deze stempel</h3>

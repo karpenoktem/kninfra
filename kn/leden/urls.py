@@ -72,6 +72,8 @@ urlpatterns = [
         views.relation_end, name='relation-end'),
     url(r'^relaties/begin$',
         views.relation_begin, name='relation-begin'),
+    url(r'^tags/add$',
+        views.add_tag, name='add-tag'),
     url(r'^noteer$',
         views.note_add, name='add-note'),
 

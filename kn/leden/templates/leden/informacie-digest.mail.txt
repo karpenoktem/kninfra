@@ -57,6 +57,13 @@ Wijzigingen aan de ledenadministratie
 		<a href="{{ BASE_URL }}{{ nt.relation.with.get_absolute_url }}"
 			>{{ nt.relation.with.humanName }}</a>.
 	</li>
+{% elif nt.event == 'add_tag' %}
+	<li>De stempel <a href="{{ BASE_URL }}{{ nt.tag.get_absolute_url }}"
+			>{{ nt.tag.humanName}}</a>
+		is toegevoegd aan {{ nt.entity.humanName.definite_article }}
+		<a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}"
+			>{{ nt.entity.humanName }}</a>.
+	</li>
 {% elif nt.event == 'set_smoel' %}
 	<li><a href="{{ BASE_URL }}{{ nt.user.get_absolute_url }}">
 			{{ nt.user.humanName }}</a>
