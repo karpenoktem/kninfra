@@ -66,7 +66,7 @@ lid
 <a href="{{ r.with.get_absolute_url }}">{{ r.with.humanName }}</a>
 {{ r|rel_when }}
 {% if r.may_end %}
-<form action="{% url "relation-end" _id=r.id %}" style="display:inline"
+<form action="{% url "relation-end" _id=r.id %}"
         method="post"
         onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
         wil uitschrijven als \
@@ -119,7 +119,7 @@ lid
 {% endif %}
 {{ r|rel_when }}
 {% if r.may_end %}
-<form action="{% url "relation-end" _id=r.id %}" style="display:inline"
+<form action="{% url "relation-end" _id=r.id %}"
         method="post"
         onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
         wil uitschrijven als \

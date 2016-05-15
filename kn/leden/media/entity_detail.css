@@ -26,3 +26,7 @@
 .change-description {
 	float: right;
 }
+
+li form {
+	display: inline;
+}
