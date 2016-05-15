@@ -83,7 +83,7 @@ lid
 {% endif %}
 {% if may_add_related %}
 {% if related or object.is_user %}
-<form action="{% url "relation-begin" %}" method="post" style="display: inline" \
+<form action="{% url "relation-begin" %}" method="post"
         onsubmit="return confirm('Weet je zeker dat je {{ object.humanName }} \
         wil inschrijven als \
         '+ (entityChoiceField_get('relation_begin1_how') ?
@@ -135,7 +135,7 @@ lid
 {% endif %}
 {% if may_add_rrelated %}
 {% if rrelated or object.is_group %}
-<form action="{% url "relation-begin" %}" method="post" style="display: inline"
+<form action="{% url "relation-begin" %}" method="post"
         onsubmit="return confirm('Weet je zeker dat je '+
         entityChoiceField_get('relation_begin2_who') +' \
         wil inschrijven als \
