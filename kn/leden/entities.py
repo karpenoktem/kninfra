@@ -455,6 +455,9 @@ def add_relation(who, _with, how=None, _from=None, until=None):
 def user_may_add_tag(user, group, tag):
     return 'secretariaat' in user.cached_groups_names
 
+def user_may_remove_tag(user, group, tag):
+    return 'secretariaat' in user.cached_groups_names
+
 def disj_query_relations(queries, deref_who=False, deref_with=False,
         deref_how=False):
     """ Find relations matching any one of @queries.
@@ -756,6 +759,12 @@ class Entity(SONWrapper):
         if 'tags' not in self._data:
             self._data['tags'] = []
         self._data['tags'].append(_id(tag))
+        if save:
+            self.save()
+    def remove_tag(self, tag, save=True):
+        if not self.has_tag(tag):
+            raise ValueError('This entity does not have this tag')
+        self._data['tags'].remove(_id(tag))
         if save:
             self.save()
     @property

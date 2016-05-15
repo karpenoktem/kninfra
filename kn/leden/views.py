@@ -151,7 +151,8 @@ def _entity_detail(request, e):
                 'groups': groups,
                 'may_add_related': True,
                 'may_add_rrelated': True,
-                'may_add_tag': True})
+                'may_add_tag': True,
+                'may_remove_tag': True})
     ctx['may_upload_smoel'] = request.user.may_upload_smoel_for(e)
     if e.is_tag:
         ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
@@ -656,8 +657,7 @@ def relation_begin(request):
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
-@login_required
-def add_tag(request):
+def get_group_and_tag(request):
     if 'group' not in request.POST:
         raise ValueError('Missing group')
     group = Es.by_id(request.POST['group'])
@@ -670,11 +670,28 @@ def add_tag(request):
     if not tag.is_tag:
         raise ValueError("'tag' is not a tag")
 
+    return group, tag
+
+
+@login_required
+def add_tag(request):
+    group, tag = get_group_and_tag(request)
     if not Es.user_may_add_tag(request.user, group, tag):
         raise PermissionDenied
 
     group.add_tag(tag)
     Es.notify_informacie('add_tag', request.user, entity=group, tag=tag)
+    giedo.sync_async(request)
+    return redirect_to_referer(request)
+
+@login_required
+def remove_tag(request):
+    group, tag = get_group_and_tag(request)
+    if not Es.user_may_remove_tag(request.user, group, tag):
+        raise PermissionDenied
+
+    group.remove_tag(tag)
+    Es.notify_informacie('remove_tag', request.user, entity=group, tag=tag)
     giedo.sync_async(request)
     return redirect_to_referer(request)
 

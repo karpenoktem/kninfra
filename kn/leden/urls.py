@@ -74,6 +74,8 @@ urlpatterns = [
         views.relation_begin, name='relation-begin'),
     url(r'^tags/add$',
         views.add_tag, name='add-tag'),
+    url(r'^tags/remove$',
+        views.remove_tag, name='remove-tag'),
     url(r'^noteer$',
         views.note_add, name='add-note'),
 

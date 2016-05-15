@@ -159,7 +159,22 @@ lid
 <h3>Stempels</h3>
 <ul>
 {% for t in tags %}
-<li><a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a></li>
+<li>
+    <a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a>
+    {% if may_remove_tag %}
+    <form action="{% url "remove-tag" %}"
+            method="post"
+            onsubmit="return confirm('Weet je zeker dat je de stempel \
+            {{ t.humanName }} wilt verwijderen \
+            {{ object.humanName.genitive }}?');">
+
+    {% csrf_token %}
+    <input type="hidden" name="group" value="{{ object.id }}" />
+    <input type="hidden" name="tag" value="{{ t.id }}" />
+    <input type="submit" value="verwijder" />
+    </form>
+    {% endif %}{# may_remove_tag #}
+</li>
 {% endfor %}
 </ul>
 {% endif %}
