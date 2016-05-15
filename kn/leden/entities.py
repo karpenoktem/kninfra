@@ -619,15 +619,11 @@ def get_open_notes():
 # Functions to work with informacie-notifications
 # ######################################################################
 
-def notify_informacie(event, user, entity=None, relation=None):
+def notify_informacie(event, user, **props):
     data = {'when': now(), 'event': event}
     data['user'] = _id(user)
-    if relation is not None:
-        data['rel'] = _id(relation)
-    elif entity is not None:
-        data['entity'] = _id(entity)
-    else:
-        raise ValueError('supply either entity or relation')
+    for key, value in props.items():
+        data[key] = _id(value)
     incol.insert(data)
 
 def pop_all_informacie_notifications():
@@ -1292,8 +1288,8 @@ class InformacieNotification(SONWrapper):
     def user(self):
         return by_id(self._data['user'])
 
-    def rel(self):
-        return relation_by_id(self._data['rel'])
+    def relation(self):
+        return relation_by_id(self._data['relation'])
 
     def entity(self):
         return by_id(self._data['entity'])
