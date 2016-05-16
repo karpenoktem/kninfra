@@ -679,7 +679,10 @@ class EntityHumanName(object):
         return self.genitive_prefix + ' ' + unicode(self)
     @property
     def definite_article(self):
-        return self.genitive_prefix.split()[-1]
+        return {'van de': 'de',
+                'van het': 'het',
+                'van': '',
+                }.get(self.genitive_prefix, 'de')
     def __unicode__(self):
         return self.humanName
     def __repr__(self):
