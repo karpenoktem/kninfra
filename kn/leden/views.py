@@ -657,16 +657,24 @@ def relation_begin(request):
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
-def get_group_and_tag(request):
+def _get_group_and_tag(request):
+    '''
+    Helper for add_tag and remove_tag to quickly get the group and tag from a
+    request or raise an error on invalid input.
+    '''
     if 'group' not in request.POST:
         raise ValueError('Missing group')
     group = Es.by_id(request.POST['group'])
+    if not group:
+        raise Http404('group does not exist')
     if not group.is_group:
         raise ValueError("'group' is not a group")
 
     if 'tag' not in request.POST:
         raise ValueError('Missing tag')
     tag = Es.by_id(request.POST['tag'])
+    if not tag:
+        raise Http404('tag does not exist')
     if not tag.is_tag:
         raise ValueError("'tag' is not a tag")
 
@@ -675,7 +683,7 @@ def get_group_and_tag(request):
 
 @login_required
 def add_tag(request):
-    group, tag = get_group_and_tag(request)
+    group, tag = _get_group_and_tag(request)
     if not Es.user_may_add_tag(request.user, group, tag):
         raise PermissionDenied
 
@@ -686,7 +694,7 @@ def add_tag(request):
 
 @login_required
 def remove_tag(request):
-    group, tag = get_group_and_tag(request)
+    group, tag = _get_group_and_tag(request)
     if not Es.user_may_remove_tag(request.user, group, tag):
         raise PermissionDenied
 
