@@ -12,7 +12,7 @@ from kn.leden.date import date_to_dt, now, date_to_midnight
 from kn.leden.mongo import _id
 
 from kn.planning.forms import *
-from kn.planning.entities import Pool, Event, Vacancy
+from kn.planning.entities import Pool, Event, Vacancy, may_manage_planning
 from kn.planning.score import planning_vacancy_worker_score
 from kn.planning.utils import send_reminder
 
@@ -220,6 +220,8 @@ def planning_poollist(request):
 
 @login_required
 def event_create(request):
+    if not may_manage_planning(request.user):
+        raise PermissionDenied
     if request.method == 'POST':
         form = EventCreateForm(request.POST)
         if form.is_valid():
@@ -254,6 +256,8 @@ def event_create(request):
 
 @login_required
 def event_edit(request, eventid):
+    if not may_manage_planning(request.user):
+        raise PermissionDenied
     avform = None
     e = Event.by_id(eventid)
     if request.method == 'POST':

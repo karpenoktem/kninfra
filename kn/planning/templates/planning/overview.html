@@ -33,9 +33,14 @@
             <td
                 colspan="{{ pools|length }}"
                 class="poolHeader">
+                {% if may_manage_planning %}
                 <a href="{% url "planning-event-edit" eventid=event.id %}">
                     <strong>{{ event.datetime|date:"l j F Y" }}</strong>
                     - {{ event.name }}</a>
+                {% else %}
+                    <strong>{{ event.datetime|date:"l j F Y" }}</strong>
+                    - {{ event.name }}
+                {% endif %}
             </td>
         </tr>
         <tr>

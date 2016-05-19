@@ -10,6 +10,16 @@ pcol = db['planning_pools']
 ecol = db['planning_events']
 vcol = db['planning_vacancies']
 
+PLANNER_GROUPS = {'bestuur', 'barco', 'disco', 'chef', 'secretariaat'}
+
+def may_manage_planning(user):
+    if user is None:
+        return False
+    if not hasattr(user, 'cached_groups_names'):
+        # e.g. AnonymousUser
+        return False
+    return bool(user.cached_groups_names & PLANNER_GROUPS)
+
 # TODO save vacancies in events?
 
 # ---
