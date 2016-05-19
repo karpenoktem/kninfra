@@ -10,6 +10,16 @@ pcol = db['planning_pools']
 ecol = db['planning_events']
 vcol = db['planning_vacancies']
 
+PLANNER_GROUPS = {'bestuur', 'barco', 'disco', 'chef', 'secretariaat'}
+
+def may_manage_planning(user):
+    if user is None:
+        return False
+    if not hasattr(user, 'cached_groups_names'):
+        # e.g. AnonymousUser
+        return False
+    return bool(user.cached_groups_names & PLANNER_GROUPS)
+
 # TODO save vacancies in events?
 
 # ---
@@ -106,6 +116,13 @@ class Pool(SONWrapper):
         if not self._group:
             self._group = Es.by_name(self.name)
         return self._group
+
+    def may_manage(self, user):
+        '''
+        Is this user allowed to manage this pool?
+        '''
+        return bool(user.cached_groups_names & set(['secretariaat',
+            self.administrator]))
 
 # Generic functions for Vacancy.begin and end.
 #

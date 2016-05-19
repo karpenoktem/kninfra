@@ -12,7 +12,7 @@ from kn.leden.date import date_to_dt, now, date_to_midnight
 from kn.leden.mongo import _id
 
 from kn.planning.forms import *
-from kn.planning.entities import Pool, Event, Vacancy
+from kn.planning.entities import Pool, Event, Vacancy, may_manage_planning
 from kn.planning.score import planning_vacancy_worker_score
 from kn.planning.utils import send_reminder
 
@@ -145,11 +145,12 @@ def cmp_None(x,y,cmp=cmp):
 
 @login_required
 def planning_manage(request, poolname):
+    if not may_manage_planning(request.user):
+        raise PermissionDenied
     pool = Pool.by_name(poolname)
     if pool is None:
         raise Http404
-    if not request.user.cached_groups_names & set(['secretariaat',
-        pool.administrator]):
+    if not pool.may_manage(request.user):
         raise PermissionDenied
     # TODO reduce number of queries
     events = dict()
@@ -213,6 +214,9 @@ def planning_manage(request, poolname):
 
 @login_required
 def planning_poollist(request):
+    if not may_manage_planning(request.user):
+        # There's no planning you can change anyway, so what are you doing here?
+        raise PermissionDenied
     pools = list(Pool.all())
     return render_to_response('planning/pools.html',
             {'pools': pools},
@@ -220,6 +224,8 @@ def planning_poollist(request):
 
 @login_required
 def event_create(request):
+    if not may_manage_planning(request.user):
+        raise PermissionDenied
     if request.method == 'POST':
         form = EventCreateForm(request.POST)
         if form.is_valid():
@@ -254,6 +260,8 @@ def event_create(request):
 
 @login_required
 def event_edit(request, eventid):
+    if not may_manage_planning(request.user):
+        raise PermissionDenied
     avform = None
     e = Event.by_id(eventid)
     if request.method == 'POST':
@@ -312,11 +320,7 @@ def _api_send_reminder(request):
     v = Vacancy.by_id(request.REQUEST['vacancy_id'])
     if not v:
         raise Http404
-    print v._data
-    print v.pool_id
-    print v.pool
-    if not request.user.cached_groups_names & set(['secretariaat',
-        v.pool.administrator]):
+    if not v.pool.may_manage(request.user):
         raise PermissionDenied
     send_reminder(v, update=False)
     return JsonHttpResponse({'success': True})

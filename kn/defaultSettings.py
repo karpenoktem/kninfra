@@ -162,6 +162,7 @@ def defaultSettings(glbls):
             "django.core.context_processors.media",
             "django.contrib.messages.context_processors.messages",
             "kn.base.context_processors.base_url",
+            "kn.leden.context_processors.may_manage_planning",
     )
     d.TEMPLATE_DIRS = ()
     d.AUTHENTICATION_BACKENDS = (
