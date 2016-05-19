@@ -117,6 +117,13 @@ class Pool(SONWrapper):
             self._group = Es.by_name(self.name)
         return self._group
 
+    def may_manage(self, user):
+        '''
+        Is this user allowed to manage this pool?
+        '''
+        return bool(user.cached_groups_names & set(['secretariaat',
+            self.administrator]))
+
 # Generic functions for Vacancy.begin and end.
 #
 # These fields are either a datetime d or a tuple (d,a),
