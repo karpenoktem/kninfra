@@ -15,6 +15,7 @@ $(function(){
         create_entityChoiceField('relation_begin1_how', {type: 'brand'});
         create_entityChoiceField('relation_begin2_who', {type: 'user'});
         create_entityChoiceField('relation_begin2_how', {type: 'brand'});
+        create_entityChoiceField('group_tag', {type: 'tag'});
 });
 </script>
 <script src="{{ MEDIA_URL }}leden/entity_detail.js" defer></script>
@@ -65,7 +66,7 @@ lid
 <a href="{{ r.with.get_absolute_url }}">{{ r.with.humanName }}</a>
 {{ r|rel_when }}
 {% if r.may_end %}
-<form action="{% url "relation-end" _id=r.id %}" style="display:inline"
+<form action="{% url "relation-end" _id=r.id %}"
         method="post"
         onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
         wil uitschrijven als \
@@ -83,7 +84,7 @@ lid
 {% endif %}
 {% if may_add_related %}
 {% if related or object.is_user %}
-<form action="{% url "relation-begin" %}" method="post" style="display: inline" \
+<form action="{% url "relation-begin" %}" method="post"
         onsubmit="return confirm('Weet je zeker dat je {{ object.humanName }} \
         wil inschrijven als \
         '+ (entityChoiceField_get('relation_begin1_how') ?
@@ -118,7 +119,7 @@ lid
 {% endif %}
 {{ r|rel_when }}
 {% if r.may_end %}
-<form action="{% url "relation-end" _id=r.id %}" style="display:inline"
+<form action="{% url "relation-end" _id=r.id %}"
         method="post"
         onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
         wil uitschrijven als \
@@ -135,7 +136,7 @@ lid
 {% endif %}
 {% if may_add_rrelated %}
 {% if rrelated or object.is_group %}
-<form action="{% url "relation-begin" %}" method="post" style="display: inline"
+<form action="{% url "relation-begin" %}" method="post"
         onsubmit="return confirm('Weet je zeker dat je '+
         entityChoiceField_get('relation_begin2_who') +' \
         wil inschrijven als \
@@ -158,10 +159,41 @@ lid
 <h3>Stempels</h3>
 <ul>
 {% for t in tags %}
-<li><a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a></li>
+<li>
+    <a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a>
+    {% if may_untag %}
+    <form action="{% url "untag" %}"
+            method="post"
+            onsubmit="return confirm('Weet je zeker dat je de stempel \
+            {{ t.humanName }} wilt verwijderen \
+            {{ object.humanName.genitive }}?');">
+
+    {% csrf_token %}
+    <input type="hidden" name="group" value="{{ object.id }}" />
+    <input type="hidden" name="tag" value="{{ t.id }}" />
+    <input type="submit" value="verwijder" />
+    </form>
+    {% endif %}{# may_untag #}
+</li>
 {% endfor %}
 </ul>
 {% endif %}
+
+{% if may_tag %}
+{% if object.is_group %}
+<form action="{% url "tag" %}" method="post"
+        onsubmit="return confirm('Weet je zeker dat je de stempel '+
+        entityChoiceField_get('group_tag') +
+        ' wilt toevoegen aan {{ object.humanName }}?');">
+        {% csrf_token %}
+        <input type="hidden" name="group" value="{{ object.id }}" />
+        Voeg de stempel
+        <input type="hidden" name="tag" id="group_tag" />
+        toe
+        <input type="submit" value="verstuur" />
+</form>{# tag #}
+{% endif %}{# object.is_group #}
+{% endif %}{# may_tag #}
 
 {% if tag_bearers %}
 <h3>Dragers van deze stempel</h3>

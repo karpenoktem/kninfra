@@ -150,7 +150,9 @@ def _entity_detail(request, e):
                 'brands': brands,
                 'groups': groups,
                 'may_add_related': True,
-                'may_add_rrelated': True})
+                'may_add_rrelated': True,
+                'may_tag': True,
+                'may_untag': True})
     ctx['may_upload_smoel'] = request.user.may_upload_smoel_for(e)
     if e.is_tag:
         ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
@@ -652,6 +654,52 @@ def relation_begin(request):
     # TODO (rik) leave out 'als lid'
     Es.notify_informacie('relation_begin', request.user, relation=relation_id)
 
+    giedo.sync_async(request)
+    return redirect_to_referer(request)
+
+def _get_group_and_tag(request):
+    '''
+    Helper for tag and untag to quickly get the group and tag from a request or
+    raise an error on invalid input.
+    '''
+    if 'group' not in request.POST:
+        raise ValueError('Missing group')
+    group = Es.by_id(request.POST['group'])
+    if not group:
+        raise Http404('group does not exist')
+    if not group.is_group:
+        raise ValueError("'group' is not a group")
+
+    if 'tag' not in request.POST:
+        raise ValueError('Missing tag')
+    tag = Es.by_id(request.POST['tag'])
+    if not tag:
+        raise Http404('tag does not exist')
+    if not tag.is_tag:
+        raise ValueError("'tag' is not a tag")
+
+    return group, tag
+
+
+@login_required
+def tag(request):
+    group, tag = _get_group_and_tag(request)
+    if not Es.user_may_tag(request.user, group, tag):
+        raise PermissionDenied
+
+    group.tag(tag)
+    Es.notify_informacie('tag', request.user, entity=group, tag=tag)
+    giedo.sync_async(request)
+    return redirect_to_referer(request)
+
+@login_required
+def untag(request):
+    group, tag = _get_group_and_tag(request)
+    if not Es.user_may_untag(request.user, group, tag):
+        raise PermissionDenied
+
+    group.untag(tag)
+    Es.notify_informacie('untag', request.user, entity=group, tag=tag)
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
