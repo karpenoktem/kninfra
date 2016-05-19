@@ -452,10 +452,10 @@ def add_relation(who, _with, how=None, _from=None, until=None):
                      'from': _from,
                      'until': until})
 
-def user_may_add_tag(user, group, tag):
+def user_may_tag(user, group, tag):
     return 'secretariaat' in user.cached_groups_names
 
-def user_may_remove_tag(user, group, tag):
+def user_may_untag(user, group, tag):
     return 'secretariaat' in user.cached_groups_names
 
 def disj_query_relations(queries, deref_who=False, deref_with=False,
@@ -756,7 +756,7 @@ class Entity(SONWrapper):
             yield Tag(m)
     def has_tag(self, tag):
         return _id(tag) in self._data.get('tags', ())
-    def add_tag(self, tag, save=True):
+    def tag(self, tag, save=True):
         if self.has_tag(tag):
             raise ValueError('This entity already has this tag')
         if 'tags' not in self._data:
@@ -764,7 +764,7 @@ class Entity(SONWrapper):
         self._data['tags'].append(_id(tag))
         if save:
             self.save()
-    def remove_tag(self, tag, save=True):
+    def untag(self, tag, save=True):
         if not self.has_tag(tag):
             raise ValueError('This entity does not have this tag')
         self._data['tags'].remove(_id(tag))

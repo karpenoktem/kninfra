@@ -161,8 +161,8 @@ lid
 {% for t in tags %}
 <li>
     <a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a>
-    {% if may_remove_tag %}
-    <form action="{% url "remove-tag" %}"
+    {% if may_untag %}
+    <form action="{% url "untag" %}"
             method="post"
             onsubmit="return confirm('Weet je zeker dat je de stempel \
             {{ t.humanName }} wilt verwijderen \
@@ -173,15 +173,15 @@ lid
     <input type="hidden" name="tag" value="{{ t.id }}" />
     <input type="submit" value="verwijder" />
     </form>
-    {% endif %}{# may_remove_tag #}
+    {% endif %}{# may_untag #}
 </li>
 {% endfor %}
 </ul>
 {% endif %}
 
-{% if may_add_tag %}
+{% if may_tag %}
 {% if object.is_group %}
-<form action="{% url "add-tag" %}" method="post"
+<form action="{% url "tag" %}" method="post"
         onsubmit="return confirm('Weet je zeker dat je de stempel '+
         entityChoiceField_get('group_tag') +
         ' wilt toevoegen aan {{ object.humanName }}?');">
@@ -191,9 +191,9 @@ lid
         <input type="hidden" name="tag" id="group_tag" />
         toe
         <input type="submit" value="verstuur" />
-</form>{# add-tag #}
+</form>{# tag #}
 {% endif %}{# object.is_group #}
-{% endif %}{# may_add_tag #}
+{% endif %}{# may_tag #}
 
 {% if tag_bearers %}
 <h3>Dragers van deze stempel</h3>

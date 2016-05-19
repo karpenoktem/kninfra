@@ -151,8 +151,8 @@ def _entity_detail(request, e):
                 'groups': groups,
                 'may_add_related': True,
                 'may_add_rrelated': True,
-                'may_add_tag': True,
-                'may_remove_tag': True})
+                'may_tag': True,
+                'may_untag': True})
     ctx['may_upload_smoel'] = request.user.may_upload_smoel_for(e)
     if e.is_tag:
         ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
@@ -659,8 +659,8 @@ def relation_begin(request):
 
 def _get_group_and_tag(request):
     '''
-    Helper for add_tag and remove_tag to quickly get the group and tag from a
-    request or raise an error on invalid input.
+    Helper for tag and untag to quickly get the group and tag from a request or
+    raise an error on invalid input.
     '''
     if 'group' not in request.POST:
         raise ValueError('Missing group')
@@ -682,24 +682,24 @@ def _get_group_and_tag(request):
 
 
 @login_required
-def add_tag(request):
+def tag(request):
     group, tag = _get_group_and_tag(request)
-    if not Es.user_may_add_tag(request.user, group, tag):
+    if not Es.user_may_tag(request.user, group, tag):
         raise PermissionDenied
 
-    group.add_tag(tag)
-    Es.notify_informacie('add_tag', request.user, entity=group, tag=tag)
+    group.tag(tag)
+    Es.notify_informacie('tag', request.user, entity=group, tag=tag)
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
 @login_required
-def remove_tag(request):
+def untag(request):
     group, tag = _get_group_and_tag(request)
-    if not Es.user_may_remove_tag(request.user, group, tag):
+    if not Es.user_may_untag(request.user, group, tag):
         raise PermissionDenied
 
-    group.remove_tag(tag)
-    Es.notify_informacie('remove_tag', request.user, entity=group, tag=tag)
+    group.untag(tag)
+    Es.notify_informacie('untag', request.user, entity=group, tag=tag)
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
