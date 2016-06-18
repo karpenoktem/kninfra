@@ -160,7 +160,7 @@ def event_new_or_edit(request, edit=None):
         if not superuser and not request.user.is_related_with(e.owner) and \
                 not _id(e.owner) == request.user._id:
             raise PermissionDenied
-    AddEventForm = get_add_event_form(request.user, superuser)
+    AddEventForm = get_add_event_form(request.user, superuser, bool(edit))
     if request.method == 'POST':
         form = AddEventForm(request.POST)
         if form.is_valid():
@@ -174,15 +174,6 @@ def event_new_or_edit(request, edit=None):
                     raise PermissionDenied('User not related with owner')
                 if not subscr_Es.may_set_owner(request.user, owner):
                     raise PermissionDenied('Owner is not allowed')
-            name = fd['name']
-            # If not secretariaat, then prefix name with the username
-            if fd['owner'] == request.user.id:
-                prefix = str(request.user.name) + '-'
-            else:
-                prefix = str(Es.by_id(fd['owner']).name) + '-'
-            if (not superuser and not name.startswith(prefix) and (
-                    edit is None or e.name != name)):
-                name = prefix + name
             d = {
                 'date': date_to_dt(fd['date']),
                 'owner': _id(fd['owner']),
@@ -193,11 +184,20 @@ def event_new_or_edit(request, edit=None):
                 'may_unsubscribe': fd['may_unsubscribe'],
                 'humanName': fd['humanName'],
                 'createdBy': request.user._id,
-                'name': name,
                 'cost': str(fd['cost']),
                 'max_subscriptions': fd['max_subscriptions'],
                 'is_official': superuser}
             if edit is None:
+                name = fd['name']
+                # If not secretariaat, then prefix name with the username
+                if fd['owner'] == request.user.id:
+                    prefix = str(request.user.name) + '-'
+                else:
+                    prefix = str(Es.by_id(fd['owner']).name) + '-'
+                if (not superuser and not name.startswith(prefix) and (
+                        edit is None or e.name != name)):
+                    name = prefix + name
+                d['name'] = name
                 d['is_open'] = True # default for new events
                 e = subscr_Es.Event(d)
             else:

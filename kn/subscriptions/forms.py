@@ -18,16 +18,30 @@ def get_allowed_owners(user):
     return entities
 
 
-def get_add_event_form(user, superuser=False):
+def get_add_event_form(user, superuser=False, editing=False):
     class AddEventForm(forms.Form):
-        name = forms.RegexField(label='Korte naam', regex=r'^[a-z0-9-]+$')
-        humanName = forms.CharField(label='Naam')
+        humanName = forms.CharField(label='Naam',
+                widget=forms.TextInput(attrs={'required': ''}))
+        if not editing:
+            name = forms.RegexField(label='Naam voor computers',
+                    regex=r'^[a-z0-9-]+$',
+                    widget=forms.TextInput(attrs={
+                        'required': '',
+                        'pattern':  '[a-z0-9-]+'}))
         description = forms.CharField(label='Beschrijving',
-                widget=forms.Textarea)
-        cost = forms.DecimalField(label='Kosten')
-        date = forms.DateField(label='Datum')
+                widget=forms.Textarea(attrs={'required': ''}))
+        cost = forms.DecimalField(label='Kosten',
+                initial='0',
+                widget=forms.NumberInput(attrs={
+                    'required': '',
+                    'min':      '0'}))
+        date = forms.DateField(label='Datum',
+                widget=forms.DateInput(attrs={
+                    'required':    '',
+                    'placeholder': 'jjjj-mm-dd'}))
         max_subscriptions = forms.IntegerField(required=False,
-                label='Maximum aantal deelnemers (optioneel)')
+                label='Maximum aantal deelnemers (optioneel)',
+                widget=forms.NumberInput(attrs={'placeholder': 'geen maximum'}))
         if superuser:
             owner = EntityChoiceField(label="Eigenaar")
         else:
