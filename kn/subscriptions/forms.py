@@ -18,7 +18,7 @@ def get_allowed_owners(user):
     return entities
 
 def validate_event_name(name):
-    if any([e for e in subscr_Es.all_events() if e.name == name]):
+    if subscr_Es.event_by_name(name):
         raise forms.ValidationError('Naam voor computers bestaat al')
 
 
