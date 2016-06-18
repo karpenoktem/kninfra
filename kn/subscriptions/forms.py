@@ -17,6 +17,10 @@ def get_allowed_owners(user):
                            if subscr_Es.may_set_owner(user, g)]
     return entities
 
+def validate_event_name(name):
+    if any([e for e in subscr_Es.all_events() if e.name == name]):
+        raise forms.ValidationError('Naam voor computers bestaat al')
+
 
 def get_add_event_form(user, superuser=False, editing=False):
     class AddEventForm(forms.Form):
@@ -27,7 +31,8 @@ def get_add_event_form(user, superuser=False, editing=False):
                     regex=r'^[a-z0-9-]+$',
                     widget=forms.TextInput(attrs={
                         'required': '',
-                        'pattern':  '[a-z0-9-]+'}))
+                        'pattern':  '[a-z0-9-]+'}),
+                    validators=[validate_event_name])
         description = forms.CharField(label='Beschrijving',
                 widget=forms.Textarea(attrs={'required': ''}))
         cost = forms.DecimalField(label='Kosten',
