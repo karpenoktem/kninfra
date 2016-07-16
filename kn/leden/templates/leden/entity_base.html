@@ -22,16 +22,32 @@ $(function(){
 {% endblock head %}
 
 {% block body %}
-
 {% block entity_head %}
+{% if hasPhoto or photosUrl %}
+<div class="{% if hasPhoto %}smoel{% else %}nosmoel{% endif %}">
+    {% if photosUrl %}<a href="{{ photosUrl }}">{% endif %}
+        {% if hasPhoto %}
+            <img src="{% url "user-smoel" object.name %}"
+                 width="{{ photoWidth }}"
+                 height="{{ photoHeight }}"/>
+        {% else %}{# hasPhoto #}
+            {% if photosUrl %}Foto's{% endif %}
+        {% endif %}{# hasPhoto #}
+    {% if photosUrl %}</a>{% endif %}
+</div>
+{% endif %}{# hasPhoto or photosUrl #}
+
 <h2>
+    {% if not object.is_user %}
 	{% if "secretariaat" in user.cached_groups_names %}
 	<button class="change-humanName"
 		onclick="promptNewProperty('{{ object.id }}', 'humanName',
 				'Wijzig naam', $('.humanName').text());">Wijzig naam</button>
 	{% endif %}{# "secretariaat" in user.cached_groups_names #}
+    {% endif %}{# object.is_user #}
 	<span class="humanName">{{ object.humanName }}</span>
 </h2>
+{% if not object.is_user %}
 <p>
 	{% if "secretariaat" in user.cached_groups_names %}
 	<button class="change-description"
@@ -41,6 +57,17 @@ $(function(){
 	{% endif %}{# "secretariaat" in user.cached_groups_names #}
 	<span class="description">{{ object.description }}</span>
 </p>
+{% endif %}{# not object.is_user #}
+
+{% if may_upload_smoel %}
+<form method="post" action="{% url "ik-chsmoel"  %}"
+        enctype="multipart/form-data">
+{% csrf_token %}
+<input type="hidden" name="id" value="{{ object.id }}" />
+<input type="file" name="smoel" accept="image/*" required />
+<input type="submit" value="upload smoel" />
+</form>
+{% endif %} {# "secretariaat" in user.cached_groups_names #}
 {% endblock entity_head %}
 
 {% block entity_body %}{% endblock entity_body %}
