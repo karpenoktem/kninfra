@@ -1,0 +1,32 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+
+{% block body %}
+<p class="imageDisplay">
+<img width="800"
+     src="{{ MEDIA_URL }}static/img/bestuur13.jpg" /><br/>
+     <table align="center" style="text-align: center">
+       <tr><td>Willanka Kapelle (penningmeester)</td>
+         <td rowspan="2">Eva Prins (vice-voorzitter)</td>
+         <td>Koos van der Vegt (pandcommissaris)</td> </tr>
+       <tr><td>Roel Bouman (voorzitter)</td>
+         <td>Sophie Fennema (secretaris)</td></tr>
+     </table>
+
+<p>Het <strong>dertiende bestuur</strong> van Karpe Noktem
+is [TODO, iets met superhip, uit het hart van de vereniging, etc &mdash; redactie].</p>
+<p>Alle bestuursleden zijn bereikbaar op hun functie@karpenoktem.nl of
+op de volgende adressen:</p>
+<ul>
+  <li>{% filter email %}roel@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}sophief@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}willanka@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}koos@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}eva@karpenoktem.nl{% endfilter %}</li>
+</ul>
+
+<p>&lArr; Het vorige,
+<a href="{% url "bestuur12" %}">twaalfde bestuur.</a>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}
