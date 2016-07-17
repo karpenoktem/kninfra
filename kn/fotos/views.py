@@ -182,6 +182,7 @@ def fotoadmin_move(request):
             cd = form.cleaned_data
             (store, user, dir) = cd['move_src'].split('/')
             giedo.fotoadmin_move_fotos(cd['move_dst'], store, user, dir)
+            return redirect('fotos', path=cd['move_dst'])
     else:
         form = MoveFotosForm()
     return render_to_response('fotos/admin/move.html',
