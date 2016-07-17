@@ -153,18 +153,15 @@ def _entity_detail(request, e):
                 'may_add_rrelated': True,
                 'may_tag': True,
                 'may_untag': True})
-    ctx['may_upload_smoel'] = request.user.may_upload_smoel_for(e)
+    ctx['may_upload_smoel'] = e.name and request.user.may_upload_smoel_for(e)
     if e.is_tag:
         ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
                         cmp=Es.entity_cmp_humanName)})
-    return ctx
 
-def _user_detail(request, user):
-    ctx = _entity_detail(request, user)
-    ctx['photosUrl'] = reverse('fotos', kwargs={'path':''}) + \
-                                        '?q=tag:'+str(user.name)
-    photos_path = path.join(settings.SMOELEN_PHOTOS_PATH, str(user.name))
-    if default_storage.exists(photos_path + '.jpg'):
+    # Check whether entity has a photo
+    photos_path = (path.join(settings.SMOELEN_PHOTOS_PATH, str(e.name))
+                        if e.name else None)
+    if photos_path and default_storage.exists(photos_path + '.jpg'):
         img = Image.open(default_storage.open(photos_path + '.jpg'))
         width, height = img.size
         if default_storage.exists(photos_path + '.orig'):
@@ -184,6 +181,12 @@ def _user_detail(request, user):
                 'hasPhoto': True,
                 'photoWidth': width,
                 'photoHeight': height})
+    return ctx
+
+def _user_detail(request, user):
+    ctx = _entity_detail(request, user)
+    ctx['photosUrl'] = reverse('fotos', kwargs={'path':''}) + \
+                                        '?q=tag:'+str(user.name)
     return render_to_response('leden/user_detail.html', ctx,
             context_instance=RequestContext(request))
 
@@ -310,6 +313,8 @@ def ik_chsmoel(request):
     if not 'id' in request.POST:
         raise ValueError, "Missing `id' in POST"
     user = Es.by_id(request.POST['id'])
+    if not user.name:
+        raise ValueError, "Entity does not have a name"
     if not request.user.may_upload_smoel_for(request.user):
         raise PermissionDenied
     original = default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
@@ -338,7 +343,7 @@ def ik_chsmoel(request):
 @login_required
 def user_smoel(request, name):
     user = Es.by_name(name)
-    if not user or not 'user' in user.types:
+    if not user:
         raise Http404
     try:
         img = default_storage.open(path.join(
