@@ -24,8 +24,6 @@ def configure_vagrant
         def common(config, hostname)
             config.vm.box = "debian/contrib-jessie64"
             config.vm.hostname = "vagrant-" + hostname + ".lan"
-            config.vm.box_url = "https://atlas.hashicorp.com/debian/boxes/" \
-                   + "jessie64/versions/8.2.0/providers/virtualbox.box"
             config.vm.synced_folder "salt/states", "/srv/salt", \
                                     type: "virtualbox"
             config.vm.synced_folder "salt/pillar", "/srv/pillar", \
