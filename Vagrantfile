@@ -39,14 +39,17 @@ def configure_vagrant
                 salt.bootstrap_options = "-F -c /tmp/ -P"
             end
 
-            # Work-around symlink problem in windows.
-            # See http://stackoverflow.com/questions/24200333/symbolic-links-and-synced-folders-in-vagrant
-            if Vagrant::Util::Platform.windows?
-                config.vm.provider "virtualbox" do |v|
+            config.vm.provider "virtualbox" do |v|
+                # Work-around symlink problem in windows.
+                # See http://stackoverflow.com/questions/24200333/symbolic-links-and-synced-folders-in-vagrant
+                if Vagrant::Util::Platform.windows?
                     v.customize ["setextradata", :id,
                         "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root",
                                                                         "1"]
                 end
+
+                # http://serverfault.com/questions/453185/
+                v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
             end
         end
 
