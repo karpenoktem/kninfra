@@ -5,3 +5,4 @@ Disallow: /foto/
 Disallow: /~bas/
 Disallow: /mailman/archives/
 Disallow: /groups/leden/aktas/
+Disallow: /kndjango.fcgi/
