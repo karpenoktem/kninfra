@@ -1323,6 +1323,14 @@ class InformacieNotification(SONWrapper):
     def entity(self):
         return by_id(self._data['entity'])
 
+    def fotoEvent(self):
+        import kn.fotos.entities as fEs
+        return fEs.by_id(self._data['fotoEvent'])
+
+    def fotoAlbum(self):
+        import kn.fotos.entities as fEs
+        return fEs.by_id(self._data['fotoAlbum'])
+
     event = son_property(('event', ))
     when = son_property(('when', ))
 

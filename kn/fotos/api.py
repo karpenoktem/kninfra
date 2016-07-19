@@ -1,5 +1,6 @@
 import json
 
+import kn.leden.entities as Es
 import kn.fotos.entities as fEs
 from kn.base.http import JsonHttpResponse
 from django.core.exceptions import PermissionDenied
@@ -157,7 +158,28 @@ def _set_metadata(data, request):
     # except for visibility which is much harder to save in the same batch
     if entity.is_root:
         return result
+
+    was_visible = 'leden' in fEs.actual_visibility(entity.effective_visibility)
     entity.update_visibility([visibility])
+    is_visible = 'leden' in fEs.actual_visibility(entity.effective_visibility)
+
+    # Send a mail when a new album comes online.
+    if not entity.notified_informacie:
+        if not was_visible and is_visible and isinstance(entity, fEs.FotoAlbum):
+            event = entity
+            while event.depth > 1:
+                event = event.get_parent()
+            if entity.depth > 1:
+                Es.notify_informacie('add_foto_album', request.user, fotoEvent=event, fotoAlbum=entity)
+            else:
+                Es.notify_informacie('add_foto_event', request.user, fotoEvent=event)
+            entity.set_informacie_notified()
+        elif was_visible and not is_visible:
+            # Do not send a mail when an old album (pre-notifications) is set to
+            # invisible and back to visible. Act like a notification has already
+            # been sent.
+            entity.set_informacie_notified()
+
     return result
 
 def _remove(data, request):
