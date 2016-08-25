@@ -807,7 +807,7 @@ class Entity(SONWrapper):
         return set(self._data['types'])
 
     def __repr__(self):
-        return "<Entity %s (%s)>" % (self.id, self.type)
+        return "<Entity %s (%s)>" % (str(self.name) if self.name else self.id, self.type)
 
     @property
     def is_user(self): return 'user' in self._data['types']
