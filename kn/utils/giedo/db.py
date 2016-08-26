@@ -51,6 +51,10 @@ def update_db(giedo):
                 if tp:
                     years.add(yr)
                 else:
+                    if yr not in years:
+                        logging.warning('bogus year-override -{} on {}'.format(
+                            yr, rel['_id']))
+                        continue
                     years.remove(yr)
             rel['years'] = years
     year_group_mrels = tuple(Es.query_relations(
