@@ -96,18 +96,19 @@ def main():
     print 'exactly on the change of year ...'
     for year in xrange(min_year+1, max_year+1):
         start_of_year = Es.year_to_range(year)[0]
+        end_of_year = Es.year_to_range(year)[0] - datetime.timedelta(0,1)
         window = datetime.timedelta(1)
         for rel in Es.rcol.find({'until': {'$gt': start_of_year - window,
                                           '$lt': start_of_year + window}}):
-            if rel['until'] == start_of_year:
+            if rel['until'] == end_of_year:
                 continue
             how = Es.by_id(rel['how'])
             print ' {} {} (as {}): {} -> {}'.format(unicode(Es.by_id(rel['who'])),
                             str(Es.by_id(rel['with'])),
                             how._data['sofa_suffix'] if how else 'member',
-                            rel['until'], start_of_year)
+                            rel['until'], end_of_year)
             if args.apply:
-                rel['until'] = start_of_year
+                rel['until'] = end_of_year
                 Es.rcol.save(rel)
 
 if __name__ == '__main__':
