@@ -78,7 +78,7 @@ def main():
     print 'exactly on the change of year ...'
     for year in xrange(min_year+1, max_year+1):
         start_of_year = Es.year_to_range(year)[0]
-        window = datetime.timedelta(1)
+        window = datetime.timedelta(1,12*60*60)
         for rel in Es.rcol.find({'from': {'$gt': start_of_year - window,
                                           '$lt': start_of_year + window}}):
             if rel['from'] == start_of_year:
@@ -97,7 +97,7 @@ def main():
     for year in xrange(min_year+1, max_year+1):
         start_of_year = Es.year_to_range(year)[0]
         end_of_year = Es.year_to_range(year)[0] - datetime.timedelta(0,1)
-        window = datetime.timedelta(1)
+        window = datetime.timedelta(1,12*60*60)
         for rel in Es.rcol.find({'until': {'$gt': start_of_year - window,
                                           '$lt': start_of_year + window}}):
             if rel['until'] == end_of_year:
