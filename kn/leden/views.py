@@ -713,6 +713,8 @@ def user_reset_password(request, _id):
     if not 'secretariaat' in request.user.cached_groups_names:
         raise PermissionDenied
     u = Es.by_id(_id).as_user()
+    if not u.is_active:
+        raise ValueError, "User is not active"
     pwd = pseudo_randstr()
     u.set_password(pwd)
     giedo.change_password(str(u.name), pwd, pwd)

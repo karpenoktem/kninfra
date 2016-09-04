@@ -4,10 +4,12 @@
 
 {% block entity_body %}
 {% if "secretariaat" in user.cached_groups_names %}
+{% if object.is_acive %}
 <form method="post" action="{% url "user-reset-password" _id=object.id %}">
 {% csrf_token %}
 <input type="submit" value="stuur nieuw wachtwoord" />
 </form>
+{% endif %}{# object.is_active #}
 {% endif %}{# "secretariaat" in user.cached_groups_names #}
 <dl>
 	<dt>Gebruikersnamen</dt>
