@@ -3,6 +3,7 @@ import os.path
 import logging
 import socket
 import select
+import errno
 import os
 
 import msgpack
@@ -18,15 +19,9 @@ import mirte
 
 class WhimClient(object):
     def __init__(self, address, family='unix'):
-        if family == 'tcp':
-            sf = socket.AF_INET
-        elif family == 'unix':
-            sf = socket.AF_UNIX
-        else:
-            raise ValueError, 'unknown family'
-        self.s = socket.socket(sf, socket.SOCK_STREAM)
-        self.s.connect(address)
-        self.f = self.s.makefile()
+        self._address = address
+        self._family = family
+        self._connect()
         self.w_lock = threading.Lock()
         self.n_send_lock = threading.Lock()
         self.n_send = 0
@@ -36,14 +31,39 @@ class WhimClient(object):
         self.event_lut = {}
         self.msg_lut = {}
         self.got_reader = False
+    def _connect(self):
+        """ (Re)connects to socket. """
+        if self._family == 'tcp':
+            sf = socket.AF_INET
+        elif self._family == 'unix':
+            sf = socket.AF_UNIX
+        else:
+            raise ValueError, 'unknown family'
+        self.s = socket.socket(sf, socket.SOCK_STREAM)
+        self.s.connect(self._address)
+        self.f = self.s.makefile()
+    def _send(self, bs):
+        """ Tries to send some bytes over the socket.  If the socket has been
+            closed, try to reconnect. """
+        with self.w_lock:
+            first_try = True
+            while True:
+                try:
+                    self.f.write(bs)
+                    self.f.flush()
+                    break
+                except socket.error as e:
+                    if not first_try or e.args[0] != errno.EPIPE:
+                        raise
+                    first_try = False
+                    self._connect()
     def send_noret(self, d):
         """ Sends the message `d` to the server, but do not wait for its
             response. """
         bs = self.packer.pack((None, d))
         # Send the message
-        with self.w_lock:
-            self.f.write(bs)
-            self.f.flush()
+        self._send(bs)
+
     def send(self, d):
         """ Sends the message @d to the server and returns its
             response """
@@ -58,9 +78,7 @@ class WhimClient(object):
         # Pack the message
         bs = self.packer.pack((n, d))
         # Send the message
-        with self.w_lock:
-            self.f.write(bs)
-            self.f.flush()
+        self._send(bs)
         while True:
             with self.lock:
                 # Has the message been received by another
