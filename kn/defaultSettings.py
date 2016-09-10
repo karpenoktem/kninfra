@@ -109,6 +109,8 @@ def defaultSettings(glbls):
 
     d.INTERNAL_IPS = ['83.162.203.144'] # bas
     d.LOCALE = 'nl_NL.UTF-8'
+    d.LANGUAGE_CODE = 'nl-nl'
+    d.LOCALE_PATHS = [d.INFRA_REPO + '/locale']
 
     # You probably won't change this
     # ############################################################

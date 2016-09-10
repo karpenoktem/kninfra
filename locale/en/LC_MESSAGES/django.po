@@ -1,0 +1,82 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: kninfra\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: kn/leden/views.py:69
+#, python-format
+msgid "Entiteit is niet een %s"
+msgstr "Entity is not a %s"
+
+#: kn/leden/views.py:73
+msgid "Onbekende entiteit type"
+msgstr "Unknown entity type"
+
+#: kn/leden/views.py:313
+msgid "Missende `smoel' in FILES"
+msgstr "Missing `smoel' in FILES"
+
+#: kn/leden/views.py:315
+msgid "Missende `id' in POST"
+msgstr "Missing `id' in POST"
+
+#: kn/leden/views.py:318
+msgid "Entiteit heeft geen naam"
+msgstr "Entity does not have a name"
+
+#: kn/leden/views.py:361
+#, python-format
+msgid "Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."
+msgstr "Dear %s, but off course: your password has been changed."
+
+#: kn/leden/views.py:395
+#, python-format
+msgid ""
+"Lieve %s, maar natuurlijk, jouw wachtwoord voor het villa-netwerk is "
+"veranderd."
+msgstr ""
+"Dear %s, but off course, your password for the villa-network has "
+"been changed."
+
+#: kn/leden/views.py:654
+msgid "Deze relatie bestaat al"
+msgstr "This relation already exists"
+
+#: kn/leden/views.py:677
+msgid "'group' is niet een groep"
+msgstr "'group' is not a group"
+
+#: kn/leden/views.py:685
+msgid "'tag' is niet een stempel"
+msgstr "'tag' is not a tag"
+
+#: kn/leden/views.py:718
+msgid "Gebruiker is niet geactiveerd"
+msgstr "User is not active"
+
+#: kn/leden/views.py:726
+msgid "Wachtwoord gereset!"
+msgstr "Password reset!"
+
+#: kn/leden/views.py:734
+msgid "missende `on' of `note'"
+msgstr "Missing `on' or `note'"
+
+#: kn/leden/views.py:751
+msgid "Agenda geupdate!"
+msgstr "Agenda has been updated"
+
+#: kn/leden/views.py:765
+msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
+msgstr "Your request is being processed.  Expect an e-mail within 5 minutes."
+
+#: kn/static/templates/static/home.html:27
+msgid ""
+"Welkom op de website van <strong>Alternatieve\n"
+"  studenten&shy;vereniging Karpe Noktem</strong>."
+msgstr ""
+"Welcome to the homepage of <strong>Alternatieve\n"
+"  studenten&shy;vereniging Karpe Noktem</strong>."

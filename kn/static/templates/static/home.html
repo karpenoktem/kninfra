@@ -1,5 +1,6 @@
 {% extends "static/base.html" %}
 {% load short_agenda %}
+{% load i18n %}
 
 {% block styles %}
 {{ block.super }}
@@ -23,8 +24,8 @@
 
 {% block body %}
 <div id="random-text">
-<p>Welkom op de website van <strong>Alternatieve studenten&shy;vereniging
-      Karpe Noktem</strong>.</p>
+<p>{% blocktrans %}Welkom op de website van <strong>Alternatieve
+  studenten&shy;vereniging Karpe Noktem</strong>.{% endblocktrans %}</p>
 </div>
 
 <div id="slider-wrapper" class="slider-wrapper theme-default">

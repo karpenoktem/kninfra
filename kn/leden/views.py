@@ -17,6 +17,7 @@ from django.core.paginator import Paginator, EmptyPage
 from django.core.files.storage import default_storage
 from django.core.servers.basehttp import FileWrapper
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -65,11 +66,11 @@ def entity_detail(request, name=None, _id=None, type=None):
     if e is None:
         raise Http404
     if type and not type in e.types:
-        raise ValueError, "Entity is not a %s" % type
+        raise ValueError, _("Entiteit is niet een %s") % type
     if not type:
         type = e.type
     if not type in Es.TYPE_MAP:
-        raise ValueError, "Unknown entity type"
+        raise ValueError, _("Onbekende entiteit type")
     return globals()['_'+type+'_detail'](request, getattr(e, 'as_'+type)())
 
 def _entity_detail(request, e):
@@ -326,12 +327,12 @@ def ik(request):
 @login_required
 def ik_chsmoel(request):
     if not 'smoel' in request.FILES:
-        raise ValueError, "Missing `smoel' in FILES"
+        raise ValueError, _("Missende `smoel' in FILES")
     if not 'id' in request.POST:
-        raise ValueError, "Missing `id' in POST"
+        raise ValueError, _("Missende `id' in POST")
     user = Es.by_id(request.POST['id'])
     if not user.name:
-        raise ValueError, "Entity does not have a name"
+        raise ValueError, _("Entiteit heeft geen naam")
     if not request.user.may_upload_smoel_for(request.user):
         raise PermissionDenied
     original = default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
@@ -374,7 +375,7 @@ def _ik_chpasswd_handle_valid_form(request, form):
     oldpw = form.cleaned_data['old_password']
     newpw = form.cleaned_data['new_password']
     giedo.change_password(str(request.user.name), oldpw, newpw)
-    t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."""
+    t = _("""Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd.""")
     messages.info(request, t % request.user.first_name)
     return HttpResponseRedirect(reverse('smoelen-home'))
 
@@ -408,7 +409,7 @@ def ik_chpasswd_villanet(request):
                 newpw = form.cleaned_data['new_password']
                 giedo.change_villanet_password(str(request.user.name), oldpw,
                         newpw)
-                t = ("Lieve %s, maar natuurlijk, jouw wachtwoord voor het "+
+                t = _("Lieve %s, maar natuurlijk, jouw wachtwoord voor het "+
                         "villa-netwerk is veranderd.")
                 messages.info(request, t % request.user.first_name)
                 return HttpResponseRedirect(reverse('smoelen-home'))
@@ -667,7 +668,7 @@ def relation_begin(request):
     except StopIteration:
         ok = True
     if not ok:
-        raise ValueError, "This relation already exists"
+        raise ValueError, _("Deze relatie bestaat al")
 
     # Add the relation!
     relation_id = Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
@@ -690,7 +691,7 @@ def _get_group_and_tag(request):
     if not group:
         raise Http404('group does not exist')
     if not group.is_group:
-        raise ValueError("'group' is not a group")
+        raise ValueError(_("'group' is niet een groep"))
 
     if 'tag' not in request.POST:
         raise ValueError('Missing tag')
@@ -698,7 +699,7 @@ def _get_group_and_tag(request):
     if not tag:
         raise Http404('tag does not exist')
     if not tag.is_tag:
-        raise ValueError("'tag' is not a tag")
+        raise ValueError(_("'tag' is niet een stempel"))
 
     return group, tag
 
@@ -731,7 +732,7 @@ def user_reset_password(request, _id):
         raise PermissionDenied
     u = Es.by_id(_id).as_user()
     if not u.is_active:
-        raise ValueError, "User is not active"
+        raise ValueError, _("Gebruiker is niet geactiveerd")
     pwd = pseudo_randstr()
     u.set_password(pwd)
     giedo.change_password(str(u.name), pwd, pwd)
@@ -739,7 +740,7 @@ def user_reset_password(request, _id):
                         u.canonical_full_email, {
                             'user': u,
                             'password': pwd})
-    messages.info(request, "Wachtwoord gereset!")
+    messages.info(request, _("Wachtwoord gereset!"))
     return redirect_to_referer(request)
 
 @login_required
@@ -747,7 +748,7 @@ def note_add(request):
     if not 'secretariaat' in request.user.cached_groups_names:
         raise PermissionDenied
     if 'on' not in request.POST or 'note' not in request.POST:
-        raise ValueError, "missing `on' or `note'"
+        raise ValueError, _("missende `on' of `note'")
     on = Es.by_id(_id(request.POST['on']))
     if on is None:
         raise Http404
@@ -764,7 +765,7 @@ def secr_update_site_agenda(request):
         if 'secretariaat' not in request.user.cached_groups_names:
                 raise PermissionDenied
         giedo.update_site_agenda()
-        messages.info(request, "Agenda geupdate!")
+        messages.info(request, _("Agenda geupdate!"))
         return redirect_to_referer(request)
 
 @login_required
@@ -778,8 +779,8 @@ def ik_openvpn(request):
                     request.POST['password'])
             giedo.openvpn_create(str(request.user.name),
                     request.POST['want'])
-            messages.info(request, "Je verzoek wordt verwerkt. "
-                    "Verwacht binnen 5 minuten een e-mail.")
+            messages.info(request, _("Je verzoek wordt verwerkt. "
+                    "Verwacht binnen 5 minuten een e-mail."))
             return HttpResponseRedirect(reverse('smoelen-home'))
         else:
             password_incorrect = True
