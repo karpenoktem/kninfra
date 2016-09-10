@@ -168,10 +168,6 @@ class FotoEntity(SONWrapper):
         return bool(self.required_visibility(user)
                         & frozenset(self.effective_visibility))
 
-    @permalink
-    def get_browse_url(self):
-        return ('fotos-browse', (), {'path': self.full_path})
-
     @property
     def full_path(self):
         if not self.path:
