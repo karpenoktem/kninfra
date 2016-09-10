@@ -88,6 +88,10 @@ urlpatterns = [
     url(r'^styles/leden/$',
         TemplateView.as_view(template_name='leden/base.css',
                              content_type='text/css'), name='leden-base'),
+
+    # for now, just shows the guessed language
+    url(r'^taal$',
+        views.language),
         ]
 
 # vim: et:sta:bs=2:sw=4:

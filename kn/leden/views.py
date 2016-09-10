@@ -807,4 +807,7 @@ def ik_openvpn_download(request, filename):
     # XXX use ETags and returns 304's
     return response
 
+def language(request):
+    return HttpResponse(str(request.LANGUAGE_CODE))
+
 # vim: et:sta:bs=2:sw=4:
