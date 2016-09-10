@@ -181,13 +181,9 @@ class FotoEntity(SONWrapper):
     @property
     def depth(self):
         '''
-        Return how many parents this entry has.
+        Return how many ancestors this entry has.
         '''
-        parts = self.full_path.split('/')
-        if len(parts) == 1 and parts[0] == '/':
-            # root entry
-            return 0
-        return len(parts)
+        return 0 if self.is_root else self.full_path.count('/') + 1
 
     # NOTE keep up to date with media/fotos.js
     @permalink
