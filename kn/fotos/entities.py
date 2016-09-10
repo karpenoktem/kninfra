@@ -108,10 +108,16 @@ class FotoEntity(SONWrapper):
     visibility = son_property(('visibility',))
     _lost = son_property(('lost',))
     effective_visibility = son_property(('effectiveVisibility',))
+    notified_informacie = son_property(('notifiedInformacie',))
 
     @property
     def is_root(self):
         return self.path is None
+
+    def display_title(self):
+        if self.title:
+            return self.title
+        return self.name
 
     def required_visibility(self, user):
         if user is None:
@@ -162,15 +168,18 @@ class FotoEntity(SONWrapper):
         return bool(self.required_visibility(user)
                         & frozenset(self.effective_visibility))
 
-    @permalink
-    def get_browse_url(self):
-        return ('fotos-browse', (), {'path': self.full_path})
-
     @property
     def full_path(self):
         if not self.path:
             return self.name
         return self.path + '/' + self.name
+
+    @property
+    def depth(self):
+        '''
+        Return how many ancestors this entry has.
+        '''
+        return 0 if self.is_root else self.full_path.count('/') + 1
 
     # NOTE keep up to date with media/fotos.js
     @permalink
@@ -317,6 +326,13 @@ class FotoEntity(SONWrapper):
                     {'$unset': {'effectiveVisibility': ''}},
                     multi=True)
 
+    def set_informacie_notified(self, save=True):
+        if self.notified_informacie:
+            return
+        self.notified_informacie = True
+        if save:
+            self.save()
+
     @property
     def is_lost(self):
         return bool(self._lost)
@@ -370,6 +386,10 @@ class FotoEntity(SONWrapper):
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
         super(FotoAlbum, self).__init__(data)
+
+    @permalink
+    def get_absolute_url(self):
+        return ('fotos', (), {'path': self.full_path})
 
     def list(self, user):
         required_visibility = self.required_visibility(user)

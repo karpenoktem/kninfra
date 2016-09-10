@@ -82,6 +82,20 @@ Wijzigingen aan de ledenadministratie
 				{{ nt.entity.humanName }}</a>.
 		{% endif %}
 	</li>
+{% elif nt.event == 'add_foto_event' %}
+	<li>Het fotoalbum <a href="{{ BASE_URL }}{{ nt.fotoEvent.get_absolute_url }}"
+			>{{ nt.fotoEvent.display_title }}</a> is online gezet door
+			<a href="{{ BASE_URL }}{{ nt.user.get_absolute_url }}"
+			>{{ nt.user.humanName }}</a>.</li>
+{% elif nt.event == 'add_foto_album' %}
+	<li>Het fotoalbum <a href="{{ BASE_URL }}{{ nt.fotoAlbum.get_absolute_url }}"
+			>{{ nt.fotoAlbum.display_title }}</a> is toegevoegd aan
+			<a href="{{ BASE_URL }}{{ nt.fotoEvent.get_absolute_url }}"
+			>{{ nt.fotoEvent.display_title }}</a> door
+			<a href="{{ BASE_URL }}{{ nt.user.get_absolute_url }}"
+			>{{ nt.user.humanName }}</a>.</li>
+{% else %}
+	<li>Onbekende notificatie {{ nt.event }}.</li>
 {% endif %}
 {% endfor %}
 </ul>
