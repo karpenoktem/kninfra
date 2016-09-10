@@ -1,4 +1,5 @@
 {% extends "static/overbase.html" %}
+{% load i18n %}
 
 {% block styles %}
 {{ block.super }}
@@ -7,7 +8,8 @@
 {% endblock styles %}
 
 {% block body %}
-<p>Hier kun je de oudere uitgaven van de Akta Nokturna downloaden:</p>
+<p>{% blocktrans %}Hier kun je de oudere uitgaven van
+de Akta Nokturna downloaden:{% endblocktrans %}</p>
 
 <ul id="an">
 <li><a href="{% url "groupfolder" subdir="leden" path="aktas/akta44.pdf" %}">

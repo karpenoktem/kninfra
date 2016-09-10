@@ -1,10 +1,10 @@
 {% extends "base/bare.html" %}
-
+{% load i18n %}
 
 {% block body %}
 <iframe src="https://kiwiirc.com/client/karpenoktem.nl/#kn"
   style="border:0; width:100%; height:450px;"></iframe>
 <p class="wrappingtext">(<a href="{% url "home" %}"
-    >ga naar de website</a>)</p>
+    >{% trans "ga naar de website" %}</a>)</p>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

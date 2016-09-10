@@ -2,6 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-11 00:38+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,8 +40,8 @@ msgid ""
 "Lieve %s, maar natuurlijk, jouw wachtwoord voor het villa-netwerk is "
 "veranderd."
 msgstr ""
-"Dear %s, but off course, your password for the villa-network has "
-"been changed."
+"Dear %s, but off course, your password for the villa-network has been "
+"changed."
 
 #: kn/leden/views.py:654
 msgid "Deze relatie bestaat al"
@@ -73,6 +75,37 @@ msgstr "Agenda has been updated"
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
 msgstr "Your request is being processed.  Expect an e-mail within 5 minutes."
 
+#: kn/static/templates/static/activiteiten.html:6
+msgid ""
+"Karpe Noktem staat bekend om zijn live-acts, zoals\n"
+"Karpe Rockt'em en de\n"
+"bandjesavonden. Daarnaast programmeren we voor leden tal van andere\n"
+"activiteiten. Een kleine greep uit voorgaande hoogtepunten: Karpe Rockt'em, "
+"De\n"
+"nacht van de po&euml;zie, Het jaarlijkse gemaskerd bal &amp; Karpe Noktem\n"
+"weekend.\n"
+"Ook verzeil je regelmatig in een vreemde stad tijdens onze Roadtrips en "
+"feesten\n"
+"bij onze zusterverenigingen van het ZEUS-verband."
+msgstr ""
+
+#: kn/static/templates/static/activiteiten.html:16
+#, python-format
+msgid ""
+"Natuurlijk is er elke\n"
+"maandag een gezellige borrel in onze vaste stek, de\n"
+"<a href=\"%(url_route)s\">Villa van Schaeck</a>.\n"
+"Wil je concrete\n"
+"up-to-date informatie over ons programma? Kijk even in\n"
+"onze <a href=\"%(url_agenda)s\">agenda</a>."
+msgstr ""
+
+#: kn/static/templates/static/aktanokturna.html:11
+msgid ""
+"Hier kun je de oudere uitgaven van\n"
+"de Akta Nokturna downloaden:"
+msgstr ""
+
 #: kn/static/templates/static/home.html:27
 msgid ""
 "Welkom op de website van <strong>Alternatieve\n"
@@ -80,3 +113,93 @@ msgid ""
 msgstr ""
 "Welcome to the homepage of <strong>Alternatieve\n"
 "  studenten&shy;vereniging Karpe Noktem</strong>."
+
+#: kn/static/templates/static/irc.html:8
+msgid "ga naar de website"
+msgstr ""
+
+#: kn/static/templates/static/lidworden.html:8
+#, python-format
+msgid ""
+"\n"
+"  Kom eens een keer langs bij een van onze\n"
+"  <a href=\"%(url_activiteiten)s\">activiteiten</a>,\n"
+"    bijvoorbeeld de maandagavond\n"
+"  borrels in de <a href=\"%(url_route)s\">Villa van Schaeck</a>, of stuur "
+"een\n"
+"  e-mailtje naar %(secretaris)s en dan is het zo geregeld!"
+msgstr ""
+
+#: kn/static/templates/static/lidworden.html:16
+#, python-format
+msgid ""
+"\n"
+"  Wil je je uitschrijven? Stuur ook dan een mailtje naar\n"
+"  %(secretaris)s."
+msgstr ""
+
+#: kn/static/templates/static/links.html:7
+msgid "Karpe Noktem op"
+msgstr ""
+
+#: kn/static/templates/static/links.html:14
+msgid "Wij hebben ons ook begeven op"
+msgstr ""
+
+#: kn/static/templates/static/links.html:19
+#, python-format
+msgid ""
+"(kijk voor de nieuwe foto's op\n"
+"      <a href=\"%(url_fotos)s\">onze eigen site</a>)."
+msgstr ""
+
+#: kn/static/templates/static/links.html:23
+msgid "Maar vergeet niet"
+msgstr ""
+
+#: kn/static/templates/static/links.html:25
+msgid "onze wiki"
+msgstr ""
+
+#: kn/static/templates/static/links.html:26
+msgid "ons forum"
+msgstr ""
+
+#: kn/static/templates/static/links.html:27
+msgid "en"
+msgstr ""
+
+#: kn/static/templates/static/links.html:29
+#, python-format
+msgid "de <a href=\"%(url_zusjes)s\">zusjes</a>."
+msgstr ""
+
+#: kn/static/templates/static/over.html:6
+msgid ""
+"Karpe Noktem is een dynamisch alternatief voor\n"
+"iedereen die zich niet tot traditionele verenigingen aangetrokken\n"
+"voelt. Wij brengen HBO- en WO-studenten op een ongedwongen manier\n"
+"samen. De meeste  verenigingen eisen van nieuwe leden een ontgroening\n"
+"en jarenlange aanwezigheidsplicht. Karpe Noktem wil vooral veel\n"
+"bieden: concerten voor de muziekfreaks, roadtrips voor de avonturiers,\n"
+"ledenblad Akta Nokturna voor fotografen en literair talent, poker\n"
+"voor de gokkers en een wekelijkse borrel voor de\n"
+"stamgasten."
+msgstr ""
+
+#: kn/static/templates/static/over.html:16
+msgid ""
+"Bij Karpe Noktem maken de leden de vereniging.\n"
+"We bieden vrijwel constant activiteiten aan die door actieve leden\n"
+"zijn georganiseerd. Daardoor blijft iedereen bij elkaar betrokken\n"
+"en is er voor ieder wat wils. Zo leer je ook heel snel je nieuwe\n"
+"stad kennen."
+msgstr ""
+
+#: kn/static/templates/static/over.html:22
+msgid ""
+"Dus: wil jij nog iets gezelligs doen naast je\n"
+"studie? Wil je niet alleen bij je studie blijven hangen? En wil je\n"
+"nog iets ondernemen en zien van de wereld?  Ongedwongen, actief,\n"
+"dynamisch, veelzijdig. Karpe Noktem... anders ook!"
+msgstr ""

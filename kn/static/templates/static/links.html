@@ -1,28 +1,32 @@
 {% extends "static/base.html" %}
 
+{% load i18n %}
 {% load base %}
 
 {% block body %}
-<p>Karpe Noktem op</p>
+<p>{% trans "Karpe Noktem op" %}</p>
 <ul>
   <li><a href="http://www.facebook.com/karpenoktem">Facebook</a>,</li>
   <li><a href="http://twitter.com/karpenoktem">Twitter</a> en</li>
   <li><a href="http://www.last.fm/group/Karpe+Noktem">Last.fm</a>.</li>
 </ul>
 
-<p>Wij hebben ons ook begeven op</p>
+<p>{% trans "Wij hebben ons ook begeven op" %}</p>
 <ul>
   <li><a href="http://karpenoktem.hyves.nl/">Hyves</a> en</li>
-  <li><a href="http://www.flickr.com/photos/12267979@N04/">Flickr</a> (kijk
-  voor de nieuwe foto's op
-  <a href="{% url "fotos" "" %}">onze eigen site</a>).</li>
+  <li><a href="http://www.flickr.com/photos/12267979@N04/">Flickr</a>
+      {% url "fotos" "" as url_fotos %}
+      {% blocktrans %}(kijk voor de nieuwe foto's op
+      <a href="{{ url_fotos }}">onze eigen site</a>).{% endblocktrans %}</li>
 </ul>
 
-<p>Maar vergeet niet</p>
+<p>{% trans "Maar vergeet niet" %}</p>
 <ul>
-  <li><a href="{% external_url "wiki-home" %}">onze wiki</a>,</li>
-  <li><a href="{% external_url "forum" %}">ons forum</a> en</li>
-  <li>de <a href="{% url "zusjes" %}">zusjes</a>.</li>
+  <li><a href="{% external_url "wiki-home" %}">{% trans "onze wiki" %}</a>,</li>
+  <li><a href="{% external_url "forum" %}">{% trans "ons forum" %}</a>
+          {% trans "en" %}</li>
+  {% url "zusjes" as url_zusjes %}
+  <li>{% blocktrans %}de <a href="{{ url_zusjes }}">zusjes</a>.{% endblocktrans %}</li>
 </ul>
 
 {% endblock %}

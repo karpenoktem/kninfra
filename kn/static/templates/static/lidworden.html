@@ -1,20 +1,21 @@
 {% extends "static/base.html" %}
-
+{% load i18n %}
 {% load base %}
 
 {% block body %}
-<p>
+{% url "activiteiten" as url_activiteiten %}
+{% url "route" as url_route %}
+<p>{% blocktrans with secretaris="secretaris@karpenoktem.nl"|email%}
   Kom eens een keer langs bij een van onze
-  <a href="{% url "activiteiten" %}">activiteiten</a>,
+  <a href="{{ url_activiteiten }}">activiteiten</a>,
     bijvoorbeeld de maandagavond
-  borrels in de <a href="{% url "route" %}">Villa van Schaeck</a>, of stuur een
-  e-mailtje naar {% filter email %}secretaris@karpenoktem.nl{% endfilter %}
-  en dan is het zo geregeld!
+  borrels in de <a href="{{ url_route }}">Villa van Schaeck</a>, of stuur een
+  e-mailtje naar {{ secretaris }} en dan is het zo geregeld!{% endblocktrans %}
 </p>
 
-<p>
+<p>{% blocktrans with secretaris="secretaris@karpenoktem.nl"|email%}
   Wil je je uitschrijven? Stuur ook dan een mailtje naar
-  {% filter email %}secretaris@karpenoktem.nl{% endfilter %}.
+  {{ secretaris }}.{% endblocktrans %}
 </p>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}
