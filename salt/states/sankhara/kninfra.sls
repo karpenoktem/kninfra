@@ -19,6 +19,7 @@ kninfra packages:
             - python-m2crypto
             - python-pyx
             - python-unidecode
+            - gettext
 mirte:
     pip.installed
 sarah:
