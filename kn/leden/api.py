@@ -8,7 +8,7 @@ from kn.base.mail import render_then_email
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
 from kn.leden import giedo
-from kn.leden.utils import find_name_for_user
+from kn.leden.utils import find_name_for_user, parse_date
 
 @login_required
 def view(request):
@@ -170,6 +170,33 @@ def entity_update_visibility(data, request):
     giedo.sync_async(request)
     return {'ok': True}
 
+def entity_end_study(data, request):
+    '''
+    End a study at the specified date.
+    '''
+    if 'id' not in data or not isinstance(data['id'], basestring):
+        return {'ok': False, 'error': 'Missing argument "id"'}
+    if 'study' not in data or not isinstance(data['study'], int):
+        return {'ok': False, 'error': 'Missing argument "study"'}
+    if 'end_date' not in data or not isinstance(data['end_date'], basestring):
+        return {'ok': False, 'error': 'Missing argument "end_date"'}
+
+    if not 'secretariaat' in request.user.cached_groups_names:
+        return {'ok': False, 'error': 'Permission denied'}
+
+    e = Es.by_id(data['id'])
+    if e is None:
+        return {'ok': False, 'error': 'Entity not found'}
+    try:
+        end_date = parse_date(data['end_date'])
+    except ValueError:
+        return {'ok': False, 'error': 'Invalid date'}
+    if not end_date:
+        return {'ok': False, 'error': 'No valid end date given'}
+    e.study_end(data['study'], end_date)
+
+    return {'ok': True}
+
 def entity_set_property(data, request):
     if 'id' not in data or not isinstance(data['id'], basestring):
         return {'ok': False, 'error': 'Missing argument "id"'}
@@ -216,6 +243,7 @@ ACTION_HANDLER_MAP = {
         'entity_set_property': entity_set_property,
         'entity_update_primary':  entity_update_primary,
         'entity_update_visibility':  entity_update_visibility,
+        'entity_end_study':  entity_end_study,
         'get_last_synced':  get_last_synced,
         'adduser_suggest_username': adduser_suggest_username,
         None: no_such_action,

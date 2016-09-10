@@ -1,8 +1,10 @@
 import kn.leden.entities as Es
 
 from django.conf import settings
+from django.utils import dateparse
 
 import unidecode
+import datetime
 
 def find_name_for_user(first_name, last_name):
     """ Given the first and the last name of a user, find a free name """
@@ -58,5 +60,14 @@ def find_name_for_user(first_name, last_name):
         n = fn + ln + str(i)
         if n not in names:
             return n
+
+def parse_date(s):
+    '''
+    Converts a string in the form YYYY-MM-DD to a datetime object.
+    '''
+    date = dateparse.parse_date(s)
+    if date is None:
+        return None
+    return datetime.datetime(date.year, date.month, date.day, 0, 0)
 
 # vim: et:sta:bs=2:sw=4:

@@ -1177,6 +1177,17 @@ class User(Entity):
         if not studies:
             return None
         return studies[0]
+    def study_end(self, index, end_date, save=True):
+        studies = self._data.get('studies', ())
+        if index < 0 or index >= len(studies):
+            raise ValueError('study index out of range')
+        study = studies[index]
+        if study['until'] != DT_MAX:
+            raise ValueError('study already ended')
+        study['until'] = end_date
+        if save:
+            self.save()
+
     @property
     def studentNumber(self):
         study = self.proper_primary_study
