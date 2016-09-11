@@ -1,5 +1,6 @@
 
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
@@ -54,7 +55,7 @@ def event_detail(request, name):
         if not event.can_subscribe:
             raise PermissionDenied
         if subscription is not None and subscription.subscribed:
-            messages.error(request, "Je bent al aangemeld")
+            messages.error(request, _("Je bent al aangemeld"))
         else:
             notes = request.POST['notes']
             subscription = event.subscribe(request.user, notes)
@@ -64,7 +65,7 @@ def event_detail(request, name):
         if not event.can_unsubscribe:
             raise PermissionDenied
         if not subscription.subscribed:
-            messages.error(request, "Je bent al afgemeld")
+            messages.error(request, _("Je bent al afgemeld"))
         else:
             notes = request.POST['notes']
             subscription = event.unsubscribe(request.user, notes)
@@ -79,7 +80,7 @@ def event_detail(request, name):
             raise Http404
         # Is the other already subscribed?
         if event.get_subscription(user) is not None:
-            messages.error(request, "%s is al aangemeld" % user.full_name)
+            messages.error(request, _("%s is al aangemeld") % user.full_name)
         else:
             notes = request.POST['notes']
             other_subscription = event.invite(user, notes, request.user)
@@ -171,9 +172,9 @@ def event_new_or_edit(request, edit=None):
                 # Check some more constraints.
                 owner = Es.by_id(fd['owner'])
                 if not request.user.is_related_with(owner):
-                    raise PermissionDenied('User not related with owner')
+                    raise PermissionDenied(_('Gebruiker niet verwant met eigenaar'))
                 if not subscr_Es.may_set_owner(request.user, owner):
-                    raise PermissionDenied('Owner is not allowed')
+                    raise PermissionDenied(_('Mag deze eigenaar niet kiezen'))
             d = {
                 'date': date_to_dt(fd['date']),
                 'owner': _id(fd['owner']),

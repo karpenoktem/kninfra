@@ -1,5 +1,6 @@
 {% extends "leden/base.html" %}
 {% load base %}
+{% load i18n %}
 
 {% block styles %}
 {{ block.super }}
@@ -22,40 +23,40 @@ var event_object_id = '{{ object.id }}';
 </div>
 <dl>
     {% if object.date %}
-    <dt>Datum</dt>
+    <dt>{% trans "Datum" %}</dt>
     <dd>{{ object.date.date }}</dd>
     {% endif %}{# object.date #}
     {% if object.owner %}
-    <dt>Georganiseerd door</dt>
+    <dt>{% trans "Georganiseerd door" %}</dt>
     <dd><a href="{{ object.owner.get_absolute_url }}"
         >{{ object.owner.humanName }}</a></dd>
     {% endif %}
     {% if object.createdBy and object.createdBy != object.owner %}
-    <dt>Activiteit gemaakt door</dt>
+    <dt>{% trans "Activiteit gemaakt door" %}</dt>
     <dd><a href="{{ object.createdBy.get_absolute_url }}"
         >{{ object.createdBy.humanName }}</a></dd>
     {% endif %}
     {% if object.max_subscriptions != None %}
-    <dt>Maximum aantal deelnemers:</dt>
-    <dd>{{ object.max_subscriptions }} personen</dd>
+    <dt>{% trans "Maximum aantal deelnemers:" %}</dt>
+    <dd>{{ object.max_subscriptions }} {% trans "personen" %}</dd>
     {% endif %}
     {% if object.cost %}
-    <dt>Kosten</dt>
+    <dt>{% trans "Kosten" %}</dt>
     <dd>&euro; {{ object.cost }}</dd>
     {% endif %}
 </dl>
 
 {% if object.history %}
-Geschiedenis:
+{% trans "Geschiedenis:" %}
 <ul>
     {% for historyEvent in object.history %}
-    <li>Activiteit
-        {% if historyEvent.action == 'opened' %}geopend
-        {% elif historyEvent.action == 'closed' %}gesloten
-        {% elif historyEvent.action == 'edited' %}bewerkt
+    <li>{% trans "Activiteit" %}
+        {% if historyEvent.action == 'opened' %}{% trans "geopend" %}
+        {% elif historyEvent.action == 'closed' %}{% trans "gesloten" %}
+        {% elif historyEvent.action == 'edited' %}{% trans "bewerkt" %}
         {% endif %}
-        op {{ historyEvent.date.date }}
-        door <a href="{{ historyEvent.user.get_absolute_url }}"
+        {% trans "op" %} {{ historyEvent.date.date }}
+        {% trans "door" %} <a href="{{ historyEvent.user.get_absolute_url }}"
                                    >{{ historyEvent.user.humanName }}</a>.</li>
     {% endfor %}
 </ul>
@@ -66,9 +67,9 @@ Geschiedenis:
 <div class="tabs">
     <div class="tabHeads">
         <div class="tabHead {% if not subscription.subscribed %} selected{% endif %}"
-            data-for="tab-subscribe">Aanmelden</div>
+             data-for="tab-subscribe">{% trans "Aanmelden" %}</div>
         <div class="tabHead {% if subscription.subscribed %} selected{% endif %}"
-            data-for="tab-invite">Uitnodigen</div>
+             data-for="tab-invite">{% trans "Uitnodigen" %}</div>
     </div>
     <div class="tabBody" id="tab-subscribe">
         <form class="subscribe" method="POST" action="">
@@ -76,39 +77,40 @@ Geschiedenis:
             {% if object.can_subscribe and not subscription.subscribed or object.can_unsubscribe and subscription.subscribed %}
             {# can still subscribe/unsubscribe #}
             <!--[if lte IE 9]>
-            Opmerkingen:<br/>
+            {% trans "Opmerkingen:" %}<br/>
             <![endif]-->
             <textarea class="default" name="notes" cols="30" rows="4"
-                placeholder="Opmerkingen"></textarea>
+                placeholder="{% trans "Opmerkingen" %}"></textarea>
             <div class="button-text">
             {% if subscription.invited and not subscription.has_mutations %}
-            <div class="message">Je bent door
+            <div class="message">{% trans "Je bent door" %}
             <a href="{{ subscription.inviter.get_absolute_url }}"
                 >{{ subscription.inviter.full_name }}</a>
-            uitgenodigd.</div>
+            {% trans "uitgenodigd." %}</div>
             {% endif %}
             {% if subscription.subscribed %}
-            <div class="message"><strong>Je bent al aangemeld</strong>, maar je
-                kunt je nog afmelden.</div>
-            <input type="submit" name="unsubscribe" value="Afmelden"/>
+            <div class="message">
+            {% blocktrans %}<strong>Je bent al aangemeld</strong>, maar je
+                kunt je nog afmelden.</div>{% endblocktrans %}
+            <input type="submit" name="unsubscribe" value="{% trans "Afmelden" %}"/>
             {% else %}
-            <input type="submit" name="subscribe" value="Aanmelden"/>
+            <input type="submit" name="subscribe" value="{% trans "Aanmelden" %}"/>
             {% if not object.may_unsubscribe %}
-            <div class="message">(je kunt je daarna niet meer afmelden)</div>
+            <div class="message">{% trans "(je kunt je daarna niet meer afmelden)" %}</div>
             {% endif %}{# object.may_unsubscribe #}
             {% endif %}{# subscription.subscribed #}
             </div><!-- .button-text -->
             {% else %}{# cannot (un)subscribe #}
             <div class="message">
             {% if not object.is_open %}
-            De activiteit is gesloten, je kunt je niet meer aanmelden of
-            afmelden.
+            {% blocktrans %}De activiteit is gesloten, je kunt je
+            niet meer aanmelden of afmelden.{% endblocktrans %}
             {% else %}
-            Je kunt je helaas niet meer aanmelden{% if object.may_unsubscribe %}
-                of afmelden{% endif %}.
+            {% blocktrans %}Je kunt je helaas niet meer aanmelden{% endblocktrans %}
+            {% if object.may_unsubscribe %}{% trans "of afmelden" %}{% endif %}.
             {% endif %}{# object.is_open #}
-            Stuur een mailtje naar <a href="mailto:{{ object.owner.canonical_email }}"
-                >{{ object.owner.canonical_email }}</a> voor vragen.
+            {% trans "Stuur een mailtje naar" %} <a href="mailto:{{ object.owner.canonical_email }}"
+                >{{ object.owner.canonical_email }}</a> {% trans "voor vragen." %}
             </div><!-- .message -->
             {% endif %}{# object.can_subscribe etc. #}
         </form>
@@ -118,13 +120,14 @@ Geschiedenis:
         <form class="subscribe" method="POST" action="">
             {% csrf_token %}
             <!--[if lte IE 9]>
-            Opmerkingen:<br/>
+            {% trans "Opmerkingen:" %}<br/>
             <![endif]-->
             <textarea class="default" name="notes" cols="30" rows="4"
-                placeholder="Opmerkingen"></textarea>
+                placeholder="{% trans "Opmerkingen" %}"></textarea>
             <div class="button-text">
             {% if not object.can_subscribe %}
-            <div class="message">Let op: je kunt je niet meer aanmelden!</div>
+            <div class="message">{% blocktrans %}Let op:
+                je kunt je niet meer aanmelden!{% endblocktrans %}</div>
             {% endif %}{# object.can_subscribe #}
             <select name="who" required>
                 <option selected disabled hidden value=""></option>
@@ -132,7 +135,7 @@ Geschiedenis:
                 <option value="{{ u.id }}">{{ u.full_name }}</option>
                 {% endfor %}{# u in users #}
             </select>
-            <input type="submit" name="invite" value="Uitnodigen" />
+            <input type="submit" name="invite" value="{% trans "Uitnodigen" %}" />
             </div><!-- .button-text -->
         </form>
     </div>
@@ -142,32 +145,32 @@ Geschiedenis:
 {% if has_write_access %}
 <div>
     {% if object.is_open %}
-    <button onclick="close_event()">Sluit inschrijvingen</button>
+    <button onclick="close_event()">{% trans "Sluit inschrijvingen" %}</button>
     {% else %}
-    <button onclick="reopen_event()">Heropen inschrijvingen</button>
+    <button onclick="reopen_event()">{% trans "Heropen inschrijvingen" %}</button>
     {% endif %}{# object.is_open #}
-    – <a href="{% url "event-edit" edit=object.name %}">Bewerk activiteit</a>
+    – <a href="{% url "event-edit" edit=object.name %}">{% trans "Bewerk activiteit" %}</a>
 </div>
 {% endif %}{# has_write_access #}
 
 {% if has_read_access or object.has_public_subscriptions %}
     <button onclick="copy_emailaddresses_to_clipboard()">
-        Toon e-mail adressen van de ingeschrevenen
+        {% trans "Toon e-mail adressen van de ingeschrevenen" %}
     </button>
     {% if listSubscribed %}
-    <h2>Aanmeldingen ({{ listSubscribed|length }})</h2>
+    <h2>{% trans "Aanmeldingen" %} ({{ listSubscribed|length }})</h2>
     {% include "subscriptions/include_list.html" with list=listSubscribed %}
     {% else %}
-    <p>Er zijn (nog) geen aanmeldingen.</p>
+    <p>{% trans "Er zijn (nog) geen aanmeldingen." %}</p>
     {% endif %}{# listSubscribed #}
 
     {% if listUnsubscribed %}
-    <h2>Afmeldingen ({{ listUnsubscribed|length }})</h2>
+    <h2>{% trans "Afmeldingen" %} ({{ listUnsubscribed|length }})</h2>
     {% include "subscriptions/include_list.html" with list=listUnsubscribed %}
     {% endif %}{# listUnsubscribed #}
 
     {% if listInvited %}
-    <h2>Uitnodigingen ({{ listInvited|length }})</h2>
+    <h2>{% trans "Uitnodigingen" %} ({{ listInvited|length }})</h2>
     {% include "subscriptions/include_list.html" with list=listInvited %}
     {% endif %}{# listInvited #}
 {% endif %}{# has_read_access or object.has_public_subscriptions#}

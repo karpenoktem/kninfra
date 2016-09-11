@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-11 00:38+0200\n"
+"POT-Creation-Date: 2016-09-11 02:20+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -137,6 +137,9 @@ msgid ""
 "  Wil je je uitschrijven? Stuur ook dan een mailtje naar\n"
 "  %(secretaris)s."
 msgstr ""
+"\n"
+"  Do you want to stop your membership?  Also then, just\n"
+"  send an e-mail to %(secretaris)s."
 
 #: kn/static/templates/static/links.html:7
 msgid "Karpe Noktem op"
@@ -202,4 +205,248 @@ msgid ""
 "studie? Wil je niet alleen bij je studie blijven hangen? En wil je\n"
 "nog iets ondernemen en zien van de wereld?  Ongedwongen, actief,\n"
 "dynamisch, veelzijdig. Karpe Noktem... anders ook!"
+msgstr ""
+
+#: kn/subscriptions/forms.py:23
+msgid "Naam voor computers bestaat al"
+msgstr ""
+
+#: kn/subscriptions/forms.py:31
+msgid "Naam voor computers"
+msgstr ""
+
+#: kn/subscriptions/forms.py:37
+msgid "Beschrijving"
+msgstr ""
+
+#: kn/subscriptions/forms.py:39
+#: kn/subscriptions/templates/subscriptions/event_detail.html:44
+msgid "Kosten"
+msgstr ""
+
+#: kn/subscriptions/forms.py:44
+#: kn/subscriptions/templates/subscriptions/event_detail.html:26
+msgid "Datum"
+msgstr ""
+
+#: kn/subscriptions/forms.py:49
+msgid "Maximum aantal deelnemers (optioneel)"
+msgstr ""
+
+#: kn/subscriptions/forms.py:51
+msgid "geen maximum"
+msgstr ""
+
+#: kn/subscriptions/forms.py:53 kn/subscriptions/forms.py:55
+msgid "Eigenaar"
+msgstr ""
+
+#: kn/subscriptions/forms.py:59
+msgid "Inschrijvingen openbaar"
+msgstr ""
+
+#: kn/subscriptions/forms.py:61
+msgid "Leden mogen zichzelf afmelden"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:30
+msgid "Georganiseerd door"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:35
+msgid "Activiteit gemaakt door"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:40
+msgid "Maximum aantal deelnemers:"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:41
+msgid "personen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:50
+msgid "Geschiedenis:"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:53
+msgid "Activiteit"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:54
+msgid "geopend"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:55
+msgid "gesloten"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:56
+msgid "bewerkt"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:58
+#: kn/subscriptions/templates/subscriptions/include_list.html:15
+#: kn/subscriptions/templates/subscriptions/include_list.html:27
+msgid "op"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:59
+msgid "door"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:70
+#: kn/subscriptions/templates/subscriptions/event_detail.html:97
+msgid "Aanmelden"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:72
+#: kn/subscriptions/templates/subscriptions/event_detail.html:138
+msgid "Uitnodigen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:80
+#: kn/subscriptions/templates/subscriptions/event_detail.html:123
+msgid "Opmerkingen:"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:83
+#: kn/subscriptions/templates/subscriptions/event_detail.html:126
+msgid "Opmerkingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:86
+msgid "Je bent door"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:89
+msgid "uitgenodigd."
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:93
+msgid ""
+"<strong>Je bent al aangemeld</strong>, maar je\n"
+"                kunt je nog afmelden.</div>"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:95
+msgid "Afmelden"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:99
+msgid "(je kunt je daarna niet meer afmelden)"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:106
+msgid ""
+"De activiteit is gesloten, je kunt je\n"
+"            niet meer aanmelden of afmelden."
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:109
+msgid "Je kunt je helaas niet meer aanmelden"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:110
+msgid "of afmelden"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:112
+msgid "Stuur een mailtje naar"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:113
+msgid "voor vragen."
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:129
+msgid ""
+"Let op:\n"
+"                je kunt je niet meer aanmelden!"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:148
+msgid "Sluit inschrijvingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:150
+msgid "Heropen inschrijvingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:152
+#: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:6
+msgid "Bewerk activiteit"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:158
+msgid "Toon e-mail adressen van de ingeschrevenen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:161
+msgid "Aanmeldingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:164
+msgid "Er zijn (nog) geen aanmeldingen."
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:168
+msgid "Afmeldingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:173
+msgid "Uitnodigingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_list.html:6
+msgid "Activiteiten"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_list.html:27
+msgid ">Oude activiteiten"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:8
+msgid "Nieuwe activiteit"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:14
+msgid "Pas aan!"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:16
+msgid "Maak aan!"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/include_list.html:10
+msgid "aangemeld"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/include_list.html:12
+msgid "afgemeld"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/include_list.html:24
+msgid "uitgenodigd door"
+msgstr ""
+
+#: kn/subscriptions/views.py:58
+msgid "Je bent al aangemeld"
+msgstr ""
+
+#: kn/subscriptions/views.py:68
+msgid "Je bent al afgemeld"
+msgstr ""
+
+#: kn/subscriptions/views.py:83
+#, python-format
+msgid "%s is al aangemeld"
+msgstr ""
+
+#: kn/subscriptions/views.py:175
+msgid "Gebruiker niet verwant met eigenaar"
+msgstr "User is not related to owner"
+
+#: kn/subscriptions/views.py:177
+msgid "Mag deze eigenaar niet kiezen"
 msgstr ""
