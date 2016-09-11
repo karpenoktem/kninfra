@@ -1,16 +1,18 @@
 {% extends "static/base.html" %}
 
+{% load i18n %}
+
 {% block submenu %}
 <div id="submenu-wrapper" class="toggle">
     <a id="submenu-button" href="" class="toggle-button">&nbsp;</a>
     <ul id="submenu" class="toggle-window">
-        <li><a href="{% url "over" %}">Over Karpe Noktem</a></li>
-        <li><a href="{% url "geschiedenis" %}">Geschiedenis</a></li>
-        <li><a href="{% url "activiteiten" %}">Activiteiten</a></li>
-        <li><a href="{% url "bestuur" %}">Bestuur</a></li>
-        <li><a href="{% url "aktanokturna" %}">Akta Nokturna</a></li>
-        <li><a href="{% url "zusjes" %}">Zusjes</a></li>
-        <li><a href="{% url "sponsoren" %}">Sponsoren</a></li>
+        <li><a href="{% url "over" %}">{% trans "Over Karpe Noktem" %}</a></li>
+        <li><a href="{% url "geschiedenis" %}">{% trans "Geschiedenis" %}</a></li>
+        <li><a href="{% url "activiteiten" %}">{% trans "Activiteiten" %}</a></li>
+        <li><a href="{% url "bestuur" %}">{% trans "Bestuur" %}</a></li>
+        <li><a href="{% url "aktanokturna" %}">{% trans "Akta Nokturna" %}</a></li>
+        <li><a href="{% url "zusjes" %}">{% trans "Zusjes" %}</a></li>
+        <li><a href="{% url "sponsoren" %}">{% trans "Sponsoren" %}</a></li>
     </div>
 </div>
 {% endblock %}

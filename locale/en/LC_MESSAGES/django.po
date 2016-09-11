@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-11 05:04+0200\n"
+"POT-Creation-Date: 2016-09-11 10:28+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -362,6 +362,7 @@ msgid "Statistieken"
 msgstr ""
 
 #: kn/leden/templates/leden/base.html:36
+#: kn/static/templates/static/overbase.html:11
 #: kn/subscriptions/templates/subscriptions/event_list.html:6
 msgid "Activiteiten"
 msgstr ""
@@ -623,6 +624,118 @@ msgid ""
 "de Akta Nokturna downloaden:"
 msgstr ""
 
+#: kn/static/templates/static/contact.html:8
+msgid ""
+"Voor verzoeken, aanbiedingen en andere algemene\n"
+"  zaken kunt u zich wenden tot de secretaris:"
+msgstr ""
+
+#: kn/static/templates/static/contact.html:12
+msgid ""
+"Voor alle financi&euml;le zaken, mag u zich\n"
+"  wenden tot de penningmeester:"
+msgstr ""
+
+#: kn/static/templates/static/contact.html:15
+msgid ""
+"Voor vragen ofwel opmerkingen over de website\n"
+"  karpenoktem.nl kunt u mailen met:"
+msgstr ""
+
+#: kn/static/templates/static/contact.html:18
+msgid ""
+"Kerstkaarten, uitnodigingen, rekeningen en\n"
+"  alle andere zaken kunt u sturen naar:"
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:6
+msgid ""
+"Door Giedo Jansen,\n"
+"Oprichter van Karpe Noktem"
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:10
+msgid ""
+"Karpe Noktem is één van de jongste gezelligheidsvereniging\n"
+"van Nijmegen. Het\n"
+"idee voor de vereniging ontstond in de introductie van 2003. In de aanloop "
+"naar\n"
+"het daadwerkelijk opstarten van een nieuwe vereniging organiseerde Karpe "
+"Noktem\n"
+"in april en juni 2004 twee feesten. Een officieus oprichtingsfeest in\n"
+"Café De\n"
+"Onderbroek en een Midzomernachtfeest in toenmalig café Gonzo. Twee\n"
+"volle zalen\n"
+"maakte ons overtuigd van het gene wat we al maanden riepen: er is animo voor "
+"een\n"
+"alternatieve gezelligheidsvereniging in Nijmegen!"
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:20
+msgid ""
+"En zo geschiedde het... In de zomermaanden van\n"
+"2004 maakt Karpe Noktem zich op voor de studentenintroductie. In\n"
+"een week tijd bestookt de vereniging de aankomende studenten met\n"
+"een drietal activiteiten. Een 80's Bash/WaPuSka (in/met Diogenes),\n"
+"een avondje relaxen in de zomerzon, en een Loungefeest (in De\n"
+"Onderbroek). Eveneens is Karpe Noktem aanwezig op de informatiemarkt,\n"
+"en wordt er die week voor het eerst een begin gemaakt met het werven\n"
+"van leden.  Na intro wordt de balans opgemaakt, en telt de vereniging\n"
+"zo'n 15 leden."
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:29
+msgid ""
+"Vanaf september 2004 begint Karpe Noktem goed\n"
+"op gang te komen, en langzamerhand vorm te krijgen. De twee wekelijkse\n"
+"borrel wordt geïntroduceerd, en de activiteiten krijgen de regelmaat\n"
+"die ze nodig hebben. Na een maand acht het bestuur de tijd rijp\n"
+"voor een uitdaging, en wordende kersverse leden uitgenodigd voor\n"
+"een weekend in het idyllische Hoenderloo. Het wordt een gedenkwaardig\n"
+"weekend waarin de workshops de gezelligheid afwisselen.</p> <p>Verdere\n"
+"hoogpunten in het prille bestaan van Karpe Noktem zijn het piraten\n"
+"themafeest \"Kapen en Kielhalen\", de Sinterklaas-Bingo-avond, en de\n"
+"eerste Bandjesavond (met optredens van The Analog Project, Pharmacon\n"
+"en Ska Zuster Nee Zuster)."
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:42
+msgid ""
+"Karpe Noktem sluit het jaar 2004 vol goed gemoed\n"
+"af met de betrekking van een bestuurskamer in het Gymnasion. Vanuit\n"
+"deze plek zal de Karpe Noktem-motor draaiende worden gehouden, ten\n"
+"einde ook in 2005, en in de decennia erna, activiteiten te blijven\n"
+"organiseren die als legendarisch de geschiedenis in zullen gaan.\n"
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:48
+msgid ""
+"In januari 2005 gaat Karpe Noktem dansend het\n"
+"nieuwe jaar in met een feest in de Gonzo met de toepasselijke naam\n"
+"\"Dansfeest\". Een maand later volgde de nu al roemruchte Karpe\n"
+"Noktem's Extreme playbackshow. Een zinderde avond waar George Baker\n"
+"gebroederlijk naast The Supremes en KISS stond. Met een publiekslieveling\n"
+"het optreden van een behaarde Ariel de zeemeerm(i/a)n."
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:54
+msgid ""
+"Ook in de periode februari tot en met mei staat\n"
+"het programma bom vol van de meest uiteenlopende activiteiten. Karpe\n"
+"Noktem plukt boompjes in de Hatertse Vennen, staat oog in oog met\n"
+"Het Kwaad (Tropenmuseum), kijkt films, en stelt zich bloot en een\n"
+"schandalige hoeveelheid alcohol (bierspellenavond).\n"
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:60
+msgid ""
+"Maar de onbetwiste hoogtepunten van het tweede\n"
+"halve jaar Karpe Noktem zijn toch echt. Het Broeder en Zusterfeest\n"
+"in De Onderbroek (met bezoek van zusjes Catena, Saam, Wolbodo), Het\n"
+"Hippiefeest in Gonzo, en het Gemaskerde eindfeest van Karpe Noktem\n"
+"in De Cloostertuyn."
+msgstr ""
+
 #: kn/static/templates/static/home.html:27
 msgid ""
 "Welkom op de website van <strong>Alternatieve\n"
@@ -630,6 +743,22 @@ msgid ""
 msgstr ""
 "Welcome to the homepage of <strong>Alternatieve\n"
 "  studenten&shy;vereniging Karpe Noktem</strong>."
+
+#: kn/static/templates/static/intro2008.html:6
+msgid "Naar de hoofdpagina"
+msgstr ""
+
+#: kn/static/templates/static/intro2008.html:8
+msgid "Intro Poster 2008. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/intro2008.html:9
+msgid "Intro Poster 2008"
+msgstr ""
+
+#: kn/static/templates/static/intro2008.html:12
+msgid "ga naar de hoofdpagina"
+msgstr ""
 
 #: kn/static/templates/static/irc.html:8
 msgid "ga naar de website"
@@ -694,6 +823,16 @@ msgstr ""
 msgid "de <a href=\"%(url_zusjes)s\">zusjes</a>."
 msgstr ""
 
+#: kn/static/templates/static/merchandise.html:7
+#, python-format
+msgid ""
+"Wil je\n"
+"zo een kek Karpe Noktem <strong>t-shirt</strong>; wil je ook\n"
+"<strong>stickers</strong> om je omgeving onveilig te maken of heb\n"
+"jij een goed idee voor ander Karpe Noktem spul?  E-Mail dan naar\n"
+"%(proco)s."
+msgstr ""
+
 #: kn/static/templates/static/over.html:6
 msgid ""
 "Karpe Noktem is een dynamisch alternatief voor\n"
@@ -722,6 +861,73 @@ msgid ""
 "studie? Wil je niet alleen bij je studie blijven hangen? En wil je\n"
 "nog iets ondernemen en zien van de wereld?  Ongedwongen, actief,\n"
 "dynamisch, veelzijdig. Karpe Noktem... anders ook!"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:9
+msgid "Over Karpe Noktem"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:10
+msgid "Geschiedenis"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:12
+msgid "Bestuur"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:13
+msgid "Akta Nokturna"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:14
+msgid "Zusjes"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:15
+msgid "Sponsoren"
+msgstr ""
+
+#: kn/static/templates/static/route.html:6
+msgid ""
+"Meestal zitten we in de Villa van Schaeck. Op\n"
+"maandagen in de kelder, en op vrijdagen de borrelruimte. De Villa\n"
+"ligt rechts aan de directe weg van het Keizer Karelplein naar het\n"
+"Centraal Station."
+msgstr ""
+
+#: kn/static/templates/static/sponsoren.html:6
+msgid ""
+">Karpe Noktem zou niet kunnen bestaan zonder de\n"
+"steun van onze sponsoren:"
+msgstr ""
+
+#: kn/static/templates/static/zusjes.html:6
+msgid ""
+"Behalve Karpe Noktem zijn er nog heel veel andere\n"
+"alternatieve studentenverenigingen, in heel Nederland!  Deze vormen\n"
+"samen het zusterverband <a href=\"http://zeusverbond.nl\">ZEUS</a>\n"
+"(dit staat voor Zusterlijke Eenheid Uit Saamhorigheid), dat bestaat\n"
+"uit zes verenigingen naast Karpe Noktem; namelijk:"
+msgstr ""
+
+#: kn/static/templates/static/zusjes.html:13
+#: kn/static/templates/static/zusjes.html:14
+#: kn/static/templates/static/zusjes.html:15
+#: kn/static/templates/static/zusjes.html:17
+#: kn/static/templates/static/zusjes.html:18
+#: kn/static/templates/static/zusjes.html:19
+msgid "uit"
+msgstr ""
+
+#: kn/static/templates/static/zusjes.html:21
+msgid ""
+"Samen met deze verenigingen organiseren wij\n"
+"    feesten, weekenden en hebben wij andere\n"
+"    samenwerkingsverbanden."
+msgstr ""
+
+#: kn/static/templates/static/zusjes.html:25
+msgid "Bekijk ook onze gezamelijke agenda!"
 msgstr ""
 
 #: kn/subscriptions/forms.py:23
