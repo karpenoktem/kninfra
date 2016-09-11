@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-11 04:29+0200\n"
+"POT-Creation-Date: 2016-09-11 05:04+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -144,7 +144,7 @@ msgid ""
 "                        dan naar %(webcie)s."
 msgstr ""
 
-#: kn/base/templates/base/base.html:57
+#: kn/base/templates/base/base.html:57 kn/leden/forms.py:68
 msgid "Gebruikersnaam"
 msgstr ""
 
@@ -169,6 +169,360 @@ msgstr ""
 #: kn/base/views.py:17
 #, python-format
 msgid "%s is een map --- geen bestand"
+msgstr ""
+
+#: kn/leden/entities.py:762
+#, fuzzy
+#| msgid "Entiteit heeft geen naam"
+msgid "Entiteit heeft al deze stempel"
+msgstr "Entity does not have a name"
+
+#: kn/leden/entities.py:770
+#, fuzzy
+#| msgid "Entiteit heeft geen naam"
+msgid "Eniteit heeft deze stempel nog niet"
+msgstr "Entity does not have a name"
+
+#: kn/leden/entities.py:916
+#, fuzzy
+#| msgid "Entiteit heeft geen naam"
+msgid "Entiteit heeft nog geen humanName"
+msgstr "Entity does not have a name"
+
+#: kn/leden/forms.py:56
+#, fuzzy
+#| msgid "Gebruiker is niet geactiveerd"
+msgid "Gebruikersnaam is al in gebruik"
+msgstr "User is not active"
+
+#: kn/leden/forms.py:59
+msgid "Gebruikersnaam bevat een niet-toegestane letter"
+msgstr ""
+
+#: kn/leden/forms.py:61
+#, fuzzy
+#| msgid "Gebruiker is niet geactiveerd"
+msgid "Gebruikersnaam is niet toegestaan"
+msgstr "User is not active"
+
+#: kn/leden/forms.py:64
+msgid "Achternaam"
+msgstr ""
+
+#: kn/leden/forms.py:66
+msgid "bijv.: Vaart, van der"
+msgstr ""
+
+#: kn/leden/forms.py:67
+msgid "Voornaam"
+msgstr ""
+
+#: kn/leden/forms.py:70
+msgid "Geslacht"
+msgstr ""
+
+#: kn/leden/forms.py:71
+msgid "Man"
+msgstr ""
+
+#: kn/leden/forms.py:72
+msgid "Vrouw"
+msgstr ""
+
+#: kn/leden/forms.py:73
+msgid "E-Mail adres"
+msgstr ""
+
+#: kn/leden/forms.py:74
+msgid "Geboortedatum"
+msgstr ""
+
+#: kn/leden/forms.py:75
+msgid "Straatnaam"
+msgstr ""
+
+#: kn/leden/forms.py:76
+msgid "Huisnummer"
+msgstr ""
+
+#: kn/leden/forms.py:77
+msgid "Postcode"
+msgstr ""
+
+#: kn/leden/forms.py:78
+msgid "Woonplaats"
+msgstr ""
+
+#: kn/leden/forms.py:79
+msgid "Telefoonnummer"
+msgstr ""
+
+#: kn/leden/forms.py:81
+msgid "bijv.: +31612345678"
+msgstr ""
+
+#: kn/leden/forms.py:82
+msgid "Studentnummer"
+msgstr ""
+
+#: kn/leden/forms.py:83
+msgid "Onderwijs instelling"
+msgstr ""
+
+#: kn/leden/forms.py:85
+msgid "Studie"
+msgstr ""
+
+#: kn/leden/forms.py:87
+msgid "Datum van inschrijving"
+msgstr ""
+
+#: kn/leden/forms.py:89
+msgid "Incasso"
+msgstr ""
+
+#: kn/leden/forms.py:90
+msgid "Voeg toe aan groepen"
+msgstr ""
+
+#: kn/leden/forms.py:91
+msgid "Eerstejaars"
+msgstr ""
+
+#: kn/leden/forms.py:91
+msgid "Aan"
+msgstr ""
+
+#: kn/leden/forms.py:92
+msgid "Uit"
+msgstr ""
+
+#: kn/leden/forms.py:92
+msgid "Zooi"
+msgstr ""
+
+#: kn/leden/forms.py:98
+msgid "Naam"
+msgstr ""
+
+#: kn/leden/forms.py:99
+msgid "Naam voor mensen"
+msgstr ""
+
+#: kn/leden/forms.py:100
+msgid "Genitivus"
+msgstr ""
+
+#: kn/leden/forms.py:101
+msgid "Korte beschrijving"
+msgstr ""
+
+#: kn/leden/forms.py:102
+msgid "Oudergroep"
+msgstr ""
+
+#: kn/leden/forms.py:105
+msgid "Volwaardige groep"
+msgstr ""
+
+#: kn/leden/forms.py:122
+msgid "Geen oud wachtwoord opgegeven"
+msgstr ""
+
+#: kn/leden/forms.py:124
+msgid "Geen nieuw wachtwoord opgegeven"
+msgstr ""
+
+#: kn/leden/forms.py:126
+msgid "Niet hetzelfde nieuwe wachtwoord opnieuw gegeven"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:22
+msgid "Smoelenboek"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:25
+msgid "Leden"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:27
+msgid "Commissies"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:29
+msgid "Groepen"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:31
+msgid "E-maillijsten"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:33 kn/leden/templates/leden/stats.html:6
+msgid "Statistieken"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:36
+#: kn/subscriptions/templates/subscriptions/event_list.html:6
+msgid "Activiteiten"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:38
+msgid "Aanmaken"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:43
+msgid "Secretariaat"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:45
+msgid "Lid inschrijven"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:46
+msgid "Groep aanmaken"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:47
+#, fuzzy
+#| msgid "Agenda geupdate!"
+msgid "Agenda updaten"
+msgstr "Agenda has been updated"
+
+#: kn/leden/templates/leden/base.html:48
+msgid "Openstaande notities"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:53
+msgid "Foto's"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:55
+msgid "Foto's verplaatsen"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:60
+msgid "Planning"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:63
+msgid "Beheer"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:64
+msgid "Nieuw"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:69
+msgid "Wiki"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:70
+msgid "Forum"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:71
+msgid "Stukken"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:80
+msgid "Zoeken ..."
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:95
+msgid "Wijzingen worden doorgevoerd ..."
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:8
+msgid "Korte namen"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:13
+msgid "E-Maillijst"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:18
+msgid "Hoofden"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:18
+msgid "Hoofd"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:31
+msgid "Bestuurspipo's"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:33
+msgid "Bestuurspipo"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:46
+msgid "Vertegenwoordiger"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:46
+msgid "Vertegenwoordigers"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:61
+msgid "Verlaat"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:69
+msgid "Treed toe"
+msgstr ""
+
+#: kn/leden/templates/leden/stats.html:10
+msgid "grafiek van ledenaantallen over de jaren heen"
+msgstr ""
+
+#: kn/leden/templates/leden/user_list.html:4
+msgid "Gebruikers"
+msgstr ""
+
+#: kn/leden/templates/leden/user_list.html:12
+msgid "vorige"
+msgstr ""
+
+#: kn/leden/templates/leden/user_list.html:14
+msgid "pagina"
+msgstr ""
+
+#: kn/leden/templates/leden/user_list.html:14
+msgid "van de"
+msgstr ""
+
+#: kn/leden/templates/leden/user_list.html:16
+msgid "volgende"
+msgstr ""
+
+#: kn/leden/templates/leden/years_of_birth.html:6
+msgid "Bouwjaren"
+msgstr ""
+
+#: kn/leden/templates/registration/login.html:25
+msgid ""
+"Je gebruikersnaam en wachtwoord zijn fout.\n"
+"    Probeer eens opnieuw."
+msgstr ""
+
+#: kn/leden/templates/registration/login.html:30
+#, python-format
+msgid ""
+"Voor\n"
+"deze pagina moet je inloggen met je Karpe Noktem gebruikersnaam en\n"
+"wachtwoord.  Weet je die niet meer?  E-Mail even naar\n"
+"%(webcie)s."
+msgstr ""
+
+#: kn/leden/templatetags/leden.py:16
+#, python-format
+msgid "van %s"
+msgstr ""
+
+#: kn/leden/templatetags/leden.py:20
+#, python-format
+msgid "tot %s"
 msgstr ""
 
 #: kn/leden/views.py:69
@@ -559,10 +913,6 @@ msgstr ""
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:173
 msgid "Uitnodigingen"
-msgstr ""
-
-#: kn/subscriptions/templates/subscriptions/event_list.html:6
-msgid "Activiteiten"
 msgstr ""
 
 #: kn/subscriptions/templates/subscriptions/event_list.html:27

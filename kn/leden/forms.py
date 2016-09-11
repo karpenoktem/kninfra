@@ -2,6 +2,7 @@ import datetime
 import json
 import reserved
 
+from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.forms.widgets import flatatt
@@ -52,54 +53,56 @@ class EntityChoiceField(forms.CharField):
 
 def validate_username(username):
     if username in Es.names():
-        raise forms.ValidationError('Gebruikersnaam is al in gebruik')
+        raise forms.ValidationError(_('Gebruikersnaam is al in gebruik'))
     if any(map(lambda c: c not in settings.USERNAME_CHARS, username)):
-        raise forms.ValidationError('Gebruikersnaam heeft niet-toegestaan karakter')
+        raise forms.ValidationError(
+                _('Gebruikersnaam bevat een niet-toegestane letter'))
     if not reserved.allowed(username):
-        raise forms.ValidationError('Gebruikersnaam is niet toegestaan')
+        raise forms.ValidationError(_('Gebruikersnaam is niet toegestaan'))
 
 class AddUserForm(forms.Form):
-    last_name = forms.CharField(label="Achternaam",
+    last_name = forms.CharField(label=_("Achternaam"),
                     widget=forms.TextInput(attrs={
-                        'placeholder': 'bijv.: Vaart, van der'}))
-    first_name = forms.CharField(label="Voornaam")
-    username = forms.CharField(label="Gebruikersnaam",
+                        'placeholder': _('bijv.: Vaart, van der')}))
+    first_name = forms.CharField(label=_("Voornaam"))
+    username = forms.CharField(label=_("Gebruikersnaam"),
                     validators=[validate_username])
-    gender = forms.ChoiceField(label="Geslacht", choices=(('m', 'Man'),
-                               ('v', 'Vrouw')))
-    email = forms.EmailField(label="E-Mail adres")
-    dateOfBirth = forms.DateField(label="Geboortedatum")
-    addr_street = forms.CharField(label="Straatnaam")
-    addr_number = forms.CharField(label="Huisnummer")
-    addr_zip = forms.CharField(label="Postcode")
-    addr_city = forms.CharField(label="Woonplaats")
-    telephone = forms.CharField(label="Telefoonnummer",
+    gender = forms.ChoiceField(label=_("Geslacht"),
+                        choices=(('m', _('Man')),
+                                 ('v', _('Vrouw'))))
+    email = forms.EmailField(label=_("E-Mail adres"))
+    dateOfBirth = forms.DateField(label=_("Geboortedatum"))
+    addr_street = forms.CharField(label=_("Straatnaam"))
+    addr_number = forms.CharField(label=_("Huisnummer"))
+    addr_zip = forms.CharField(label=_("Postcode"))
+    addr_city = forms.CharField(label=_("Woonplaats"))
+    telephone = forms.CharField(label=_("Telefoonnummer"),
                     widget=forms.TextInput(attrs={
-                        'placeholder': 'bijv.: +31612345678'}))
-    study_number = forms.CharField(label="Studentnummer")
-    study_inst = EntityChoiceField(label="Onderwijs instelling",
+                        'placeholder': _('bijv.: +31612345678')}))
+    study_number = forms.CharField(label=_("Studentnummer"))
+    study_inst = EntityChoiceField(label=_("Onderwijs instelling"),
             _type='institute')
-    study = EntityChoiceField(label="Studie",
+    study = EntityChoiceField(label=_("Studie"),
             _type='study')
-    dateJoined = forms.DateField(label="Datum van inschrijving",
+    dateJoined = forms.DateField(label=_("Datum van inschrijving"),
             initial=datetime.date.today)
-    incasso = forms.BooleanField(label='Incasso', required=False)
-    addToList = forms.MultipleChoiceField(label="Voeg toe aan groepen",
-            choices=[('eerstejaars', 'Eerstejaars'), ('aan', "Aan"),
-                     ('uit', "Uit"), ('zooi', 'Zooi')],
+    incasso = forms.BooleanField(label=_('Incasso'), required=False)
+    addToList = forms.MultipleChoiceField(label=_("Voeg toe aan groepen"),
+            choices=[('eerstejaars', _('Eerstejaars')), ('aan', _("Aan")),
+                     ('uit', _("Uit")), ('zooi', _('Zooi'))],
             initial=['leden', 'eerstejaars', 'aan'],
             required=False,
             widget=forms.CheckboxSelectMultiple())
 
 class AddGroupForm(forms.Form):
-    name = forms.RegexField(label="Naam", regex=r'^[a-z0-9-]{2,64}$')
-    humanName = forms.CharField(label="Naam voor mensen")
-    genitive_prefix = forms.CharField(label="Genitivus", initial="van de")
-    description = forms.CharField(label="Korte beschrijving")
-    parent = EntityChoiceField(label="Parent",
+    name = forms.RegexField(label=_("Naam"), regex=r'^[a-z0-9-]{2,64}$')
+    humanName = forms.CharField(label=_("Naam voor mensen"))
+    genitive_prefix = forms.CharField(label=_("Genitivus"), initial="van de")
+    description = forms.CharField(label=_("Korte beschrijving"))
+    parent = EntityChoiceField(label=_("Oudergroep"),
             _type='group',
             initial=Es.by_name('secretariaat')._id)
-    true_group = forms.BooleanField(label="Volwaardige groep",
+    true_group = forms.BooleanField(label=_("Volwaardige groep"),
             initial=True)
 
 class AddStudyForm(forms.Form):
@@ -123,15 +126,13 @@ class ChangePasswordForm(forms.Form):
         new_password = cleaned_data.get("new_password")
         new_password_again = cleaned_data.get("new_password_again")
 
-        # todo: add proper and not hardcoded localization
-
         if not old_password:
-            errors.append("geen oud wachtwoord opgegeven")
+            errors.append(_("Geen oud wachtwoord opgegeven"))
         if not new_password:
-            errors.append("geen nieuw wachtwoord opgegeven")
+            errors.append(_("Geen nieuw wachtwoord opgegeven"))
         if new_password != new_password_again:
-            errors.append("niet hetzelfde nieuwe wachtwoord "
-                    "opnieuw gegeven")
+            errors.append(_("Niet hetzelfde nieuwe wachtwoord "
+                            "opnieuw gegeven"))
         if len(errors)>0:
             raise forms.ValidationError(errors)
 

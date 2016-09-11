@@ -6,6 +6,7 @@ import email.utils
 
 from django.conf import settings
 from django.db.models import permalink
+from django.utils.translation import ugettext as _
 from django.contrib.auth.hashers import check_password, make_password
 from django.utils.crypto import constant_time_compare
 
@@ -766,7 +767,7 @@ class Entity(SONWrapper):
         return _id(tag) in self._data.get('tags', ())
     def tag(self, tag, save=True):
         if self.has_tag(tag):
-            raise ValueError('This entity already has this tag')
+            raise ValueError(_("Entiteit heeft al deze stempel"))
         if 'tags' not in self._data:
             self._data['tags'] = []
         self._data['tags'].append(_id(tag))
@@ -774,7 +775,7 @@ class Entity(SONWrapper):
             self.save()
     def untag(self, tag, save=True):
         if not self.has_tag(tag):
-            raise ValueError('This entity does not have this tag')
+            raise ValueError(_("Eniteit heeft deze stempel nog niet"))
         self._data['tags'].remove(_id(tag))
         if save:
             self.save()
@@ -920,7 +921,7 @@ class Entity(SONWrapper):
     def set_humanName(self, humanName, save=True):
         if len(self._data['humanNames']) < 1:
             # does not appear to occur in practice
-            raise ValueError('there are no humanNames yet')
+            raise ValueError(_('Entiteit heeft nog geen humanName'))
         self._data['humanNames'][0]['human'] = humanName
         if save:
             self.save()

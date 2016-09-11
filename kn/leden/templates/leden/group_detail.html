@@ -1,20 +1,21 @@
 {% extends "leden/entity_base.html" %}
 {% load base %}
 {% load leden %}
+{% load i18n %}
 
 {% block entity_body %}
 <dl>
-	<dt>Korte namen</dt>
+    <dt>{% trans "Korte namen" %}</dt>
 	<dd>
         {% for name in object.names %}{% if not forloop.first %}, {% endif %}
         {{ name }}{% endfor %}
 	</dd>
-	<dt>E-Maillijst</dt>
+    <dt>{% trans "E-Maillijst" %}</dt>
         <dd><a href="mailto:{{ object.canonical_email }}">
                 {{ object.canonical_email }}</a></dd>
 
         {% if chiefs %}
-        <dt>{% if chiefs|length > 1 %}Hoofden{% else %}Hoofd{% endif %}</dt>
+        <dt>{% if chiefs|length > 1 %}{% trans "Hoofden" %}{% else %}{% trans "Hoofd" %}{% endif %}</dt>
         <dd>
         {% for chief in chiefs %}
         {% if not forloop.first %}<br/>{% endif %}
@@ -27,9 +28,9 @@
         {% if pipos %}
         <dt>
         {% if pipos|length > 1 %}
-        Bestuurspipo's
+        {% trans "Bestuurspipo's" %}
         {% else %}
-        Bestuurspipo
+        {% trans "Bestuurspipo" %}
         {% endif %}
         </dt>
         <dd>
@@ -42,7 +43,7 @@
         {% endif %}{# pipos #}
 
         {% if reps %}
-        <dt>Vertegenwoordiger{% if reps|length > 1 %}s{% endif %}</dt>
+        <dt>{% if reps|length > 1 %}{% trans "Vertegenwoordiger" %}{% else %}{% trans "Vertegenwoordigers" %}{% endif %}</dt>
         <dd>
         {% for rep in reps %}
         {% if not forloop.first %}<br/>{% endif %}
@@ -57,7 +58,7 @@
 <form action="{% url "relation-end" _id=relation_with_group %}"
         style="display:inline" method="post">
 {% csrf_token %}
-<input type="submit" value="Verlaat" />
+<input type="submit" value="{% trans "Verlaat" %}" />
 </form>
 {% else %}
 <form action="{% url "relation-begin" %}" method="POST">
@@ -65,7 +66,7 @@
         <input type="hidden" name="with" value="{{ object.id }}" />
         <input type="hidden" name="how" value="null" />
         <input type="hidden" name="who" value="{{ request.user.id }}" />
-        <input type="submit" value="Treed toe" />
+        <input type="submit" value="{% trans "Treed toe" %}" />
 </form>
 {% endif %}
 {% endif %}

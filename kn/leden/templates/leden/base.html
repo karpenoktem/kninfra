@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 
+{% load i18n %}
 {% load base %}
 
 {% block styles %}
@@ -18,58 +19,58 @@
 <div id="submenu-wrapper" class="toggle">
     <a id="submenu-button" class="toggle-button" href="">&nbsp;</a>
     <ul id="submenu" class="has-dropdown toggle-window">
-        <li><a href="{% url "smoelen-home" %}">Smoelenboek</a>
+        <li><a href="{% url "smoelen-home" %}">{% trans "Smoelenboek" %}</a>
           <ul>
               <li><a href="{% url "entity-by-name" name="leden" %}"
-                  >Leden</a></li>
+                  >{% trans "Leden" %}</a></li>
               <li><a href="{% url "entity-by-name" name="comms" %}"
-                  >Commissies</a></li>
+                  >{% trans "Commissies" %}</a></li>
               <li><a href="{% url "entity-by-name" name="groepen" %}"
-                  >Groepen</a></li>
-              <li><a href="{% url "entity-by-name" name="lists" %}"
-                  >E-maillijsten</a></li>
+                  >{% trans "Groepen" %}</a></li>
               <li><a href="{% url "entity-by-name" name="disputen" %}"
-                  >Disputen</a></li>
+                  >{% trans "Disputen" %}</a></li>
+              <li><a href="{% url "entity-by-name" name="lists" %}"
+                  >{% trans "E-maillijsten" %}</a></li>
               <li><a href="{% url "stats" %}"
-                  >Statistieken</a></li>
+                  >{% trans "Statistieken" %}</a></li>
               </ul>
           </li>
-        <li><a href="{% url "event-list" %}">Activiteiten</a>
+        <li><a href="{% url "event-list" %}">{% trans "Activiteiten" %}</a>
             <ul>
-                <li><a href="{% url "event-new"  %}">Aanmaken</a></li>
+                <li><a href="{% url "event-new"  %}">{% trans "Aanmaken" %}</a></li>
             </ul>
         </li>
 
         {% if "secretariaat" in user.cached_groups_names %}
-        <li><span>Secretariaat</span>
+        <li><span>{% trans "Secretariaat" %}</span>
             <ul>
-                <li><a href="{% url "secr-add-user"  %}">Lid inschrijven</a></li>
-                <li><a href="{% url "secr-add-group"  %}">Groep aanmaken</a></li>
-                <li><a href="{% url "secr-update-site-agenda"  %}">Agenda updaten</a></li>
-                <li><a href="{% url "secr-notes"  %}">Openstaande notities</a></li>
+                <li><a href="{% url "secr-add-user"  %}">{% trans "Lid inschrijven" %}</a></li>
+                <li><a href="{% url "secr-add-group"  %}">{% trans "Groep aanmaken" %}</a></li>
+                <li><a href="{% url "secr-update-site-agenda"  %}">{% trans "Agenda updaten" %}</a></li>
+                <li><a href="{% url "secr-notes"  %}">{% trans "Openstaande notities" %}</a></li>
             </ul>
         </li>
         {% endif %}
         {% if "fotocie" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
-        <li><a href="{% url "fotos" "" %}">Foto's</a>
+        <li><a href="{% url "fotos" "" %}">{% trans "Foto's" %}</a>
             <ul>
-                <li><a href="{% url "fotoadmin-move" %}">Foto's verplaatsen</a></li>
+                <li><a href="{% url "fotoadmin-move" %}">{% trans "Foto's verplaatsen" %}</a></li>
             </ul>
         </li>
         {% endif %}
 
-        <li><a href="{% url "planning-home"  %}">Planning</a>
+        <li><a href="{% url "planning-home"  %}">{% trans "Planning" %}</a>
             {% if may_manage_planning %}
             <ul>
-                <li><a href="{% url "planning-poollist" %}">Beheer</a></li>
-                <li><a href="{% url "planning-event-create" %}">Nieuw</a></li>
+                <li><a href="{% url "planning-poollist" %}">{% trans "Beheer" %}</a></li>
+                <li><a href="{% url "planning-event-create" %}">{% trans "Nieuw" %}</a></li>
             </ul>
             {% endif %}
         </li>
 
-        <li><a href="{% external_url "wiki-home" %}">Wiki</a></li>
-        <li><a href="{% external_url "forum" %}">Forum</a></li>
-        <li><a href="{% external_url "stukken" %}">Stukken</a></li>
+        <li><a href="{% external_url "wiki-home" %}">{% trans "Wiki" %}</a></li>
+        <li><a href="{% external_url "forum" %}">{% trans "Forum" %}</a></li>
+        <li><a href="{% external_url "stukken" %}">{% trans "Stukken" %}</a></li>
     </ul>
 
     <input type="hidden" id="searchfield" />
@@ -78,7 +79,7 @@
             {# TODO we need a page for when the user did not select #}
             {#      something from the dropdown #}
             create_entityChoiceField('searchfield', {
-                placeholder: 'Zoeken ...',
+                placeholder: '{% trans "Zoeken ..." %}',
                 input_type: 'search',
                 position: { my : "right top", at: "right bottom" },
                 select: function(label, entid) {
@@ -93,7 +94,7 @@
 {% block messages %}
 {% if request.session.waitingOnGiedoSync %}
 <div class="notice" id="waitingOnGiedoSyncNotice">
-        Wijzingen worden doorgevoerd ...
+    {% trans "Wijzingen worden doorgevoerd ..." %}
 </div>
 <script type="text/javascript">
         setTimeout(function(){checkGiedoSync(
@@ -102,4 +103,3 @@
 {% endif %}{# request.session.waiting_on_giedo_sync #}
 {{ block.super }}
 {% endblock messages %}
-

@@ -1,7 +1,7 @@
 {% extends "leden/base.html" %}
 
 {% block body %}
-<h1>Gebruikers</h1>
+<h1>{% trans "Gebruikers" %}</h1>
 <ul>
 {% for user in users %}
 <li><a href="{{ user.get_absolute_url }}">{{ user.full_name }}</a></li>
@@ -9,10 +9,10 @@
 </ul>
 
 {% if page_obj.has_previous %}
-<a href="{% url "user-list" page=page_obj.previous_page_number %}">vorige</a>
+<a href="{% url "user-list" page=page_obj.previous_page_number %}">{% trans "vorige" %}</a>
 {% endif %}
-pagina {{ page_obj.number }} van de {{ paginator.num_pages }}
+{% trans "pagina" %} {{ page_obj.number }} {% trans "van de" %} {{ paginator.num_pages }}
 {% if page_obj.has_next %}
-<a href="{% url "user-list" page=page_obj.next_page_number %}">volgende</a>
+<a href="{% url "user-list" page=page_obj.next_page_number %}">{% trans "volgende" %}</a>
 {% endif %}
 {% endblock %}

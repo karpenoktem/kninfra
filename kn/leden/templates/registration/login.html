@@ -1,33 +1,36 @@
 {% extends "leden/base.html" %}
 
 {% load base %}
+{% load i18n %}
+
 {% block body %}
 <script type="text/javascript">
 $(function(){
-        $('#loginform').submit(function(){
-                var username = $('#id_username');
-                if (username.val() != username.val().toLowerCase()) {
-                        var orig = username.val();
-                        username.effect('shake', {}, 200, function() {
-                                username.effect('highlight', {color: 'red'}, 1000);
-                                username.val(orig.toLowerCase());
-                        });
-                        return false;
-                }
-                return true;
-        });
+    $('#loginform').submit(function(){
+        var username = $('#id_username');
+        if (username.val() != username.val().toLowerCase()) {
+            var orig = username.val();
+            username.effect('shake', {}, 200, function() {
+                username.effect('highlight', {color: 'red'}, 1000);
+                username.val(orig.toLowerCase());
+            });
+            return false;
+        }
+        return true;
+    });
 });
 </script>
 {% if form.errors %}
 <div class="error">
-	Je gebruikersnaam en wachtwoord zijn fout.  Probeer eens opnieuw.
+    {% blocktrans %}Je gebruikersnaam en wachtwoord zijn fout.
+    Probeer eens opnieuw.{% endblocktrans %}
 </div>
 {% endif %}
 
-<p>Voor deze pagina moet je inloggen met je Karpe Noktem gebruikersnaam
-en wachtwoord.  Weet je die niet meer?  E-Mail even naar
-{% filter email %}webcie@karpenoktem.nl{% endfilter %}.
-</p>
+<p>{% blocktrans with webcie="webcie@karpenoktem.nl"|email %}Voor
+deze pagina moet je inloggen met je Karpe Noktem gebruikersnaam en
+wachtwoord.  Weet je die niet meer?  E-Mail even naar
+{{ webcie }}.{% endblocktrans %}</p>
 
 <form method="post" action="." id="loginform">
 	<table>
