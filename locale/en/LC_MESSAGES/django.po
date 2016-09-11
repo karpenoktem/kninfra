@@ -3,10 +3,128 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-11 02:20+0200\n"
+"POT-Creation-Date: 2016-09-11 03:02+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: kn/base/http.py:10
+msgid "referer header mist"
+msgstr ""
+
+#: kn/base/mail.py:34
+msgid "subject blok mist"
+msgstr ""
+
+#: kn/base/mail.py:36
+msgid "html of plain blok mist"
+msgstr ""
+
+#: kn/base/templates/403.html:7
+msgid "Geen toegang"
+msgstr ""
+
+#: kn/base/templates/403.html:8
+msgid ""
+"Helaas, je hebt geen toegang tot deze pagina.\n"
+"Of je probeerde bijvoorbeeld iets in een formulier in te vullen\n"
+"dat niet mocht."
+msgstr ""
+
+#: kn/base/templates/404.html:7
+msgid "Pagina niet gevonden"
+msgstr ""
+
+#: kn/base/templates/404.html:8
+msgid ""
+"Misschien probeerde je de URL handmatig aan te passen? Als je een\n"
+"gewone link volgde die het wel zou moeten doen kun je even de WebCie\n"
+"mailen."
+msgstr ""
+
+#: kn/base/templates/base/bare.html:75
+#, fuzzy
+#| msgid ""
+#| "Welkom op de website van <strong>Alternatieve\n"
+#| "  studenten&shy;vereniging Karpe Noktem</strong>."
+msgid "Alternatieve studentenvereniging Karpe Noktem"
+msgstr ""
+"Welcome to the homepage of <strong>Alternatieve\n"
+"  studenten&shy;vereniging Karpe Noktem</strong>."
+
+#: kn/base/templates/base/bare.html:77
+msgid "Terug naar boven"
+msgstr ""
+
+#: kn/base/templates/base/base.html:32
+msgid "agenda"
+msgstr ""
+
+#: kn/base/templates/base/base.html:33
+msgid "over"
+msgstr ""
+
+#: kn/base/templates/base/base.html:34
+msgid "foto's"
+msgstr ""
+
+#: kn/base/templates/base/base.html:35
+msgid "contact"
+msgstr ""
+
+#: kn/base/templates/base/base.html:37
+msgid "uitloggen"
+msgstr ""
+
+#: kn/base/templates/base/base.html:40
+msgid "lid worden"
+msgstr ""
+
+#: kn/base/templates/base/base.html:44
+msgid "leden"
+msgstr ""
+
+#: kn/base/templates/base/base.html:47
+msgid "Inloggen voor leden"
+msgstr ""
+
+#: kn/base/templates/base/base.html:48
+#, python-format
+msgid ""
+"\n"
+"                        Leden kunnen hier inloggen om o.a. het smoelenboek, "
+"de wiki en\n"
+"                        het forum te bekijken. Weet je je wachtwoord niet "
+"meer, mail\n"
+"                        dan naar %(webcie)s."
+msgstr ""
+
+#: kn/base/templates/base/base.html:57
+msgid "Gebruikersnaam"
+msgstr ""
+
+#: kn/base/templates/base/base.html:61
+#, fuzzy
+#| msgid "Wachtwoord gereset!"
+msgid "Wachtwoord"
+msgstr "Password reset!"
+
+#: kn/base/templates/base/base.html:67
+msgid "Inloggen"
+msgstr ""
+
+#: kn/base/templatetags/base.py:23
+msgid "waar"
+msgstr ""
+
+#: kn/base/views.py:13
+msgid "Dit pad ligt buiten de root"
+msgstr ""
+
+#: kn/base/views.py:17
+#, python-format
+msgid "%s is een map --- geen bestand"
+msgstr ""
 
 #: kn/leden/views.py:69
 #, python-format

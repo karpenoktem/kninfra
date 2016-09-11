@@ -1,4 +1,5 @@
 from django.template.defaultfilters import stringfilter
+from django.utils.translation import ugettext as _
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.conf import settings
@@ -17,9 +18,9 @@ def email_filter(value):
     n, r = conditional_escape(value).split('@',1)
     d, e = r.rsplit('.',1)
     return mark_safe(("<script type='text/javascript'>email("+
-        "'%s', '%s', '%s')</script><noscript>X@Y.Z waar Z=%s,"+
+        "'%s', '%s', '%s')</script><noscript>X@Y.Z %s Z=%s,"+
         " Y=%s, X=%s</noscript>") % (\
-        e, d, n, e, d, n))
+        e, d, n, _('waar'), e, d, n))
 
 @stringfilter
 @register.filter(name='mark_safe')

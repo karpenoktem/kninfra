@@ -1,10 +1,12 @@
 {% extends "base/base.html" %}
 
+{% load i18n %}
+
 {% block body %}
 
-<h1>Pagina niet gevonden</h1>
-<p>Misschien probeerde je de URL handmatig aan te passen? Als je een
+<h1>{% trans "Pagina niet gevonden" %}</h1>
+<p>{% blocktrans %}Misschien probeerde je de URL handmatig aan te passen? Als je een
 gewone link volgde die het wel zou moeten doen kun je even de WebCie
-mailen.</p>
+mailen.{% endblocktrans %}</p>
 
 {% endblock body %}

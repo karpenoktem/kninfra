@@ -1,4 +1,4 @@
-# todo: add localization
+# TODO add localization
 def humanized_enum (it, normal_sep=u", ", final_sep=u" en "):
     lst = list(it)
     if len(lst)==0:

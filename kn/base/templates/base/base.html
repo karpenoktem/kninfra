@@ -1,6 +1,7 @@
 {% extends "base/bare.html" %}
 
 {% load base %}
+{% load i18n %}
 
 {% block styles %}
 {{ block.super }}
@@ -20,60 +21,60 @@
 {% block header %}
 {{ block.super }}
 <div id="header">
-        <div class="container">
-                <a href="{% url "home" %}" id="logo">
-                        <img width="310" src="{{ MEDIA_URL }}base/logo.png"
-                                alt="Karpe Noktem" />
+    <div class="container">
+        <a href="{% url "home" %}" id="logo">
+            <img width="310" src="{{ MEDIA_URL }}base/logo.png"
+                    alt="Karpe Noktem" />
+        </a>
+        <div id="navigator" class="container">
+        {% block topmenu %}
+        <ul>
+            <li><a href="{% url "agenda" %}">{% trans "agenda" %}</a></li>
+            <li><a href="{% url "over" %}">{% trans "over" %}</a></li>
+            <li><a href="{% url "fotos" "" %}">{% trans "foto's" %}</a></li>
+            <li><a href="{% url "contact" %}">{% trans "contact" %}</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url "logout" %}">{% trans "uitloggen" %}</a></li>
+            <li id="loginButton"><a href="{% url "smoelen-home" %}">{{ user.name }}</a></li>
+            {% else %}{# user.is_authenticated #}
+            <li><a href="{% url "lidworden" %}">{% trans "lid worden" %}</a></li>
+            <li id="loginButton" class="toggle">
+                <a id="loginButtonLink" href="{% url "login" %}" class="toggle-button">
+                    <img src="{{ MEDIA_URL }}base/login.svg" width="13" height="15" alt=""/>
+                    <span class="label">{% trans "leden" %}</span>
                 </a>
-                <div id="navigator" class="container">
-                {% block topmenu %}
-                <ul>
-                    <li><a href="{% url "agenda" %}">agenda</a></li>
-                    <li><a href="{% url "over" %}">over</a></li>
-                    <li><a href="{% url "fotos" "" %}">foto's</a></li>
-                    <li><a href="{% url "contact" %}">contact</a></li>
-                    {% if user.is_authenticated %}
-                    <li><a href="{% url "logout" %}">uitloggen</a></li>
-                    <li id="loginButton"><a href="{% url "smoelen-home" %}">{{ user.name }}</a></li>
-                    {% else %}{# user.is_authenticated #}
-                    <li><a href="{% url "lidworden" %}">lid worden</a></li>
-                    <li id="loginButton" class="toggle">
-                        <a id="loginButtonLink" href="{% url "login" %}" class="toggle-button">
-                            <img src="{{ MEDIA_URL }}base/login.svg" width="13" height="15" alt=""/>
-                            <span class="label">leden</span>
-                        </a>
-                        <div id="loginWindow" class="toggle-window">
-                            <h2>Inloggen voor leden</h2>
-                            <p>
-                                Leden kunnen hier inloggen om o.a. het smoelenboek, de wiki en
-                                het forum te bekijken. Weet je je wachtwoord niet meer, mail
-                                dan naar
-                                {% filter email %}webcie@karpenoktem.nl{% endfilter %}
-                            </p>
-                            <form method="POST" action="/accounts/login/">
-                                {% csrf_token %}
-                                <table>
-                                    <tr>
-                                        <td><label for="input-username">Gebruikersnaam</label></td>
-                                        <td><input id="input-username" type="text" name="username" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label for="input-password">Wachtwoord</label></td>
-                                        <td><input id="input-password" type="password" name="password" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td><input type="submit" id="input-submit" value="Inloggen"/></td>
-                                    </tr>
-                                </table>
-                            </form>
-                        </div>
-                    </li>
-                    {% endif %}{# user.is_authenticated #}
-                </ul>
-                {% endblock %}
+                <div id="loginWindow" class="toggle-window">
+                    <h2>{% trans "Inloggen voor leden" %}</h2>
+                    <p>{% blocktrans with webcie="webcie@karpenoktem.nl"|email %}
+                        Leden kunnen hier inloggen om o.a. het smoelenboek, de wiki en
+                        het forum te bekijken. Weet je je wachtwoord niet meer, mail
+                        dan naar {{ webcie }}.{% endblocktrans %}
+                    </p>
+                    <form method="POST" action="/accounts/login/">
+                        {% csrf_token %}
+                        <table>
+                            <tr>
+                                <td><label for="input-username">{% trans "Gebruikersnaam" %}</label></td>
+                                <td><input id="input-username" type="text" name="username" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="input-password">{% trans "Wachtwoord" %}</label></td>
+                                <td><input id="input-password" type="password" name="password" /></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><input type="submit" id="input-submit"
+                                    value="{% trans "Inloggen" %}"/></td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
+            </li>
+            {% endif %}{# user.is_authenticated #}
+        </ul>
+        {% endblock %}
         </div>
+    </div>
 </div>
 {% endblock %}
 {% block content %}
