@@ -3,10 +3,59 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-11 03:02+0200\n"
+"POT-Creation-Date: 2016-09-11 04:29+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: kn/agenda/templates/agenda/agenda.html:8
+#: kn/agenda/templates/agenda/zeus.html:14
+msgid "Ook op Google Calendar"
+msgstr ""
+
+#: kn/agenda/templates/agenda/agenda.html:9
+msgid ""
+"Ben je geen lid, maar wil je wel op de hoogte\n"
+"  blijven van onze activiteiten?  Zet jezelf op de\n"
+"  geïnteresseerden-e-maillijst"
+msgstr ""
+
+#: kn/agenda/templates/agenda/agenda.html:16
+msgid "jouw@email.com"
+msgstr ""
+
+#: kn/agenda/templates/agenda/agenda.html:17
+msgid "voeg toe"
+msgstr ""
+
+#: kn/agenda/templates/agenda/agenda.html:21
+#, python-format
+msgid ""
+"We hebben ook een <a href=\"%(url_agenda_zeus)s\">gezamelijke\n"
+"    agenda</a> met onze <a href=\"%(url_zusjes)s\">zusjes</a>!"
+msgstr ""
+
+#: kn/agenda/templates/agenda/short_agenda.html:2
+#: kn/base/templates/base/base.html:32
+msgid "agenda"
+msgstr ""
+
+#: kn/agenda/templates/agenda/short_agenda.html:8
+msgid "Meer..."
+msgstr ""
+
+#: kn/agenda/templates/agenda/zeus.html:9
+#, python-format
+msgid ""
+"\n"
+"\tDit is de ZEUS-agenda, de agenda met alle grote activiteiten\n"
+"    van onze <a href=\"%(url_zusjes)s\">zusterverenigingen</a>\n"
+"    door heel het land."
+msgstr ""
+
+#: kn/agenda/templates/agenda/zeus.html:15
+msgid "Terug naar onze eigen agenda"
+msgstr ""
 
 #: kn/base/http.py:10
 msgid "referer header mist"
@@ -54,10 +103,6 @@ msgstr ""
 
 #: kn/base/templates/base/bare.html:77
 msgid "Terug naar boven"
-msgstr ""
-
-#: kn/base/templates/base/base.html:32
-msgid "agenda"
 msgstr ""
 
 #: kn/base/templates/base/base.html:33
