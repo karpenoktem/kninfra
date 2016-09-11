@@ -1177,6 +1177,19 @@ class User(Entity):
         if not studies:
             return None
         return studies[0]
+    def study_start(self, study, institute, number, start_date, save=True):
+        if not 'studies' in self._data:
+            self._data['studies'] = []
+        self._data['studies'].append({
+            'study': _id(study),
+            'institute': _id(institute),
+            'from': datetime.datetime(start_date.year, start_date.month,
+                start_date.day),
+            'until': DT_MAX,
+            'number': number,
+        })
+        if save:
+            self.save()
     def study_end(self, index, end_date, save=True):
         studies = self._data.get('studies', ())
         if index < 0 or index >= len(studies):

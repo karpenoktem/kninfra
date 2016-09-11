@@ -22,7 +22,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib import messages
 
-from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
+from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm, AddStudyForm
 from kn.leden.auth import login_or_basicauth_required
 from kn.leden.date import now, date_to_dt
 from kn.leden.mongo import _id
@@ -187,6 +187,21 @@ def _user_detail(request, user):
     ctx = _entity_detail(request, user)
     ctx['photosUrl'] = reverse('fotos', kwargs={'path':''}) + \
                                         '?q=tag:'+str(user.name)
+    ctx['addStudyFormOpen'] = False
+    if request.method == 'POST':
+        addStudyForm = AddStudyForm(request.POST)
+        if 'action' in request.POST and request.POST['action'] == 'add-study':
+            if 'secretariaat' not in request.user.cached_groups_names:
+                raise PermissionDenied
+            ctx['addStudyFormOpen'] = True
+            if addStudyForm.is_valid():
+                fd = addStudyForm.cleaned_data
+                user.study_start(fd['study'], fd['study_inst'],
+                        fd['study_number'], fd['study_from'])
+                return redirect_to_referer(request)
+    else:
+        addStudyForm = AddStudyForm()
+    ctx['addStudyForm'] = addStudyForm
     return render_to_response('leden/user_detail.html', ctx,
             context_instance=RequestContext(request))
 
