@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-11 10:28+0200\n"
+"POT-Creation-Date: 2016-09-11 10:35+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -171,6 +171,44 @@ msgstr ""
 msgid "%s is een map --- geen bestand"
 msgstr ""
 
+#: kn/fotos/forms.py:22 kn/leden/forms.py:99
+msgid "Naam voor mensen"
+msgstr ""
+
+#: kn/fotos/forms.py:23 kn/subscriptions/forms.py:44
+#: kn/subscriptions/templates/subscriptions/event_detail.html:26
+msgid "Datum"
+msgstr ""
+
+#: kn/fotos/forms.py:24 kn/subscriptions/forms.py:31
+msgid "Naam voor computers"
+msgstr ""
+
+#: kn/fotos/forms.py:26
+msgid "Volledige naam voor mensen"
+msgstr ""
+
+#: kn/fotos/forms.py:34
+msgid "Verplaats"
+msgstr ""
+
+#: kn/fotos/forms.py:36
+msgid "naar"
+msgstr ""
+
+#: kn/fotos/views.py:164
+msgid "Fotoalbum aangemaakt!"
+msgstr ""
+
+#: kn/fotos/views.py:166
+#, python-format
+msgid "Er is een fout opgetreden: %s"
+msgstr ""
+
+#: kn/fotos/views.py:167
+msgid "geen foutmelding"
+msgstr ""
+
 #: kn/leden/entities.py:762
 #, fuzzy
 #| msgid "Entiteit heeft geen naam"
@@ -303,10 +341,6 @@ msgstr ""
 
 #: kn/leden/forms.py:98
 msgid "Naam"
-msgstr ""
-
-#: kn/leden/forms.py:99
-msgid "Naam voor mensen"
 msgstr ""
 
 #: kn/leden/forms.py:100
@@ -934,10 +968,6 @@ msgstr ""
 msgid "Naam voor computers bestaat al"
 msgstr ""
 
-#: kn/subscriptions/forms.py:31
-msgid "Naam voor computers"
-msgstr ""
-
 #: kn/subscriptions/forms.py:37
 msgid "Beschrijving"
 msgstr ""
@@ -945,11 +975,6 @@ msgstr ""
 #: kn/subscriptions/forms.py:39
 #: kn/subscriptions/templates/subscriptions/event_detail.html:44
 msgid "Kosten"
-msgstr ""
-
-#: kn/subscriptions/forms.py:44
-#: kn/subscriptions/templates/subscriptions/event_detail.html:26
-msgid "Datum"
 msgstr ""
 
 #: kn/subscriptions/forms.py:49

@@ -8,6 +8,7 @@ import Image
 
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
+from django.utils.translation import ugettext as _
 from django.core.exceptions import PermissionDenied
 from django.core.servers.basehttp import FileWrapper
 from django.core.paginator import EmptyPage
@@ -160,10 +161,10 @@ def fotoadmin_create_event(request):
             ret = giedo.fotoadmin_create_event(str(cd['date']),
                     cd['name'], cd['fullHumanName'])
             if ret.get('success', False):
-                messages.info(request, 'Fotoalbum aangemaakt!')
+                messages.info(request, _('Fotoalbum aangemaakt!'))
             else:
-                messages.error(request, 'Er is een fout opgetreden: %s' %
-                                ret.get('error', 'geen foutmelding'))
+                messages.error(request, _('Er is een fout opgetreden: %s') %
+                                ret.get('error', _('geen foutmelding')))
             return redirect('fotoadmin-move')
     else:
         form = CreateEventForm()
