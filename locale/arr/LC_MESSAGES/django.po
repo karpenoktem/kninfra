@@ -1,0 +1,1178 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-11 19:29+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: kn/agenda/templates/agenda/agenda.html:8
+#: kn/agenda/templates/agenda/zeus.html:14
+msgid "Ook op Google Calendar"
+msgstr ""
+
+#: kn/agenda/templates/agenda/agenda.html:9
+msgid ""
+"Ben je geen lid, maar wil je wel op de hoogte\n"
+"  blijven van onze activiteiten?  Zet jezelf op de\n"
+"  geïnteresseerden-e-maillijst"
+msgstr ""
+
+#: kn/agenda/templates/agenda/agenda.html:16
+msgid "jouw@email.com"
+msgstr ""
+
+#: kn/agenda/templates/agenda/agenda.html:17
+msgid "voeg toe"
+msgstr ""
+
+#: kn/agenda/templates/agenda/agenda.html:21
+#, python-format
+msgid ""
+"We hebben ook een <a href=\"%(url_agenda_zeus)s\">gezamelijke\n"
+"    agenda</a> met onze <a href=\"%(url_zusjes)s\">zusjes</a>!"
+msgstr ""
+
+#: kn/agenda/templates/agenda/short_agenda.html:2
+#: kn/base/templates/base/base.html:32
+msgid "agenda"
+msgstr ""
+
+#: kn/agenda/templates/agenda/short_agenda.html:8
+msgid "Meer..."
+msgstr ""
+
+#: kn/agenda/templates/agenda/zeus.html:9
+#, python-format
+msgid ""
+"\n"
+"\tDit is de ZEUS-agenda, de agenda met alle grote activiteiten\n"
+"    van onze <a href=\"%(url_zusjes)s\">zusterverenigingen</a>\n"
+"    door heel het land."
+msgstr ""
+
+#: kn/agenda/templates/agenda/zeus.html:15
+msgid "Terug naar onze eigen agenda"
+msgstr ""
+
+#: kn/base/http.py:10
+msgid "referer header mist"
+msgstr ""
+
+#: kn/base/mail.py:34
+msgid "subject blok mist"
+msgstr ""
+
+#: kn/base/mail.py:36
+msgid "html of plain blok mist"
+msgstr ""
+
+#: kn/base/templates/403.html:7
+msgid "Geen toegang"
+msgstr ""
+
+#: kn/base/templates/403.html:8
+msgid ""
+"Helaas, je hebt geen toegang tot deze pagina.\n"
+"Of je probeerde bijvoorbeeld iets in een formulier in te vullen\n"
+"dat niet mocht."
+msgstr ""
+
+#: kn/base/templates/404.html:7
+msgid "Pagina niet gevonden"
+msgstr ""
+
+#: kn/base/templates/404.html:8
+msgid ""
+"Misschien probeerde je de URL handmatig aan te passen? Als je een\n"
+"gewone link volgde die het wel zou moeten doen kun je even de WebCie\n"
+"mailen."
+msgstr ""
+
+#: kn/base/templates/base/bare.html:75
+msgid "Alternatieve studentenvereniging Karpe Noktem"
+msgstr ""
+
+#: kn/base/templates/base/bare.html:77
+msgid "Terug naar boven"
+msgstr ""
+
+#: kn/base/templates/base/base.html:33
+msgid "over"
+msgstr ""
+
+#: kn/base/templates/base/base.html:34
+msgid "foto's"
+msgstr ""
+
+#: kn/base/templates/base/base.html:35
+msgid "contact"
+msgstr ""
+
+#: kn/base/templates/base/base.html:37
+msgid "uitloggen"
+msgstr ""
+
+#: kn/base/templates/base/base.html:40
+msgid "lid worden"
+msgstr ""
+
+#: kn/base/templates/base/base.html:44
+msgid "leden"
+msgstr ""
+
+#: kn/base/templates/base/base.html:47
+msgid "Inloggen voor leden"
+msgstr ""
+
+#: kn/base/templates/base/base.html:48
+#, python-format
+msgid ""
+"\n"
+"                        Leden kunnen hier inloggen om o.a. het smoelenboek, "
+"de wiki en\n"
+"                        het forum te bekijken. Weet je je wachtwoord niet "
+"meer, mail\n"
+"                        dan naar %(webcie)s."
+msgstr ""
+
+#: kn/base/templates/base/base.html:57 kn/leden/forms.py:68
+msgid "Gebruikersnaam"
+msgstr ""
+
+#: kn/base/templates/base/base.html:61
+msgid "Wachtwoord"
+msgstr ""
+
+#: kn/base/templates/base/base.html:67
+msgid "Inloggen"
+msgstr ""
+
+#: kn/base/templatetags/base.py:23
+msgid "waar"
+msgstr ""
+
+#: kn/base/views.py:13
+msgid "Dit pad ligt buiten de root"
+msgstr ""
+
+#: kn/base/views.py:17
+#, python-format
+msgid "%s is een map --- geen bestand"
+msgstr ""
+
+#: kn/fotos/forms.py:22 kn/leden/forms.py:99
+msgid "Naam voor mensen"
+msgstr ""
+
+#: kn/fotos/forms.py:23 kn/subscriptions/forms.py:44
+#: kn/subscriptions/templates/subscriptions/event_detail.html:26
+msgid "Datum"
+msgstr ""
+
+#: kn/fotos/forms.py:24 kn/subscriptions/forms.py:31
+msgid "Naam voor computers"
+msgstr ""
+
+#: kn/fotos/forms.py:26
+msgid "Volledige naam voor mensen"
+msgstr ""
+
+#: kn/fotos/forms.py:34
+msgid "Verplaats"
+msgstr ""
+
+#: kn/fotos/forms.py:36
+msgid "naar"
+msgstr ""
+
+#: kn/fotos/views.py:164
+msgid "Fotoalbum aangemaakt!"
+msgstr ""
+
+#: kn/fotos/views.py:166
+#, python-format
+msgid "Er is een fout opgetreden: %s"
+msgstr ""
+
+#: kn/fotos/views.py:167
+msgid "geen foutmelding"
+msgstr ""
+
+#: kn/leden/entities.py:762
+msgid "Entiteit heeft al deze stempel"
+msgstr ""
+
+#: kn/leden/entities.py:770
+msgid "Eniteit heeft deze stempel nog niet"
+msgstr ""
+
+#: kn/leden/entities.py:916
+msgid "Entiteit heeft nog geen humanName"
+msgstr ""
+
+#: kn/leden/forms.py:56
+msgid "Gebruikersnaam is al in gebruik"
+msgstr ""
+
+#: kn/leden/forms.py:59
+msgid "Gebruikersnaam bevat een niet-toegestane letter"
+msgstr ""
+
+#: kn/leden/forms.py:61
+msgid "Gebruikersnaam is niet toegestaan"
+msgstr ""
+
+#: kn/leden/forms.py:64
+msgid "Achternaam"
+msgstr ""
+
+#: kn/leden/forms.py:66
+msgid "bijv.: Vaart, van der"
+msgstr ""
+
+#: kn/leden/forms.py:67
+msgid "Voornaam"
+msgstr ""
+
+#: kn/leden/forms.py:70
+msgid "Geslacht"
+msgstr ""
+
+#: kn/leden/forms.py:71
+msgid "Man"
+msgstr ""
+
+#: kn/leden/forms.py:72
+msgid "Vrouw"
+msgstr ""
+
+#: kn/leden/forms.py:73
+msgid "E-Mail adres"
+msgstr ""
+
+#: kn/leden/forms.py:74
+msgid "Geboortedatum"
+msgstr ""
+
+#: kn/leden/forms.py:75
+msgid "Straatnaam"
+msgstr ""
+
+#: kn/leden/forms.py:76
+msgid "Huisnummer"
+msgstr ""
+
+#: kn/leden/forms.py:77
+msgid "Postcode"
+msgstr ""
+
+#: kn/leden/forms.py:78
+msgid "Woonplaats"
+msgstr ""
+
+#: kn/leden/forms.py:79
+msgid "Telefoonnummer"
+msgstr ""
+
+#: kn/leden/forms.py:81
+msgid "bijv.: +31612345678"
+msgstr ""
+
+#: kn/leden/forms.py:82
+msgid "Studentnummer"
+msgstr ""
+
+#: kn/leden/forms.py:83
+msgid "Onderwijs instelling"
+msgstr ""
+
+#: kn/leden/forms.py:85
+msgid "Studie"
+msgstr ""
+
+#: kn/leden/forms.py:87
+msgid "Datum van inschrijving"
+msgstr ""
+
+#: kn/leden/forms.py:89
+msgid "Incasso"
+msgstr ""
+
+#: kn/leden/forms.py:90
+msgid "Voeg toe aan groepen"
+msgstr ""
+
+#: kn/leden/forms.py:91
+msgid "Eerstejaars"
+msgstr ""
+
+#: kn/leden/forms.py:91
+msgid "Aan"
+msgstr ""
+
+#: kn/leden/forms.py:92
+msgid "Uit"
+msgstr ""
+
+#: kn/leden/forms.py:92
+msgid "Zooi"
+msgstr ""
+
+#: kn/leden/forms.py:98
+msgid "Naam"
+msgstr ""
+
+#: kn/leden/forms.py:100
+msgid "Genitivus"
+msgstr ""
+
+#: kn/leden/forms.py:101
+msgid "Korte beschrijving"
+msgstr ""
+
+#: kn/leden/forms.py:102
+msgid "Oudergroep"
+msgstr ""
+
+#: kn/leden/forms.py:105
+msgid "Volwaardige groep"
+msgstr ""
+
+#: kn/leden/forms.py:122
+msgid "Geen oud wachtwoord opgegeven"
+msgstr ""
+
+#: kn/leden/forms.py:124
+msgid "Geen nieuw wachtwoord opgegeven"
+msgstr ""
+
+#: kn/leden/forms.py:126
+msgid "Niet hetzelfde nieuwe wachtwoord opnieuw gegeven"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:22
+msgid "Smoelenboek"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:25
+msgid "Leden"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:27
+msgid "Commissies"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:29
+msgid "Groepen"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:31
+msgid "E-maillijsten"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:33 kn/leden/templates/leden/stats.html:6
+msgid "Statistieken"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:36
+#: kn/static/templates/static/overbase.html:11
+#: kn/subscriptions/templates/subscriptions/event_list.html:6
+msgid "Activiteiten"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:38
+msgid "Aanmaken"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:43
+msgid "Secretariaat"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:45
+msgid "Lid inschrijven"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:46
+msgid "Groep aanmaken"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:47
+msgid "Agenda updaten"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:48
+msgid "Openstaande notities"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:53
+msgid "Foto's"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:55
+msgid "Foto's verplaatsen"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:60
+msgid "Planning"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:63
+msgid "Beheer"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:64
+msgid "Nieuw"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:69
+msgid "Wiki"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:70
+msgid "Forum"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:71
+msgid "Stukken"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:80
+msgid "Zoeken ..."
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:95
+msgid "Wijzingen worden doorgevoerd ..."
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:8
+msgid "Korte namen"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:13
+msgid "E-Maillijst"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:18
+msgid "Hoofden"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:18
+msgid "Hoofd"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:31
+msgid "Bestuurspipo's"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:33
+msgid "Bestuurspipo"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:46
+msgid "Vertegenwoordiger"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:46
+msgid "Vertegenwoordigers"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:61
+msgid "Verlaat"
+msgstr ""
+
+#: kn/leden/templates/leden/group_detail.html:69
+msgid "Treed toe"
+msgstr ""
+
+#: kn/leden/templates/leden/stats.html:10
+msgid "grafiek van ledenaantallen over de jaren heen"
+msgstr ""
+
+#: kn/leden/templates/leden/user_list.html:4
+msgid "Gebruikers"
+msgstr ""
+
+#: kn/leden/templates/leden/user_list.html:12
+msgid "vorige"
+msgstr ""
+
+#: kn/leden/templates/leden/user_list.html:14
+msgid "pagina"
+msgstr ""
+
+#: kn/leden/templates/leden/user_list.html:14
+msgid "van de"
+msgstr ""
+
+#: kn/leden/templates/leden/user_list.html:16
+msgid "volgende"
+msgstr ""
+
+#: kn/leden/templates/leden/years_of_birth.html:6
+msgid "Bouwjaren"
+msgstr ""
+
+#: kn/leden/templates/registration/login.html:25
+msgid ""
+"Je gebruikersnaam en wachtwoord zijn fout.\n"
+"    Probeer eens opnieuw."
+msgstr ""
+
+#: kn/leden/templates/registration/login.html:30
+#, python-format
+msgid ""
+"Voor\n"
+"deze pagina moet je inloggen met je Karpe Noktem gebruikersnaam en\n"
+"wachtwoord.  Weet je die niet meer?  E-Mail even naar\n"
+"%(webcie)s."
+msgstr ""
+
+#: kn/leden/templatetags/leden.py:16
+#, python-format
+msgid "van %s"
+msgstr ""
+
+#: kn/leden/templatetags/leden.py:20
+#, python-format
+msgid "tot %s"
+msgstr ""
+
+#: kn/leden/views.py:69
+#, python-format
+msgid "Entiteit is niet een %s"
+msgstr ""
+
+#: kn/leden/views.py:73
+msgid "Onbekende entiteit type"
+msgstr ""
+
+#: kn/leden/views.py:313
+msgid "Missende `smoel' in FILES"
+msgstr ""
+
+#: kn/leden/views.py:315
+msgid "Missende `id' in POST"
+msgstr ""
+
+#: kn/leden/views.py:318
+msgid "Entiteit heeft geen naam"
+msgstr ""
+
+#: kn/leden/views.py:361
+#, python-format
+msgid "Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."
+msgstr ""
+
+#: kn/leden/views.py:395
+#, python-format
+msgid ""
+"Lieve %s, maar natuurlijk, jouw wachtwoord voor het villa-netwerk is "
+"veranderd."
+msgstr ""
+
+#: kn/leden/views.py:654
+msgid "Deze relatie bestaat al"
+msgstr ""
+
+#: kn/leden/views.py:677
+msgid "'group' is niet een groep"
+msgstr ""
+
+#: kn/leden/views.py:685
+msgid "'tag' is niet een stempel"
+msgstr ""
+
+#: kn/leden/views.py:718
+msgid "Gebruiker is niet geactiveerd"
+msgstr ""
+
+#: kn/leden/views.py:726
+msgid "Wachtwoord gereset!"
+msgstr ""
+
+#: kn/leden/views.py:734
+msgid "missende `on' of `note'"
+msgstr ""
+
+#: kn/leden/views.py:751
+msgid "Agenda geupdate!"
+msgstr ""
+
+#: kn/leden/views.py:765
+msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
+msgstr ""
+
+#: kn/static/templates/static/activiteiten.html:6
+msgid ""
+"Karpe Noktem staat bekend om zijn live-acts, zoals\n"
+"Karpe Rockt'em en de\n"
+"bandjesavonden. Daarnaast programmeren we voor leden tal van andere\n"
+"activiteiten. Een kleine greep uit voorgaande hoogtepunten: Karpe Rockt'em, "
+"De\n"
+"nacht van de po&euml;zie, Het jaarlijkse gemaskerd bal &amp; Karpe Noktem\n"
+"weekend.\n"
+"Ook verzeil je regelmatig in een vreemde stad tijdens onze Roadtrips en "
+"feesten\n"
+"bij onze zusterverenigingen van het ZEUS-verband."
+msgstr ""
+
+#: kn/static/templates/static/activiteiten.html:16
+#, python-format
+msgid ""
+"Natuurlijk is er elke\n"
+"maandag een gezellige borrel in onze vaste stek, de\n"
+"<a href=\"%(url_route)s\">Villa van Schaeck</a>.\n"
+"Wil je concrete\n"
+"up-to-date informatie over ons programma? Kijk even in\n"
+"onze <a href=\"%(url_agenda)s\">agenda</a>."
+msgstr ""
+
+#: kn/static/templates/static/aktanokturna.html:11
+msgid ""
+"Hier kun je de oudere uitgaven van\n"
+"de Akta Nokturna downloaden:"
+msgstr ""
+
+#: kn/static/templates/static/contact.html:8
+msgid ""
+"Voor verzoeken, aanbiedingen en andere algemene\n"
+"  zaken kunt u zich wenden tot de secretaris:"
+msgstr ""
+
+#: kn/static/templates/static/contact.html:12
+msgid ""
+"Voor alle financi&euml;le zaken, mag u zich\n"
+"  wenden tot de penningmeester:"
+msgstr ""
+
+#: kn/static/templates/static/contact.html:15
+msgid ""
+"Voor vragen ofwel opmerkingen over de website\n"
+"  karpenoktem.nl kunt u mailen met:"
+msgstr ""
+
+#: kn/static/templates/static/contact.html:18
+msgid ""
+"Kerstkaarten, uitnodigingen, rekeningen en\n"
+"  alle andere zaken kunt u sturen naar:"
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:6
+msgid ""
+"Door Giedo Jansen,\n"
+"Oprichter van Karpe Noktem"
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:10
+msgid ""
+"Karpe Noktem is één van de jongste gezelligheidsvereniging\n"
+"van Nijmegen. Het\n"
+"idee voor de vereniging ontstond in de introductie van 2003. In de aanloop "
+"naar\n"
+"het daadwerkelijk opstarten van een nieuwe vereniging organiseerde Karpe "
+"Noktem\n"
+"in april en juni 2004 twee feesten. Een officieus oprichtingsfeest in\n"
+"Café De\n"
+"Onderbroek en een Midzomernachtfeest in toenmalig café Gonzo. Twee\n"
+"volle zalen\n"
+"maakte ons overtuigd van het gene wat we al maanden riepen: er is animo voor "
+"een\n"
+"alternatieve gezelligheidsvereniging in Nijmegen!"
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:20
+msgid ""
+"En zo geschiedde het... In de zomermaanden van\n"
+"2004 maakt Karpe Noktem zich op voor de studentenintroductie. In\n"
+"een week tijd bestookt de vereniging de aankomende studenten met\n"
+"een drietal activiteiten. Een 80's Bash/WaPuSka (in/met Diogenes),\n"
+"een avondje relaxen in de zomerzon, en een Loungefeest (in De\n"
+"Onderbroek). Eveneens is Karpe Noktem aanwezig op de informatiemarkt,\n"
+"en wordt er die week voor het eerst een begin gemaakt met het werven\n"
+"van leden.  Na intro wordt de balans opgemaakt, en telt de vereniging\n"
+"zo'n 15 leden."
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:29
+msgid ""
+"Vanaf september 2004 begint Karpe Noktem goed\n"
+"op gang te komen, en langzamerhand vorm te krijgen. De twee wekelijkse\n"
+"borrel wordt geïntroduceerd, en de activiteiten krijgen de regelmaat\n"
+"die ze nodig hebben. Na een maand acht het bestuur de tijd rijp\n"
+"voor een uitdaging, en wordende kersverse leden uitgenodigd voor\n"
+"een weekend in het idyllische Hoenderloo. Het wordt een gedenkwaardig\n"
+"weekend waarin de workshops de gezelligheid afwisselen.</p> <p>Verdere\n"
+"hoogpunten in het prille bestaan van Karpe Noktem zijn het piraten\n"
+"themafeest \"Kapen en Kielhalen\", de Sinterklaas-Bingo-avond, en de\n"
+"eerste Bandjesavond (met optredens van The Analog Project, Pharmacon\n"
+"en Ska Zuster Nee Zuster)."
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:42
+msgid ""
+"Karpe Noktem sluit het jaar 2004 vol goed gemoed\n"
+"af met de betrekking van een bestuurskamer in het Gymnasion. Vanuit\n"
+"deze plek zal de Karpe Noktem-motor draaiende worden gehouden, ten\n"
+"einde ook in 2005, en in de decennia erna, activiteiten te blijven\n"
+"organiseren die als legendarisch de geschiedenis in zullen gaan.\n"
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:48
+msgid ""
+"In januari 2005 gaat Karpe Noktem dansend het\n"
+"nieuwe jaar in met een feest in de Gonzo met de toepasselijke naam\n"
+"\"Dansfeest\". Een maand later volgde de nu al roemruchte Karpe\n"
+"Noktem's Extreme playbackshow. Een zinderde avond waar George Baker\n"
+"gebroederlijk naast The Supremes en KISS stond. Met een publiekslieveling\n"
+"het optreden van een behaarde Ariel de zeemeerm(i/a)n."
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:54
+msgid ""
+"Ook in de periode februari tot en met mei staat\n"
+"het programma bom vol van de meest uiteenlopende activiteiten. Karpe\n"
+"Noktem plukt boompjes in de Hatertse Vennen, staat oog in oog met\n"
+"Het Kwaad (Tropenmuseum), kijkt films, en stelt zich bloot en een\n"
+"schandalige hoeveelheid alcohol (bierspellenavond).\n"
+msgstr ""
+
+#: kn/static/templates/static/geschiedenis.html:60
+msgid ""
+"Maar de onbetwiste hoogtepunten van het tweede\n"
+"halve jaar Karpe Noktem zijn toch echt. Het Broeder en Zusterfeest\n"
+"in De Onderbroek (met bezoek van zusjes Catena, Saam, Wolbodo), Het\n"
+"Hippiefeest in Gonzo, en het Gemaskerde eindfeest van Karpe Noktem\n"
+"in De Cloostertuyn."
+msgstr ""
+
+#: kn/static/templates/static/home.html:27
+msgid ""
+"Welkom op de website van <strong>Alternatieve\n"
+"  studenten&shy;vereniging Karpe Noktem</strong>."
+msgstr ""
+
+#: kn/static/templates/static/intro2008.html:6
+msgid "Naar de hoofdpagina"
+msgstr ""
+
+#: kn/static/templates/static/intro2008.html:8
+msgid "Intro Poster 2008. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/intro2008.html:9
+msgid "Intro Poster 2008"
+msgstr ""
+
+#: kn/static/templates/static/intro2008.html:12
+msgid "ga naar de hoofdpagina"
+msgstr ""
+
+#: kn/static/templates/static/irc.html:8
+msgid "ga naar de website"
+msgstr ""
+
+#: kn/static/templates/static/lidworden.html:8
+#, python-format
+msgid ""
+"\n"
+"  Kom eens een keer langs bij een van onze\n"
+"  <a href=\"%(url_activiteiten)s\">activiteiten</a>,\n"
+"    bijvoorbeeld de maandagavond\n"
+"  borrels in de <a href=\"%(url_route)s\">Villa van Schaeck</a>, of stuur "
+"een\n"
+"  e-mailtje naar %(secretaris)s en dan is het zo geregeld!"
+msgstr ""
+
+#: kn/static/templates/static/lidworden.html:16
+#, python-format
+msgid ""
+"\n"
+"  Wil je je uitschrijven? Stuur ook dan een mailtje naar\n"
+"  %(secretaris)s."
+msgstr ""
+
+#: kn/static/templates/static/links.html:7
+msgid "Karpe Noktem op"
+msgstr ""
+
+#: kn/static/templates/static/links.html:14
+msgid "Wij hebben ons ook begeven op"
+msgstr ""
+
+#: kn/static/templates/static/links.html:19
+#, python-format
+msgid ""
+"(kijk voor de nieuwe foto's op\n"
+"      <a href=\"%(url_fotos)s\">onze eigen site</a>)."
+msgstr ""
+
+#: kn/static/templates/static/links.html:23
+msgid "Maar vergeet niet"
+msgstr ""
+
+#: kn/static/templates/static/links.html:25
+msgid "onze wiki"
+msgstr ""
+
+#: kn/static/templates/static/links.html:26
+msgid "ons forum"
+msgstr ""
+
+#: kn/static/templates/static/links.html:27
+msgid "en"
+msgstr ""
+
+#: kn/static/templates/static/links.html:29
+#, python-format
+msgid "de <a href=\"%(url_zusjes)s\">zusjes</a>."
+msgstr ""
+
+#: kn/static/templates/static/merchandise.html:7
+#, python-format
+msgid ""
+"Wil je\n"
+"zo een kek Karpe Noktem <strong>t-shirt</strong>; wil je ook\n"
+"<strong>stickers</strong> om je omgeving onveilig te maken of heb\n"
+"jij een goed idee voor ander Karpe Noktem spul?  E-Mail dan naar\n"
+"%(proco)s."
+msgstr ""
+
+#: kn/static/templates/static/over.html:6
+msgid ""
+"Karpe Noktem is een dynamisch alternatief voor\n"
+"iedereen die zich niet tot traditionele verenigingen aangetrokken\n"
+"voelt. Wij brengen HBO- en WO-studenten op een ongedwongen manier\n"
+"samen. De meeste  verenigingen eisen van nieuwe leden een ontgroening\n"
+"en jarenlange aanwezigheidsplicht. Karpe Noktem wil vooral veel\n"
+"bieden: concerten voor de muziekfreaks, roadtrips voor de avonturiers,\n"
+"ledenblad Akta Nokturna voor fotografen en literair talent, poker\n"
+"voor de gokkers en een wekelijkse borrel voor de\n"
+"stamgasten."
+msgstr ""
+
+#: kn/static/templates/static/over.html:16
+msgid ""
+"Bij Karpe Noktem maken de leden de vereniging.\n"
+"We bieden vrijwel constant activiteiten aan die door actieve leden\n"
+"zijn georganiseerd. Daardoor blijft iedereen bij elkaar betrokken\n"
+"en is er voor ieder wat wils. Zo leer je ook heel snel je nieuwe\n"
+"stad kennen."
+msgstr ""
+
+#: kn/static/templates/static/over.html:22
+msgid ""
+"Dus: wil jij nog iets gezelligs doen naast je\n"
+"studie? Wil je niet alleen bij je studie blijven hangen? En wil je\n"
+"nog iets ondernemen en zien van de wereld?  Ongedwongen, actief,\n"
+"dynamisch, veelzijdig. Karpe Noktem... anders ook!"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:9
+msgid "Over Karpe Noktem"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:10
+msgid "Geschiedenis"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:12
+msgid "Bestuur"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:13
+msgid "Akta Nokturna"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:14
+msgid "Zusjes"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:15
+msgid "Sponsoren"
+msgstr ""
+
+#: kn/static/templates/static/route.html:6
+msgid ""
+"Meestal zitten we in de Villa van Schaeck. Op\n"
+"maandagen in de kelder, en op vrijdagen de borrelruimte. De Villa\n"
+"ligt rechts aan de directe weg van het Keizer Karelplein naar het\n"
+"Centraal Station."
+msgstr ""
+
+#: kn/static/templates/static/sponsoren.html:6
+msgid ""
+">Karpe Noktem zou niet kunnen bestaan zonder de\n"
+"steun van onze sponsoren:"
+msgstr ""
+
+#: kn/static/templates/static/zusjes.html:6
+msgid ""
+"Behalve Karpe Noktem zijn er nog heel veel andere\n"
+"alternatieve studentenverenigingen, in heel Nederland!  Deze vormen\n"
+"samen het zusterverband <a href=\"http://zeusverbond.nl\">ZEUS</a>\n"
+"(dit staat voor Zusterlijke Eenheid Uit Saamhorigheid), dat bestaat\n"
+"uit zes verenigingen naast Karpe Noktem; namelijk:"
+msgstr ""
+
+#: kn/static/templates/static/zusjes.html:13
+#: kn/static/templates/static/zusjes.html:14
+#: kn/static/templates/static/zusjes.html:15
+#: kn/static/templates/static/zusjes.html:17
+#: kn/static/templates/static/zusjes.html:18
+#: kn/static/templates/static/zusjes.html:19
+msgid "uit"
+msgstr ""
+
+#: kn/static/templates/static/zusjes.html:21
+msgid ""
+"Samen met deze verenigingen organiseren wij\n"
+"    feesten, weekenden en hebben wij andere\n"
+"    samenwerkingsverbanden."
+msgstr ""
+
+#: kn/static/templates/static/zusjes.html:25
+msgid "Bekijk ook onze gezamelijke agenda!"
+msgstr ""
+
+#: kn/subscriptions/forms.py:23
+msgid "Naam voor computers bestaat al"
+msgstr ""
+
+#: kn/subscriptions/forms.py:37
+msgid "Beschrijving"
+msgstr ""
+
+#: kn/subscriptions/forms.py:39
+#: kn/subscriptions/templates/subscriptions/event_detail.html:44
+msgid "Kosten"
+msgstr ""
+
+#: kn/subscriptions/forms.py:49
+msgid "Maximum aantal deelnemers (optioneel)"
+msgstr ""
+
+#: kn/subscriptions/forms.py:51
+msgid "geen maximum"
+msgstr ""
+
+#: kn/subscriptions/forms.py:53 kn/subscriptions/forms.py:55
+msgid "Eigenaar"
+msgstr ""
+
+#: kn/subscriptions/forms.py:59
+msgid "Inschrijvingen openbaar"
+msgstr ""
+
+#: kn/subscriptions/forms.py:61
+msgid "Leden mogen zichzelf afmelden"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:30
+msgid "Georganiseerd door"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:35
+msgid "Activiteit gemaakt door"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:40
+msgid "Maximum aantal deelnemers:"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:41
+msgid "personen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:50
+msgid "Geschiedenis:"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:53
+msgid "Activiteit"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:54
+msgid "geopend"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:55
+msgid "gesloten"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:56
+msgid "bewerkt"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:58
+#: kn/subscriptions/templates/subscriptions/include_list.html:15
+#: kn/subscriptions/templates/subscriptions/include_list.html:27
+msgid "op"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:59
+msgid "door"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:70
+#: kn/subscriptions/templates/subscriptions/event_detail.html:97
+msgid "Aanmelden"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:72
+#: kn/subscriptions/templates/subscriptions/event_detail.html:138
+msgid "Uitnodigen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:80
+#: kn/subscriptions/templates/subscriptions/event_detail.html:123
+msgid "Opmerkingen:"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:83
+#: kn/subscriptions/templates/subscriptions/event_detail.html:126
+msgid "Opmerkingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:86
+msgid "Je bent door"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:89
+msgid "uitgenodigd."
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:93
+msgid ""
+"<strong>Je bent al aangemeld</strong>, maar je\n"
+"                kunt je nog afmelden.</div>"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:95
+msgid "Afmelden"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:99
+msgid "(je kunt je daarna niet meer afmelden)"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:106
+msgid ""
+"De activiteit is gesloten, je kunt je\n"
+"            niet meer aanmelden of afmelden."
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:109
+msgid "Je kunt je helaas niet meer aanmelden"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:110
+msgid "of afmelden"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:112
+msgid "Stuur een mailtje naar"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:113
+msgid "voor vragen."
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:129
+msgid ""
+"Let op:\n"
+"                je kunt je niet meer aanmelden!"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:148
+msgid "Sluit inschrijvingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:150
+msgid "Heropen inschrijvingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:152
+#: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:6
+msgid "Bewerk activiteit"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:158
+msgid "Toon e-mail adressen van de ingeschrevenen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:161
+msgid "Aanmeldingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:164
+msgid "Er zijn (nog) geen aanmeldingen."
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:168
+msgid "Afmeldingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_detail.html:173
+msgid "Uitnodigingen"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_list.html:27
+msgid ">Oude activiteiten"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:8
+msgid "Nieuwe activiteit"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:14
+msgid "Pas aan!"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:16
+msgid "Maak aan!"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/include_list.html:10
+msgid "aangemeld"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/include_list.html:12
+msgid "afgemeld"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/include_list.html:24
+msgid "uitgenodigd door"
+msgstr ""
+
+#: kn/subscriptions/views.py:58
+msgid "Je bent al aangemeld"
+msgstr ""
+
+#: kn/subscriptions/views.py:68
+msgid "Je bent al afgemeld"
+msgstr ""
+
+#: kn/subscriptions/views.py:83
+#, python-format
+msgid "%s is al aangemeld"
+msgstr ""
+
+#: kn/subscriptions/views.py:175
+msgid "Gebruiker niet verwant met eigenaar"
+msgstr ""
+
+#: kn/subscriptions/views.py:177
+msgid "Mag deze eigenaar niet kiezen"
+msgstr ""
