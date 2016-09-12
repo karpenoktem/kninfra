@@ -66,17 +66,15 @@
         {% if "secretariaat" in user.cached_groups_names and not s.until %}
         <button onclick="var end_date = prompt('Beëindig studie', (new Date().toISOString().substr(0, 10)));
                          if (!end_date) return false;
-                         $.post('{% url "leden-api" %}', {
-                                'csrfmiddlewaretoken': csrf_token,
-                                data: JSON.stringify({
-                                        action: 'entity_end_study',
-                                        study: {{ forloop.counter0 }},
-                                        end_date: end_date,
-                                        id: '{{ object.id }}'})
-                                }, function(data) {
-                                        if(data.ok) window.location.reload();
-                                        else alert(data.error);
-                                }); return false;">Beëindig</button>
+                         leden_api({
+                            action: 'entity_end_study',
+                            study: {{ forloop.counter0 }},
+                            end_date: end_date,
+                            id: '{{ object.id }}'
+                         }, function(data) {
+                            if(data.ok) window.location.reload();
+                            else alert(data.error);
+                         }); return false;">Beëindig</button>
         {% endif %}{# "secretariaat" in user.cached_groups_names and not s.until #}
         </li>
         {% endfor %}{# s in object.studies #}
