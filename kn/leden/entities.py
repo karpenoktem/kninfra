@@ -1180,7 +1180,7 @@ class User(Entity):
     def study_start(self, study, institute, number, start_date, save=True):
         if not 'studies' in self._data:
             self._data['studies'] = []
-        self._data['studies'].append({
+        self._data['studies'].insert(0, {
             'study': _id(study),
             'institute': _id(institute),
             'from': datetime.datetime(start_date.year, start_date.month,

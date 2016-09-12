@@ -45,6 +45,20 @@
         <dt>Studie</dt>
         <dd>
         <ul>
+        {% if "secretariaat" in user.cached_groups_names %}
+        <li>
+            <a href onclick="$('#block-add-study').addClass('visible'); return false;">toevoegen</a>
+            <form method="POST" action="" id="block-add-study"
+                {% if addStudyFormOpen %} class="visible" {% endif %}>
+                <input type="hidden" name="action" value="add-study"/>
+                {% csrf_token %}
+                <table>
+                    {{ addStudyForm.as_table }}
+                </table>
+                <input type="submit" value="Toevoegen" />
+            </form>
+        </li>
+        {% endif %}{# "secretariaat" in user.cached_groups_names #}
         {% for s in object.studies %}
         <li><a href="{{ s.study.get_absolute_url }}"
                 >{{ s.study.humanName }}</a>
@@ -78,20 +92,6 @@
         {% endif %}{# "secretariaat" in user.cached_groups_names and not s.until #}
         </li>
         {% endfor %}{# s in object.studies #}
-        {% if "secretariaat" in user.cached_groups_names %}
-        <li>
-            <a href onclick="$('#block-add-study').addClass('visible'); return false;">toevoegen</a>
-            <form method="POST" action="" id="block-add-study"
-                {% if addStudyFormOpen %} class="visible" {% endif %}>
-                <input type="hidden" name="action" value="add-study"/>
-                {% csrf_token %}
-                <table>
-                    {{ addStudyForm.as_table }}
-                </table>
-                <input type="submit" value="Toevoegen" />
-            </form>
-        </li>
-        {% endif %}{# "secretariaat" in user.cached_groups_names #}
         </ul>
         </dd>
         {% endif %}{# object.primary_study or "secretariaat" in user.cached_groups_names #}
