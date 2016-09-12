@@ -193,7 +193,10 @@ def entity_end_study(data, request):
         return {'ok': False, 'error': 'Invalid date'}
     if not end_date:
         return {'ok': False, 'error': 'No valid end date given'}
-    e.study_end(data['study'], end_date)
+    try:
+        e.study_end(data['study'], end_date)
+    except Es.EntityException, why:
+        return {'ok': False, 'error': why.message}
 
     return {'ok': True}
 

@@ -196,6 +196,7 @@ def _user_detail(request, user):
             ctx['addStudyFormOpen'] = True
             if addStudyForm.is_valid():
                 fd = addStudyForm.cleaned_data
+                # TODO: catch error when study start overlaps with last study
                 user.study_start(fd['study'], fd['study_inst'],
                         fd['study_number'], fd['study_from'])
                 return redirect_to_referer(request)

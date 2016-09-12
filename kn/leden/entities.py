@@ -179,6 +179,14 @@ def ensure_indices():
 
 # Basic functions to work with entities
 # ######################################################################
+
+class EntityException(Exception):
+    '''
+    Exception that is raised when invalid input is entered (e.g. overlapping
+    dates).
+    '''
+    pass
+
 def entity(d):
     """ Given a dictionary, returns an Entity object wrapping it """
     if d is None:
@@ -1178,13 +1186,19 @@ class User(Entity):
             return None
         return studies[0]
     def study_start(self, study, institute, number, start_date, save=True):
+        start_date = datetime.datetime(start_date.year, start_date.month,
+                start_date.day)
         if not 'studies' in self._data:
             self._data['studies'] = []
-        self._data['studies'].insert(0, {
+        studies = self._data['studies']
+        last = max(map(lambda s: s['until'], studies))
+        if start_date <= last:
+            raise EntityException('overlapping study')
+        # add study to the start of the list
+        studies.insert(0, {
             'study': _id(study),
             'institute': _id(institute),
-            'from': datetime.datetime(start_date.year, start_date.month,
-                start_date.day),
+            'from': start_date,
             'until': DT_MAX,
             'number': number,
         })
@@ -1197,6 +1211,8 @@ class User(Entity):
         study = studies[index]
         if study['until'] != DT_MAX:
             raise ValueError('study already ended')
+        if study['from'] >= end_date:
+            raise EntityException('study end date before start date')
         study['until'] = end_date
         if save:
             self.save()
