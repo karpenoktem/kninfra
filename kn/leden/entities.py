@@ -1185,17 +1185,18 @@ class User(Entity):
         if not studies:
             return None
         return studies[0]
+    @property
+    def last_study_end_date(self):
+        return max([DT_MIN]+map(lambda s: s['until'], self._data['studies']))
     def study_start(self, study, institute, number, start_date, save=True):
         start_date = datetime.datetime(start_date.year, start_date.month,
                 start_date.day)
         if not 'studies' in self._data:
             self._data['studies'] = []
-        studies = self._data['studies']
-        last = max(map(lambda s: s['until'], studies))
-        if start_date <= last:
+        if start_date <= self.last_study_end_date:
             raise EntityException('overlapping study')
         # add study to the start of the list
-        studies.insert(0, {
+        self._data['studies'].insert(0, {
             'study': _id(study),
             'institute': _id(institute),
             'from': start_date,

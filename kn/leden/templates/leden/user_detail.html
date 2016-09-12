@@ -41,12 +41,10 @@
         {% endif %}{# "secretariaat" in user.cached_groups_names #}
         </dd>
         {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
-        {% if object.primary_study or "secretariaat" in user.cached_groups_names %}
+        {% if object.primary_study or "secretariaat" in user.cached_groups_names and addStudyForm %}
         <dt>Studie</dt>
         <dd>
-        <ul>
-        {% if "secretariaat" in user.cached_groups_names %}
-        <li>
+        {% if "secretariaat" in user.cached_groups_names and addStudyForm %}
             <a href onclick="$('#block-add-study').addClass('visible'); return false;">toevoegen</a>
             <form method="POST" action="" id="block-add-study"
                 {% if addStudyFormOpen %} class="visible" {% endif %}>
@@ -57,8 +55,8 @@
                 </table>
                 <input type="submit" value="Toevoegen" />
             </form>
-        </li>
-        {% endif %}{# "secretariaat" in user.cached_groups_names #}
+        {% endif %}{# "secretariaat" in user.cached_groups_names and addStudyForm #}
+        <ul>
         {% for s in object.studies %}
         <li><a href="{{ s.study.get_absolute_url }}"
                 >{{ s.study.humanName }}</a>
@@ -94,7 +92,7 @@
         {% endfor %}{# s in object.studies #}
         </ul>
         </dd>
-        {% endif %}{# object.primary_study or "secretariaat" in user.cached_groups_names #}
+        {% endif %}{# object.primary_study or "secretariaat" in user.cached_groups_names and addStudyForm #}
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
         {% if object.telephones %}
         <dt>Telefoonnummer
