@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-14 08:34+0200\n"
+"POT-Creation-Date: 2016-09-14 08:58+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -241,15 +241,15 @@ msgstr "Entity does not have a name"
 msgid "Entiteit heeft nog geen humanName"
 msgstr "Entity does not have a name"
 
-#: kn/leden/entities.py:1212
+#: kn/leden/entities.py:1213
 msgid "studie index bestaat niet"
 msgstr ""
 
-#: kn/leden/entities.py:1215
+#: kn/leden/entities.py:1216
 msgid "studie is al beeindigt"
 msgstr ""
 
-#: kn/leden/entities.py:1217
+#: kn/leden/entities.py:1218
 msgid "einddatum voor begindatum"
 msgstr ""
 
@@ -406,6 +406,7 @@ msgid "Smoelenboek"
 msgstr "Smoelenboek"
 
 #: kn/leden/templates/leden/base.html:25
+#: kn/leden/templates/leden/entity_base.html:137
 msgid "Leden"
 msgstr "Members"
 
@@ -462,6 +463,7 @@ msgid "Openstaande notities"
 msgstr "Pending notes"
 
 #: kn/leden/templates/leden/base.html:55
+#: kn/leden/templates/leden/entity_base.html:36
 msgid "Foto's"
 msgstr "Photos"
 
@@ -500,6 +502,156 @@ msgstr "Search ..."
 #: kn/leden/templates/leden/base.html:97
 msgid "Wijzingen worden doorgevoerd ..."
 msgstr "Changes are carried out ..."
+
+#: kn/leden/templates/leden/brand_detail.html:12
+#: kn/leden/templates/leden/entity_base.html:142
+msgid "Tot jaar"
+msgstr ""
+
+#: kn/leden/templates/leden/brand_detail.html:20
+#, fuzzy
+#| msgid "Man"
+msgid "van"
+msgstr "Male"
+
+#: kn/leden/templates/leden/brand_detail.html:23
+#, fuzzy
+#| msgid "tot %s"
+msgid "tot"
+msgstr "until %s"
+
+#: kn/leden/templates/leden/entities_by_year_of_birth.html:6
+#, fuzzy
+#| msgid "Bouwjaren"
+msgid "Bouwjaar"
+msgstr "Years of birth"
+
+#: kn/leden/templates/leden/entities_by_year_of_birth.html:17
+#, fuzzy
+#| msgid "Geboortedatum"
+msgid "geboortejaren"
+msgstr "Date of birth"
+
+#: kn/leden/templates/leden/entities_underage.html:6
+msgid "Leden onder de 18"
+msgstr ""
+
+#: kn/leden/templates/leden/entities_underage.html:18
+msgid "Vanaf {{ final_date.date }} is ieder lid boven de 18 jaar."
+msgstr ""
+
+#: kn/leden/templates/leden/entities_underage.html:20
+msgid "Er zijn geen leden onder de 18 jaar."
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:47
+#: kn/leden/templates/leden/entity_base.html:48
+msgid "Wijzig naam"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:58
+#, fuzzy
+#| msgid "Korte beschrijving"
+msgid "Nieuwe beschrijving"
+msgstr "Short description"
+
+#: kn/leden/templates/leden/entity_base.html:59
+#, fuzzy
+#| msgid "Korte beschrijving"
+msgid "Wijzig beschrijving"
+msgstr "Short description"
+
+#: kn/leden/templates/leden/entity_base.html:71
+msgid "upload smoel"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:80
+msgid "Lidmaatschap"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:86
+msgid "Tot in jaar"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:93
+#: kn/leden/templates/leden/entity_base.html:150
+msgid "lid"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:108
+#: kn/leden/templates/leden/entity_base.html:162
+msgid "be&euml;indig"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:127
+msgid "Voeg als"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:129
+msgid "toe aan"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:131
+#: kn/leden/templates/leden/entity_base.html:187
+#: kn/leden/templates/leden/entity_base.html:229
+#, fuzzy
+#| msgid "Bestuurspipo"
+msgid "verstuur"
+msgstr "Board thingamabob"
+
+#: kn/leden/templates/leden/entity_base.html:182
+msgid "Voeg"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:184
+msgid "als"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:186
+#: kn/leden/templates/leden/entity_base.html:228
+msgid "toe"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:193
+msgid "Stempels"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:209
+msgid "verwijder"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:226
+msgid "Voeg de stempel"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:235
+#, fuzzy
+#| msgid "'tag' is niet een stempel"
+msgid "Dragers van deze stempel"
+msgstr "'tag' is not a tag"
+
+#: kn/leden/templates/leden/entity_base.html:244
+msgid "Notities"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:263
+msgid "Sluit"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:265
+msgid "Gesloten door"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:266
+#: kn/subscriptions/templates/subscriptions/event_detail.html:58
+#: kn/subscriptions/templates/subscriptions/include_list.html:15
+#: kn/subscriptions/templates/subscriptions/include_list.html:27
+msgid "op"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:276
+msgid "Voeg notitie toe"
+msgstr ""
 
 #: kn/leden/templates/leden/group_detail.html:8
 msgid "Korte namen"
@@ -1703,12 +1855,6 @@ msgstr ""
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:56
 msgid "bewerkt"
-msgstr ""
-
-#: kn/subscriptions/templates/subscriptions/event_detail.html:58
-#: kn/subscriptions/templates/subscriptions/include_list.html:15
-#: kn/subscriptions/templates/subscriptions/include_list.html:27
-msgid "op"
 msgstr ""
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:59
