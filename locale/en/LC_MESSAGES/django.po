@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-14 08:28+0200\n"
+"POT-Creation-Date: 2016-09-14 08:34+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1387,8 +1387,91 @@ msgstr ""
 msgid "band 22:00; bier, fris en wijn voor slechts één euro"
 msgstr ""
 
+#: kn/static/templates/static/introPoster2009.html:12
+#: kn/static/templates/static/introPoster2010.html:12
+#: kn/static/templates/static/introPoster2011.html:12
+#: kn/static/templates/static/introPoster2012.html:12
+#: kn/static/templates/static/introPoster2013.html:12
+#: kn/static/templates/static/introPoster2014.html:12
+#: kn/static/templates/static/introPoster2015.html:12
+#: kn/static/templates/static/introPoster2016.html:12
+msgid "Naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2009.html:14
+msgid "Intro Poster 2009. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2009.html:15
+msgid "Intro Poster 2009"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2009.html:18
+#: kn/static/templates/static/introPoster2010.html:18
+#: kn/static/templates/static/introPoster2011.html:18
+#: kn/static/templates/static/introPoster2012.html:18
+#: kn/static/templates/static/introPoster2013.html:18
+#: kn/static/templates/static/introPoster2014.html:19
+#: kn/static/templates/static/introPoster2015.html:19
+#: kn/static/templates/static/introPoster2016.html:19
 #: kn/static/templates/static/irc.html:8
 msgid "ga naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2010.html:14
+msgid "Intro Poster 2010. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2010.html:15
+msgid "Intro Poster 2010"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2011.html:14
+msgid "Intro Poster 2011. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2011.html:15
+msgid "Intro Poster 2011"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2012.html:14
+msgid "Intro Poster 2012. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2012.html:15
+msgid "Intro Poster 2012"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2013.html:14
+msgid "Intro Poster 2013. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2013.html:15
+msgid "Intro Poster 2013"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2014.html:14
+msgid "Intro Poster 2014. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2014.html:15
+msgid "Intro Poster 2014"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2015.html:14
+msgid "Intro Poster 2015. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2015.html:15
+msgid "Intro Poster 2015"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2016.html:14
+msgid "Intro Poster 2016. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2016.html:15
+msgid "Intro Poster 2016"
 msgstr ""
 
 #: kn/static/templates/static/lidworden.html:8
