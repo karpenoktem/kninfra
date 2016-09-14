@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-14 08:21+0200\n"
+"POT-Creation-Date: 2016-09-14 08:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1219,6 +1219,114 @@ msgstr ""
 
 #: kn/static/templates/static/intro2008.html:12
 msgid "ga naar de hoofdpagina"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:13
+msgid "maandag 17 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:14
+msgid "Pubquiz"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:17
+msgid ""
+"Na het grote succes van vorig jaar alweer een pubquiz\n"
+"in de intro!  Quizmasters Daan en Chris hebben weer een briljante\n"
+"quiz voor ons in petto.  Doe mee en win die felbegeerde prijs!<br/>\n"
+"<em>21:00 in Café 't Haantje, Daalseweg 19</em>"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:23
+msgid "dinsdag 18 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:24
+msgid "Eten in het Park"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:27
+#, python-format
+msgid ""
+"Trap je luie mentorpappa en mamma en eet dinsdagavond mee met Karpe Noktem\n"
+"in stijl in het prachtige Kronenburger Park.  Kom je met jouw mentorgroep?\n"
+"E-Mail dan naar %(parkhangen)s, dan houden we rekening met jullie. <br/>\n"
+"<em>Vanaf 16:00 in het Kronenburger Park</em>"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:33
+msgid "woensdag 19 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:34
+msgid "Open Borrel"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:37
+msgid ""
+"Voor de verandering houden we onze wekelijkse borrel\n"
+"op de woensdag, maar dit keer in de grote zaal!  Start samen met\n"
+"KN het nieuwe jaar met een knal op deze feestelijke borrels met\n"
+"leuke mensen, goede DJ's, bier voor één euro en alle andere\n"
+"gezeligheden die je van Karpe gewend bent.<br/> <em>21:00 in de "
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:42
+#: kn/static/templates/static/intro2009.html:53
+#: kn/static/templates/static/intro2009.html:76
+msgid "Villa van Schaeck"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:45
+msgid "donderdag 20 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:46
+msgid "Villa Live en Beestfeest"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:48
+msgid ""
+" Samen met de andere verenigingen in de Villa van\n"
+"Schaeck houden we het terugkerende feest Villa Live, met live muziek!\n"
+"Ook zullen onze vaste DJs draaien op een gelijktijdig <a\n"
+"href=\"http://www.olympus.science.ru.nl/beestfeest\">Beestfeest</a>\n"
+" in Doornroosje.<br/> <em><strong>Villa Live</strong> 22:00, "
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:56
+msgid "zondag 23 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:57
+msgid "Filmavond"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:60
+msgid ""
+"Heb jij nog geen bestemmingsplan voor de vrije\n"
+"zondagavond?  Of heb je net een zwaar (intro-)weekend achter de rug\n"
+"en wil je even rustig achteroverleunen met een filmpje?  Kom dan\n"
+"naar de Karpe Noktem Filmavond in 't Haantje!<br/> <em>21:00 in\n"
+"café 't Haantje, daalseweg 19</em>"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:68
+msgid "Karpe Intr'Rock"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:71
+msgid ""
+"Karpe Noktem pakt uit!  De band\n"
+"<a href=\"http://www.myspace.com/atzero\">At Zero</a> trapt af en "
+"overgenomen\n"
+"door onze eigen huis DJ's garanderen wij een spetterend einde van jouw\n"
+"introductie.<br/>\n"
+"<em>21:00 in de "
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:77
+msgid "band 22:00; bier, fris en wijn voor slechts één euro"
 msgstr ""
 
 #: kn/static/templates/static/irc.html:8
