@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-14 07:57+0200\n"
+"POT-Creation-Date: 2016-09-14 08:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -666,6 +666,427 @@ msgid ""
 "de Akta Nokturna downloaden:"
 msgstr ""
 
+#: kn/static/templates/static/bestuur10.html:10
+msgid "Pandcommissaris"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:11
+msgid "Vice-voorzitter"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:12
+msgid "Secretaris"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:13
+msgid "Voorzitter"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:14
+msgid "Penningmeester"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:17
+msgid ""
+" <strong>Het tiende bestuur</strong> van A.S.V.\n"
+" Karpe Noktem is net zo divers als de vereniging zelf.  <em>Jean\n"
+" Mennens</em> maakt als voorzitter gebruik van zijn kennis als\n"
+" docent natuurkunde en houdt de vereniging goed in de gaten.  Hij\n"
+" wordt hierin bijgestaan door <em>Els Lunding</em>, die naast haar\n"
+" studie in Engelse literatuur zorgt voor de goede communicatie zowel\n"
+" binnen als buiten de vereniging.  <em>Jurrien Riezebos</em> laat\n"
+" naast zijn kennis van de wereldse geschiedenis ook zien dat hij\n"
+" de geldelijke stromen binnen de vereniging goed kan beheersen als\n"
+" penningmeester.  Als vice-voorzitter zorgt <em>Amirouche Chemim</em>\n"
+" voor het contact met de zusjesverenigingen en andere externen,\n"
+" waarin hij inspiratie put uit zijn studie toegepaste psychologie.\n"
+" <em>Liza Boon</em> maakt als pandcommissaris gebruik van haar\n"
+" studie politicologie en zorgt voor de goede verstandhouding met\n"
+" de verschillende verenigingen binnen de Villa van\n"
+" Schaeck."
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:34
+#, python-format
+msgid ""
+"Alle\n"
+" bestuursleden zijn bereikbaar op hun functie- of voornaam\n"
+" @karpenoktem.nl, behalve Els, die is bereikbaar op\n"
+" %(els)s."
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:39
+#: kn/static/templates/static/bestuur11.html:46
+#: kn/static/templates/static/bestuur12.html:43
+#: kn/static/templates/static/bestuur13.html:44
+#: kn/static/templates/static/bestuur5.html:31
+#: kn/static/templates/static/bestuur6.html:26
+#: kn/static/templates/static/bestuur7.html:42
+#: kn/static/templates/static/bestuur8.html:32
+#: kn/static/templates/static/bestuur9.html:34
+msgid "Het vorige"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:40
+#: kn/static/templates/static/bestuur8.html:35
+msgid "negende bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:41
+#: kn/static/templates/static/bestuur11.html:48
+#: kn/static/templates/static/bestuur12.html:45
+#: kn/static/templates/static/bestuur5.html:33
+#: kn/static/templates/static/bestuur6.html:28
+#: kn/static/templates/static/bestuur7.html:44
+#: kn/static/templates/static/bestuur8.html:34
+#: kn/static/templates/static/bestuur9.html:36
+msgid "het volgende"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:42
+#: kn/static/templates/static/bestuur12.html:44
+msgid "elfde bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:10
+msgid ""
+"Van links naar rechts:\n"
+"           Jeffry (secretaris);\n"
+"           Henk (vice-voorzitter);\n"
+"           Margot (voorzitter);\n"
+"           Niels (pandcommissaris)\n"
+"           en Daan (penningmeester)."
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:17
+msgid ""
+"Het <strong>elfde bestuur</strong> der A.S.V.\n"
+"Karpe Noktem zijn echte Bourgondi&euml;rs maar gelukkig geen\n"
+"Brabanders, Limburgers en Zeeuwen met een aantal uitzonderingen\n"
+"daar gelaten.  Ze zijn jong, ambitieus en vol idee&euml;n, waarmee\n"
+"ze onze vereniging naar een hoger niveau tillen.</p> <p>Dit alles\n"
+"onder de bezielende leiding van onze voorzitter <em>Margot Mangnus</em>,\n"
+"student taalwetenschap, die als jongste voorzitter van Karpe Noktem\n"
+"de vernieuwingsgeest belichaamt.  Zij wordt bijgestaan door vier\n"
+"'stoere' mannen: onze trouwe secretaris <em>Jeffry Huntjens</em>,\n"
+"student geschiedenis, heeft de langste baard en is daarom bedeeld\n"
+"met de taak de leden te managen.  <em>Daan Sprenkels</em>, student\n"
+"scheikunde en voormalig bestuurslid van Olympus, houdt als\n"
+"penningmeester toezicht op onze financi&euml;n.  <em>Niels van\n"
+"Beers</em>, student rechten en scouting-o-loog, zal met zijn brede\n"
+"postuur, uitgebreide survival skills en kennis over de Efteling de\n"
+"contacten binnen de Villa onderhouden.  Onze vice-voorzitter <em>Eric\n"
+"\"Henk\" Buitinck</em>, student natuur- en sterrenkunde, is\n"
+"verantwoordelijk voor de externe contacten, PR en de broodnodige\n"
+"portie death metal."
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:37
+msgid ""
+"Alle bestuursleden zijn bereikbaar op hun functie-\n"
+"of voornaam @karpenoktem.nl, behalve Daan en Niels.  Zij zijn\n"
+"respectievelijk te bereiken via"
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:41
+#: kn/static/templates/static/bestuur7.html:18
+#: kn/static/templates/static/links.html:27
+msgid "en"
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:43
+msgid "Margot is overigens ook te benaderen via"
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:47
+#: kn/static/templates/static/bestuur9.html:37
+msgid "tiende bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:49
+msgid "twaalfde bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur12.html:10
+msgid ""
+"Van links naar rechts:\n"
+"           Jordi (pandcommissaris);\n"
+"           Bas (secretaris);\n"
+"           Sandra (voorzitter);\n"
+"           Rianne (penningmeester)\n"
+"           en Michiel (vice-voorzitter)."
+msgstr ""
+
+#: kn/static/templates/static/bestuur12.html:17
+msgid ""
+"Het <strong>twaalfde bestuur</strong> van Karpe\n"
+"Noktem belichaamt alle aspecten van onze vereniging, behalve dan\n"
+"dat er geen beta-studenten in zitten. Als voorzitter bewaart\n"
+"<em>Sandra Mulder</em>, studente geneeskunde, de algemene vrede en\n"
+"overzicht. Hierbij wordt ze geholpen door <em>Bas van Wijk</em>,\n"
+"student biomedische wetenschappen, die als secretaris de communicatie\n"
+"met de leden op zich zal nemen. <em>Rianne Warmerdam</em> zal haar\n"
+"studie commerci&euml;le economie goed kunnen gebruiken bij haar\n"
+"functie als penningmeester, waarbij zij alle financi&euml;le zaken\n"
+"van de vereniging bijhoudt. Als pandcommissaris zal <em>Jordi van\n"
+"Lanen</em>, student culturele maatschappelijke vorming, optreden.\n"
+"Hij onderhoudt de relaties met de andere verenigingen in de Villa\n"
+"van Schaeck. De functie van vice-voorzitter wordt bekleed door\n"
+"<em>Michiel Pospiech</em>, docent geschiedenis, waarbij hij\n"
+"verantwoordelijk is voor externe contacten en\n"
+"PR."
+msgstr ""
+
+#: kn/static/templates/static/bestuur12.html:33
+#: kn/static/templates/static/bestuur13.html:33
+msgid ""
+"Alle bestuursleden zijn bereikbaar op hun\n"
+"functie@karpenoktem.nl of op de volgende adressen:"
+msgstr ""
+
+#: kn/static/templates/static/bestuur12.html:46
+msgid "dertiende bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:11
+#: kn/static/templates/static/bestuur7.html:14
+msgid "penningmeester"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:12
+msgid "vice-voorzitter"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:13
+#: kn/static/templates/static/bestuur7.html:15
+msgid "pandcommissaris"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:14
+#: kn/static/templates/static/bestuur7.html:20
+msgid "voorzitter"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:15
+#: kn/static/templates/static/bestuur7.html:19
+msgid "secretaris"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:18
+msgid ""
+"Het <strong>dertiende bestuur</strong> der A.S.V Karpe Noktem\n"
+"bestaat uit een groep met een hoge variatie in capaciteiten,\n"
+"studies en zelfs lengte.  Aan het roer staat voorzitter <em>Roel Bouman</"
+"em>,\n"
+"student Data Science en Scheikunde, die zijn brede kennis op veel vlakken "
+"in\n"
+"kan zetten.  Bijgestaan wordt hij door Artificial Intelligence student\n"
+"<em>Sophie Fennema</em>, die naast de administratie het contact zal "
+"onderhouden\n"
+"met zusjes.  Als Geneeskunde  student draagt <em>Willanka Kappelle</em>\n"
+"niet alleen de verantwoordelijkheid voor haar toekomstige\n"
+"pati&euml;nten, maar ook voor de financi&euml;n.\n"
+"Wiskunde genie <em>Koos van der Vegt</em> zal als pandcommissaris het imago\n"
+"van Karpe Noktem vertegenwoordigen in zijn contacten met andere Villa "
+"bewoners.\n"
+"<em>Eva Prins</em> heeft haar communicatie vaardigheden geperfectioneerd in\n"
+"haar studie Engels en maakt hier als vice-voorzitter gretig gebruik\n"
+"van."
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:41
+msgid "of"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:45
+msgid "twaalfde bestuur."
+msgstr ""
+
+#: kn/static/templates/static/bestuur4.html:7
+msgid ""
+"<strong>Het vierde bestuur van Karpe Noktem</strong>\n"
+"zit vol met echte coinnaisseurs van het vak. Bram Balk (Voorzitter)\n"
+"heeft zijn sporen verdiend als hoofdredacteur van het Algemeen\n"
+"Nijmeegs Studentenblad. Daan Fifis du Pont (Vice-voorzitter) kent\n"
+"het klappen van de zweep als ex-bestuurslid van debatvereniging\n"
+"Trivium. Jorg Kennis (secretaris) is veteraan in het bestuur en\n"
+"zorgt voor continuiteit en ervaring. Jorne van de Veen (Penningmeester)\n"
+"geldt als expert op het gebied van Financien. De grote creatieve\n"
+"geest in het bestuur is Judith Brinkkemper, die als oprichtster van\n"
+"de LoCo verse en originele ideeen de vrije ruimte geeft."
+msgstr ""
+
+#: kn/static/templates/static/bestuur4.html:17
+msgid "Het volgende,"
+msgstr ""
+
+#: kn/static/templates/static/bestuur4.html:18
+#: kn/static/templates/static/bestuur6.html:27
+msgid "vijfde bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur5.html:15
+msgid ""
+"<strong>Het eerste lustrumbestuur</strong> is\n"
+"een geweldige afspiegeling van de Alternatieve S.V. Karpe Noktem:\n"
+"een jong, fris bestuur van een jonge, frisse vereniging. <em>Lisette\n"
+"Huijbers</em> (1987), voorzitter, studeert rechten en weet met haar\n"
+"expertise en wijsheid de vereniging in goede banen te leiden. <em>Rik\n"
+"Sprenkels</em> (1988), secretaris, staat de vereniging bij met zijn\n"
+"schrijftalent en biedt stabiliteit door middel van zijn verslaglegging.\n"
+"<em>Jesper van Wijngaarden</em> (1987), penningmeester, heeft veel\n"
+"ervaring met boekhouden en financieel beheer en beheert het geldelijk\n"
+"reilen en zeilen van Karpe Noktem. <em>Mike Koeman</em> (1986),\n"
+"vice-voorzitter, draagt zorg voor contacten met iedereen buiten de\n"
+"vereniging; zijn innige contacten met vele instanties en verenigingen\n"
+"helpen hem hier uitstekend mee! <em>Maaike Greveling</em> (1983),\n"
+"pandcommissaris en hoofd activiteiten, weet met haar organisatietalent\n"
+"en creativiteit altijd weer leuke, nieuwe activiteiten neer te\n"
+"zetten."
+msgstr ""
+
+#: kn/static/templates/static/bestuur5.html:32
+msgid "vierde bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur5.html:34
+#: kn/static/templates/static/bestuur7.html:43
+msgid "zesde bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur6.html:9
+msgid ""
+"Van links naar rechts: Rik (pandverantwoordelijke),\n"
+"    Bas (secretaris), Michiel (voorzitter), Hugo (penningmeester)\n"
+"    en Mike (vice-voorzitter)."
+msgstr ""
+
+#: kn/static/templates/static/bestuur6.html:14
+msgid ""
+"<strong>Het zesde bestuur</strong> van ASV Karpe\n"
+"Noktem is uit het hart van de vereniging gegrepen: jong, eigenzinnig\n"
+"en ruimdenkend.  <em>Michiel van Lierop</em> ('88), student\n"
+"Informatiekunde, loodst ons onvervaard door de maalstroom van het\n"
+"Nijmeegs studentenleven &mdash; altijd op koers door het houvast\n"
+"van <em>Bas Westerbaan</em> ('88), student Wiskunde &mdash; nooit\n"
+"zonder middelen door, de klassiek geschoolde, <em>Hugo van\n"
+"Versendaal</em> ('85), student Grieks en Latijn &mdash; nimmer\n"
+"verlegen van bondgenoten met, aller vriend, <em>Mike Ligthart</em>\n"
+"('88), student Scheikunde en stevig gehuisvest en van alle gemakken\n"
+"voorzien door <em>Rik Sprenkels</em> ('88), student Filosofie en\n"
+"Scheikunde."
+msgstr ""
+
+#: kn/static/templates/static/bestuur6.html:29
+#: kn/static/templates/static/bestuur8.html:33
+msgid "zevende bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur7.html:11
+msgid "vicevoorzitter"
+msgstr ""
+
+#: kn/static/templates/static/bestuur7.html:24
+msgid ""
+"<strong>Het zevende bestuur</strong> van ASV\n"
+"Karpe Noktem bestaat\n"
+"  uit 5 enthousiaste leden die een breed spectrum van hun vereniging\n"
+"  vertegenwoordigen. <em>Remco van Cruchten</em> ('90, voorzitter),\n"
+"  student moleculare levenswetenschappen, houdt de touwtjes strak\n"
+"  en wordt daarbij ondersteund door de digitale kennis van <em>Jille\n"
+"  Timmermans</em> ('90, secretaris), student informatica, en geholpen\n"
+"  door een die zelfs bij de kleinste zaken scherp blijft, <em>Bente\n"
+"  Rotberg</em> ('90, penningmeester), studente sociologie, en\n"
+"  bijgestaan door <em>Chaim van Rens</em> ('85, vicevoorzitter),\n"
+"  student leraar geschiedenis, de vertegenwoordiging van het HBO\n"
+"  en, voor alle communicatie binnen de Villa van Schaeck, <em>Robin\n"
+"  Nazarski</em> ('89, pandcommissaris), studente\n"
+"geschiedenis."
+msgstr ""
+
+#: kn/static/templates/static/bestuur7.html:39
+msgid ""
+"Alle bestuursleden zijn bereikbaar op hun\n"
+"functie- of voornaam @karpenoktem.nl."
+msgstr ""
+
+#: kn/static/templates/static/bestuur7.html:45
+#: kn/static/templates/static/bestuur9.html:35
+msgid "achtste bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur8.html:8
+msgid ""
+"Van links naar rechts: Sara (vicevoorzitter),\n"
+"    Koen (pandcommissaris), Stan (voorzitter), Yurre (secretaris)\n"
+"    en Louise (penningmeester)"
+msgstr ""
+
+#: kn/static/templates/static/bestuur8.html:12
+msgid ""
+"<strong>Het achtste bestuur</strong> van A.S.V.\n"
+"Karpe Noktem is typerend voor de vereniging &mdash; divers, eigenzinnig\n"
+"en bovenal enthousiast.  <i>Stan Beekmans</i> ('91, voorzitter),\n"
+"doet de docentenopleiding natuurkunde en ziet toe op het reilen en\n"
+"zeilen van de vereniging, daarin bijgestaan door <i>Yurre Wieken</i>\n"
+"('90, secretaris), student politicologie en reeds ervaren in het\n"
+"bestuur van koepelvereniging CHECK, <i>Louise Mouthaan</i> ('92,\n"
+"penningmeester), studente ergotherapie, die toeziet op de financi&euml;n,\n"
+"<i>Sara van Bezooijen*</i> ('90, vicevoorzitter), studente\n"
+"omgevingswetenschappen, die de externe contacten voor haar rekening\n"
+"neemt, en <i>Koen van den Bisen</i> ('88, pandcommissaris), student\n"
+"moleculaire levenwetenschappen en verantwoordelijk voor de communicatie\n"
+"met andere verenigingen in de Villa van Schaeck."
+msgstr ""
+
+#: kn/static/templates/static/bestuur8.html:26
+msgid ""
+"Alle bestuursleden zijn bereikbaar op hun functie-\n"
+"of voornaam @karpenoktem.nl."
+msgstr ""
+
+#: kn/static/templates/static/bestuur8.html:29
+msgid ""
+"<small>*Sara van Bezooijen is per 1 maart uit het bestuur\n"
+"getreden.</small>"
+msgstr ""
+
+#: kn/static/templates/static/bestuur9.html:9
+msgid ""
+"Van links naar rechts: Astrid (secretaris),\n"
+"  Annemiek (voorzitter), Loesje (vicevoorzitter), Peter (pandcommissaris)\n"
+"  en Carlien (penningmeester)"
+msgstr ""
+
+#: kn/static/templates/static/bestuur9.html:13
+msgid ""
+"<strong>Het negende bestuur</strong> van A.S.V.\n"
+"Karpe Noktem is alternatief op vele fronten. Het eerste bestuur in\n"
+"7 jaar tijd zonder beta-studenten en een bestuur met wel heel veel\n"
+"vrouwen. Maar natuurlijk met evenveel enthousiasme en goede zin als\n"
+"altijd! <em>Annemiek Arfman</em> houdt als voorzitter het overzicht\n"
+"over de vereniging en behartigt met haar achtergrond als acw'er\n"
+"graag de culturele belangen binnen de vereniging, <em>Loesje\n"
+"Jacobs</em> onderhoudt als vice-voorzitter de contacten met onze\n"
+"zusjes en andere partijen en zet graag haar creatieve talenten in,\n"
+"<em>Astrid van Roosmalen</em> gebruikt haar expertise als\n"
+"taalwetenschapper om alle communicatie en administratie op een goede\n"
+"manier te organiseren, <em>Carlien Alferink</em> beheerst naast de\n"
+"Engelse taal en cultuur ook het talent om alle geldelijke stromen\n"
+"in goede banen te leiden, en <em>Peter van der Veeken</em> zet zijn\n"
+"studie communicatie effectief in, door contacten te onderhouden met\n"
+"alle verenigingen binnen de Villa van Schaeck."
+msgstr ""
+
+#: kn/static/templates/static/bestuur9.html:30
+#, python-format
+msgid ""
+"Alle\n"
+"bestuursleden zijn bereikbaar op hun functie- of voornaam\n"
+"@karpenoktem.nl, behalve Peter, die is bereikbaar op\n"
+"%(peter)s."
+msgstr ""
+
 #: kn/static/templates/static/contact.html:8
 msgid ""
 "Voor verzoeken, aanbiedingen en andere algemene\n"
@@ -849,10 +1270,6 @@ msgstr ""
 
 #: kn/static/templates/static/links.html:26
 msgid "ons forum"
-msgstr ""
-
-#: kn/static/templates/static/links.html:27
-msgid "en"
 msgstr ""
 
 #: kn/static/templates/static/links.html:29

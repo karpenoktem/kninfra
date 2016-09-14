@@ -1,34 +1,37 @@
 {% extends "static/overbase.html" %}
 
 {% load base %}
+{% load i18n %}
 
 {% block body %}
 <p class="imageDisplay">
 <img width="800"
      src="{{ MEDIA_URL }}static/img/bestuur12.jpg" /><br/>
-     <small>Van links naar rechts:
+     <small>{% blocktrans %}Van links naar rechts:
            Jordi (pandcommissaris);
            Bas (secretaris);
            Sandra (voorzitter);
            Rianne (penningmeester)
-           en Michiel (vice-voorzitter).</small></p>
+           en Michiel (vice-voorzitter).{% endblocktrans %}</small></p>
 
-<p>Het <strong>twaalfde bestuur</strong> van Karpe Noktem belichaamt alle
-aspecten van onze vereniging, behalve dan dat er geen beta-studenten
-in zitten. Als voorzitter bewaart <em>Sandra Mulder</em>, studente
-geneeskunde, de algemene vrede en overzicht. Hierbij wordt ze geholpen
-door <em>Bas van Wijk</em>, student biomedische wetenschappen, die als
-secretaris de communicatie met de leden op zich zal nemen. <em>Rianne
-Warmerdam</em> zal haar studie commerci&euml;le economie goed kunnen
-gebruiken bij haar functie als penningmeester, waarbij zij alle
-financi&euml;le zaken van de vereniging bijhoudt. Als pandcommissaris zal
-<em>Jordi van Lanen</em>, student culturele maatschappelijke vorming,
-optreden. Hij onderhoudt de relaties met de andere verenigingen in
-de Villa van Schaeck. De functie van vice-voorzitter wordt bekleed
-door <em>Michiel Pospiech</em>, docent geschiedenis, waarbij hij
-verantwoordelijk is voor externe contacten en PR.</p>
-<p>Alle bestuursleden zijn bereikbaar op hun functie@karpenoktem.nl of
-op de volgende adressen:</p>
+<p>{% blocktrans %}Het <strong>twaalfde bestuur</strong> van Karpe
+Noktem belichaamt alle aspecten van onze vereniging, behalve dan
+dat er geen beta-studenten in zitten. Als voorzitter bewaart
+<em>Sandra Mulder</em>, studente geneeskunde, de algemene vrede en
+overzicht. Hierbij wordt ze geholpen door <em>Bas van Wijk</em>,
+student biomedische wetenschappen, die als secretaris de communicatie
+met de leden op zich zal nemen. <em>Rianne Warmerdam</em> zal haar
+studie commerci&euml;le economie goed kunnen gebruiken bij haar
+functie als penningmeester, waarbij zij alle financi&euml;le zaken
+van de vereniging bijhoudt. Als pandcommissaris zal <em>Jordi van
+Lanen</em>, student culturele maatschappelijke vorming, optreden.
+Hij onderhoudt de relaties met de andere verenigingen in de Villa
+van Schaeck. De functie van vice-voorzitter wordt bekleed door
+<em>Michiel Pospiech</em>, docent geschiedenis, waarbij hij
+verantwoordelijk is voor externe contacten en
+PR.{% endblocktrans %}</p>
+<p>{% blocktrans %}Alle bestuursleden zijn bereikbaar op hun
+functie@karpenoktem.nl of op de volgende adressen:{% endblocktrans %}</p>
 <ul>
   <li>{% filter email %}sandra@karpenoktem.nl{% endfilter %}</li>
   <li>{% filter email %}basv@karpenoktem.nl{% endfilter %}</li>
@@ -37,8 +40,8 @@ op de volgende adressen:</p>
   <li>{% filter email %}michielp@karpenoktem.nl{% endfilter %}</li>
 </ul>
 
-<p>&lArr; Het vorige,
-<a href="{% url "bestuur11" %}">elfde bestuur</a>;
-het volgende,
-<a href="{% url "bestuur13" %}">dertiende bestuur</a> &rArr;</p>
+<p>&lArr; {% trans "Het vorige" %},
+<a href="{% url "bestuur11" %}">{% trans "elfde bestuur" %}</a>;
+{% trans "het volgende" %},
+<a href="{% url "bestuur13" %}">{% trans "dertiende bestuur" %}</a> &rArr;</p>
 {% endblock %}
