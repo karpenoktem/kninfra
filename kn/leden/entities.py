@@ -1209,12 +1209,12 @@ class User(Entity):
     def study_end(self, index, end_date, save=True):
         studies = self._data.get('studies', ())
         if index < 0 or index >= len(studies):
-            raise ValueError('study index out of range')
+            raise ValueError(_('studie index bestaat niet'))
         study = studies[index]
         if study['until'] != DT_MAX:
-            raise ValueError('study already ended')
+            raise ValueError(_('studie is al beeindigt'))
         if study['from'] >= end_date:
-            raise EntityException('study end date before start date')
+            raise EntityException(_('einddatum voor begindatum'))
         study['until'] = end_date
         if save:
             self.save()

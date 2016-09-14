@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-11 19:30+0200\n"
+"POT-Creation-Date: 2016-09-14 07:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -211,16 +211,28 @@ msgstr ""
 msgid "geen foutmelding"
 msgstr ""
 
-#: kn/leden/entities.py:762
+#: kn/leden/entities.py:770
 msgid "Entiteit heeft al deze stempel"
 msgstr ""
 
-#: kn/leden/entities.py:770
+#: kn/leden/entities.py:778
 msgid "Eniteit heeft deze stempel nog niet"
 msgstr ""
 
-#: kn/leden/entities.py:916
+#: kn/leden/entities.py:924
 msgid "Entiteit heeft nog geen humanName"
+msgstr ""
+
+#: kn/leden/entities.py:1212
+msgid "studie index bestaat niet"
+msgstr ""
+
+#: kn/leden/entities.py:1215
+msgid "studie is al beeindigt"
+msgstr ""
+
+#: kn/leden/entities.py:1217
+msgid "einddatum voor begindatum"
 msgstr ""
 
 #: kn/leden/forms.py:56
@@ -291,15 +303,15 @@ msgstr ""
 msgid "bijv.: +31612345678"
 msgstr ""
 
-#: kn/leden/forms.py:82
+#: kn/leden/forms.py:82 kn/leden/forms.py:112
 msgid "Studentnummer"
 msgstr ""
 
-#: kn/leden/forms.py:83
+#: kn/leden/forms.py:83 kn/leden/forms.py:110
 msgid "Onderwijs instelling"
 msgstr ""
 
-#: kn/leden/forms.py:85
+#: kn/leden/forms.py:85 kn/leden/forms.py:109
 msgid "Studie"
 msgstr ""
 
@@ -351,15 +363,19 @@ msgstr ""
 msgid "Volwaardige groep"
 msgstr ""
 
-#: kn/leden/forms.py:122
+#: kn/leden/forms.py:113
+msgid "Start op"
+msgstr ""
+
+#: kn/leden/forms.py:130
 msgid "Geen oud wachtwoord opgegeven"
 msgstr ""
 
-#: kn/leden/forms.py:124
+#: kn/leden/forms.py:132
 msgid "Geen nieuw wachtwoord opgegeven"
 msgstr ""
 
-#: kn/leden/forms.py:126
+#: kn/leden/forms.py:134
 msgid "Niet hetzelfde nieuwe wachtwoord opnieuw gegeven"
 msgstr ""
 
@@ -380,80 +396,84 @@ msgid "Groepen"
 msgstr ""
 
 #: kn/leden/templates/leden/base.html:31
+msgid "Disputen"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:33
 msgid "E-maillijsten"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:33 kn/leden/templates/leden/stats.html:6
+#: kn/leden/templates/leden/base.html:35 kn/leden/templates/leden/stats.html:6
 msgid "Statistieken"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:36
+#: kn/leden/templates/leden/base.html:38
 #: kn/static/templates/static/overbase.html:11
 #: kn/subscriptions/templates/subscriptions/event_list.html:6
 msgid "Activiteiten"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:38
+#: kn/leden/templates/leden/base.html:40
 msgid "Aanmaken"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:43
+#: kn/leden/templates/leden/base.html:45
 msgid "Secretariaat"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:45
+#: kn/leden/templates/leden/base.html:47
 msgid "Lid inschrijven"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:46
+#: kn/leden/templates/leden/base.html:48
 msgid "Groep aanmaken"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:47
+#: kn/leden/templates/leden/base.html:49
 msgid "Agenda updaten"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:48
+#: kn/leden/templates/leden/base.html:50
 msgid "Openstaande notities"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:53
+#: kn/leden/templates/leden/base.html:55
 msgid "Foto's"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:55
+#: kn/leden/templates/leden/base.html:57
 msgid "Foto's verplaatsen"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:60
+#: kn/leden/templates/leden/base.html:62
 msgid "Planning"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:63
+#: kn/leden/templates/leden/base.html:65
 msgid "Beheer"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:64
+#: kn/leden/templates/leden/base.html:66
 msgid "Nieuw"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:69
+#: kn/leden/templates/leden/base.html:71
 msgid "Wiki"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:70
+#: kn/leden/templates/leden/base.html:72
 msgid "Forum"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:71
+#: kn/leden/templates/leden/base.html:73
 msgid "Stukken"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:80
+#: kn/leden/templates/leden/base.html:82
 msgid "Zoeken ..."
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:95
+#: kn/leden/templates/leden/base.html:97
 msgid "Wijzingen worden doorgevoerd ..."
 msgstr ""
 
@@ -559,59 +579,59 @@ msgstr ""
 msgid "Onbekende entiteit type"
 msgstr ""
 
-#: kn/leden/views.py:313
+#: kn/leden/views.py:330
 msgid "Missende `smoel' in FILES"
 msgstr ""
 
-#: kn/leden/views.py:315
+#: kn/leden/views.py:332
 msgid "Missende `id' in POST"
 msgstr ""
 
-#: kn/leden/views.py:318
+#: kn/leden/views.py:335
 msgid "Entiteit heeft geen naam"
 msgstr ""
 
-#: kn/leden/views.py:361
+#: kn/leden/views.py:378
 #, python-format
 msgid "Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."
 msgstr ""
 
-#: kn/leden/views.py:395
+#: kn/leden/views.py:412
 #, python-format
 msgid ""
 "Lieve %s, maar natuurlijk, jouw wachtwoord voor het villa-netwerk is "
 "veranderd."
 msgstr ""
 
-#: kn/leden/views.py:654
+#: kn/leden/views.py:671
 msgid "Deze relatie bestaat al"
 msgstr ""
 
-#: kn/leden/views.py:677
+#: kn/leden/views.py:694
 msgid "'group' is niet een groep"
 msgstr ""
 
-#: kn/leden/views.py:685
+#: kn/leden/views.py:702
 msgid "'tag' is niet een stempel"
 msgstr ""
 
-#: kn/leden/views.py:718
+#: kn/leden/views.py:735
 msgid "Gebruiker is niet geactiveerd"
 msgstr ""
 
-#: kn/leden/views.py:726
+#: kn/leden/views.py:743
 msgid "Wachtwoord gereset!"
 msgstr ""
 
-#: kn/leden/views.py:734
+#: kn/leden/views.py:751
 msgid "missende `on' of `note'"
 msgstr ""
 
-#: kn/leden/views.py:751
+#: kn/leden/views.py:768
 msgid "Agenda geupdate!"
 msgstr ""
 
-#: kn/leden/views.py:765
+#: kn/leden/views.py:782
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
 msgstr ""
 

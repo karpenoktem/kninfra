@@ -106,11 +106,11 @@ class AddGroupForm(forms.Form):
             initial=True)
 
 class AddStudyForm(forms.Form):
-    study = EntityChoiceField(label='Studie', _type='study')
-    study_inst = EntityChoiceField(label='Onderwijs instelling',
+    study = EntityChoiceField(label=_('Studie'), _type='study')
+    study_inst = EntityChoiceField(label=_('Onderwijs instelling'),
                                   _type='institute')
-    study_number = forms.CharField(label='Studentnummer')
-    study_from = forms.DateField(label='Start op',
+    study_number = forms.CharField(label=_('Studentnummer'))
+    study_from = forms.DateField(label=_('Start op'),
                                  initial=datetime.date.today)
 
 class ChangePasswordForm(forms.Form):
