@@ -1188,7 +1188,8 @@ class User(Entity):
         return studies[0]
     @property
     def last_study_end_date(self):
-        return max([DT_MIN]+map(lambda s: s['until'], self._data['studies']))
+        return max([DT_MIN]+map(lambda s: s['until'],
+                        self._data.get('studies', ())))
     def study_start(self, study, institute, number, start_date, save=True):
         start_date = datetime.datetime(start_date.year, start_date.month,
                 start_date.day)
