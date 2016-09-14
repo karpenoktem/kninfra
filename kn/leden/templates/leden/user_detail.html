@@ -41,9 +41,21 @@
         {% endif %}{# "secretariaat" in user.cached_groups_names #}
         </dd>
         {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
-	{% if object.primary_study %}
-	<dt>Studie</dt>
+        {% if object.primary_study or "secretariaat" in user.cached_groups_names and addStudyForm %}
+        <dt>Studie</dt>
         <dd>
+        {% if "secretariaat" in user.cached_groups_names and addStudyForm %}
+            <a href onclick="$('#block-add-study').addClass('visible'); return false;">toevoegen</a>
+            <form method="POST" action="" id="block-add-study"
+                {% if addStudyFormOpen %} class="visible" {% endif %}>
+                <input type="hidden" name="action" value="add-study"/>
+                {% csrf_token %}
+                <table>
+                    {{ addStudyForm.as_table }}
+                </table>
+                <input type="submit" value="Toevoegen" />
+            </form>
+        {% endif %}{# "secretariaat" in user.cached_groups_names and addStudyForm #}
         <ul>
         {% for s in object.studies %}
         <li><a href="{{ s.study.get_absolute_url }}"
@@ -63,13 +75,26 @@
         tot {{ s.until.date }}
         {% endif %})
         {% endif %}
+        {% if "secretariaat" in user.cached_groups_names and not s.until %}
+        <button onclick="var end_date = prompt('Beëindig studie', (new Date().toISOString().substr(0, 10)));
+                         if (!end_date) return false;
+                         leden_api({
+                            action: 'entity_end_study',
+                            study: {{ forloop.counter0 }},
+                            end_date: end_date,
+                            id: '{{ object.id }}'
+                         }, function(data) {
+                            if(data.ok) window.location.reload();
+                            else alert(data.error);
+                         }); return false;">Beëindig</button>
+        {% endif %}{# "secretariaat" in user.cached_groups_names and not s.until #}
         </li>
         {% endfor %}{# s in object.studies #}
         </ul>
         </dd>
-	{% endif %}
+        {% endif %}{# object.primary_study or "secretariaat" in user.cached_groups_names and addStudyForm #}
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
-	{% if object.telephones %}
+        {% if object.telephones %}
         <dt>Telefoonnummer
         {% if "secretariaat" in user.cached_groups_names or user == object %}
         &nbsp; <i><label>

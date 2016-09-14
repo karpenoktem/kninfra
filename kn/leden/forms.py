@@ -102,6 +102,14 @@ class AddGroupForm(forms.Form):
     true_group = forms.BooleanField(label="Volwaardige groep",
             initial=True)
 
+class AddStudyForm(forms.Form):
+    study = EntityChoiceField(label='Studie', _type='study')
+    study_inst = EntityChoiceField(label='Onderwijs instelling',
+                                  _type='institute')
+    study_number = forms.CharField(label='Studentnummer')
+    study_from = forms.DateField(label='Start op',
+                                 initial=datetime.date.today)
+
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput())
     new_password = forms.CharField(widget=forms.PasswordInput())

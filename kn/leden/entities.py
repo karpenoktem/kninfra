@@ -179,6 +179,14 @@ def ensure_indices():
 
 # Basic functions to work with entities
 # ######################################################################
+
+class EntityException(Exception):
+    '''
+    Exception that is raised when invalid input is entered (e.g. overlapping
+    dates).
+    '''
+    pass
+
 def entity(d):
     """ Given a dictionary, returns an Entity object wrapping it """
     if d is None:
@@ -1177,6 +1185,39 @@ class User(Entity):
         if not studies:
             return None
         return studies[0]
+    @property
+    def last_study_end_date(self):
+        return max([DT_MIN]+map(lambda s: s['until'], self._data['studies']))
+    def study_start(self, study, institute, number, start_date, save=True):
+        start_date = datetime.datetime(start_date.year, start_date.month,
+                start_date.day)
+        if not 'studies' in self._data:
+            self._data['studies'] = []
+        if start_date <= self.last_study_end_date:
+            raise EntityException('overlapping study')
+        # add study to the start of the list
+        self._data['studies'].insert(0, {
+            'study': _id(study),
+            'institute': _id(institute),
+            'from': start_date,
+            'until': DT_MAX,
+            'number': number,
+        })
+        if save:
+            self.save()
+    def study_end(self, index, end_date, save=True):
+        studies = self._data.get('studies', ())
+        if index < 0 or index >= len(studies):
+            raise ValueError('study index out of range')
+        study = studies[index]
+        if study['until'] != DT_MAX:
+            raise ValueError('study already ended')
+        if study['from'] >= end_date:
+            raise EntityException('study end date before start date')
+        study['until'] = end_date
+        if save:
+            self.save()
+
     @property
     def studentNumber(self):
         study = self.proper_primary_study

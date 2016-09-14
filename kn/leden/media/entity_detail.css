@@ -30,3 +30,10 @@
 li form {
 	display: inline;
 }
+
+#block-add-study {
+	display: none;
+}
+#block-add-study.visible {
+	display: block;
+}
