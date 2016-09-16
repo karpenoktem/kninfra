@@ -57,7 +57,8 @@ msgid ""
 "    van onze <a href=\"%(url_zusjes)s\">zusterverenigingen</a>\n"
 "    door heel het land."
 msgstr ""
-"This is the ZEUS-diary, which contains all major activities of our <a href="
+"\n"
+"\tThis is the ZEUS-diary, which contains all major activities of our <a href="
 "\"%(url_zusjes)s\">sister associations</a> from all over the country."
 
 #: kn/agenda/templates/agenda/zeus.html:15
@@ -154,9 +155,10 @@ msgid ""
 "meer, mail\n"
 "                        dan naar %(webcie)s."
 msgstr ""
+"\n"
 "Members are able to login here, after which they are able to view the "
 "'smoelenboek', as well as the wiki and the forums. If you've forgotten your "
-"password, you can contact the %(webcie)."
+"password, you can contact the %(webcie)s."
 
 #: kn/base/templates/base/base.html:57 kn/leden/forms.py:68
 msgid "Gebruikersnaam"
