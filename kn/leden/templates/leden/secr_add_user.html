@@ -1,5 +1,7 @@
 {% extends "leden/base.html" %}
+
 {% load base %}
+{% load i18n %}
 
 {% block head %}
 {{ block.super }}
@@ -59,7 +61,7 @@ $(function() {
 <form method="post" action="?">{% csrf_token %}
 <table>
 {{ form.as_table }}
-<tr><td colspan="2"><input type="submit" value="Schrijf in"/></td></tr>
+<tr><td colspan="2"><input type="submit" value="{% trans "Schrijf in" %}"/></td></tr>
 </table>
 </form>
 {{ block.super }}

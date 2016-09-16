@@ -1,38 +1,40 @@
 {% extends "leden/base.html" %}
 
+{% load i18n %}
+
 {% block body %}
-<h1>OpenVPN installeren</h1>
+<h1>{% load "OpenVPN installeren" %}</h1>
 <form method="post" action="{% url "ik-openvpn" %}">
 {% csrf_token %}
 {% if password_incorrect %}
-<p>Wachtwoord incorrect.</p>
+<p>{% trans "Wachtwoord incorrect." %}</p>
 {% endif %}
 
-<p>Hier kun je de downloads aanvragen om gemakkelijk bij jouw
+<p>{% blocktrans %}Hier kun je de downloads aanvragen om gemakkelijk bij jouw
 Karpe Noktem bestanden te kunnen. Als je het formulier hieronder
 invult, krijg je enkele ogenblikken later een e-mail met daarin een
-link.</p>
+link.{% endblocktrans %}</p>
 
 <table>
-        <tr>
-        <td>Wat</td>
-        <td>
-                <input type="radio" name="want" value="exe" id="want_exe"
-                        checked><label for="want_exe"
-                        >Windows installer</label>
-                <input type="radio" name="want" value="zip" id="want_zip"
-                ><label for="want_zip">Configuratiebestanden
-                                (voor gevorderden)</label>
-        </td>
-        </tr>
-        <tr>
-                <td>Wachtwoord</td>
-                <td><input type="password" name="password"></td>
-        </tr>
-        <tr>
-                <td></td>
-                <td><input type="submit" value="Aanmaken"></td>
-        </tr>
+    <tr>
+        <td>{% trans "Wat" %}</td>
+    <td>
+            <input type="radio" name="want" value="exe" id="want_exe"
+                    checked><label for="want_exe"
+                   >{% trans "Windows installer" %}</label>
+            <input type="radio" name="want" value="zip" id="want_zip"
+                ><label for="want_zip"
+                   >{% trans "Configuratiebestanden (voor gevorderden)" %}</label>
+    </td>
+    </tr>
+    <tr>
+        <td>{% trans "Wachtwoord" %}</td>
+            <td><input type="password" name="password"></td>
+    </tr>
+    <tr>
+            <td></td>
+            <td><input type="submit" value="{% trans "Aanmaken" %}"></td>
+    </tr>
 </table>
 </form>
 

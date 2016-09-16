@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-14 08:58+0200\n"
+"POT-Creation-Date: 2016-09-16 23:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,6 +153,7 @@ msgid "Gebruikersnaam"
 msgstr ""
 
 #: kn/base/templates/base/base.html:61
+#: kn/leden/templates/leden/ik_openvpn.html:31
 msgid "Wachtwoord"
 msgstr ""
 
@@ -275,7 +276,7 @@ msgstr ""
 msgid "E-Mail adres"
 msgstr ""
 
-#: kn/leden/forms.py:74
+#: kn/leden/forms.py:74 kn/leden/templates/leden/user_detail.html:217
 msgid "Geboortedatum"
 msgstr ""
 
@@ -295,7 +296,8 @@ msgstr ""
 msgid "Woonplaats"
 msgstr ""
 
-#: kn/leden/forms.py:79
+#: kn/leden/forms.py:79 kn/leden/templates/leden/user_detail.html:100
+#: kn/leden/templates/leden/user_detail.html:156
 msgid "Telefoonnummer"
 msgstr ""
 
@@ -312,6 +314,7 @@ msgid "Onderwijs instelling"
 msgstr ""
 
 #: kn/leden/forms.py:85 kn/leden/forms.py:109
+#: kn/leden/templates/leden/user_detail.html:46
 msgid "Studie"
 msgstr ""
 
@@ -415,6 +418,7 @@ msgid "Activiteiten"
 msgstr ""
 
 #: kn/leden/templates/leden/base.html:40
+#: kn/leden/templates/leden/ik_openvpn.html:36
 msgid "Aanmaken"
 msgstr ""
 
@@ -435,6 +439,7 @@ msgid "Agenda updaten"
 msgstr ""
 
 #: kn/leden/templates/leden/base.html:50
+#: kn/leden/templates/leden/secr_notes.html:7
 msgid "Openstaande notities"
 msgstr ""
 
@@ -485,10 +490,20 @@ msgid "Tot jaar"
 msgstr ""
 
 #: kn/leden/templates/leden/brand_detail.html:20
+#: kn/leden/templates/leden/institute_detail.html:15
+#: kn/leden/templates/leden/study_detail.html:15
+#: kn/leden/templates/leden/user_detail.html:73
+#: kn/leden/templates/leden/user_detail.html:144
+#: kn/leden/templates/leden/user_detail.html:204
 msgid "van"
 msgstr ""
 
 #: kn/leden/templates/leden/brand_detail.html:23
+#: kn/leden/templates/leden/institute_detail.html:18
+#: kn/leden/templates/leden/study_detail.html:18
+#: kn/leden/templates/leden/user_detail.html:76
+#: kn/leden/templates/leden/user_detail.html:147
+#: kn/leden/templates/leden/user_detail.html:207
 msgid "tot"
 msgstr ""
 
@@ -603,6 +618,7 @@ msgid "Gesloten door"
 msgstr ""
 
 #: kn/leden/templates/leden/entity_base.html:266
+#: kn/leden/templates/leden/user_detail.html:64
 #: kn/subscriptions/templates/subscriptions/event_detail.html:58
 #: kn/subscriptions/templates/subscriptions/include_list.html:15
 #: kn/subscriptions/templates/subscriptions/include_list.html:27
@@ -653,8 +669,231 @@ msgstr ""
 msgid "Treed toe"
 msgstr ""
 
+#: kn/leden/templates/leden/ik_chpasswd.html:12
+msgid "Wachtwoord veranderen"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:16
+#, python-format
+msgid ""
+"Lieve %(name)s, dit zou ik\n"
+"    wel willen, maar je hebt %(errors)s."
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:18
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:12
+msgid "Probeer het nog eens?"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:39
+msgid "binnen een seconde"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:41
+msgid "binnen een minuut"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:43
+msgid "binnen een uur"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:45
+msgid "binnen een dag"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:47
+msgid "binnen een maand"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:49
+msgid "binnen een jaar"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:51
+msgid "binnen een decennium"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:53
+msgid "binnen een eeuw"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:67
+msgid "Wachtwoord is te raden "
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:70
+msgid "Wachtwoord is goed!"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:10
+#, python-format
+msgid ""
+"Lieve %(name)s,\n"
+"    dit zou ik wel willen, maar je hebt %(errors)s."
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:15
+msgid ""
+"Je kunt hieronder je wachtwoord veranderen\n"
+"    om op de Villa op het netwerk in te kunnen loggen."
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:20
+msgid "KN-wachtwoord"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:24
+msgid "Villanet-wachtwoord"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:28
+msgid "Nogmaals"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:33
+msgid "veranderen?"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_openvpn.html:10
+msgid "Wachtwoord incorrect."
+msgstr ""
+
+#: kn/leden/templates/leden/ik_openvpn.html:13
+msgid ""
+"Hier kun je de downloads aanvragen om gemakkelijk bij jouw\n"
+"Karpe Noktem bestanden te kunnen. Als je het formulier hieronder\n"
+"invult, krijg je enkele ogenblikken later een e-mail met daarin een\n"
+"link."
+msgstr ""
+
+#: kn/leden/templates/leden/ik_openvpn.html:20
+msgid "Wat"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_openvpn.html:24
+msgid "Windows installer"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_openvpn.html:27
+msgid "Configuratiebestanden (voor gevorderden)"
+msgstr ""
+
+#: kn/leden/templates/leden/institute_detail.html:7
+#: kn/leden/templates/leden/study_detail.html:7
+msgid "Studenten"
+msgstr ""
+
+#: kn/leden/templates/leden/secr_add_group.html:10
+msgid "Maak aan"
+msgstr ""
+
+#: kn/leden/templates/leden/secr_add_user.html:64
+msgid "Schrijf in"
+msgstr ""
+
+#: kn/leden/templates/leden/secr_notes.html:14
+#: kn/subscriptions/templates/subscriptions/event_detail.html:59
+msgid "door"
+msgstr ""
+
 #: kn/leden/templates/leden/stats.html:10
 msgid "grafiek van ledenaantallen over de jaren heen"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:11
+msgid "stuur nieuw wachtwoord"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:16
+msgid "Gebruikersnamen"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:21
+msgid "E-Mailadres"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:25
+msgid "Achterliggend e-mailadres"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:29
+msgid "Nieuw e-mail adres"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:41
+msgid "Wijzig e-mail"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:49
+msgid "toevoegen"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:57
+msgid "Toevoegen"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:68
+msgid "studentnummer"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:80
+msgid "Beëindig studie"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:91
+msgid "Beëindig"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:104
+msgid "Zichtbaar voor alle leden"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:104
+msgid "zichtbaar"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:106
+msgid "Alleen zichtbaar voor secretariaat en admlezers"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:106
+msgid "niet zichtbaar"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:118
+msgid "verander zichtbaarheid van het telefoonnummer"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:118
+msgid "Verander"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:122
+msgid "Nieuw telefoonnummer"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:134
+msgid "Wijzig telefoonnummer"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:161
+msgid "Adres"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:164
+msgid "Nieuw adres (straatnaam, nummer, postcode, plaats)"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:172
+msgid "Er mist een waarde (verwacht: 4, gekregen: "
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:192
+msgid "Wijzig adres"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:224
+msgid "Lid sinds"
 msgstr ""
 
 #: kn/leden/templates/leden/user_list.html:4
@@ -1778,10 +2017,6 @@ msgstr ""
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:56
 msgid "bewerkt"
-msgstr ""
-
-#: kn/subscriptions/templates/subscriptions/event_detail.html:59
-msgid "door"
 msgstr ""
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:70

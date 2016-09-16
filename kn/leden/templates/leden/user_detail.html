@@ -1,31 +1,32 @@
 {% extends "leden/entity_base.html" %}
+
 {% load base %}
-<!-- TODO stub -->
+{% load i18n %}
 
 {% block entity_body %}
 {% if "secretariaat" in user.cached_groups_names %}
 {% if object.is_active %}
 <form method="post" action="{% url "user-reset-password" _id=object.id %}">
 {% csrf_token %}
-<input type="submit" value="stuur nieuw wachtwoord" />
+<input type="submit" value="{% trans "stuur nieuw wachtwoord" %}" />
 </form>
 {% endif %}{# object.is_active #}
 {% endif %}{# "secretariaat" in user.cached_groups_names #}
 <dl>
-	<dt>Gebruikersnamen</dt>
+    <dt>{% trans "Gebruikersnamen" %}</dt>
 	<dd>
 	{% for name in object.names %}{% if not forloop.first %}, 
 	{% endif %}{{ name  }}{% endfor %}
 	</dd>
-	<dt>E-Mailadres</dt>
+    <dt>{% trans "E-Mailadres" %}</dt>
         <dd><a href="mailto:{{ object.canonical_email }}">
                 {{ object.canonical_email }}</a></dd>
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
-        <dt>Achterliggend e-mailadres<dt>
+        <dt>{% trans "Achterliggend e-mailadres" %}<dt>
         <dd>
         {{ object.primary_email }}
         {% if "secretariaat" in user.cached_groups_names %}
-        <button onclick="var new_address = prompt('Nieuw e-mail adres');
+        <button onclick="var new_address = prompt('{% trans "Nieuw e-mail adres" %}');
                          if (!new_address) return false;
                          $.post('{% url "leden-api" %}', {
                                 'csrfmiddlewaretoken': csrf_token,
@@ -37,15 +38,15 @@
                                 }, function(data) {
                                         if(data.ok) window.location.reload();
                                         else alert(data.error);
-                                }); return false;">Wijzig e-mail</button>
+                                }); return false;">{% trans "Wijzig e-mail" %}</button>
         {% endif %}{# "secretariaat" in user.cached_groups_names #}
         </dd>
         {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
         {% if object.primary_study or "secretariaat" in user.cached_groups_names and addStudyForm %}
-        <dt>Studie</dt>
+        <dt>{% trans "Studie" %}</dt>
         <dd>
         {% if "secretariaat" in user.cached_groups_names and addStudyForm %}
-            <a href onclick="$('#block-add-study').addClass('visible'); return false;">toevoegen</a>
+        <a href onclick="$('#block-add-study').addClass('visible'); return false;">{% trans "toevoegen" %}</a>
             <form method="POST" action="" id="block-add-study"
                 {% if addStudyFormOpen %} class="visible" {% endif %}>
                 <input type="hidden" name="action" value="add-study"/>
@@ -53,30 +54,31 @@
                 <table>
                     {{ addStudyForm.as_table }}
                 </table>
-                <input type="submit" value="Toevoegen" />
+                <input type="submit" value="{% trans "Toevoegen" %}" />
             </form>
         {% endif %}{# "secretariaat" in user.cached_groups_names and addStudyForm #}
         <ul>
         {% for s in object.studies %}
         <li><a href="{{ s.study.get_absolute_url }}"
                 >{{ s.study.humanName }}</a>
-        op <a href="{{ s.institute.get_absolute_url }}"
+        {% trans "op" %} <a href="{{ s.institute.get_absolute_url }}"
                 >{{ s.institute.humanName}}</a>
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
         {% if s.number %}
-        studentnummer {{ s.number }}
+        {% trans "studentnummer" %} {{ s.number }}
         {% endif %}
         {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
         {% if s.from or s.until %}
         ({% if s.from %}
-        van {{ s.from.date }}
+        {% trans "van" %} {{ s.from.date }}
         {% endif %}
         {% if s.until %}
-        tot {{ s.until.date }}
+        {% trans "tot" %} {{ s.until.date }}
         {% endif %})
         {% endif %}
         {% if "secretariaat" in user.cached_groups_names and not s.until %}
-        <button onclick="var end_date = prompt('Beëindig studie', (new Date().toISOString().substr(0, 10)));
+        <button onclick="var end_date = prompt('{% trans "Beëindig studie" %}',
+                                    (new Date().toISOString().substr(0, 10)));
                          if (!end_date) return false;
                          leden_api({
                             action: 'entity_end_study',
@@ -86,7 +88,7 @@
                          }, function(data) {
                             if(data.ok) window.location.reload();
                             else alert(data.error);
-                         }); return false;">Beëindig</button>
+                        }); return false;">{% trans "Beëindig" %}</button>
         {% endif %}{# "secretariaat" in user.cached_groups_names and not s.until #}
         </li>
         {% endfor %}{# s in object.studies #}
@@ -95,13 +97,13 @@
         {% endif %}{# object.primary_study or "secretariaat" in user.cached_groups_names and addStudyForm #}
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
         {% if object.telephones %}
-        <dt>Telefoonnummer
+        <dt>{% trans "Telefoonnummer" %}
         {% if "secretariaat" in user.cached_groups_names or user == object %}
         &nbsp; <i><label>
                 {% if object.visibility.telephone %}
-                <span title="Zichtbaar voor alle leden">zichtbaar</span>
+                <span title="{% trans "Zichtbaar voor alle leden" %}">{% trans "zichtbaar" %}</span>
                 {% else %}
-                <span title="Alleen zichtbaar voor secretariaat en admlezers">niet zichtbaar</span>
+                <span title="{% trans "Alleen zichtbaar voor secretariaat en admlezers" %}">{% trans "niet zichtbaar" %}</span>
                 {% endif %}
                 <button onclick="$.post('{% url "leden-api" %}', {
                                         'csrfmiddlewaretoken': csrf_token,
@@ -113,11 +115,11 @@
                                         }, function(data) {
                                                 if(data.ok) window.location.reload();
                                                 else alert(data.error);
-                                        }); return false;" title="verander zichtbaarheid van het telefoonnummer">Verander</button>
+                                                }); return false;" title="{% trans "verander zichtbaarheid van het telefoonnummer" %}">{% trans "Verander" %}</button>
         </label></i>
         {% endif %}
         {% if "secretariaat" in user.cached_groups_names %}
-        <button onclick="var new_phone = prompt('Nieuw telefoonnummer');
+        <button onclick="var new_phone = prompt('{% trans "Nieuw telefoonnummer" %}');
                          if (!new_phone) return false;
                          $.post('{% url "leden-api" %}', {
                                 'csrfmiddlewaretoken': csrf_token,
@@ -129,7 +131,7 @@
                                 }, function(data) {
                                         if(data.ok) window.location.reload();
                                         else alert(data.error);
-                                }); return false;">Wijzig telefoonnummer</button>
+                                }); return false;">{% trans "Wijzig telefoonnummer" %}</button>
         {% endif %}{# "secretariaat" in user.cached_groups_names #}
         </dt>
         <dd>
@@ -139,10 +141,10 @@
         {{ t.number }}
         {% if t.from or t.until %}
         ({% if t.from %}
-        van {{ t.from.date }}
+        {% trans "van" %} {{ t.from.date }}
         {% endif %}
         {% if t.until %}
-        tot {{ t.until.date }}
+        {% trans "tot" %} {{ t.until.date }}
         {% endif %})
         {% endif %}
         </li>
@@ -151,15 +153,15 @@
         </dd>
         {% endif %}{# object.telephones #}
         {% elif object.visibility.telephone %}
-        <dt>Telefoonnummer</dt>
+        <dt>{% trans "Telefoonnummer" %}</dt>
         <dd>{{ object.primary_telephone }}</dd>
         {% endif %}
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
 	{% if object.addresses %}
-        <dt>Adres
+    <dt>{% trans "Adres" %}
         {% if "secretariaat" in user.cached_groups_names %}
         <button onclick="var new_addr = prompt(
-                        'Nieuw adres (straatnaam, nummer, postcode, plaats)',
+                        '{% trans "Nieuw adres (straatnaam, nummer, postcode, plaats)" %}',
                         '{{ object.primary_address.street|escapejs }}, '+
                         '{{ object.primary_address.number|escapejs }}, '+
                         '{{ object.primary_address.zip|escapejs }}, '+
@@ -167,8 +169,7 @@
                          if (!new_addr) return false;
                          var addr = new_addr.split(',');
                          if (addr.length != 4) {
-                                 alert('Er mist een waarde (verwacht: 4, '+
-                                        'gekregen: '+addr.length+')');
+                                 alert('{% trans "Er mist een waarde (verwacht: 4, gekregen: " %}'+addr.length+')');
                                 return false;
                          }
                          var addr_street = $.trim(addr[0]);
@@ -188,7 +189,7 @@
                                 }, function(data) {
                                         if(data.ok) window.location.reload();
                                         else alert(data.error);
-                                }); return false;">Wijzig adres</button>
+                                }); return false;">{% trans "Wijzig adres" %}</button>
         {% endif %}{# "secretariaat" in user.cached_groups_names #}
         </dt>
         <dd>
@@ -200,10 +201,10 @@
         </address>
         {% if a.from or a.until %}
         ({% if a.from %}
-        van {{ a.from.date }}
+        {% trans "van" %} {{ a.from.date }}
         {% endif %}
         {% if a.until %}
-        tot {{ a.until.date }}
+        {% trans "tot" %} {{ a.until.date }}
         {% endif %})
         {% endif %}
         </li>
@@ -213,14 +214,14 @@
         {% endif %}{# object.addresses #}
         {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
         {% if object.dateOfBirth %}
-	<dt>Geboortedatum</dt>
+    <dt>{% trans "Geboortedatum" %}</dt>
 	<dd>
         <a href="{% url "entities-by-year-of-birth" year=object.dateOfBirth.year %}"
                 >{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth.month }}-{{ object.dateOfBirth.day }}
 	</dd>
         {% endif %}
 	{% if object.dateJoined %}
-	<dt>Lid sinds</dt>
+    <dt>{% trans "Lid sinds" %}</dt>
 	<dd>
 	<a href="{% url "jaar" year=object.dateJoined.year %}"
 		>{{ object.dateJoined.year }}</a>-{{ object.dateJoined.month }}-{{ object.dateJoined.day }}
