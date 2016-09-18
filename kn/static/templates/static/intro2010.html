@@ -1,6 +1,9 @@
 {% extends "static/base.html" %}
 
 {% load base %}
+{% load i18n %}
+
+{% url "route" as url_route %}
 
 {% block styles %}
 {{ block.super }}
@@ -10,111 +13,116 @@
 {% block body %}
 <dl id="introAgenda">
 <img src="{{ MEDIA_URL }}static/img/intro2010flyer2a.png" class="right" />
-<div class="date">maandag 16 aug</div>
-<dt>Pubquiz</dt>
+<div class="date">{% trans "maandag 16 aug" %}</div>
+<dt>{% trans "Pubquiz" %}</dt>
 <dd>
-Na het grote succes van vorig jaar alweer een pubquiz in de intro!  Onze
-Quizmasters hebben weer een briljante quiz voor ons in petto.  Doe mee,
-test je nutteloze kennis en win die felbegeerde prijs!<br/>
-<em class="footer">20:30 in de kelder van <strong>Tio Pepe, Bloemerstraat 82
-</strong></em>
+{% blocktrans %}Na het grote succes van vorig jaar alweer een pubquiz
+in de intro!  Onze Quizmasters hebben weer een briljante quiz voor
+ons in petto.  Doe mee, test je nutteloze kennis en win die felbegeerde
+prijs!{% endblocktrans %}<br/>
+<em class="footer">{% blocktrans %}20:30 in de kelder van <strong>Tio
+Pepe, Bloemerstraat 82{% endblocktrans %}</strong></em>
 </dd>
 
 
-<div class="date">dinsdag 17 aug</div>
-<dt>Villa Live</dt>
-<dd>
-Wij geven samen met de andere zeven verenigingen in de Villa van Schaeck een
-groot verbroederingsfeest, waarbij de live muziek niet ontbreekt!  Met twee
-zalen met verschillende DJ's is er voor ieders wil wat.<br/>
-<em class="footer">22:00 in de <a href="{% url "route" %}">Villa van Schaeck</a>.
-Entr&eacute;e &euro; 3</em>
+<div class="date">{% trans "dinsdag 17 aug" %}</div>
+<dt>{% trans "Villa Live" %}</dt>
+<dd>{% blocktrans %} Wij geven samen met de andere zeven verenigingen
+in de Villa van Schaeck een groot verbroederingsfeest, waarbij de
+live muziek niet ontbreekt!  Met twee zalen met verschillende DJ's
+is er voor ieders wil wat.{% endblocktrans %}<br/>
+<em class="footer">{% blocktrans %}22:00 in de <a href="{{ url_route
+}}">Villa van Schaeck</a>.  Entr&eacute;e &euro; 3{% endblocktrans %}</em>
 </dd>
 
 <div style="clear: both" />
 
 <img src="{{ MEDIA_URL }}static/img/intro2010flyer2v.png" class="left" />
-<div class="date">woensdag 18 aug</div>
-<dt>Karpe Intr'Rock</dt>
+<div class="date">{% trans "woensdag 18 aug" %}</div>
+<dt>{% trans "Karpe Intr'Rock" %}</dt>
 <dd>
-Karpe Noktem pakt uit!  De band
+{% blocktrans %}Karpe Noktem pakt uit!  De band
 <a href="http://www.myspace.com/unlockedmemories">Unlocked Memories</a> trapt
 af met melodische nu-metal.  Daarna neemt
 <a href="http://www.myspace.com/voltviolin">Volt Violin</a>, die voor de tweede
 maal voor ons speelt, het over met sfeervolle, maar ijzersterke rock.  Na de
 bands nemen onze eigen huis DJ's het over en  garanderen wij een geweldige
-avond van jouw introductie.<br/>
-<em class="footer">21:00 in de 
-  <a href="{% url "route" %}">Villa van Schaeck</a>; 
- Entr&eacute;e &euro; 3; bier, fris en wijn voor slechts één euro</em>
+avond van jouw introductie.{% endblocktrans %}<br/>
+<em class="footer">{% blocktrans %}21:00 in de
+  <a href="{{ url_route }}">Villa van Schaeck</a>; Entr&eacute;e
+  &euro; 3; bier, fris en wijn voor slechts één euro{% endblocktrans %}</em>
 </dd>
 
-<div class="date">donderdag 19 aug</div>
-<dt>Beestfeest</dt>
+<div class="date">{% trans "donderdag 19 aug" %}</div>
+<dt>{% trans "Beestfeest" %}</dt>
 <dd>
-Geen zin in het vijf-verenigingen feest?  Kom dan naar het Beestfeest
-van de betastudiekoepelvereniging Olympus!  Zoals gebruikelijk maken
-onze huis-DJ's er een feest van in de kleine zaal.  Jesper draait voor
-de laatste keer op Beestfeest – rede te meer om deze Beestfeest niet
-te missen!
-<em class="footer">21:30 in Doornroosje, Groenewouseweg 332.  Tip:
-sta 20:30 al in de rij</em>
+{% blocktrans %}Geen zin in het vijf-verenigingen feest?  Kom dan
+naar het Beestfeest van de betastudiekoepelvereniging Olympus!
+Zoals gebruikelijk maken onze huis-DJ's er een feest van in de
+kleine zaal.  Jesper draait voor de laatste keer op Beestfeest –
+rede te meer om deze Beestfeest niet te missen!{% endblocktrans %}
+<em class="footer">{% blocktrans %}21:30 in Doornroosje, Groenewouseweg
+332.  Tip: sta 20:30 al in de rij{% endblocktrans %}</em>
 </dd>
 
 <img src="{{ MEDIA_URL }}static/img/intro2010flyer1v.png" class="right" />
-<div class="date">zondag 22 aug</div>
-<dt>Spelletjesavond</dt>
-<dd>
-Na een week vol met feesten en een geweldig introductieweekend laten wij jou
-zien hoe knus en verademend een gerelaxte spelletjesavond kan zijn.  Leg
-een kaartje, speel schaak of een ander spel onder het genot van snacks,
-zachte muziek en een ontspannen gezelschap bij de Karpe Noktem spelletjesavond.
+<div class="date">{% trans "zondag 22 aug" %}</div>
+<dt>{% trans "Spelletjesavond" %}</dt>
+<dd>{% blocktrans %} Na een week vol met feesten en een geweldig
+introductieweekend laten wij jou zien hoe knus en verademend een
+gerelaxte spelletjesavond kan zijn.  Leg een kaartje, speel schaak
+of een ander spel onder het genot van snacks, zachte muziek en een
+ontspannen gezelschap bij de Karpe Noktem
+spelletjesavond.{% endblocktrans %}
 <br/>
-<em class="footer">21:00 in de kelder van de
-  <a href="{% url "route" %}">Villa van Schaeck</a></em>
+<em class="footer">{% blocktrans %}21:00 in de kelder van de
+  <a href="{{ url_route }}">Villa van Schaeck</a>{% endblocktrans %}</em>
 </dd>
 
-<div class="date">maandag 23 aug</div>
-<dt>Anti-Kater Wandel Aktiviteit</dt>
+<div class="date">{% trans "maandag 23 aug" %}</div>
+<dt>{% trans "Anti-Kater Wandel Aktiviteit" %}</dt>
 <dd>
-Een introductie is druk: veel nieuwe mensen, kamers en kroegen.  Karpe Noktem
-laat jou uitwaaien tijdens de AKWA, de Anti Kater Wander Acitiviteit.  Naast
-al die tenten in de binnenstad, zie je ook nog eens de mooie natuur rondom
-Nijmegen.<br/>
-<em class="footer">Verzamelen met fiets om 12:30 voor het Gymnasion</em>
+{% blocktrans %}Een introductie is druk: veel nieuwe mensen, kamers
+en kroegen.  Karpe Noktem laat jou uitwaaien tijdens de AKWA, de
+Anti Kater Wander Acitiviteit.  Naast al die tenten in de binnenstad,
+zie je ook nog eens de mooie natuur rondom Nijmegen.{% endblocktrans %}<br/>
+<em class="footer">{% blocktrans %}Verzamelen met fiets om 12:30
+voor het Gymnasion{% endblocktrans %}</em>
 </dd>
 
 <img src="{{ MEDIA_URL }}static/img/intro2010flyer1a.png" class="left" />
-<div class="date">maandag 23 aug</div>
-<dt>BBQ</dt>
-<dd>
-Een gezellige barbecue met vlees van een biologische slager en dat proef je!
-Ook voor vega's hebben wij van alles wat.<br/>
-Meld je aan door te e-mailen naar
-{% filter email %}eet@karpenoktem.nl{% endfilter %}, of
+<div class="date">{% trans "maandag 23 aug" %}</div>
+<dt>{% trans "BBQ" %}</dt>
+<dd>{% blocktrans %}Een gezellige barbecue met vlees van een
+biologische slager en dat proef je!  Ook voor vega's hebben wij van
+alles wat.{% endblocktrans %}<br/>
+{% blocktrans with eet="eet@karpenoktem.nl"|email %}
+Meld je aan door te e-mailen naar {{ eet }} of
 (voor leden) naar <a href="http://karpenoktem.nl/activiteit/introbbq-20100823"
->deze pagina</a> te gaan. Deadline aanmelden: donderdag 13:00. Kosten: &euro; 6.<br/>
-<em class="footer">17:00 in de achtertuin van de
-  <a href="{% url "route" %}">Villa van Schaeck</a></em>
+>deze pagina</a> te gaan. Deadline aanmelden:
+donderdag 13:00. Kosten: &euro; 6.{% endblocktrans %}<br/>
+<em class="footer">{% blocktrans %}17:00 in de achtertuin van de
+  <a href="{{ url_route }}">Villa van Schaeck</a>{% endblocktrans %}</em>
 </dd>
 
-<div class="date">maandag 23 aug</div>
-<dt>Open Borrel</dt>
+<div class="date">{% trans "maandag 23 aug" %}</div>
+<dt>{% trans "Open Borrel" %}</dt>
 <dd>
-Begeef je in nachtelijke sferen met goed gezelschap, hippe muziek, whiskey
-en speciaalbier.  Start kortom je jaar met een knal op deze spetterende
-open borrel.<br/>
-<em class="footer">21:00 in de kelder van de 
-  <a href="{% url "route" %}">Villa van Schaeck</a></em>
+{% blocktrans %}Begeef je in nachtelijke sferen met goed gezelschap,
+hippe muziek, whiskey en speciaalbier.  Start kortom je jaar met
+een knal op deze spetterende open borrel.{% endblocktrans %}<br/>
+<em class="footer">{% blocktrans %}21:00 in de kelder van de 
+  <a href="{{ url_route }}">Villa van Schaeck</a>{% endblocktrans %}</em>
 </dd>
 
-<div class="date">dinsdag 24 aug</div>
-<dt>Nachtpicknick</dt>
+<div class="date">{% trans "dinsdag 24 aug" %}</div>
+<dt>{% trans "Nachtpicknick" %}</dt>
 <dd>
-Trap je luie mentorpappa en -mama en maak de zonsopgang mee onder het genot
-van een prachtige picknick midden op het keizerkarelplein.<br/>
-<em class="footer">Vanaf 23:00 tot diep in de nacht op het
-      Keizer Karel Plein</em>
+{% blocktrans %}Trap je luie mentorpappa en -mama en maak de
+zonsopgang mee onder het genot van een prachtige picknick midden
+op het keizerkarelplein.{% endblocktrans %}<br/>
+<em class="footer">{% blocktrans %}Vanaf 23:00 tot diep in de nacht op het
+  Keizer Karel Plein{% endblocktrans %}</em>
 </dd>
 
 </dl>

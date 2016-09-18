@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-16 23:16+0200\n"
+"POT-Creation-Date: 2016-09-18 21:27+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1705,6 +1705,7 @@ msgid "maandag 17 aug"
 msgstr ""
 
 #: kn/static/templates/static/intro2009.html:14
+#: kn/static/templates/static/intro2010.html:17
 msgid "Pubquiz"
 msgstr ""
 
@@ -1738,6 +1739,7 @@ msgid "woensdag 19 aug"
 msgstr ""
 
 #: kn/static/templates/static/intro2009.html:34
+#: kn/static/templates/static/intro2010.html:109
 msgid "Open Borrel"
 msgstr ""
 
@@ -1791,6 +1793,7 @@ msgid ""
 msgstr ""
 
 #: kn/static/templates/static/intro2009.html:68
+#: kn/static/templates/static/intro2010.html:42
 msgid "Karpe Intr'Rock"
 msgstr ""
 
@@ -1806,6 +1809,208 @@ msgstr ""
 
 #: kn/static/templates/static/intro2009.html:77
 msgid "band 22:00; bier, fris en wijn voor slechts één euro"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:16
+msgid "maandag 16 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:19
+msgid ""
+"Na het grote succes van vorig jaar alweer een pubquiz\n"
+"in de intro!  Onze Quizmasters hebben weer een briljante quiz voor\n"
+"ons in petto.  Doe mee, test je nutteloze kennis en win die felbegeerde\n"
+"prijs!"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:23
+msgid ""
+"20:30 in de kelder van <strong>Tio\n"
+"Pepe, Bloemerstraat 82"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:28
+msgid "dinsdag 17 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:29
+msgid "Villa Live"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:30
+msgid ""
+" Wij geven samen met de andere zeven verenigingen\n"
+"in de Villa van Schaeck een groot verbroederingsfeest, waarbij de\n"
+"live muziek niet ontbreekt!  Met twee zalen met verschillende DJ's\n"
+"is er voor ieders wil wat."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:34
+msgid ""
+"22:00 in de <a href=\"{{ url_route\n"
+"}}\">Villa van Schaeck</a>.  Entr&eacute;e &euro; 3"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:41
+msgid "woensdag 18 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:44
+msgid ""
+"Karpe Noktem pakt uit!  De band\n"
+"<a href=\"http://www.myspace.com/unlockedmemories\">Unlocked Memories</a> "
+"trapt\n"
+"af met melodische nu-metal.  Daarna neemt\n"
+"<a href=\"http://www.myspace.com/voltviolin\">Volt Violin</a>, die voor de "
+"tweede\n"
+"maal voor ons speelt, het over met sfeervolle, maar ijzersterke rock.  Na "
+"de\n"
+"bands nemen onze eigen huis DJ's het over en  garanderen wij een geweldige\n"
+"avond van jouw introductie."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:51
+#, python-format
+msgid ""
+"21:00 in de\n"
+"  <a href=\"%(url_route)s\">Villa van Schaeck</a>; Entr&eacute;e\n"
+"  &euro; 3; bier, fris en wijn voor slechts één euro"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:56
+msgid "donderdag 19 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:57
+msgid "Beestfeest"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:59
+msgid ""
+"Geen zin in het vijf-verenigingen feest?  Kom dan\n"
+"naar het Beestfeest van de betastudiekoepelvereniging Olympus!\n"
+"Zoals gebruikelijk maken onze huis-DJ's er een feest van in de\n"
+"kleine zaal.  Jesper draait voor de laatste keer op Beestfeest –\n"
+"rede te meer om deze Beestfeest niet te missen!"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:64
+msgid ""
+"21:30 in Doornroosje, Groenewouseweg\n"
+"332.  Tip: sta 20:30 al in de rij"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:69
+msgid "zondag 22 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:70
+msgid "Spelletjesavond"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:71
+msgid ""
+" Na een week vol met feesten en een geweldig\n"
+"introductieweekend laten wij jou zien hoe knus en verademend een\n"
+"gerelaxte spelletjesavond kan zijn.  Leg een kaartje, speel schaak\n"
+"of een ander spel onder het genot van snacks, zachte muziek en een\n"
+"ontspannen gezelschap bij de Karpe Noktem\n"
+"spelletjesavond."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:78
+#, python-format
+msgid ""
+"21:00 in de kelder van de\n"
+"  <a href=\"%(url_route)s\">Villa van Schaeck</a>"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:82
+#: kn/static/templates/static/intro2010.html:94
+#: kn/static/templates/static/intro2010.html:108
+msgid "maandag 23 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:83
+msgid "Anti-Kater Wandel Aktiviteit"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:85
+msgid ""
+"Een introductie is druk: veel nieuwe mensen, kamers\n"
+"en kroegen.  Karpe Noktem laat jou uitwaaien tijdens de AKWA, de\n"
+"Anti Kater Wander Acitiviteit.  Naast al die tenten in de binnenstad,\n"
+"zie je ook nog eens de mooie natuur rondom Nijmegen."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:89
+msgid ""
+"Verzamelen met fiets om 12:30\n"
+"voor het Gymnasion"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:95
+msgid "BBQ"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:96
+msgid ""
+"Een gezellige barbecue met vlees van een\n"
+"biologische slager en dat proef je!  Ook voor vega's hebben wij van\n"
+"alles wat."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:99
+#, python-format
+msgid ""
+"\n"
+"Meld je aan door te e-mailen naar %(eet)s of\n"
+"(voor leden) naar <a href=\"http://karpenoktem.nl/activiteit/"
+"introbbq-20100823\"\n"
+">deze pagina</a> te gaan. Deadline aanmelden:\n"
+"donderdag 13:00. Kosten: &euro; 6."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:104
+#, python-format
+msgid ""
+"17:00 in de achtertuin van de\n"
+"  <a href=\"%(url_route)s\">Villa van Schaeck</a>"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:111
+msgid ""
+"Begeef je in nachtelijke sferen met goed gezelschap,\n"
+"hippe muziek, whiskey en speciaalbier.  Start kortom je jaar met\n"
+"een knal op deze spetterende open borrel."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:114
+#, python-format
+msgid ""
+"21:00 in de kelder van de \n"
+"  <a href=\"%(url_route)s\">Villa van Schaeck</a>"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:118
+msgid "dinsdag 24 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:119
+msgid "Nachtpicknick"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:121
+msgid ""
+"Trap je luie mentorpappa en -mama en maak de\n"
+"zonsopgang mee onder het genot van een prachtige picknick midden\n"
+"op het keizerkarelplein."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:124
+msgid ""
+"Vanaf 23:00 tot diep in de nacht op het\n"
+"  Keizer Karel Plein"
 msgstr ""
 
 #: kn/static/templates/static/introPoster2009.html:12
