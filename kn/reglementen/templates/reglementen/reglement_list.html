@@ -1,7 +1,9 @@
 {% extends "base/base.html" %}
 
+{% load i18n %}
+
 {% block body %}
-<h1>Reglementen</h1>
+<h1>{% trans "Reglementen" %}</h1>
 <ul>
 {% for reglement in reglementen %}
 <li><a href="{{ reglement.get_absolute_url }}">

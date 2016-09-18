@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-18 21:27+0200\n"
+"POT-Creation-Date: 2016-09-18 21:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1008,6 +1008,38 @@ msgstr ""
 
 #: kn/leden/views.py:782
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/reglement_detail.html:13
+msgid "Aangenomen op"
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/reglement_detail.html:15
+msgid "Was van kracht tot"
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/reglement_detail.html:17
+msgid "Nog steeds van kracht."
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/reglement_detail.html:20
+msgid "(Nog) niet aangenomen."
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/reglement_list.html:6
+msgid "Reglementen"
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/version_detail.html:18
+msgid "Deze versie is (nog) niet aangenomen en daarmee niet van kracht."
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/version_detail.html:26
+#, python-format
+msgid ""
+"\n"
+"        Deze versie was aangenomen op %(valid_from)s en\n"
+"        nog steeds van kracht."
 msgstr ""
 
 #: kn/static/templates/static/activiteiten.html:6

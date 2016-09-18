@@ -1,5 +1,7 @@
 {% extends "base/base.html" %}
 
+{% load i18n %}
+
 {% block body %}
 <h1>{{ reglement.humanName }}</h1>
 <p>{{ reglement.description }}</p>
@@ -8,14 +10,14 @@
 	<li><a href="{{ version.get_absolute_url }}"
 		>{{ version.humanName }}</a>
 	{% if version.valid_from %}
-	Aangenomen op {{ version.valid_from.date }}.
+    {% trans "Aangenomen op" %} {{ version.valid_from.date }}.
 		{% if version.valid_until %}
-		Was van kracht tot {{ version.valid_until.date }}.
+        {% trans "Was van kracht tot" %} {{ version.valid_until.date }}.
 		{% else %}
-		Nog steeds van kracht.
+        {% trans "Nog steeds van kracht." %}
 		{% endif %}
 	{% else %}
-	(Nog) niet aangenomen.
+    {% trans "(Nog) niet aangenomen." %}
 	{% endif %}
 	</li>
 {% endfor %}
