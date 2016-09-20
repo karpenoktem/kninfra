@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-18 21:39+0200\n"
+"POT-Creation-Date: 2016-09-20 08:08+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2053,6 +2053,7 @@ msgstr ""
 #: kn/static/templates/static/introPoster2014.html:12
 #: kn/static/templates/static/introPoster2015.html:12
 #: kn/static/templates/static/introPoster2016.html:12
+#: kn/static/templates/static/lustrumPoster5.html:12
 msgid "Naar de website"
 msgstr ""
 
@@ -2073,6 +2074,8 @@ msgstr ""
 #: kn/static/templates/static/introPoster2015.html:19
 #: kn/static/templates/static/introPoster2016.html:19
 #: kn/static/templates/static/irc.html:8
+#: kn/static/templates/static/lustrumPoster10.html:19
+#: kn/static/templates/static/lustrumPoster5.html:18
 msgid "ga naar de website"
 msgstr ""
 
@@ -2185,6 +2188,122 @@ msgstr ""
 #: kn/static/templates/static/links.html:29
 #, python-format
 msgid "de <a href=\"%(url_zusjes)s\">zusjes</a>."
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:13
+msgid "Maandagavond &mdash; borrel"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:16
+msgid ""
+"Een maandagavondborrel als alle andere &mdash;\n"
+"alleen zullen deze keer oud-bestuursleden om 22:00 een presentatie\n"
+"geven!  De ex-voorzitters Giedo Jansen, Alette Ouwens en Bram Balk\n"
+"vertellen over de vroegste tijden uit de geschiedenis van Karpe\n"
+"Noktem.  Wellicht zullen er ook enkele externen aanwezig zijn.\n"
+"Uiteraard geldt op deze borrel het gebruikelijke bartarief en -aanbod\n"
+"van ASV Karpe Noktem."
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:25
+msgid "26 mei"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:26
+msgid "Dinsdagavond &mdash; eten met leden"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:29
+msgid ""
+" In het gebouw van Scouting Traianus Nijmegen zal\n"
+"onze allereerste offici&euml;le 'eten met leden'-activiteit\n"
+"plaatsvinden.  Tijdens deze megapicknick neemt ieder lid een maaltijd\n"
+"mee om te delen met zijn of haar medeleden, die op hun beurt ook\n"
+"allemaal iets te eten hebben meegenomen.  Ook de LustrumCie zorgt\n"
+"voor het nodige drinken en enkele versnaperingen.  Dus, maak een\n"
+"frisse salade, een vullend hoofdgerecht, heerlijke soep of een\n"
+"tongstrelend toetje en voer daarmee je medeleden (dan wel niet op\n"
+"romantische wijze)!  Er is overigens een mogelijkheid tot het\n"
+"opwarmen van je gerecht.  Na het voedselfestijn is er ruim tijd om\n"
+"uit te buiken en na te genieten!"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:42
+msgid "27 mei"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:43
+msgid ""
+"Woensdagmiddag &mdash; spelen en relaxen in\n"
+"Park Brakkenstein"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:46
+msgid ""
+"Na de zware maaltijd van dinsdagavond moeten al die\n"
+"extra calorie&euml;n er natuurlijk wel weer vanaf (of niet).  Daarom\n"
+"gaan we 's woensdags naar Park Brakkenstein om daar in de middagzon\n"
+"te genieten van enkele sportieve activiteiten (of niet).  Als je\n"
+"namelijk geen zin in hebt in al dat geren en gespring kun je uiteraard\n"
+"ook een beetje chillen in het gras.  Iedereen is welkom om wat\n"
+"picknick-benodigdheden mee te nemen, zoals sandwiches, pannekoeken,\n"
+"picknickmanden, tafelkleden, limonade, enzovoorts.  De LustrumCie\n"
+"zal zorgen voor bier, fris en wijn."
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:57
+msgid "28 mei"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:58
+msgid ""
+"Donderdagavond &mdash; het eerste lustrumfeest\n"
+"in de Villa"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:62
+msgid ""
+" Het hoogtepunt van de week!  Tijdens deze explosieve\n"
+"avond in de grote zaal van de Villa is iedereen welkom om het eerste\n"
+"lustrum van Karpe Noktem mee te vieren!  De avond zal stevig, maar\n"
+"vrolijk geopend worden door folkmetalband <a\n"
+"href=\"http://www.myrkvar.nl/\">Myrkvar</a>; vervolgens zullen de\n"
+"springerige folkpunkriffjes van <a\n"
+"href=\"http://www.baggerunited.nl/\">Bagger United</a> je voeten\n"
+"verder de nacht in dragen!  De avond wordt voortgezet met onze eigen\n"
+"DJ's Felix en Stonehead.  Het lustrumfeest is tevens zusjesfeest,\n"
+"dus we kunnen bezoek verwachten uit alle hoeken en gaten van\n"
+"Nederland.  Consumpties zullen 1 euro bedragen, zoals jullie van\n"
+"Karpe Noktem gewendr zijn."
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:76
+msgid "29 mei"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:77
+msgid "Vrijdagavond &mdash; filmavond"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:80
+msgid ""
+" Na een vermoeiende donderdagavond is het tijd voor\n"
+"rust en recreatie.  Daarom zullen we ons vrijdagavond verzamelen\n"
+"in cafe 't Haantje om daar relaxed te genieten van een film <a\n"
+"href=\"http://karpenoktem.nl/poll/vote/lustrum5film/\">die jullie\n"
+"zelf mogen kiezen via de poll op onze site</a>!  Alle zusjes die\n"
+"nog in Nijmegen zijn gestrand zijn natuurlijk van harte welkom om\n"
+"samen met Karpe Noktem uit te puffen."
+msgstr ""
+
+#: kn/static/templates/static/lustrumPoster10.html:14
+#: kn/static/templates/static/lustrumPoster5.html:14
+msgid "Lustrum Poster. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/lustrumPoster10.html:15
+#: kn/static/templates/static/lustrumPoster5.html:15
+msgid "Lustrum"
 msgstr ""
 
 #: kn/static/templates/static/merchandise.html:7
