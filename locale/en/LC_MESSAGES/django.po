@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 08:58+0200\n"
+"POT-Creation-Date: 2016-09-20 09:02+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1083,6 +1083,26 @@ msgstr "Agenda has been updated"
 #: kn/leden/views.py:782
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
 msgstr "Your request is being processed.  Expect an e-mail within 5 minutes."
+
+#: kn/poll/templates/poll/vote.html:18
+msgid "Sla op"
+msgstr ""
+
+#: kn/poll/templates/poll/vote.html:20
+msgid "Pas aan"
+msgstr ""
+
+#: kn/poll/views.py:24
+msgid "(geen antwoord)"
+msgstr ""
+
+#: kn/poll/views.py:56
+msgid "De enquete is gesloten"
+msgstr ""
+
+#: kn/poll/views.py:58
+msgid "Veranderingen opgeslagen!"
+msgstr ""
 
 #: kn/reglementen/templates/reglementen/reglement_detail.html:13
 msgid "Aangenomen op"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 08:58+0200\n"
+"POT-Creation-Date: 2016-09-20 09:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1007,6 +1007,26 @@ msgstr ""
 
 #: kn/leden/views.py:782
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
+msgstr ""
+
+#: kn/poll/templates/poll/vote.html:18
+msgid "Sla op"
+msgstr ""
+
+#: kn/poll/templates/poll/vote.html:20
+msgid "Pas aan"
+msgstr ""
+
+#: kn/poll/views.py:24
+msgid "(geen antwoord)"
+msgstr ""
+
+#: kn/poll/views.py:56
+msgid "De enquete is gesloten"
+msgstr ""
+
+#: kn/poll/views.py:58
+msgid "Veranderingen opgeslagen!"
 msgstr ""
 
 #: kn/reglementen/templates/reglementen/reglement_detail.html:13

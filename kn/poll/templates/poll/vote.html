@@ -1,5 +1,7 @@
 {% extends "base/base.html" %}
 
+{% load i18n %}
+
 {% block body %}
 <h1>{{ poll.humanName }}</h1>
 <p><small>[{{ poll.date.date }}]</small> {{ poll.description }}</p>
@@ -13,9 +15,9 @@
 {% if poll.is_open %}
 <input type="submit"
 {% if initial %}
-value="Sla op"
+       value="{% trans "Sla op" %}"
 {% else %}{# initial #}
-value="Pas aan"
+       value="{% trans "Pas aan" %}"
 {% endif %}{# initial #} />
 {% endif %}{# poll.is_open #}
 </form>
