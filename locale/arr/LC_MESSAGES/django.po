@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 09:15+0200\n"
+"POT-Creation-Date: 2016-09-20 09:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -345,7 +345,8 @@ msgstr ""
 msgid "Zooi"
 msgstr ""
 
-#: kn/leden/forms.py:98 kn/planning/templates/planning/event_edit.html:11
+#: kn/leden/forms.py:98 kn/moderation/templates/moderation/overview.html:9
+#: kn/planning/templates/planning/event_edit.html:11
 msgid "Naam"
 msgstr ""
 
@@ -793,6 +794,7 @@ msgid "Schrijf in"
 msgstr ""
 
 #: kn/leden/templates/leden/secr_notes.html:14
+#: kn/moderation/templates/moderation/overview.html:24
 #: kn/subscriptions/templates/subscriptions/event_detail.html:59
 msgid "door"
 msgstr ""
@@ -1009,6 +1011,38 @@ msgstr ""
 
 #: kn/leden/views.py:782
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
+msgstr ""
+
+#: kn/moderation/templates/moderation/overview.html:9
+msgid "Moderatie-modus"
+msgstr ""
+
+#: kn/moderation/templates/moderation/overview.html:22
+msgid "actief"
+msgstr ""
+
+#: kn/moderation/templates/moderation/overview.html:27
+msgid "inactief"
+msgstr ""
+
+#: kn/moderation/templates/moderation/overview.html:33
+msgid "in wachtrij"
+msgstr ""
+
+#: kn/moderation/templates/moderation/overview.html:47
+msgid "deactiveer"
+msgstr ""
+
+#: kn/moderation/templates/moderation/overview.html:49
+msgid "activeer"
+msgstr ""
+
+#: kn/moderation/templates/moderation/overview.html:59
+msgid "verleng"
+msgstr ""
+
+#: kn/moderation/views.py:35
+msgid "Toegang geweigerd"
 msgstr ""
 
 #: kn/planning/forms.py:17

@@ -7,6 +7,7 @@ import datetime
 
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
@@ -31,7 +32,7 @@ def redirect(request, name):
     name = str(name)
     if (request.user.groups.filter(
             name=settings.MODERATORS_GROUP).count() == 0):
-        return HttpReponse("Access denied")
+        return HttpReponse(_("Toegang geweigerd"))
     if not name in settings.MODED_MAILINGLISTS:
         raise Http404
     ml = Mailman.MailList.MailList(name, True)

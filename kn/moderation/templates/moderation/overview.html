@@ -1,10 +1,12 @@
 {% extends "leden/base.html" %}
 
+{% load i18n %}
+
 {% block body %}
 <h1>Moderatie</h1>
 <table>
 	<thead>
-		<tr><th>Naam</th><th>Moderatie-modus</th>
+        <tr><th>{% trans "Naam" %}</th><th>{% trans "Moderatie-modus" %}</th>
 			{% if is_moderator %}
 			<th></th>
 			{% endif %}
@@ -17,18 +19,18 @@
 			>{{ l.real_name }}</a></td>
 	<td>
 		{% if l.modmode %}
-		actief
+        {% trans "actief" %}
 		{% if l.by %}
-		door {{ l.by.humanName }}
+        {% trans "door" %} {{ l.by.humanName }}
 		{% endif %}
 		{% else %}
-		inactief
+        {% trans "inactief" %}
 		{% endif %}
 		{% if l.queue %}
 		{% if is_moderator %}
 		<a href="{% url "moderation-redirect" l.name %}">
 		{% endif %}
-		({{ l.queue }} in wachtrij)
+        ({{ l.queue }} {% trans "in wachtrij" %})
 		{% if is_moderator %}
 		</a>
 		{% endif %}
@@ -42,9 +44,9 @@
 						value="{{ l.name }}" />
 			<input type="submit"
 			{% if l.modmode %}
-				value="deactiveer"
+                        value="{% trans "deactiveer" %}"
 			{% else %}
-				value="activeer"
+                        value="{% trans "activeer" %}"
 			{% endif %}
 				/>
 		</form>
@@ -54,7 +56,7 @@
 			<input type="hidden" name="renew"
 						value="{{ l.name }}" />
 			<input type="submit"
-				value="verleng (-{{l.remaining}})" />
+                        value="{% trans "verleng" %} (-{{l.remaining}})" />
 		</form>
 		{% endif %}
 	</td>
