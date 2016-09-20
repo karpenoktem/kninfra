@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 08:55+0200\n"
+"POT-Creation-Date: 2016-09-20 08:58+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2054,6 +2054,11 @@ msgstr ""
 #: kn/static/templates/static/introPoster2015.html:12
 #: kn/static/templates/static/introPoster2016.html:12
 #: kn/static/templates/static/lustrumPoster5.html:12
+#: kn/static/templates/static/openweek2Poster2015.html:12
+#: kn/static/templates/static/openweekPoster2013.html:12
+#: kn/static/templates/static/openweekPoster2014.html:12
+#: kn/static/templates/static/openweekPoster2015.html:12
+#: kn/static/templates/static/openweekPoster2016.html:12
 msgid "Naar de website"
 msgstr ""
 
@@ -2076,6 +2081,11 @@ msgstr ""
 #: kn/static/templates/static/irc.html:8
 #: kn/static/templates/static/lustrumPoster10.html:19
 #: kn/static/templates/static/lustrumPoster5.html:18
+#: kn/static/templates/static/openweek2Poster2015.html:19
+#: kn/static/templates/static/openweekPoster2013.html:18
+#: kn/static/templates/static/openweekPoster2014.html:19
+#: kn/static/templates/static/openweekPoster2015.html:19
+#: kn/static/templates/static/openweekPoster2016.html:19
 msgid "ga naar de website"
 msgstr ""
 
@@ -2350,6 +2360,40 @@ msgid ""
 "<strong>stickers</strong> om je omgeving onveilig te maken of heb\n"
 "jij een goed idee voor ander Karpe Noktem spul?  E-Mail dan naar\n"
 "%(proco)s."
+msgstr ""
+
+#: kn/static/templates/static/openweek2Poster2015.html:14
+#: kn/static/templates/static/openweekPoster2015.html:14
+msgid "Open Week 2015. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/openweek2Poster2015.html:15
+#: kn/static/templates/static/openweekPoster2015.html:15
+msgid "Open Week 2015"
+msgstr ""
+
+#: kn/static/templates/static/openweekPoster2013.html:14
+msgid "Poster open week 2013. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/openweekPoster2013.html:15
+msgid "Poster open week 2013"
+msgstr ""
+
+#: kn/static/templates/static/openweekPoster2014.html:14
+msgid "Open Week 2014. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/openweekPoster2014.html:15
+msgid "Open Week 2014"
+msgstr ""
+
+#: kn/static/templates/static/openweekPoster2016.html:14
+msgid "Open Week 2016. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/openweekPoster2016.html:15
+msgid "Open Week 2016"
 msgstr ""
 
 #: kn/static/templates/static/over.html:6
