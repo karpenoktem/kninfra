@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 09:22+0200\n"
+"POT-Creation-Date: 2016-09-20 09:26+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -187,6 +187,10 @@ msgstr "This path is outside of the root"
 #, python-format
 msgid "%s is een map --- geen bestand"
 msgstr "%s is a folder --- not a file"
+
+#: kn/browser/views.py:31
+msgid "Going outside of the root"
+msgstr ""
 
 #: kn/fotos/forms.py:22 kn/leden/forms.py:99
 msgid "Naam voor mensen"

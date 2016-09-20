@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 09:22+0200\n"
+"POT-Creation-Date: 2016-09-20 09:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -171,6 +171,10 @@ msgstr ""
 #: kn/base/views.py:17
 #, python-format
 msgid "%s is een map --- geen bestand"
+msgstr ""
+
+#: kn/browser/views.py:31
+msgid "Going outside of the root"
 msgstr ""
 
 #: kn/fotos/forms.py:22 kn/leden/forms.py:99

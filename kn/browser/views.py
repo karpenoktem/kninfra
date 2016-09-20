@@ -5,6 +5,7 @@ import os
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.servers.basehttp import FileWrapper
+from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.conf import settings
@@ -27,7 +28,7 @@ def homedir(request, root, subdir, path):
     p2 = os.path.realpath(os.path.join(root, subdir,
         'protected_html', path))
     if (not p1[:len(root)] == root or not p2[:len(root)] == root):
-        raise ValueError, "Going outside of the root"
+        raise ValueError(_("Going outside of the root"))
     if os.path.exists(p1):
         p = p1
     elif os.path.exists(p2):
