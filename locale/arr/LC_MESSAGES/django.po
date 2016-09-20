@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-11 19:29+0200\n"
+"POT-Creation-Date: 2016-09-20 08:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,6 +152,7 @@ msgid "Gebruikersnaam"
 msgstr ""
 
 #: kn/base/templates/base/base.html:61
+#: kn/leden/templates/leden/ik_openvpn.html:31
 msgid "Wachtwoord"
 msgstr ""
 
@@ -210,16 +211,28 @@ msgstr ""
 msgid "geen foutmelding"
 msgstr ""
 
-#: kn/leden/entities.py:762
+#: kn/leden/entities.py:770
 msgid "Entiteit heeft al deze stempel"
 msgstr ""
 
-#: kn/leden/entities.py:770
+#: kn/leden/entities.py:778
 msgid "Eniteit heeft deze stempel nog niet"
 msgstr ""
 
-#: kn/leden/entities.py:916
+#: kn/leden/entities.py:924
 msgid "Entiteit heeft nog geen humanName"
+msgstr ""
+
+#: kn/leden/entities.py:1213
+msgid "studie index bestaat niet"
+msgstr ""
+
+#: kn/leden/entities.py:1216
+msgid "studie is al beeindigt"
+msgstr ""
+
+#: kn/leden/entities.py:1218
+msgid "einddatum voor begindatum"
 msgstr ""
 
 #: kn/leden/forms.py:56
@@ -262,7 +275,7 @@ msgstr ""
 msgid "E-Mail adres"
 msgstr ""
 
-#: kn/leden/forms.py:74
+#: kn/leden/forms.py:74 kn/leden/templates/leden/user_detail.html:217
 msgid "Geboortedatum"
 msgstr ""
 
@@ -282,7 +295,8 @@ msgstr ""
 msgid "Woonplaats"
 msgstr ""
 
-#: kn/leden/forms.py:79
+#: kn/leden/forms.py:79 kn/leden/templates/leden/user_detail.html:100
+#: kn/leden/templates/leden/user_detail.html:156
 msgid "Telefoonnummer"
 msgstr ""
 
@@ -290,15 +304,16 @@ msgstr ""
 msgid "bijv.: +31612345678"
 msgstr ""
 
-#: kn/leden/forms.py:82
+#: kn/leden/forms.py:82 kn/leden/forms.py:112
 msgid "Studentnummer"
 msgstr ""
 
-#: kn/leden/forms.py:83
+#: kn/leden/forms.py:83 kn/leden/forms.py:110
 msgid "Onderwijs instelling"
 msgstr ""
 
-#: kn/leden/forms.py:85
+#: kn/leden/forms.py:85 kn/leden/forms.py:109
+#: kn/leden/templates/leden/user_detail.html:46
 msgid "Studie"
 msgstr ""
 
@@ -350,15 +365,19 @@ msgstr ""
 msgid "Volwaardige groep"
 msgstr ""
 
-#: kn/leden/forms.py:122
+#: kn/leden/forms.py:113
+msgid "Start op"
+msgstr ""
+
+#: kn/leden/forms.py:130
 msgid "Geen oud wachtwoord opgegeven"
 msgstr ""
 
-#: kn/leden/forms.py:124
+#: kn/leden/forms.py:132
 msgid "Geen nieuw wachtwoord opgegeven"
 msgstr ""
 
-#: kn/leden/forms.py:126
+#: kn/leden/forms.py:134
 msgid "Niet hetzelfde nieuwe wachtwoord opnieuw gegeven"
 msgstr ""
 
@@ -367,6 +386,7 @@ msgid "Smoelenboek"
 msgstr ""
 
 #: kn/leden/templates/leden/base.html:25
+#: kn/leden/templates/leden/entity_base.html:137
 msgid "Leden"
 msgstr ""
 
@@ -379,81 +399,233 @@ msgid "Groepen"
 msgstr ""
 
 #: kn/leden/templates/leden/base.html:31
+msgid "Disputen"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:33
 msgid "E-maillijsten"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:33 kn/leden/templates/leden/stats.html:6
+#: kn/leden/templates/leden/base.html:35 kn/leden/templates/leden/stats.html:6
 msgid "Statistieken"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:36
+#: kn/leden/templates/leden/base.html:38
 #: kn/static/templates/static/overbase.html:11
 #: kn/subscriptions/templates/subscriptions/event_list.html:6
 msgid "Activiteiten"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:38
+#: kn/leden/templates/leden/base.html:40
+#: kn/leden/templates/leden/ik_openvpn.html:36
 msgid "Aanmaken"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:43
+#: kn/leden/templates/leden/base.html:45
 msgid "Secretariaat"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:45
+#: kn/leden/templates/leden/base.html:47
 msgid "Lid inschrijven"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:46
+#: kn/leden/templates/leden/base.html:48
 msgid "Groep aanmaken"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:47
+#: kn/leden/templates/leden/base.html:49
 msgid "Agenda updaten"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:48
+#: kn/leden/templates/leden/base.html:50
+#: kn/leden/templates/leden/secr_notes.html:7
 msgid "Openstaande notities"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:53
+#: kn/leden/templates/leden/base.html:55
+#: kn/leden/templates/leden/entity_base.html:36
 msgid "Foto's"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:55
+#: kn/leden/templates/leden/base.html:57
 msgid "Foto's verplaatsen"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:60
+#: kn/leden/templates/leden/base.html:62
 msgid "Planning"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:63
+#: kn/leden/templates/leden/base.html:65
 msgid "Beheer"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:64
+#: kn/leden/templates/leden/base.html:66
 msgid "Nieuw"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:69
+#: kn/leden/templates/leden/base.html:71
 msgid "Wiki"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:70
+#: kn/leden/templates/leden/base.html:72
 msgid "Forum"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:71
+#: kn/leden/templates/leden/base.html:73
 msgid "Stukken"
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:80
+#: kn/leden/templates/leden/base.html:82
 msgid "Zoeken ..."
 msgstr ""
 
-#: kn/leden/templates/leden/base.html:95
+#: kn/leden/templates/leden/base.html:97
 msgid "Wijzingen worden doorgevoerd ..."
+msgstr ""
+
+#: kn/leden/templates/leden/brand_detail.html:12
+#: kn/leden/templates/leden/entity_base.html:142
+msgid "Tot jaar"
+msgstr ""
+
+#: kn/leden/templates/leden/brand_detail.html:20
+#: kn/leden/templates/leden/institute_detail.html:15
+#: kn/leden/templates/leden/study_detail.html:15
+#: kn/leden/templates/leden/user_detail.html:73
+#: kn/leden/templates/leden/user_detail.html:144
+#: kn/leden/templates/leden/user_detail.html:204
+msgid "van"
+msgstr ""
+
+#: kn/leden/templates/leden/brand_detail.html:23
+#: kn/leden/templates/leden/institute_detail.html:18
+#: kn/leden/templates/leden/study_detail.html:18
+#: kn/leden/templates/leden/user_detail.html:76
+#: kn/leden/templates/leden/user_detail.html:147
+#: kn/leden/templates/leden/user_detail.html:207
+msgid "tot"
+msgstr ""
+
+#: kn/leden/templates/leden/entities_by_year_of_birth.html:6
+msgid "Bouwjaar"
+msgstr ""
+
+#: kn/leden/templates/leden/entities_by_year_of_birth.html:17
+msgid "geboortejaren"
+msgstr ""
+
+#: kn/leden/templates/leden/entities_underage.html:6
+msgid "Leden onder de 18"
+msgstr ""
+
+#: kn/leden/templates/leden/entities_underage.html:18
+msgid "Vanaf {{ final_date.date }} is ieder lid boven de 18 jaar."
+msgstr ""
+
+#: kn/leden/templates/leden/entities_underage.html:20
+msgid "Er zijn geen leden onder de 18 jaar."
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:47
+#: kn/leden/templates/leden/entity_base.html:48
+msgid "Wijzig naam"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:58
+msgid "Nieuwe beschrijving"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:59
+msgid "Wijzig beschrijving"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:71
+msgid "upload smoel"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:80
+msgid "Lidmaatschap"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:86
+msgid "Tot in jaar"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:93
+#: kn/leden/templates/leden/entity_base.html:150
+msgid "lid"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:108
+#: kn/leden/templates/leden/entity_base.html:162
+msgid "be&euml;indig"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:127
+msgid "Voeg als"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:129
+msgid "toe aan"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:131
+#: kn/leden/templates/leden/entity_base.html:187
+#: kn/leden/templates/leden/entity_base.html:229
+msgid "verstuur"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:182
+msgid "Voeg"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:184
+msgid "als"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:186
+#: kn/leden/templates/leden/entity_base.html:228
+msgid "toe"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:193
+msgid "Stempels"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:209
+msgid "verwijder"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:226
+msgid "Voeg de stempel"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:235
+msgid "Dragers van deze stempel"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:244
+msgid "Notities"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:263
+msgid "Sluit"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:265
+msgid "Gesloten door"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:266
+#: kn/leden/templates/leden/user_detail.html:64
+#: kn/subscriptions/templates/subscriptions/event_detail.html:58
+#: kn/subscriptions/templates/subscriptions/include_list.html:15
+#: kn/subscriptions/templates/subscriptions/include_list.html:27
+msgid "op"
+msgstr ""
+
+#: kn/leden/templates/leden/entity_base.html:276
+msgid "Voeg notitie toe"
 msgstr ""
 
 #: kn/leden/templates/leden/group_detail.html:8
@@ -496,8 +668,231 @@ msgstr ""
 msgid "Treed toe"
 msgstr ""
 
+#: kn/leden/templates/leden/ik_chpasswd.html:12
+msgid "Wachtwoord veranderen"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:16
+#, python-format
+msgid ""
+"Lieve %(name)s, dit zou ik\n"
+"    wel willen, maar je hebt %(errors)s."
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:18
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:12
+msgid "Probeer het nog eens?"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:39
+msgid "binnen een seconde"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:41
+msgid "binnen een minuut"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:43
+msgid "binnen een uur"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:45
+msgid "binnen een dag"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:47
+msgid "binnen een maand"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:49
+msgid "binnen een jaar"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:51
+msgid "binnen een decennium"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:53
+msgid "binnen een eeuw"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:67
+msgid "Wachtwoord is te raden "
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd.html:70
+msgid "Wachtwoord is goed!"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:10
+#, python-format
+msgid ""
+"Lieve %(name)s,\n"
+"    dit zou ik wel willen, maar je hebt %(errors)s."
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:15
+msgid ""
+"Je kunt hieronder je wachtwoord veranderen\n"
+"    om op de Villa op het netwerk in te kunnen loggen."
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:20
+msgid "KN-wachtwoord"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:24
+msgid "Villanet-wachtwoord"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:28
+msgid "Nogmaals"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_chpasswd_villanet.html:33
+msgid "veranderen?"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_openvpn.html:10
+msgid "Wachtwoord incorrect."
+msgstr ""
+
+#: kn/leden/templates/leden/ik_openvpn.html:13
+msgid ""
+"Hier kun je de downloads aanvragen om gemakkelijk bij jouw\n"
+"Karpe Noktem bestanden te kunnen. Als je het formulier hieronder\n"
+"invult, krijg je enkele ogenblikken later een e-mail met daarin een\n"
+"link."
+msgstr ""
+
+#: kn/leden/templates/leden/ik_openvpn.html:20
+msgid "Wat"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_openvpn.html:24
+msgid "Windows installer"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_openvpn.html:27
+msgid "Configuratiebestanden (voor gevorderden)"
+msgstr ""
+
+#: kn/leden/templates/leden/institute_detail.html:7
+#: kn/leden/templates/leden/study_detail.html:7
+msgid "Studenten"
+msgstr ""
+
+#: kn/leden/templates/leden/secr_add_group.html:10
+msgid "Maak aan"
+msgstr ""
+
+#: kn/leden/templates/leden/secr_add_user.html:64
+msgid "Schrijf in"
+msgstr ""
+
+#: kn/leden/templates/leden/secr_notes.html:14
+#: kn/subscriptions/templates/subscriptions/event_detail.html:59
+msgid "door"
+msgstr ""
+
 #: kn/leden/templates/leden/stats.html:10
 msgid "grafiek van ledenaantallen over de jaren heen"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:11
+msgid "stuur nieuw wachtwoord"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:16
+msgid "Gebruikersnamen"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:21
+msgid "E-Mailadres"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:25
+msgid "Achterliggend e-mailadres"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:29
+msgid "Nieuw e-mail adres"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:41
+msgid "Wijzig e-mail"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:49
+msgid "toevoegen"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:57
+msgid "Toevoegen"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:68
+msgid "studentnummer"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:80
+msgid "Beëindig studie"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:91
+msgid "Beëindig"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:104
+msgid "Zichtbaar voor alle leden"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:104
+msgid "zichtbaar"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:106
+msgid "Alleen zichtbaar voor secretariaat en admlezers"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:106
+msgid "niet zichtbaar"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:118
+msgid "verander zichtbaarheid van het telefoonnummer"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:118
+msgid "Verander"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:122
+msgid "Nieuw telefoonnummer"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:134
+msgid "Wijzig telefoonnummer"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:161
+msgid "Adres"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:164
+msgid "Nieuw adres (straatnaam, nummer, postcode, plaats)"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:172
+msgid "Er mist een waarde (verwacht: 4, gekregen: "
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:192
+msgid "Wijzig adres"
+msgstr ""
+
+#: kn/leden/templates/leden/user_detail.html:224
+msgid "Lid sinds"
 msgstr ""
 
 #: kn/leden/templates/leden/user_list.html:4
@@ -558,60 +953,92 @@ msgstr ""
 msgid "Onbekende entiteit type"
 msgstr ""
 
-#: kn/leden/views.py:313
+#: kn/leden/views.py:330
 msgid "Missende `smoel' in FILES"
 msgstr ""
 
-#: kn/leden/views.py:315
+#: kn/leden/views.py:332
 msgid "Missende `id' in POST"
 msgstr ""
 
-#: kn/leden/views.py:318
+#: kn/leden/views.py:335
 msgid "Entiteit heeft geen naam"
 msgstr ""
 
-#: kn/leden/views.py:361
+#: kn/leden/views.py:378
 #, python-format
 msgid "Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."
 msgstr ""
 
-#: kn/leden/views.py:395
+#: kn/leden/views.py:412
 #, python-format
 msgid ""
 "Lieve %s, maar natuurlijk, jouw wachtwoord voor het villa-netwerk is "
 "veranderd."
 msgstr ""
 
-#: kn/leden/views.py:654
+#: kn/leden/views.py:671
 msgid "Deze relatie bestaat al"
 msgstr ""
 
-#: kn/leden/views.py:677
+#: kn/leden/views.py:694
 msgid "'group' is niet een groep"
 msgstr ""
 
-#: kn/leden/views.py:685
+#: kn/leden/views.py:702
 msgid "'tag' is niet een stempel"
 msgstr ""
 
-#: kn/leden/views.py:718
+#: kn/leden/views.py:735
 msgid "Gebruiker is niet geactiveerd"
 msgstr ""
 
-#: kn/leden/views.py:726
+#: kn/leden/views.py:743
 msgid "Wachtwoord gereset!"
 msgstr ""
 
-#: kn/leden/views.py:734
+#: kn/leden/views.py:751
 msgid "missende `on' of `note'"
 msgstr ""
 
-#: kn/leden/views.py:751
+#: kn/leden/views.py:768
 msgid "Agenda geupdate!"
 msgstr ""
 
-#: kn/leden/views.py:765
+#: kn/leden/views.py:782
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/reglement_detail.html:13
+msgid "Aangenomen op"
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/reglement_detail.html:15
+msgid "Was van kracht tot"
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/reglement_detail.html:17
+msgid "Nog steeds van kracht."
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/reglement_detail.html:20
+msgid "(Nog) niet aangenomen."
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/reglement_list.html:6
+msgid "Reglementen"
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/version_detail.html:18
+msgid "Deze versie is (nog) niet aangenomen en daarmee niet van kracht."
+msgstr ""
+
+#: kn/reglementen/templates/reglementen/version_detail.html:26
+#, python-format
+msgid ""
+"\n"
+"        Deze versie was aangenomen op %(valid_from)s en\n"
+"        nog steeds van kracht."
 msgstr ""
 
 #: kn/static/templates/static/activiteiten.html:6
@@ -643,6 +1070,427 @@ msgstr ""
 msgid ""
 "Hier kun je de oudere uitgaven van\n"
 "de Akta Nokturna downloaden:"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:10
+msgid "Pandcommissaris"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:11
+msgid "Vice-voorzitter"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:12
+msgid "Secretaris"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:13
+msgid "Voorzitter"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:14
+msgid "Penningmeester"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:17
+msgid ""
+" <strong>Het tiende bestuur</strong> van A.S.V.\n"
+" Karpe Noktem is net zo divers als de vereniging zelf.  <em>Jean\n"
+" Mennens</em> maakt als voorzitter gebruik van zijn kennis als\n"
+" docent natuurkunde en houdt de vereniging goed in de gaten.  Hij\n"
+" wordt hierin bijgestaan door <em>Els Lunding</em>, die naast haar\n"
+" studie in Engelse literatuur zorgt voor de goede communicatie zowel\n"
+" binnen als buiten de vereniging.  <em>Jurrien Riezebos</em> laat\n"
+" naast zijn kennis van de wereldse geschiedenis ook zien dat hij\n"
+" de geldelijke stromen binnen de vereniging goed kan beheersen als\n"
+" penningmeester.  Als vice-voorzitter zorgt <em>Amirouche Chemim</em>\n"
+" voor het contact met de zusjesverenigingen en andere externen,\n"
+" waarin hij inspiratie put uit zijn studie toegepaste psychologie.\n"
+" <em>Liza Boon</em> maakt als pandcommissaris gebruik van haar\n"
+" studie politicologie en zorgt voor de goede verstandhouding met\n"
+" de verschillende verenigingen binnen de Villa van\n"
+" Schaeck."
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:34
+#, python-format
+msgid ""
+"Alle\n"
+" bestuursleden zijn bereikbaar op hun functie- of voornaam\n"
+" @karpenoktem.nl, behalve Els, die is bereikbaar op\n"
+" %(els)s."
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:39
+#: kn/static/templates/static/bestuur11.html:46
+#: kn/static/templates/static/bestuur12.html:43
+#: kn/static/templates/static/bestuur13.html:44
+#: kn/static/templates/static/bestuur5.html:31
+#: kn/static/templates/static/bestuur6.html:26
+#: kn/static/templates/static/bestuur7.html:42
+#: kn/static/templates/static/bestuur8.html:32
+#: kn/static/templates/static/bestuur9.html:34
+msgid "Het vorige"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:40
+#: kn/static/templates/static/bestuur8.html:35
+msgid "negende bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:41
+#: kn/static/templates/static/bestuur11.html:48
+#: kn/static/templates/static/bestuur12.html:45
+#: kn/static/templates/static/bestuur5.html:33
+#: kn/static/templates/static/bestuur6.html:28
+#: kn/static/templates/static/bestuur7.html:44
+#: kn/static/templates/static/bestuur8.html:34
+#: kn/static/templates/static/bestuur9.html:36
+msgid "het volgende"
+msgstr ""
+
+#: kn/static/templates/static/bestuur10.html:42
+#: kn/static/templates/static/bestuur12.html:44
+msgid "elfde bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:10
+msgid ""
+"Van links naar rechts:\n"
+"           Jeffry (secretaris);\n"
+"           Henk (vice-voorzitter);\n"
+"           Margot (voorzitter);\n"
+"           Niels (pandcommissaris)\n"
+"           en Daan (penningmeester)."
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:17
+msgid ""
+"Het <strong>elfde bestuur</strong> der A.S.V.\n"
+"Karpe Noktem zijn echte Bourgondi&euml;rs maar gelukkig geen\n"
+"Brabanders, Limburgers en Zeeuwen met een aantal uitzonderingen\n"
+"daar gelaten.  Ze zijn jong, ambitieus en vol idee&euml;n, waarmee\n"
+"ze onze vereniging naar een hoger niveau tillen.</p> <p>Dit alles\n"
+"onder de bezielende leiding van onze voorzitter <em>Margot Mangnus</em>,\n"
+"student taalwetenschap, die als jongste voorzitter van Karpe Noktem\n"
+"de vernieuwingsgeest belichaamt.  Zij wordt bijgestaan door vier\n"
+"'stoere' mannen: onze trouwe secretaris <em>Jeffry Huntjens</em>,\n"
+"student geschiedenis, heeft de langste baard en is daarom bedeeld\n"
+"met de taak de leden te managen.  <em>Daan Sprenkels</em>, student\n"
+"scheikunde en voormalig bestuurslid van Olympus, houdt als\n"
+"penningmeester toezicht op onze financi&euml;n.  <em>Niels van\n"
+"Beers</em>, student rechten en scouting-o-loog, zal met zijn brede\n"
+"postuur, uitgebreide survival skills en kennis over de Efteling de\n"
+"contacten binnen de Villa onderhouden.  Onze vice-voorzitter <em>Eric\n"
+"\"Henk\" Buitinck</em>, student natuur- en sterrenkunde, is\n"
+"verantwoordelijk voor de externe contacten, PR en de broodnodige\n"
+"portie death metal."
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:37
+msgid ""
+"Alle bestuursleden zijn bereikbaar op hun functie-\n"
+"of voornaam @karpenoktem.nl, behalve Daan en Niels.  Zij zijn\n"
+"respectievelijk te bereiken via"
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:41
+#: kn/static/templates/static/bestuur7.html:18
+#: kn/static/templates/static/links.html:27
+msgid "en"
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:43
+msgid "Margot is overigens ook te benaderen via"
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:47
+#: kn/static/templates/static/bestuur9.html:37
+msgid "tiende bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur11.html:49
+msgid "twaalfde bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur12.html:10
+msgid ""
+"Van links naar rechts:\n"
+"           Jordi (pandcommissaris);\n"
+"           Bas (secretaris);\n"
+"           Sandra (voorzitter);\n"
+"           Rianne (penningmeester)\n"
+"           en Michiel (vice-voorzitter)."
+msgstr ""
+
+#: kn/static/templates/static/bestuur12.html:17
+msgid ""
+"Het <strong>twaalfde bestuur</strong> van Karpe\n"
+"Noktem belichaamt alle aspecten van onze vereniging, behalve dan\n"
+"dat er geen beta-studenten in zitten. Als voorzitter bewaart\n"
+"<em>Sandra Mulder</em>, studente geneeskunde, de algemene vrede en\n"
+"overzicht. Hierbij wordt ze geholpen door <em>Bas van Wijk</em>,\n"
+"student biomedische wetenschappen, die als secretaris de communicatie\n"
+"met de leden op zich zal nemen. <em>Rianne Warmerdam</em> zal haar\n"
+"studie commerci&euml;le economie goed kunnen gebruiken bij haar\n"
+"functie als penningmeester, waarbij zij alle financi&euml;le zaken\n"
+"van de vereniging bijhoudt. Als pandcommissaris zal <em>Jordi van\n"
+"Lanen</em>, student culturele maatschappelijke vorming, optreden.\n"
+"Hij onderhoudt de relaties met de andere verenigingen in de Villa\n"
+"van Schaeck. De functie van vice-voorzitter wordt bekleed door\n"
+"<em>Michiel Pospiech</em>, docent geschiedenis, waarbij hij\n"
+"verantwoordelijk is voor externe contacten en\n"
+"PR."
+msgstr ""
+
+#: kn/static/templates/static/bestuur12.html:33
+#: kn/static/templates/static/bestuur13.html:33
+msgid ""
+"Alle bestuursleden zijn bereikbaar op hun\n"
+"functie@karpenoktem.nl of op de volgende adressen:"
+msgstr ""
+
+#: kn/static/templates/static/bestuur12.html:46
+msgid "dertiende bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:11
+#: kn/static/templates/static/bestuur7.html:14
+msgid "penningmeester"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:12
+msgid "vice-voorzitter"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:13
+#: kn/static/templates/static/bestuur7.html:15
+msgid "pandcommissaris"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:14
+#: kn/static/templates/static/bestuur7.html:20
+msgid "voorzitter"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:15
+#: kn/static/templates/static/bestuur7.html:19
+msgid "secretaris"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:18
+msgid ""
+"Het <strong>dertiende bestuur</strong> der A.S.V Karpe Noktem\n"
+"bestaat uit een groep met een hoge variatie in capaciteiten,\n"
+"studies en zelfs lengte.  Aan het roer staat voorzitter <em>Roel Bouman</"
+"em>,\n"
+"student Data Science en Scheikunde, die zijn brede kennis op veel vlakken "
+"in\n"
+"kan zetten.  Bijgestaan wordt hij door Artificial Intelligence student\n"
+"<em>Sophie Fennema</em>, die naast de administratie het contact zal "
+"onderhouden\n"
+"met zusjes.  Als Geneeskunde  student draagt <em>Willanka Kappelle</em>\n"
+"niet alleen de verantwoordelijkheid voor haar toekomstige\n"
+"pati&euml;nten, maar ook voor de financi&euml;n.\n"
+"Wiskunde genie <em>Koos van der Vegt</em> zal als pandcommissaris het imago\n"
+"van Karpe Noktem vertegenwoordigen in zijn contacten met andere Villa "
+"bewoners.\n"
+"<em>Eva Prins</em> heeft haar communicatie vaardigheden geperfectioneerd in\n"
+"haar studie Engels en maakt hier als vice-voorzitter gretig gebruik\n"
+"van."
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:41
+msgid "of"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13.html:45
+msgid "twaalfde bestuur."
+msgstr ""
+
+#: kn/static/templates/static/bestuur4.html:7
+msgid ""
+"<strong>Het vierde bestuur van Karpe Noktem</strong>\n"
+"zit vol met echte coinnaisseurs van het vak. Bram Balk (Voorzitter)\n"
+"heeft zijn sporen verdiend als hoofdredacteur van het Algemeen\n"
+"Nijmeegs Studentenblad. Daan Fifis du Pont (Vice-voorzitter) kent\n"
+"het klappen van de zweep als ex-bestuurslid van debatvereniging\n"
+"Trivium. Jorg Kennis (secretaris) is veteraan in het bestuur en\n"
+"zorgt voor continuiteit en ervaring. Jorne van de Veen (Penningmeester)\n"
+"geldt als expert op het gebied van Financien. De grote creatieve\n"
+"geest in het bestuur is Judith Brinkkemper, die als oprichtster van\n"
+"de LoCo verse en originele ideeen de vrije ruimte geeft."
+msgstr ""
+
+#: kn/static/templates/static/bestuur4.html:17
+msgid "Het volgende,"
+msgstr ""
+
+#: kn/static/templates/static/bestuur4.html:18
+#: kn/static/templates/static/bestuur6.html:27
+msgid "vijfde bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur5.html:15
+msgid ""
+"<strong>Het eerste lustrumbestuur</strong> is\n"
+"een geweldige afspiegeling van de Alternatieve S.V. Karpe Noktem:\n"
+"een jong, fris bestuur van een jonge, frisse vereniging. <em>Lisette\n"
+"Huijbers</em> (1987), voorzitter, studeert rechten en weet met haar\n"
+"expertise en wijsheid de vereniging in goede banen te leiden. <em>Rik\n"
+"Sprenkels</em> (1988), secretaris, staat de vereniging bij met zijn\n"
+"schrijftalent en biedt stabiliteit door middel van zijn verslaglegging.\n"
+"<em>Jesper van Wijngaarden</em> (1987), penningmeester, heeft veel\n"
+"ervaring met boekhouden en financieel beheer en beheert het geldelijk\n"
+"reilen en zeilen van Karpe Noktem. <em>Mike Koeman</em> (1986),\n"
+"vice-voorzitter, draagt zorg voor contacten met iedereen buiten de\n"
+"vereniging; zijn innige contacten met vele instanties en verenigingen\n"
+"helpen hem hier uitstekend mee! <em>Maaike Greveling</em> (1983),\n"
+"pandcommissaris en hoofd activiteiten, weet met haar organisatietalent\n"
+"en creativiteit altijd weer leuke, nieuwe activiteiten neer te\n"
+"zetten."
+msgstr ""
+
+#: kn/static/templates/static/bestuur5.html:32
+msgid "vierde bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur5.html:34
+#: kn/static/templates/static/bestuur7.html:43
+msgid "zesde bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur6.html:9
+msgid ""
+"Van links naar rechts: Rik (pandverantwoordelijke),\n"
+"    Bas (secretaris), Michiel (voorzitter), Hugo (penningmeester)\n"
+"    en Mike (vice-voorzitter)."
+msgstr ""
+
+#: kn/static/templates/static/bestuur6.html:14
+msgid ""
+"<strong>Het zesde bestuur</strong> van ASV Karpe\n"
+"Noktem is uit het hart van de vereniging gegrepen: jong, eigenzinnig\n"
+"en ruimdenkend.  <em>Michiel van Lierop</em> ('88), student\n"
+"Informatiekunde, loodst ons onvervaard door de maalstroom van het\n"
+"Nijmeegs studentenleven &mdash; altijd op koers door het houvast\n"
+"van <em>Bas Westerbaan</em> ('88), student Wiskunde &mdash; nooit\n"
+"zonder middelen door, de klassiek geschoolde, <em>Hugo van\n"
+"Versendaal</em> ('85), student Grieks en Latijn &mdash; nimmer\n"
+"verlegen van bondgenoten met, aller vriend, <em>Mike Ligthart</em>\n"
+"('88), student Scheikunde en stevig gehuisvest en van alle gemakken\n"
+"voorzien door <em>Rik Sprenkels</em> ('88), student Filosofie en\n"
+"Scheikunde."
+msgstr ""
+
+#: kn/static/templates/static/bestuur6.html:29
+#: kn/static/templates/static/bestuur8.html:33
+msgid "zevende bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur7.html:11
+msgid "vicevoorzitter"
+msgstr ""
+
+#: kn/static/templates/static/bestuur7.html:24
+msgid ""
+"<strong>Het zevende bestuur</strong> van ASV\n"
+"Karpe Noktem bestaat\n"
+"  uit 5 enthousiaste leden die een breed spectrum van hun vereniging\n"
+"  vertegenwoordigen. <em>Remco van Cruchten</em> ('90, voorzitter),\n"
+"  student moleculare levenswetenschappen, houdt de touwtjes strak\n"
+"  en wordt daarbij ondersteund door de digitale kennis van <em>Jille\n"
+"  Timmermans</em> ('90, secretaris), student informatica, en geholpen\n"
+"  door een die zelfs bij de kleinste zaken scherp blijft, <em>Bente\n"
+"  Rotberg</em> ('90, penningmeester), studente sociologie, en\n"
+"  bijgestaan door <em>Chaim van Rens</em> ('85, vicevoorzitter),\n"
+"  student leraar geschiedenis, de vertegenwoordiging van het HBO\n"
+"  en, voor alle communicatie binnen de Villa van Schaeck, <em>Robin\n"
+"  Nazarski</em> ('89, pandcommissaris), studente\n"
+"geschiedenis."
+msgstr ""
+
+#: kn/static/templates/static/bestuur7.html:39
+msgid ""
+"Alle bestuursleden zijn bereikbaar op hun\n"
+"functie- of voornaam @karpenoktem.nl."
+msgstr ""
+
+#: kn/static/templates/static/bestuur7.html:45
+#: kn/static/templates/static/bestuur9.html:35
+msgid "achtste bestuur"
+msgstr ""
+
+#: kn/static/templates/static/bestuur8.html:8
+msgid ""
+"Van links naar rechts: Sara (vicevoorzitter),\n"
+"    Koen (pandcommissaris), Stan (voorzitter), Yurre (secretaris)\n"
+"    en Louise (penningmeester)"
+msgstr ""
+
+#: kn/static/templates/static/bestuur8.html:12
+msgid ""
+"<strong>Het achtste bestuur</strong> van A.S.V.\n"
+"Karpe Noktem is typerend voor de vereniging &mdash; divers, eigenzinnig\n"
+"en bovenal enthousiast.  <i>Stan Beekmans</i> ('91, voorzitter),\n"
+"doet de docentenopleiding natuurkunde en ziet toe op het reilen en\n"
+"zeilen van de vereniging, daarin bijgestaan door <i>Yurre Wieken</i>\n"
+"('90, secretaris), student politicologie en reeds ervaren in het\n"
+"bestuur van koepelvereniging CHECK, <i>Louise Mouthaan</i> ('92,\n"
+"penningmeester), studente ergotherapie, die toeziet op de financi&euml;n,\n"
+"<i>Sara van Bezooijen*</i> ('90, vicevoorzitter), studente\n"
+"omgevingswetenschappen, die de externe contacten voor haar rekening\n"
+"neemt, en <i>Koen van den Bisen</i> ('88, pandcommissaris), student\n"
+"moleculaire levenwetenschappen en verantwoordelijk voor de communicatie\n"
+"met andere verenigingen in de Villa van Schaeck."
+msgstr ""
+
+#: kn/static/templates/static/bestuur8.html:26
+msgid ""
+"Alle bestuursleden zijn bereikbaar op hun functie-\n"
+"of voornaam @karpenoktem.nl."
+msgstr ""
+
+#: kn/static/templates/static/bestuur8.html:29
+msgid ""
+"<small>*Sara van Bezooijen is per 1 maart uit het bestuur\n"
+"getreden.</small>"
+msgstr ""
+
+#: kn/static/templates/static/bestuur9.html:9
+msgid ""
+"Van links naar rechts: Astrid (secretaris),\n"
+"  Annemiek (voorzitter), Loesje (vicevoorzitter), Peter (pandcommissaris)\n"
+"  en Carlien (penningmeester)"
+msgstr ""
+
+#: kn/static/templates/static/bestuur9.html:13
+msgid ""
+"<strong>Het negende bestuur</strong> van A.S.V.\n"
+"Karpe Noktem is alternatief op vele fronten. Het eerste bestuur in\n"
+"7 jaar tijd zonder beta-studenten en een bestuur met wel heel veel\n"
+"vrouwen. Maar natuurlijk met evenveel enthousiasme en goede zin als\n"
+"altijd! <em>Annemiek Arfman</em> houdt als voorzitter het overzicht\n"
+"over de vereniging en behartigt met haar achtergrond als acw'er\n"
+"graag de culturele belangen binnen de vereniging, <em>Loesje\n"
+"Jacobs</em> onderhoudt als vice-voorzitter de contacten met onze\n"
+"zusjes en andere partijen en zet graag haar creatieve talenten in,\n"
+"<em>Astrid van Roosmalen</em> gebruikt haar expertise als\n"
+"taalwetenschapper om alle communicatie en administratie op een goede\n"
+"manier te organiseren, <em>Carlien Alferink</em> beheerst naast de\n"
+"Engelse taal en cultuur ook het talent om alle geldelijke stromen\n"
+"in goede banen te leiden, en <em>Peter van der Veeken</em> zet zijn\n"
+"studie communicatie effectief in, door contacten te onderhouden met\n"
+"alle verenigingen binnen de Villa van Schaeck."
+msgstr ""
+
+#: kn/static/templates/static/bestuur9.html:30
+#, python-format
+msgid ""
+"Alle\n"
+"bestuursleden zijn bereikbaar op hun functie- of voornaam\n"
+"@karpenoktem.nl, behalve Peter, die is bereikbaar op\n"
+"%(peter)s."
 msgstr ""
 
 #: kn/static/templates/static/contact.html:8
@@ -779,8 +1627,407 @@ msgstr ""
 msgid "ga naar de hoofdpagina"
 msgstr ""
 
+#: kn/static/templates/static/intro2009.html:13
+msgid "maandag 17 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:14
+#: kn/static/templates/static/intro2010.html:17
+msgid "Pubquiz"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:17
+msgid ""
+"Na het grote succes van vorig jaar alweer een pubquiz\n"
+"in de intro!  Quizmasters Daan en Chris hebben weer een briljante\n"
+"quiz voor ons in petto.  Doe mee en win die felbegeerde prijs!<br/>\n"
+"<em>21:00 in Café 't Haantje, Daalseweg 19</em>"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:23
+msgid "dinsdag 18 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:24
+msgid "Eten in het Park"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:27
+#, python-format
+msgid ""
+"Trap je luie mentorpappa en mamma en eet dinsdagavond mee met Karpe Noktem\n"
+"in stijl in het prachtige Kronenburger Park.  Kom je met jouw mentorgroep?\n"
+"E-Mail dan naar %(parkhangen)s, dan houden we rekening met jullie. <br/>\n"
+"<em>Vanaf 16:00 in het Kronenburger Park</em>"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:33
+msgid "woensdag 19 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:34
+#: kn/static/templates/static/intro2010.html:109
+msgid "Open Borrel"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:37
+msgid ""
+"Voor de verandering houden we onze wekelijkse borrel\n"
+"op de woensdag, maar dit keer in de grote zaal!  Start samen met\n"
+"KN het nieuwe jaar met een knal op deze feestelijke borrels met\n"
+"leuke mensen, goede DJ's, bier voor één euro en alle andere\n"
+"gezeligheden die je van Karpe gewend bent.<br/> <em>21:00 in de "
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:42
+#: kn/static/templates/static/intro2009.html:53
+#: kn/static/templates/static/intro2009.html:76
+msgid "Villa van Schaeck"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:45
+msgid "donderdag 20 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:46
+msgid "Villa Live en Beestfeest"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:48
+msgid ""
+" Samen met de andere verenigingen in de Villa van\n"
+"Schaeck houden we het terugkerende feest Villa Live, met live muziek!\n"
+"Ook zullen onze vaste DJs draaien op een gelijktijdig <a\n"
+"href=\"http://www.olympus.science.ru.nl/beestfeest\">Beestfeest</a>\n"
+" in Doornroosje.<br/> <em><strong>Villa Live</strong> 22:00, "
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:56
+msgid "zondag 23 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:57
+msgid "Filmavond"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:60
+msgid ""
+"Heb jij nog geen bestemmingsplan voor de vrije\n"
+"zondagavond?  Of heb je net een zwaar (intro-)weekend achter de rug\n"
+"en wil je even rustig achteroverleunen met een filmpje?  Kom dan\n"
+"naar de Karpe Noktem Filmavond in 't Haantje!<br/> <em>21:00 in\n"
+"café 't Haantje, daalseweg 19</em>"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:68
+#: kn/static/templates/static/intro2010.html:42
+msgid "Karpe Intr'Rock"
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:71
+msgid ""
+"Karpe Noktem pakt uit!  De band\n"
+"<a href=\"http://www.myspace.com/atzero\">At Zero</a> trapt af en "
+"overgenomen\n"
+"door onze eigen huis DJ's garanderen wij een spetterend einde van jouw\n"
+"introductie.<br/>\n"
+"<em>21:00 in de "
+msgstr ""
+
+#: kn/static/templates/static/intro2009.html:77
+msgid "band 22:00; bier, fris en wijn voor slechts één euro"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:16
+msgid "maandag 16 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:19
+msgid ""
+"Na het grote succes van vorig jaar alweer een pubquiz\n"
+"in de intro!  Onze Quizmasters hebben weer een briljante quiz voor\n"
+"ons in petto.  Doe mee, test je nutteloze kennis en win die felbegeerde\n"
+"prijs!"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:23
+msgid ""
+"20:30 in de kelder van <strong>Tio\n"
+"Pepe, Bloemerstraat 82"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:28
+msgid "dinsdag 17 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:29
+msgid "Villa Live"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:30
+msgid ""
+" Wij geven samen met de andere zeven verenigingen\n"
+"in de Villa van Schaeck een groot verbroederingsfeest, waarbij de\n"
+"live muziek niet ontbreekt!  Met twee zalen met verschillende DJ's\n"
+"is er voor ieders wil wat."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:34
+msgid ""
+"22:00 in de <a href=\"{{ url_route\n"
+"}}\">Villa van Schaeck</a>.  Entr&eacute;e &euro; 3"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:41
+msgid "woensdag 18 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:44
+msgid ""
+"Karpe Noktem pakt uit!  De band\n"
+"<a href=\"http://www.myspace.com/unlockedmemories\">Unlocked Memories</a> "
+"trapt\n"
+"af met melodische nu-metal.  Daarna neemt\n"
+"<a href=\"http://www.myspace.com/voltviolin\">Volt Violin</a>, die voor de "
+"tweede\n"
+"maal voor ons speelt, het over met sfeervolle, maar ijzersterke rock.  Na "
+"de\n"
+"bands nemen onze eigen huis DJ's het over en  garanderen wij een geweldige\n"
+"avond van jouw introductie."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:51
+#, python-format
+msgid ""
+"21:00 in de\n"
+"  <a href=\"%(url_route)s\">Villa van Schaeck</a>; Entr&eacute;e\n"
+"  &euro; 3; bier, fris en wijn voor slechts één euro"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:56
+msgid "donderdag 19 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:57
+msgid "Beestfeest"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:59
+msgid ""
+"Geen zin in het vijf-verenigingen feest?  Kom dan\n"
+"naar het Beestfeest van de betastudiekoepelvereniging Olympus!\n"
+"Zoals gebruikelijk maken onze huis-DJ's er een feest van in de\n"
+"kleine zaal.  Jesper draait voor de laatste keer op Beestfeest –\n"
+"rede te meer om deze Beestfeest niet te missen!"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:64
+msgid ""
+"21:30 in Doornroosje, Groenewouseweg\n"
+"332.  Tip: sta 20:30 al in de rij"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:69
+msgid "zondag 22 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:70
+msgid "Spelletjesavond"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:71
+msgid ""
+" Na een week vol met feesten en een geweldig\n"
+"introductieweekend laten wij jou zien hoe knus en verademend een\n"
+"gerelaxte spelletjesavond kan zijn.  Leg een kaartje, speel schaak\n"
+"of een ander spel onder het genot van snacks, zachte muziek en een\n"
+"ontspannen gezelschap bij de Karpe Noktem\n"
+"spelletjesavond."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:78
+#, python-format
+msgid ""
+"21:00 in de kelder van de\n"
+"  <a href=\"%(url_route)s\">Villa van Schaeck</a>"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:82
+#: kn/static/templates/static/intro2010.html:94
+#: kn/static/templates/static/intro2010.html:108
+msgid "maandag 23 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:83
+msgid "Anti-Kater Wandel Aktiviteit"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:85
+msgid ""
+"Een introductie is druk: veel nieuwe mensen, kamers\n"
+"en kroegen.  Karpe Noktem laat jou uitwaaien tijdens de AKWA, de\n"
+"Anti Kater Wander Acitiviteit.  Naast al die tenten in de binnenstad,\n"
+"zie je ook nog eens de mooie natuur rondom Nijmegen."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:89
+msgid ""
+"Verzamelen met fiets om 12:30\n"
+"voor het Gymnasion"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:95
+msgid "BBQ"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:96
+msgid ""
+"Een gezellige barbecue met vlees van een\n"
+"biologische slager en dat proef je!  Ook voor vega's hebben wij van\n"
+"alles wat."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:99
+#, python-format
+msgid ""
+"\n"
+"Meld je aan door te e-mailen naar %(eet)s of\n"
+"(voor leden) naar <a href=\"http://karpenoktem.nl/activiteit/"
+"introbbq-20100823\"\n"
+">deze pagina</a> te gaan. Deadline aanmelden:\n"
+"donderdag 13:00. Kosten: &euro; 6."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:104
+#, python-format
+msgid ""
+"17:00 in de achtertuin van de\n"
+"  <a href=\"%(url_route)s\">Villa van Schaeck</a>"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:111
+msgid ""
+"Begeef je in nachtelijke sferen met goed gezelschap,\n"
+"hippe muziek, whiskey en speciaalbier.  Start kortom je jaar met\n"
+"een knal op deze spetterende open borrel."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:114
+#, python-format
+msgid ""
+"21:00 in de kelder van de \n"
+"  <a href=\"%(url_route)s\">Villa van Schaeck</a>"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:118
+msgid "dinsdag 24 aug"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:119
+msgid "Nachtpicknick"
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:121
+msgid ""
+"Trap je luie mentorpappa en -mama en maak de\n"
+"zonsopgang mee onder het genot van een prachtige picknick midden\n"
+"op het keizerkarelplein."
+msgstr ""
+
+#: kn/static/templates/static/intro2010.html:124
+msgid ""
+"Vanaf 23:00 tot diep in de nacht op het\n"
+"  Keizer Karel Plein"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2009.html:12
+#: kn/static/templates/static/introPoster2010.html:12
+#: kn/static/templates/static/introPoster2011.html:12
+#: kn/static/templates/static/introPoster2012.html:12
+#: kn/static/templates/static/introPoster2013.html:12
+#: kn/static/templates/static/introPoster2014.html:12
+#: kn/static/templates/static/introPoster2015.html:12
+#: kn/static/templates/static/introPoster2016.html:12
+#: kn/static/templates/static/lustrumPoster5.html:12
+msgid "Naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2009.html:14
+msgid "Intro Poster 2009. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2009.html:15
+msgid "Intro Poster 2009"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2009.html:18
+#: kn/static/templates/static/introPoster2010.html:18
+#: kn/static/templates/static/introPoster2011.html:18
+#: kn/static/templates/static/introPoster2012.html:18
+#: kn/static/templates/static/introPoster2013.html:18
+#: kn/static/templates/static/introPoster2014.html:19
+#: kn/static/templates/static/introPoster2015.html:19
+#: kn/static/templates/static/introPoster2016.html:19
 #: kn/static/templates/static/irc.html:8
+#: kn/static/templates/static/lustrumPoster10.html:19
+#: kn/static/templates/static/lustrumPoster5.html:18
 msgid "ga naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2010.html:14
+msgid "Intro Poster 2010. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2010.html:15
+msgid "Intro Poster 2010"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2011.html:14
+msgid "Intro Poster 2011. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2011.html:15
+msgid "Intro Poster 2011"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2012.html:14
+msgid "Intro Poster 2012. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2012.html:15
+msgid "Intro Poster 2012"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2013.html:14
+msgid "Intro Poster 2013. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2013.html:15
+msgid "Intro Poster 2013"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2014.html:14
+msgid "Intro Poster 2014. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2014.html:15
+msgid "Intro Poster 2014"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2015.html:14
+msgid "Intro Poster 2015. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2015.html:15
+msgid "Intro Poster 2015"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2016.html:14
+msgid "Intro Poster 2016. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/introPoster2016.html:15
+msgid "Intro Poster 2016"
 msgstr ""
 
 #: kn/static/templates/static/lidworden.html:8
@@ -830,13 +2077,125 @@ msgstr ""
 msgid "ons forum"
 msgstr ""
 
-#: kn/static/templates/static/links.html:27
-msgid "en"
-msgstr ""
-
 #: kn/static/templates/static/links.html:29
 #, python-format
 msgid "de <a href=\"%(url_zusjes)s\">zusjes</a>."
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:13
+msgid "Maandagavond &mdash; borrel"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:16
+msgid ""
+"Een maandagavondborrel als alle andere &mdash;\n"
+"alleen zullen deze keer oud-bestuursleden om 22:00 een presentatie\n"
+"geven!  De ex-voorzitters Giedo Jansen, Alette Ouwens en Bram Balk\n"
+"vertellen over de vroegste tijden uit de geschiedenis van Karpe\n"
+"Noktem.  Wellicht zullen er ook enkele externen aanwezig zijn.\n"
+"Uiteraard geldt op deze borrel het gebruikelijke bartarief en -aanbod\n"
+"van ASV Karpe Noktem."
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:25
+msgid "26 mei"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:26
+msgid "Dinsdagavond &mdash; eten met leden"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:29
+msgid ""
+" In het gebouw van Scouting Traianus Nijmegen zal\n"
+"onze allereerste offici&euml;le 'eten met leden'-activiteit\n"
+"plaatsvinden.  Tijdens deze megapicknick neemt ieder lid een maaltijd\n"
+"mee om te delen met zijn of haar medeleden, die op hun beurt ook\n"
+"allemaal iets te eten hebben meegenomen.  Ook de LustrumCie zorgt\n"
+"voor het nodige drinken en enkele versnaperingen.  Dus, maak een\n"
+"frisse salade, een vullend hoofdgerecht, heerlijke soep of een\n"
+"tongstrelend toetje en voer daarmee je medeleden (dan wel niet op\n"
+"romantische wijze)!  Er is overigens een mogelijkheid tot het\n"
+"opwarmen van je gerecht.  Na het voedselfestijn is er ruim tijd om\n"
+"uit te buiken en na te genieten!"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:42
+msgid "27 mei"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:43
+msgid ""
+"Woensdagmiddag &mdash; spelen en relaxen in\n"
+"Park Brakkenstein"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:46
+msgid ""
+"Na de zware maaltijd van dinsdagavond moeten al die\n"
+"extra calorie&euml;n er natuurlijk wel weer vanaf (of niet).  Daarom\n"
+"gaan we 's woensdags naar Park Brakkenstein om daar in de middagzon\n"
+"te genieten van enkele sportieve activiteiten (of niet).  Als je\n"
+"namelijk geen zin in hebt in al dat geren en gespring kun je uiteraard\n"
+"ook een beetje chillen in het gras.  Iedereen is welkom om wat\n"
+"picknick-benodigdheden mee te nemen, zoals sandwiches, pannekoeken,\n"
+"picknickmanden, tafelkleden, limonade, enzovoorts.  De LustrumCie\n"
+"zal zorgen voor bier, fris en wijn."
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:57
+msgid "28 mei"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:58
+msgid ""
+"Donderdagavond &mdash; het eerste lustrumfeest\n"
+"in de Villa"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:62
+msgid ""
+" Het hoogtepunt van de week!  Tijdens deze explosieve\n"
+"avond in de grote zaal van de Villa is iedereen welkom om het eerste\n"
+"lustrum van Karpe Noktem mee te vieren!  De avond zal stevig, maar\n"
+"vrolijk geopend worden door folkmetalband <a\n"
+"href=\"http://www.myrkvar.nl/\">Myrkvar</a>; vervolgens zullen de\n"
+"springerige folkpunkriffjes van <a\n"
+"href=\"http://www.baggerunited.nl/\">Bagger United</a> je voeten\n"
+"verder de nacht in dragen!  De avond wordt voortgezet met onze eigen\n"
+"DJ's Felix en Stonehead.  Het lustrumfeest is tevens zusjesfeest,\n"
+"dus we kunnen bezoek verwachten uit alle hoeken en gaten van\n"
+"Nederland.  Consumpties zullen 1 euro bedragen, zoals jullie van\n"
+"Karpe Noktem gewendr zijn."
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:76
+msgid "29 mei"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:77
+msgid "Vrijdagavond &mdash; filmavond"
+msgstr ""
+
+#: kn/static/templates/static/lustrum.html:80
+msgid ""
+" Na een vermoeiende donderdagavond is het tijd voor\n"
+"rust en recreatie.  Daarom zullen we ons vrijdagavond verzamelen\n"
+"in cafe 't Haantje om daar relaxed te genieten van een film <a\n"
+"href=\"http://karpenoktem.nl/poll/vote/lustrum5film/\">die jullie\n"
+"zelf mogen kiezen via de poll op onze site</a>!  Alle zusjes die\n"
+"nog in Nijmegen zijn gestrand zijn natuurlijk van harte welkom om\n"
+"samen met Karpe Noktem uit te puffen."
+msgstr ""
+
+#: kn/static/templates/static/lustrumPoster10.html:14
+#: kn/static/templates/static/lustrumPoster5.html:14
+msgid "Lustrum Poster. Klik hier om verder te gaan naar de website"
+msgstr ""
+
+#: kn/static/templates/static/lustrumPoster10.html:15
+#: kn/static/templates/static/lustrumPoster5.html:15
+msgid "Lustrum"
 msgstr ""
 
 #: kn/static/templates/static/merchandise.html:7
@@ -1013,16 +2372,6 @@ msgstr ""
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:56
 msgid "bewerkt"
-msgstr ""
-
-#: kn/subscriptions/templates/subscriptions/event_detail.html:58
-#: kn/subscriptions/templates/subscriptions/include_list.html:15
-#: kn/subscriptions/templates/subscriptions/include_list.html:27
-msgid "op"
-msgstr ""
-
-#: kn/subscriptions/templates/subscriptions/event_detail.html:59
-msgid "door"
 msgstr ""
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:70
