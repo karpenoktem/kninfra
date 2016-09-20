@@ -3,6 +3,7 @@ from random import shuffle
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
+from django.utils.translation import ugettext as _
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -23,65 +24,65 @@ templates = {
     '': { },
     'borrel': {
         'tappers': [
-            [(hm2s(20, 30),False), (hm2s(23),False), 'eerste dienst'],
-            [(hm2s(23),False), (hm2s(25),False), 'tweede dienst'],
-            [(hm2s(25),False), (hm2s(28),True), 'derde dienst']],
+            [(hm2s(20, 30),False), (hm2s(23),False), _('eerste dienst')],
+            [(hm2s(23),False), (hm2s(25),False), _('tweede dienst')],
+            [(hm2s(25),False), (hm2s(28),True), _('derde dienst')]],
         'sooscie': [
-            [(hm2s(20, 30),False), (hm2s(24),False), 'openen'],
-            [(hm2s(24),False), (hm2s(28),True), 'sluiten']],
+            [(hm2s(20, 30),False), (hm2s(24),False), _('openen')],
+            [(hm2s(24),False), (hm2s(28),True), _('sluiten')]],
         'draai': [
-            [(hm2s(20, 45),False), (hm2s(23),False), 'openen'],
-            [(hm2s(23),False), (hm2s(24),False), 'prime-time'],
-            [(hm2s(24),False), (hm2s(25),True), 'sluiten']]},
+            [(hm2s(20, 45),False), (hm2s(23),False), _('openen')],
+            [(hm2s(23),False), (hm2s(24),False), _('prime-time')],
+            [(hm2s(24),False), (hm2s(25),True), _('sluiten')]]},
     'kleinfeest': {
         'tappers': [
-            [(hm2s(20, 30),False), (hm2s(23),False), 'eerste dienst'],
-            [(hm2s(23),False), (hm2s(25),False), 'tweede dienst'],
-            [(hm2s(25),False), (hm2s(28),True), 'derde dienst']],
+            [(hm2s(20, 30),False), (hm2s(23),False), _('eerste dienst')],
+            [(hm2s(23),False), (hm2s(25),False), _('tweede dienst')],
+            [(hm2s(25),False), (hm2s(28),True), _('derde dienst')]],
         'bestuur': [
-            [(hm2s(20, 30),False), (hm2s(24),False), 'openen'],
-            [(hm2s(24),False), (hm2s(28),True), 'sluiten']]},
+            [(hm2s(20, 30),False), (hm2s(24),False), _('openen')],
+            [(hm2s(24),False), (hm2s(28),True), _('sluiten')]]},
     'grootfeest': {
         'tappers': [
-            [(hm2s(20, 30),False), (hm2s(23),False), 'eerste dienst, tapper 1'],
-            [(hm2s(20, 30),False), (hm2s(23),False), 'eerste dienst, tapper 2'],
-            [(hm2s(23),False), (hm2s(25),False), 'tweede dienst, tapper 1'],
-            [(hm2s(23),False), (hm2s(25),False), 'tweede dienst, tapper 2'],
-            [(hm2s(25),False), (hm2s(28),True), 'derde dienst, tapper 1'],
-            [(hm2s(25),False), (hm2s(28),True), 'derde dienst, tapper 2']],
+            [(hm2s(20, 30),False), (hm2s(23),False), _('eerste dienst, tapper 1')],
+            [(hm2s(20, 30),False), (hm2s(23),False), _('eerste dienst, tapper 2')],
+            [(hm2s(23),False), (hm2s(25),False), _('tweede dienst, tapper 1')],
+            [(hm2s(23),False), (hm2s(25),False), _('tweede dienst, tapper 2')],
+            [(hm2s(25),False), (hm2s(28),True), _('derde dienst, tapper 1')],
+            [(hm2s(25),False), (hm2s(28),True), _('derde dienst, tapper 2')]],
         'bestuur': [
-            [(hm2s(20, 30),False), (hm2s(24),False), 'openen'],
-            [(hm2s(24),False), (hm2s(28),True), 'sluiten']]},
+            [(hm2s(20, 30),False), (hm2s(24),False), _('openen')],
+            [(hm2s(24),False), (hm2s(28),True), _('sluiten')]]},
     'dranktelling': {
         'barco': [
-            [(hm2s(20),True), (hm2s(20, 30),False), 'Teller 1'],
-            [(hm2s(20),True), (hm2s(20, 30),False), 'Teller 2']]},
+            [(hm2s(20),True), (hm2s(20, 30),False), _('Teller 1')],
+            [(hm2s(20),True), (hm2s(20, 30),False), _('Teller 2')]]},
     'dranklevering': {
         'barco': [
-            [(hm2s(9),False), (hm2s(13),False), 'Persoon 1'],
-            [(hm2s(9),False), (hm2s(13),False), 'Persoon 2']]},
+            [(hm2s(9),False), (hm2s(13),False), _('Persoon 1')],
+            [(hm2s(9),False), (hm2s(13),False), _('Persoon 2')]]},
     'vrijdag_met_tappers': {
         'tappers': [
-            [(hm2s(20, 30),False), (hm2s(23),False), 'eerste dienst'],
-            [(hm2s(23),False), (hm2s(25),False), 'tweede dienst'],
-            [(hm2s(25),False), (hm2s(28),True), 'derde dienst']],
+            [(hm2s(20, 30),False), (hm2s(23),False), _('eerste dienst')],
+            [(hm2s(23),False), (hm2s(25),False), _('tweede dienst')],
+            [(hm2s(25),False), (hm2s(28),True), _('derde dienst')]],
         'bestuur': [
-            [(hm2s(17),False), (hm2s(22),False), 'openen'],
-            [(hm2s(22),False), (hm2s(27),True), 'sluiten']],
+            [(hm2s(17),False), (hm2s(22),False), _('openen')],
+            [(hm2s(22),False), (hm2s(27),True), _('sluiten')]],
         'cocks': [
-            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 1'],
-            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 2']]},
+            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 1')],
+            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 2')]]},
     'vrijdag_zonder_tappers': {
         'bestuur': [
-            [(hm2s(17),False), (hm2s(22),False), 'openen'],
-            [(hm2s(22),False), (hm2s(27),True), 'sluiten']],
+            [(hm2s(17),False), (hm2s(22),False), _('openen')],
+            [(hm2s(22),False), (hm2s(27),True), _('sluiten')]],
         'cocks': [
-            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 1'],
-            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 2']]},
+            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 1')],
+            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 2')]]},
     'koken': {
         'cocks': [
-            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 1'],
-            [(hm2s(17),True), (hm2s(19,30),False), 'Kok 2']]},
+            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 1')],
+            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 2')]]},
 }
 
 @login_required

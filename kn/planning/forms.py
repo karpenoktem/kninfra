@@ -1,6 +1,7 @@
 import datetime
 
 from django import forms
+from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
 from kn.planning.entities import Pool
@@ -13,7 +14,7 @@ class WorkerChoiceField(forms.ChoiceField):
         if kwargs.get('sort_choices', False):
             kwargs['choices'].sort(key=lambda x: x[1])
             del kwargs['sort_choices']
-        kwargs['choices'].insert(0, ('', 'Selecteer'))
+        kwargs['choices'].insert(0, ('', _('Selecteer')))
         super(WorkerChoiceField, self).__init__(*args, **kwargs)
 
 class ManagePlanningForm(forms.Form):
@@ -38,28 +39,28 @@ class EventCreateForm(forms.Form):
     name = forms.CharField(label="Naam", initial="Borrel")
     date = forms.DateField(label="Datum", initial=datetime.date.today())
     template = forms.ChoiceField(label="Soort", required=False, choices=(
-        ('', 'Geen'),
-        ('borrel', 'Borrel'),
-        ('kleinfeest', 'Klein feest'),
-        ('grootfeest', 'Groot feest'),
-        ('dranktelling', 'Dranktelling'),
-        ('dranklevering', 'Dranklevering'),
-        ('vrijdag_zonder_tappers', 'Vrijdag'),
-        ('vrijdag_met_tappers', 'Vrijdag (met tappers)'),
+        ('', _('Geen')),
+        ('borrel', _('Borrel')),
+        ('kleinfeest', _('Klein feest')),
+        ('grootfeest', _('Groot feest')),
+        ('dranktelling', _('Dranktelling')),
+        ('dranklevering', _('Dranklevering')),
+        ('vrijdag_zonder_tappers', _('Vrijdag')),
+        ('vrijdag_met_tappers', _('Vrijdag (met tappers)')),
         ('koken', 'Koken'),
         ))
 
 class AddVacancyForm(forms.Form):
-    name = forms.CharField(label="Shiftnaam", initial="eerste dienst")
-    begin = forms.RegexField(label="Begintijd", initial="20:30",
+    name = forms.CharField(label=_("Shiftnaam"), initial="eerste dienst")
+    begin = forms.RegexField(label=_("Begintijd"), initial="20:30",
             regex=r'^[0123][0-9]:[0-5][0-9]$')
     begin_is_approximate = forms.ChoiceField(initial=False,
-            choices=((True,"bij benadering"),(False, "exact")))
-    end = forms.RegexField(label="Eindtijd", initial="23:00",
+            choices=((True,_("bij benadering")),(False, _("exact"))))
+    end = forms.RegexField(label=_("Eindtijd"), initial="23:00",
             regex=r'^[0123][0-9]:[0-5][0-9]$')
     end_is_approximate = forms.ChoiceField(initial=False,
-            choices=((True,"bij benadering"),(False, "exact")))
-    pool = forms.ChoiceField(label="Type",
+            choices=((True,_("bij benadering")),(False, _("exact"))))
+    pool = forms.ChoiceField(label=_("Type"),
             choices=map(lambda x: (x._id, x.name), Pool.all()))
 
 # vim: et:sta:bs=2:sw=4:

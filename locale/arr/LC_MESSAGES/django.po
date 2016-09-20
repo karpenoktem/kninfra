@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 09:02+0200\n"
+"POT-Creation-Date: 2016-09-20 09:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -345,7 +345,7 @@ msgstr ""
 msgid "Zooi"
 msgstr ""
 
-#: kn/leden/forms.py:98
+#: kn/leden/forms.py:98 kn/planning/templates/planning/event_edit.html:11
 msgid "Naam"
 msgstr ""
 
@@ -783,6 +783,8 @@ msgid "Studenten"
 msgstr ""
 
 #: kn/leden/templates/leden/secr_add_group.html:10
+#: kn/planning/templates/planning/event_create.html:14
+#: kn/planning/templates/planning/event_edit.html:58
 msgid "Maak aan"
 msgstr ""
 
@@ -1009,8 +1011,202 @@ msgstr ""
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
 msgstr ""
 
+#: kn/planning/forms.py:17
+msgid "Selecteer"
+msgstr ""
+
+#: kn/planning/forms.py:42
+msgid "Geen"
+msgstr ""
+
+#: kn/planning/forms.py:43
+msgid "Borrel"
+msgstr ""
+
+#: kn/planning/forms.py:44
+msgid "Klein feest"
+msgstr ""
+
+#: kn/planning/forms.py:45
+msgid "Groot feest"
+msgstr ""
+
+#: kn/planning/forms.py:46
+msgid "Dranktelling"
+msgstr ""
+
+#: kn/planning/forms.py:47
+msgid "Dranklevering"
+msgstr ""
+
+#: kn/planning/forms.py:48
+msgid "Vrijdag"
+msgstr ""
+
+#: kn/planning/forms.py:49
+msgid "Vrijdag (met tappers)"
+msgstr ""
+
+#: kn/planning/forms.py:54
+msgid "Shiftnaam"
+msgstr ""
+
+#: kn/planning/forms.py:55
+msgid "Begintijd"
+msgstr ""
+
+#: kn/planning/forms.py:58 kn/planning/forms.py:62
+msgid "bij benadering"
+msgstr ""
+
+#: kn/planning/forms.py:58 kn/planning/forms.py:62
+msgid "exact"
+msgstr ""
+
+#: kn/planning/forms.py:59
+msgid "Eindtijd"
+msgstr ""
+
+#: kn/planning/forms.py:63
+msgid "Type"
+msgstr ""
+
+#: kn/planning/templates/planning/event_create.html:7
+msgid "Event aanmaken"
+msgstr ""
+
+#: kn/planning/templates/planning/event_edit.html:7
+msgid "Event bewerken:"
+msgstr ""
+
+#: kn/planning/templates/planning/event_edit.html:12
+msgid "Time"
+msgstr ""
+
+#: kn/planning/templates/planning/event_edit.html:13
+msgid "Pool"
+msgstr ""
+
+#: kn/planning/templates/planning/event_edit.html:14
+msgid "Aangewezene"
+msgstr ""
+
+#: kn/planning/templates/planning/event_edit.html:34
+msgid "Dienst aanmaken"
+msgstr ""
+
+#: kn/planning/templates/planning/event_edit.html:63
+msgid "Weet je het zeker?"
+msgstr ""
+
+#: kn/planning/templates/planning/event_edit.html:66
+msgid "Verwijder event"
+msgstr ""
+
+#: kn/planning/templates/planning/manage.html:54
+msgid "Reminder wordt nog verzonden"
+msgstr ""
+
+#: kn/planning/templates/planning/manage.html:57
+msgid "Stuur nu een reminder"
+msgstr ""
+
+#: kn/planning/templates/planning/manage.html:64
+msgid "meer..."
+msgstr ""
+
+#: kn/planning/templates/planning/manage.html:76
+#, python-format
+msgid ""
+"Er zijn geen\n"
+"                diensten voor de pool %(pool_name)s."
+msgstr ""
+
+#: kn/planning/templates/planning/manage.html:84
 #: kn/poll/templates/poll/vote.html:18
 msgid "Sla op"
+msgstr ""
+
+#: kn/planning/templates/planning/template.html:4
+msgid "Planning template"
+msgstr ""
+
+#: kn/planning/templates/planning/template.html:18
+msgid "Iemand"
+msgstr ""
+
+#: kn/planning/views.py:27 kn/planning/views.py:39 kn/planning/views.py:66
+msgid "eerste dienst"
+msgstr ""
+
+#: kn/planning/views.py:28 kn/planning/views.py:40 kn/planning/views.py:67
+msgid "tweede dienst"
+msgstr ""
+
+#: kn/planning/views.py:29 kn/planning/views.py:41 kn/planning/views.py:68
+msgid "derde dienst"
+msgstr ""
+
+#: kn/planning/views.py:31 kn/planning/views.py:34 kn/planning/views.py:43
+#: kn/planning/views.py:54 kn/planning/views.py:70 kn/planning/views.py:77
+msgid "openen"
+msgstr ""
+
+#: kn/planning/views.py:32 kn/planning/views.py:36 kn/planning/views.py:44
+#: kn/planning/views.py:55 kn/planning/views.py:71 kn/planning/views.py:78
+msgid "sluiten"
+msgstr ""
+
+#: kn/planning/views.py:35
+msgid "prime-time"
+msgstr ""
+
+#: kn/planning/views.py:47
+msgid "eerste dienst, tapper 1"
+msgstr ""
+
+#: kn/planning/views.py:48
+msgid "eerste dienst, tapper 2"
+msgstr ""
+
+#: kn/planning/views.py:49
+msgid "tweede dienst, tapper 1"
+msgstr ""
+
+#: kn/planning/views.py:50
+msgid "tweede dienst, tapper 2"
+msgstr ""
+
+#: kn/planning/views.py:51
+msgid "derde dienst, tapper 1"
+msgstr ""
+
+#: kn/planning/views.py:52
+msgid "derde dienst, tapper 2"
+msgstr ""
+
+#: kn/planning/views.py:58
+msgid "Teller 1"
+msgstr ""
+
+#: kn/planning/views.py:59
+msgid "Teller 2"
+msgstr ""
+
+#: kn/planning/views.py:62
+msgid "Persoon 1"
+msgstr ""
+
+#: kn/planning/views.py:63
+msgid "Persoon 2"
+msgstr ""
+
+#: kn/planning/views.py:73 kn/planning/views.py:80 kn/planning/views.py:84
+msgid "Kok 1"
+msgstr ""
+
+#: kn/planning/views.py:74 kn/planning/views.py:81 kn/planning/views.py:85
+msgid "Kok 2"
 msgstr ""
 
 #: kn/poll/templates/poll/vote.html:20
