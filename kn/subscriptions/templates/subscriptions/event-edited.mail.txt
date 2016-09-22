@@ -1,10 +1,17 @@
+{% load i18n %}
+
 {% block subject %}
-Activiteit "{{ event.name }}" is door {{ user.full_name }} bewerkt
+{% blocktrans with name=event.name full_name=user.full_name %}
+Activiteit "{{ name }}" is door {{ full_name }} bewerkt
+{% endblocktrans %}
 {% endblock %}
 
 {% block plain %}
-{{ user.full_name }} heeft de volgende activiteit bewerkt.
+{% url "event-detail" name=event.name as event_url %}
+{% blocktrans with name=event.name full_name=user.full_name %}
+{{ full_name }} heeft de volgende activiteit bewerkt.
 
-   "{{ event.name }}"
-   {{ BASE_URL }}{% url "event-detail" name=event.name %}
+   "{{ name }}"
+   {{ BASE_URL }}{{ event_url }}
+{% endblocktrans %}
 {% endblock %}

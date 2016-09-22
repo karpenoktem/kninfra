@@ -1,46 +1,66 @@
+{% load i18n %}
+
 {% block from %}
-Karpe Noktem Activiteiten <root@karpenoktem.nl>
+{% trans "Karpe Noktem Activiteiten <root@karpenoktem.nl>" %}
 {% endblock from %}
 
 {% block subject %}
-Activiteit: {{ event.humanName }}
+{% blocktrans with humanName=event.humanName %}
+Activiteit: {{ humanName }}
+{% endblocktrans %}
 {% endblock subject %}
 
 {% block html %}
-<p>Hallo {{ subscription.user.first_name }},</p>
+{% with humanName=event.humanName event_url=event.get_absolute_url %}
+<p>
+{% blocktrans with first_name=subscription.user.first_name %}
+Hallo {{ first_name }},
+{% endblocktrans %}
+</p>
 
 {% if mutation.state != "invited" %}
-<p>Je hebt je
-{% if mutation.state == "subscribed" %}aangemeld
-{% elif mutation.state == "unsubscribed" %}afgemeld
-{% endif %}
-voor <a href="{{ BASE_URL }}{{ event.get_absolute_url }}">{{ event.humanName }}</a>.</p>
+<p>{% if mutation.state == "subscribed" %}
+{% blocktrans %}
+Je hebt je aangemeld
+voor <a href="{{ BASE_URL }}{{ event_url }}">{{ humanName }}</a>.
+{% endblocktrans %}
+{% elif mutation.state == "unsubscribed" %}
+{% blocktrans %}
+Je hebt je afgemeld
+voor <a href="{{ BASE_URL }}{{ event_url }}">{{ humanName }}</a>.
+{% endblocktrans %}
+{% endif %}</p>
 
 {% if mutation.notes %}
-<p>Je opmerkingen waren:
+<p>{% trans "Je opmerkingen waren:" %}
 <blockquote>{{ mutation.notes|linebreaksbr }}</blockquote>
 </p>
 {% else %}
-<p>Je had geen opmerkingen.</p>
+<p>{% trans "Je had geen opmerkingen." %}</p>
 {% endif %}{# mutation.notes #}
 
 {% else %}
 
-<p>Je bent door {{ subscription.inviter.first_name }} uitgenodigd voor
-<a href="{{ BASE_URL }}{{ event.get_absolute_url }}">{{ event.humanName }}</a>.</p>
+{% with inviter=subscription.inviter.first_name %}
+<p>{% blocktrans %}
+Je bent door {{ inviter }} uitgenodigd voor
+<a href="{{ BASE_URL }}{{ event_url }}">{{ humanName }}</a>.
+{% endblocktrans %}</p>
 
 {% if subscription.inviterNotes %}
-<p>{{ subscription.inviter.first_name }}'s opmerkingen waren:
+<p>{% blocktrans %}{{ inviter }}'s opmerkingen waren:{% endblocktrans %}
 <blockquote>{{ subscription.inviterNotes|linebreaksbr }}</blockquote>
 </p>
 {% endif %}
+{% endwith %}
 
-<p>Om deze uitnodiging te bevestigen, bezoek:<br/>
-&nbsp;&nbsp; <a href="{{ BASE_URL }}{{ event.get_absolute_url }}"
-                >{{ BASE_URL }}{{ event.get_absolute_url }}</a></p>
+<p>{% trans "Om deze uitnodiging te bevestigen, bezoek:" %}<br/>
+&nbsp;&nbsp; <a href="{{ BASE_URL }}{{ event_url }}"
+                >{{ BASE_URL }}{{ event_url }}</a></p>
 {% endif %}{# mutation.state == "invited" #}
 
-<p>Met een vriendelijke groet,<br/>
+<p>{% trans "Met een vriendelijke groet," %}<br/>
 {{ event.owner.humanName }}
 </p>
+{% endwith %}
 {% endblock html %}

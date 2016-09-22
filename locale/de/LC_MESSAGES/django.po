@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-22 04:05+0200\n"
+"POT-Creation-Date: 2016-09-22 09:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3113,6 +3113,23 @@ msgstr ""
 msgid "Leden mogen zichzelf afmelden"
 msgstr ""
 
+#: kn/subscriptions/templates/subscriptions/event-edited.mail.txt:4
+#, python-format
+msgid ""
+"\n"
+"Activiteit \"%(name)s\" is door %(full_name)s bewerkt\n"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/event-edited.mail.txt:11
+#, python-format
+msgid ""
+"\n"
+"%(full_name)s heeft de volgende activiteit bewerkt.\n"
+"\n"
+"   \"%(name)s\"\n"
+"   %(BASE_URL)s%(event_url)s\n"
+msgstr ""
+
 #: kn/subscriptions/templates/subscriptions/event_detail.html:30
 msgid "Georganiseerd door"
 msgstr ""
@@ -3278,6 +3295,86 @@ msgstr ""
 
 #: kn/subscriptions/templates/subscriptions/include_list.html:24
 msgid "uitgenodigd door"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/new-event.mail.txt:4
+#, python-format
+msgid ""
+"\n"
+"Nieuwe activiteit \"%(name)s\" door %(full_name)s\n"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/new-event.mail.txt:11
+#, python-format
+msgid ""
+"\n"
+"%(full_name)s heeft een nieuwe activiteit aangemaakt\n"
+"\n"
+"   \"%(name)s\"\n"
+"   %(BASE_URL)s%(url_event)s\n"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/subscription-notification.mail.html:4
+msgid "Karpe Noktem Activiteiten <root@karpenoktem.nl>"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/subscription-notification.mail.html:8
+#, python-format
+msgid ""
+"\n"
+"Activiteit: %(humanName)s\n"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/subscription-notification.mail.html:16
+#, python-format
+msgid ""
+"\n"
+"Hallo %(first_name)s,\n"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/subscription-notification.mail.html:23
+#, python-format
+msgid ""
+"\n"
+"Je hebt je aangemeld\n"
+"voor <a href=\"%(BASE_URL)s%(event_url)s\">%(humanName)s</a>.\n"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/subscription-notification.mail.html:28
+#, python-format
+msgid ""
+"\n"
+"Je hebt je afgemeld\n"
+"voor <a href=\"%(BASE_URL)s%(event_url)s\">%(humanName)s</a>.\n"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/subscription-notification.mail.html:35
+msgid "Je opmerkingen waren:"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/subscription-notification.mail.html:39
+msgid "Je had geen opmerkingen."
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/subscription-notification.mail.html:45
+#, python-format
+msgid ""
+"\n"
+"Je bent door %(inviter)s uitgenodigd voor\n"
+"<a href=\"%(BASE_URL)s%(event_url)s\">%(humanName)s</a>.\n"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/subscription-notification.mail.html:51
+#, python-format
+msgid "%(inviter)s's opmerkingen waren:"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/subscription-notification.mail.html:57
+msgid "Om deze uitnodiging te bevestigen, bezoek:"
+msgstr ""
+
+#: kn/subscriptions/templates/subscriptions/subscription-notification.mail.html:62
+msgid "Met een vriendelijke groet,"
 msgstr ""
 
 #: kn/subscriptions/urls.py:14
