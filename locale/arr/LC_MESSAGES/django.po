@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-22 09:25+0200\n"
+"POT-Creation-Date: 2016-09-22 09:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1233,6 +1233,50 @@ msgstr ""
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
 msgstr ""
 
+#: kn/moderation/templates/moderation/disabled-by.mail.txt:4
+#, python-format
+msgid ""
+"\n"
+"Moderatiemodus op %(name)s is uitgezet door %(user)s\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/disabled-by.mail.txt:10
+#, python-format
+msgid ""
+"\n"
+"De moderatiemodus op %(name)s is uitgezet door %(user)s.\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/enabled.mail.txt:4
+#, python-format
+msgid ""
+"\n"
+"Moderatiemodus op %(name)s is aangezet door %(user)s\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/enabled.mail.txt:10
+#, python-format
+msgid ""
+"\n"
+"De moderatiemodus op %(name)s is aangezet door %(user)s.\n"
+"Deze loopt, indien niet verlengd, af om %(until_time)s.\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/extended.mail.txt:4
+#, python-format
+msgid ""
+"\n"
+"Moderatiemodus op %(name)s is verlengd door %(user)s\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/extended.mail.txt:10
+#, python-format
+msgid ""
+"\n"
+"De moderatiemodus op %(name)s is verlengd door %(user)s.\n"
+"Deze loop, indien niet verder verlengd, af om %(until_time)s.\n"
+msgstr ""
+
 #: kn/moderation/templates/moderation/overview.html:9
 msgid "Moderatie-modus"
 msgstr ""
@@ -1259,6 +1303,20 @@ msgstr ""
 
 #: kn/moderation/templates/moderation/overview.html:59
 msgid "verleng"
+msgstr ""
+
+#: kn/moderation/templates/moderation/timed-out.mail.txt:4
+#, python-format
+msgid ""
+"\n"
+"Moderatiemodus op %(name)s is verlopen\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/timed-out.mail.txt:10
+#, python-format
+msgid ""
+"\n"
+"De moderatiemodus op %(name)s is verlopen.\n"
 msgstr ""
 
 #: kn/moderation/views.py:35

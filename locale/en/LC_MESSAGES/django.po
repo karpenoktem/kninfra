@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-22 09:25+0200\n"
+"POT-Creation-Date: 2016-09-22 09:30+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1322,6 +1322,50 @@ msgstr "Agenda has been updated"
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
 msgstr "Your request is being processed.  Expect an e-mail within 5 minutes."
 
+#: kn/moderation/templates/moderation/disabled-by.mail.txt:4
+#, python-format
+msgid ""
+"\n"
+"Moderatiemodus op %(name)s is uitgezet door %(user)s\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/disabled-by.mail.txt:10
+#, python-format
+msgid ""
+"\n"
+"De moderatiemodus op %(name)s is uitgezet door %(user)s.\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/enabled.mail.txt:4
+#, python-format
+msgid ""
+"\n"
+"Moderatiemodus op %(name)s is aangezet door %(user)s\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/enabled.mail.txt:10
+#, python-format
+msgid ""
+"\n"
+"De moderatiemodus op %(name)s is aangezet door %(user)s.\n"
+"Deze loopt, indien niet verlengd, af om %(until_time)s.\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/extended.mail.txt:4
+#, python-format
+msgid ""
+"\n"
+"Moderatiemodus op %(name)s is verlengd door %(user)s\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/extended.mail.txt:10
+#, python-format
+msgid ""
+"\n"
+"De moderatiemodus op %(name)s is verlengd door %(user)s.\n"
+"Deze loop, indien niet verder verlengd, af om %(until_time)s.\n"
+msgstr ""
+
 #: kn/moderation/templates/moderation/overview.html:9
 msgid "Moderatie-modus"
 msgstr ""
@@ -1350,6 +1394,20 @@ msgstr "Activities"
 
 #: kn/moderation/templates/moderation/overview.html:59
 msgid "verleng"
+msgstr ""
+
+#: kn/moderation/templates/moderation/timed-out.mail.txt:4
+#, python-format
+msgid ""
+"\n"
+"Moderatiemodus op %(name)s is verlopen\n"
+msgstr ""
+
+#: kn/moderation/templates/moderation/timed-out.mail.txt:10
+#, python-format
+msgid ""
+"\n"
+"De moderatiemodus op %(name)s is verlopen.\n"
 msgstr ""
 
 #: kn/moderation/views.py:35

@@ -1,8 +1,14 @@
+{% load i18n %}
+
 {% block subject %}
-Moderatiemodus op {{ name }} is verlengd door {{ user.name }}
+{% blocktrans with user=user.name %}
+Moderatiemodus op {{ name }} is verlengd door {{ user }}
+{% endblocktrans %}
 {% endblock %}
 
 {% block plain %}
-De moderatiemodus op {{ name }} is verlengd door {{ user.humanName }}.
-Deze loop, indien niet verder verlengd, af om {{ until.time }}.
+{% blocktrans with user=user.humanName until_time=until.time %}
+De moderatiemodus op {{ name }} is verlengd door {{ user }}.
+Deze loop, indien niet verder verlengd, af om {{ until_time }}.
+{% endblocktrans %}
 {% endblock %}
