@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 09:26+0200\n"
+"POT-Creation-Date: 2016-09-22 04:05+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -65,6 +65,24 @@ msgstr ""
 msgid "Terug naar onze eigen agenda"
 msgstr "Back to our own diary."
 
+#: kn/agenda/urls.py:7
+#, fuzzy
+#| msgid "agenda"
+msgid "^agenda/?$"
+msgstr "diary"
+
+#: kn/agenda/urls.py:8
+msgid "^agenda/zeus/?$"
+msgstr ""
+
+#: kn/agenda/urls.py:9
+msgid "^ledenmail-template/?$"
+msgstr ""
+
+#: kn/barco/urls.py:8
+msgid "^(?P<repos>[^/]+)/enter/(?P<formname>[^/]+)/$"
+msgstr ""
+
 #: kn/base/http.py:10
 msgid "referer header mist"
 msgstr "referer header is missing"
@@ -103,7 +121,7 @@ msgstr ""
 "Maybe you've tried to change the URL manually? If you did not; please "
 "contact the WebCie about this problem."
 
-#: kn/base/templates/base/bare.html:75
+#: kn/base/templates/base/bare.html:82
 #, fuzzy
 #| msgid ""
 #| "Welkom op de website van <strong>Alternatieve\n"
@@ -113,7 +131,7 @@ msgstr ""
 "Welcome to the homepage of <strong>Alternatieve\n"
 "  studenten&shy;vereniging Karpe Noktem</strong>."
 
-#: kn/base/templates/base/bare.html:77
+#: kn/base/templates/base/bare.html:84
 msgid "Terug naar boven"
 msgstr "Back to top"
 
@@ -175,7 +193,7 @@ msgstr "Password reset!"
 msgid "Inloggen"
 msgstr "Login"
 
-#: kn/base/templatetags/base.py:23
+#: kn/base/templatetags/base.py:25
 msgid "waar"
 msgstr "where"
 
@@ -190,6 +208,22 @@ msgstr "%s is a folder --- not a file"
 
 #: kn/browser/views.py:31
 msgid "Going outside of the root"
+msgstr ""
+
+#: kn/defaultSettings.py:118
+msgid "Duits"
+msgstr ""
+
+#: kn/defaultSettings.py:119
+msgid "Engels"
+msgstr ""
+
+#: kn/defaultSettings.py:120
+msgid "Nederlands"
+msgstr ""
+
+#: kn/defaultSettings.py:121
+msgid "Piraat"
 msgstr ""
 
 #: kn/fotos/forms.py:22 kn/leden/forms.py:99
@@ -216,6 +250,26 @@ msgstr "Relocate"
 #: kn/fotos/forms.py:36
 msgid "naar"
 msgstr "to"
+
+#: kn/fotos/urls.py:19
+msgid "^foto/admin/?$"
+msgstr ""
+
+#: kn/fotos/urls.py:21
+msgid "^foto/admin/create/?$"
+msgstr ""
+
+#: kn/fotos/urls.py:23
+msgid "^fotos/api/?$"
+msgstr ""
+
+#: kn/fotos/urls.py:25
+msgid "^fotos/(?P<path>.*)$"
+msgstr ""
+
+#: kn/fotos/urls.py:28
+msgid "^foto/(?P<cache>[^/]+)/(?P<path>.*)$"
+msgstr ""
 
 #: kn/fotos/views.py:164
 msgid "Fotoalbum aangemaakt!"
@@ -1025,6 +1079,182 @@ msgstr "from %s"
 msgid "tot %s"
 msgstr "until %s"
 
+#: kn/leden/urls.py:12
+msgid "^gebruikers/(?:p/(?P<page>[0-9]+)/)?$"
+msgstr ""
+
+#: kn/leden/urls.py:14
+msgid "^naamdrager/(?P<name>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:16
+msgid "^id/(?P<_id>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:18
+msgid "^gebruiker/(?P<name>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:20
+msgid "^gebruiker/id/(?P<_id>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:22
+msgid "^gebruiker/id/(?P<_id>[^/]+)/reset-wachtwoord$"
+msgstr ""
+
+#: kn/leden/urls.py:24
+msgid "^groep/(?P<name>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:26
+msgid "^groep/id/(?P<_id>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:28
+msgid "^brand/(?P<name>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:30
+msgid "^brand/id/(?P<_id>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:32
+msgid "^stempel/(?P<name>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:34
+msgid "^stempel/id/(?P<_id>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:36
+msgid "^studie/(?P<name>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:38
+msgid "^studie/id/(?P<_id>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:40
+msgid "^instituut/(?P<name>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:43
+msgid "^instituut/id/(?P<_id>[^/]+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:46
+#, fuzzy
+#| msgid "Bouwjaren"
+msgid "^bouwjaar/$"
+msgstr "Years of birth"
+
+#: kn/leden/urls.py:48
+msgid "^bouwjaar/(?P<year>\\d+)/$"
+msgstr ""
+
+#: kn/leden/urls.py:50
+msgid "^smoel/(?P<name>[^.]+).jpg$"
+msgstr ""
+
+#: kn/leden/urls.py:52
+msgid "^geenalcohol/$"
+msgstr ""
+
+#: kn/leden/urls.py:54
+msgid "^ik/?$"
+msgstr ""
+
+#: kn/leden/urls.py:55
+#, fuzzy
+#| msgid "Wachtwoord gereset!"
+msgid "^ik/wachtwoord$"
+msgstr "Password reset!"
+
+#: kn/leden/urls.py:56
+msgid "^ik/wachtwoord/villanet/$"
+msgstr ""
+
+#: kn/leden/urls.py:58
+#, fuzzy
+#| msgid "Smoelenboek"
+msgid "^ik/smoel$"
+msgstr "Smoelenboek"
+
+#: kn/leden/urls.py:59
+msgid "^api/users$"
+msgstr ""
+
+#: kn/leden/urls.py:60
+msgid "^api/?$"
+msgstr ""
+
+#: kn/leden/urls.py:61
+msgid "^ik/openvpn/$"
+msgstr ""
+
+#: kn/leden/urls.py:62
+msgid "^ik/openvpn/(?P<filename>.+(exe|zip))$"
+msgstr ""
+
+#: kn/leden/urls.py:64
+msgid "^secretariaat/inschrijven$"
+msgstr ""
+
+#: kn/leden/urls.py:66
+msgid "^secretariaat/update-site-agenda/$"
+msgstr ""
+
+#: kn/leden/urls.py:68
+#, fuzzy
+#| msgid "Secretariaat"
+msgid "^secretariaat/addgroup$"
+msgstr "Secretariat"
+
+#: kn/leden/urls.py:70
+#, fuzzy
+#| msgid "Secretariaat"
+msgid "^secretariaat/notes$"
+msgstr "Secretariat"
+
+#: kn/leden/urls.py:72
+msgid "^relaties/(?P<_id>[^/]+)/beindig$"
+msgstr ""
+
+#: kn/leden/urls.py:74
+msgid "^relaties/begin$"
+msgstr ""
+
+#: kn/leden/urls.py:76
+msgid "^tags/tag$"
+msgstr ""
+
+#: kn/leden/urls.py:78
+msgid "^tags/untag$"
+msgstr ""
+
+#: kn/leden/urls.py:80
+msgid "^noteer$"
+msgstr ""
+
+#: kn/leden/urls.py:83
+#, fuzzy
+#| msgid "Statistieken"
+msgid "^statistieken/?$"
+msgstr "Statistics"
+
+#: kn/leden/urls.py:85
+msgid "^grafiek/(?P<graph>[-a-z/]+)\\.(?P<ext>[a-z]+)/?$"
+msgstr ""
+
+#: kn/leden/urls.py:89
+msgid "^styles/leden/$"
+msgstr ""
+
+#: kn/leden/urls.py:94
+msgid "^taal$"
+msgstr ""
+
 #: kn/leden/views.py:69
 #, python-format
 msgid "Entiteit is niet een %s"
@@ -1260,6 +1490,30 @@ msgstr "Planning"
 msgid "Iemand"
 msgstr ""
 
+#: kn/planning/urls.py:8 kn/subscriptions/urls.py:12
+msgid "^!api/?$"
+msgstr ""
+
+#: kn/planning/urls.py:9
+msgid "^manage/$"
+msgstr ""
+
+#: kn/planning/urls.py:10
+msgid "^manage/event/new/$"
+msgstr ""
+
+#: kn/planning/urls.py:12
+msgid "^manage/event/(?P<eventid>[^/]+)/$"
+msgstr ""
+
+#: kn/planning/urls.py:14
+msgid "^manage/(?P<poolname>[^/]+)/$"
+msgstr ""
+
+#: kn/planning/urls.py:16
+msgid "^manage/(?P<poolname>[^/]+)/template/?$"
+msgstr ""
+
 #: kn/planning/views.py:27 kn/planning/views.py:39 kn/planning/views.py:66
 msgid "eerste dienst"
 msgstr ""
@@ -1336,6 +1590,10 @@ msgstr ""
 
 #: kn/poll/templates/poll/vote.html:20
 msgid "Pas aan"
+msgstr ""
+
+#: kn/poll/urls.py:7
+msgid "^vote/(?P<name>[^/]+)/$"
 msgstr ""
 
 #: kn/poll/views.py:24
@@ -2759,6 +3017,224 @@ msgstr ""
 msgid "Bekijk ook onze gezamelijke agenda!"
 msgstr ""
 
+#: kn/static/urls.py:13
+msgid "^home/?$"
+msgstr ""
+
+#: kn/static/urls.py:14
+msgid "^default/?$"
+msgstr ""
+
+#: kn/static/urls.py:21
+#, fuzzy
+#| msgid "over"
+msgid "^over/?$"
+msgstr "about"
+
+#: kn/static/urls.py:23
+msgid "^watis/?$"
+msgstr ""
+
+#: kn/static/urls.py:26
+#, fuzzy
+#| msgid "contact"
+msgid "^contact/?$"
+msgstr "contact"
+
+#: kn/static/urls.py:28
+#, fuzzy
+#| msgid "lid worden"
+msgid "^lidworden/?$"
+msgstr "become a member"
+
+#: kn/static/urls.py:30
+msgid "^geschiedenis/?$"
+msgstr ""
+
+#: kn/static/urls.py:32
+#, fuzzy
+#| msgid "Activiteiten"
+msgid "^activiteiten/?$"
+msgstr "Activities"
+
+#: kn/static/urls.py:35
+msgid "^akta/?$"
+msgstr ""
+
+#: kn/static/urls.py:37
+msgid "^(?:an|aktanokturna)/?$"
+msgstr ""
+
+#: kn/static/urls.py:40
+msgid "^zusjes/?$"
+msgstr ""
+
+#: kn/static/urls.py:42
+msgid "^route/?$"
+msgstr ""
+
+#: kn/static/urls.py:44
+msgid "^merchandise/?$"
+msgstr ""
+
+#: kn/static/urls.py:46
+msgid "^sponsoren/?$"
+msgstr ""
+
+#: kn/static/urls.py:48
+msgid "^media/?$"
+msgstr ""
+
+#: kn/static/urls.py:50
+msgid "^links/?$"
+msgstr ""
+
+#: kn/static/urls.py:52
+msgid "^irc/?$"
+msgstr ""
+
+#: kn/static/urls.py:58
+#, fuzzy
+#| msgid "Bestuurspipo"
+msgid "^bestuur4/?$"
+msgstr "Board thingamabob"
+
+#: kn/static/urls.py:60
+#, fuzzy
+#| msgid "Bestuurspipo"
+msgid "^bestuur5/?$"
+msgstr "Board thingamabob"
+
+#: kn/static/urls.py:62
+#, fuzzy
+#| msgid "Bestuurspipo"
+msgid "^bestuur6/?$"
+msgstr "Board thingamabob"
+
+#: kn/static/urls.py:64
+#, fuzzy
+#| msgid "Bestuurspipo"
+msgid "^bestuur7/?$"
+msgstr "Board thingamabob"
+
+#: kn/static/urls.py:66
+#, fuzzy
+#| msgid "Bestuurspipo"
+msgid "^bestuur8/?$"
+msgstr "Board thingamabob"
+
+#: kn/static/urls.py:68
+#, fuzzy
+#| msgid "Bestuurspipo"
+msgid "^bestuur9/?$"
+msgstr "Board thingamabob"
+
+#: kn/static/urls.py:70
+msgid "^bestuur10/?$"
+msgstr ""
+
+#: kn/static/urls.py:72
+msgid "^bestuur11/?$"
+msgstr ""
+
+#: kn/static/urls.py:74
+msgid "^bestuur12/?$"
+msgstr ""
+
+#: kn/static/urls.py:76
+msgid "^bestuur13/?$"
+msgstr ""
+
+#: kn/static/urls.py:80
+#, fuzzy
+#| msgid "Bestuurspipo"
+msgid "^bestuur/?$"
+msgstr "Board thingamabob"
+
+#: kn/static/urls.py:83
+msgid "^introPoster2016/?$"
+msgstr ""
+
+#: kn/static/urls.py:86
+msgid "^introPoster2015/?$"
+msgstr ""
+
+#: kn/static/urls.py:89
+msgid "^introPoster2014/?$"
+msgstr ""
+
+#: kn/static/urls.py:92
+msgid "^introPoster2013/?$"
+msgstr ""
+
+#: kn/static/urls.py:95
+msgid "^introPoster2012/?$"
+msgstr ""
+
+#: kn/static/urls.py:98
+msgid "^introPoster2011/?$"
+msgstr ""
+
+#: kn/static/urls.py:101
+msgid "^introPoster2010/?$"
+msgstr ""
+
+#: kn/static/urls.py:104
+msgid "^introPoster2009/?$"
+msgstr ""
+
+#: kn/static/urls.py:107
+msgid "^lustrumPoster5/?$"
+msgstr ""
+
+#: kn/static/urls.py:110
+msgid "^lustrumPoster(?:10)?/?$"
+msgstr ""
+
+#: kn/static/urls.py:113
+msgid "^openweekPoster2013/?$"
+msgstr ""
+
+#: kn/static/urls.py:116
+msgid "^openweekPoster2014/?$"
+msgstr ""
+
+#: kn/static/urls.py:119
+msgid "^openweekPoster2015/?$"
+msgstr ""
+
+#: kn/static/urls.py:122
+msgid "^openweek2Poster2015/?$"
+msgstr ""
+
+#: kn/static/urls.py:125
+msgid "^openweekPoster2016/?$"
+msgstr ""
+
+#: kn/static/urls.py:129
+msgid "^lustrum/?$"
+msgstr ""
+
+#: kn/static/urls.py:132
+msgid "^intro2008/?$"
+msgstr ""
+
+#: kn/static/urls.py:135
+msgid "^intro2009/?$"
+msgstr ""
+
+#: kn/static/urls.py:138
+msgid "^intro2010/?$"
+msgstr ""
+
+#: kn/static/urls.py:143
+msgid "^hink-stap/(?P<name>wiki|forum|stukken)$"
+msgstr ""
+
+#: kn/static/urls.py:153
+msgid "^styles/static/$"
+msgstr ""
+
 #: kn/subscriptions/forms.py:23
 msgid "Naam voor computers bestaat al"
 msgstr ""
@@ -2959,6 +3435,14 @@ msgstr ""
 msgid "uitgenodigd door"
 msgstr ""
 
+#: kn/subscriptions/urls.py:14
+msgid "^!nieuwe/?$"
+msgstr ""
+
+#: kn/subscriptions/urls.py:16
+msgid "^(?P<edit>[a-zA-Z0-9\\-.]+)/edit/?$"
+msgstr ""
+
 #: kn/subscriptions/views.py:58
 msgid "Je bent al aangemeld"
 msgstr ""
@@ -2978,4 +3462,58 @@ msgstr "User is not related to owner"
 
 #: kn/subscriptions/views.py:177
 msgid "Mag deze eigenaar niet kiezen"
+msgstr ""
+
+#: kn/urls.py:19
+msgid "^groups/(?P<subdir>[^/]+)/(?P<path>.*)"
+msgstr ""
+
+#: kn/urls.py:22
+#, fuzzy
+#| msgid "Smoelenboek"
+msgid "^smoelen/"
+msgstr "Smoelenboek"
+
+#: kn/urls.py:23
+#, fuzzy
+#| msgid "Activiteiten"
+msgid "^activiteit/"
+msgstr "Activities"
+
+#: kn/urls.py:24
+msgid "^reglementen/"
+msgstr ""
+
+#: kn/urls.py:25
+msgid "^poll/"
+msgstr ""
+
+#: kn/urls.py:26
+msgid "^accounts/login/$"
+msgstr ""
+
+#: kn/urls.py:27
+msgid "^accounts/logout/$"
+msgstr ""
+
+#: kn/urls.py:28
+msgid "^accounts/rauth/$"
+msgstr ""
+
+#: kn/urls.py:29
+msgid "^accounts/api/$"
+msgstr ""
+
+#: kn/urls.py:30
+msgid "^moderatie/"
+msgstr ""
+
+#: kn/urls.py:31
+#, fuzzy
+#| msgid "Planning"
+msgid "^planning/"
+msgstr "Planning"
+
+#: kn/urls.py:32
+msgid "^barco/"
 msgstr ""

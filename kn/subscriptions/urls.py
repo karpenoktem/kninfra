@@ -1,18 +1,19 @@
 from django.conf.urls import url
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.decorators import login_required
 
 from kn.subscriptions import views
 
 urlpatterns = [
-        url(r'^/?$',
+    url(r'^/?$',
             views.event_list, name='event-list'),
     url(r'^(?P<name>[a-zA-Z0-9\-.]+)/?$',
         views.event_detail, name='event-detail'),
-    url(r'^!api/?$',
+    url(_(r'^!api/?$'),
         views.api, name='api'),
-    url(r'^!nieuwe/?$',
+    url(_(r'^!nieuwe/?$'),
         views.event_new_or_edit, name='event-new'),
-    url(r'^(?P<edit>[a-zA-Z0-9\-.]+)/edit/?$',
+    url(_(r'^(?P<edit>[a-zA-Z0-9\-.]+)/edit/?$'),
         views.event_new_or_edit, name='event-edit'),
     ]
 

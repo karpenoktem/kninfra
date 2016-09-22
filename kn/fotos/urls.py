@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import RedirectView
+from django.utils.translation import ugettext_lazy as _
 
 from kn.fotos import views
 from kn.fotos import api
@@ -15,16 +16,16 @@ urlpatterns = [
 
         # TODO add fallback for old foto links
         # TODO change wiki links, etc.
-        url(r'^foto/admin/?$',
+        url(_(r'^foto/admin/?$'),
             views.fotoadmin_move, name='fotoadmin-move'),
-        url(r'^foto/admin/create/?$',
+        url(_(r'^foto/admin/create/?$'),
             views.fotoadmin_create_event, name='fotoadmin-create-event'),
-        url(r'^fotos/api/?$',
+        url(_(r'^fotos/api/?$'),
             api.view, name='fotos-api'),
-        url(r'^fotos/(?P<path>.*)$',
+        url(_(r'^fotos/(?P<path>.*)$'),
             views.fotos, name='fotos'),
         # NOTE keep up to date with media/fotos.js
-        url(r'^foto/(?P<cache>[^/]+)/(?P<path>.*)$',
+        url(_(r'^foto/(?P<cache>[^/]+)/(?P<path>.*)$'),
             views.cache, name='fotos-cache'),
         ]
 

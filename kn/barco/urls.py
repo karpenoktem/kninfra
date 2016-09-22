@@ -1,10 +1,11 @@
 from django.conf.urls import url
 from django.views.generic import RedirectView
+from django.utils.translation import ugettext_lazy as _
 
 from kn.barco import views
 
 urlpatterns = [
-    url(r'^(?P<repos>[^/]+)/enter/(?P<formname>[^/]+)/$',
+    url(_(r'^(?P<repos>[^/]+)/enter/(?P<formname>[^/]+)/$'),
         views.barco_enterform, name='barco-enterform'),
 
     # legacy:

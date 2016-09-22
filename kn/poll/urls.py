@@ -1,9 +1,10 @@
 from django.conf.urls import url
+from django.utils.translation import ugettext_lazy as _
 
 from kn.poll import views
 
 urlpatterns = [
-    url(r'^vote/(?P<name>[^/]+)/$',
+    url(_(r'^vote/(?P<name>[^/]+)/$'),
         views.vote, name='poll'),
     ]
 
