@@ -1,14 +1,23 @@
+{% load i18n %}
+
 {% block from %}
+{% blocktrans %}
 Secretaris Karpe Noktem <secretaris@karpenoktem.nl>
+{% endblocktrans %}
 {% endblock %}
 
 {% block subject %}
+{% blocktrans %}
 [Karpe Noktem] Jouw gegevens
+{% endblocktrans %}
 {% endblock %}
 
 {% block plain %}
-Beste {{ u.first_name }},
+{% blocktrans with first_name=u.first_name %}\
+Beste {{ first_name }},
+{% endblocktrans %}
 
+{% blocktrans %}\
 Welkom bij Karpe Noktem!
 
 Wij hebben de volgende gegevens van jouw inschrijfformulier
@@ -17,69 +26,76 @@ overgenomen.  Kun je controleren of deze kloppen?
 Bij voorbaat dank,
 
   Bas van Wijk
+{% endblocktrans %}
 
 
-Personalia  {{ u.full_name }}
+{% trans "Personalia" %}  {{ u.full_name }}
 -----------------------------------------------------------
 
-  Voornaam              {{ u.first_name }}
-  Achternaam            {{ u.last_name }}
-  Geslacht              {{ u.gender }}
-  Geboortedatum         {{ u.dateOfBirth.date }}
-  Gebruikersnamen       {{ u.names|join:" " }}
+  {% blocktrans with first_name=u.first_name last_name=u.last_name \
+                   gender=u.gender dateOfBirth=u.dateOfBirth.date \
+                   names=u.names|join:" " %}\
+Voornaam              {{ first_name }}
+  Achternaam            {{ last_name }}
+  Geslacht              {{ gender }}
+  Geboortedatum         {{ dateOfBirth }}
+  Gebruikersnamen       {{ names }}
+{% endblocktrans %}
 
-  Telefoonnummer(s)
-{% for t in u.telephones %}\
-    * {{ t.number }}\
+  {% trans "Telefoonnummer(s)" %}
+{% for t in u.telephones %}    * {{ t.number }}\
 {% if t.from and t.until %}\
- [ van {{ t.from.date }} tot {{ t.until.date }} ]
+ [ {% trans "van" %} {{ t.from.date }} {% trans "tot" %} {{ t.until.date }} ]
 {% else %}{% if t.from %}\
- [ van {{ t.from.date }} ]
+ [ {% trans "van" %} {{ t.from.date }} ]
 {% else %}{% if t.until %}\
- [ tot {{ t.until.date }} ]
+ [ {% trans "tot" %} {{ t.until.date }} ]
 {% endif %}{% endif %}{% endif %}\
 {% endfor %}
 
-  E-Mail adres(sen)
-{% for a in u.emailAddresses %}\
-    * {{ a.email }}\
+  {% trans "E-Mail adres(sen)" %}
+{% for a in u.emailAddresses %}    * {{ a.email }}\
 {% if a.from and a.until %}\
- [ van {{ a.from.date }} tot {{ a.until.date }} ]
+ [ {% trans "van" %} {{ a.from.date }} {% trans "tot" %} {{ a.until.date }} ]
 {% else %}{% if a.from %}\
- [ van {{ a.from.date }} ]
+ [ {% trans "van" %} {{ a.from.date }} ]
 {% else %}{% if a.until %}\
- [ tot {{ a.until.date }} ]
+ [ {% trans "tot" %} {{ a.until.date }} ]
 {% endif %}{% endif %}{% endif %}\
 {% endfor %}
 
-  Studie(s)
+  {% trans "Studie(s)" %}
 {% for study in u.studies %}\
-{% if study.from and study.until %}\
-    * Van {{study.from.date}} tot {{study.until.date}} studeerde je\
-{% else %}{% if study.from %}\
-    * Vanaf {{study.from.date}} studeer je\
-{% else %}{% if study.until %}\
-    * Tot {{study.until.date}} studeerde je\
+{% with from=study.from.date until=study.until.date %}
+{% if study.from and study.until %}    * {% blocktrans %}Van {{ from }} tot {{ until }} studeerde je{% endblocktrans %}\
+{% else %}{% if study.from %}    * {% blocktrans %}Vanaf {{ from }} studeer je{% endblocktrans %}\
 {% else %}\
-    * Je studeert\
+{% if study.until %}    * {% blocktrans %}Tot {{ until }} studeerde je{% endblocktrans %}\
+{% else %}    * {% trans "Je studeert" %}\
 {% endif %}{% endif %}{% endif %}
-      Studie            {{ study.study.humanName }}
-      Instituut         {{ study.institute.humanName }}
-      Studentnummer     {{ study.number }}
+{% endwith %}
+      {% blocktrans with study_name=study.study.humanName \
+                   institute=study.institute.humanName \
+                   study_number=study.number %}\
+Studie            {{ study_name }}
+      Instituut         {{ institute }}
+      Studentnummer     {{ study_number }}
+{% endblocktrans %}
 {% endfor %}
 
-  Adres(sen)
-{% for a in u.addresses %}\
-    * {% if a.from and a.until %}\
-[ van {{ a.from.date }} tot {{ a.until.date }} ]
+  {% trans "Adres(sen)" %}
+{% for a in u.addresses %}    * {% if a.from and a.until %}\
+[ {% trans "van" %} {{ a.from.date }} {% trans "tot" %} {{ a.until.date }} ]
 {% else %}{% if a.from %}\
-[ van {{ a.from.date }} ]
+[ {% trans "van" %} {{ a.from.date }} ]
 {% else %}{% if a.until %}\
-[ tot {{ a.until.date }} ]
+[ {% trans "tot" %} {{ a.until.date }} ]
 {% endif %}{% endif %}{% endif %}\
-Straat            {{ a.street }} 
-      Nummer            {{ a.number }}
-      Postcode          {{ a.zip }}
-      Stad              {{ a.city }}
+{% blocktrans with street=a.street number=a.number zip=a.zip city=a.city %}\
+Straat            {{ street }} 
+      Nummer            {{ number }}
+      Postcode          {{ zip }}
+      Stad              {{ city }}
+{% endblocktrans %}
 {% endfor %}
 {% endblock %}

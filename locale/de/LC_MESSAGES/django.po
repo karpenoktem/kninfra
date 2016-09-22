@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-22 09:52+0200\n"
+"POT-Creation-Date: 2016-09-22 10:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -552,6 +552,12 @@ msgstr ""
 #: kn/leden/templates/leden/user_detail.html:73
 #: kn/leden/templates/leden/user_detail.html:144
 #: kn/leden/templates/leden/user_detail.html:204
+#: kn/leden/templates/leden/welcome.mail.txt:48
+#: kn/leden/templates/leden/welcome.mail.txt:50
+#: kn/leden/templates/leden/welcome.mail.txt:59
+#: kn/leden/templates/leden/welcome.mail.txt:61
+#: kn/leden/templates/leden/welcome.mail.txt:88
+#: kn/leden/templates/leden/welcome.mail.txt:90
 msgid "van"
 msgstr ""
 
@@ -561,6 +567,12 @@ msgstr ""
 #: kn/leden/templates/leden/user_detail.html:76
 #: kn/leden/templates/leden/user_detail.html:147
 #: kn/leden/templates/leden/user_detail.html:207
+#: kn/leden/templates/leden/welcome.mail.txt:48
+#: kn/leden/templates/leden/welcome.mail.txt:52
+#: kn/leden/templates/leden/welcome.mail.txt:59
+#: kn/leden/templates/leden/welcome.mail.txt:63
+#: kn/leden/templates/leden/welcome.mail.txt:88
+#: kn/leden/templates/leden/welcome.mail.txt:92
 msgid "tot"
 msgstr ""
 
@@ -1091,6 +1103,87 @@ msgstr ""
 
 #: kn/leden/templates/leden/user_list.html:16
 msgid "volgende"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:4
+msgid ""
+"\n"
+"Secretaris Karpe Noktem <secretaris@karpenoktem.nl>\n"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:10
+msgid ""
+"\n"
+"[Karpe Noktem] Jouw gegevens\n"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:16
+#, python-format
+msgid ""
+"\\\n"
+"Beste %(first_name)s,\n"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:20
+msgid ""
+"\\\n"
+"Welkom bij Karpe Noktem!\n"
+"\n"
+"Wij hebben de volgende gegevens van jouw inschrijfformulier\n"
+"overgenomen.  Kun je controleren of deze kloppen?\n"
+"\n"
+"Bij voorbaat dank,\n"
+"\n"
+"  Bas van Wijk\n"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:32
+msgid "Personalia"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:45
+msgid "Telefoonnummer(s)"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:56
+msgid "E-Mail adres(sen)"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:67
+msgid "Studie(s)"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:70
+#, python-format
+msgid "Van %(from)s tot %(until)s studeerde je"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:71
+#, python-format
+msgid "Vanaf %(from)s studeer je"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:73
+#, python-format
+msgid "Tot %(until)s studeerde je"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:74
+msgid "Je studeert"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:86
+msgid "Adres(sen)"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.txt:94
+#, python-format
+msgid ""
+"\\\n"
+"Straat            %(street)s \n"
+"      Nummer            %(number)s\n"
+"      Postcode          %(zip)s\n"
+"      Stad              %(city)s\n"
 msgstr ""
 
 #: kn/leden/templates/leden/years_of_birth.html:6
