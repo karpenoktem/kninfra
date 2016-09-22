@@ -68,6 +68,9 @@ def header(context):
 @register.simple_tag
 def external_url(name):
     return settings.EXTERNAL_URLS[name]
+@register.assignment_tag
+def store_external_url(name):
+    return settings.EXTERNAL_URLS[name]
 
 @register.simple_tag(takes_context=True)
 def translate_url(context, language):
