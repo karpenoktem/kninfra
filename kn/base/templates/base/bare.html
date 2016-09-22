@@ -85,7 +85,7 @@
                         {# Language picker #}
                         <select id="langpicker">
                         {% for code, name in LANGUAGES %}
-                        <option value="{% translate_url code %}"
+                        <option value="{% if code == "nl" %}/nl{% endif %}{% translate_url code %}"
                             {% if code == LANGUAGE_CODE %}selected{% endif %}
                                 >{{ name }}</option>
                         {% endfor %}{# code, name in LANGUAGES ... #}
