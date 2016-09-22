@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-22 09:30+0200\n"
+"POT-Creation-Date: 2016-09-22 09:52+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -465,7 +465,7 @@ msgstr "No new password given"
 msgid "Niet hetzelfde nieuwe wachtwoord opnieuw gegeven"
 msgstr "The new passwords do not match"
 
-#: kn/leden/templates/leden/base.html:22
+#: kn/leden/templates/leden/base.html:22 kn/leden/templates/leden/home.html:7
 msgid "Smoelenboek"
 msgstr "Smoelenboek"
 
@@ -769,6 +769,129 @@ msgstr "Leave"
 #: kn/leden/templates/leden/group_detail.html:69
 msgid "Treed toe"
 msgstr "Enter"
+
+#: kn/leden/templates/leden/home.html:8
+#, python-format
+msgid ""
+"\n"
+"Hallo <a href=\"%(user_url)s\">%(first_name)s</a>,\n"
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:12
+msgid ""
+"Karpe Noktem heeft diverse digitale diensten,\n"
+"op deze website en daar buiten:"
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:23
+#, python-format
+msgid ""
+"De ledenadministratie aka het\n"
+"        <a href=\"%(url_smoelen_home)s\"> smoelenboek</a>\n"
+"        (dit hier!). Hier houden we van alles\n"
+"\t    bij, zoals:"
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:29
+msgid "alle leden en oud-leden"
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:31
+#, fuzzy
+#| msgid "Commissies"
+msgid "alle commissies"
+msgstr "Committees"
+
+#: kn/leden/templates/leden/home.html:33
+#, fuzzy
+#| msgid "Groepen"
+msgid "alle groepen"
+msgstr "Groups"
+
+#: kn/leden/templates/leden/home.html:33
+#: kn/static/templates/static/bestuur11.html:41
+#: kn/static/templates/static/bestuur7.html:18
+#: kn/static/templates/static/links.html:27
+msgid "en"
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:34
+#, python-format
+msgid ""
+"de <a href=\"%(url_lists)s\"\n"
+"                          >e-maillijsten</a>."
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:38
+#, python-format
+msgid ""
+"Wifi op de villa, zie <a href=\"%(url_wiki)s/Wifi\">\n"
+"            het wiki-artikel</a>."
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:40
+#, python-format
+msgid ""
+"Het <a href=\"%(url_fotos)s\">fotoboek</a>.\n"
+"        Je kunt hier ook <a href=\"%(url_wiki)s/Handleiding:FotosUploaden"
+"\">\n"
+"            foto's naar uploaden</a>!"
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:43
+#, python-format
+msgid ""
+"Een <a href=\"%(url_wiki_home)s\">wiki</a> waar iedereen\n"
+"        voor de vereniging nuttige informatie op kan\n"
+"        plempen.</a>"
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:46
+#, python-format
+msgid ""
+"Het <a href=\"%(url_forum)s\">forum</a>, dat helaas\n"
+"        nauwelijks meer wordt gebruikt."
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:48
+#, python-format
+msgid ""
+"Een <a href=\"%(url_irc)s\">chatkanaal</a> (IRC),\n"
+"        zie <a href=\"%(url_wiki)s/IRC\"\n"
+"            >het wiki-artikel</a>."
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:51
+msgid ""
+"Een <a href=\"https://www.facebook.com/groups/170930412922856/\">\n"
+"            Karpe Noktem groep op Facebook</a>."
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:53
+msgid ""
+"Het <a href=\"https://www.facebook.com/groups/279385195413570/\">\n"
+"            zusjesgroepje op Facebook</a>."
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:57
+msgid "Instellingen"
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:60
+msgid ""
+"Verander je profiel\n"
+"            (profielfoto, zichbaarheid telefoonnummer)"
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:62
+#, fuzzy
+#| msgid "Wachtwoord gereset!"
+msgid "Verander je wachtwoord"
+msgstr "Password reset!"
+
+#: kn/leden/templates/leden/home.html:64
+msgid "Stel een wachtwoord in voor wifi op de villa"
+msgstr ""
 
 #: kn/leden/templates/leden/ik_chpasswd.html:12
 #, fuzzy
@@ -1868,12 +1991,6 @@ msgid ""
 "Alle bestuursleden zijn bereikbaar op hun functie-\n"
 "of voornaam @karpenoktem.nl, behalve Daan en Niels.  Zij zijn\n"
 "respectievelijk te bereiken via"
-msgstr ""
-
-#: kn/static/templates/static/bestuur11.html:41
-#: kn/static/templates/static/bestuur7.html:18
-#: kn/static/templates/static/links.html:27
-msgid "en"
 msgstr ""
 
 #: kn/static/templates/static/bestuur11.html:43

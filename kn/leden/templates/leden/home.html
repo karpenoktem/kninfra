@@ -1,52 +1,67 @@
 {% extends "leden/base.html" %}
+
 {% load base %}
+{% load i18n %}
 
 {% block body %}
-<h1>Smoelenboek</h1>
-<p>Hallo <a href="{{ user.get_absolute_url }}">{{user.first_name }}</a>,</p>
+<h1>{% trans "Smoelenboek" %}</h1>
+<p>{% blocktrans with user_url=user.get_absolute_url first_name=user.first_name %}
+Hallo <a href="{{ user_url }}">{{ first_name }}</a>,
+{% endblocktrans %}</p>
 
-<p>Karpe Noktem heeft diverse digitale diensten, op deze website en daar
-	buiten:</p>
+<p>{% blocktrans %}Karpe Noktem heeft diverse digitale diensten,
+op deze website en daar buiten:{% endblocktrans %}</p>
 
+{% url "smoelen-home" as url_smoelen_home %}
+{% url "entity-by-name" name="lists" as url_lists %}
+{% store_external_url "wiki" as url_wiki %}
+{% store_external_url "wiki-home" as url_wiki_home %}
+{% url "fotos" "" as url_fotos %}
+{% url "forum" "" as url_forum %}
+{% url "irc" "" as url_irc %}
 <ul>
-	<li>De ledenadministratie aka het <a href="{% url "smoelen-home" %}">
-			smoelenboek</a> (dit hier!). Hier houden we van alles bij, zoals:
+    <li>{% blocktrans %}De ledenadministratie aka het
+        <a href="{{ url_smoelen_home }}"> smoelenboek</a>
+        (dit hier!). Hier houden we van alles
+	    bij, zoals:{% endblocktrans %}
 		<ul>
-			<li><a href="{% url "entity-by-name" name="leden"  %}"
-				>alle leden en oud-leden</a>,</li>
+			<li><a href=""
+                >{% trans "alle leden en oud-leden" %}</a>,</li>
 			<li><a href="{% url "tag-by-name" name="comms" %}"
-				>alle commissies</a>,</li>
+                >{% trans "alle commissies" %}</a>,</li>
 			<li><a href="{% url "entity-by-name" name="groepen" %}"
-				>alle groepen</a> en</li>
-			<li>de <a href="{% url "entity-by-name" name="lists" %}"
-				>e-maillijsten</a>.</li>
+                >{% trans "alle groepen" %}</a> {% trans "en" %}</li>
+            <li>{% blocktrans %}de <a href="{{ url_lists }}"
+                          >e-maillijsten</a>.{% endblocktrans %}</li>
 		</ul>
 	</li>
-	<li>Wifi op de villa, zie <a href="{% external_url "wiki" %}/Wifi">
-			het wiki-artikel</a>.</li>
-	<li>Het <a href="{% url "fotos" "" %}">fotoboek</a>. Je kunt hier ook
-		<a href="{% external_url "wiki" %}/Handleiding:FotosUploaden">
-			foto's naar uploaden</a>!</li>
-	<li>Een <a href="{% external_url "wiki-home" %}">wiki</a> waar iedereen
-		voor de vereniging nuttige informatie op kan plempen.</a>
-	<li>Het <a href="{% external_url "forum" %}">forum</a>, dat helaas
-		nauwelijks meer wordt gebruikt.</li>
-	<li>Een <a href="{% external_url "irc" %}">chatkanaal</a> (IRC),
-		zie <a href="{% external_url "wiki" %}/IRC">het wiki-artikel</a>.</li>
-	<li>Een <a href="https://www.facebook.com/groups/170930412922856/">
-			Karpe Noktem groep op Facebook</a>.</li>
-	<li>Het <a href="https://www.facebook.com/groups/279385195413570/">
-			zusjesgroepje op Facebook</a>.</li>
+    <li>{% blocktrans %}Wifi op de villa, zie <a href="{{ url_wiki }}/Wifi">
+            het wiki-artikel</a>.{% endblocktrans %}</li>
+    <li>{% blocktrans %}Het <a href="{{ url_fotos }}">fotoboek</a>.
+        Je kunt hier ook <a href="{{ url_wiki }}/Handleiding:FotosUploaden">
+            foto's naar uploaden</a>!{% endblocktrans %}</li>
+    <li>{% blocktrans %}Een <a href="{{ url_wiki_home }}">wiki</a> waar iedereen
+        voor de vereniging nuttige informatie op kan
+        plempen.</a>{% endblocktrans %}</li>
+    <li>{% blocktrans %}Het <a href="{{ url_forum }}">forum</a>, dat helaas
+        nauwelijks meer wordt gebruikt.{% endblocktrans %}</li>
+    <li>{% blocktrans %}Een <a href="{{ url_irc }}">chatkanaal</a> (IRC),
+        zie <a href="{{ url_wiki }}/IRC"
+            >het wiki-artikel</a>.{% endblocktrans %}</li>
+    <li>{% blocktrans %}Een <a href="https://www.facebook.com/groups/170930412922856/">
+            Karpe Noktem groep op Facebook</a>.{% endblocktrans %}</li>
+    <li>{% blocktrans %}Het <a href="https://www.facebook.com/groups/279385195413570/">
+            zusjesgroepje op Facebook</a>.{% endblocktrans %}</li>
 </ul>
 
-<h2>Instellingen</h2>
+<h2>{% trans "Instellingen" %}</h2>
 
 <ul>
-	<li><a href="{{ user.get_absolute_url }}">Verander je profiel
-			(profielfoto, zichbaarheid telefoonnummer)</a></li>
-	<li><a href="{% url "chpasswd" %}">Verander je wachtwoord</a></li>
-	<li><a href="{% url "chpasswd-villanet" %}">Stel een wachtwoord in voor wifi
-			op de villa</a></li>
+    <li><a href="{{ user.get_absolute_url }}">{% blocktrans %}Verander je profiel
+            (profielfoto, zichbaarheid telefoonnummer){% endblocktrans %}</a></li>
+    <li><a href="{% url "chpasswd" %}">{% trans "Verander je wachtwoord" %}</a></li>
+	<li><a href="{% url "chpasswd-villanet" %}"
+        >{% trans "Stel een wachtwoord in voor wifi op de villa" %}</a></li>
 </ul>
 
 {% endblock %}
