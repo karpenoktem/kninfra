@@ -109,7 +109,7 @@ def defaultSettings(glbls):
 
     d.INTERNAL_IPS = ['83.162.203.144'] # bas
     d.LOCALE = 'nl_NL.UTF-8'
-    d.LANGUAGE_CODE = 'nl-nl'
+    d.LANGUAGE_CODE = 'nl'
     d.LOCALE_PATHS = [d.INFRA_REPO + '/locale']
 
     # You probably won't change this
@@ -119,7 +119,6 @@ def defaultSettings(glbls):
     d.CACHE_BACKEND = 'locmem:///'
     d.MANAGERS = d.ADMINS
     d.TIME_ZONE = 'Europe/Amsterdam'
-    d.LANGUAGE_CODE = 'nl-NL'
     d.SITE_ID = 1
     d.USE_I18N = True
 
@@ -133,7 +132,8 @@ def defaultSettings(glbls):
     )
     d.MIDDLEWARE_CLASSES = (
             'django.contrib.sessions.middleware.SessionMiddleware',
-            'django.middleware.locale.LocaleMiddleware',
+            #'django.middleware.locale.LocaleMiddleware',
+            'kn.base.backports.BackportedLocaleMiddleware',
             'django.middleware.common.CommonMiddleware',
             'django.middleware.csrf.CsrfViewMiddleware',
             'django.contrib.auth.middleware.AuthenticationMiddleware',
