@@ -68,3 +68,7 @@ smtpd_sender_login_maps = hash:/etc/postfix/virtual/kninfra_slm_maps
 
 # [2014-10-27 bas] rewrite @lists.karpenoktem.nl to karpenoktem.nl
 sender_canonical_maps = pcre:/etc/postfix/sender_canonical_map
+
+{% if grains['vagrant'] %}
+luser_relay=infra
+{% endif %}
