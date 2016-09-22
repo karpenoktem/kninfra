@@ -1,7 +1,9 @@
 from django.template.defaultfilters import stringfilter
+from django.utils.safestring import mark_safe
+from django.core.urlresolvers import resolve, reverse
 from django.utils.translation import ugettext as _
 from django.utils.html import conditional_escape
-from django.utils.safestring import mark_safe
+from django.utils import translation
 from django.conf import settings
 from django import template
 
@@ -66,5 +68,18 @@ def header(context):
 @register.simple_tag
 def external_url(name):
     return settings.EXTERNAL_URLS[name]
+
+@register.simple_tag(takes_context=True)
+def translate_url(context, language):
+    # Do not forget to add django.core.context_processors.request as
+    # a template context processor.
+    view = resolve(context['request'].path)
+    request_language = translation.get_language()
+    translation.activate(language)
+    try:
+        url = reverse(view.url_name, args=view.args, kwargs=view.kwargs)
+    finally:
+        translation.activate(request_language)
+    return url
 
 # vim: et:sta:bs=2:sw=4:

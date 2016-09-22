@@ -181,6 +181,11 @@ $(document).ready(function() {
             });
         });
     });
+
+    // language picker
+    $('#langpicker').change(function() {
+        document.location = $(this).val();
+    });
 });
 
 // Implement rot13 for email obscurification

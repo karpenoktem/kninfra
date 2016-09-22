@@ -4,6 +4,8 @@
 import datetime
 import locale
 
+from django.utils.translation import ugettext_lazy as _
+
 # We want smart default. Eg: on a particular installation BASE_URL might be
 # overwritten (default: karpenoktem.nl).  However, if it is, we want other
 # defaults, which depend on BASE_URL, to use the overwritten BASE_URL.
@@ -112,6 +114,13 @@ def defaultSettings(glbls):
     d.LANGUAGE_CODE = 'nl'
     d.LOCALE_PATHS = [d.INFRA_REPO + '/locale']
 
+    d.LANGUAGES = [
+        ('de', _('Duits')),
+        ('en', _('Engels')),
+        ('nl', _('Nederlands')),
+        ('arr', _('Piraat')),
+    ]
+
     # You probably won't change this
     # ############################################################
 
@@ -166,6 +175,7 @@ def defaultSettings(glbls):
             "django.contrib.messages.context_processors.messages",
             "kn.base.context_processors.base_url",
             "kn.leden.context_processors.may_manage_planning",
+            "django.core.context_processors.request",
     )
     d.TEMPLATE_DIRS = ()
     d.AUTHENTICATION_BACKENDS = (

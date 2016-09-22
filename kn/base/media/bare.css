@@ -99,3 +99,8 @@ a img {
 		display: none;
 	}
 }
+
+/* taal kiezer */
+#footer #langpicker {
+	float: right;
+}

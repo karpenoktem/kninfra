@@ -1,11 +1,18 @@
 {% load i18n %}
+{% load base %}
 {% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl-NL" lang="nl-NL" prefix="og: http://ogp.me/ns#">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}"
+      prefix="og: http://ogp.me/ns#">
 	<head>
 		{% block head %}
 		<meta charset="utf-8"/>
 		<title>{% block title %}ASV Karpe Noktem{% endblock %}</title>
+        {% for code, name in LANGUAGES %}{% if code != LANGUAGE_CODE %}
+        <link rel="alternate" hreflang="{{ code }}" href="{% translate_url code %}" />
+        {% endif %}{% endfor %}{# code, name in LANGUAGES ... #}
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<meta property="og:image" content="{{ ABSOLUTE_MEDIA_URL }}/base/logo-og.png"/>
         <meta property="og:locale" content="{{ LANGUAGE_CODE }}"/>
@@ -75,6 +82,15 @@
                         {% trans "Alternatieve studentenvereniging Karpe Noktem" %}
                         <small><a id="scrollUp" href="#"
                             >{% trans "Terug naar boven" %}</a></small>
+                        {# Language picker #}
+                        <select id="langpicker">
+                        {% for code, name in LANGUAGES %}
+                        <option value="{% translate_url code %}"
+                            {% if code == LANGUAGE_CODE %}selected{% endif %}
+                                >{{ name }}</option>
+                        {% endfor %}{# code, name in LANGUAGES ... #}
+                        </select>
+                        {# / Language picker #}
                     </div>
                 </div>
                 {% endblock footer %}
