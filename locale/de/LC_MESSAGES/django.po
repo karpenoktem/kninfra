@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-24 04:29+0200\n"
+"POT-Creation-Date: 2016-09-24 04:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,8 +79,65 @@ msgstr ""
 msgid "^ledenmail-template/?$"
 msgstr ""
 
+#: kn/barco/forms.py:7
+msgid "Formuliernaam"
+msgstr ""
+
+#: kn/barco/forms.py:12
+msgid "Prijsbasis"
+msgstr ""
+
+#: kn/barco/forms.py:14 kn/barco/forms.py:24 kn/fotos/forms.py:23
+#: kn/subscriptions/forms.py:44
+#: kn/subscriptions/templates/subscriptions/event_detail.html:26
+msgid "Datum"
+msgstr ""
+
+#: kn/barco/forms.py:15
+msgid "Tapper"
+msgstr ""
+
+#: kn/barco/forms.py:16
+msgid "Dienst"
+msgstr ""
+
+#: kn/barco/forms.py:17
+msgid "Beginkas"
+msgstr ""
+
+#: kn/barco/forms.py:18
+msgid "Eindkas"
+msgstr ""
+
+#: kn/barco/forms.py:19 kn/barco/forms.py:26
+#: kn/subscriptions/templates/subscriptions/event_detail.html:83
+#: kn/subscriptions/templates/subscriptions/event_detail.html:126
+msgid "Opmerkingen"
+msgstr ""
+
+#: kn/barco/forms.py:25
+msgid "Tellers"
+msgstr ""
+
+#: kn/barco/templates/barco/form.html:162
+#: kn/fotos/templates/fotos/fotos.html:128
+msgid "Opslaan"
+msgstr ""
+
 #: kn/barco/urls.py:8
 msgid "^(?P<repos>[^/]+)/enter/(?P<formname>[^/]+)/$"
+msgstr ""
+
+#: kn/barco/views.py:181
+#, python-format
+msgid ""
+"Barform %s ingevoerd via kninfra\n"
+"\n"
+"Signed-off-by: kninfra <root@karpenoktem.nl>"
+msgstr ""
+
+#: kn/barco/views.py:193
+msgid "Opgeslagen!"
 msgstr ""
 
 #: kn/base/http.py:10
@@ -218,11 +275,6 @@ msgstr ""
 msgid "Naam voor mensen"
 msgstr ""
 
-#: kn/fotos/forms.py:23 kn/subscriptions/forms.py:44
-#: kn/subscriptions/templates/subscriptions/event_detail.html:26
-msgid "Datum"
-msgstr ""
-
 #: kn/fotos/forms.py:24 kn/subscriptions/forms.py:31
 msgid "Naam voor computers"
 msgstr ""
@@ -345,10 +397,6 @@ msgstr ""
 
 #: kn/fotos/templates/fotos/fotos.html:124
 msgid "Tags:"
-msgstr ""
-
-#: kn/fotos/templates/fotos/fotos.html:128
-msgid "Opslaan"
 msgstr ""
 
 #: kn/fotos/templates/fotos/fotos.html:136
@@ -3677,11 +3725,6 @@ msgstr ""
 #: kn/subscriptions/templates/subscriptions/event_detail.html:80
 #: kn/subscriptions/templates/subscriptions/event_detail.html:123
 msgid "Opmerkingen:"
-msgstr ""
-
-#: kn/subscriptions/templates/subscriptions/event_detail.html:83
-#: kn/subscriptions/templates/subscriptions/event_detail.html:126
-msgid "Opmerkingen"
 msgstr ""
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:86

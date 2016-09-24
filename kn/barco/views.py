@@ -4,6 +4,7 @@ import os.path
 import json
 
 from django.contrib import messages
+from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -177,8 +178,8 @@ def barco_enterform(request, repos, formname):
             with open(os.path.join(repopath, fn), 'w') as fh:
                 fh.write(csv.getvalue())
             subprocess.call(['/usr/bin/git', 'add', fn], cwd=repopath)
-            msg = ("Barform %s ingevoerd via kninfra\n\n"
-                    "Signed-off-by: kninfra <root@karpenoktem.nl>" %
+            msg = (_("Barform %s ingevoerd via kninfra\n\n"
+                    "Signed-off-by: kninfra <root@karpenoktem.nl>") %
                     fd['formname'])
             # XXX Is it safe to use canonical_full_email?
             author = "%s <%s>" % (str(request.user.humanName),
@@ -189,7 +190,7 @@ def barco_enterform(request, repos, formname):
             subprocess.call(['/usr/bin/git', 'push'], cwd=repopath)
 
             # and get back to the user:
-            messages.info(request, "Opgeslagen!")
+            messages.info(request, _("Opgeslagen!"))
             return HttpResponseRedirect(reverse('barco-enterform', 
                 args=(repos,formname)))
     form = formspec.django_form()
