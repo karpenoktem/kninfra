@@ -572,13 +572,11 @@ def secr_add_user(request):
             pwd = pseudo_randstr()
             u.set_password(pwd)
             giedo.change_password(str(u.name), pwd, pwd)
-            render_then_email("leden/set-password.mail.txt",
-                        u.canonical_full_email, {
+            render_then_email("leden/set-password.mail.txt", u, {
                             'user': u,
                             'password': pwd})
             # Send the welcome e-mail
-            render_then_email("leden/welcome.mail.txt",
-                        u.canonical_full_email, {
+            render_then_email("leden/welcome.mail.txt", u, {
                             'u': u})
             Es.notify_informacie('adduser', request.user, entity=u._id)
             return HttpResponseRedirect(reverse('user-by-name',
@@ -736,8 +734,7 @@ def user_reset_password(request, _id):
     pwd = pseudo_randstr()
     u.set_password(pwd)
     giedo.change_password(str(u.name), pwd, pwd)
-    render_then_email("leden/reset-password.mail.txt",
-                        u.canonical_full_email, {
+    render_then_email("leden/reset-password.mail.txt", u, {
                             'user': u,
                             'password': pwd})
     messages.info(request, _("Wachtwoord gereset!"))

@@ -340,8 +340,7 @@ class Subscription(SONWrapper):
         # headers:
         # https://tools.ietf.org/html/rfc5322#section-3.6.4
         # They are used here for proper threading in mail applications.
-        render_then_email(template,
-                self.user.canonical_full_email,
+        render_then_email(template, self.user,
                 ctx={
                     'mutation': mutation,
                     'subscription': self,
