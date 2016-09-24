@@ -1,105 +1,186 @@
+{% load i18n %}
+
 {% block subject %}\
-Wijzigingen aan de ledenadministratie
+{% trans "Wijzigingen aan de ledenadministratie" %}
 {% endblock %}\
 
 {% block html %}
-<p>Best InformaCie-lid,</p>
+<p>{% trans "Best InformaCie-lid," %}</p>
 
-<p>De volgende wijzigingen hebben plaatsgevonden aan de ledenadministratie:</p>
+<p>{% blocktrans %}De volgende wijzigingen hebben plaatsgevonden
+aan de ledenadministratie:{% endblocktrans %}</p>
 
 <ul>
 {% for nt in ntfs %}
 {% if nt.event == 'adduser' %}
-	<li><a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}"
-			>{{ nt.entity.humanName }}</a>
-		is ingeschreven als lid.
+<li>{% blocktrans with url=nt.entity.get_absolute_url \
+                       name=nt.entity.humanName %}
+<a href="{{ BASE_URL }}{{ url }}">{{ name }}</a> is ingeschreven als lid.
+{% endblocktrans %}
 	</li>
 {% elif nt.event == 'addgroup' %}
-	<li>De groep
-		<a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}"
-			>{{ nt.entity.humanName }}</a>
-		is opgericht.
-	</li>
+<li>{% blocktrans with url=nt.entity.get_absolute_url \
+                       name=nt.entity.humanName %}
+    De groep <a href="{{ BASE_URL }}{{ url }}">{{ name }}</a> is opgericht.</li>
+{% endblocktrans %}
 {% elif nt.event == 'relation_begin' %}
-	<li><a href="{{ BASE_URL }}{{ nt.relation.who.get_absolute_url }}"
-			>{{ nt.relation.who.humanName}}</a>
+	<li>
+        {% with who_url=nt.relation.who.get_absolute_url \
+                who=nt.relation.who.humanName \
+                with_gp=nt.relation.with.humanName.genitive_prefix \
+                with=nt.relation.with.humanName \
+                with_url=nt.relation.with.get_absolute_url %}
 		{% if nt.user == nt.relation.who %}
-			heeft zich ingeschreven als
-		{% else %}
-			is nu
-		{% endif%}
 		{% if nt.relation.how %}
-			<a href="{{ BASE_URL }}{{ nt.relation.how.get_absolute_url }}"
-				>{{ nt.relation.how.humanName }}</a>
+        {% blocktrans with how=nt.relation.how.humanName \
+                           how_url=nt.relation.how.get_absolute_url %}
+        <a href="{{ BASE_URL }}{{ who_url }}">{{ who }}</a>
+            heeft zich ingeschreven als
+			<a href="{{ BASE_URL }}{{ how_url }}">{{ how }}</a> {{ with_gp }}
+            <a href="{{ BASE_URL }}{{ with_url }}">{{ with }}</a>.
+        {% endblocktrans %}
+        {% else %}
+        {% blocktrans %}
+        <a href="{{ BASE_URL }}{{ who_url }}">{{ who }}</a>
+			heeft zich ingeschreven als lid {{ with_gp }}
+		<a href="{{ BASE_URL }}{{ with_url }}">{{ with }}</a>.
+        {% endblocktrans %}
+        {% endif %}
 		{% else %}
-			lid
+		{% if nt.relation.how %}
+        {% blocktrans with how=nt.relation.how.humanName \
+                           how_url=nt.relation.how.get_absolute_url %}
+        <a href="{{ BASE_URL }}{{ who_url }}">{{ who }}</a> is nu
+			<a href="{{ BASE_URL }}{{ how_url }}">{{ how }}</a> {{ with_gp }}
+		<a href="{{ BASE_URL }}{{ with_url }}">{{ with }}</a>.
+        {% endblocktrans %}
+        {% else %}
+        {% blocktrans %}
+        <a href="{{ BASE_URL }}{{ who_url }}">{{ who }}</a>
+			is nu lid {{ with_gp }}
+		<a href="{{ BASE_URL }}{{ with_url }}">{{ with }}</a>.
+        {% endblocktrans %}
+        {% endif %}
 		{% endif %}
-		{{ nt.relation.with.humanName.genitive_prefix }}
-		<a href="{{ BASE_URL }}{{ nt.relation.with.get_absolute_url }}"
-			>{{ nt.relation.with.humanName }}</a>.
+        {% endwith %}
 	</li>
 {% elif nt.event == 'relation_end' %}
-	<li><a href="{{ BASE_URL }}{{ nt.relation.who.get_absolute_url }}"
-			>{{ nt.relation.who.humanName}}</a>
+	<li>
+        {% with who_url=nt.relation.who.get_absolute_url \
+                who=nt.relation.who.humanName \
+                with_gp=nt.relation.with.humanName.genitive_prefix \
+                with=nt.relation.with.humanName \
+                with_url=nt.relation.with.get_absolute_url %}
 		{% if nt.user == nt.relation.who %}
-			heeft zich uitgeschreven als
-		{% else %}
-			is geen
-		{% endif%}
 		{% if nt.relation.how %}
-			<a href="{{ BASE_URL }}{{ nt.relation.how.get_absolute_url }}"
-				>{{ nt.relation.how.humanName }}</a>
+        {% blocktrans with how=nt.relation.how.humanName \
+                           how_url=nt.relation.how.get_absolute_url %}
+        <a href="{{ BASE_URL }}{{ who_url }}">{{ who }}</a>
+            heeft zich uitgeschreven als
+			<a href="{{ BASE_URL }}{{ how_url }}">{{ how }}</a> {{ with_gp }}
+            <a href="{{ BASE_URL }}{{ with_url }}">{{ with }}</a>.
+        {% endblocktrans %}
+        {% else %}
+        {% blocktrans %}
+        <a href="{{ BASE_URL }}{{ who_url }}">{{ who }}</a>
+			heeft zich uitgeschreven als lid {{ with_gp }}
+		<a href="{{ BASE_URL }}{{ with_url }}">{{ with }}</a>.
+        {% endblocktrans %}
+        {% endif %}
 		{% else %}
-			lid
+		{% if nt.relation.how %}
+        {% blocktrans with how=nt.relation.how.humanName \
+                           how_url=nt.relation.how.get_absolute_url %}
+        <a href="{{ BASE_URL }}{{ who_url }}">{{ who }}</a> is geen
+			<a href="{{ BASE_URL }}{{ how_url }}">{{ how }}</a>
+                meer {{ with_gp }}
+		<a href="{{ BASE_URL }}{{ with_url }}">{{ with }}</a>.
+        {% endblocktrans %}
+        {% else %}
+        {% blocktrans %}
+        <a href="{{ BASE_URL }}{{ who_url }}">{{ who }}</a>
+			is geen lid meer {{ with_gp }}
+		<a href="{{ BASE_URL }}{{ with_url }}">{{ with }}</a>.
+        {% endblocktrans %}
+        {% endif %}
 		{% endif %}
-		{% if nt.user != nt.relation.who %} meer {% endif %}
-		{{ nt.relation.with.humanName.genitive_prefix }}
-		<a href="{{ BASE_URL }}{{ nt.relation.with.get_absolute_url }}"
-			>{{ nt.relation.with.humanName }}</a>.
+        {% endwith %}
 	</li>
 {% elif nt.event == 'tag' %}
-	<li>De stempel <a href="{{ BASE_URL }}{{ nt.tag.get_absolute_url }}"
-			>{{ nt.tag.humanName}}</a>
-		is toegevoegd aan {{ nt.entity.humanName.definite_article }}
-		<a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}"
-			>{{ nt.entity.humanName }}</a>.
+	<li>
+        {% blocktrans with tag_url=nt.tag.get_absolute_url \
+                           tag=nt.tag.humanName \
+                           ent_da=nt.entity.humanName.definite_article \
+                           ent_url=nt.entity.get_absolute_url \
+                           ent=nt.entity.humanName %}
+         De stempel <a href="{{ BASE_URL }}{{ tag_url }}">{{ tag }}</a>
+            is toegevoegd aan {{ ent_da }}
+            <a href="{{ BASE_URL }}{{ ent_url }}">{{ ent }}</a>.
+        {% endblocktrans %}
 	</li>
 {% elif nt.event == 'untag' %}
-	<li>De stempel <a href="{{ BASE_URL }}{{ nt.tag.get_absolute_url }}"
-			>{{ nt.tag.humanName}}</a>
-		is verwijderd {{ nt.entity.humanName.genitive_prefix }}
-		<a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}"
-			>{{ nt.entity.humanName }}</a>.
+	<li>
+        {% blocktrans with tag_url=nt.tag.get_absolute_url \
+                           tag=nt.tag.humanName \
+                           ent_gp=nt.entity.humanName.genitive_prefix \
+                           ent_url=nt.entity.get_absolute_url \
+                           ent=nt.entity.humanName %}
+         De stempel <a href="{{ BASE_URL }}{{ tag_url }}">{{ tag }}</a>
+            is verwijderd {{ ent_gp }}
+            <a href="{{ BASE_URL }}{{ ent_url }}">{{ ent }}</a>.
+        {% endblocktrans %}
 	</li>
 {% elif nt.event == 'set_smoel' %}
-	<li><a href="{{ BASE_URL }}{{ nt.user.get_absolute_url }}">
-			{{ nt.user.humanName }}</a>
-		heeft een nieuwe smoel ingesteld voor
+	<li>
+        {% with user_url=nt.user.get_absolute_url \
+                user=nt.user.humanName \
+                ent_url=nt.entity.get_absolute_url \
+                ent=nt.entity.humanName %}
 		{% if nt.user == nt.entity %}
-			zichzelf.
-		{% else %}
-			<a href="{{ BASE_URL }}{{ nt.entity.get_absolute_url }}">
-				{{ nt.entity.humanName }}</a>.
+        {% blocktrans %}
+        <a href="{{ BASE_URL }}{{ user_url }}">{{ user }}</a>
+		heeft een nieuwe smoel ingesteld voor zichzelf.
+        {% endblocktrans %}
+        {% else %}
+        {% blocktrans %}
+        <a href="{{ BASE_URL }}{{ user_url }}">{{ user }}</a>
+		heeft een nieuwe smoel ingesteld voor
+			<a href="{{ BASE_URL }}{{ ent_url }}">{{ ent }}</a>.
+        {% endblocktrans %}
 		{% endif %}
+        {% endwith %}
 	</li>
 {% elif nt.event == 'add_foto_event' %}
-	<li>Het fotoalbum <a href="{{ BASE_URL }}{{ nt.fotoEvent.get_absolute_url }}"
-			>{{ nt.fotoEvent.display_title }}</a> is online gezet door
-			<a href="{{ BASE_URL }}{{ nt.user.get_absolute_url }}"
-			>{{ nt.user.humanName }}</a>.</li>
+	<li>
+        {% blocktrans with event_url=nt.fotoEvent.get_absolute_url \
+                           event=nt.fotoEvent.display_title \
+                           user_url=nt.user.get_absolute_url \
+                           user=nt.user.humanName %}
+        Het fotoalbum <a href="{{ BASE_URL }}{{ event_url }}">{{ event }}</a>
+        is online gezet door <a href="{{ BASE_URL }}{{ user_url }}">{{ user }}</a>.
+        {% endblocktrans %}
+    </li>
 {% elif nt.event == 'add_foto_album' %}
-	<li>Het fotoalbum <a href="{{ BASE_URL }}{{ nt.fotoAlbum.get_absolute_url }}"
-			>{{ nt.fotoAlbum.display_title }}</a> is toegevoegd aan
-			<a href="{{ BASE_URL }}{{ nt.fotoEvent.get_absolute_url }}"
-			>{{ nt.fotoEvent.display_title }}</a> door
-			<a href="{{ BASE_URL }}{{ nt.user.get_absolute_url }}"
-			>{{ nt.user.humanName }}</a>.</li>
+	<li>
+        {% blocktrans with event_url=nt.fotoEvent.get_absolute_url \
+                           event=nt.fotoEvent.display_title \
+                           album_url=nt.fotoAlbum.get_absolute_url \
+                           album=nt.fotoAlbum.display_title \
+                           user_url=nt.user.get_absolute_url \
+                           user=nt.user.humanName %}
+        Het fotoalbum <a href="{{ BASE_URL }}{{ album_url }}">{{ album}}</a>
+            is toegevoegd aan
+            <a href="{{ BASE_URL }}{{ event_url }}">{{ event}}</a> door
+			<a href="{{ BASE_URL }}{{ user_url }}">{{ user }}</a>.
+        {% endblocktrans %}</li>
 {% else %}
-	<li>Onbekende notificatie {{ nt.event }}.</li>
+<li>{% blocktrans with what=nt.event %}
+    Onbekende notificatie {{ what }}.
+    {% endblocktrans %}</li>
 {% endif %}
 {% endfor %}
 </ul>
 
-<p>Met geautomatiseerde groet,<br/>
-Het Smoelenboek</p>
+<p>{% trans "Met geautomatiseerde groet," %}<br/>
+{% trans "Het Smoelenboek" %}</p>
 {% endblock %}

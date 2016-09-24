@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-22 10:20+0200\n"
+"POT-Creation-Date: 2016-09-24 04:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -116,11 +116,11 @@ msgid ""
 "mailen."
 msgstr ""
 
-#: kn/base/templates/base/bare.html:82
+#: kn/base/templates/base/bare.html:83
 msgid "Alternatieve studentenvereniging Karpe Noktem"
 msgstr ""
 
-#: kn/base/templates/base/bare.html:84
+#: kn/base/templates/base/bare.html:85
 msgid "Terug naar boven"
 msgstr ""
 
@@ -961,6 +961,95 @@ msgstr ""
 
 #: kn/leden/templates/leden/ik_openvpn.html:27
 msgid "Configuratiebestanden (voor gevorderden)"
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:4
+msgid "Wijzigingen aan de ledenadministratie"
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:8
+msgid "Best InformaCie-lid,"
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:10
+msgid ""
+"De volgende wijzigingen hebben plaatsgevonden\n"
+"aan de ledenadministratie:"
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:43
+#, python-format
+msgid ""
+"\n"
+"        <a href=\"%(BASE_URL)s%(who_url)s\">%(who)s</a>\n"
+"\t\t\theeft zich ingeschreven als lid %(with_gp)s\n"
+"\t\t<a href=\"%(BASE_URL)s%(with_url)s\">%(with)s</a>.\n"
+"        "
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:58
+#, python-format
+msgid ""
+"\n"
+"        <a href=\"%(BASE_URL)s%(who_url)s\">%(who)s</a>\n"
+"\t\t\tis nu lid %(with_gp)s\n"
+"\t\t<a href=\"%(BASE_URL)s%(with_url)s\">%(with)s</a>.\n"
+"        "
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:84
+#, python-format
+msgid ""
+"\n"
+"        <a href=\"%(BASE_URL)s%(who_url)s\">%(who)s</a>\n"
+"\t\t\theeft zich uitgeschreven als lid %(with_gp)s\n"
+"\t\t<a href=\"%(BASE_URL)s%(with_url)s\">%(with)s</a>.\n"
+"        "
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:100
+#, python-format
+msgid ""
+"\n"
+"        <a href=\"%(BASE_URL)s%(who_url)s\">%(who)s</a>\n"
+"\t\t\tis geen lid meer %(with_gp)s\n"
+"\t\t<a href=\"%(BASE_URL)s%(with_url)s\">%(with)s</a>.\n"
+"        "
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:140
+#, python-format
+msgid ""
+"\n"
+"        <a href=\"%(BASE_URL)s%(user_url)s\">%(user)s</a>\n"
+"\t\theeft een nieuwe smoel ingesteld voor zichzelf.\n"
+"        "
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:145
+#, python-format
+msgid ""
+"\n"
+"        <a href=\"%(BASE_URL)s%(user_url)s\">%(user)s</a>\n"
+"\t\theeft een nieuwe smoel ingesteld voor\n"
+"\t\t\t<a href=\"%(BASE_URL)s%(ent_url)s\">%(ent)s</a>.\n"
+"        "
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:177
+#, python-format
+msgid ""
+"\n"
+"    Onbekende notificatie %(what)s.\n"
+"    "
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:184
+msgid "Met geautomatiseerde groet,"
+msgstr ""
+
+#: kn/leden/templates/leden/informacie-digest.mail.txt:185
+msgid "Het Smoelenboek"
 msgstr ""
 
 #: kn/leden/templates/leden/institute_detail.html:7
