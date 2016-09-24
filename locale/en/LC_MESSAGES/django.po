@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-24 04:13+0200\n"
+"POT-Creation-Date: 2016-09-24 04:25+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -243,13 +243,143 @@ msgstr "Name for computers"
 msgid "Volledige naam voor mensen"
 msgstr "Full name for people"
 
-#: kn/fotos/forms.py:34
+#: kn/fotos/forms.py:34 kn/fotos/templates/fotos/admin/move.html:30
 msgid "Verplaats"
 msgstr "Relocate"
 
 #: kn/fotos/forms.py:36
 msgid "naar"
 msgstr "to"
+
+#: kn/fotos/templates/fotos/admin/create.html:62
+msgid "Hier kun je een map maken voor een nog niet bestaande activiteit."
+msgstr ""
+
+#: kn/fotos/templates/fotos/admin/create.html:68
+#, fuzzy
+#| msgid "Activiteiten"
+msgid "Maak activiteit aan"
+msgstr "Activities"
+
+#: kn/fotos/templates/fotos/admin/create.html:73
+#, fuzzy
+#| msgid "Activiteiten"
+msgid "Maak activiteit"
+msgstr "Activities"
+
+#: kn/fotos/templates/fotos/admin/create.html:77
+msgid "Lijst van bestaande activiteiten:"
+msgstr ""
+
+#: kn/fotos/templates/fotos/admin/move.html:8
+#, python-format
+msgid ""
+"Hier kun je foto's verplaatsen. Ze worden uit de fotos\n"
+"        map van een gebruik er gehaald en aan het fotoboek\n"
+"        toegevoegd. Bestaat de activiteit nog niet? Maak hem\n"
+"        <a href=\"%(url_create)s\">hier</a> aan.\n"
+"        "
+msgstr ""
+
+#: kn/fotos/templates/fotos/admin/move.html:18
+#, fuzzy
+#| msgid "Verplaats"
+msgid "Verplaats foto's"
+msgstr "Relocate"
+
+#: kn/fotos/templates/fotos/fotos.html:54
+msgid "zoek..."
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:58
+msgid "Bewerk naam en zichtbaarheid"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:63
+#: kn/fotos/templates/fotos/fotos.html:109
+msgid "Publiek"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:64
+#: kn/fotos/templates/fotos/fotos.html:110
+msgid "Alleen leden"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:65
+#: kn/fotos/templates/fotos/fotos.html:111
+msgid "Fototaggers"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:68
+msgid "Album titel"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:70
+msgid "Ok"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:74
+msgid "Duidelijke zichtbaarheid:"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:82
+#, python-format
+msgid ""
+"Je hebt niet de juiste rechten\n"
+"om dit album te zien.  Waarschijnlijk mogen alleen\n"
+"<a href=\"%(url_fotocie)s\">FotoCie</a>-leden\n"
+"dit album zien."
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:92
+#: kn/leden/templates/leden/user_list.html:12
+msgid "vorige"
+msgstr "previous"
+
+#: kn/fotos/templates/fotos/fotos.html:94
+#: kn/leden/templates/leden/user_list.html:16
+msgid "volgende"
+msgstr "next"
+
+#: kn/fotos/templates/fotos/fotos.html:103
+msgid "Titel"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:105
+#, fuzzy
+#| msgid "Korte beschrijving"
+msgid "Beschrijving..."
+msgstr "Short description"
+
+#: kn/fotos/templates/fotos/fotos.html:106 kn/subscriptions/forms.py:37
+msgid "Beschrijving"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:108
+msgid "Zichtbaarheid"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:113
+msgid "Verwijder"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:124
+msgid "Tags:"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:128
+msgid "Opslaan"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:136
+msgid "tags"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:137
+#, fuzzy
+#| msgid "vorige"
+msgid "origineel"
+msgstr "previous"
 
 #: kn/fotos/urls.py:19
 msgid "^foto/admin/?$"
@@ -1293,10 +1423,6 @@ msgstr ""
 msgid "Gebruikers"
 msgstr "Users"
 
-#: kn/leden/templates/leden/user_list.html:12
-msgid "vorige"
-msgstr "previous"
-
 #: kn/leden/templates/leden/user_list.html:14
 msgid "pagina"
 msgstr "page"
@@ -1304,10 +1430,6 @@ msgstr "page"
 #: kn/leden/templates/leden/user_list.html:14
 msgid "van de"
 msgstr "of the"
-
-#: kn/leden/templates/leden/user_list.html:16
-msgid "volgende"
-msgstr "next"
 
 #: kn/leden/templates/leden/welcome.mail.txt:4
 msgid ""
@@ -3637,10 +3759,6 @@ msgstr ""
 
 #: kn/subscriptions/forms.py:23
 msgid "Naam voor computers bestaat al"
-msgstr ""
-
-#: kn/subscriptions/forms.py:37
-msgid "Beschrijving"
 msgstr ""
 
 #: kn/subscriptions/forms.py:39
