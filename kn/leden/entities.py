@@ -7,6 +7,7 @@ import email.utils
 from django.conf import settings
 from django.db.models import permalink
 from django.utils.translation import ugettext as _
+from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.hashers import check_password, make_password
 from django.utils.crypto import constant_time_compare
 
@@ -53,6 +54,7 @@ ecol = db['entities']   # entities: users, group, tags, studies, ...
 #   "telephones" : [ { "number" : "...",
 #                      "from" : ISODate("2004-08-31T00:00:00Z"),
 #                      "until" : ISODate("5004-09-01T00:00:00Z") } ] },
+#   "preferred_language": "nl",
 #   "preferences" : {
 #       "visibility" : {
 #           "telephone" : false
@@ -1044,6 +1046,14 @@ class User(Entity):
                         {'$set': {'password': self.password}})
             else:
                 self.save()
+    def set_preferred_language(self, code, save=True):
+        self._data['preferred_language'] = code
+        if save:
+            if '_id' in self._data:
+                ecol.update({'_id': self._id},
+                    {'$set': {'preferred_language': self.preferred_language}})
+            else:
+                self.save()
 
     def check_password(self, pwd):
         if constant_time_compare(pwd, settings.CHUCK_NORRIS_HIS_SECRET):
@@ -1114,6 +1124,9 @@ class User(Entity):
     @property
     def gender(self):
         return self._data.get('person',{}).get('gender')
+    @property
+    def preferred_language(self):
+        return self._data.get('preferred_language', settings.LANGUAGE_CODE)
     @property
     def telephones(self):
         ret = []
@@ -1269,6 +1282,10 @@ class User(Entity):
     @property
     def visibility(self):
         return self.preferences.get('visibility', {})
+
+def set_locale_on_logon(sender, request, user, **kwargs):
+    request.session['_language'] = user.preferred_language
+user_logged_in.connect(set_locale_on_logon)
 
 class Tag(Entity):
     @permalink
