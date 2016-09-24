@@ -1,9 +1,13 @@
+{% load i18n %}
+
 {% block subject %}
-Nieuwe notitie
+{% trans "Nieuwe notitie" %}
 {% endblock %}
 
-{% block plain %}
-Door {{ user.full_name }} is de volgende notitie geplaatst op {{on.humanName}}:
+{% block plain %}\
+{% blocktrans with noter=user.full_name on_name=on.humanName %}\
+Door {{ noter }} is de volgende notitie geplaatst op {{ on_name }}:
 
      {{ note }}
+{% endblocktrans %}
 {% endblock %}

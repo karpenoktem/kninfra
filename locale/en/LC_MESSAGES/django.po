@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-24 04:03+0200\n"
+"POT-Creation-Date: 2016-09-24 04:13+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1124,6 +1124,32 @@ msgstr "Smoelenboek"
 msgid "Studenten"
 msgstr "Student number"
 
+#: kn/leden/templates/leden/new-note.mail.txt:4
+msgid "Nieuwe notitie"
+msgstr ""
+
+#: kn/leden/templates/leden/new-note.mail.txt:8
+#, python-format
+msgid ""
+"\\\n"
+"Door %(noter)s is de volgende notitie geplaatst op %(on_name)s:\n"
+"\n"
+"     %(note)s\n"
+msgstr ""
+
+#: kn/leden/templates/leden/note-closed.mail.txt:4
+msgid "Notitie gesloten"
+msgstr ""
+
+#: kn/leden/templates/leden/reset-password.mail.txt:4
+msgid ""
+"Karpe Noktem's ledenadministratie <nietjewachtwoorddoorsturen@karpenoktem.nl>"
+msgstr ""
+
+#: kn/leden/templates/leden/reset-password.mail.txt:8
+msgid "[Karpe Noktem Smoelenboek] Nieuw wachtwoord"
+msgstr ""
+
 #: kn/leden/templates/leden/secr_add_group.html:10
 #: kn/planning/templates/planning/event_create.html:14
 #: kn/planning/templates/planning/event_edit.html:58
@@ -1138,6 +1164,15 @@ msgstr ""
 #: kn/moderation/templates/moderation/overview.html:24
 #: kn/subscriptions/templates/subscriptions/event_detail.html:59
 msgid "door"
+msgstr ""
+
+#: kn/leden/templates/leden/set-password.mail.txt:4
+msgid ""
+"Karpe Noktems ledenadministratie <nietjewachtwoorddoorsturen@karpenoktem.nl>"
+msgstr ""
+
+#: kn/leden/templates/leden/set-password.mail.txt:8
+msgid "[Karpe Noktem Smoelenboek] Jouw wachtwoord"
 msgstr ""
 
 #: kn/leden/templates/leden/stats.html:10
