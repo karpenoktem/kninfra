@@ -5,13 +5,22 @@
 <h1>Activiteiten</h1>
 <ul>
 {% for e in open_events %}
+{% if e.owner %}
+<li><small><a href="{{ e.owner.get_absolute_url }}"
+                >{{ e.owner.humanName }}</a>:</small>
+<a href={{ e.get_absolute_url }}>{{ e.humanName }}</a>
+{% else %}
 <li><a href={{ e.get_absolute_url }}>{{ e.humanName }}</a>
+{% endif %}{# e.owner #}
 {% if e.date %}
 <small>{{ e.date.date }}</small>
 {% endif %}{# e.date #}
 </li>
 {% endfor %}{# e in open_events #}
 </ul>
+
+{% if open_leden_events %}
+<h3>Ledenactiviteiten</h3>
 <ul>
 {% for e in open_leden_events %}
 <li><small><a href="{{ e.createdBy.get_absolute_url }}"
@@ -23,10 +32,18 @@
 </li>
 {% endfor %}{# e in open_leden_events #}
 </ul>
+{% endif %}{# open_leden_events #}
+
 <h2>Oude activiteiten</h2>
 <ul>
 {% for e in closed_events %}
+{% if e.owner %}
+<li><small><a href="{{ e.owner.get_absolute_url }}"
+                >{{ e.owner.humanName }}</a>:</small>
+<a href={{ e.get_absolute_url }}>{{ e.humanName }}</a>
+{% else %}
 <li><a href={{ e.get_absolute_url }}>{{ e.humanName }}</a>
+{% endif %}{# e.owner #}
 {% if e.date %}
 <small>{{ e.date.date }}</small>
 {% endif %}{# e.date #}
@@ -34,14 +51,4 @@
 {% endfor %}{# e in closed_events #}
 </ul>
 <ul>
-{% for e in closed_leden_events %}
-<li><small><a href="{{ e.createdBy.get_absolute_url }}"
-                >{{ e.createdBy.humanName }}</a>:</small>
-<a href={{ e.get_absolute_url }}>{{ e.humanName }}</a>
-{% if e.date %}
-<small>{{ e.date.date }}</small>
-{% endif %}{# e.date #}
-</li>
-{% endfor %}{# e in closed_leden_events #}
-</ul>
 {% endblock %}

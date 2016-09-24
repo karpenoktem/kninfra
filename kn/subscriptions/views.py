@@ -19,24 +19,19 @@ from kn.subscriptions.forms import get_add_event_form
 
 @login_required
 def event_list(request):
-    open_events, closed_events, open_leden_events, \
-                closed_leden_events = [],[],[],[]
+    open_events, closed_events, open_leden_events = [],[],[]
     for e in reversed(tuple(subscr_Es.all_events())):
         if e.is_open:
-            if e.is_official:
-                open_events.append(e)
-            else:
+            if e.is_member_activity:
                 open_leden_events.append(e)
-        else:
-            if e.is_official:
-                closed_events.append(e)
             else:
-                closed_leden_events.append(e)
+                open_events.append(e)
+        else:
+            closed_events.append(e)
     return render_to_response('subscriptions/event_list.html',
             {'open_events': open_events,
-             'closed_events': closed_events,
              'open_leden_events': open_leden_events,
-             'closed_leden_events': closed_leden_events},
+             'closed_events': closed_events},
             context_instance=RequestContext(request))
 
 @login_required
@@ -215,7 +210,9 @@ def event_new_or_edit(request, edit=None):
             )
             return HttpResponseRedirect(reverse('event-detail', args=(e.name,)))
     elif edit is None:
-        form = AddEventForm()
+        form = AddEventForm(initial={'owner': request.user.id,
+                                     'cost': 0,
+                                     'has_public_subscriptions': True})
     else:
         d = e._data
         form = AddEventForm(d)

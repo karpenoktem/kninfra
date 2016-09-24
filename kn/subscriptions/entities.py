@@ -175,6 +175,11 @@ class Event(SONWrapper):
     @property
     def can_unsubscribe(self):
         return self.is_open and self.may_unsubscribe
+    @property
+    def is_member_activity(self):
+        if self.is_official:
+            return False
+        return self.owner.id == self.createdBy.id
 
     def subscribe(self, user, notes):
         subscription = self.get_subscription(user, create=True)
