@@ -61,10 +61,10 @@ def validate_username(username):
         raise forms.ValidationError(_('Gebruikersnaam is niet toegestaan'))
 
 class AddUserForm(forms.Form):
+    first_name = forms.CharField(label=_("Voornaam"))
     last_name = forms.CharField(label=_("Achternaam"),
                     widget=forms.TextInput(attrs={
                         'placeholder': _('bijv.: Vaart, van der')}))
-    first_name = forms.CharField(label=_("Voornaam"))
     username = forms.CharField(label=_("Gebruikersnaam"),
                     validators=[validate_username])
     gender = forms.ChoiceField(label=_("Geslacht"),
