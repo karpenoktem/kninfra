@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-24 04:33+0200\n"
+"POT-Creation-Date: 2016-09-26 03:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,11 +143,11 @@ msgstr ""
 msgid "referer header mist"
 msgstr ""
 
-#: kn/base/mail.py:34
+#: kn/base/mail.py:49
 msgid "subject blok mist"
 msgstr ""
 
-#: kn/base/mail.py:36
+#: kn/base/mail.py:51
 msgid "html of plain blok mist"
 msgstr ""
 
@@ -255,19 +255,11 @@ msgid "Going outside of the root"
 msgstr ""
 
 #: kn/defaultSettings.py:118
-msgid "Duits"
+msgid "Nederlands"
 msgstr ""
 
 #: kn/defaultSettings.py:119
 msgid "Engels"
-msgstr ""
-
-#: kn/defaultSettings.py:120
-msgid "Nederlands"
-msgstr ""
-
-#: kn/defaultSettings.py:121
-msgid "Piraat"
 msgstr ""
 
 #: kn/fotos/forms.py:22 kn/leden/forms.py:99
@@ -439,27 +431,27 @@ msgstr ""
 msgid "geen foutmelding"
 msgstr ""
 
-#: kn/leden/entities.py:770
+#: kn/leden/entities.py:772
 msgid "Entiteit heeft al deze stempel"
 msgstr ""
 
-#: kn/leden/entities.py:778
+#: kn/leden/entities.py:780
 msgid "Eniteit heeft deze stempel nog niet"
 msgstr ""
 
-#: kn/leden/entities.py:924
+#: kn/leden/entities.py:926
 msgid "Entiteit heeft nog geen humanName"
 msgstr ""
 
-#: kn/leden/entities.py:1213
+#: kn/leden/entities.py:1226
 msgid "studie index bestaat niet"
 msgstr ""
 
-#: kn/leden/entities.py:1216
+#: kn/leden/entities.py:1229
 msgid "studie is al beeindigt"
 msgstr ""
 
-#: kn/leden/entities.py:1218
+#: kn/leden/entities.py:1231
 msgid "einddatum voor begindatum"
 msgstr ""
 
@@ -476,15 +468,15 @@ msgid "Gebruikersnaam is niet toegestaan"
 msgstr ""
 
 #: kn/leden/forms.py:64
+msgid "Voornaam"
+msgstr ""
+
+#: kn/leden/forms.py:65
 msgid "Achternaam"
 msgstr ""
 
-#: kn/leden/forms.py:66
-msgid "bijv.: Vaart, van der"
-msgstr ""
-
 #: kn/leden/forms.py:67
-msgid "Voornaam"
+msgid "bijv.: Vaart, van der"
 msgstr ""
 
 #: kn/leden/forms.py:70
@@ -1699,35 +1691,35 @@ msgid ""
 "veranderd."
 msgstr ""
 
-#: kn/leden/views.py:671
+#: kn/leden/views.py:669
 msgid "Deze relatie bestaat al"
 msgstr ""
 
-#: kn/leden/views.py:694
+#: kn/leden/views.py:692
 msgid "'group' is niet een groep"
 msgstr ""
 
-#: kn/leden/views.py:702
+#: kn/leden/views.py:700
 msgid "'tag' is niet een stempel"
 msgstr ""
 
-#: kn/leden/views.py:735
+#: kn/leden/views.py:733
 msgid "Gebruiker is niet geactiveerd"
 msgstr ""
 
-#: kn/leden/views.py:743
+#: kn/leden/views.py:740
 msgid "Wachtwoord gereset!"
 msgstr ""
 
-#: kn/leden/views.py:751
+#: kn/leden/views.py:748
 msgid "missende `on' of `note'"
 msgstr ""
 
-#: kn/leden/views.py:768
+#: kn/leden/views.py:765
 msgid "Agenda geupdate!"
 msgstr ""
 
-#: kn/leden/views.py:782
+#: kn/leden/views.py:779
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
 msgstr ""
 

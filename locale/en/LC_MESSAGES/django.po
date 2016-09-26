@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-24 04:33+0200\n"
+"POT-Creation-Date: 2016-09-26 03:09+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -146,11 +146,11 @@ msgstr ""
 msgid "referer header mist"
 msgstr "referer header is missing"
 
-#: kn/base/mail.py:34
+#: kn/base/mail.py:49
 msgid "subject blok mist"
 msgstr "subject block is missing"
 
-#: kn/base/mail.py:36
+#: kn/base/mail.py:51
 msgid "html of plain blok mist"
 msgstr "html or plain block is missing"
 
@@ -274,19 +274,11 @@ msgid "Going outside of the root"
 msgstr ""
 
 #: kn/defaultSettings.py:118
-msgid "Duits"
+msgid "Nederlands"
 msgstr ""
 
 #: kn/defaultSettings.py:119
 msgid "Engels"
-msgstr ""
-
-#: kn/defaultSettings.py:120
-msgid "Nederlands"
-msgstr ""
-
-#: kn/defaultSettings.py:121
-msgid "Piraat"
 msgstr ""
 
 #: kn/fotos/forms.py:22 kn/leden/forms.py:99
@@ -468,33 +460,33 @@ msgstr "An error has occured: %s"
 msgid "geen foutmelding"
 msgstr "no error"
 
-#: kn/leden/entities.py:770
+#: kn/leden/entities.py:772
 #, fuzzy
 #| msgid "Entiteit heeft geen naam"
 msgid "Entiteit heeft al deze stempel"
 msgstr "Entity does not have a name"
 
-#: kn/leden/entities.py:778
+#: kn/leden/entities.py:780
 #, fuzzy
 #| msgid "Entiteit heeft geen naam"
 msgid "Eniteit heeft deze stempel nog niet"
 msgstr "Entity does not have a name"
 
-#: kn/leden/entities.py:924
+#: kn/leden/entities.py:926
 #, fuzzy
 #| msgid "Entiteit heeft geen naam"
 msgid "Entiteit heeft nog geen humanName"
 msgstr "Entity does not have a name"
 
-#: kn/leden/entities.py:1213
+#: kn/leden/entities.py:1226
 msgid "studie index bestaat niet"
 msgstr ""
 
-#: kn/leden/entities.py:1216
+#: kn/leden/entities.py:1229
 msgid "studie is al beeindigt"
 msgstr ""
 
-#: kn/leden/entities.py:1218
+#: kn/leden/entities.py:1231
 msgid "einddatum voor begindatum"
 msgstr ""
 
@@ -515,16 +507,16 @@ msgid "Gebruikersnaam is niet toegestaan"
 msgstr "User is not active"
 
 #: kn/leden/forms.py:64
+msgid "Voornaam"
+msgstr "First name"
+
+#: kn/leden/forms.py:65
 msgid "Achternaam"
 msgstr "Surname"
 
-#: kn/leden/forms.py:66
+#: kn/leden/forms.py:67
 msgid "bijv.: Vaart, van der"
 msgstr "e.g.: Vaart, van der"
-
-#: kn/leden/forms.py:67
-msgid "Voornaam"
-msgstr "First name"
 
 #: kn/leden/forms.py:70
 msgid "Geslacht"
@@ -1814,35 +1806,35 @@ msgstr ""
 "Dear %s, but off course, your password for the villa-network has been "
 "changed."
 
-#: kn/leden/views.py:671
+#: kn/leden/views.py:669
 msgid "Deze relatie bestaat al"
 msgstr "This relation already exists"
 
-#: kn/leden/views.py:694
+#: kn/leden/views.py:692
 msgid "'group' is niet een groep"
 msgstr "'group' is not a group"
 
-#: kn/leden/views.py:702
+#: kn/leden/views.py:700
 msgid "'tag' is niet een stempel"
 msgstr "'tag' is not a tag"
 
-#: kn/leden/views.py:735
+#: kn/leden/views.py:733
 msgid "Gebruiker is niet geactiveerd"
 msgstr "User is not active"
 
-#: kn/leden/views.py:743
+#: kn/leden/views.py:740
 msgid "Wachtwoord gereset!"
 msgstr "Password reset!"
 
-#: kn/leden/views.py:751
+#: kn/leden/views.py:748
 msgid "missende `on' of `note'"
 msgstr "Missing `on' or `note'"
 
-#: kn/leden/views.py:768
+#: kn/leden/views.py:765
 msgid "Agenda geupdate!"
 msgstr "Agenda has been updated"
 
-#: kn/leden/views.py:782
+#: kn/leden/views.py:779
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
 msgstr "Your request is being processed.  Expect an e-mail within 5 minutes."
 
