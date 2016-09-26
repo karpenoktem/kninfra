@@ -115,10 +115,10 @@ def defaultSettings(glbls):
     d.LOCALE_PATHS = [d.INFRA_REPO + '/locale']
 
     d.LANGUAGES = [
-        ('de', _('Duits')),
-        ('en', _('Engels')),
         ('nl', _('Nederlands')),
-        ('en_PI', _('Piraat')),
+        ('en', _('Engels')),
+    #    ('de', _('Duits')),
+    #    ('en_PI', _('Piraat')),
     ]
 
     # You probably won't change this
