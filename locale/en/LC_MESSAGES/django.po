@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-26 03:09+0200\n"
+"POT-Creation-Date: 2016-09-26 05:12+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -43,7 +43,7 @@ msgstr ""
 #: kn/agenda/templates/agenda/short_agenda.html:2
 #: kn/base/templates/base/base.html:32
 msgid "agenda"
-msgstr "diary"
+msgstr "calendar"
 
 #: kn/agenda/templates/agenda/short_agenda.html:8
 msgid "Meer..."
@@ -66,28 +66,24 @@ msgid "Terug naar onze eigen agenda"
 msgstr "Back to our own diary."
 
 #: kn/agenda/urls.py:7
-#, fuzzy
-#| msgid "agenda"
 msgid "^agenda/?$"
-msgstr "diary"
+msgstr "^calendar/?$"
 
 #: kn/agenda/urls.py:8
 msgid "^agenda/zeus/?$"
-msgstr ""
+msgstr "^calendar/zeus/?$"
 
 #: kn/agenda/urls.py:9
 msgid "^ledenmail-template/?$"
-msgstr ""
+msgstr "^ledenmail-template/?$"
 
 #: kn/barco/forms.py:7
-#, fuzzy
-#| msgid "Gebruikersnaam"
 msgid "Formuliernaam"
-msgstr "Username"
+msgstr "Name of form"
 
 #: kn/barco/forms.py:12
 msgid "Prijsbasis"
-msgstr ""
+msgstr "Pricebase"
 
 #: kn/barco/forms.py:14 kn/barco/forms.py:24 kn/fotos/forms.py:23
 #: kn/subscriptions/forms.py:44
@@ -97,38 +93,38 @@ msgstr "Date"
 
 #: kn/barco/forms.py:15
 msgid "Tapper"
-msgstr ""
+msgstr "Bartender"
 
 #: kn/barco/forms.py:16
 msgid "Dienst"
-msgstr ""
+msgstr "Shift"
 
 #: kn/barco/forms.py:17
 msgid "Beginkas"
-msgstr ""
+msgstr "Initial balance"
 
 #: kn/barco/forms.py:18
 msgid "Eindkas"
-msgstr ""
+msgstr "Final balance"
 
 #: kn/barco/forms.py:19 kn/barco/forms.py:26
 #: kn/subscriptions/templates/subscriptions/event_detail.html:83
 #: kn/subscriptions/templates/subscriptions/event_detail.html:126
 msgid "Opmerkingen"
-msgstr ""
+msgstr "Notes"
 
 #: kn/barco/forms.py:25
 msgid "Tellers"
-msgstr ""
+msgstr "Counters"
 
 #: kn/barco/templates/barco/form.html:162
 #: kn/fotos/templates/fotos/fotos.html:128
 msgid "Opslaan"
-msgstr ""
+msgstr "Save"
 
 #: kn/barco/urls.py:8
 msgid "^(?P<repos>[^/]+)/enter/(?P<formname>[^/]+)/$"
-msgstr ""
+msgstr "^(?P<repos>[^/]+)/enter/(?P<formname>[^/]+)/$"
 
 #: kn/barco/views.py:181
 #, python-format
@@ -137,6 +133,9 @@ msgid ""
 "\n"
 "Signed-off-by: kninfra <root@karpenoktem.nl>"
 msgstr ""
+"Barform %s entered via kninfra\n"
+"\n"
+"Signed-off-by: kninfra <root@karpenoktem.nl>"
 
 #: kn/barco/views.py:193
 msgid "Opgeslagen!"
@@ -181,14 +180,8 @@ msgstr ""
 "contact the WebCie about this problem."
 
 #: kn/base/templates/base/bare.html:83
-#, fuzzy
-#| msgid ""
-#| "Welkom op de website van <strong>Alternatieve\n"
-#| "  studenten&shy;vereniging Karpe Noktem</strong>."
 msgid "Alternatieve studentenvereniging Karpe Noktem"
-msgstr ""
-"Welcome to the homepage of <strong>Alternatieve\n"
-"  studenten&shy;vereniging Karpe Noktem</strong>."
+msgstr "Alternatieve studentenvereniging Karpe Noktem"
 
 #: kn/base/templates/base/bare.html:85
 msgid "Terug naar boven"
@@ -243,10 +236,8 @@ msgstr "Username"
 
 #: kn/base/templates/base/base.html:61
 #: kn/leden/templates/leden/ik_openvpn.html:31
-#, fuzzy
-#| msgid "Wachtwoord gereset!"
 msgid "Wachtwoord"
-msgstr "Password reset!"
+msgstr "Password"
 
 #: kn/base/templates/base/base.html:67
 msgid "Inloggen"
@@ -258,7 +249,7 @@ msgstr "where"
 
 #: kn/base/text.py:5
 msgid " en "
-msgstr ""
+msgstr " and "
 
 #: kn/base/views.py:13
 msgid "Dit pad ligt buiten de root"
@@ -271,31 +262,31 @@ msgstr "%s is a folder --- not a file"
 
 #: kn/browser/views.py:31
 msgid "Going outside of the root"
-msgstr ""
+msgstr "Going outside of the root"
 
 #: kn/defaultSettings.py:118
 msgid "Nederlands"
-msgstr ""
+msgstr "Dutch"
 
 #: kn/defaultSettings.py:119
 msgid "Engels"
-msgstr ""
+msgstr "English"
 
 #: kn/fotos/forms.py:22 kn/leden/forms.py:99
 msgid "Naam voor mensen"
-msgstr "Name for people"
+msgstr "Human name"
 
 #: kn/fotos/forms.py:24 kn/subscriptions/forms.py:31
 msgid "Naam voor computers"
-msgstr "Name for computers"
+msgstr "Computer name"
 
 #: kn/fotos/forms.py:26
 msgid "Volledige naam voor mensen"
-msgstr "Full name for people"
+msgstr "Full human name"
 
 #: kn/fotos/forms.py:34 kn/fotos/templates/fotos/admin/move.html:30
 msgid "Verplaats"
-msgstr "Relocate"
+msgstr "Move"
 
 #: kn/fotos/forms.py:36
 msgid "naar"
@@ -303,23 +294,19 @@ msgstr "to"
 
 #: kn/fotos/templates/fotos/admin/create.html:62
 msgid "Hier kun je een map maken voor een nog niet bestaande activiteit."
-msgstr ""
+msgstr "Here you can create a folder for an event."
 
 #: kn/fotos/templates/fotos/admin/create.html:68
-#, fuzzy
-#| msgid "Activiteiten"
 msgid "Maak activiteit aan"
-msgstr "Activities"
+msgstr "Create events"
 
 #: kn/fotos/templates/fotos/admin/create.html:73
-#, fuzzy
-#| msgid "Activiteiten"
 msgid "Maak activiteit"
-msgstr "Activities"
+msgstr "Create event"
 
 #: kn/fotos/templates/fotos/admin/create.html:77
 msgid "Lijst van bestaande activiteiten:"
-msgstr ""
+msgstr "List of existing events:"
 
 #: kn/fotos/templates/fotos/admin/move.html:8
 #, python-format
@@ -332,45 +319,43 @@ msgid ""
 msgstr ""
 
 #: kn/fotos/templates/fotos/admin/move.html:18
-#, fuzzy
-#| msgid "Verplaats"
 msgid "Verplaats foto's"
-msgstr "Relocate"
+msgstr "Move photos"
 
 #: kn/fotos/templates/fotos/fotos.html:54
 msgid "zoek..."
-msgstr ""
+msgstr "search..."
 
 #: kn/fotos/templates/fotos/fotos.html:58
 msgid "Bewerk naam en zichtbaarheid"
-msgstr ""
+msgstr "Edit name and visibility"
 
 #: kn/fotos/templates/fotos/fotos.html:63
 #: kn/fotos/templates/fotos/fotos.html:109
 msgid "Publiek"
-msgstr ""
+msgstr "Public"
 
 #: kn/fotos/templates/fotos/fotos.html:64
 #: kn/fotos/templates/fotos/fotos.html:110
 msgid "Alleen leden"
-msgstr ""
+msgstr "Members-only"
 
 #: kn/fotos/templates/fotos/fotos.html:65
 #: kn/fotos/templates/fotos/fotos.html:111
 msgid "Fototaggers"
-msgstr ""
+msgstr "Phototaggers"
 
 #: kn/fotos/templates/fotos/fotos.html:68
 msgid "Album titel"
-msgstr ""
+msgstr "Title of album"
 
 #: kn/fotos/templates/fotos/fotos.html:70
 msgid "Ok"
-msgstr ""
+msgstr "OK"
 
 #: kn/fotos/templates/fotos/fotos.html:74
 msgid "Duidelijke zichtbaarheid:"
-msgstr ""
+msgstr "Effective visibility:"
 
 #: kn/fotos/templates/fotos/fotos.html:82
 #, python-format
@@ -393,59 +378,55 @@ msgstr "next"
 
 #: kn/fotos/templates/fotos/fotos.html:103
 msgid "Titel"
-msgstr ""
+msgstr "Title"
 
 #: kn/fotos/templates/fotos/fotos.html:105
-#, fuzzy
-#| msgid "Korte beschrijving"
 msgid "Beschrijving..."
-msgstr "Short description"
+msgstr "Description..."
 
 #: kn/fotos/templates/fotos/fotos.html:106 kn/subscriptions/forms.py:37
 msgid "Beschrijving"
-msgstr ""
+msgstr "Description"
 
 #: kn/fotos/templates/fotos/fotos.html:108
 msgid "Zichtbaarheid"
-msgstr ""
+msgstr "Visibility"
 
 #: kn/fotos/templates/fotos/fotos.html:113
 msgid "Verwijder"
-msgstr ""
+msgstr "Delete"
 
 #: kn/fotos/templates/fotos/fotos.html:124
 msgid "Tags:"
-msgstr ""
+msgstr "Tags:"
 
 #: kn/fotos/templates/fotos/fotos.html:136
 msgid "tags"
-msgstr ""
+msgstr "tags"
 
 #: kn/fotos/templates/fotos/fotos.html:137
-#, fuzzy
-#| msgid "vorige"
 msgid "origineel"
-msgstr "previous"
+msgstr "original"
 
 #: kn/fotos/urls.py:19
 msgid "^foto/admin/?$"
-msgstr ""
+msgstr "^photo/admin/?$"
 
 #: kn/fotos/urls.py:21
 msgid "^foto/admin/create/?$"
-msgstr ""
+msgstr "^photo/admin/create/?$"
 
 #: kn/fotos/urls.py:23
 msgid "^fotos/api/?$"
-msgstr ""
+msgstr "^photo/api/?$"
 
 #: kn/fotos/urls.py:25
 msgid "^fotos/(?P<path>.*)$"
-msgstr ""
+msgstr "^photos/(?P<path>.*)$"
 
 #: kn/fotos/urls.py:28
 msgid "^foto/(?P<cache>[^/]+)/(?P<path>.*)$"
-msgstr ""
+msgstr "^photo/(?P<cache>[^/]+)/(?P<path>.*)$"
 
 #: kn/fotos/views.py:164
 msgid "Fotoalbum aangemaakt!"
@@ -461,50 +442,40 @@ msgid "geen foutmelding"
 msgstr "no error"
 
 #: kn/leden/entities.py:772
-#, fuzzy
-#| msgid "Entiteit heeft geen naam"
 msgid "Entiteit heeft al deze stempel"
-msgstr "Entity does not have a name"
+msgstr "Entity already has this tag"
 
 #: kn/leden/entities.py:780
-#, fuzzy
-#| msgid "Entiteit heeft geen naam"
 msgid "Eniteit heeft deze stempel nog niet"
-msgstr "Entity does not have a name"
+msgstr "Entity does not contain this tag"
 
 #: kn/leden/entities.py:926
-#, fuzzy
-#| msgid "Entiteit heeft geen naam"
 msgid "Entiteit heeft nog geen humanName"
-msgstr "Entity does not have a name"
+msgstr "Entity does not have a humanName"
 
 #: kn/leden/entities.py:1226
 msgid "studie index bestaat niet"
-msgstr ""
+msgstr "index of study does not exist"
 
 #: kn/leden/entities.py:1229
 msgid "studie is al beeindigt"
-msgstr ""
+msgstr "study already ended"
 
 #: kn/leden/entities.py:1231
 msgid "einddatum voor begindatum"
-msgstr ""
+msgstr "enddate lies before startdate"
 
 #: kn/leden/forms.py:56
-#, fuzzy
-#| msgid "Gebruiker is niet geactiveerd"
 msgid "Gebruikersnaam is al in gebruik"
-msgstr "User is not active"
+msgstr "Username already taken"
 
 #: kn/leden/forms.py:59
 msgid "Gebruikersnaam bevat een niet-toegestane letter"
 msgstr "Username contains a letter that is not allowed"
 
 #: kn/leden/forms.py:61
-#, fuzzy
-#| msgid "Gebruiker is niet geactiveerd"
 msgid "Gebruikersnaam is niet toegestaan"
-msgstr "User is not active"
+msgstr "Username not allowed"
 
 #: kn/leden/forms.py:64
 msgid "Voornaam"
@@ -582,7 +553,7 @@ msgstr "Date of enrollment"
 
 #: kn/leden/forms.py:89
 msgid "Incasso"
-msgstr "Collection"
+msgstr "Incasso"
 
 #: kn/leden/forms.py:90
 msgid "Voeg toe aan groepen"
@@ -594,11 +565,11 @@ msgstr "First years"
 
 #: kn/leden/forms.py:91
 msgid "Aan"
-msgstr "On"
+msgstr "Aam"
 
 #: kn/leden/forms.py:92
 msgid "Uit"
-msgstr "Off"
+msgstr "Uit"
 
 #: kn/leden/forms.py:92
 msgid "Zooi"
@@ -611,7 +582,7 @@ msgstr "Name"
 
 #: kn/leden/forms.py:100
 msgid "Genitivus"
-msgstr "Genitivus"
+msgstr "Genitive"
 
 #: kn/leden/forms.py:101
 msgid "Korte beschrijving"
@@ -627,11 +598,11 @@ msgstr "Full group"
 
 #: kn/leden/forms.py:113
 msgid "Start op"
-msgstr ""
+msgstr "Starts at"
 
 #: kn/leden/forms.py:130
 msgid "Geen oud wachtwoord opgegeven"
-msgstr "No previous password given"
+msgstr "No old password given"
 
 #: kn/leden/forms.py:132
 msgid "Geen nieuw wachtwoord opgegeven"
@@ -694,10 +665,8 @@ msgid "Groep aanmaken"
 msgstr "Create group"
 
 #: kn/leden/templates/leden/base.html:49
-#, fuzzy
-#| msgid "Agenda geupdate!"
 msgid "Agenda updaten"
-msgstr "Agenda has been updated"
+msgstr "Update calendar"
 
 #: kn/leden/templates/leden/base.html:50
 #: kn/leden/templates/leden/secr_notes.html:7
@@ -743,12 +712,12 @@ msgstr "Search ..."
 
 #: kn/leden/templates/leden/base.html:97
 msgid "Wijzingen worden doorgevoerd ..."
-msgstr "Changes are carried out ..."
+msgstr "Changes are being carried out ..."
 
 #: kn/leden/templates/leden/brand_detail.html:12
 #: kn/leden/templates/leden/entity_base.html:142
 msgid "Tot jaar"
-msgstr ""
+msgstr "Until year"
 
 #: kn/leden/templates/leden/brand_detail.html:20
 #: kn/leden/templates/leden/institute_detail.html:15
@@ -762,10 +731,8 @@ msgstr ""
 #: kn/leden/templates/leden/welcome.mail.txt:61
 #: kn/leden/templates/leden/welcome.mail.txt:88
 #: kn/leden/templates/leden/welcome.mail.txt:90
-#, fuzzy
-#| msgid "Man"
 msgid "van"
-msgstr "Male"
+msgstr "from"
 
 #: kn/leden/templates/leden/brand_detail.html:23
 #: kn/leden/templates/leden/institute_detail.html:18
@@ -779,132 +746,118 @@ msgstr "Male"
 #: kn/leden/templates/leden/welcome.mail.txt:63
 #: kn/leden/templates/leden/welcome.mail.txt:88
 #: kn/leden/templates/leden/welcome.mail.txt:92
-#, fuzzy
-#| msgid "tot %s"
 msgid "tot"
-msgstr "until %s"
+msgstr "until"
 
 #: kn/leden/templates/leden/entities_by_year_of_birth.html:6
-#, fuzzy
-#| msgid "Bouwjaren"
 msgid "Bouwjaar"
-msgstr "Years of birth"
+msgstr "Year of birth"
 
 #: kn/leden/templates/leden/entities_by_year_of_birth.html:17
-#, fuzzy
-#| msgid "Geboortedatum"
 msgid "geboortejaren"
-msgstr "Date of birth"
+msgstr "Dates of birth"
 
 #: kn/leden/templates/leden/entities_underage.html:6
 msgid "Leden onder de 18"
-msgstr ""
+msgstr "Underage members"
 
 #: kn/leden/templates/leden/entities_underage.html:18
 msgid "Vanaf {{ final_date.date }} is ieder lid boven de 18 jaar."
-msgstr ""
+msgstr "From {{ final_date.date }} there is no underage member"
 
 #: kn/leden/templates/leden/entities_underage.html:20
 msgid "Er zijn geen leden onder de 18 jaar."
-msgstr ""
+msgstr "There are no underage members."
 
 #: kn/leden/templates/leden/entity_base.html:47
 #: kn/leden/templates/leden/entity_base.html:48
 msgid "Wijzig naam"
-msgstr ""
+msgstr "Change name"
 
 #: kn/leden/templates/leden/entity_base.html:58
-#, fuzzy
-#| msgid "Korte beschrijving"
 msgid "Nieuwe beschrijving"
-msgstr "Short description"
+msgstr "New description"
 
 #: kn/leden/templates/leden/entity_base.html:59
-#, fuzzy
-#| msgid "Korte beschrijving"
 msgid "Wijzig beschrijving"
-msgstr "Short description"
+msgstr "Change description"
 
 #: kn/leden/templates/leden/entity_base.html:71
 msgid "upload smoel"
-msgstr ""
+msgstr "upload picture"
 
 #: kn/leden/templates/leden/entity_base.html:80
 msgid "Lidmaatschap"
-msgstr ""
+msgstr "Membership"
 
 #: kn/leden/templates/leden/entity_base.html:86
 msgid "Tot in jaar"
-msgstr ""
+msgstr "Until and including year"
 
 #: kn/leden/templates/leden/entity_base.html:93
 #: kn/leden/templates/leden/entity_base.html:150
 msgid "lid"
-msgstr ""
+msgstr "member"
 
 #: kn/leden/templates/leden/entity_base.html:108
 #: kn/leden/templates/leden/entity_base.html:162
 msgid "be&euml;indig"
-msgstr ""
+msgstr "end"
 
 #: kn/leden/templates/leden/entity_base.html:127
 msgid "Voeg als"
-msgstr ""
+msgstr "Add as"
 
 #: kn/leden/templates/leden/entity_base.html:129
 msgid "toe aan"
-msgstr ""
+msgstr "to"
 
 #: kn/leden/templates/leden/entity_base.html:131
 #: kn/leden/templates/leden/entity_base.html:187
 #: kn/leden/templates/leden/entity_base.html:229
-#, fuzzy
-#| msgid "Bestuurspipo"
 msgid "verstuur"
-msgstr "Board thingamabob"
+msgstr "send"
 
 #: kn/leden/templates/leden/entity_base.html:182
 msgid "Voeg"
-msgstr ""
+msgstr "Add"
 
 #: kn/leden/templates/leden/entity_base.html:184
 msgid "als"
-msgstr ""
+msgstr "as"
 
 #: kn/leden/templates/leden/entity_base.html:186
 #: kn/leden/templates/leden/entity_base.html:228
 msgid "toe"
-msgstr ""
+msgstr "to"
 
 #: kn/leden/templates/leden/entity_base.html:193
 msgid "Stempels"
-msgstr ""
+msgstr "Tags"
 
 #: kn/leden/templates/leden/entity_base.html:209
 msgid "verwijder"
-msgstr ""
+msgstr "remove"
 
 #: kn/leden/templates/leden/entity_base.html:226
 msgid "Voeg de stempel"
-msgstr ""
+msgstr "Tag"
 
 #: kn/leden/templates/leden/entity_base.html:235
-#, fuzzy
-#| msgid "'tag' is niet een stempel"
 msgid "Dragers van deze stempel"
-msgstr "'tag' is not a tag"
+msgstr "Bearers of this tag"
 
 #: kn/leden/templates/leden/entity_base.html:244
 msgid "Notities"
-msgstr ""
+msgstr "Notes"
 
 #: kn/leden/templates/leden/entity_base.html:263
 msgid "Sluit"
-msgstr ""
+msgstr "Close"
 
 #: kn/leden/templates/leden/entity_base.html:265
 msgid "Gesloten door"
-msgstr ""
+msgstr "Closed by"
 
 #: kn/leden/templates/leden/entity_base.html:266
 #: kn/leden/templates/leden/user_detail.html:64
@@ -912,11 +865,11 @@ msgstr ""
 #: kn/subscriptions/templates/subscriptions/include_list.html:15
 #: kn/subscriptions/templates/subscriptions/include_list.html:27
 msgid "op"
-msgstr ""
+msgstr "on"
 
 #: kn/leden/templates/leden/entity_base.html:276
 msgid "Voeg notitie toe"
-msgstr ""
+msgstr "Add note"
 
 #: kn/leden/templates/leden/group_detail.html:8
 msgid "Korte namen"
@@ -964,12 +917,18 @@ msgid ""
 "\n"
 "Hallo <a href=\"%(user_url)s\">%(first_name)s</a>,\n"
 msgstr ""
+"\n"
+"Hello <a href=\"%(user_url)s\">%(first_name)s</a>,\n"
 
 #: kn/leden/templates/leden/home.html:12
+#, fuzzy
+#| msgid ""
+#| "karpe noktem heeft diverse digitale diensten,\n"
+#| "op deze website en daar buiten:"
 msgid ""
 "Karpe Noktem heeft diverse digitale diensten,\n"
 "op deze website en daar buiten:"
-msgstr ""
+msgstr "karpe noktem has several digital services:"
 
 #: kn/leden/templates/leden/home.html:23
 #, python-format
@@ -979,29 +938,29 @@ msgid ""
 "        (dit hier!). Hier houden we van alles\n"
 "\t    bij, zoals:"
 msgstr ""
+"The ledenadministratie aka the\n"
+"        <a href=\"%(url_smoelen_home)s\"> smoelenboek</a>\n"
+"        (this!). Here we keep track of various things,\n"
+"\t    including:"
 
 #: kn/leden/templates/leden/home.html:29
 msgid "alle leden en oud-leden"
-msgstr ""
+msgstr "all old and current members"
 
 #: kn/leden/templates/leden/home.html:31
-#, fuzzy
-#| msgid "Commissies"
 msgid "alle commissies"
-msgstr "Committees"
+msgstr "all committees"
 
 #: kn/leden/templates/leden/home.html:33
-#, fuzzy
-#| msgid "Groepen"
 msgid "alle groepen"
-msgstr "Groups"
+msgstr "all groups"
 
 #: kn/leden/templates/leden/home.html:33
 #: kn/static/templates/static/bestuur11.html:41
 #: kn/static/templates/static/bestuur7.html:18
 #: kn/static/templates/static/links.html:27
 msgid "en"
-msgstr ""
+msgstr "and"
 
 #: kn/leden/templates/leden/home.html:34
 #, python-format
@@ -1009,6 +968,8 @@ msgid ""
 "de <a href=\"%(url_lists)s\"\n"
 "                          >e-maillijsten</a>."
 msgstr ""
+"the <a href=\"%(url_lists)s\"\n"
+"                          >mailinglists</a>."
 
 #: kn/leden/templates/leden/home.html:38
 #, python-format
@@ -1016,6 +977,8 @@ msgid ""
 "Wifi op de villa, zie <a href=\"%(url_wiki)s/Wifi\">\n"
 "            het wiki-artikel</a>."
 msgstr ""
+"Wifi at the villa, see <a href=\"%(url_wiki)s/Wifi\">\n"
+"            the wiki-article</a>."
 
 #: kn/leden/templates/leden/home.html:40
 #, python-format
@@ -1025,6 +988,9 @@ msgid ""
 "\">\n"
 "            foto's naar uploaden</a>!"
 msgstr ""
+"The <a href=\"%(url_fotos)s\">photogallery</a>.\n"
+"        You can also <a href=\"%(url_wiki)s/Handleiding:FotosUploaden\">\n"
+"            upload photos to it</a>!"
 
 #: kn/leden/templates/leden/home.html:43
 #, python-format
@@ -1033,6 +999,8 @@ msgid ""
 "        voor de vereniging nuttige informatie op kan\n"
 "        plempen.</a>"
 msgstr ""
+"A <a href=\"%(url_wiki_home)s\">wiki</a> where everyone\n"
+"        can leave useful information.</a>"
 
 #: kn/leden/templates/leden/home.html:46
 #, python-format
@@ -1040,6 +1008,8 @@ msgid ""
 "Het <a href=\"%(url_forum)s\">forum</a>, dat helaas\n"
 "        nauwelijks meer wordt gebruikt."
 msgstr ""
+"The <a href=\"%(url_forum)s\">forum</a>, which\n"
+"        unfortunately is barely used anymore."
 
 #: kn/leden/templates/leden/home.html:48
 #, python-format
@@ -1048,44 +1018,49 @@ msgid ""
 "        zie <a href=\"%(url_wiki)s/IRC\"\n"
 "            >het wiki-artikel</a>."
 msgstr ""
+"A <a href=\"%(url_irc)s\">chatroom</a> (IRC),\n"
+"        see <a href=\"%(url_wiki)s/IRC\"\n"
+"            >the wiki-article</a>."
 
 #: kn/leden/templates/leden/home.html:51
 msgid ""
 "Een <a href=\"https://www.facebook.com/groups/170930412922856/\">\n"
 "            Karpe Noktem groep op Facebook</a>."
 msgstr ""
+"A <a href=\"https://www.facebook.com/groups/170930412922856/\">\n"
+"            Karpe Noktem Facebook-group</a>."
 
 #: kn/leden/templates/leden/home.html:53
 msgid ""
 "Het <a href=\"https://www.facebook.com/groups/279385195413570/\">\n"
 "            zusjesgroepje op Facebook</a>."
 msgstr ""
+"The <a href=\"https://www.facebook.com/groups/279385195413570/\">\n"
+"            sistergroup on Facebook</a>."
 
 #: kn/leden/templates/leden/home.html:57
 msgid "Instellingen"
-msgstr ""
+msgstr "Preferences"
 
 #: kn/leden/templates/leden/home.html:60
 msgid ""
 "Verander je profiel\n"
 "            (profielfoto, zichbaarheid telefoonnummer)"
 msgstr ""
+"Change your profile\n"
+"            (photo, visibility telephonenumber)"
 
 #: kn/leden/templates/leden/home.html:62
-#, fuzzy
-#| msgid "Wachtwoord gereset!"
 msgid "Verander je wachtwoord"
-msgstr "Password reset!"
+msgstr "Change your password"
 
 #: kn/leden/templates/leden/home.html:64
 msgid "Stel een wachtwoord in voor wifi op de villa"
-msgstr ""
+msgstr "Set a password for the wifi at the villa"
 
 #: kn/leden/templates/leden/ik_chpasswd.html:12
-#, fuzzy
-#| msgid "Wachtwoord gereset!"
 msgid "Wachtwoord veranderen"
-msgstr "Password reset!"
+msgstr "Change password"
 
 #: kn/leden/templates/leden/ik_chpasswd.html:16
 #, python-format
@@ -1093,55 +1068,53 @@ msgid ""
 "Lieve %(name)s, dit zou ik\n"
 "    wel willen, maar je hebt %(errors)s."
 msgstr ""
+"Dear %(name)s, I would like to do this\n"
+"    but there are some %(errors)s."
 
 #: kn/leden/templates/leden/ik_chpasswd.html:18
 #: kn/leden/templates/leden/ik_chpasswd_villanet.html:12
 msgid "Probeer het nog eens?"
-msgstr ""
+msgstr "Try again?"
 
 #: kn/leden/templates/leden/ik_chpasswd.html:39
 msgid "binnen een seconde"
-msgstr ""
+msgstr "within a second"
 
 #: kn/leden/templates/leden/ik_chpasswd.html:41
 msgid "binnen een minuut"
-msgstr ""
+msgstr "within a minute"
 
 #: kn/leden/templates/leden/ik_chpasswd.html:43
 msgid "binnen een uur"
-msgstr ""
+msgstr "within an hour"
 
 #: kn/leden/templates/leden/ik_chpasswd.html:45
 msgid "binnen een dag"
-msgstr ""
+msgstr "within a day"
 
 #: kn/leden/templates/leden/ik_chpasswd.html:47
 msgid "binnen een maand"
-msgstr ""
+msgstr "within a month"
 
 #: kn/leden/templates/leden/ik_chpasswd.html:49
 msgid "binnen een jaar"
-msgstr ""
+msgstr "within a year"
 
 #: kn/leden/templates/leden/ik_chpasswd.html:51
 msgid "binnen een decennium"
-msgstr ""
+msgstr "within ten years"
 
 #: kn/leden/templates/leden/ik_chpasswd.html:53
 msgid "binnen een eeuw"
-msgstr ""
+msgstr "within a century"
 
 #: kn/leden/templates/leden/ik_chpasswd.html:67
-#, fuzzy
-#| msgid "Wachtwoord gereset!"
 msgid "Wachtwoord is te raden "
-msgstr "Password reset!"
+msgstr "Password can be guessed "
 
 #: kn/leden/templates/leden/ik_chpasswd.html:70
-#, fuzzy
-#| msgid "Wachtwoord gereset!"
 msgid "Wachtwoord is goed!"
-msgstr "Password reset!"
+msgstr "Password is great!"
 
 #: kn/leden/templates/leden/ik_chpasswd_villanet.html:10
 #, python-format
@@ -1149,38 +1122,36 @@ msgid ""
 "Lieve %(name)s,\n"
 "    dit zou ik wel willen, maar je hebt %(errors)s."
 msgstr ""
+"Dear %(name)s,\n"
+"    I would like to do that, but there are %(errors)s."
 
 #: kn/leden/templates/leden/ik_chpasswd_villanet.html:15
 msgid ""
 "Je kunt hieronder je wachtwoord veranderen\n"
 "    om op de Villa op het netwerk in te kunnen loggen."
 msgstr ""
+"Here you can change your password to log-in to\n"
+"    the wifi at the Villa."
 
 #: kn/leden/templates/leden/ik_chpasswd_villanet.html:20
-#, fuzzy
-#| msgid "Wachtwoord gereset!"
 msgid "KN-wachtwoord"
-msgstr "Password reset!"
+msgstr "KN-password"
 
 #: kn/leden/templates/leden/ik_chpasswd_villanet.html:24
-#, fuzzy
-#| msgid "Wachtwoord gereset!"
 msgid "Villanet-wachtwoord"
-msgstr "Password reset!"
+msgstr "Villanet-password"
 
 #: kn/leden/templates/leden/ik_chpasswd_villanet.html:28
 msgid "Nogmaals"
-msgstr ""
+msgstr "Again"
 
 #: kn/leden/templates/leden/ik_chpasswd_villanet.html:33
 msgid "veranderen?"
-msgstr ""
+msgstr "change?"
 
 #: kn/leden/templates/leden/ik_openvpn.html:10
-#, fuzzy
-#| msgid "Wachtwoord gereset!"
 msgid "Wachtwoord incorrect."
-msgstr "Password reset!"
+msgstr "Password incorrect."
 
 #: kn/leden/templates/leden/ik_openvpn.html:13
 msgid ""
@@ -1192,11 +1163,11 @@ msgstr ""
 
 #: kn/leden/templates/leden/ik_openvpn.html:20
 msgid "Wat"
-msgstr ""
+msgstr "What"
 
 #: kn/leden/templates/leden/ik_openvpn.html:24
 msgid "Windows installer"
-msgstr ""
+msgstr "Windows installer"
 
 #: kn/leden/templates/leden/ik_openvpn.html:27
 msgid "Configuratiebestanden (voor gevorderden)"
@@ -1204,7 +1175,7 @@ msgstr ""
 
 #: kn/leden/templates/leden/informacie-digest.mail.txt:4
 msgid "Wijzigingen aan de ledenadministratie"
-msgstr ""
+msgstr "Changes to the ledeadminstratie"
 
 #: kn/leden/templates/leden/informacie-digest.mail.txt:8
 msgid "Best InformaCie-lid,"
@@ -1285,7 +1256,7 @@ msgstr ""
 
 #: kn/leden/templates/leden/informacie-digest.mail.txt:184
 msgid "Met geautomatiseerde groet,"
-msgstr ""
+msgstr "With automated regards,"
 
 #: kn/leden/templates/leden/informacie-digest.mail.txt:185
 #, fuzzy
@@ -1302,7 +1273,7 @@ msgstr "Student number"
 
 #: kn/leden/templates/leden/new-note.mail.txt:4
 msgid "Nieuwe notitie"
-msgstr ""
+msgstr "New note"
 
 #: kn/leden/templates/leden/new-note.mail.txt:8
 #, python-format
@@ -1312,158 +1283,150 @@ msgid ""
 "\n"
 "     %(note)s\n"
 msgstr ""
+"\\\n"
+"%(noter)s has created the following note on %(on_name)s:\n"
+"\n"
+"     %(note)s\n"
 
 #: kn/leden/templates/leden/note-closed.mail.txt:4
 msgid "Notitie gesloten"
-msgstr ""
+msgstr "Note closed"
 
 #: kn/leden/templates/leden/reset-password.mail.txt:4
 msgid ""
 "Karpe Noktem's ledenadministratie <nietjewachtwoorddoorsturen@karpenoktem.nl>"
 msgstr ""
+"Karpe Noktem's ledenadministratie <dontforwardyourpassword@karpenoktem.nl>"
 
 #: kn/leden/templates/leden/reset-password.mail.txt:8
 msgid "[Karpe Noktem Smoelenboek] Nieuw wachtwoord"
-msgstr ""
+msgstr "[Karpe Noktem Smoelenboek] New password"
 
 #: kn/leden/templates/leden/secr_add_group.html:10
 #: kn/planning/templates/planning/event_create.html:14
 #: kn/planning/templates/planning/event_edit.html:58
 msgid "Maak aan"
-msgstr ""
+msgstr "Create"
 
 #: kn/leden/templates/leden/secr_add_user.html:64
 msgid "Schrijf in"
-msgstr ""
+msgstr "Subscribe"
 
 #: kn/leden/templates/leden/secr_notes.html:14
 #: kn/moderation/templates/moderation/overview.html:24
 #: kn/subscriptions/templates/subscriptions/event_detail.html:59
 msgid "door"
-msgstr ""
+msgstr "by"
 
 #: kn/leden/templates/leden/set-password.mail.txt:4
 msgid ""
 "Karpe Noktems ledenadministratie <nietjewachtwoorddoorsturen@karpenoktem.nl>"
 msgstr ""
+"Karpe Noktems ledenadministratie <dontforwardyourpassword@karpenoktem.nl>"
 
 #: kn/leden/templates/leden/set-password.mail.txt:8
 msgid "[Karpe Noktem Smoelenboek] Jouw wachtwoord"
-msgstr ""
+msgstr "[Karpe Noktem Smoelenboek] Your password"
 
 #: kn/leden/templates/leden/stats.html:10
 msgid "grafiek van ledenaantallen over de jaren heen"
 msgstr "graph showing the number of members over time"
 
 #: kn/leden/templates/leden/user_detail.html:11
-#, fuzzy
-#| msgid "Geen nieuw wachtwoord opgegeven"
 msgid "stuur nieuw wachtwoord"
-msgstr "No new password given"
+msgstr "send new password"
 
 #: kn/leden/templates/leden/user_detail.html:16
-#, fuzzy
-#| msgid "Gebruikersnaam"
 msgid "Gebruikersnamen"
-msgstr "Username"
+msgstr "Usernames"
 
 #: kn/leden/templates/leden/user_detail.html:21
-#, fuzzy
-#| msgid "E-Mail adres"
 msgid "E-Mailadres"
-msgstr "E-mail address"
+msgstr "E-mail addresses"
 
 #: kn/leden/templates/leden/user_detail.html:25
 msgid "Achterliggend e-mailadres"
-msgstr ""
+msgstr "Underlying e-mail address"
 
 #: kn/leden/templates/leden/user_detail.html:29
-#, fuzzy
-#| msgid "E-Mail adres"
 msgid "Nieuw e-mail adres"
-msgstr "E-mail address"
+msgstr "New e-mail address"
 
 #: kn/leden/templates/leden/user_detail.html:41
 msgid "Wijzig e-mail"
-msgstr ""
+msgstr "Change e-mail"
 
 #: kn/leden/templates/leden/user_detail.html:49
 msgid "toevoegen"
-msgstr ""
+msgstr "add"
 
 #: kn/leden/templates/leden/user_detail.html:57
 msgid "Toevoegen"
-msgstr ""
+msgstr "Add"
 
 #: kn/leden/templates/leden/user_detail.html:68
-#, fuzzy
-#| msgid "Studentnummer"
 msgid "studentnummer"
 msgstr "Student number"
 
 #: kn/leden/templates/leden/user_detail.html:80
 msgid "Beëindig studie"
-msgstr ""
+msgstr "End study"
 
 #: kn/leden/templates/leden/user_detail.html:91
 msgid "Beëindig"
-msgstr ""
+msgstr "End"
 
 #: kn/leden/templates/leden/user_detail.html:104
 msgid "Zichtbaar voor alle leden"
-msgstr ""
+msgstr "Visible to all members"
 
 #: kn/leden/templates/leden/user_detail.html:104
 msgid "zichtbaar"
-msgstr ""
+msgstr "visible"
 
 #: kn/leden/templates/leden/user_detail.html:106
 msgid "Alleen zichtbaar voor secretariaat en admlezers"
-msgstr ""
+msgstr "Only visible to secretariat and admlezers"
 
 #: kn/leden/templates/leden/user_detail.html:106
 msgid "niet zichtbaar"
-msgstr ""
+msgstr "not visible"
 
 #: kn/leden/templates/leden/user_detail.html:118
 msgid "verander zichtbaarheid van het telefoonnummer"
-msgstr ""
+msgstr "change visibility of phone number"
 
 #: kn/leden/templates/leden/user_detail.html:118
 msgid "Verander"
-msgstr ""
+msgstr "Change"
 
 #: kn/leden/templates/leden/user_detail.html:122
-#, fuzzy
-#| msgid "Telefoonnummer"
 msgid "Nieuw telefoonnummer"
-msgstr "Phone number"
+msgstr "New phone number"
 
 #: kn/leden/templates/leden/user_detail.html:134
-#, fuzzy
-#| msgid "Telefoonnummer"
 msgid "Wijzig telefoonnummer"
-msgstr "Phone number"
+msgstr "Change phone number"
 
 #: kn/leden/templates/leden/user_detail.html:161
 msgid "Adres"
-msgstr ""
+msgstr "Address"
 
 #: kn/leden/templates/leden/user_detail.html:164
 msgid "Nieuw adres (straatnaam, nummer, postcode, plaats)"
-msgstr ""
+msgstr "New address (street, number, zip, city)"
 
 #: kn/leden/templates/leden/user_detail.html:172
 msgid "Er mist een waarde (verwacht: 4, gekregen: "
-msgstr ""
+msgstr "A value is missing (expecting: 4, got: "
 
 #: kn/leden/templates/leden/user_detail.html:192
 msgid "Wijzig adres"
-msgstr ""
+msgstr "Change address"
 
 #: kn/leden/templates/leden/user_detail.html:224
 msgid "Lid sinds"
-msgstr ""
+msgstr "Member since"
 
 #: kn/leden/templates/leden/user_list.html:4
 msgid "Gebruikers"
@@ -1482,12 +1445,16 @@ msgid ""
 "\n"
 "Secretaris Karpe Noktem <secretaris@karpenoktem.nl>\n"
 msgstr ""
+"\n"
+"Secretary of Karpe Noktem <secretaris@karpenoktem.nl>\n"
 
 #: kn/leden/templates/leden/welcome.mail.txt:10
 msgid ""
 "\n"
 "[Karpe Noktem] Jouw gegevens\n"
 msgstr ""
+"\n"
+"[Karpe Noktem] Your data\n"
 
 #: kn/leden/templates/leden/welcome.mail.txt:16
 #, python-format
@@ -1495,6 +1462,8 @@ msgid ""
 "\\\n"
 "Beste %(first_name)s,\n"
 msgstr ""
+"\\\n"
+"Dear %(first_name)s,\n"
 
 #: kn/leden/templates/leden/welcome.mail.txt:20
 msgid ""
@@ -1508,51 +1477,54 @@ msgid ""
 "\n"
 "  Bas van Wijk\n"
 msgstr ""
+"\\\n"
+"Welcome to Karpe Noktem!\n"
+"\n"
+"We copied the following information from your registration form.\n"
+"Could you double-check it?\n"
+"\n"
+"Thanks in advance,\n"
+"\n"
+"  Bas van Wijk\n"
 
 #: kn/leden/templates/leden/welcome.mail.txt:32
 msgid "Personalia"
-msgstr ""
+msgstr "Personal"
 
 #: kn/leden/templates/leden/welcome.mail.txt:45
-#, fuzzy
-#| msgid "Telefoonnummer"
 msgid "Telefoonnummer(s)"
-msgstr "Phone number"
+msgstr "Phone number(s)"
 
 #: kn/leden/templates/leden/welcome.mail.txt:56
-#, fuzzy
-#| msgid "E-Mail adres"
 msgid "E-Mail adres(sen)"
-msgstr "E-mail address"
+msgstr "E-mail address(es)"
 
 #: kn/leden/templates/leden/welcome.mail.txt:67
-#, fuzzy
-#| msgid "Studie"
 msgid "Studie(s)"
-msgstr "Study"
+msgstr "Study(s)"
 
 #: kn/leden/templates/leden/welcome.mail.txt:70
 #, python-format
 msgid "Van %(from)s tot %(until)s studeerde je"
-msgstr ""
+msgstr "From %(from)s until %(until)s you studied"
 
 #: kn/leden/templates/leden/welcome.mail.txt:71
 #, python-format
 msgid "Vanaf %(from)s studeer je"
-msgstr ""
+msgstr "From %(from)s you studied"
 
 #: kn/leden/templates/leden/welcome.mail.txt:73
 #, python-format
 msgid "Tot %(until)s studeerde je"
-msgstr ""
+msgstr "Until %(until)s you studied"
 
 #: kn/leden/templates/leden/welcome.mail.txt:74
 msgid "Je studeert"
-msgstr ""
+msgstr "You study"
 
 #: kn/leden/templates/leden/welcome.mail.txt:86
 msgid "Adres(sen)"
-msgstr ""
+msgstr "Address(es)"
 
 #: kn/leden/templates/leden/welcome.mail.txt:94
 #, python-format
@@ -1563,6 +1535,11 @@ msgid ""
 "      Postcode          %(zip)s\n"
 "      Stad              %(city)s\n"
 msgstr ""
+"\\\n"
+"Street            %(street)s \n"
+"      Number            %(number)s\n"
+"      Zip               %(zip)s\n"
+"      City              %(city)s\n"
 
 #: kn/leden/templates/leden/years_of_birth.html:6
 msgid "Bouwjaren"
@@ -1597,179 +1574,167 @@ msgstr "until %s"
 
 #: kn/leden/urls.py:12
 msgid "^gebruikers/(?:p/(?P<page>[0-9]+)/)?$"
-msgstr ""
+msgstr "^users/(?:p/(?P<page>[0-9]+)/)?$"
 
 #: kn/leden/urls.py:14
 msgid "^naamdrager/(?P<name>[^/]+)/$"
-msgstr ""
+msgstr "^by-name/(?P<name>[^/]+)/$"
 
 #: kn/leden/urls.py:16
 msgid "^id/(?P<_id>[^/]+)/$"
-msgstr ""
+msgstr "^id/(?P<_id>[^/]+)/$"
 
 #: kn/leden/urls.py:18
 msgid "^gebruiker/(?P<name>[^/]+)/$"
-msgstr ""
+msgstr "^user/(?P<name>[^/]+)/$"
 
 #: kn/leden/urls.py:20
 msgid "^gebruiker/id/(?P<_id>[^/]+)/$"
-msgstr ""
+msgstr "^user/id/(?P<_id>[^/]+)/$"
 
 #: kn/leden/urls.py:22
 msgid "^gebruiker/id/(?P<_id>[^/]+)/reset-wachtwoord$"
-msgstr ""
+msgstr "^user/id/(?P<_id>[^/]+)/reset-password$"
 
 #: kn/leden/urls.py:24
 msgid "^groep/(?P<name>[^/]+)/$"
-msgstr ""
+msgstr "^group/(?P<name>[^/]+)/$"
 
 #: kn/leden/urls.py:26
 msgid "^groep/id/(?P<_id>[^/]+)/$"
-msgstr ""
+msgstr "^group/id/(?P<_id>[^/]+)/$"
 
 #: kn/leden/urls.py:28
 msgid "^brand/(?P<name>[^/]+)/$"
-msgstr ""
+msgstr "^brand/(?P<name>[^/]+)/$"
 
 #: kn/leden/urls.py:30
 msgid "^brand/id/(?P<_id>[^/]+)/$"
-msgstr ""
+msgstr "^brand/id/(?P<_id>[^/]+)/$"
 
 #: kn/leden/urls.py:32
 msgid "^stempel/(?P<name>[^/]+)/$"
-msgstr ""
+msgstr "^tag/(?P<name>[^/]+)/$"
 
 #: kn/leden/urls.py:34
 msgid "^stempel/id/(?P<_id>[^/]+)/$"
-msgstr ""
+msgstr "^tag/id/(?P<_id>[^/]+)/$"
 
 #: kn/leden/urls.py:36
 msgid "^studie/(?P<name>[^/]+)/$"
-msgstr ""
+msgstr "^study/(?P<name>[^/]+)/$"
 
 #: kn/leden/urls.py:38
 msgid "^studie/id/(?P<_id>[^/]+)/$"
-msgstr ""
+msgstr "^study/id/(?P<_id>[^/]+)/$"
 
 #: kn/leden/urls.py:40
 msgid "^instituut/(?P<name>[^/]+)/$"
-msgstr ""
+msgstr "^institute/(?P<name>[^/]+)/$"
 
 #: kn/leden/urls.py:43
 msgid "^instituut/id/(?P<_id>[^/]+)/$"
-msgstr ""
+msgstr "^institute/id/(?P<_id>[^/]+)/$"
 
 #: kn/leden/urls.py:46
-#, fuzzy
-#| msgid "Bouwjaren"
 msgid "^bouwjaar/$"
-msgstr "Years of birth"
+msgstr "^yearOfBirth/$"
 
 #: kn/leden/urls.py:48
 msgid "^bouwjaar/(?P<year>\\d+)/$"
-msgstr ""
+msgstr "^yearOfBirth/(?P<year>\\d+)/$"
 
 #: kn/leden/urls.py:50
 msgid "^smoel/(?P<name>[^.]+).jpg$"
-msgstr ""
+msgstr "^face/(?P<name>[^.]+).jpg$"
 
 #: kn/leden/urls.py:52
 msgid "^geenalcohol/$"
-msgstr ""
+msgstr "^underage/$"
 
 #: kn/leden/urls.py:54
 msgid "^ik/?$"
-msgstr ""
+msgstr "^me/?$"
 
 #: kn/leden/urls.py:55
-#, fuzzy
-#| msgid "Wachtwoord gereset!"
 msgid "^ik/wachtwoord$"
-msgstr "Password reset!"
+msgstr "^me/password$"
 
 #: kn/leden/urls.py:56
 msgid "^ik/wachtwoord/villanet/$"
-msgstr ""
+msgstr "^me/password/villanet/$"
 
 #: kn/leden/urls.py:58
-#, fuzzy
-#| msgid "Smoelenboek"
 msgid "^ik/smoel$"
-msgstr "Smoelenboek"
+msgstr "^me/face$"
 
 #: kn/leden/urls.py:59
 msgid "^api/users$"
-msgstr ""
+msgstr "^api/users$"
 
 #: kn/leden/urls.py:60
 msgid "^api/?$"
-msgstr ""
+msgstr "^api/?$"
 
 #: kn/leden/urls.py:61
 msgid "^ik/openvpn/$"
-msgstr ""
+msgstr "^ik/openvpn/$"
 
 #: kn/leden/urls.py:62
 msgid "^ik/openvpn/(?P<filename>.+(exe|zip))$"
-msgstr ""
+msgstr "^me/openvpn/(?P<filename>.+(exe|zip))$"
 
 #: kn/leden/urls.py:64
 msgid "^secretariaat/inschrijven$"
-msgstr ""
+msgstr "^secretariat/subscribe$"
 
 #: kn/leden/urls.py:66
 msgid "^secretariaat/update-site-agenda/$"
-msgstr ""
+msgstr "^secretariat/update-site-calendar/$"
 
 #: kn/leden/urls.py:68
-#, fuzzy
-#| msgid "Secretariaat"
 msgid "^secretariaat/addgroup$"
-msgstr "Secretariat"
+msgstr "^secretariat/addgroup$"
 
 #: kn/leden/urls.py:70
-#, fuzzy
-#| msgid "Secretariaat"
 msgid "^secretariaat/notes$"
-msgstr "Secretariat"
+msgstr "^secretariat/notes$"
 
 #: kn/leden/urls.py:72
 msgid "^relaties/(?P<_id>[^/]+)/beindig$"
-msgstr ""
+msgstr "^relations/(?P<_id>[^/]+)/end$"
 
 #: kn/leden/urls.py:74
 msgid "^relaties/begin$"
-msgstr ""
+msgstr "^relations/begin$"
 
 #: kn/leden/urls.py:76
 msgid "^tags/tag$"
-msgstr ""
+msgstr "^tags/tag$"
 
 #: kn/leden/urls.py:78
 msgid "^tags/untag$"
-msgstr ""
+msgstr "^tags/untag$"
 
 #: kn/leden/urls.py:80
 msgid "^noteer$"
-msgstr ""
+msgstr "^addNote$"
 
 #: kn/leden/urls.py:83
-#, fuzzy
-#| msgid "Statistieken"
 msgid "^statistieken/?$"
-msgstr "Statistics"
+msgstr "^statistics/?$"
 
 #: kn/leden/urls.py:85
 msgid "^grafiek/(?P<graph>[-a-z/]+)\\.(?P<ext>[a-z]+)/?$"
-msgstr ""
+msgstr "^graph/(?P<graph>[-a-z/]+)\\.(?P<ext>[a-z]+)/?$"
 
 #: kn/leden/urls.py:89
 msgid "^styles/leden/$"
-msgstr ""
+msgstr "^styles/leden/$"
 
 #: kn/leden/urls.py:94
 msgid "^taal$"
-msgstr ""
+msgstr "^language$"
 
 #: kn/leden/views.py:69
 #, python-format
@@ -1888,29 +1853,27 @@ msgstr ""
 
 #: kn/moderation/templates/moderation/overview.html:22
 msgid "actief"
-msgstr ""
+msgstr "active"
 
 #: kn/moderation/templates/moderation/overview.html:27
 msgid "inactief"
-msgstr ""
+msgstr "inactive"
 
 #: kn/moderation/templates/moderation/overview.html:33
 msgid "in wachtrij"
-msgstr ""
+msgstr "queued"
 
 #: kn/moderation/templates/moderation/overview.html:47
 msgid "deactiveer"
-msgstr ""
+msgstr "deactivate"
 
 #: kn/moderation/templates/moderation/overview.html:49
-#, fuzzy
-#| msgid "Activiteiten"
 msgid "activeer"
-msgstr "Activities"
+msgstr "activate"
 
 #: kn/moderation/templates/moderation/overview.html:59
 msgid "verleng"
-msgstr ""
+msgstr "extend"
 
 #: kn/moderation/templates/moderation/timed-out.mail.txt:4
 #, python-format
@@ -1928,15 +1891,15 @@ msgstr ""
 
 #: kn/moderation/views.py:35
 msgid "Toegang geweigerd"
-msgstr ""
+msgstr "Permission denied"
 
 #: kn/planning/forms.py:17
 msgid "Selecteer"
-msgstr ""
+msgstr "Select"
 
 #: kn/planning/forms.py:42
 msgid "Geen"
-msgstr ""
+msgstr "None"
 
 #: kn/planning/forms.py:43
 msgid "Borrel"
@@ -3583,83 +3546,77 @@ msgstr ""
 
 #: kn/static/templates/static/zusjes.html:25
 msgid "Bekijk ook onze gezamelijke agenda!"
-msgstr ""
+msgstr "Check our joint calendar!"
 
 #: kn/static/urls.py:13
 msgid "^home/?$"
-msgstr ""
+msgstr "^home/?$"
 
 #: kn/static/urls.py:14
 msgid "^default/?$"
-msgstr ""
+msgstr "^default/?$"
 
 #: kn/static/urls.py:21
-#, fuzzy
-#| msgid "over"
 msgid "^over/?$"
-msgstr "about"
+msgstr "^about/?$"
 
 #: kn/static/urls.py:23
 msgid "^watis/?$"
-msgstr ""
+msgstr "^whatis/?$"
 
 #: kn/static/urls.py:26
 #, fuzzy
 #| msgid "contact"
 msgid "^contact/?$"
-msgstr "contact"
+msgstr "^contact/?$"
 
 #: kn/static/urls.py:28
-#, fuzzy
-#| msgid "lid worden"
 msgid "^lidworden/?$"
-msgstr "become a member"
+msgstr "^enroll/?$"
 
 #: kn/static/urls.py:30
 msgid "^geschiedenis/?$"
-msgstr ""
+msgstr "^history/?$"
 
 #: kn/static/urls.py:32
-#, fuzzy
-#| msgid "Activiteiten"
 msgid "^activiteiten/?$"
-msgstr "Activities"
+msgstr "^events/?$"
 
 #: kn/static/urls.py:35
 msgid "^akta/?$"
-msgstr ""
+msgstr "^akta/?$"
 
 #: kn/static/urls.py:37
 msgid "^(?:an|aktanokturna)/?$"
-msgstr ""
+msgstr "^(?:an|aktanokturna)/?$"
 
 #: kn/static/urls.py:40
 msgid "^zusjes/?$"
-msgstr ""
+msgstr "^sisters/?$"
 
 #: kn/static/urls.py:42
 msgid "^route/?$"
-msgstr ""
+msgstr "^route/?$"
 
 #: kn/static/urls.py:44
 msgid "^merchandise/?$"
-msgstr ""
+msgstr "^merch/?$"
 
 #: kn/static/urls.py:46
 msgid "^sponsoren/?$"
-msgstr ""
+msgstr "^benefactors/?$"
 
 #: kn/static/urls.py:48
 msgid "^media/?$"
-msgstr ""
+msgstr "^press/?$"
 
 #: kn/static/urls.py:50
 msgid "^links/?$"
-msgstr ""
+msgstr "^links/?$"
 
 #: kn/static/urls.py:52
 msgid "^irc/?$"
-msgstr ""
+msgstr "^irc/?$"
 
 #: kn/static/urls.py:58
 #, fuzzy
@@ -3717,7 +3674,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Bestuurspipo"
 msgid "^bestuur/?$"
-msgstr "Board thingamabob"
+msgstr "^board/?$"
 
 #: kn/static/urls.py:83
 msgid "^introPoster2016/?$"
@@ -3805,32 +3762,32 @@ msgstr ""
 
 #: kn/subscriptions/forms.py:23
 msgid "Naam voor computers bestaat al"
-msgstr ""
+msgstr "Name for computers already exists"
 
 #: kn/subscriptions/forms.py:39
 #: kn/subscriptions/templates/subscriptions/event_detail.html:44
 msgid "Kosten"
-msgstr ""
+msgstr "Cost"
 
 #: kn/subscriptions/forms.py:49
 msgid "Maximum aantal deelnemers (optioneel)"
-msgstr ""
+msgstr "Maximum number of participants"
 
 #: kn/subscriptions/forms.py:51
 msgid "geen maximum"
-msgstr ""
+msgstr "no maximum"
 
 #: kn/subscriptions/forms.py:53 kn/subscriptions/forms.py:55
 msgid "Eigenaar"
-msgstr ""
+msgstr "Owner"
 
 #: kn/subscriptions/forms.py:59
 msgid "Inschrijvingen openbaar"
-msgstr ""
+msgstr "Public attendance"
 
 #: kn/subscriptions/forms.py:61
 msgid "Leden mogen zichzelf afmelden"
-msgstr ""
+msgstr "Members can cancel"
 
 #: kn/subscriptions/templates/subscriptions/event-edited.mail.txt:4
 #, python-format
@@ -3851,165 +3808,171 @@ msgstr ""
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:30
 msgid "Georganiseerd door"
-msgstr ""
+msgstr "Organised by"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:35
 msgid "Activiteit gemaakt door"
-msgstr ""
+msgstr "Event created by"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:40
 msgid "Maximum aantal deelnemers:"
-msgstr ""
+msgstr "Maximum number of attendants:"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:41
 msgid "personen"
-msgstr ""
+msgstr "people"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:50
 msgid "Geschiedenis:"
-msgstr ""
+msgstr "History:"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:53
 msgid "Activiteit"
-msgstr ""
+msgstr "Event"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:54
 msgid "geopend"
-msgstr ""
+msgstr "opened"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:55
 msgid "gesloten"
-msgstr ""
+msgstr "closed"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:56
 msgid "bewerkt"
-msgstr ""
+msgstr "changed"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:70
 #: kn/subscriptions/templates/subscriptions/event_detail.html:97
 msgid "Aanmelden"
-msgstr ""
+msgstr "Subscribe"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:72
 #: kn/subscriptions/templates/subscriptions/event_detail.html:138
 msgid "Uitnodigen"
-msgstr ""
+msgstr "Invite"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:80
 #: kn/subscriptions/templates/subscriptions/event_detail.html:123
 msgid "Opmerkingen:"
-msgstr ""
+msgstr "Notes:"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:86
 msgid "Je bent door"
-msgstr ""
+msgstr "By"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:89
 msgid "uitgenodigd."
-msgstr ""
+msgstr "you have been invited."
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:93
 msgid ""
 "<strong>Je bent al aangemeld</strong>, maar je\n"
 "                kunt je nog afmelden.</div>"
 msgstr ""
+"<strong>You already subscribed</strong>, but you\n"
+"                can still unsubscribe.</div>"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:95
 msgid "Afmelden"
-msgstr ""
+msgstr "Unsubscribe"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:99
 msgid "(je kunt je daarna niet meer afmelden)"
-msgstr ""
+msgstr "(after this you cannot unsubscribe anymore)"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:106
 msgid ""
 "De activiteit is gesloten, je kunt je\n"
 "            niet meer aanmelden of afmelden."
 msgstr ""
+"The event is closed, you cannot\n"
+"            subscribe or unsubscribe anymore."
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:109
 msgid "Je kunt je helaas niet meer aanmelden"
-msgstr ""
+msgstr "Unfortunately, you cannot subscribe anymore"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:110
 msgid "of afmelden"
-msgstr ""
+msgstr "or unsubscribe"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:112
 msgid "Stuur een mailtje naar"
-msgstr ""
+msgstr "E-Mail"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:113
 msgid "voor vragen."
-msgstr ""
+msgstr "for questions."
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:129
 msgid ""
 "Let op:\n"
 "                je kunt je niet meer aanmelden!"
 msgstr ""
+"Note:\n"
+"                you cannot subscribe anymore!"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:148
 msgid "Sluit inschrijvingen"
-msgstr ""
+msgstr "Close subscriptions"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:150
 msgid "Heropen inschrijvingen"
-msgstr ""
+msgstr "Reopen subscriptions"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:152
 #: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:6
 msgid "Bewerk activiteit"
-msgstr ""
+msgstr "Edit event"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:158
 msgid "Toon e-mail adressen van de ingeschrevenen"
-msgstr ""
+msgstr "Show e-mail addresses of all participants"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:161
 msgid "Aanmeldingen"
-msgstr ""
+msgstr "Participants"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:164
 msgid "Er zijn (nog) geen aanmeldingen."
-msgstr ""
+msgstr "There are no participants (yet)"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:168
 msgid "Afmeldingen"
-msgstr ""
+msgstr "Cancellations"
 
 #: kn/subscriptions/templates/subscriptions/event_detail.html:173
 msgid "Uitnodigingen"
-msgstr ""
+msgstr "Invitations"
 
 #: kn/subscriptions/templates/subscriptions/event_list.html:27
 msgid ">Oude activiteiten"
-msgstr ""
+msgstr ">Old events"
 
 #: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:8
 msgid "Nieuwe activiteit"
-msgstr ""
+msgstr "New event"
 
 #: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:14
 msgid "Pas aan!"
-msgstr ""
+msgstr "Change!"
 
 #: kn/subscriptions/templates/subscriptions/event_new_or_edit.html:16
 msgid "Maak aan!"
-msgstr ""
+msgstr "Create!"
 
 #: kn/subscriptions/templates/subscriptions/include_list.html:10
 msgid "aangemeld"
-msgstr ""
+msgstr "subscribed"
 
 #: kn/subscriptions/templates/subscriptions/include_list.html:12
 msgid "afgemeld"
-msgstr ""
+msgstr "cancelled"
 
 #: kn/subscriptions/templates/subscriptions/include_list.html:24
 msgid "uitgenodigd door"
-msgstr ""
+msgstr "invited by"
 
 #: kn/subscriptions/templates/subscriptions/new-event.mail.txt:4
 #, python-format
@@ -4118,58 +4081,58 @@ msgstr "User is not related to owner"
 
 #: kn/subscriptions/views.py:177
 msgid "Mag deze eigenaar niet kiezen"
-msgstr ""
+msgstr "Can't choose this owner"
 
 #: kn/urls.py:19
 msgid "^groups/(?P<subdir>[^/]+)/(?P<path>.*)"
-msgstr ""
+msgstr "^groups/(?P<subdir>[^/]+)/(?P<path>.*)"
 
 #: kn/urls.py:22
 #, fuzzy
 #| msgid "Smoelenboek"
 msgid "^smoelen/"
-msgstr "Smoelenboek"
+msgstr "^faces/"
 
 #: kn/urls.py:23
 #, fuzzy
 #| msgid "Activiteiten"
 msgid "^activiteit/"
-msgstr "Activities"
+msgstr "^event/"
 
 #: kn/urls.py:24
 msgid "^reglementen/"
-msgstr ""
+msgstr "^legal/"
 
 #: kn/urls.py:25
 msgid "^poll/"
-msgstr ""
+msgstr "^poll/"
 
 #: kn/urls.py:26
 msgid "^accounts/login/$"
-msgstr ""
+msgstr "^accounts/login/$"
 
 #: kn/urls.py:27
 msgid "^accounts/logout/$"
-msgstr ""
+msgstr "^accounts/logout/$"
 
 #: kn/urls.py:28
 msgid "^accounts/rauth/$"
-msgstr ""
+msgstr "^accounts/rauth/$"
 
 #: kn/urls.py:29
 msgid "^accounts/api/$"
-msgstr ""
+msgstr "^accounts/api/$"
 
 #: kn/urls.py:30
 msgid "^moderatie/"
-msgstr ""
+msgstr "^censor/"
 
 #: kn/urls.py:31
 #, fuzzy
 #| msgid "Planning"
 msgid "^planning/"
-msgstr "Planning"
+msgstr "^planning/"
 
 #: kn/urls.py:32
 msgid "^barco/"
-msgstr ""
+msgstr "^barco/"
