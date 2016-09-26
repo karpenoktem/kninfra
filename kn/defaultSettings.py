@@ -118,7 +118,7 @@ def defaultSettings(glbls):
         ('de', _('Duits')),
         ('en', _('Engels')),
         ('nl', _('Nederlands')),
-        ('arr', _('Piraat')),
+        ('en_PI', _('Piraat')),
     ]
 
     # You probably won't change this
