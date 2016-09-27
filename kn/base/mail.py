@@ -20,7 +20,6 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
     language = settings.LANGUAGE_CODE
     if isinstance(to, Es.User):
         language = to.preferred_language
-    print 'sending in', language
 
     # Normalize arguments
     addrs = {'to': to, 'cc': cc, 'bcc': bcc}
