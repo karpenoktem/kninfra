@@ -92,7 +92,7 @@ urlpatterns = [
 
     # for now, just shows the guessed language
     url(_(r'^taal$'),
-        views.language),
+        views.language, name='taal'),
         ]
 
 # vim: et:sta:bs=2:sw=4:

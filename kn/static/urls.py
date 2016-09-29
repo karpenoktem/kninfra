@@ -11,8 +11,8 @@ from kn.static import views
 
 urlpatterns = [
     url(_(r'^home/?$'), views.home, name='home'),
-    url(_(r'^default/?$'), views.home),
-    url(r'^/?$', views.home),
+    url(_(r'^default/?$'), views.home, name='default'),
+    url(r'^/?$', views.home, name='root'),
     #url(r'^/?$', RedirectView.as_view(
     #           url=reverse_lazy('openweek2Poster2015'))),
     # TODO we have to specify a separate url entry to make the reverse URL work
@@ -21,7 +21,7 @@ urlpatterns = [
     url(_(r'^over/?$'),
         TemplateView.as_view(template_name='static/over.html'), name='over'),
     url(_(r'^watis/?$'),  # alias van over
-        TemplateView.as_view(template_name='static/over.html')),
+        TemplateView.as_view(template_name='static/over.html'), name='watis'),
 
     url(_(r'^contact/?$'), TemplateView.as_view(
             template_name='static/contact.html'), name='contact'),
@@ -35,7 +35,7 @@ urlpatterns = [
     url(_(r'^akta/?$'), TemplateView.as_view(
             template_name='static/aktanokturna.html'), name='aktanokturna'),
     url(_(r'^(?:an|aktanokturna)/?$'), TemplateView.as_view(
-            template_name='static/aktanokturna.html')),
+            template_name='static/aktanokturna.html'), name='an'),
 
     url(_(r'^zusjes/?$'), TemplateView.as_view(
             template_name='static/zusjes.html'), name='zusjes'),
@@ -50,10 +50,10 @@ urlpatterns = [
     url(_(r'^links/?$'), TemplateView.as_view(
             template_name='static/links.html'), name='links'),
     url(_(r'^irc/?$'), TemplateView.as_view(
-            template_name='static/irc.html')),
+            template_name='static/irc.html'), name='irc'),
     url(r'^robots.txt/?$', TemplateView.as_view(
             template_name='static/robots.txt',
-            content_type='text/plain')),
+            content_type='text/plain'), name='robotstxt'),
 
     url(_(r'^bestuur4/?$'), TemplateView.as_view(
             template_name='static/bestuur4.html'), name='bestuur4'),
@@ -141,7 +141,7 @@ urlpatterns = [
 
     # legacy redirect URLs
     url(_(r'^hink-stap/(?P<name>wiki|forum|stukken)$'),
-            views.hink_stap),
+            views.hink_stap, name='hinkstap'),
 
     # Backwards compatibility
     url(r'^img/(?P<subdir>.*)', direct_to_folder,
