@@ -79,7 +79,7 @@ class AddUserForm(forms.Form):
     telephone = forms.CharField(label=_("Telefoonnummer"),
                     widget=forms.TextInput(attrs={
                         'placeholder': _('bijv.: +31612345678')}))
-    study_number = forms.CharField(label=_("Studentnummer"))
+    study_number = forms.CharField(label=_("Studentnummer"), required=False)
     study_inst = EntityChoiceField(label=_("Onderwijs instelling"),
             _type='institute')
     study = EntityChoiceField(label=_("Studie"),
@@ -109,7 +109,7 @@ class AddStudyForm(forms.Form):
     study = EntityChoiceField(label=_('Studie'), _type='study')
     study_inst = EntityChoiceField(label=_('Onderwijs instelling'),
                                   _type='institute')
-    study_number = forms.CharField(label=_('Studentnummer'))
+    study_number = forms.CharField(label=_('Studentnummer'), required=False)
     study_from = forms.DateField(label=_('Start op'),
                                  initial=datetime.date.today)
 
