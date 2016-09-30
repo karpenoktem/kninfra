@@ -1,6 +1,6 @@
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
-from django.core.urlresolvers import resolve, reverse
+from django.core.urlresolvers import resolve, reverse, Resolver404
 from django.utils.translation import ugettext as _
 from django.utils.html import conditional_escape
 from django.utils import translation
@@ -76,7 +76,10 @@ def store_external_url(name):
 def translate_url(context, language):
     # Do not forget to add django.core.context_processors.request as
     # a template context processor.
-    view = resolve(context['request'].path)
+    try:
+        view = resolve(context['request'].path)
+    except Resolver404:
+        return
     request_language = translation.get_language()
     translation.activate(language)
     try:
