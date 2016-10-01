@@ -9,7 +9,7 @@ from django.core.urlresolvers import (RegexURLResolver, get_resolver,
 from django.utils.six.moves.urllib.parse import quote
 from django.utils.translation import get_language
 from django.utils.cache import patch_vary_headers
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_bytes, iri_to_uri
 from django.http import HttpResponseRedirect
 from django.utils import translation
 from django.utils import lru_cache
