@@ -21,8 +21,12 @@ def generate_quassel_changes(giedo):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
     have = set()
-    for username, in c.execute("SELECT username FROM quasseluser"):
-        have.add(username)
+    try:
+        for username, in c.execute("SELECT username FROM quasseluser"):
+            have.add(username)
+    except sqlite3.OperationalError:
+        logging.exception("Operational error.")
+        return {'add': [], 'remove': []}
 
     # Check which should be on the core
     want = set([str(e.name) for e in Es.by_name('leden').get_members()])

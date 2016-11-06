@@ -12,9 +12,12 @@ def quassel_setpass(daan, user, password):
     conn = sqlite3.connect(db_path)
     hashed_pw = hashlib.sha1(password).hexdigest()
     c = conn.cursor()
-    c.execute("UPDATE quasseluser SET password=? where username=?",
-                                    (hashed_pw, user))
-    conn.commit()
+    try:
+        c.execute("UPDATE quasseluser SET password=? where username=?",
+                                        (hashed_pw, user))
+        conn.commit()
+    except sqlite3.OperationalError:
+        logging.exception("OperationalError")
 
 def apply_quassel_changes(daan, changes):
     if not changes:
