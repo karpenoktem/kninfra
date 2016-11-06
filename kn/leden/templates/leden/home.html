@@ -17,15 +17,15 @@ op deze website en daar buiten:{% endblocktrans %}</p>
 {% store_external_url "wiki" as url_wiki %}
 {% store_external_url "wiki-home" as url_wiki_home %}
 {% url "fotos" "" as url_fotos %}
-{% url "forum" "" as url_forum %}
-{% url "irc" "" as url_irc %}
+{% store_external_url "forum" as url_forum %}
+{% store_external_url "irc" as url_irc %}
 <ul>
     <li>{% blocktrans %}De ledenadministratie aka het
         <a href="{{ url_smoelen_home }}"> smoelenboek</a>
         (dit hier!). Hier houden we van alles
 	    bij, zoals:{% endblocktrans %}
 		<ul>
-			<li><a href=""
+			<li><a href="{% url "tag-by-name" name="leden" %}"
                 >{% trans "alle leden en oud-leden" %}</a>,</li>
 			<li><a href="{% url "tag-by-name" name="comms" %}"
                 >{% trans "alle commissies" %}</a>,</li>
