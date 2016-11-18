@@ -27,7 +27,14 @@ def apply_quassel_changes(daan, changes):
     c = conn.cursor()
     for user in changes['remove']:
         logging.info('quassel: removing %s', user)
+        c.execute("SELECT userid FORM quasseluser WHERE username=?", (user,))
+        userid, = c.fetchone()
         c.execute("DELETE FROM quasseluser WHERE username=?", (user,))
+        c.execute("DELETE FROM identity WHERE userid=?", (userid,))
+        c.execute("DELETE FROM ircserver WHERE userid=?", (userid,))
+        c.execute("DELETE FROM user_setting WHERE userid=?", (userid,))
+        c.execute("DELETE FROM buffer WHERE userid=?", (userid,))
+        c.execute("DELETE FROM network WHERE userid=?", (userid,))
     for user in changes['add']:
         logging.info('quassel: adding %s', user)
         hashed_pw = hashlib.sha1(pseudo_randstr()).hexdigest()
