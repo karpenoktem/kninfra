@@ -402,6 +402,18 @@ def date_to_year(dt):
         year = 1
     return year
 
+def quarter_to_range(quarter):
+    """ Translates a quarter to a start and end datetime.
+        The quarters of the first year are [1,2,3,4]. """
+    startCMonths = (quarter - 1) * 3 + 8
+    startYears, startMonths = divmod(startCMonths, 12)
+    start = datetime.datetime(2004 + startYears, startMonths + 1, 1)
+    endCMonths = quarter * 3 + 8
+    endYears, endMonths = divmod(endCMonths, 12)
+    end = (datetime.datetime(2004 + endYears, endMonths + 1, 1)
+                - datetime.timedelta(1))
+    return start, end
+
 # Functions to work with relations
 # ######################################################################
 
