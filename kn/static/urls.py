@@ -34,8 +34,8 @@ urlpatterns = [
 
     url(_(r'^akta/?$'), TemplateView.as_view(
             template_name='static/aktanokturna.html'), name='aktanokturna'),
-    url(_(r'^(?:an|aktanokturna)/?$'), TemplateView.as_view(
-            template_name='static/aktanokturna.html'), name='an'),
+    url(_(r'^(?:an|aktanokturna)/?$'), RedirectView.as_view(
+            url='/akta')),
 
     url(_(r'^zusjes/?$'), TemplateView.as_view(
             template_name='static/zusjes.html'), name='zusjes'),
