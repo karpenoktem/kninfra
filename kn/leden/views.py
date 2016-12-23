@@ -99,8 +99,9 @@ def _entity_detail(request, e):
     for r in chain(related, rrelated):
         r['may_end'] = Es.user_may_end_relation(request.user, r)
         r['id'] = r['_id']
-        r['until_year'] = (None if r['until'] is None else
-                    Es.date_to_year(r['until']))
+        r['until_year'] = (None if r['until'] is None
+                                or r['until'] >= now()
+                                else Es.date_to_year(r['until']))
         r['virtual'] = Es.relation_is_virtual(r)
     tags = [t.as_primary_type() for t in e.get_tags()]
 
