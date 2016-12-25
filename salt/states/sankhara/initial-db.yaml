@@ -35,6 +35,12 @@ entities:
   names: ['!can-organize-official-events']
   tags: [*system_id]
   types: [tag]
+- _id: &hide_members_id !id '58600675fc8e9ecec4fae142'
+  humanNames:
+  - {human: Verberg leden, name: '!hide-members'}
+  names: ['!hide-members']
+  tags: [*system_id]
+  types: [tag]
 - _id: !id '4e6fcc85e60edf3dc0000005'
   humanNames:
   - {human: Wel jaar 1}
@@ -446,14 +452,14 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: Incasso, name: incasso}
   names: [incasso]
-  tags: [*groepen_id]
+  tags: [*groepen_id, *hide_members_id]
   types: [group, tag]
 - _id: !id '4e6fcc85e60edf3dc00000a5'
   description: Leden die geen incassoformulier hebben getekend.
   humanNames:
   - {genitive_prefix: van de, human: Geen Incasso, name: geen-incasso}
   names: [geen-incasso]
-  tags: [*groepen_id]
+  tags: [*groepen_id, *hide_members_id]
   types: [group, tag]
 - description: Frequent impulsief uitgaande mensen
   humanNames:

@@ -134,6 +134,10 @@ $(function(){
 {% endif %}{# may_add_related #}
 
 {% if rrelated %}
+{% if "!hide-members" in object.cached_tags_names and not "secretariaat" in user.cached_groups_names %}
+<h3>{% trans "Leden" %}</h3>
+<em>Leden zijn verborgen.</em>
+{% else %}
 <h3>{% trans "Leden" %} ({{ year_counts.this }})</h3>
 <ul>
 {% for r in rrelated %}
@@ -166,7 +170,9 @@ $(function(){
 {% endfor %}
 </li>
 </ul>
-{% endif %}
+{% endif %}{# "!hide-members" in object.cached_tags_names and not "secretariaat" in user.cached_groups_names #}
+{% endif %}{# rrelated #}
+
 {% if may_add_rrelated %}
 {% if rrelated or object.is_group %}
 <form action="{% url "relation-begin" %}" method="post"
