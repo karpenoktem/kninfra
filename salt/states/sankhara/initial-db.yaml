@@ -355,11 +355,19 @@ entities:
   names: [bestuur, bestuul, parkhangen, festivals]
   tags: [!id '4e6fcc85e60edf3dc0000004']
   types: [group, tag]
-- _id: !id '4e6fcc85e60edf3dc000007e'
+- _id: &root_id !id '4e6fcc85e60edf3dc0000086'
+  description: Categorieen van onderverdelingen der leden.
+  humanNames:
+  - {genitive_prefix: van de, human: Onderverdelingen, name: root}
+  names: [root, sms-gateway]
+  tags: [*root_id]
+  types: [tag]
+- _id: &groepen_id !id '4e6fcc85e60edf3dc000007e'
   description: Alle overige mailinglists.
   humanNames:
   - {genitive_prefix: van de, human: Groepen, name: groepen}
   names: [groepen]
+  tags: [*root_id]
   types: [tag]
 - description: De kascontrolecommissie
   humanNames:
@@ -372,14 +380,14 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: FotoCie, name: fotocie}
   names: [fotocie, fotos]
-  tags: [!id '4e6fcc85e60edf3dc000007e']
+  tags: [*groepen_id]
   types: [group, tag]
 - _id: !id 50bcaaec0032a07ed8000000
   description: Organisatie van het kerstgala
   humanNames:
   - {genitive_prefix: van de, human: Galagroep, name: galagroep}
   names: [galagroep]
-  tags: [!id '4e6fcc85e60edf3dc000007e', !id 56af677edef5152cf39aa2bc]
+  tags: [*groepen_id, !id 56af677edef5152cf39aa2bc]
   types: [group, tag]
 - _id: !id '4e6fcc85e60edf3dc000006f'
   description: De loze activiteitencommissie.
@@ -431,27 +439,13 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: Commissies, name: comms}
   names: [comms]
-  tags: [!id '4e6fcc85e60edf3dc0000086']
-  types: [tag]
-- _id: !id '4e6fcc85e60edf3dc000007e'
-  description: Alle overige mailinglists.
-  humanNames:
-  - {genitive_prefix: van de, human: Groepen, name: groepen}
-  names: [groepen]
-  tags: [!id '4e6fcc85e60edf3dc0000086']
-  types: [tag]
-- _id: !id '4e6fcc85e60edf3dc0000086'
-  description: Categorieen van onderverdelingen der leden.
-  humanNames:
-  - {genitive_prefix: van de, human: Onderverdelingen, name: root}
-  names: [root, sms-gateway]
-  tags: [!id '4e6fcc85e60edf3dc0000086']
+  tags: [*root_id]
   types: [tag]
 - description: Besturen der ASV Karpe Noktem.
   humanNames:
   - {genitive_prefix: van de, human: Besturen, name: besturen}
   names: [besturen]
-  tags: [!id '4e6fcc85e60edf3dc0000086']
+  tags: [*root_id]
   types: [tag]
 - description: De wortel van de WebCie.
   humanNames:
@@ -481,7 +475,7 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: Moderators, name: moderators}
   names: [moderators, veiligheid, mods, censuur, forum-abuse, spellingscontrole]
-  tags: [!id '4e6fcc85e60edf3dc000007e']
+  tags: [*groepen_id]
   types: [group, tag]
 - description: De platen draaiende groep.
   humanNames:
@@ -505,7 +499,7 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: E-Mail Lijsten, name: lists}
   names: [lists]
-  tags: [!id '4e6fcc85e60edf3dc0000086']
+  tags: [*root_id]
   types: [tag]
 - description: "De e-maillijst met de ge\xEFnteresseerde oud leden."
   humanNames:
@@ -589,20 +583,20 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: Boekenlezers, name: boekenlezers}
   names: [boekenlezers]
-  tags: [!id '4e6fcc85e60edf3dc000007e']
+  tags: [*groepen_id]
   types: [group, tag]
 - description: Secretariaat
   _id: &secretariaat_id !id 'aaaaaaaaaaaaaaaaaaa00002'
   humanNames:
   - {genitive_prefix: van het, human: Secretariaat, name: secretariaat}
   names: [secretariaat]
-  tags: [!id '4e6fcc85e60edf3dc000007e']
+  tags: [*groepen_id]
   types: [group, tag]
 - description: De lezers van de ledenadministratie
   humanNames:
   - {genitive_prefix: van de, human: Administratielezers, name: admlezers}
   names: [admlezers]
-  tags: [!id '4e6fcc85e60edf3dc000007e']
+  tags: [*groepen_id]
   types: [group, tag]
 - _id: !id 4ea9ce060032a04a41000001
   description: Alle groepen die met "Vrijelijk betreedbaar" zijn getagged kun je zelf
@@ -616,7 +610,7 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: Dranklezers, name: dranklezers}
   names: [dranklezers]
-  tags: [!id '4e6fcc85e60edf3dc000007e']
+  tags: [*groepen_id]
   types: [group, tag]
 - description: De InformaCie wordt op de hoogte gesteld van wijzigingen aan de ledenadministratie
   humanNames:
@@ -719,7 +713,7 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: Disputen, name: disputen}
   names: [disputen]
-  tags: [!id '4e6fcc85e60edf3dc0000086']
+  tags: [*root_id]
   types: [tag]
 
 - _id: &test_id !id '4e6fcc85e60edf3dc00001d4'
