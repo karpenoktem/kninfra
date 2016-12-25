@@ -396,43 +396,70 @@ entities:
   names: [loco]
   tags: [!id '4e6fcc85e60edf3dc000007d']
   types: [group, tag]
+- _id: &lists_id !id '4e6fcc85e60edf3dc00000b9'
+  description: De E-Mail Lijsten.
+  humanNames:
+  - {genitive_prefix: van de, human: E-Mail Lijsten, name: lists}
+  names: [lists]
+  tags: [*root_id]
+  types: [tag]
+- _id: &lists_auto_id !id '4e6fcc85e60edf3dc00000bb'
+  description: E-Maillijsten waarvan lidmaatschap automatisch wordt bepaald.
+  humanNames:
+  - {genitive_prefix: van de, human: Automatische E-Maillijsten, name: lists-auto}
+  names: [lists-auto]
+  tags: [*lists_id]
+  types: [tag]
+- _id: &lists_other_id !id 4e6fcc85e60edf3dc00000bc
+  description: De e-maillijsten waar je zelf lid van kunt worden.
+  humanNames:
+  - {genitive_prefix: van de, human: Vrijwillige E-Maillijsten, name: lists-opted}
+  names: [lists-opted]
+  tags: [*lists_id]
+  types: [tag]
+- description: Andere e-maillijsten of doorverwijzingen
+  humanNames:
+  - {genitive_prefix: van de, human: Andere E-Maillijsten, name: lists-other}
+  names: [lists-other]
+  tags: [*lists_id]
+  types: [tag]
 - description: De hoofden van de commissies van Karpe Noktem.
   humanNames:
   - {genitive_prefix: van de, human: Hoofden, name: hoofden}
   names: [hoofden]
-  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  tags: [*lists_auto_id]
   types: [group, tag]
 - description: De mannelijke leden van Karpe Noktem.
   humanNames:
   - {genitive_prefix: van de, human: Mannen, name: mannen}
   names: [mannen]
-  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  tags: [*lists_auto_id]
   types: [group, tag]
 - description: De vrouwelijke leden van Karpe Noktem.
   humanNames:
   - {genitive_prefix: van de, human: Vrouwen, name: vrouwen}
   names: [vrouwen]
-  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  tags: [*lists_auto_id]
   types: [group, tag]
 - _id: !id '4e6fcc85e60edf3dc00000a4'
   description: Leden die een incassoformulier hebben getekend.
   humanNames:
   - {genitive_prefix: van de, human: Incasso, name: incasso}
   names: [incasso]
-  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  tags: [*groepen_id]
   types: [group, tag]
 - _id: !id '4e6fcc85e60edf3dc00000a5'
   description: Leden die geen incassoformulier hebben getekend.
   humanNames:
   - {genitive_prefix: van de, human: Geen Incasso, name: geen-incasso}
   names: [geen-incasso]
-  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  tags: [*groepen_id]
   types: [group, tag]
 - description: Frequent impulsief uitgaande mensen
   humanNames:
   - {genitive_prefix: van de, human: Uit, name: uit}
   names: [uit, sex, bier, parijs]
-  tags: [!id '4e6fcc85e60edf3dc00000bc', !id '4ea9ce060032a04a41000001']
+  tags: [*lists_other_id, !id '4ea9ce060032a04a41000001']
   types: [group, tag]
 - _id: !id '4e6fcc85e60edf3dc000007d'
   description: Alle commissies van Karpe Noktem.
@@ -457,7 +484,7 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: EersteJaars, name: eerstejaars}
   names: [eerstejaars]
-  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  tags: [*lists_auto_id]
   types: [group, tag]
 - description: De Fotografen.
   humanNames:
@@ -493,39 +520,19 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: Discussie, name: discussie}
   names: [discussie]
-  tags: [!id '4e6fcc85e60edf3dc00000bc', !id '4ea9ce060032a04a41000001']
+  tags: [*lists_other_id, !id '4ea9ce060032a04a41000001']
   types: [group, tag]
-- description: De E-Mail Lijsten.
-  humanNames:
-  - {genitive_prefix: van de, human: E-Mail Lijsten, name: lists}
-  names: [lists]
-  tags: [*root_id]
-  types: [tag]
 - description: "De e-maillijst met de ge\xEFnteresseerde oud leden."
   humanNames:
   - {genitive_prefix: van de, human: Oud, name: oud}
   names: [oud]
-  tags: [!id '4e6fcc85e60edf3dc00000bc']
+  tags: [*lists_other_id]
   types: [group, tag]
-- _id: !id '4e6fcc85e60edf3dc0000094'
-  description: E-Maillijsten waarvan lidmaatschap automatisch wordt bepaald.
-  humanNames:
-  - {genitive_prefix: van de, human: Automatische E-Maillijsten, name: lists-auto}
-  names: [lists-auto]
-  tags: [!id '4e6fcc85e60edf3dc00000b9']
-  types: [tag]
-- _id: !id 4e6fcc85e60edf3dc00000bc
-  description: De e-maillijsten waar je zelf lid van kunt worden.
-  humanNames:
-  - {genitive_prefix: van de, human: Vrijwillige E-Maillijsten, name: lists-opted}
-  names: [lists-opted]
-  tags: [!id '4e6fcc85e60edf3dc00000b9']
-  types: [tag]
 - description: "De re\xFCnisten van onze vereniging."
   humanNames:
   - {genitive_prefix: van de, human: "Re\xFCnisten", name: reunisten}
   names: [reunisten]
-  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  tags: [*lists_auto_id]
   types: [group, tag]
 - description: De tappers van de Barco.
   humanNames:
@@ -537,14 +544,8 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: Ereleden, name: ereleden}
   names: [ereleden]
-  tags: [!id '4e6fcc85e60edf3dc00000bb']
+  tags: [*lists_auto_id]
   types: [group, tag]
-- description: Andere e-maillijsten of doorverwijzingen
-  humanNames:
-  - {genitive_prefix: van de, human: Andere E-Maillijsten, name: lists-other}
-  names: [lists-other]
-  tags: [!id '4e6fcc85e60edf3dc00000b9']
-  types: [tag]
 - humanNames:
   - {human: Wel jaar 10}
   tags: [!id '4e6fcc85e60edf3dc0000001']
@@ -616,7 +617,7 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: InformaCie, name: informacie}
   names: [informacie]
-  tags: [!id '4ea9ce060032a04a41000001', !id '4e6fcc85e60edf3dc00000bc']
+  tags: [!id '4ea9ce060032a04a41000001', *lists_other_id]
   types: [group, tag]
 - description: De Pluk de Nacht Weekend organiserende groep
   humanNames:
@@ -660,7 +661,7 @@ entities:
   humanNames:
   - {genitive_prefix: van de, human: Leden, name: leden}
   names: [leden]
-  tags: [!id '4e6fcc85e60edf3dc00000bb', !id '4e6fcc85e60edf3dc0000004']
+  tags: [*lists_auto_id, !id '4e6fcc85e60edf3dc0000004']
   types: [group, tag]
 - description: De WebCie regelt de digitale voorzieningen voor Karpe Noktem
   humanNames:
