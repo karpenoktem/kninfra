@@ -1,5 +1,5 @@
 entities:
-- _id: !id '4e6fcc85e60edf3dc0000000'
+- _id: &system_id !id '4e6fcc85e60edf3dc0000000'
   humanNames:
   - {human: Systeemstempels, name: '!system'}
   names: ['!system']
@@ -9,31 +9,31 @@ entities:
   humanNames:
   - {human: Jaarlidmaatschapstempels, name: '!year-overrides'}
   names: ['!year-overrides']
-  tags: [!id '4e6fcc85e60edf3dc0000000']
+  tags: [*system_id]
   types: [tag]
 - _id: !id '4e6fcc85e60edf3dc0000002'
   humanNames:
   - {human: Virtuele groep, name: '!virtual-group'}
   names: ['!virtual-group']
-  tags: [!id '4e6fcc85e60edf3dc0000000']
+  tags: [*system_id]
   types: [tag]
 - _id: !id '4e6fcc85e60edf3dc0000003'
   humanNames:
   - {human: Sofa merk, name: '!sofa-brand'}
   names: ['!sofa-brand']
-  tags: [!id '4e6fcc85e60edf3dc0000000']
+  tags: [*system_id]
   types: [tag]
 - _id: !id '4e6fcc85e60edf3dc0000004'
   humanNames:
   - {human: Jaargroep, name: '!year-group'}
   names: ['!year-group']
-  tags: [!id '4e6fcc85e60edf3dc0000000']
+  tags: [*system_id]
   types: [tag]
 - _id: !id 56af677edef5152cf39aa2bc
   humanNames:
   - {human: Mag officiële activiteiten organiseren, name: '!can-organize-official-events'}
   names: ['!can-organize-official-events']
-  tags: [!id '4e6fcc85e60edf3dc0000000']
+  tags: [*system_id]
   types: [tag]
 - _id: !id '4e6fcc85e60edf3dc0000005'
   humanNames:
@@ -605,7 +605,7 @@ entities:
   humanNames:
   - {human: Vrijelijk betreedbaar, name: '!free-to-join'}
   names: ['!free-to-join']
-  tags: [!id '4e6fcc85e60edf3dc0000000']
+  tags: [*system_id]
   types: [tag]
 - description: De drankboekhouding lezende groep
   humanNames:
