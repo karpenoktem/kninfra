@@ -6,7 +6,6 @@ Van jouw inschrijfformulier hebben wij het volgende overgenomen.
 
  voornaam              %(firstName)s
  achternaam            %(lastName)s
- geslacht              %(gender)s
  geboortedatum         %(dateOfBirth)s
  datum van toetreding  %(dateJoined)s
 

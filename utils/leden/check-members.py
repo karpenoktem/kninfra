@@ -59,8 +59,6 @@ def check_members(members):
             print "%s: no empty addr_number" % m.username
         if m.addr_city == '':
             print "%s: no empty addr_city" % m.username
-        if not m.gender in ('m', 'v'):
-            print "%s: gender not in {m, v}" % m.username
         if m.telephone is None:
             print "%s: telephone is None" % m.username
         elif m.telephone == '':

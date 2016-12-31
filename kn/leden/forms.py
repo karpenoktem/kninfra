@@ -67,9 +67,6 @@ class AddUserForm(forms.Form):
                         'placeholder': _('bijv.: Vaart, van der')}))
     username = forms.CharField(label=_("Gebruikersnaam"),
                     validators=[validate_username])
-    gender = forms.ChoiceField(label=_("Geslacht"),
-                        choices=(('m', _('Man')),
-                                 ('v', _('Vrouw'))))
     email = forms.EmailField(label=_("E-Mail adres"))
     dateOfBirth = forms.DateField(label=_("Geboortedatum"))
     addr_street = forms.CharField(label=_("Straatnaam"))

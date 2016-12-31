@@ -38,7 +38,6 @@ ecol = db['entities']   # entities: users, group, tags, studies, ...
 #   "person" : { "given" : null,
 #                "family" : "Jansen",
 #                "nick" : "Giedo",
-#                "gender" : "m",
 #                "dateOfBirth" : ISODate("..."),
 #                "titles" : [ ] },
 #   "is_active" : 0,
@@ -1133,9 +1132,6 @@ class User(Entity):
     @property
     def last_name(self):
         return self._data.get('person',{}).get('family')
-    @property
-    def gender(self):
-        return self._data.get('person',{}).get('gender')
     @property
     def preferred_language(self):
         return self._data.get('preferred_language', settings.LANGUAGE_CODE)
