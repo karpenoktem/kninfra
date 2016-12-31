@@ -1,8 +1,9 @@
 {% extends "leden/base.html" %}
 {% load base %}
+{% load i18n %}
 
 {% block body %}
-<h1>Activiteiten</h1>
+<h1>{% trans "Activiteiten" %}</h1>
 <ul>
 {% for e in open_events %}
 <li><a href={{ e.get_absolute_url }}>{{ e.humanName }}</a>
@@ -23,7 +24,7 @@
 </li>
 {% endfor %}{# e in open_leden_events #}
 </ul>
-<h2>Oude activiteiten</h2>
+<h2{% trans ">Oude activiteiten" %}</h2>
 <ul>
 {% for e in closed_events %}
 <li><a href={{ e.get_absolute_url }}>{{ e.humanName }}</a>

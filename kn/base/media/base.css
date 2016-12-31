@@ -26,6 +26,42 @@ body {
 	}
 }
 
+
+/* generic classes */
+
+.toggle-window {
+	position: absolute;
+	left: auto;
+        display: none;
+}
+.toggle.toggle-open .toggle-window {
+        display: block;
+}
+
+.tabs > .tabHeads > .tabHead {
+	display: inline-block;
+	cursor: default;
+	border-bottom: solid 2px transparent;
+	padding: 4px;
+	line-height: 1;
+}
+.tabs > .tabHeads > .tabHead:hover {
+	border-bottom: solid 2px #a31e1b;
+	background: rgba(255, 255, 255, 0.5);
+}
+.tabs > .tabHeads > .tabHead.selected {
+	background: #fff;
+}
+.tabs > .tabBody {
+	background: #fff;
+	overflow: hidden;
+	padding: 4px;
+}
+.tabs > .tabBody:not(.selected) {
+	display: none;
+}
+
+
 /* header */
 #header {
 	z-index: 5;
@@ -168,8 +204,7 @@ body {
 #content {
 	padding-bottom: 6px; /* prevent collapsing of margins */
 	background-color: #f0f0f0;
-	background-image: url('uiltje.png');
-    background-size: 400px;
+	background-image: url('uiltje.svg');
 	background-repeat: no-repeat;
 	background-position: 100% 0%;
 	background-attachment: scroll;
@@ -177,6 +212,9 @@ body {
 	flex-grow: 1;
 	-webkit-flex-shrink: 0;
 	flex-shrink: 0;
+}
+.no-svg #content {
+	background-image: url('uiltje.png');
 }
 @media screen and (min-width: 801px) {
 	#content {
@@ -207,12 +245,10 @@ body {
 #content .nivoSlider img {
 	max-width: none; /* initial */
 }
-#content hr {
-	background-color: #a31e1b;
-	height: 3px;
-	width: 5em;
-	border: none;
-	margin: 8px auto;
+#content hr.slight {
+	border-style: none;
+	height: 1px;
+	background: #ccc;
 }
 
 .email {
@@ -229,10 +265,12 @@ body {
 }
 
 #submenu {
+	position: static;
 	display: inline-block;
 	margin: 0;
 	line-height: 1;
 	padding: 0;
+	left: auto;
 }
 
 #submenu li {
@@ -325,7 +363,7 @@ body {
 		border-radius: 2px;
 		background: white url('menu.svg') no-repeat 8px 4px;
 	}
-	#submenu-wrapper.open a#submenu-button {
+	#submenu-wrapper.toggle-open a#submenu-button {
 		border-bottom-color: white;
 		border-radius: 2px 2px 0 0;
 	}
@@ -340,7 +378,7 @@ body {
 		padding: 16px 12px;
 		border: 1px solid rgba(127, 127, 127, 0.5);
 	}
-	#submenu-wrapper.open #submenu {
+	#submenu-wrapper.toggle-open #submenu {
 		left: auto;
 		right: 0;
 	}
@@ -413,16 +451,14 @@ textarea {
 
 #loginButtonLink:hover img {
 	-webkit-filter: brightness(115%);
+	filter: brightness(115%);
 }
-#loginButton.open #loginButtonLink img {
+#loginButton.toggle-open #loginButtonLink img {
 	-webkit-filter: brightness(150%);
+	filter: brightness(150%);
 }
 
 #loginWindow {
-	display: none;
-
-	position: absolute;
-	top: auto;
 	right: -12px;
 	margin-top: 8px;
 	max-width: 290px;
@@ -435,10 +471,6 @@ textarea {
 	color: #afafaf;
 	text-transform: none;
 	font-variant: normal;
-}
-
-#loginButton.open #loginWindow {
-	display: block;
 }
 
 @media screen and (max-width: 800px) {
@@ -491,6 +523,7 @@ form.top-aligned p {
 }
 
 form.top-aligned input,
+form.top-aligned select,
 form.top-aligned textarea {
 	display: block;
 	margin: 2px 0;

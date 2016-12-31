@@ -1,18 +1,20 @@
 {% extends "base/bare.html" %}
 
+{% load i18n %}
+
 {% block styles %}
 {{ block.super }}
 <link rel="stylesheet"
-  href="{{ MEDIA_URL }}/static/style/introPoster2010.css" />
+  href="{{ MEDIA_URL }}static/style/introPoster2010.css" />
 {% endblock styles %}
 
 {% block body %}
-<a href="{% url intro2010 %}" title="Naar de website" />
-     <img src="{{ MEDIA_URL }}/static/img/introposter2010-3.png"
-        alt="Intro Poster 2010. Klik hier om verder te gaan naar de website"
-        title="Intro Poster 2010" 
+<a href="{% url "intro2010" %}" title="{% trans "Naar de website" %}" />
+     <img src="{{ MEDIA_URL }}static/img/introposter2010-3.png"
+          alt="{% trans "Intro Poster 2010. Klik hier om verder te gaan naar de website" %}"
+          title="{% trans "Intro Poster 2010" %}" 
         class="boilerplate" /></a>
-<p class="wrappingtext">(<a href="{% url intro2010 %}"
-    >ga naar de website</a>)</p>
+<p class="wrappingtext">(<a href="{% url "intro2010" %}"
+      >{% trans "ga naar de website" %}</a>)</p>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

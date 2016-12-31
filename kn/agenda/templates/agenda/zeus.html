@@ -1,0 +1,20 @@
+{% extends "agenda/base.html" %}
+
+{% load i18n %}
+
+{% block body %}
+
+{% url "zusjes" as url_zusjes %}
+
+<div>{% blocktrans %}
+	Dit is de ZEUS-agenda, de agenda met alle grote activiteiten
+    van onze <a href="{{ url_zusjes }}">zusterverenigingen</a>
+    door heel het land.{% endblocktrans %}
+	<a href="https://www.google.com/calendar/embed?src=a9jl7tuhqg7oe8stapcu9uhvk8%40group.calendar.google.com&amp;ctz=Europe/Amsterdam" target="_blank"
+	>{% trans "Ook op Google Calendar" %}</a>.<br/>
+<a href="{% url "agenda" %}">{% trans "Terug naar onze eigen agenda" %}</a>.
+</div>
+
+{% include "agenda/widget.html" %}
+
+{% endblock %}

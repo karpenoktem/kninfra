@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ ! -d /vagrant ]; then
+    # This is not a production server
+    echo "Are you sure you want to reset the database?"
+    select yn in "Yes" "No"; do
+        case $yn in
+            Yes ) break;;
+            No ) exit;;
+        esac
+    done
+fi
+
+# Empty the database
+/usr/bin/mongo kn --eval 'db.dropDatabase()'
+
+# Fill it with the test data
+python /home/infra/repo/salt/states/sankhara/initializeDb.py
+
+# For some reason, this may be necessary.
+run-fcgi

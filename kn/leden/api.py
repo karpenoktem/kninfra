@@ -1,13 +1,14 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.core.validators import email_re
+from kn.base.validators import email_re
 
 from kn.base.http import JsonHttpResponse
 from kn.base.mail import render_then_email
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
 from kn.leden import giedo
+from kn.leden.utils import find_name_for_user, parse_date
 
 @login_required
 def view(request):
@@ -169,14 +170,85 @@ def entity_update_visibility(data, request):
     giedo.sync_async(request)
     return {'ok': True}
 
+def entity_end_study(data, request):
+    '''
+    End a study at the specified date.
+    '''
+    if 'id' not in data or not isinstance(data['id'], basestring):
+        return {'ok': False, 'error': 'Missing argument "id"'}
+    if 'study' not in data or not isinstance(data['study'], int):
+        return {'ok': False, 'error': 'Missing argument "study"'}
+    if 'end_date' not in data or not isinstance(data['end_date'], basestring):
+        return {'ok': False, 'error': 'Missing argument "end_date"'}
+
+    if not 'secretariaat' in request.user.cached_groups_names:
+        return {'ok': False, 'error': 'Permission denied'}
+
+    e = Es.by_id(data['id'])
+    if e is None:
+        return {'ok': False, 'error': 'Entity not found'}
+    try:
+        end_date = parse_date(data['end_date'])
+    except ValueError:
+        return {'ok': False, 'error': 'Invalid date'}
+    if not end_date:
+        return {'ok': False, 'error': 'No valid end date given'}
+    try:
+        e.study_end(data['study'], end_date)
+    except Es.EntityException, why:
+        return {'ok': False, 'error': why.message}
+
+    return {'ok': True}
+
+def entity_set_property(data, request):
+    if 'id' not in data or not isinstance(data['id'], basestring):
+        return {'ok': False, 'error': 'Missing argument "id"'}
+    if 'property' not in data or not isinstance(data['property'], basestring):
+        return {'ok': False, 'error': 'Missing argument "property"'}
+    if 'value' not in data or not isinstance(data['value'], basestring):
+        return {'ok': False, 'error': 'Missing argument "value"'}
+
+    if not 'secretariaat' in request.user.cached_groups_names:
+        return {'ok': False, 'error': 'Permission denied'}
+
+    property = data['property']
+    value = data['value']
+
+    e = Es.by_id(data['id'])
+    if e is None:
+        return {'ok': False, 'error': 'Entity not found'}
+
+    if property == 'description':
+        e.set_description(value)
+    elif property == 'humanName':
+        e.set_humanName(value)
+    else:
+        return {'ok': False, 'error': 'Unknown property "%s"' % property}
+
+    return {'ok': True}
+
+def adduser_suggest_username(data, request):
+    if 'first_name' not in data or not isinstance(data['first_name'], basestring):
+        return {'ok': False, 'error': 'Missing argument "first_name"'}
+    if 'last_name' not in data or not isinstance(data['last_name'], basestring):
+        return {'ok': False, 'error': 'Missing argument "last_name"'}
+
+    if not 'secretariaat' in request.user.cached_groups_names:
+        return {'ok': False, 'error': 'Permission denied'}
+
+    return {'ok': True,
+            'username': find_name_for_user(data['first_name'], data['last_name'])}
 
 ACTION_HANDLER_MAP = {
         'entity_humanName_by_id': entity_humanName_by_id,
         'entities_by_keyword': entities_by_keyword,
         'close_note': close_note,
+        'entity_set_property': entity_set_property,
         'entity_update_primary':  entity_update_primary,
         'entity_update_visibility':  entity_update_visibility,
+        'entity_end_study':  entity_end_study,
         'get_last_synced':  get_last_synced,
+        'adduser_suggest_username': adduser_suggest_username,
         None: no_such_action,
         }
 

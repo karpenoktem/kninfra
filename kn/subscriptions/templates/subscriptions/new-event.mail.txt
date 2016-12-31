@@ -1,10 +1,17 @@
+{% load i18n %}
+
 {% block subject %}
-Nieuwe activiteit "{{ event.name }}" door {{ user.full_name }}
+{% blocktrans with name=event.name full_name=user.full_name %}
+Nieuwe activiteit "{{ name }}" door {{ full_name }}
+{% endblocktrans %}
 {% endblock %}
 
 {% block plain %}
-{{ user.full_name }} heeft een nieuwe activiteit aangemaakt
+{% url "event-detail" name=event.name as url_event %}
+{% blocktrans with full_name=user.full_name name=event.name%}
+{{ full_name }} heeft een nieuwe activiteit aangemaakt
 
-   "{{ event.name }}"
-   {{ BASE_URL }}{% url event-detail name=event.name %}
+   "{{ name }}"
+   {{ BASE_URL }}{{ url_event }}
+{% endblocktrans %}
 {% endblock %}

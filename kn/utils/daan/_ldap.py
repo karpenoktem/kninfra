@@ -1,11 +1,16 @@
+import logging
+
 import ldap
 import ldap.modlist
 import smbpasswd
 
-from kn import settings
+from django.conf import settings
 
 def ldap_setpass(daan, user, password):
     if not password:
+        return
+    if not settings.LDAP_PASS:
+        logging.warning('ldap: no credentials available, skipping')
         return
     l = ldap.open(settings.LDAP_HOST)
     l.bind_s(settings.LDAP_USER, settings.LDAP_PASS)

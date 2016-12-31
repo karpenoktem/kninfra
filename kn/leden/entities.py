@@ -4,25 +4,150 @@ import datetime
 import functools
 import email.utils
 
+from django.conf import settings
 from django.db.models import permalink
+from django.utils.translation import ugettext as _
+from django.contrib.auth.signals import user_logged_in
+from django.contrib.auth.hashers import check_password, make_password
+from django.utils.crypto import constant_time_compare
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
-from kn.settings import DT_MIN, DT_MAX, MAILDOMAIN
 from kn.base._random import pseudo_randstr
-from kn import settings
 
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
+
+# ######################################################################
 # The collections
 # ######################################################################
 ecol = db['entities']   # entities: users, group, tags, studies, ...
+
+# Example of a user
+# ----------------------------------------------------------------------
+# {"_id" : ObjectId("4e6fcc85e60edf3dc0000270"),
+#  "addresses" : [ { "city" : "Nijmegen",
+#                    "zip" : "...",
+#                    "number" : "...",
+#                    "street" : "...",
+#                    "from" : ISODate("2004-..."),
+#                    "until" : DT_MAX) } ],
+#   "types" : [ "user" ],
+#   "names" : [ "giedo" ],
+#   "humanNames" : [ { "human" : "Giedo Jansen" } ],
+#   "person" : { "given" : null,
+#                "family" : "Jansen",
+#                "nick" : "Giedo",
+#                "gender" : "m",
+#                "dateOfBirth" : ISODate("..."),
+#                "titles" : [ ] },
+#   "is_active" : 0,
+#   "emailAddresses" : [ { "email" : "...",
+#                          "from" : ISODate("2004-08-31T00:00:00Z"),
+#                          "until" : DT_MAX } ],
+#   "password" : "pbkdf2_sha256$15000$...$...",
+#   "studies" : [ { "institute" : ObjectId("4e6fcc85e60edf3dc000001d"),
+#                   "study" : ObjectId("4e6fcc85e60edf3dc0000030"),
+#                   "number" : "...",
+#                   "from" : ...,
+#                   "until" : DT_MAX } ],
+#   "telephones" : [ { "number" : "...",
+#                      "from" : ISODate("2004-08-31T00:00:00Z"),
+#                      "until" : ISODate("5004-09-01T00:00:00Z") } ] },
+#   "preferred_language": "nl",
+#   "preferences" : {
+#       "visibility" : {
+#           "telephone" : false
+#       }
+#   }
+# }
+
+# NOTE password can also be of the old-style form
+#   "password" : {"hash" : "...","salt" : "...", "algorithm" : "sha1" }
+
+# Example of a tag
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000004"),
+#   "types" : [ "tag" ],
+#   "names" : [ "!year-group" ],
+#   "humanNames" : [ { "name" : "!year-group", "human" : "Jaargroep" } ],
+#   "tags" : [ ObjectId("4e6fcc85e60edf3dc0000000") ]
+# }
+
+# Example of a study
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000033"),
+#   "humanNames" : [ { "human" : "Geschiedenis" } ],
+#   "types" : [ "study" ]
+# }
+
+# Example of an institute
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000016"),
+#   "humanNames" : [ { "human" : "Radboud Universiteit Nijmegen" } ],
+#   "types" : [ "institute" ]
+# }
+
+# Example of a group
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000067"),
+#   "types" : [ "group", "tag" ],
+#   "description" : "Het bestuur",
+#   "names" : [ "bestuur", "bestuul", "parkhangen", "festivals", "b" ],
+#   "humanNames" : [ { "name" : "bestuur",
+#                      "human" : "Bestuur",
+#                      "genitive_prefix" : "van het" } ],
+#   "tags" : [ ObjectId("4e6fcc85e60edf3dc0000004") ]
+# }
+
+# Example of a brand
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e6fcc85e60edf3dc0000bcb"),
+#   "types" : [ "brand" ],
+#   "tags" : [ ObjectId("4e6fcc85e60edf3dc0000003") ],
+#   "humanNames" : [ { "human" : "Vice-voorzitter" } ],
+#   "sofa_suffix" : "vicevoorzitter",
+#   "names" : [ ]
+# }
+
 rcol = db['relations']  # relations: "giedo is chairman of bestuur from
-            #             date A until date B"
-mcol = db['messages']   # message: used for old code
+                        #             date A until date B"
+# Example of a brand
+# ----------------------------------------------------------------------
+# This is the relation: "mike is chair (voorzitter) of the soco from
+#   2012-02-07 to 2013-03-11, but he should not be put in soco9
+#   (which is forced by the year-override tag)". 
+# { "_id" : ObjectId("4f3086270032a05bfd000005"),
+#   "from" : ISODate("2012-02-07T03:02:15.130Z"),
+#   "how" : ObjectId("4e6fcc85e60edf3dc0000bc8"),
+#   "tags" : [ ObjectId("5038e25b0032a04438000000") ],
+#   "until" : ISODate("2013-03-11T20:16:36.203Z"),
+#   "who" : ObjectId("4e6fcc85e60edf3dc0000356"),
+#   "with" : ObjectId("4e6fcc85e60edf3dc0000077")
+# }
+
 ncol = db['notes']      # notes on entities by the secretaris
+# Example of a note
+# ----------------------------------------------------------------------
+# { "_id" : ObjectId("4e99b5460032a006e3000013"),
+#   "on" : ObjectId("4e6fcc85e60edf3dc000029d"),
+#   "closed_by" : ObjectId("4e6fcc85e60edf3dc00001d4"),
+#   "note" : "Adres veranderd. Was:  (...) Nijmegen",
+#   "at" : ISODate("2011-03-24T00:00:00Z"),
+#   "closed_at" : ISODate("2012-08-25T14:53:17.413Z"),
+#   "open" : false,
+#   "by" : ObjectId("4e6fcc85e60edf3dc0000410")
+# }
+
 pcol = db['push_changes'] # Changes to be pushed to remote systems
+# TODO add example
+
 incol = db['informacie_notifications'] # human readable list of notifications 
                                         #for informacie group
+# TODO add example
+
 def get_hexdigest(algorithm, salt, raw_password):
+    """ Used to check old-style passwords. """
     assert algorithm == 'sha1'
     return hashlib.sha1(salt + raw_password).hexdigest()
 
@@ -46,8 +171,6 @@ def ensure_indices():
     rcol.ensure_index('tags', sparse=True)
     rcol.ensure_index([('until',1),
                ('from',-1)])
-    # messages
-    mcol.ensure_index('entity')
     # notes
     ncol.ensure_index([('on', 1),
                        ('at', 1)])
@@ -59,6 +182,14 @@ def ensure_indices():
 
 # Basic functions to work with entities
 # ######################################################################
+
+class EntityException(Exception):
+    '''
+    Exception that is raised when invalid input is entered (e.g. overlapping
+    dates).
+    '''
+    pass
+
 def entity(d):
     """ Given a dictionary, returns an Entity object wrapping it """
     if d is None:
@@ -149,6 +280,7 @@ def by_name(n):
 
 def by_id(n):
     """ Finds an entity by id """
+    if n is None: return None
     return entity(ecol.find_one({'_id': _id(n)}))
 
 def by_study(study):
@@ -270,6 +402,18 @@ def date_to_year(dt):
         year = 1
     return year
 
+def quarter_to_range(quarter):
+    """ Translates a quarter to a start and end datetime.
+        The quarters of the first year are [1,2,3,4]. """
+    startCMonths = (quarter - 1) * 3 + 8
+    startYears, startMonths = divmod(startCMonths, 12)
+    start = datetime.datetime(2004 + startYears, startMonths + 1, 1)
+    endCMonths = quarter * 3 + 8
+    endYears, endMonths = divmod(endCMonths, 12)
+    end = (datetime.datetime(2004 + endYears, endMonths + 1, 1)
+                - datetime.timedelta(1))
+    return start, end
+
 # Functions to work with relations
 # ######################################################################
 
@@ -331,10 +475,18 @@ def add_relation(who, _with, how=None, _from=None, until=None):
                      'from': _from,
                      'until': until})
 
+def user_may_tag(user, group, tag):
+    return 'secretariaat' in user.cached_groups_names
+
+def user_may_untag(user, group, tag):
+    return 'secretariaat' in user.cached_groups_names
+
 def disj_query_relations(queries, deref_who=False, deref_with=False,
         deref_how=False):
     """ Find relations matching any one of @queries.
         See @query_relations. """
+    if not queries:
+        return []
     bits = []
     for query in queries:
         for attr in ('with', 'how', 'who'):
@@ -496,14 +648,11 @@ def get_open_notes():
 # Functions to work with informacie-notifications
 # ######################################################################
 
-def notify_informacie(event, entity=None, relation=None):
+def notify_informacie(event, user, **props):
     data = {'when': now(), 'event': event}
-    if relation is not None:
-        data['rel'] = _id(relation)
-    elif entity is not None:
-        data['entity'] = _id(entity)
-    else:
-        raise ValueError, 'supply either entity or relation'
+    data['user'] = _id(user)
+    for key, value in props.items():
+        data[key] = _id(value)
     incol.insert(data)
 
 def pop_all_informacie_notifications():
@@ -551,6 +700,12 @@ class EntityHumanName(object):
     @property
     def genitive(self):
         return self.genitive_prefix + ' ' + unicode(self)
+    @property
+    def definite_article(self):
+        return {'van de': 'de',
+                'van het': 'het',
+                'van': '',
+                }.get(self.genitive_prefix, 'de')
     def __unicode__(self):
         return self.humanName
     def __repr__(self):
@@ -624,6 +779,20 @@ class Entity(SONWrapper):
             yield Tag(m)
     def has_tag(self, tag):
         return _id(tag) in self._data.get('tags', ())
+    def tag(self, tag, save=True):
+        if self.has_tag(tag):
+            raise ValueError(_("Entiteit heeft al deze stempel"))
+        if 'tags' not in self._data:
+            self._data['tags'] = []
+        self._data['tags'].append(_id(tag))
+        if save:
+            self.save()
+    def untag(self, tag, save=True):
+        if not self.has_tag(tag):
+            raise ValueError(_("Eniteit heeft deze stempel nog niet"))
+        self._data['tags'].remove(_id(tag))
+        if save:
+            self.save()
     @property
     def names(self):
         for n in self._data.get('names',()):
@@ -661,7 +830,7 @@ class Entity(SONWrapper):
         return set(self._data['types'])
 
     def __repr__(self):
-        return "<Entity %s (%s)>" % (self.id, self.type)
+        return "<Entity %s (%s)>" % (str(self.name) if self.name else self.id, self.type)
 
     @property
     def is_user(self): return 'user' in self._data['types']
@@ -763,6 +932,19 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def set_humanName(self, humanName, save=True):
+        if len(self._data['humanNames']) < 1:
+            # does not appear to occur in practice
+            raise ValueError(_('Entiteit heeft nog geen humanName'))
+        self._data['humanNames'][0]['human'] = humanName
+        if save:
+            self.save()
+
+    def set_description(self, description, save=True):
+        self._data['description'] = description
+        if save:
+            self.save()
+
     @property
     def canonical_full_email(self):
         """ Returns the string
@@ -779,7 +961,7 @@ class Entity(SONWrapper):
         if self.type in ('institute', 'study', 'brand', 'tag'):
             return None
         name = str(self.name if self.name else self.id)
-        return "%s@%s" % (name, MAILDOMAIN)
+        return "%s@%s" % (name, settings.MAILDOMAIN)
 
     @property
     def got_mailman_list(self):
@@ -857,6 +1039,7 @@ class Group(Entity):
     @property
     def is_virtual(self):
         return 'virtual' in self._data
+
 class User(Entity):
     def __init__(self, data):
         super(User,self).__init__(data)
@@ -868,26 +1051,44 @@ class User(Entity):
                     {'name': self.name})
         return ('user-by-id', (), {'_id': self.id})
     def set_password(self, pwd, save=True):
-        salt = pseudo_randstr()
-        alg = 'sha1'
-        self._data['password'] = {
-                'algorithm': alg,
-                'salt': salt,
-                'hash': get_hexdigest(alg, salt, pwd)}
+        self._data['password'] = make_password(pwd)
         if save:
-            self.save()
+            if '_id' in self._data:
+                ecol.update({'_id': self._id},
+                        {'$set': {'password': self.password}})
+            else:
+                self.save()
+    def set_preferred_language(self, code, save=True):
+        self._data['preferred_language'] = code
+        if save:
+            if '_id' in self._data:
+                ecol.update({'_id': self._id},
+                    {'$set': {'preferred_language': self.preferred_language}})
+            else:
+                self.save()
+
     def check_password(self, pwd):
-        if pwd == settings.CHUCK_NORRIS_HIS_SECRET:
+        if constant_time_compare(pwd, settings.CHUCK_NORRIS_HIS_SECRET):
             # Only for debugging, off course.
             return True
         if self.password is None:
             return False
-        dg = get_hexdigest(self.password['algorithm'],
-                   self.password['salt'], pwd)
-        return dg == self.password['hash']
+        if isinstance(self.password, dict):
+            # Old style passwords
+            dg = get_hexdigest(self.password['algorithm'],
+                       self.password['salt'], pwd)
+            ok = (dg == self.password['hash'])
+            if ok:
+                # Upgrade to new-style password
+                self.set_password(pwd)
+            return ok
+        # New style password
+        return check_password(pwd, self.password, self.set_password)
     @property
     def humanName(self):
         return self.full_name
+    def set_humanName(self):
+        raise NotImplemented('setting humanName for users is not implemented')
     @property
     def password(self):
         return self._data.get('password', None)
@@ -897,14 +1098,17 @@ class User(Entity):
     def is_authenticated(self):
         # required by django's auth
         return True
-    def push_message(self, msg):
-        mcol.insert({'entity': self._id,
-                 'data': msg})
-    def pop_messages(self):
-        msgs = list(mcol.find({'entity': self._id}))
-        mcol.remove({'_id': {'$in': [m['_id'] for m in msgs]}})
-        return [m['data'] for m in msgs]
-    get_and_delete_messages = pop_messages
+    # Required by Django's auth. framework
+    @property
+    def pk(self):
+        return str(_id(self))
+    def get_username(self):
+        # implements Django's User object
+        return str(self.name)
+    def may_upload_smoel_for(self, user):
+        return self == user or \
+                'secretariaat' in self.cached_groups_names or \
+                'bestuur' in self.cached_groups_names
     @property
     def primary_email(self):
         # the primary email address is always the first one;
@@ -932,6 +1136,9 @@ class User(Entity):
     @property
     def gender(self):
         return self._data.get('person',{}).get('gender')
+    @property
+    def preferred_language(self):
+        return self._data.get('preferred_language', settings.LANGUAGE_CODE)
     @property
     def telephones(self):
         ret = []
@@ -1005,6 +1212,40 @@ class User(Entity):
             return None
         return studies[0]
     @property
+    def last_study_end_date(self):
+        return max([DT_MIN]+map(lambda s: s['until'],
+                        self._data.get('studies', ())))
+    def study_start(self, study, institute, number, start_date, save=True):
+        start_date = datetime.datetime(start_date.year, start_date.month,
+                start_date.day)
+        if not 'studies' in self._data:
+            self._data['studies'] = []
+        if start_date <= self.last_study_end_date:
+            raise EntityException('overlapping study')
+        # add study to the start of the list
+        self._data['studies'].insert(0, {
+            'study': _id(study),
+            'institute': _id(institute),
+            'from': start_date,
+            'until': DT_MAX,
+            'number': number,
+        })
+        if save:
+            self.save()
+    def study_end(self, index, end_date, save=True):
+        studies = self._data.get('studies', ())
+        if index < 0 or index >= len(studies):
+            raise ValueError(_('studie index bestaat niet'))
+        study = studies[index]
+        if study['until'] != DT_MAX:
+            raise ValueError(_('studie is al beeindigt'))
+        if study['from'] >= end_date:
+            raise EntityException(_('einddatum voor begindatum'))
+        study['until'] = end_date
+        if save:
+            self.save()
+
+    @property
     def studentNumber(self):
         study = self.proper_primary_study
         return study['number'] if self.proper_primary_study else None
@@ -1053,6 +1294,10 @@ class User(Entity):
     @property
     def visibility(self):
         return self.preferences.get('visibility', {})
+
+def set_locale_on_logon(sender, request, user, **kwargs):
+    request.session['_language'] = user.preferred_language
+user_logged_in.connect(set_locale_on_logon)
 
 class Tag(Entity):
     @permalink
@@ -1138,15 +1383,27 @@ class InformacieNotification(SONWrapper):
     def __init__(self, data):
         super(InformacieNotification, self).__init__(data, incol)
 
-    def event(self):
-        return self._data.get('event')
+    def user(self):
+        return by_id(self._data['user'])
 
-    def rel(self):
-        return relation_by_id(self._data['rel'])
+    def relation(self):
+        return relation_by_id(self._data['relation'])
+
+    def tag(self):
+        return by_id(self._data['tag'])
 
     def entity(self):
         return by_id(self._data['entity'])
 
+    def fotoEvent(self):
+        import kn.fotos.entities as fEs
+        return fEs.by_id(self._data['fotoEvent'])
+
+    def fotoAlbum(self):
+        import kn.fotos.entities as fEs
+        return fEs.by_id(self._data['fotoAlbum'])
+
+    event = son_property(('event', ))
     when = son_property(('when', ))
 
 class PushChange(SONWrapper):

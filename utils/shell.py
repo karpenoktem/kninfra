@@ -1,4 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
+from __future__ import absolute_import
+
 import _import
 try:
     import Mailman.MailList
@@ -16,7 +18,8 @@ from kn.leden.mongo import _id, ObjectId
 from kn.leden import giedo
 from kn.leden.date import now
 from kn.utils.mailman import import_mailman
-from kn.settings import DT_MIN, DT_MAX
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
 
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
     """ Queries relations """
@@ -94,3 +97,10 @@ def qe(keyword):
 def create_study(name):
     return Es.ecol.insert({'types': ['study'],
                            'humanNames': [{'human': name}]})
+
+def create_brand(suffix, name):
+    Es.ecol.insert({'humanNames': [{'human': name}],
+                    'names': [],
+                    'sofa_suffix': suffix,
+                    'tags': [Es.id_by_name('!sofa-brand')],
+                    'types': ['brand']})

@@ -1,0 +1,10 @@
+root@{{ grains['fqdn'] }} wortel@{{ grains['fqdn'] }}
+postmaster@{{ grains['fqdn'] }} wortel@{{ grains['fqdn'] }}
+geinteresseerden@{{ grains['fqdn'] }} geinteresseerden@lists.{{ grains['fqdn'] }}
+devnull@{{ grains['fqdn'] }} devnull@localhost
+{% if grains['vagrant'] %}
+@{{ grains['fqdn'] }} infra@local.{{ grains['fqdn'] }}
+{% else %}
+@{{ grains['fqdn'] }} catchall@lists.{{ grains['fqdn'] }}
+{% endif %}
+@mail.{{ grains['fqdn'] }} @{{ grains ['fqdn'] }}

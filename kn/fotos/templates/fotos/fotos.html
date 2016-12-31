@@ -1,15 +1,16 @@
 {% extends "base/base.html" %}
 
 {% load base %}
+{% load i18n %}
 
 {% block head %}
 {{ block.super }}
-<script type="text/javascript" src="{{ MEDIA_URL }}/fotos/jquery.lazyloadxt.extra.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}fotos/jquery.lazyloadxt.extra.min.js"></script>
 {% if fotos_admin %}
 <script type="text/javascript"
-        src="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.js" defer></script>
+        src="{{ MEDIA_URL }}base/jquery-ui-1.8.22/the.js" defer></script>
 {% endif %}
-<script type="text/javascript" src="{{ MEDIA_URL }}/fotos/fotos.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}fotos/fotos.js?v=2"></script>
 <script type="text/javascript">
 'use strict';
 expandHeader = false;
@@ -19,8 +20,8 @@ var fotos_admin = {{ fotos_admin|yesno:"true,false" }};
 {% if fotos_admin %}
 var fotos_people = {{ people|json }};
 {% endif %}
-var fotos_root = "{% url fotos '' %}";
-var fotos_api_url = "{% url fotos-api %}";
+var fotos_root = "{% url "fotos" '' %}";
+var fotos_api_url = "{% url "fotos-api" %}";
 // Initialize Lazy Load XT
 $.extend($.lazyLoadXT, {
   autoInit: false,
@@ -40,35 +41,48 @@ if ('srcset' in (new Image())) {
 {% block styles %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css"
-        href="{{ MEDIA_URL }}/fotos/fotos.css" />
+        href="{{ MEDIA_URL }}fotos/fotos.css" />
 {% if fotos_admin %}
 <link rel="stylesheet" type="text/css"
-    deferred-href="{{ MEDIA_URL }}/base/jquery-ui-1.8.22/the.css"/>
+    deferred-href="{{ MEDIA_URL }}base/jquery-ui-1.8.22/the.css"/>
 {% endif %}
 {% endblock styles %}
 
 {% block body %}
 <div id="breadcrumbs"></div>
-<div id="topbar">
-  <input id="search" type="search" placeholder="zoek..."/>
+<div id="topbar" class="toggle">
+<input id="search" type="search" placeholder="{% trans "zoek..." %}"/>
 {% if fotos_admin %}
-  <img id="album-edit-toggle" src="{{ MEDIA_URL }}/fotos/edit-icon.svg"
-    width="16" height="16" title="Bewerk naam en zichtbaarheid"/>
-  <form id="album-editor">
-    <select id="album-visibility"
-      onchange="$('#album-edit-button').prop('disabled', false)">
-      <option value="world">Publiek</option>
-      <option value="leden">Alleen leden</option>
-      <option value="hidden">Fototaggers</option>
-    </select>
-    <input id="album-title" type="text" name="album-title" title="Album titel"
-      oninput="$('#album-edit-button').prop('disabled', false)"/>
-    <button id="album-edit-button" disabled>Ok</button>
+  <img id="album-edit-toggle" class="toggle-button"
+    src="{{ MEDIA_URL }}fotos/edit-icon.svg" width="16" height="16"
+    title="{% trans "Bewerk naam en zichtbaarheid" %}"/>
+  <form id="album-editor" class="toggle-window">
+    <div class="album-options">
+      <select id="album-visibility"
+        onchange="$('#album-edit-button').prop('disabled', false)">
+        <option value="world">{% trans "Publiek" %}</option>
+        <option value="leden">{% trans "Alleen leden" %}</option>
+        <option value="hidden">{% trans "Fototaggers" %}</option>
+      </select>
+      <input id="album-title" type="text" name="album-title"
+              title="{% trans "Album titel" %}"
+        oninput="$('#album-edit-button').prop('disabled', false)"/>
+      <button id="album-edit-button" disabled>{% trans "Ok" %}</button>
+      <hr class="slight"/>
+    </div>
+    <label>
+      {% trans "Duidelijke zichtbaarheid:" %}
+      <input type="checkbox" id="highlight" value="checked"/>
+    </label>
   </form>
 {% endif %}
 </div>
 {% if error == 'permission-denied' %}
-<p class="error">Je hebt niet de juiste rechten om dit album te zien. Waarschijnlijk mogen alleen <a href="{% url group-by-name 'fotocie' %}">FotoCie</a>-leden dit album zien.</p>
+{% url "group-by-name" 'fotocie' as url_fotocie%}
+<p class="error">{% blocktrans %}Je hebt niet de juiste rechten
+om dit album te zien.  Waarschijnlijk mogen alleen
+<a href="{{ url_fotocie }}">FotoCie</a>-leden
+dit album zien.{% endblocktrans %}</p>
 {% else %}
 <ul id="fotos"></ul>
 {% endif %}
@@ -76,25 +90,29 @@ if ('srcset' in (new Image())) {
 <div class="template foto-frame">
   <div class="image-wrapper">
     <img class="img"/>
-    <a class="nav prev"><img src="{{ MEDIA_URL }}/fotos/prev.svg" alt="Vorige" title="Vorige"/></a>
-    <a class="nav next"><img src="{{ MEDIA_URL }}/fotos/next.svg" alt="Volgende" title="Volgende"/></a>
+    <a class="nav prev"><img src="{{ MEDIA_URL }}/fotos/prev.svg" alt="{% trans "vorige" %}" title="{% trans "vorige" %}"/></a>
+    <a class="nav next"><img src="{{ MEDIA_URL }}/fotos/next.svg" alt="{% trans "volgende" %}" title="{% trans "volgende" %}"/></a>
     <a class="nav close" href><img src="{{ MEDIA_URL }}/fotos/close.svg" alt="Sluiten" title="Sluiten"/></a>
     <a class="nav open-sidebar" href><img src="{{ MEDIA_URL }}/fotos/sidebar.svg" alt="Tags" title="Tags"/></a>
   </div>
   <div class="sidebar">
     <form>
 {% if fotos_admin %}
-      <input type="text" class="title" name="title" title="Titel"
+      <input type="text" class="title" name="title" title="{% trans "Titel" %}"
         oninput="$('#foto .save').prop('disabled', false)">
       <textarea class="description" name="description"
-        placeholder="Beschrijving..." title="Beschrijving"
+        placeholder="{% trans "Beschrijving..." %}"
+        title="{% trans "Beschrijving..." %}"
         oninput="$('#foto .save').prop('disabled', false)"></textarea>
-      <select class="visibility" title="Zichtbaarheid"
-        onchange="$('#foto .save').prop('disabled', false)">
-        <option value="world">Publiek</option>
-        <option value="leden">Alleen leden</option>
-        <option value="hidden">Fototaggers</option>
-      </select>
+      <div class="row">
+        <select class="visibility" title="{% trans "Zichtbaarheid" %}"
+          onchange="$('#foto .save').prop('disabled', false)">
+          <option value="world">{% trans "Publiek" %}</option>
+          <option value="leden">{% trans "Alleen leden" %}</option>
+          <option value="hidden">{% trans "Fototaggers" %}</option>
+        </select>
+        <button class="remove">{% trans "Verwijder" %}</button>
+      </div>
       <div class="rotation">
         <a class="rotate-left" href>
           <img src="{{ MEDIA_URL }}/fotos/rotate-left.svg" width="24" height="24"/>
@@ -107,12 +125,13 @@ if ('srcset' in (new Image())) {
       <h2 class="title"></h2>
       <p class="description"></p>
 {% endif %}
-      Tags:
+      {% trans "Tags:" %}
       <ul class="tags">
       </ul>
 {% if fotos_admin %}
       <div class="save-wrapper">
-        <button class="save" disabled>Opslaan</button>
+        <input type="submit" class="hidden-submit" value="{% trans "Opslaan" %}" tabindex="-1"/>
+        <span class="status">&nbsp;</span>
       </div>
 {% endif %}
     </form>

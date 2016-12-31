@@ -1,5 +1,6 @@
 import json
 
+import kn.leden.entities as Es
 import kn.fotos.entities as fEs
 from kn.base.http import JsonHttpResponse
 from django.core.exceptions import PermissionDenied
@@ -45,11 +46,11 @@ def entities_json(children, user):
         entry = {'type': child._type,
                  'path': child.full_path,
                  'name': child.name,
-                 'title': child.title}
+                 'title': child.title,
+                 'rotation': child.rotation}
 
         if fEs.is_admin(user):
             entry['visibility'] = child.visibility[0]
-            entry['rotation'] = child.rotation
 
         if child.description:
             entry['description'] = child.description;
@@ -117,6 +118,18 @@ def _set_metadata(data, request):
 
     result = {'Ok': True}
 
+    if entity._type == 'foto':
+        if 'rotation' not in data:
+            return {'error': 'missing rotation attribute'}
+        if not isinstance(data['rotation'], int):
+            return {'error': 'rotation should be a number'}
+        rotation = data['rotation']
+        if rotation not in [0, 90, 180, 270]:
+            return {'error': 'rotation is not valid'}
+        entity.set_rotation(rotation, save=False)
+
+        result['largeSize'] = entity.get_cache_size('large')
+
     if entity._type in ['foto', 'video']:
         if 'description' not in data:
             return {'error': 'missing description attribute'}
@@ -138,18 +151,6 @@ def _set_metadata(data, request):
 
         result['thumbnailSize'] = entity.get_cache_size('thumb')
 
-    if entity._type == 'foto':
-        if 'rotation' not in data:
-            return {'error': 'missing rotation attribute'}
-        if not isinstance(data['rotation'], int):
-            return {'error': 'rotation should be a number'}
-        rotation = data['rotation']
-        if rotation not in [0, 90, 180, 270]:
-            return {'error': 'rotation is not valid'}
-        entity.set_rotation(rotation, save=False)
-
-        result['largeSize'] = entity.get_cache_size('large')
-
     entity.set_title(title, save=False)
 
     # save changes in one batch
@@ -157,8 +158,43 @@ def _set_metadata(data, request):
     # except for visibility which is much harder to save in the same batch
     if entity.is_root:
         return result
+
+    was_visible = 'leden' in fEs.actual_visibility(entity.effective_visibility)
     entity.update_visibility([visibility])
+    is_visible = 'leden' in fEs.actual_visibility(entity.effective_visibility)
+
+    # Send a mail when a new album comes online.
+    if not entity.notified_informacie:
+        if not was_visible and is_visible and isinstance(entity, fEs.FotoAlbum):
+            event = entity
+            while event.depth > 1:
+                event = event.get_parent()
+            if entity.depth > 1:
+                Es.notify_informacie('add_foto_album', request.user, fotoEvent=event, fotoAlbum=entity)
+            else:
+                Es.notify_informacie('add_foto_event', request.user, fotoEvent=event)
+            entity.set_informacie_notified()
+        elif was_visible and not is_visible:
+            # Do not send a mail when an old album (pre-notifications) is set to
+            # invisible and back to visible. Act like a notification has already
+            # been sent.
+            entity.set_informacie_notified()
+
     return result
+
+def _remove(data, request):
+    user = request.user if request.user.is_authenticated() else None
+    if not fEs.is_admin(user):
+        raise PermissionDenied
+
+    foto = entity_from_request(data)
+    if isinstance(foto, basestring):
+        return {'error': foto}
+
+    # No visibility equals removal.
+    foto.update_visibility([])
+
+    return {'Ok': True}
 
 def _search(data, request):
     album = entity_from_request(data)
@@ -184,6 +220,7 @@ def _search(data, request):
 ACTION_HANDLER_MAP = {
         'list': _list,
         'set-metadata': _set_metadata,
+        'remove': _remove,
         'search': _search,
         None: no_such_action,
         }

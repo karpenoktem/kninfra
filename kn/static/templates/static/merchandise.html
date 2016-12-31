@@ -1,11 +1,13 @@
 {% extends "static/base.html" %}
 
 {% load base %}
+{% load i18n %}
 
 {% block body %}
-<p>Wil je zo een kek Karpe Noktem <strong>t-shirt</strong>; wil je 
-ook <strong>stickers</strong> om je omgeving onveilig te maken
-of heb jij een goed idee voor ander Karpe Noktem spul?  E-Mail dan naar
-{% filter email %}proco@karpenoktem.nl{% endfilter %}.</p>
+<p>{% blocktrans with proco="proco@karpenoktem.nl"|email %}Wil je
+zo een kek Karpe Noktem <strong>t-shirt</strong>; wil je ook
+<strong>stickers</strong> om je omgeving onveilig te maken of heb
+jij een goed idee voor ander Karpe Noktem spul?  E-Mail dan naar
+{{ proco }}.{% endblocktrans %}</p>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

@@ -1,28 +1,31 @@
 {% extends "static/overbase.html" %}
 
+{% load i18n %}
+
 {% block body %}
 <p class="imageDisplay">
 <img width="800"
-     src="{{ MEDIA_URL }}/static/img/bestuur6.jpg?v=2" /><br/>
-  <small>Van links naar rechts: Rik (pandverantwoordelijke),
+     src="{{ MEDIA_URL }}static/img/bestuur6.jpg?v=2" /><br/>
+    <small>{% blocktrans %}Van links naar rechts: Rik (pandverantwoordelijke),
     Bas (secretaris), Michiel (voorzitter), Hugo (penningmeester)
-    en Mike (vice-voorzitter).</small>
+    en Mike (vice-voorzitter).{% endblocktrans %}</small>
 </p>
 
-<p><strong>Het zesde bestuur</strong> van ASV Karpe Noktem is uit het hart
-van de vereniging gegrepen: jong, eigenzinnig en ruimdenkend.
-<em>Michiel van Lierop</em> ('88), student Informatiekunde, loodst ons
-onvervaard door de maalstroom van het Nijmeegs studentenleven &mdash; altijd op
-koers door het houvast van <em>Bas Westerbaan</em> ('88), student Wiskunde
-&mdash;
-nooit zonder middelen door, de klassiek geschoolde, <em>Hugo van Versendaal</em>
-('85), student Grieks en Latijn &mdash; nimmer verlegen van bondgenoten met,
-aller vriend, <em>Mike Ligthart</em> ('88), student Scheikunde en stevig
-gehuisvest en van alle gemakken voorzien door <em>Rik Sprenkels</em> ('88),
-student Filosofie en Scheikunde.</p>
-<p>&lArr; Het vorige,
-<a href="{% url bestuur5 %}">vijfde bestuur</a>; 
-het volgende,
-<a href="{% url bestuur7 %}">zevende bestuur</a> &rArr;</p>
+<p>{% blocktrans %}<strong>Het zesde bestuur</strong> van ASV Karpe
+Noktem is uit het hart van de vereniging gegrepen: jong, eigenzinnig
+en ruimdenkend.  <em>Michiel van Lierop</em> ('88), student
+Informatiekunde, loodst ons onvervaard door de maalstroom van het
+Nijmeegs studentenleven &mdash; altijd op koers door het houvast
+van <em>Bas Westerbaan</em> ('88), student Wiskunde &mdash; nooit
+zonder middelen door, de klassiek geschoolde, <em>Hugo van
+Versendaal</em> ('85), student Grieks en Latijn &mdash; nimmer
+verlegen van bondgenoten met, aller vriend, <em>Mike Ligthart</em>
+('88), student Scheikunde en stevig gehuisvest en van alle gemakken
+voorzien door <em>Rik Sprenkels</em> ('88), student Filosofie en
+Scheikunde.{% endblocktrans %}</p>
+<p>&lArr; {% trans "Het vorige" %},
+<a href="{% url "bestuur5" %}">{% trans "vijfde bestuur" %}</a>; 
+{% trans "het volgende" %},
+<a href="{% url "bestuur7" %}">{% trans "zevende bestuur" %}</a> &rArr;</p>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

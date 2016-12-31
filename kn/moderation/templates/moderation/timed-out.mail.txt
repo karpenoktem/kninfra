@@ -1,7 +1,13 @@
+{% load i18n %}
+
 {% block subject %}
+{% blocktrans %}
 Moderatiemodus op {{ name }} is verlopen
+{% endblocktrans %}
 {% endblock %}
 
 {% block plain %}
+{% blocktrans %}
 De moderatiemodus op {{ name }} is verlopen.
+{% endblocktrans %}
 {% endblock %}

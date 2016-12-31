@@ -4,7 +4,7 @@ import ldap
 
 import kn.leden.entities as Es
 
-from kn import settings
+from django.conf import settings
 
 def generate_ldap_changes(giedo):
     if not settings.LDAP_PASS:

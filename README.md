@@ -13,3 +13,26 @@ Vindt onder
  * `kn/planning`. Tappers planning
  * `kn/moderation`. E-Mail moderatie
  
+Vagrant
+-------
+
+Met [vagrant](https://www.vagrantup.com) is het systeem op je eigen
+computer te testen:
+
+ 1. Installeer [vagrant](https://www.vagrantup.com).
+ 2. Maak een kopie van deze *repository*
+
+        $ git clone https://github.com/karpenoktem/kninfra
+
+ 3. Start vagrant:
+
+        $ cd pad/naar/kninfra
+        $ vagrant up
+           (...)
+        $ vagrant ssh
+
+Salt
+----
+
+De servers worden geinstalleerd met [saltstack](http://saltstack.com).
+De beschrijvingen daarvan zijn te vinden onder de map `salt`.

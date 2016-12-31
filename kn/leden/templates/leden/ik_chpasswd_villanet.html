@@ -1,36 +1,38 @@
 {% extends "leden/base.html" %}
 
+{% load i18n %}
+
 {% block body %}
 <h1>Villa internet wachtwoord veranderen</h1>
 <form method="post" action="">
 	{% csrf_token %}
 	{% if errors %}
-	<p>Lieve {{ user.first_name }}, dit zou ik wel willen, maar je hebt 
-	{{errors}}.</p>
-	<p> Probeer het nog eens? </p>
+    <p>{% blocktrans with name=user.first_name %}Lieve {{ name }},
+    dit zou ik wel willen, maar je hebt {{errors}}.{% endblocktrans %}</p>
+    <p>{% trans "Probeer het nog eens?" %} </p>
 	{% endif %}
 
-        <p>Je kunt hieronder je wachtwoord veranderen om op de Villa op het
-        netwerk in te kunnen loggen.</p>
+	<p>{% blocktrans %}Je kunt hieronder je wachtwoord veranderen
+    om op de Villa op het netwerk in te kunnen loggen.{% endblocktrans %}</p>
 
-        <table>
-                <tr>
-                        <td>KN-wachtwoord</td>
-                        <td>{{ form.old_password }} </td>
-                </tr>
-                <tr>
-                        <td>Villanet-wachtwoord</td>
-                        <td>{{ form.new_password }} </td>
-                </tr>
-                <tr>
-                        <td>Nogmaals</td>
-                        <td>{{ form.new_password_again }} </td>
-                </tr>
-                <tr>
-                        <td></td>
-                        <td><input type="submit" value="veranderen?" /> </td>
-                </tr>
-        </table>
+    <table>
+        <tr>
+            <td>{% trans "KN-wachtwoord" %}</td>
+                <td>{{ form.old_password }} </td>
+        </tr>
+        <tr>
+            <td>{% trans "Villanet-wachtwoord" %}</td>
+                <td>{{ form.new_password }} </td>
+        </tr>
+        <tr>
+            <td>{% trans "Nogmaals" %}</td>
+                <td>{{ form.new_password_again }} </td>
+        </tr>
+        <tr>
+            <td></td>
+                <td><input type="submit" value="{% trans "veranderen?" %}" /> </td>
+        </tr>
+    </table>
 </form>
 
 {% endblock %}

@@ -9,7 +9,8 @@ import re
 
 
 import kn.fotos.entities as fEs
-from kn import settings
+from kn.fotos.roots import FOTO_ROOTS
+from django.conf import settings
 
 def fotoadmin_create_event(daan, date, name, humanName):
     if not re.match('^20\d{2}-\d{2}-\d{2}$', date):
@@ -34,17 +35,20 @@ def fotoadmin_create_event(daan, date, name, humanName):
     album.save()
     return {'success': True}
 
-def fotoadmin_move_fotos(daan, event, user, directory):
+def fotoadmin_move_fotos(daan, event, store, user, directory):
     if not re.match('^20\d{2}-\d{2}-\d{2}-[a-z0-9-]{3,64}$', event):
         return {'error': 'Invalid event'}
     if not re.match('^[a-z0-9]{3,32}$', user):
         return {'error': 'Invalid user'}
     if not re.match('^[^/\\.][^/]*$', directory):
         return {'error': 'Invalid dir'}
-    user_path = os.path.join(settings.USER_DIRS, user)
+    if not store in FOTO_ROOTS:
+        return {'error': 'Invalid store'}
+    root = FOTO_ROOTS[store]
+    user_path = os.path.join(root.base, user)
     if not os.path.isdir(user_path):
         return {'error': 'Invalid user'}
-    fotos_path = os.path.join(user_path, 'fotos', directory)
+    fotos_path = os.path.join(user_path, root.between, directory)
     if not os.path.isdir(fotos_path):
         return {'error': 'Invalid fotodir'}
     if not os.path.realpath(fotos_path).startswith(user_path):

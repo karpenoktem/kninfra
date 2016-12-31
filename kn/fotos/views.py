@@ -4,21 +4,22 @@ from os.path import basename
 from urllib import unquote
 from time import gmtime, strftime
 
-import MySQLdb
 import Image
 
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
+from django.utils.translation import ugettext as _
 from django.core.exceptions import PermissionDenied
 from django.core.servers.basehttp import FileWrapper
 from django.core.paginator import EmptyPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import Http404, HttpResponse, HttpResponseNotModified, QueryDict
+from django.utils.encoding import filepath_to_uri
 
 from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
-from kn.settings import PHOTOS_DIR
 from kn.leden import giedo
 
 import kn.fotos.entities as fEs
@@ -45,7 +46,25 @@ def fotos(request, path=''):
 
     album = fEs.by_path(path)
     if album is None:
+        bits = path.rsplit('/', 1)
+        if len(bits) == 2:
+            path = bits[0]
+            name = bits[1].replace('+', ' ')
+            entity = fEs.by_path_and_name(path, name)
+            if entity is not None:
+                # Zen Photo used + signs in the filename part of the URL.
+                url = reverse('fotos', kwargs={'path':path}) \
+                        + '#'+filepath_to_uri(name)
+                return redirect(url, permanent=True)
         raise Http404
+
+    if album._type != 'album':
+        # This is a photo, not an album.
+        # Backwards compatibility, probably to Zen Photo.
+        url = reverse('fotos', kwargs={'path':album.path}) \
+                + '#'+filepath_to_uri(album.name)
+        return redirect(url, permanent=True)
+
     user = request.user if request.user.is_authenticated() else None
 
     if not album.may_view(user) and user is None:
@@ -109,10 +128,15 @@ def cache(request, cache, path):
     lm = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(st.st_mtime))
     if request.META.get('HTTP_IF_MODIFIED_SINCE', None) == lm:
         return HttpResponseNotModified()
+    cc = 'max-age=30780000' # Cache-Control header
+    if not entity.may_view(None):
+        # not publicly cacheable
+        cc = 'private, ' + cc
     resp = HttpResponse(FileWrapper(open(entity.get_cache_path(cache))),
-                            mimetype=entity.get_cache_mimetype(cache))
+                            content_type=entity.get_cache_mimetype(cache))
     resp['Content-Length'] = str(st.st_size)
     resp['Last-Modified'] = lm
+    resp['Cache-Control'] = cc
     return resp
 
 def compat_view(request):
@@ -134,8 +158,14 @@ def fotoadmin_create_event(request):
         form = CreateEventForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            giedo.fotoadmin_create_event(str(cd['date']),
+            ret = giedo.fotoadmin_create_event(str(cd['date']),
                     cd['name'], cd['fullHumanName'])
+            if ret.get('success', False):
+                messages.info(request, _('Fotoalbum aangemaakt!'))
+            else:
+                messages.error(request, _('Er is een fout opgetreden: %s') %
+                                ret.get('error', _('geen foutmelding')))
+            return redirect('fotoadmin-move')
     else:
         form = CreateEventForm()
     return render_to_response('fotos/admin/create.html',
@@ -151,8 +181,9 @@ def fotoadmin_move(request):
         form = MoveFotosForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            (user, dir) = cd['move_src'].split('/')
-            giedo.fotoadmin_move_fotos(cd['move_dst'], user, dir)
+            (store, user, dir) = cd['move_src'].split('/')
+            giedo.fotoadmin_move_fotos(cd['move_dst'], store, user, dir)
+            return redirect('fotos', path=cd['move_dst'])
     else:
         form = MoveFotosForm()
     return render_to_response('fotos/admin/move.html',

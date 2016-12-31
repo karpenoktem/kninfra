@@ -1,5 +1,7 @@
 {% extends "leden/base.html" %}
+
 {% load base %}
+{% load i18n %}
 
 {% block body %}
 <script type="text/javascript">
@@ -57,27 +59,25 @@
                 fn.value = lastfullname;
         }
 </script>
-<p>
-        Hier kun je een map maken voor een nog niet bestaande activiteit.
-</p>
+<p>{% trans "Hier kun je een map maken voor een nog niet bestaande activiteit." %}</p>
 {{ form.errors }}
 <form method="POST">
 {% csrf_token %}
 <table style="width: 100%">
         <tr>
-                <th colspan="2">Maak activiteit aan</th>
+            <th colspan="2">{% trans "Maak activiteit aan" %}</th>
         </tr>
         {{ form.as_table }}
         <tr>
                 <td></td>
-                <td><input type="submit" value="Maak activiteit"></td>
+                <td><input type="submit" value="{% trans "Maak activiteit" %}"></td>
         </tr>
 </table>
 </form>
-Lijst van bestaande activiteiten:
+{% trans "Lijst van bestaande activiteiten:" %}
 <ul>
 {% for dir in events %}
-    <li><a href="{% url fotos dir %}">{{ dir }}</a></li>
+    <li><a href="{% url "fotos" dir %}">{{ dir }}</a></li>
 {% endfor %}
 		</ul>
 {% endblock %}

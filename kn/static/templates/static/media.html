@@ -1,24 +1,30 @@
 {% extends "static/base.html" %}
 
 {% load base %}
+{% load i18n %}
+
 
 {% block body %}
+{% url "fotos" "" as url_fotos %}
+{% url "fotos" "pdn" as url_fotos_pdn %}
+
 <ul>
-  <li>Foto's van <a href="{% url fotos "" %}"
-                >Karpe Noktem</a></li>
-  <li>Foto's van <a
-    href="{% url fotos "pdn" %}"
-                >Pluk de Nacht weekend</a></li>
-  <li>2009: Een reportage van <a
+  <li>{% blocktrans %}Foto's van
+    <a href="{{ url_fotos }}">Karpe Noktem</a>{% endblocktrans %}</li>
+  <li>{% blocktrans %}Foto's van
+    <a href="{{ url_fotos_pdn}}">Pluk de Nacht weekend</a>
+    {% endblocktrans %}</li>
+  <li>{% blocktrans %}2009: Een reportage van <a
   href="http://www.youtube.com/watch?v=NLOT1TkZTf4"
-                >Campus in Beeld</a> tijdens onze nachtpicknick</li>
-  <li>2008: een reportage van
+                >Campus in Beeld</a> tijdens onze
+              nachtpicknick{% endblocktrans %}</li>
+  <li>{% blocktrans %}2008: een reportage van
     <a href="http://www.voxlog.nl/blog/studentslive-carolus-magnus-karpe-noktem"
-                >Voxlog</a>
+       >Voxlog</a>
   en <a href="http://www.campus.tv/index.php?action=showmovie&movieid=1142"
                 >CampusTV</a>
   over het Tussen Twee Werelden Feest met Carolus Magnus
-  tijdens de Ragweek</li>
+  tijdens de Ragweek{% endblocktrans %}</li>
 </ul>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

@@ -1,31 +1,32 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import RedirectView
+from django.utils.translation import ugettext_lazy as _
 
 from kn.fotos import views
 from kn.fotos import api
 
-urlpatterns = patterns('',
+urlpatterns = [
         # backwards compatibility with knfotos
-        url(r'^fotos/view\.php$', views.compat_view),
-        url(r'^fotos/foto\.php$', views.compat_foto),
+        url(r'^fotos/view\.php$', views.compat_view, name='foto-comp-1'),
+        url(r'^fotos/foto\.php$', views.compat_foto, name='foto-comp-2'),
         url(r'^fotos/index\.php$', RedirectView.as_view(
             url=reverse_lazy('fotos', kwargs={'path':''}),
-            query_string=True)),
+            query_string=True), name='foto-comp-3'),
 
         # TODO add fallback for old foto links
         # TODO change wiki links, etc.
-        url(r'^foto/admin/?$',
+        url(_(r'^foto/admin/?$'),
             views.fotoadmin_move, name='fotoadmin-move'),
-        url(r'^foto/admin/create/?$',
+        url(_(r'^foto/admin/create/?$'),
             views.fotoadmin_create_event, name='fotoadmin-create-event'),
-        url(r'^fotos/api/?$',
+        url(_(r'^fotos/api/?$'),
             api.view, name='fotos-api'),
-        url(r'^fotos/(?P<path>.*)$',
+        url(_(r'^fotos/(?P<path>.*)$'),
             views.fotos, name='fotos'),
         # NOTE keep up to date with media/fotos.js
-        url(r'^foto/(?P<cache>[^/]+)/(?P<path>.*)$',
+        url(_(r'^foto/(?P<cache>[^/]+)/(?P<path>.*)$'),
             views.cache, name='fotos-cache'),
-)
+        ]
 
 # vim: et:sta:bs=2:sw=4:

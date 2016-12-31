@@ -1,0 +1,23 @@
+filetype indent on
+filetype plugin on
+syntax on
+set ruler
+set modeline
+set modelines=2
+set backspace=2
+set hlsearch
+set smartcase
+set smarttab
+set expandtab
+set sw=4
+set ts=4
+
+if exists('+colorcolumn')
+        set colorcolumn=81
+else
+	autocmd BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+endif
+
+map \h :nohlsearch<CR>
+
+au BufRead,BufNewFile *.sls setfiletype yaml

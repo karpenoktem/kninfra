@@ -1,13 +1,18 @@
 #!/bin/bash
 
-pushd $HOME/repo/kn &> /dev/null
+pushd $HOME/repo &> /dev/null
 
 if [ -e $HOME/fcgi.pid ]; then
         kill `cat $HOME/fcgi.pid`
 fi
 
 rm -f $HOME/fcgi.sock $HOME/fcgi.pid
+
+set -e
 ./manage.py runfcgi socket=$HOME/fcgi.sock umask=002 pidfile=$HOME/fcgi.pid
+while [ ! -e $HOME/fcgi.sock ]; do
+    sleep 0.1
+done
 chgrp interinfra $HOME/fcgi.sock
 
 popd &> /dev/null

@@ -1,5 +1,8 @@
-# todo: add localization
-def humanized_enum (it, normal_sep=u", ", final_sep=u" en "):
+from django.utils.translation import ugettext as _
+
+def humanized_enum (it, normal_sep=u", ", final_sep=None):
+    if final_sep is None:
+        final_sep = _(" en ")
     lst = list(it)
     if len(lst)==0:
         return ""

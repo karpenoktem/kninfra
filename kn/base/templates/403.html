@@ -1,0 +1,12 @@
+{% extends "base/base.html" %}
+
+{% load i18n %}
+
+{% block body %}
+
+<h1>{% trans "Geen toegang" %}</h1>
+<p>{% blocktrans %}Helaas, je hebt geen toegang tot deze pagina.
+Of je probeerde bijvoorbeeld iets in een formulier in te vullen
+dat niet mocht.{% endblocktrans %}</p>
+
+{% endblock body %}

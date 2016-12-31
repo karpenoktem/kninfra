@@ -1,0 +1,47 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block body %}
+<p class="imageDisplay">
+<img width="800"
+     src="{{ MEDIA_URL }}static/img/bestuur13.jpg" /><br/>
+     <table align="center" style="text-align: center">
+       <tr><td>Willanka Kapelle ({% trans "penningmeester" %})</td>
+         <td rowspan="2">Eva Prins ({% trans "vice-voorzitter" %})</td>
+         <td>Koos van der Vegt ({% trans "pandcommissaris" %})</td> </tr>
+       <tr><td>Roel Bouman ({% trans "voorzitter" %})</td>
+         <td>Sophie Fennema ({% trans "secretaris" %})</td></tr>
+     </table>
+
+<p>{% blocktrans %}Het <strong>dertiende bestuur</strong> der A.S.V Karpe Noktem
+bestaat uit een groep met een hoge variatie in capaciteiten,
+studies en zelfs lengte.  Aan het roer staat voorzitter <em>Roel Bouman</em>,
+student Data Science en Scheikunde, die zijn brede kennis op veel vlakken in
+kan zetten.  Bijgestaan wordt hij door Artificial Intelligence student
+<em>Sophie Fennema</em>, die naast de administratie het contact zal onderhouden
+met zusjes.  Als Geneeskunde  student draagt <em>Willanka Kappelle</em>
+niet alleen de verantwoordelijkheid voor haar toekomstige
+pati&euml;nten, maar ook voor de financi&euml;n.
+Wiskunde genie <em>Koos van der Vegt</em> zal als pandcommissaris het imago
+van Karpe Noktem vertegenwoordigen in zijn contacten met andere Villa bewoners.
+<em>Eva Prins</em> heeft haar communicatie vaardigheden geperfectioneerd in
+haar studie Engels en maakt hier als vice-voorzitter gretig gebruik
+van.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Alle bestuursleden zijn bereikbaar op hun
+functie@karpenoktem.nl of op de volgende adressen:{% endblocktrans %}</p>
+<ul>
+  <li>{% filter email %}roel@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}sophief@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}willanka@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}koos@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}eva@karpenoktem.nl{% endfilter %}
+    ({% trans "of" %} {% filter email %}satan@karpenoktem.nl{% endfilter %})</li>
+</ul>
+
+<p>&lArr; {% trans "Het vorige" %},
+<a href="{% url "bestuur12" %}">{% trans "twaalfde bestuur." %}</a>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}

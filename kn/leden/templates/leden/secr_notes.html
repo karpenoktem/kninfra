@@ -1,15 +1,17 @@
 {% extends "leden/base.html" %}
+
+{% load i18n %}
 {% load base %}
 
 {% block body %}
-<h1>Openstaande notities</h1>
+<h1>{% trans "Openstaande notities" %}</h1>
 <ul>
 {% for n in notes %}
 <li>
 {{ n.at.date }} 
 <a href="{{ n.on.get_absolute_url }}">{{ n.on.humanName }}</a>
 {% if n.by %}
-(door <a href="{{ n.by.get_absolute_url }}">{{ n.by.humanName }}</a>)
+({% trans "door" %} <a href="{{ n.by.get_absolute_url }}">{{ n.by.humanName }}</a>)
 {% endif %}{# n.by #}
 <blockquote>{{ n.note }}</blockquote>
 </li>

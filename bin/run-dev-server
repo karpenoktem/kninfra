@@ -1,2 +1,2 @@
 #!/bin/sh
-$HOME/repo/kn/manage.py runserver 0:8001
+$HOME/repo/manage.py runserver 0:8001

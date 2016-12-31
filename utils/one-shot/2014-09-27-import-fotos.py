@@ -1,6 +1,6 @@
 import _import
 
-from kn import settings
+from django.conf import settings
 import kn.fotos.entities as fEs
 import kn.leden.entities as Es
 
@@ -29,6 +29,8 @@ def main():
     c.execute("SELECT id, name, path, humanname, visibility, description "
                         + "FROM fa_albums ORDER BY path")
     for oldId, name, path, humanName, visibility, description in c.fetchall():
+        if path and not path.endswith('/'):
+            continue
         if fEs.by_oldId('album', oldId) is not None:
             continue
 

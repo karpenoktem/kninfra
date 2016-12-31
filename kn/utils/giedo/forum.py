@@ -5,7 +5,7 @@ import MySQLdb
 
 import kn.leden.entities as Es
 
-from kn import settings
+from django.conf import settings
 
 def generate_forum_changes(self):
     creds = settings.FORUM_MYSQL_SECRET

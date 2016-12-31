@@ -4,7 +4,8 @@ import _import
 # Please make very sure that this script is up-to-date.  It is a crime
 # to leak private data entrusted to us.
 
-from kn.settings import DT_MIN, DT_MAX
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
 from kn.leden.mongo import db
 
 import bson

@@ -1,27 +1,22 @@
-# vim: et:sta:bs=2:sw=4:
 import _import
+
 import sys
-from kn.leden.models import OldKnUser, OldKnGroup
+
+import kn.leden.entities as Es
 
 def main():
-    members = set()
-    N = 0
-    while True:
-        N += 1
-        try:
-            g = OldKnGroup.objects.get(name='leden%s' % N)
-        except OldKnGroup.DoesNotExist:
-            break
-        members.update([m.username for m in g.user_set.all()])
-    N = 0
-    for m in OldKnUser.objects.order_by('dateJoined'):
-        if not m.username in members:
-            continue
-        N += 1
-        print '%-4s%-30s%s' % (N, m.full_name(), m.dateJoined)
+    now = Es.now()
+    for n, r in enumerate(sorted(Es.query_relations(
+            _with=Es.id_by_name('leden'), _from=now, until=now,
+            deref_who=True),
+                key=lambda r: r['from'])): 
+        print n+1, r['who'].humanName
+
 
 if __name__ == '__main__':
     if sys.stdout.encoding is None:
         reload(sys)
         sys.setdefaultencoding('utf-8')
     main()
+
+# vim: et:sta:bs=2:sw=4:

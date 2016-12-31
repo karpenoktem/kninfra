@@ -5,9 +5,12 @@ import os.path
 import logging
 import subprocess
 
-from kn import settings
+from django.conf import settings
 
 def wolk_setpass(cilia, user, passwd):
+    if not hasattr(settings, 'WOLK_PATH'):
+        logging.warning('wolk: no path available, skipping')
+        return None
     wolk_script = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                     'wolk.php')
     proc = subprocess.Popen(['sudo', '-u', settings.WOLK_USER, 'php',
@@ -22,6 +25,8 @@ def wolk_setpass(cilia, user, passwd):
         logging.info("wolk.php: %s" % l[:-1])
 
 def apply_wolk_changes(cilia, changes):
+    if not changes:
+        return
     wolk_script = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                     'wolk.php')
     proc = subprocess.Popen(['sudo', '-u', settings.WOLK_USER, 'php',

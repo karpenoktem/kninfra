@@ -1,27 +1,39 @@
+{% load i18n %}
+{% load base %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl-NL" lang="nl-NL" prefix="og: http://ogp.me/ns#">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}"
+      prefix="og: http://ogp.me/ns#">
 	<head>
 		{% block head %}
 		<meta charset="utf-8"/>
 		<title>{% block title %}ASV Karpe Noktem{% endblock %}</title>
+        {% for code, name in LANGUAGES %}{% if code != LANGUAGE_CODE %}
+        <link rel="alternate" hreflang="{{ code }}"
+          href="{% if code == "nl" %}/nl{% endif %}{% translate_url code %}" />
+        {% endif %}{% endfor %}{# code, name in LANGUAGES ... #}
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<meta property="og:image" content="{{ ABSOLUTE_MEDIA_URL }}/base/logo-og.png"/>
-		<meta property="og:locale" content="nl_NL"/>
+        <meta property="og:locale" content="{{ LANGUAGE_CODE }}"/>
 		<meta property="og:site_name" content="ASV Karpe Noktem"/>
+		<meta name="theme-color" content="black"/>
 		{% block styles %}
-		<link href="{{ MEDIA_URL }}/base/bare.css"
+		<link href="{{ MEDIA_URL }}base/bare.css"
 			rel="stylesheet" type="text/css" />
 		{% endblock styles %}
 		{% block styles-inline %}
 		{% endblock %}
 		<script type="text/javascript"
-                        src="{{ MEDIA_URL }}/base/jquery-1.11.1.min.js"></script>
+                        src="{{ MEDIA_URL }}base/jquery-1.11.1.min.js"></script>
 		<!--[if lte IE 8]>
-		<script type="text/javascript" src="{{ MEDIA_URL }}/base/ie8.js"></script>
+		<script type="text/javascript" src="{{ MEDIA_URL }}base/ie8.js"></script>
 		<![endif]-->
 		<script type="text/javascript"
-			src="{{ MEDIA_URL }}/base/common.js"></script>
-		<link rel="icon" href="{{ MEDIA_URL }}/base/favicon.ico" />
+			src="{{ MEDIA_URL }}base/common.js?v=4"></script>
+		<link rel="icon" href="{{ MEDIA_URL }}base/favicon.ico" />
+		<link rel="apple-touch-icon" href="{{ MEDIA_URL }}base/touch-icon-128.png" />
 		<script type="text/javascript">
 		  var _gaq = _gaq || [];
 		  _gaq.push(['_setAccount', 'UA-11922614-1']);
@@ -46,7 +58,7 @@
 		  }
 
 		  var csrf_token = "{{ csrf_token }}";
-		  var leden_api_url = "{% url leden-api %}";
+		  var leden_api_url = "{% url "leden-api" %}";
 		</script>
 		{% endblock %}
 	</head>
@@ -66,11 +78,21 @@
                 {% endblock content %}
                 {% block footer %}
                 <div id="footer">
-                        <div class="container">
-                                &copy;2007&mdash;2015,
-                                Alternatieve studentenvereniging Karpe Noktem
-                                <small><a id="scrollUp" href="#">Terug naar boven</a></small>
-                        </div>
+                    <div class="container">
+                            &copy;2007&mdash;2016,
+                        {% trans "Alternatieve studentenvereniging Karpe Noktem" %}
+                        <small><a id="scrollUp" href="#"
+                            >{% trans "Terug naar boven" %}</a></small>
+                        {# Language picker #}
+                        <select id="langpicker">
+                        {% for code, name in LANGUAGES %}
+                        <option value="{% if code == "nl" %}/nl{% endif %}{% translate_url code %}"
+                            {% if code == LANGUAGE_CODE %}selected{% endif %}
+                                >{{ name }}</option>
+                        {% endfor %}{# code, name in LANGUAGES ... #}
+                        </select>
+                        {# / Language picker #}
+                    </div>
                 </div>
                 {% endblock footer %}
 	</body>	

@@ -1,0 +1,66 @@
+{% load i18n %}
+
+{% block from %}
+{% trans "Karpe Noktem Activiteiten <root@karpenoktem.nl>" %}
+{% endblock from %}
+
+{% block subject %}
+{% blocktrans with humanName=event.humanName %}
+Activiteit: {{ humanName }}
+{% endblocktrans %}
+{% endblock subject %}
+
+{% block html %}
+{% with humanName=event.humanName event_url=event.get_absolute_url %}
+<p>
+{% blocktrans with first_name=subscription.user.first_name %}
+Hallo {{ first_name }},
+{% endblocktrans %}
+</p>
+
+{% if mutation.state != "invited" %}
+<p>{% if mutation.state == "subscribed" %}
+{% blocktrans %}
+Je hebt je aangemeld
+voor <a href="{{ BASE_URL }}{{ event_url }}">{{ humanName }}</a>.
+{% endblocktrans %}
+{% elif mutation.state == "unsubscribed" %}
+{% blocktrans %}
+Je hebt je afgemeld
+voor <a href="{{ BASE_URL }}{{ event_url }}">{{ humanName }}</a>.
+{% endblocktrans %}
+{% endif %}</p>
+
+{% if mutation.notes %}
+<p>{% trans "Je opmerkingen waren:" %}
+<blockquote>{{ mutation.notes|linebreaksbr }}</blockquote>
+</p>
+{% else %}
+<p>{% trans "Je had geen opmerkingen." %}</p>
+{% endif %}{# mutation.notes #}
+
+{% else %}
+
+{% with inviter=subscription.inviter.first_name %}
+<p>{% blocktrans %}
+Je bent door {{ inviter }} uitgenodigd voor
+<a href="{{ BASE_URL }}{{ event_url }}">{{ humanName }}</a>.
+{% endblocktrans %}</p>
+
+{% if subscription.inviterNotes %}
+<p>{% blocktrans %}{{ inviter }}'s opmerkingen waren:{% endblocktrans %}
+<blockquote>{{ subscription.inviterNotes|linebreaksbr }}</blockquote>
+</p>
+{% endif %}
+{% endwith %}
+
+<p>{% trans "Om deze uitnodiging te bevestigen, bezoek:" %}<br/>
+&nbsp;&nbsp; <a href="{{ BASE_URL }}{{ event_url }}"
+                >{{ BASE_URL }}{{ event_url }}</a></p>
+{% endif %}{# mutation.state == "invited" #}
+
+<p>{% trans "Met een vriendelijke groet," %}<br/>
+{{ event.owner.humanName }}
+</p>
+{% endwith %}
+{% endblock html %}

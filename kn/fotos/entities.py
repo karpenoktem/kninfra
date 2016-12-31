@@ -1,6 +1,7 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property
 import kn.leden.entities as Es
-from kn import settings
+from kn.fotos.utils import resize_proportional
+from django.conf import settings
 
 from django.db.models import permalink
 
@@ -33,6 +34,7 @@ def ensure_indices():
     fcol.ensure_index([('name', 'text'),
                        ('title', 'text'),
                        ('description', 'text'),
+                       ('search_text', 'text'),
                        ('path', 1),
                        ('effectiveVisibility', 1)],
                       weights={'name': 100,
@@ -44,6 +46,9 @@ def entity(d):
     if d is None:
         return None
     return TYPE_MAP[d['type']](d)
+
+def by_id(the_id):
+    return entity(fcol.find_one({'_id': _id(the_id)}))
 
 def by_oldId(_type, oldId):
     return entity(fcol.find_one({'type': _type, 'oldId': oldId}))
@@ -63,18 +68,7 @@ def by_path(p):
 def is_admin(user):
     if user is None:
         return False
-    return bool(user.cached_groups_names & frozenset(('fotocie', 'webcie')))
-
-def resize_proportional(width, height, width_max, height_max=None):
-    width = float(width)
-    height = float(height)
-    if width > width_max:
-        height *= width_max/width
-        width  *= width_max/width
-    if height_max is not None and height > height_max:
-        width  *= height_max/height
-        height *= height_max/height
-    return int(round(width)), int(round(height))
+    return bool(user.cached_groups_names & frozenset(('fotocie', 'secretariaat')))
 
 def actual_visibility(visibility):
     actual = frozenset(visibility)
@@ -109,19 +103,26 @@ class FotoEntity(SONWrapper):
     date = son_property(('date',))
     rotation = son_property(('rotation',))
     size = son_property(('size',))
+    _search_text = son_property(('search_text',))
 
     visibility = son_property(('visibility',))
     _lost = son_property(('lost',))
     effective_visibility = son_property(('effectiveVisibility',))
+    notified_informacie = son_property(('notifiedInformacie',))
 
     @property
     def is_root(self):
         return self.path is None
 
+    def display_title(self):
+        if self.title:
+            return self.title
+        return self.name
+
     def required_visibility(self, user):
         if user is None:
             return frozenset(('world',))
-        if 'webcie' in user.cached_groups_names:
+        if is_admin(user):
             return frozenset(('leden', 'world', 'hidden'))
         if 'leden' in user.cached_groups_names:
             return frozenset(('leden', 'world'))
@@ -167,15 +168,18 @@ class FotoEntity(SONWrapper):
         return bool(self.required_visibility(user)
                         & frozenset(self.effective_visibility))
 
-    @permalink
-    def get_browse_url(self):
-        return ('fotos-browse', (), {'path': self.full_path})
-
     @property
     def full_path(self):
         if not self.path:
             return self.name
         return self.path + '/' + self.name
+
+    @property
+    def depth(self):
+        '''
+        Return how many ancestors this entry has.
+        '''
+        return 0 if self.is_root else self.full_path.count('/') + 1
 
     # NOTE keep up to date with media/fotos.js
     @permalink
@@ -261,6 +265,12 @@ class FotoEntity(SONWrapper):
         '''
         return self._update_effective_visibility(parent, save=save, recursive=False)
 
+    def update_search_text(self, save=True):
+        self._search_text = ''
+
+        if save:
+            self.save()
+
     @property
     def original_path(self):
         return os.path.join(settings.PHOTOS_DIR, self.path, self.name)
@@ -316,6 +326,13 @@ class FotoEntity(SONWrapper):
                     {'$unset': {'effectiveVisibility': ''}},
                     multi=True)
 
+    def set_informacie_notified(self, save=True):
+        if self.notified_informacie:
+            return
+        self.notified_informacie = True
+        if save:
+            self.save()
+
     @property
     def is_lost(self):
         return bool(self._lost)
@@ -361,12 +378,18 @@ class FotoEntity(SONWrapper):
         for name in tags:
             self._data['tags'].append(name2id[name])
 
+        self.update_search_text(save=False)
+
         if save:
             self.save()
 
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
         super(FotoAlbum, self).__init__(data)
+
+    @permalink
+    def get_absolute_url(self):
+        return ('fotos', (), {'path': self.full_path})
 
     def list(self, user):
         required_visibility = self.required_visibility(user)
@@ -436,7 +459,7 @@ class FotoAlbum(FotoEntity):
             return
 
         # search for album or tag
-        for o in fcol.find(query_filter):
+        for o in fcol.find(query_filter).sort('date', -1):
             yield entity(o)
 
     def update_metadata(self, parent, save=True):
@@ -553,6 +576,17 @@ class Foto(FotoEntity):
             self.save()
 
         return True
+
+    def update_search_text(self, save=True):
+        super(Foto, self).update_search_text(save=False)
+        if 'tags' in self._data:
+            tags = []
+            for user_id, user in Es.by_ids(self._data['tags']).iteritems():
+                tags.extend((user.first_name, user.last_name))
+            self._search_text += ' '.join(filter(bool, tags))
+
+        if save:
+            self.save()
 
     def set_rotation(self, rotation, save=True):
         if rotation == self.rotation:

@@ -1,10 +1,17 @@
+{% load i18n %}
+
 {% block subject %}
-Notitie gesloten
+{% trans "Notitie gesloten" %}
 {% endblock %}
 
-{% block plain %}
-De volgende notitie van {{ note.by.humanName }} op {{ note.on.humanName }}
-is door {{ note.closed_by.humanName }} gesloten.
+{% block plain %}\
+{% blocktrans with noter=note.by.humanName \
+                   on=note.on.humanName \
+                   closer=note.closed_by.humanName \
+                   theNote=note.note  %}\
+De volgende notitie van {{ noter }} op {{ on }}
+is door {{ closer }} gesloten.
 
-   {{ note.note }}
+   {{ theNote }}
+{% endblocktrans %}
 {% endblock %}

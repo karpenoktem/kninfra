@@ -1,6 +1,7 @@
+{% load i18n %}
 <html>
     <head>
-        <title>Planning template</title>
+        <title>{% trans "Planning template" %}</title>
     </head>
     <body>
 {% for e in events %}
@@ -12,9 +13,9 @@
 {% for assignee in vacancy.assignees %}
 {% if not forloop.first %}+{% endif %}
 {% if assignee %}
-            {{ assignee.user.humanName }}
+            {{ assignee.humanName }}
 {% else %}
-            <span style="color: red">Iemand</span>
+<span style="color: red">{% trans "Iemand" %}</span>
 {% endif %}
 {% endfor %}
         <br>

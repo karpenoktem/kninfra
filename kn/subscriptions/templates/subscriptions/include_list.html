@@ -1,0 +1,40 @@
+{% load i18n %}
+    <ul>
+    {% for subscr in list %}
+    <li><a href="{{ subscr.user.get_absolute_url }}"
+        >{{ subscr.user.full_name }}</a>
+        {% if has_read_access %}
+        {% for mutation in subscr.history reversed %}
+        <div class="mutation">
+        {% if mutation.state == "subscribed" %}
+        {% trans "aangemeld" %}
+        {% elif mutation.state == "unsubscribed" %}
+        {% trans "afgemeld" %}
+        {% endif %}{# mutation.state #}
+        {% if mutation.date %}
+        {% trans "op" %} {{ mutation.date.date }}
+        {% endif %}{# mutation.date #}
+        {% if mutation.notes %}
+        <blockquote class="notes">{{ mutation.notes }}</blockquote>
+        {% endif %}{# mutation.notes #}
+        </div>
+        {% endfor %}{# subscr.history #}
+        {% if subscr.invited %}
+        <div class="invitation">
+        {% trans "uitgenodigd door" %}
+        <a href="{{ subscr.inviter.get_absolute_url }}"
+            >{{ subscr.inviter.full_name }}</a>
+        {% trans "op" %} {{ subscr.inviteDate.date }}
+        {% if subscr.inviterNotes %}
+        <blockquote class="notes">{{ subscr.inviterNotes }}</blockquote>
+        {% endif %}{# subscr.inviterNotes #}
+        </div>
+        {% endif %}{# subscr.invited #}
+        {% else %}
+        {% if subscr.date %}
+            <small>{{ subscr.date.date }}</small>
+        {% endif %}{# subscr.date #}
+        {% endif %}{# has_read_access #}
+        </li>
+    {% endfor %}
+    </ul>

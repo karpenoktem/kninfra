@@ -17,24 +17,28 @@ from django.core.paginator import Paginator, EmptyPage
 from django.core.files.storage import default_storage
 from django.core.servers.basehttp import FileWrapper
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+from django.contrib import messages
 
-from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm
+from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm, AddStudyForm
 from kn.leden.auth import login_or_basicauth_required
-from kn.leden.utils import find_name_for_user
 from kn.leden.date import now, date_to_dt
 from kn.leden.mongo import _id
 from kn.leden import giedo
 
 from kn.base._random import pseudo_randstr
-from kn.base.http import redirect_to_referer
+from kn.base.http import redirect_to_referer, JsonHttpResponse
 from kn.base.mail import render_then_email
 from kn.base.text import humanized_enum
 
-from kn.settings import DT_MIN, DT_MAX
-from kn import settings
+from kn.fotos.utils import resize_proportional
+
+from kn.base.conf import from_settings_import
+from_settings_import("DT_MIN", "DT_MAX", globals())
+from django.conf import settings
 
 import kn.leden.entities as Es
 
@@ -62,11 +66,11 @@ def entity_detail(request, name=None, _id=None, type=None):
     if e is None:
         raise Http404
     if type and not type in e.types:
-        raise ValueError, "Entity is not a %s" % type
+        raise ValueError, _("Entiteit is niet een %s") % type
     if not type:
         type = e.type
     if not type in Es.TYPE_MAP:
-        raise ValueError, "Unknown entity type"
+        raise ValueError, _("Onbekende entiteit type")
     return globals()['_'+type+'_detail'](request, getattr(e, 'as_'+type)())
 
 def _entity_detail(request, e):
@@ -95,8 +99,9 @@ def _entity_detail(request, e):
     for r in chain(related, rrelated):
         r['may_end'] = Es.user_may_end_relation(request.user, r)
         r['id'] = r['_id']
-        r['until_year'] = (None if r['until'] is None else
-                    Es.date_to_year(r['until']))
+        r['until_year'] = (None if r['until'] is None
+                                or r['until'] >= now()
+                                else Es.date_to_year(r['until']))
         r['virtual'] = Es.relation_is_virtual(r)
     tags = [t.as_primary_type() for t in e.get_tags()]
 
@@ -122,7 +127,8 @@ def _entity_detail(request, e):
            'tags': sorted(tags, Es.entity_cmp_humanName),
            'object': e,
            'chiefs': [],
-           'pipos': [] }
+           'pipos': [],
+           'reps': [] }
     for r in rrelated:
         if r['how'] and Es.relation_is_active(r):
             if str(r['how'].name) == '!brand-hoofd':
@@ -131,6 +137,9 @@ def _entity_detail(request, e):
             if str(r['how'].name) == '!brand-bestuurspipo':
                 r['hidden'] = True
                 ctx['pipos'].append(r)
+            if str(r['how'].name) == '!brand-vertegenwoordiger':
+                r['hidden'] = True
+                ctx['reps'].append(r)
     # Is request.user allowed to add (r)relations?
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):
@@ -143,22 +152,60 @@ def _entity_detail(request, e):
                 'brands': brands,
                 'groups': groups,
                 'may_add_related': True,
-                'may_add_rrelated': True})
+                'may_add_rrelated': True,
+                'may_tag': True,
+                'may_untag': True})
+    ctx['may_upload_smoel'] = e.name and request.user.may_upload_smoel_for(e)
     if e.is_tag:
         ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
                         cmp=Es.entity_cmp_humanName)})
+
+    # Check whether entity has a photo
+    photos_path = (path.join(settings.SMOELEN_PHOTOS_PATH, str(e.name))
+                        if e.name else None)
+    if photos_path and default_storage.exists(photos_path + '.jpg'):
+        img = Image.open(default_storage.open(photos_path + '.jpg'))
+        width, height = img.size
+        if default_storage.exists(photos_path + '.orig'):
+            # smoel was created using newer strategy. Shrink until it fits the
+            # requirements.
+            width, height = resize_proportional(img.size[0], img.size[1],
+                                                settings.SMOELEN_WIDTH,
+                                                settings.SMOELEN_HEIGHT)
+        elif width > settings.SMOELEN_WIDTH:
+            # smoel was created as high-resolution image, probably 600px wide
+            width /= 2
+            height /= 2
+        else:
+            # smoel was created as normal image, probably 300px wide
+            pass
+        ctx.update({
+                'hasPhoto': True,
+                'photoWidth': width,
+                'photoHeight': height})
     return ctx
 
 def _user_detail(request, user):
-    hasPhoto = default_storage.exists('%s.jpg' %
-            path.join(settings.SMOELEN_PHOTOS_PATH,
-                    str(user.name)))
     ctx = _entity_detail(request, user)
-    ctx.update({
-            'hasPhoto': hasPhoto,
-            'photoWidth': settings.SMOELEN_WIDTH,
-            'photosUrl': reverse('fotos', kwargs={'path':''})
-                         + '?q=tag:'+str(user.name)})
+    ctx['photosUrl'] = reverse('fotos', kwargs={'path':''}) + \
+                                        '?q=tag:'+str(user.name)
+    ctx['addStudyFormOpen'] = False
+    if request.method == 'POST':
+        addStudyForm = AddStudyForm(request.POST)
+        if 'action' in request.POST and request.POST['action'] == 'add-study':
+            if 'secretariaat' not in request.user.cached_groups_names:
+                raise PermissionDenied
+            ctx['addStudyFormOpen'] = True
+            if addStudyForm.is_valid():
+                fd = addStudyForm.cleaned_data
+                # TODO: catch error when study start overlaps with last study
+                user.study_start(fd['study'], fd['study_inst'],
+                        fd['study_number'], fd['study_from'])
+                return redirect_to_referer(request)
+    else:
+        addStudyForm = AddStudyForm()
+    if user.last_study_end_date < DT_MAX:
+        ctx['addStudyForm'] = addStudyForm
     return render_to_response('leden/user_detail.html', ctx,
             context_instance=RequestContext(request))
 
@@ -275,27 +322,47 @@ def users_underage(request):
             context_instance=RequestContext(request))
 
 @login_required
+def ik(request):
+    return HttpResponseRedirect(request.user.get_absolute_url())
+
+@login_required
 def ik_chsmoel(request):
-    if not 'secretariaat' in request.user.cached_groups_names:
-        raise PermissionDenied
-    if not 'id' in request.POST:
-        raise ValueError, "Missing `id' in POST"
     if not 'smoel' in request.FILES:
-        raise ValueError, "Missing `smoel' in FILES"
+        raise ValueError, _("Missende `smoel' in FILES")
+    if not 'id' in request.POST:
+        raise ValueError, _("Missende `id' in POST")
     user = Es.by_id(request.POST['id'])
-    img = Image.open(request.FILES['smoel'])
-    smoelen_width = settings.SMOELEN_WIDTH * 2
-    img = img.resize((smoelen_width,
-        int(float(smoelen_width) / img.size[0] * img.size[1])),
-            Image.ANTIALIAS)
+    if not user.name:
+        raise ValueError, _("Entiteit heeft geen naam")
+    if not request.user.may_upload_smoel_for(request.user):
+        raise PermissionDenied
+    original = default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
+            str(user.name)) + ".orig", 'wb+')
+    for chunk in request.FILES['smoel'].chunks():
+        original.write(chunk)
+    original.seek(0)
+    img = Image.open(original)
+    if hasattr(img, '_getexif') and img._getexif() is not None:
+        orientation = int(img._getexif().get(274, '1')) # Orientation
+        if orientation == 3:
+            img = img.transpose(Image.ROTATE_180)
+        elif orientation == 6:
+            img = img.transpose(Image.ROTATE_270)
+        elif orientation == 8:
+            img = img.transpose(Image.ROTATE_90)
+    width, height = resize_proportional(img.size[0], img.size[1],
+                                        settings.SMOELEN_WIDTH*2,
+                                        settings.SMOELEN_HEIGHT*2)
+    img = img.resize((width, height), Image.ANTIALIAS)
     img.save(default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
             str(user.name)) + ".jpg", 'w'), "JPEG")
+    Es.notify_informacie('set_smoel', request.user, entity=user)
     return redirect_to_referer(request)
 
 @login_required
 def user_smoel(request, name):
     user = Es.by_name(name)
-    if not user or not 'user' in user.types:
+    if not user:
         raise Http404
     try:
         img = default_storage.open(path.join(
@@ -303,14 +370,14 @@ def user_smoel(request, name):
             str(user.name)) + ".jpg")
     except IOError:
         raise Http404
-    return HttpResponse(FileWrapper(img), mimetype="image/jpeg")
+    return HttpResponse(FileWrapper(img), content_type="image/jpeg")
 
 def _ik_chpasswd_handle_valid_form(request, form):
     oldpw = form.cleaned_data['old_password']
     newpw = form.cleaned_data['new_password']
     giedo.change_password(str(request.user.name), oldpw, newpw)
-    t = """Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."""
-    request.user.push_message(t % request.user.first_name)
+    t = _("""Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd.""")
+    messages.info(request, t % request.user.first_name)
     return HttpResponseRedirect(reverse('smoelen-home'))
 
 @login_required
@@ -343,9 +410,9 @@ def ik_chpasswd_villanet(request):
                 newpw = form.cleaned_data['new_password']
                 giedo.change_villanet_password(str(request.user.name), oldpw,
                         newpw)
-                t = ("Lieve %s, maar natuurlijk, jouw wachtwoord voor het "+
+                t = _("Lieve %s, maar natuurlijk, jouw wachtwoord voor het "+
                         "villa-netwerk is veranderd.")
-                request.user.push_message(t % request.user.first_name)
+                messages.info(request, t % request.user.first_name)
                 return HttpResponseRedirect(reverse('smoelen-home'))
             except giedo.ChangePasswordError as e:
                 errl.extend(e.args)
@@ -419,13 +486,22 @@ def rauth(request):
         '?' if request.REQUEST['url'].find('?') == -1 else '&',
         str(request.user.name), token))
 
+def accounts_api(request):
+    if request.user.is_authenticated():
+        ret = {'valid': True,
+               'name': request.user.get_username()}
+    else:
+        ret = {'valid': False}
+
+    return JsonHttpResponse(ret)
+
 def api_users(request):
     if not request.REQUEST['key'] in settings.ALLOWED_API_KEYS:
         raise PermissionDenied
     ret = {}
     for m in Es.users():
         ret[str(m.name)] = m.full_name
-    return HttpResponse(json.dumps(ret), mimetype="text/json")
+    return HttpResponse(json.dumps(ret), content_type="text/json")
 
 @login_required
 def secr_add_user(request):
@@ -435,12 +511,10 @@ def secr_add_user(request):
         form = AddUserForm(request.POST)
         if form.is_valid():
             fd = form.cleaned_data
-            nm = find_name_for_user(fd['first_name'],
-                        fd['last_name'])
             # First, create the entity.
             u = Es.User({
                 'types': ['user'],
-                'names': [nm],
+                'names': [fd['username']],
                 'humanNames': [{'human': fd['first_name']+' '+
                              fd['last_name']}],
                 'person': {
@@ -448,7 +522,7 @@ def secr_add_user(request):
                     'nick': fd['first_name'],
                     'given': None,
                     'family': fd['last_name'],
-                    'gender': fd['sex'],
+                    'gender': fd['gender'],
                     'dateOfBirth': date_to_dt(
                         fd['dateOfBirth'])
                 },
@@ -476,12 +550,19 @@ def secr_add_user(request):
                 'is_active': True,
                 'password': None
                 })
-            logging.info("Added user %s" % nm)
+            logging.info("Added user %s" % fd['username'])
             u.save()
             # Then, add the relations.
-            Es.add_relation(u, Es.id_by_name('leden',
-                            use_cache=True),
-                    _from=date_to_dt(fd['dateJoined']))
+            groups = ['leden']
+            groups.append({'m': 'mannen', 'v': 'vrouwen'}.get(fd['gender']))
+            if fd['incasso']:
+                groups.append('incasso')
+            else:
+                groups.append('geen-incasso')
+            for group in groups:
+                Es.add_relation(u, Es.id_by_name(group,
+                                use_cache=True),
+                        _from=date_to_dt(fd['dateJoined']))
             for l in fd['addToList']:
                 Es.add_relation(u, Es.id_by_name(l, use_cache=True),
                     _from=now())
@@ -492,17 +573,15 @@ def secr_add_user(request):
             pwd = pseudo_randstr()
             u.set_password(pwd)
             giedo.change_password(str(u.name), pwd, pwd)
-            render_then_email("leden/set-password.mail.txt",
-                        u.canonical_full_email, {
+            render_then_email("leden/set-password.mail.txt", u, {
                             'user': u,
                             'password': pwd})
             # Send the welcome e-mail
-            render_then_email("leden/welcome.mail.txt",
-                        u.canonical_full_email, {
+            render_then_email("leden/welcome.mail.txt", u, {
                             'u': u})
-            Es.notify_informacie('adduser', entity=u._id)
+            Es.notify_informacie('adduser', request.user, entity=u._id)
             return HttpResponseRedirect(reverse('user-by-name',
-                    args=(nm,)))
+                    args=(fd['username'],)))
     else:
         form = AddUserForm()
     return render_to_response('leden/secr_add_user.html',
@@ -538,9 +617,9 @@ def secr_add_group(request):
                 'tags': [_id(fd['parent'])]})
             logging.info("Added group %s" % nm)
             g.save()
-            Es.notify_informacie('addgroup', entity=g._id)
+            Es.notify_informacie('addgroup', request.user, entity=g._id)
             giedo.sync_async(request)
-            request.user.push_message("Groep toegevoegd.")
+            messages.info(request, 'Groep toegevoegd.')
             return HttpResponseRedirect(reverse('group-by-name', args=(nm,)))
     else:
         form = AddGroupForm()
@@ -557,11 +636,8 @@ def relation_end(request, _id):
     Es.end_relation(_id)
 
     # Notify informacie
-    if request.user == rel['who']:
-        Es.notify_informacie('relation_ended', relation=_id)
-    else:
-        # TODO (rik) leave out 'als lid'
-        Es.notify_informacie('relation_end', relation=_id)
+    # TODO (rik) leave out 'als lid'
+    Es.notify_informacie('relation_end', request.user, relation=_id)
 
     giedo.sync_async(request)
     return redirect_to_referer(request)
@@ -591,18 +667,61 @@ def relation_begin(request):
     except StopIteration:
         ok = True
     if not ok:
-        raise ValueError, "This relation already exists"
+        raise ValueError, _("Deze relatie bestaat al")
 
     # Add the relation!
     relation_id = Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
 
     # Notify informacie
-    if request.user._id == d['who']:
-        Es.notify_informacie('relation_begun', relation=relation_id)
-    else:
-        # TODO (rik) leave out 'als lid'
-        Es.notify_informacie('relation_begin', relation=relation_id)
+    # TODO (rik) leave out 'als lid'
+    Es.notify_informacie('relation_begin', request.user, relation=relation_id)
 
+    giedo.sync_async(request)
+    return redirect_to_referer(request)
+
+def _get_group_and_tag(request):
+    '''
+    Helper for tag and untag to quickly get the group and tag from a request or
+    raise an error on invalid input.
+    '''
+    if 'group' not in request.POST:
+        raise ValueError('Missing group')
+    group = Es.by_id(request.POST['group'])
+    if not group:
+        raise Http404('group does not exist')
+    if not group.is_group:
+        raise ValueError(_("'group' is niet een groep"))
+
+    if 'tag' not in request.POST:
+        raise ValueError('Missing tag')
+    tag = Es.by_id(request.POST['tag'])
+    if not tag:
+        raise Http404('tag does not exist')
+    if not tag.is_tag:
+        raise ValueError(_("'tag' is niet een stempel"))
+
+    return group, tag
+
+
+@login_required
+def tag(request):
+    group, tag = _get_group_and_tag(request)
+    if not Es.user_may_tag(request.user, group, tag):
+        raise PermissionDenied
+
+    group.tag(tag)
+    Es.notify_informacie('tag', request.user, entity=group, tag=tag)
+    giedo.sync_async(request)
+    return redirect_to_referer(request)
+
+@login_required
+def untag(request):
+    group, tag = _get_group_and_tag(request)
+    if not Es.user_may_untag(request.user, group, tag):
+        raise PermissionDenied
+
+    group.untag(tag)
+    Es.notify_informacie('untag', request.user, entity=group, tag=tag)
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
@@ -611,14 +730,15 @@ def user_reset_password(request, _id):
     if not 'secretariaat' in request.user.cached_groups_names:
         raise PermissionDenied
     u = Es.by_id(_id).as_user()
+    if not u.is_active:
+        raise ValueError, _("Gebruiker is niet geactiveerd")
     pwd = pseudo_randstr()
     u.set_password(pwd)
     giedo.change_password(str(u.name), pwd, pwd)
-    render_then_email("leden/reset-password.mail.txt",
-                        u.canonical_full_email, {
+    render_then_email("leden/reset-password.mail.txt", u, {
                             'user': u,
                             'password': pwd})
-    request.user.push_message("Wachtwoord gereset!")
+    messages.info(request, _("Wachtwoord gereset!"))
     return redirect_to_referer(request)
 
 @login_required
@@ -626,7 +746,7 @@ def note_add(request):
     if not 'secretariaat' in request.user.cached_groups_names:
         raise PermissionDenied
     if 'on' not in request.POST or 'note' not in request.POST:
-        raise ValueError, "missing `on' or `note'"
+        raise ValueError, _("missende `on' of `note'")
     on = Es.by_id(_id(request.POST['on']))
     if on is None:
         raise Http404
@@ -643,7 +763,7 @@ def secr_update_site_agenda(request):
         if 'secretariaat' not in request.user.cached_groups_names:
                 raise PermissionDenied
         giedo.update_site_agenda()
-        request.user.push_message("Agenda geupdate!")
+        messages.info(request, _("Agenda geupdate!"))
         return redirect_to_referer(request)
 
 @login_required
@@ -657,8 +777,8 @@ def ik_openvpn(request):
                     request.POST['password'])
             giedo.openvpn_create(str(request.user.name),
                     request.POST['want'])
-            request.user.push_message("Je verzoek wordt verwerkt. "+
-                "Verwacht binnen 5 minuten een e-mail.")
+            messages.info(request, _("Je verzoek wordt verwerkt. "
+                    "Verwacht binnen 5 minuten een e-mail."))
             return HttpResponseRedirect(reverse('smoelen-home'))
         else:
             password_incorrect = True
@@ -680,9 +800,12 @@ def ik_openvpn_download(request, filename):
     if not default_storage.exists(p):
         raise Http404
     response = HttpResponse(FileWrapper(default_storage.open(p)),
-            mimetype=mimetypes.guess_type(default_storage.path(p))[0])
+            content_type=mimetypes.guess_type(default_storage.path(p))[0])
     response['Content-Length'] = default_storage.size(p)
     # XXX use ETags and returns 304's
     return response
+
+def language(request):
+    return HttpResponse(str(request.LANGUAGE_CODE))
 
 # vim: et:sta:bs=2:sw=4:

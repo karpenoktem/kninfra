@@ -1,9 +1,11 @@
 {% extends "base/base.html" %}
+
 {% load base %}
+{% load i18n %}
 
 {% block styles %}
 {{ block.super }}
-<link href="{{ MEDIA_URL }}/reglementen/regl.css"
+<link href="{{ MEDIA_URL }}reglementen/regl.css"
 	rel="stylesheet" type="text/css" />
 {% endblock styles %}
 
@@ -13,14 +15,17 @@
 <p>{{ version.description }}</p>
 <p>
 {% if not version.valid_from %}
-	Deze versie is (nog) niet aangenomen en daarmee niet van kracht.
+{% trans "Deze versie is (nog) niet aangenomen en daarmee niet van kracht." %}
 {% else %}
 	{% if version.valid_until %}
-        Deze versie was aangenomen op {{ version.valid_from.date }} en
-        van kracht tot {{ version.valid_until.date }}.
+        {% blocktrans with valid_from=version.valid_from.date \
+                           valid_until=version.valid_until.date %}
+        Deze versie was aangenomen op {{ valid_from }} en
+        van kracht tot {{ valid_until }}.{% endblocktrans %}
 	{% else %}
-        Deze versie was aangenomen op {{ version.valid_from.date }} en
-        nog steeds van kracht.
+        {% blocktrans with valid_from=version.valid_from.date %}
+        Deze versie was aangenomen op {{ valid_from }} en
+        nog steeds van kracht.{% endblocktrans %}
 	{% endif %}
 {% endif %}
 <div class="regl">

@@ -27,27 +27,29 @@ img#album-edit-toggle {
     bottom: -1px;
 }
 #album-edit-toggle:hover,
-#topbar.editor #album-edit-toggle {
+#topbar.toggle-open #album-edit-toggle {
     opacity: 1;
 }
-#topbar.editor #album-edit-toggle {
+#topbar.toggle-open #album-edit-toggle {
     background: white;
     border-color: #aaa;
     border-bottom: 1px white solid;
 }
 
 #album-editor {
-    display: none;
-    position: absolute;
     z-index: 1;
     background: white;
     white-space: nowrap;
-    right: -5px;
     padding: 2px 5px;
     border: 1px #aaa solid;
 }
-#topbar.editor #album-editor {
-    display: block;
+#topbar.toggle-open #album-editor {
+    right: -5px;
+}
+
+#album-editor label {
+    display: flex;
+    justify-content: space-between;
 }
 
 p.error {
@@ -79,8 +81,24 @@ ul#fotos li {
         padding: 0.75vw calc(0.5vw + 0.7px) 0.75vw;
     }
 }
-ul#fotos li.hidden {
+ul#fotos li.visibility-hidden {
     background-color: rgba(0, 0, 0, 0.04);
+}
+html.fotos-highlight ul#fotos li {
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+html.fotos-highlight ul#fotos li.visibility-hidden {
+    background-color: #fcc;
+    border-color: #f88;
+}
+html.fotos-highlight ul#fotos li.visibility-leden {
+    background-color: #fea;
+    border-color: #ed0;
+}
+html.fotos-highlight ul#fotos li.visibility-world {
+    background-color: #cfc;
+    border-color: #8f8;
 }
 
 ul#fotos li a {
@@ -294,12 +312,15 @@ img.lazy {
     font-weight: normal;
 }
 
-#foto select,
 #foto input,
 #foto textarea {
     display: block;
     margin: 0 0 5px;
     resize: vertical;
+}
+#foto .sidebar .row {
+    display: block;
+    margin: 0 0 5px 0;
 }
 #foto input,
 #foto textarea {
@@ -358,6 +379,20 @@ img.lazy {
     left: -0.8em;
 }
 
+#foto .sidebar .hidden-submit {
+    /* http://stackoverflow.com/a/6602788/559350 */
+    width: 0;
+    height: 0;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#foto .status {
+    color: #aaa;
+}
+
 @media (max-height: 800px) {
     #foto {
         padding: 0;
@@ -368,9 +403,8 @@ img.lazy {
     overflow: hidden;
 }
 
-.isroot #album-edit-toggle,
-.isroot #album-editor {
-    display: none !important; /* NSFW */
+.isroot #album-editor .album-options {
+    display: none;
 }
 
 /* vim: set et bs=2 sw=4 sta: */

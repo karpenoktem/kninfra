@@ -3,6 +3,18 @@ var headerHeight = 400;
 var headerCollapsed = true;
 var expandHeader = true;
 
+// Work around a bug in Safari in private mode: Storage doesn't work.
+var supportsStorage = true;
+try {
+    localStorage.setItem('test', '');
+    localStorage.removeItem('test');
+    sessionStorage.setItem('test', '');
+    sessionStorage.removeItem('test');
+} catch (error) {
+    console.warn('localStorage or sessionStorage not supported');
+    supportsStorage = false;
+}
+
 function email(t, d, u) {
     var email = u + '@' + d + '.' + t;
     document.write('<a href="mailto:' + email + '">' + email + '</a>');
@@ -89,7 +101,7 @@ $(document).ready(function() {
         return false;
     });
 
-    if (expandHeader) {
+    if (expandHeader && supportsStorage) {
         /* reduce flicker on page load by loading the page with the header collapsed
          * and expanding it with JS while scrolling to the right position */
         $(document.body).addClass('header-expanded');
@@ -126,26 +138,53 @@ $(document).ready(function() {
         }
     }
 
-    sessionStorage['visited'] = 'true';
+    if (supportsStorage) {
+        sessionStorage['visited'] = 'true';
+    }
 
-    $('#loginButtonLink').bind('click', function (event) {
-        var loginButton = $('#loginButton');
-        loginButton.toggleClass('open');
-        event.preventDefault();
-        event.stopPropagation();
+    $('.toggle').each(function(i, toggle) {
+        toggle = $(toggle);
+        var btn = $('.toggle-button', toggle);
+        btn.bind('click', function (e) {
+            toggle.toggleClass('toggle-open');
+            e.preventDefault();
+            e.stopPropagation();
+        });
     });
 
-    $(document.body).bind('click', function (event) {
-        $('#loginButton').removeClass('open');
+    $(document.body).bind('click', function (e) {
+        var target = $(e.target);
+        if (target.hasClass('toggle-window') ||
+            target.parents('.toggle-window').length) return;
+        $('.toggle').removeClass('toggle-open');
     });
 
-    $('#loginWindow').bind('click', function (event) {
-        event.stopPropagation();
+    if (!window.SVGSVGElement) {
+        $(document.documentElement).addClass('no-svg');
+    }
+
+    $('.tabs').each(function(i, tabBox) {
+        $('.tabHead', tabBox).each(function(j, tabHeader) {
+            tabHeader = $(tabHeader);
+            var tabBody = $('#'+tabHeader.data('for'));
+            if (tabHeader.hasClass('selected')) {
+                tabBody.addClass('selected');
+            }
+            tabHeader.on('click', function() {
+                var oldHeader = $('.tabHead.selected', tabBox);
+                if (tabHeader.is(oldHeader)) return;
+                oldHeader.removeClass('selected');
+                tabHeader.addClass('selected');
+                var oldBody = $('.tabBody.selected', tabBox);
+                oldBody.removeClass('selected');
+                tabBody.addClass('selected');
+            });
+        });
     });
 
-    $('#submenu-button').bind('click', function(event) {
-        event.preventDefault();
-        $('#submenu-wrapper').toggleClass('open');
+    // language picker
+    $('#langpicker').change(function() {
+        document.location = $(this).val();
     });
 });
 

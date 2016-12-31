@@ -1,7 +1,9 @@
 {% extends "leden/base.html" %}
 
+{% load i18n %}
+
 {% block body %}
-<h2>Bouwjaar {{ year }}</h2>
+<h2>{% trans "Bouwjaar" %} {{ year }}</h2>
 <ul>
 {% for user in users %}
 <li><a href="{{ user.get_absolute_url }}">{{ user.full_name }}</a></li>
@@ -9,12 +11,12 @@
 </ul>
 
 {% if previous_year %}
-<a href="{% url entities-by-year-of-birth year=previous_year %}"
+<a href="{% url "entities-by-year-of-birth" year=previous_year %}"
                 >&laquo; {{ previous_year }}</a>
 {% endif %}
-<a href="{% url years-of-birth %}">geboortejaren</a>
+<a href="{% url "years-of-birth" %}">{% trans "geboortejaren" %}</a>
 {% if next_year %}
-<a href="{% url entities-by-year-of-birth year=next_year %}"
+<a href="{% url "entities-by-year-of-birth" year=next_year %}"
                 >{{ next_year }} &raquo;</a>
 {% endif %}
 

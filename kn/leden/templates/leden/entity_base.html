@@ -1,47 +1,111 @@
 {% extends "leden/base.html" %}
+
 {% load leden %}
+{% load i18n %}
 {% load base %}
 
-{% block body %}
+{% block styles %}
+{{ block.super }}
+<link href="{{ MEDIA_URL }}leden/entity_detail.css" rel="stylesheet" />
+{% endblock styles %}
 
-<script type="text/javascript">//<!--
+{% block head %}
+{{ block.super }}
+<script>
 $(function(){
         create_entityChoiceField('relation_begin1_with', {type: 'group'});
         create_entityChoiceField('relation_begin1_how', {type: 'brand'});
         create_entityChoiceField('relation_begin2_who', {type: 'user'});
         create_entityChoiceField('relation_begin2_how', {type: 'brand'});
+        create_entityChoiceField('group_tag', {type: 'tag'});
 });
-// --></script>
+</script>
+<script src="{{ MEDIA_URL }}leden/entity_detail.js" defer></script>
+{% endblock head %}
 
+{% block body %}
+{% block entity_head %}
+{% if hasPhoto or photosUrl %}
+<div class="{% if hasPhoto %}smoel{% else %}nosmoel{% endif %}">
+    {% if photosUrl %}<a href="{{ photosUrl }}">{% endif %}
+        {% if hasPhoto %}
+            <img src="{% url "user-smoel" object.name %}"
+                 width="{{ photoWidth }}"
+                 height="{{ photoHeight }}"/>
+        {% else %}{# hasPhoto #}
+        {% if photosUrl %}{% trans "Foto's" %}{% endif %}
+        {% endif %}{# hasPhoto #}
+    {% if photosUrl %}</a>{% endif %}
+</div>
+{% endif %}{# hasPhoto or photosUrl #}
+
+<h2>
+    {% if not object.is_user %}
+	{% if "secretariaat" in user.cached_groups_names %}
+	<button class="change-humanName"
+		onclick="promptNewProperty('{{ object.id }}', 'humanName',
+      '{% trans "Wijzig naam" %}', $('.humanName').text());"
+          >{% trans "Wijzig naam" %}</button>
+	{% endif %}{# "secretariaat" in user.cached_groups_names #}
+    {% endif %}{# object.is_user #}
+	<span class="humanName">{{ object.humanName }}</span>
+</h2>
+{% if not object.is_user %}
+<p>
+	{% if "secretariaat" in user.cached_groups_names %}
+	<button class="change-description"
+		onclick="promptNewProperty('{{ object.id }}', 'description',
+      '{% trans "Nieuwe beschrijving" %}', $('.description').text());">
+        {% trans "Wijzig beschrijving" %}</button>
+	{% endif %}{# "secretariaat" in user.cached_groups_names #}
+	<span class="description">{{ object.description }}</span>
+</p>
+{% endif %}{# not object.is_user #}
+
+{% if may_upload_smoel %}
+<form method="post" action="{% url "ik-chsmoel"  %}"
+        enctype="multipart/form-data">
+{% csrf_token %}
+<input type="hidden" name="id" value="{{ object.id }}" />
+<input type="file" name="smoel" accept="image/*" required />
+<input type="submit" value="{% trans "upload smoel" %}" />
+</form>
+{% endif %} {# "secretariaat" in user.cached_groups_names #}
+{% endblock entity_head %}
+
+{% block entity_body %}{% endblock entity_body %}
+
+{% block entity_related %}
 {% if related %}
-<h3>Lidmaatschap</h3>
+<h3>{% trans "Lidmaatschap" %}</h3>
 <ul>
 {% for r in related %}
 {% if not r.virtual %}
 {% ifchanged r.until_year %}
 {% if r.until_year %}
-</ul><h4>Tot in jaar {{ r.until_year }}</h4><ul>
+</ul><h4>{% trans "Tot in jaar" %} {{ r.until_year }}</h4><ul>
 {% endif %}
 {% endifchanged %}
 <li>
 {% if r.how %}
 <a href="{{ r.how.get_absolute_url }}">{{ r.how.humanName }}</a>
 {% else %}
-lid
+{% trans "lid" %}
 {% endif %}{# r.how #}
 {{ r.with.genitive_prefix }}
 <a href="{{ r.with.get_absolute_url }}">{{ r.with.humanName }}</a>
 {{ r|rel_when }}
 {% if r.may_end %}
-<form action="{% url relation-end _id=r.id %}" style="display:inline"
+<form action="{% url "relation-end" _id=r.id %}"
         method="post"
+        {# TODO translate #}
         onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
         wil uitschrijven als \
         {% if r.how %}{{ r.how.humanName }}{% else %}lid{% endif %} \
         {{ r.with.genitive_prefix }} {{ r.with.humanName }}?');">
 
 {% csrf_token %}
-<input type="submit" value="be&euml;indig" />
+<input type="submit" value="{% trans "be&euml;indig" %}" />
 </form>
 {% endif %}{# r.may_end #}
 </li>
@@ -51,7 +115,8 @@ lid
 {% endif %}
 {% if may_add_related %}
 {% if related or object.is_user %}
-<form action="{% url relation-begin %}" method="post" style="display: inline" \
+<form action="{% url "relation-begin" %}" method="post"
+        {# TODO translate #}
         onsubmit="return confirm('Weet je zeker dat je {{ object.humanName }} \
         wil inschrijven als \
         '+ (entityChoiceField_get('relation_begin1_how') ?
@@ -59,22 +124,22 @@ lid
         van '+ entityChoiceField_get('relation_begin1_with') +'?');">
         {% csrf_token %}
         <input type="hidden" name="who" value="{{ object.id }}" />
-        Voeg als
+        {% trans "Voeg als" %}
         <input name="how" id="relation_begin1_how" type="hidden" />
-        toe aan
+        {% trans "toe aan" %}
         <input name="with" id="relation_begin1_with" type="hidden" />
-        <input type="submit" value="verstuur" />
+        <input type="submit" value="{% trans "verstuur" %}" />
 </form>{# relation-begin #}
 {% endif %}{# related or object.is_user #}
 {% endif %}{# may_add_related #}
 
 {% if rrelated %}
-<h3>Leden ({{ year_counts.this }})</h3>
+<h3>{% trans "Leden" %} ({{ year_counts.this }})</h3>
 <ul>
 {% for r in rrelated %}
 {% ifchanged r.until_year %}
 {% if r.until_year %}
-</ul><h4>Tot jaar {{ r.until_year }} ({{ year_counts|lookup:r.until_year }})</h4><ul>
+</ul><h4>{% trans "Tot jaar" %} {{ r.until_year }} ({{ year_counts|lookup:r.until_year }})</h4><ul>
 {% endif %}
 {% endifchanged %} {% if not r.hidden %}
 <li>
@@ -82,18 +147,19 @@ lid
 {% if r.how %}
 <a href="{{ r.how.get_absolute_url }}">{{ r.how.humanName }}</a>
 {% else %}
-lid
+{% trans "lid" %}
 {% endif %}
 {{ r|rel_when }}
 {% if r.may_end %}
-<form action="{% url relation-end _id=r.id %}" style="display:inline"
+<form action="{% url "relation-end" _id=r.id %}"
         method="post"
+        {# TODO translate #}
         onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
         wil uitschrijven als \
         {% if r.how %}{{ r.how.humanName }}{% else %}lid{% endif %} \
         {{ r.with.genitive_prefix }} {{ r.with.humanName }}?');">
 {% csrf_token %}
-<input type="submit" value="be&euml;indig" />
+<input type="submit" value="{% trans "be&euml;indig" %}" />
 </form>
 {% endif %}{# r.may_end #}
 {% endif %}{# r.hidden #}
@@ -103,7 +169,8 @@ lid
 {% endif %}
 {% if may_add_rrelated %}
 {% if rrelated or object.is_group %}
-<form action="{% url relation-begin %}" method="post" style="display: inline"
+<form action="{% url "relation-begin" %}" method="post"
+        {# TODO translate #}
         onsubmit="return confirm('Weet je zeker dat je '+
         entityChoiceField_get('relation_begin2_who') +' \
         wil inschrijven als \
@@ -112,27 +179,60 @@ lid
         van {{ object.humanName }}?');">
         {% csrf_token %}
         <input type="hidden" name="with" value="{{ object.id }}" />
-        Voeg
+        {% trans "Voeg" %}
         <input type="hidden" name="who" id="relation_begin2_who" />
-        als
+        {% trans "als" %}
         <input type="hidden" name="how" id="relation_begin2_how" />
-        toe
-        <input type="submit" value="verstuur" />
+        {% trans "toe" %}
+        <input type="submit" value="{% trans "verstuur" %}" />
 </form>{# relation-begin #}
 {% endif %}{# rrelated or object.is_group #}
 {% endif %}{# may_add_rrelated #}
 
 {% if tags %}
-<h3>Stempels</h3>
+<h3>{% trans "Stempels" %}</h3>
 <ul>
 {% for t in tags %}
-<li><a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a></li>
+<li>
+    <a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a>
+    {% if may_untag %}
+    <form action="{% url "untag" %}"
+            method="post"
+            {# TODO translate #}
+            onsubmit="return confirm('Weet je zeker dat je de stempel \
+            {{ t.humanName }} wilt verwijderen \
+            {{ object.humanName.genitive }}?');">
+
+    {% csrf_token %}
+    <input type="hidden" name="group" value="{{ object.id }}" />
+    <input type="hidden" name="tag" value="{{ t.id }}" />
+    <input type="submit" value="{% trans "verwijder" %}" />
+    </form>
+    {% endif %}{# may_untag #}
+</li>
 {% endfor %}
 </ul>
 {% endif %}
 
+{% if may_tag %}
+{% if object.is_group %}
+<form action="{% url "tag" %}" method="post"
+        {# TODO translate #}
+        onsubmit="return confirm('Weet je zeker dat je de stempel '+
+        entityChoiceField_get('group_tag') +
+        ' wilt toevoegen aan {{ object.humanName }}?');">
+        {% csrf_token %}
+        <input type="hidden" name="group" value="{{ object.id }}" />
+        {% trans "Voeg de stempel" %}
+        <input type="hidden" name="tag" id="group_tag" />
+        {% trans "toe" %}
+        <input type="submit" value="{% trans "verstuur" %}" />
+</form>{# tag #}
+{% endif %}{# object.is_group #}
+{% endif %}{# may_tag #}
+
 {% if tag_bearers %}
-<h3>Dragers van deze stempel</h3>
+<h3>{% trans "Dragers van deze stempel" %}</h3>
 <ul>
 {% for t in tag_bearers %}
 <li><a href="{{ t.get_absolute_url }}">{{ t.humanName }}</a></li>
@@ -141,7 +241,7 @@ lid
 {% endif %}
 
 {% if "secretariaat" in user.cached_groups_names %}
-<h3>Notities</h3>
+<h3>{% trans "Notities" %}</h3>
 <ul>
 {% for n in object.get_notes %}
 <li>{{ n.at.date }}
@@ -150,7 +250,7 @@ lid
 {% endif %}{# n.by #}
 <blockquote>{{ n.note }}</blockquote>
 {% if n.open %}
-<button onclick="$.post('{% url leden-api %}', {
+<button onclick="$.post('{% url "leden-api" %}', {
                         'csrfmiddlewaretoken': csrf_token,
                         data: JSON.stringify({
                                 action: 'close_note',
@@ -160,21 +260,23 @@ lid
                                         window.location.reload();
                                 else
                                         alert(data.error);
-                        }); return false;">Sluit</button>
+                        }); return false;">{% trans "Sluit" %}</button>
 {% else %}{# n.open #}
-<small>Gesloten door {{ n.closed_by.humanName }}
-                op {{ n.closed_at.date }}</small>
+<small>{% trans "Gesloten door" %} {{ n.closed_by.humanName }}
+    {% trans "op" %} {{ n.closed_at.date }}</small>
 {% endif %}{# n.open #}
 </li>
 {% endfor %}{# n in object.get_notes #}
 </ul>
-<form method="post" action="{% url add-note %}">
+<form method="post" action="{% url "add-note" %}">
 {% csrf_token %}
 <input type="hidden" name="on" value="{{ object.id }}" />
 <textarea name="note">
 </textarea><br/>
-<input type="submit" value="Voeg notitie toe" />
+<input type="submit" value="{% trans "Voeg notitie toe" %}" />
 </form>
 {% endif %}{# "secretariaat" in user.cached_groups_names #}
+
+{% endblock entity_related %}
 
 {% endblock %}

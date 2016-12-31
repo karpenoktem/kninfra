@@ -1,5 +1,7 @@
 {% extends "leden/base.html" %}
+
 {% load base %}
+{% load i18n %}
 
 {% block styles %}
 {{ block.super }}
@@ -31,10 +33,16 @@
         <tr>
             {# TODO move into stylesheet #}
             <td
-                colspan="{{ poolcount }}"
+                colspan="{{ pools|length }}"
                 class="poolHeader">
-                <strong>{{ event.datetime|date:"l j F Y" }}</strong>
-                 - {{ event.name }}
+                {% if may_manage_planning %}
+                <a href="{% url "planning-event-edit" eventid=event.id %}">
+                    <strong>{{ event.datetime|date:"l j F Y" }}</strong>
+                    - {{ event.name }}</a>
+                {% else %}
+                    <strong>{{ event.datetime|date:"l j F Y" }}</strong>
+                    - {{ event.name }}
+                {% endif %}
             </td>
         </tr>
         <tr>
