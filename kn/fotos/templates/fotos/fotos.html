@@ -21,6 +21,7 @@ var fotos_admin = {{ fotos_admin|yesno:"true,false" }};
 var fotos_people = {{ people|json }};
 {% endif %}
 var fotos_root = "{% url "fotos" '' %}";
+var fotos_cache_root = "{% url "fotos-cache" cache="cachetype" path="" %}";
 var fotos_api_url = "{% url "fotos-api" %}";
 // Initialize Lazy Load XT
 $.extend($.lazyLoadXT, {

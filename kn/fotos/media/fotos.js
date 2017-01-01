@@ -41,7 +41,7 @@
   };
 
   Foto.prototype.cache_url = function(cache, path) {
-    return "/foto/" + cache + "/" + encodePath(path);
+    return fotos_cache_root.replace('cachetype', cache) + encodePath(path);
   };
 
   Foto.prototype.anchor = function() {
