@@ -5,6 +5,7 @@ import os
 from django.core.servers.basehttp import FileWrapper
 from django.utils.translation import ugettext as _
 from django.http import Http404, HttpResponse
+from django.shortcuts import redirect
 
 def direct_to_folder(request, root, subdir):
     root = os.path.abspath(root)
@@ -19,5 +20,14 @@ def direct_to_folder(request, root, subdir):
         raise Http404
     return HttpResponse(FileWrapper(open(p)),
             content_type=mimetypes.guess_type(p)[0])
+
+def langpicker(request):
+    language, url = request.POST['language-url'].split(':', 2)
+    if hasattr(request, 'session'):
+        request.session['_language'] = language
+        if (hasattr(request, 'user') and request.user.is_authenticated()
+                and language != request.user.preferred_language):
+            request.user.set_preferred_language(language)
+    return redirect(url)
 
 # vim: et:sta:bs=2:sw=4:
