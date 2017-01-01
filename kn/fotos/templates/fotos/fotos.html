@@ -98,15 +98,12 @@ dit album zien.{% endblocktrans %}</p>
   <div class="sidebar">
     <form>
 {% if fotos_admin %}
-      <input type="text" class="title" name="title" title="{% trans "Titel" %}"
-        oninput="$('#foto .save').prop('disabled', false)">
+      <input type="text" class="title" name="title" title="{% trans "Titel" %}">
       <textarea class="description" name="description"
         placeholder="{% trans "Beschrijving..." %}"
-        title="{% trans "Beschrijving..." %}"
-        oninput="$('#foto .save').prop('disabled', false)"></textarea>
+        title="{% trans "Beschrijving..." %}"></textarea>
       <div class="row">
-        <select class="visibility" title="{% trans "Zichtbaarheid" %}"
-          onchange="$('#foto .save').prop('disabled', false)">
+        <select class="visibility" title="{% trans "Zichtbaarheid" %}">
           <option value="world">{% trans "Publiek" %}</option>
           <option value="leden">{% trans "Alleen leden" %}</option>
           <option value="hidden">{% trans "Fototaggers" %}</option>
