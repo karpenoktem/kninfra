@@ -433,7 +433,6 @@
           } else {
             this.open_sidebar();
           }
-          console.log(this.sidebar);
           return false;
         }.bind(this));
     if (foto.description)
