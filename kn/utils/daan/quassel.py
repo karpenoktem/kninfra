@@ -8,6 +8,9 @@ from kn.base._random import pseudo_randstr
 
 
 def quassel_setpass(daan, user, password):
+    if settings.QUASSEL_CONFIGDIR is None:
+        logging.warning('no QUASSEL_CONFIGDIR available, skipping')
+        return
     db_path = os.path.join(settings.QUASSEL_CONFIGDIR, 'quassel-storage.sqlite')
     conn = sqlite3.connect(db_path)
     hashed_pw = hashlib.sha1(password).hexdigest()
@@ -21,6 +24,9 @@ def quassel_setpass(daan, user, password):
 
 def apply_quassel_changes(daan, changes):
     if not changes:
+        return
+    if settings.QUASSEL_CONFIGDIR is None:
+        logging.warning('no QUASSEL_CONFIGDIR available, skipping')
         return
     db_path = os.path.join(settings.QUASSEL_CONFIGDIR, 'quassel-storage.sqlite')
     conn = sqlite3.connect(db_path)
