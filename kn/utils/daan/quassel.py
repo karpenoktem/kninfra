@@ -27,7 +27,7 @@ def apply_quassel_changes(daan, changes):
     c = conn.cursor()
     for user in changes['remove']:
         logging.info('quassel: removing %s', user)
-        c.execute("SELECT userid FORM quasseluser WHERE username=?", (user,))
+        c.execute("SELECT userid FROM quasseluser WHERE username=?", (user,))
         userid, = c.fetchone()
         c.execute("DELETE FROM quasseluser WHERE username=?", (user,))
         c.execute("DELETE FROM identity WHERE userid=?", (userid,))
