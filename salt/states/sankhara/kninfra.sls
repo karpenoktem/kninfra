@@ -20,6 +20,7 @@ kninfra packages:
             - python-pyx
             - python-unidecode
             - gettext
+            - imagemagick
 mirte:
     pip.installed
 sarah:
