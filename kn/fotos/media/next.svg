@@ -4,7 +4,8 @@
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
    width="32"
-   height="32">
+   height="32"
+   viewBox="0 0 32 32">
   <path
      d="m 7.5,0 7,0 11,16 -11,16 -7,0 11,-16 z"
      style="fill:#fff;stroke-width:0"/>
