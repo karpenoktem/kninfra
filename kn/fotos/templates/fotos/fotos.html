@@ -89,53 +89,53 @@ dit album zien.{% endblocktrans %}</p>
 {% endif %}
 <div id="foto"></div>
 <div class="template foto-frame">
-  <div class="header">
-    <a class="prev">{% trans "vorige" %}</a>
-    <span class="title"></span>
-    <a class="next">{% trans "volgende" %}</a>
-  </div>
-  <div class="middle">
-    {% spaceless %}
+  <div class="image-wrapper">
     <img class="img"/>
-    <div class="sidebar">
-    {% endspaceless %}
-      <form>
-{% if fotos_admin %}
-<input type="text" class="row title" name="title" title="{% trans "Titel" %}"/>
-        <input type="text" class="row description" name="description"
-           placeholder="{% trans "Beschrijving..." %}"
-           title="{% trans "Beschrijving" %}"/>
-        <div class="row">
-            <select class="visibility" title="{% trans "Zichtbaarheid" %}">
-            <option value="world">{% trans "Publiek" %}</option>
-            <option value="leden">{% trans "Alleen leden" %}</option>
-            <option value="hidden">{% trans "Fototaggers" %}</option>
-          </select>
-          <button class="remove">{% trans "Verwijder" %}</button>
-        </div>
-        <div class="rotation">
-          <a class="rotate-left" href>
-            <img src="{{ MEDIA_URL }}fotos/rotate-left.svg" width="24" height="24"/>
-          </a>
-          <a class="rotate-right" href>
-            <img src="{{ MEDIA_URL }}fotos/rotate-right.svg" width="24" height="24"/>
-          </a>
-        </div>
-{% endif %}
-    {% trans "Tags:" %}
-        <ul class="tags">
-        </ul>
-{% if fotos_admin %}
-<input type="submit" class="hidden-submit" value="{% trans "Opslaan" %}" tabindex="-1"/>
-        <span class="status">&nbsp;</span>
-{% endif %}
-      </form>
-    </div>
+    <a class="nav prev"><img src="{{ MEDIA_URL }}fotos/prev.svg" alt="{% trans "Vorige" %}" title="{% trans "Vorige" %}"/></a>
+    <a class="nav next"><img src="{{ MEDIA_URL }}fotos/next.svg" alt="{% trans "Volgende" %}" title="{% trans "Volgende" %}"/></a>
   </div>
-  <div class="footer">
-    <p class="description"></p>
-    <a class="open-sidebar" href>{% trans "tags" %}</a> ·
-    <a class="orig">{% trans "origineel" %}</a>
+  <a class="nav close" href><img src="{{ MEDIA_URL }}fotos/close.svg" alt="{% trans "Sluiten" %}" title="{% trans "Sluiten" %}"/></a>
+  <a class="nav open-sidebar" href><img src="{{ MEDIA_URL }}fotos/sidebar.svg" alt="{% trans "Tags" %}" title="{% trans "Tags" %}"/></a>
+  <div class="sidebar">
+    <form>
+{% if fotos_admin %}
+      <input type="text" class="title" name="title" title="{% trans "Titel" %}">
+      <textarea class="description" name="description"
+        placeholder="{% trans "Beschrijving..." %}"
+        title="{% trans "Beschrijving" %}"></textarea>
+      <div class="row">
+        <select class="visibility" title="{% trans "Zichtbaarheid" %}">
+          <option value="world">{% trans "Publiek" %}</option>
+          <option value="leden">{% trans "Alleen leden" %}</option>
+          <option value="hidden">{% trans "Fototaggers" %}</option>
+        </select>
+        <button class="remove">{% trans "Verwijder" %}</button>
+      </div>
+      <div class="rotation">
+        <a class="rotate-left" href>
+          <img src="{{ MEDIA_URL }}fotos/rotate-left.svg" width="24" height="24"/>
+        </a>
+        <a class="rotate-right" href>
+          <img src="{{ MEDIA_URL }}fotos/rotate-right.svg" width="24" height="24"/>
+        </a>
+      </div>
+{% else %}
+      <h2 class="title"></h2>
+      <p class="description"></p>
+{% endif %}
+      {% trans "Tags:" %}
+      <ul class="tags">
+      </ul>
+{% if fotos_admin %}
+      <div class="save-wrapper">
+        <input type="submit" class="hidden-submit" tabindex="-1"/>
+        <span class="status">&nbsp;</span>
+      </div>
+{% endif %}
+    </form>
+    <div class="footer">
+      <a class="orig">{% trans "origineel" %}</a>
+    </div>
   </div>
 </div>
 {% endblock body %}

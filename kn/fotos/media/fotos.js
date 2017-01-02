@@ -58,15 +58,16 @@
     this.search_query = '';
     this.search_timeout = null;
     this.search_results = null;
-    this.path = null;
-    this.foto = null;
     this.sidebar = false;
     this.saving_status = 0; /* enum: none, saved, saving, saving+queue */
+    this.path = null;
+    this.foto = null;
     this.fotos = {};
     this.parents = {};
     this.people = {};
     this.allpeople = [];
     this.read_fotos(this.get_url_path(), data);
+    this.nav_timeout = null;
   };
 
   KNF.prototype.change_path = function(path, query, keep_url) {
@@ -420,23 +421,25 @@
           .attr('href', '#'+encodePath(foto.next.anchor()));
     $('.orig', frame)
         .attr('href', foto.full);
+    $('.close', frame)
+        .click(function() {
+          this.change_foto(null);
+          return false;
+        }.bind(this));
+    $('.open-sidebar', frame)
+        .click(function() {
+          if (this.sidebar) {
+            this.close_sidebar();
+          } else {
+            this.open_sidebar();
+          }
+          return false;
+        }.bind(this));
     if (foto.description)
       $('.description', frame).text(foto.description);
 
     $('.img', frame).on('load', this.onresize.bind(this));
     this.update_foto_src(foto);
-    this.onresize();
-    if (this.sidebar) {
-      this.show_sidebar();
-    }
-    $('a.open-sidebar').click(function() {
-      if (this.sidebar) {
-        this.hide_sidebar();
-      } else {
-        this.show_sidebar();
-      }
-      return false;
-    }.bind(this));
 
     // Define these events here, not in show_sidebar, otherwise they fire twice.
     var sidebar = $('#foto .sidebar');
@@ -451,7 +454,7 @@
           this.save_metadata();
           return false;
         }.bind(this));
-    $('input.description', sidebar)
+    $('textarea.description', sidebar)
         .blur(function(e) {
           if (this.foto.description === e.target.value) return;
           this.save_metadata();
@@ -480,24 +483,13 @@
         }.bind(this));
 
     $('#foto').show();
-  };
-
-  KNF.prototype.update_foto_src = function (foto) {
-    var srcset = foto.large + " 1x, " +
-                 foto.large2x + " 2x";
-    $('#foto .img')
-        .attr('srcset', srcset)
-        .attr('src', foto.large);
-  };
-
-  KNF.prototype.show_sidebar = function() {
-    this.sidebar = true;
-    $('html').addClass('foto-sidebar');
 
     var sidebar = $('#foto .sidebar');
-    $('.title', sidebar)
+    $('input.title', sidebar)
         .val(this.foto.title)
         .attr('placeholder', this.foto.name);
+    $('h2.title', sidebar)
+        .text(this.foto.title || this.foto.name);
     if (this.foto.description)
       $('.description', sidebar)
           .val(this.foto.description);
@@ -506,7 +498,30 @@
 
     this.update_foto_tags(sidebar);
 
+    function showhide() {
+      if (this.nav_timeout === null) {
+        $('#foto').addClass('show-nav');
+      } else {
+        clearTimeout(this.nav_timeout);
+      }
+      this.nav_timeout = setTimeout(function() {
+        this.nav_timeout = null;
+        $('#foto').removeClass('show-nav');
+      }.bind(this), 1500);
+    }
+    frame.mousemove(showhide.bind(this));
+    frame.on('touchstart', showhide.bind(this));
+
     this.onresize();
+    $('#foto').show();
+  };
+
+  KNF.prototype.update_foto_src = function (foto) {
+    var srcset = foto.large + " 1x, " +
+                 foto.large2x + " 2x";
+    $('#foto .img')
+        .attr('srcset', srcset)
+        .attr('src', foto.large);
   };
 
   KNF.prototype.update_foto_tags = function(sidebar) {
@@ -604,9 +619,15 @@
     }
   };
 
-  KNF.prototype.hide_sidebar = function() {
+  KNF.prototype.open_sidebar = function() {
+    this.sidebar = true;
+    $('#foto').addClass('sidebar');
+    this.onresize();
+  };
+
+  KNF.prototype.close_sidebar = function() {
     this.sidebar = false;
-    $('html').removeClass('foto-sidebar');
+    $('#foto').removeClass('sidebar');
     this.onresize();
   };
 
@@ -717,7 +738,7 @@
           this.refresh_fotos();
         }
 
-        if (this.sidebar && foto === this.foto) {
+        if (foto === this.foto) {
           var frame = $('#foto .foto-frame');
           $('.title', frame)
               .text(foto.title ? foto.title : foto.name);
@@ -737,16 +758,8 @@
     var maxWidth  = window.innerWidth;
     var maxHeight = window.innerHeight;
     // Keep up to date with stylesheet!
-    if (maxWidth > 500) {
-      maxWidth -= 10*2;
-    }
-    if (maxHeight > 800) {
-      maxHeight -= 10*2 + 40*2 + (15+(6*2))*2;
-    } else {
-      maxHeight -= 5*2 + (15+(6*2))*2;
-    }
-    if (this.sidebar) {
-      maxWidth -= 200;
+    if (window.innerWidth > 700 && this.sidebar) {
+      maxWidth -= 220;
     }
     if (width > maxWidth) {
       height *= maxWidth/width;
