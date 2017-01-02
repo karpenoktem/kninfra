@@ -885,8 +885,16 @@
     $(document).keydown(function(e) {
       if (!this.foto)
         return;
-      if (e.target.nodeName === 'INPUT')
-        return;
+      if (e.target.nodeName === 'INPUT') {
+        if (e.which == 27) { // Escape
+          e.target.blur();
+          return false;
+        }
+        if (e.target.value !== '') {
+          // Don't handle keys when editing a textbox.
+          return;
+        }
+      }
       // Escape
       if (e.which == 27) {
         this.change_foto(null);
@@ -910,6 +918,12 @@
       // ]
       if (e.which == 221) {
         this.rotate(90);
+        return false;
+      }
+      // T (add tag)
+      if (e.which == 84 && fotos_admin) {
+        this.open_sidebar();
+        $('#foto .tags input').focus();
         return false;
       }
     }.bind(this));
