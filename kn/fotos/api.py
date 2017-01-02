@@ -56,6 +56,7 @@ def entities_json(children, user):
             entry['description'] = child.description;
         if child._type == 'foto':
             entry['largeSize'] = child.get_cache_size('large')
+            entry['large2xSize'] = child.get_cache_size('large2x')
             entry['thumbnailSize'] = child.get_cache_size('thumb')
         elif child._type == 'album':
             album_foto = child.get_random_foto_for(user)

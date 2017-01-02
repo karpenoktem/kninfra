@@ -140,7 +140,8 @@ img.lazy {
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: -80px; /* fix ugly border on rounding errors and while resizing */
+    padding-bottom: 80px;
     line-height: 1;
     font-family: sans-serif;
     font-size: 15px;
@@ -409,12 +410,6 @@ img.lazy {
 
 #foto .status {
     color: #aaa;
-}
-
-@media (max-height: 800px) {
-    #foto {
-        padding: 0;
-    }
 }
 
 .noscroll {

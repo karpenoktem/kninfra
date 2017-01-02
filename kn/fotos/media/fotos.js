@@ -400,6 +400,9 @@
       delete this.foto.newTags;
     }
     foto = foto || null;
+    if (foto && foto.type != 'foto') {
+      foto = null;
+    }
     this.foto = foto;
     if (!foto) {
       this.apply_url(false);
@@ -440,6 +443,10 @@
 
     $('.img', frame).on('load', this.onresize.bind(this));
     this.update_foto_src(foto);
+    if (foto.next) {
+      $('.prefetch-image', frame)
+        .attr('href', this.chooseFoto(foto.next).src);
+    }
 
     // Define these events here, not in show_sidebar, otherwise they fire twice.
     var sidebar = $('#foto .sidebar');
@@ -517,11 +524,9 @@
   };
 
   KNF.prototype.update_foto_src = function (foto) {
-    var srcset = foto.large + " 1x, " +
-                 foto.large2x + " 2x";
+    var props = this.chooseFoto(this.foto);
     $('#foto .img')
-        .attr('srcset', srcset)
-        .attr('src', foto.large);
+        .attr('src', props.src);
   };
 
   KNF.prototype.update_foto_tags = function(sidebar) {
@@ -557,7 +562,7 @@
           .appendTo(li);
       }
     }
-    if (newTags.length == 0) {
+    if (newTags.length == 0 && !fotos_admin) {
       tagList.html('<li><i>Geen tags</i></li>');
     }
     if (fotos_admin) {
@@ -748,30 +753,68 @@
       }.bind(this));
   };
 
+  KNF.prototype.updateMaxSize = function() {
+    var wrapper = $('#foto .image-wrapper');
+    // The maxWidth/maxHeight property may be 0 when the frame isn't yet
+    // visible.
+    // window.outer* vars are a fallback (and the width is wrong when the
+    // sidebar is visible on desktop), so only useful as a 'better than
+    // nothing' value.
+    this.maxWidth = wrapper.prop('clientWidth') || this.maxWidth
+      || document.documentElement.clientWidth;
+    this.maxHeight = wrapper.prop('clientHeight') || this.maxHeight
+      || document.documentElement.clientHeight;
+  };
+
+  KNF.prototype.chooseFoto = function(foto) {
+    var devicePixelRatio = 1.0;
+    if ('devicePixelRatio' in window) {
+      devicePixelRatio = window.devicePixelRatio;
+    }
+
+    this.updateMaxSize();
+
+    var src = foto.large;
+    var width = foto.largeSize[0];
+    var height = foto.largeSize[1];
+    if (width < this.maxWidth * devicePixelRatio &&
+        height < this.maxHeight * devicePixelRatio) {
+      if (foto.largeSize[0] != foto.large2xSize[0] ||
+          foto.largeSize[1] != foto.large2xSize[1]) {
+        src = foto.large2x;
+        width = foto.large2xSize[0];
+        height = foto.large2xSize[1];
+      }
+    }
+
+    if (width > this.maxWidth) {
+      height *= this.maxWidth/width;
+      width  *= this.maxWidth/width;
+    }
+    if (height > this.maxHeight) {
+      width  *= this.maxHeight/height;
+      height *= this.maxHeight/height;
+    }
+
+    return {
+      src: src,
+      width: width,
+      height: height,
+    };
+  };
 
   KNF.prototype.onresize = function() {
     if (this.foto === null) return;
 
-    var width = this.foto.largeSize[0];
-    var height = this.foto.largeSize[1];
+    var props = this.chooseFoto(this.foto);
 
-    var maxWidth  = window.innerWidth;
-    var maxHeight = window.innerHeight;
-    // Keep up to date with stylesheet!
-    if (window.innerWidth > 700 && this.sidebar) {
-      maxWidth -= 220;
+    var img = $('#foto .img');
+    img.css({'width': props.width,
+             'height': props.height});
+    if (props.src == this.foto.large2x &&
+        img.attr('src') != this.foto.large2x) {
+      img.attr('src', props.src);
     }
-    if (width > maxWidth) {
-      height *= maxWidth/width;
-      width  *= maxWidth/width;
-    }
-    if (height > maxHeight) {
-      width  *= maxHeight/height;
-      height *= maxHeight/height;
-    }
-    $('#foto .img')
-        .css({'width': width,
-              'height': height});
   };
 
   KNF.prototype.onedit = function(e) {
@@ -842,8 +885,16 @@
     $(document).keydown(function(e) {
       if (!this.foto)
         return;
-      if (e.target.nodeName === 'INPUT')
-        return;
+      if (e.target.nodeName === 'INPUT') {
+        if (e.which == 27) { // Escape
+          e.target.blur();
+          return false;
+        }
+        if (e.target.value !== '') {
+          // Don't handle keys when editing a textbox.
+          return;
+        }
+      }
       // Escape
       if (e.which == 27) {
         this.change_foto(null);
@@ -867,6 +918,12 @@
       // ]
       if (e.which == 221) {
         this.rotate(90);
+        return false;
+      }
+      // T (add tag)
+      if (e.which == 84 && fotos_admin) {
+        this.open_sidebar();
+        $('#foto .tags input').focus();
         return false;
       }
     }.bind(this));
