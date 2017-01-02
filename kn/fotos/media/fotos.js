@@ -562,7 +562,7 @@
           .appendTo(li);
       }
     }
-    if (newTags.length == 0) {
+    if (newTags.length == 0 && !fotos_admin) {
       tagList.html('<li><i>Geen tags</i></li>');
     }
     if (fotos_admin) {
