@@ -517,11 +517,9 @@
   };
 
   KNF.prototype.update_foto_src = function (foto) {
-    var srcset = foto.large + " 1x, " +
-                 foto.large2x + " 2x";
+    var props = this.chooseFoto(this.foto);
     $('#foto .img')
-        .attr('srcset', srcset)
-        .attr('src', foto.large);
+        .attr('src', props.src);
   };
 
   KNF.prototype.update_foto_tags = function(sidebar) {
@@ -748,30 +746,68 @@
       }.bind(this));
   };
 
+  KNF.prototype.updateMaxSize = function() {
+    var wrapper = $('#foto .image-wrapper');
+    // The maxWidth/maxHeight property may be 0 when the frame isn't yet
+    // visible.
+    // window.outer* vars are a fallback (and the width is wrong when the
+    // sidebar is visible on desktop), so only useful as a 'better than
+    // nothing' value.
+    this.maxWidth = wrapper.prop('clientWidth') || this.maxWidth
+      || document.documentElement.clientWidth;
+    this.maxHeight = wrapper.prop('clientHeight') || this.maxHeight
+      || document.documentElement.clientHeight;
+  };
+
+  KNF.prototype.chooseFoto = function(foto) {
+    var devicePixelRatio = 1.0;
+    if ('devicePixelRatio' in window) {
+      devicePixelRatio = window.devicePixelRatio;
+    }
+
+    this.updateMaxSize();
+
+    var src = foto.large;
+    var width = foto.largeSize[0];
+    var height = foto.largeSize[1];
+    if (width < this.maxWidth * devicePixelRatio &&
+        height < this.maxHeight * devicePixelRatio) {
+      if (foto.largeSize[0] != foto.large2xSize[0] ||
+          foto.largeSize[1] != foto.large2xSize[1]) {
+        src = foto.large2x;
+        width = foto.large2xSize[0];
+        height = foto.large2xSize[1];
+      }
+    }
+
+    if (width > this.maxWidth) {
+      height *= this.maxWidth/width;
+      width  *= this.maxWidth/width;
+    }
+    if (height > this.maxHeight) {
+      width  *= this.maxHeight/height;
+      height *= this.maxHeight/height;
+    }
+
+    return {
+      src: src,
+      width: width,
+      height: height,
+    };
+  };
 
   KNF.prototype.onresize = function() {
     if (this.foto === null) return;
 
-    var width = this.foto.largeSize[0];
-    var height = this.foto.largeSize[1];
+    var props = this.chooseFoto(this.foto);
 
-    var maxWidth  = window.innerWidth;
-    var maxHeight = window.innerHeight;
-    // Keep up to date with stylesheet!
-    if (window.innerWidth > 700 && this.sidebar) {
-      maxWidth -= 220;
+    var img = $('#foto .img');
+    img.css({'width': props.width,
+             'height': props.height});
+    if (props.src == this.foto.large2x &&
+        img.attr('src') != this.foto.large2x) {
+      img.attr('src', props.src);
     }
-    if (width > maxWidth) {
-      height *= maxWidth/width;
-      width  *= maxWidth/width;
-    }
-    if (height > maxHeight) {
-      width  *= maxHeight/height;
-      height *= maxHeight/height;
-    }
-    $('#foto .img')
-        .css({'width': width,
-              'height': height});
   };
 
   KNF.prototype.onedit = function(e) {
