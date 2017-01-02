@@ -443,6 +443,10 @@
 
     $('.img', frame).on('load', this.onresize.bind(this));
     this.update_foto_src(foto);
+    if (foto.next) {
+      $('.prefetch-image', frame)
+        .attr('href', this.chooseFoto(foto.next).src);
+    }
 
     // Define these events here, not in show_sidebar, otherwise they fire twice.
     var sidebar = $('#foto .sidebar');
