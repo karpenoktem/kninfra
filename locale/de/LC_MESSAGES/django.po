@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-26 05:12+0200\n"
+"POT-Creation-Date: 2017-01-02 14:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,7 +120,6 @@ msgid "Tellers"
 msgstr ""
 
 #: kn/barco/templates/barco/form.html:162
-#: kn/fotos/templates/fotos/fotos.html:128
 msgid "Opslaan"
 msgstr ""
 
@@ -322,17 +321,17 @@ msgid "Bewerk naam en zichtbaarheid"
 msgstr ""
 
 #: kn/fotos/templates/fotos/fotos.html:63
-#: kn/fotos/templates/fotos/fotos.html:109
+#: kn/fotos/templates/fotos/fotos.html:107
 msgid "Publiek"
 msgstr ""
 
 #: kn/fotos/templates/fotos/fotos.html:64
-#: kn/fotos/templates/fotos/fotos.html:110
+#: kn/fotos/templates/fotos/fotos.html:108
 msgid "Alleen leden"
 msgstr ""
 
 #: kn/fotos/templates/fotos/fotos.html:65
-#: kn/fotos/templates/fotos/fotos.html:111
+#: kn/fotos/templates/fotos/fotos.html:109
 msgid "Fototaggers"
 msgstr ""
 
@@ -357,45 +356,47 @@ msgid ""
 "dit album zien."
 msgstr ""
 
-#: kn/fotos/templates/fotos/fotos.html:92
-#: kn/leden/templates/leden/user_list.html:12
-msgid "vorige"
+#: kn/fotos/templates/fotos/fotos.html:93
+msgid "Vorige"
 msgstr ""
 
 #: kn/fotos/templates/fotos/fotos.html:94
-#: kn/leden/templates/leden/user_list.html:16
-msgid "volgende"
+msgid "Volgende"
 msgstr ""
 
-#: kn/fotos/templates/fotos/fotos.html:103
+#: kn/fotos/templates/fotos/fotos.html:96
+msgid "Sluiten"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:97
+msgid "Tags"
+msgstr ""
+
+#: kn/fotos/templates/fotos/fotos.html:101
 msgid "Titel"
 msgstr ""
 
-#: kn/fotos/templates/fotos/fotos.html:105
+#: kn/fotos/templates/fotos/fotos.html:103
 msgid "Beschrijving..."
 msgstr ""
 
-#: kn/fotos/templates/fotos/fotos.html:106 kn/subscriptions/forms.py:37
+#: kn/fotos/templates/fotos/fotos.html:104 kn/subscriptions/forms.py:37
 msgid "Beschrijving"
 msgstr ""
 
-#: kn/fotos/templates/fotos/fotos.html:108
+#: kn/fotos/templates/fotos/fotos.html:106
 msgid "Zichtbaarheid"
 msgstr ""
 
-#: kn/fotos/templates/fotos/fotos.html:113
+#: kn/fotos/templates/fotos/fotos.html:111
 msgid "Verwijder"
 msgstr ""
 
-#: kn/fotos/templates/fotos/fotos.html:124
+#: kn/fotos/templates/fotos/fotos.html:125
 msgid "Tags:"
 msgstr ""
 
 #: kn/fotos/templates/fotos/fotos.html:136
-msgid "tags"
-msgstr ""
-
-#: kn/fotos/templates/fotos/fotos.html:137
 msgid "origineel"
 msgstr ""
 
@@ -1377,12 +1378,20 @@ msgstr ""
 msgid "Gebruikers"
 msgstr ""
 
+#: kn/leden/templates/leden/user_list.html:12
+msgid "vorige"
+msgstr ""
+
 #: kn/leden/templates/leden/user_list.html:14
 msgid "pagina"
 msgstr ""
 
 #: kn/leden/templates/leden/user_list.html:14
 msgid "van de"
+msgstr ""
+
+#: kn/leden/templates/leden/user_list.html:16
+msgid "volgende"
 msgstr ""
 
 #: kn/leden/templates/leden/welcome.mail.txt:4

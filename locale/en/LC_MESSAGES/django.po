@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-26 05:12+0200\n"
+"POT-Creation-Date: 2017-01-02 14:49+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -118,7 +118,6 @@ msgid "Tellers"
 msgstr "Counters"
 
 #: kn/barco/templates/barco/form.html:162
-#: kn/fotos/templates/fotos/fotos.html:128
 msgid "Opslaan"
 msgstr "Save"
 
@@ -331,17 +330,17 @@ msgid "Bewerk naam en zichtbaarheid"
 msgstr "Edit name and visibility"
 
 #: kn/fotos/templates/fotos/fotos.html:63
-#: kn/fotos/templates/fotos/fotos.html:109
+#: kn/fotos/templates/fotos/fotos.html:107
 msgid "Publiek"
 msgstr "Public"
 
 #: kn/fotos/templates/fotos/fotos.html:64
-#: kn/fotos/templates/fotos/fotos.html:110
+#: kn/fotos/templates/fotos/fotos.html:108
 msgid "Alleen leden"
 msgstr "Members-only"
 
 #: kn/fotos/templates/fotos/fotos.html:65
-#: kn/fotos/templates/fotos/fotos.html:111
+#: kn/fotos/templates/fotos/fotos.html:109
 msgid "Fototaggers"
 msgstr "Phototaggers"
 
@@ -366,45 +365,47 @@ msgid ""
 "dit album zien."
 msgstr ""
 
-#: kn/fotos/templates/fotos/fotos.html:92
-#: kn/leden/templates/leden/user_list.html:12
-msgid "vorige"
-msgstr "previous"
+#: kn/fotos/templates/fotos/fotos.html:93
+msgid "Vorige"
+msgstr "Previous"
 
 #: kn/fotos/templates/fotos/fotos.html:94
-#: kn/leden/templates/leden/user_list.html:16
-msgid "volgende"
-msgstr "next"
+msgid "Volgende"
+msgstr "Next"
 
-#: kn/fotos/templates/fotos/fotos.html:103
+#: kn/fotos/templates/fotos/fotos.html:96
+msgid "Sluiten"
+msgstr "Close"
+
+#: kn/fotos/templates/fotos/fotos.html:97
+msgid "Tags"
+msgstr "Tags"
+
+#: kn/fotos/templates/fotos/fotos.html:101
 msgid "Titel"
 msgstr "Title"
 
-#: kn/fotos/templates/fotos/fotos.html:105
+#: kn/fotos/templates/fotos/fotos.html:103
 msgid "Beschrijving..."
 msgstr "Description..."
 
-#: kn/fotos/templates/fotos/fotos.html:106 kn/subscriptions/forms.py:37
+#: kn/fotos/templates/fotos/fotos.html:104 kn/subscriptions/forms.py:37
 msgid "Beschrijving"
 msgstr "Description"
 
-#: kn/fotos/templates/fotos/fotos.html:108
+#: kn/fotos/templates/fotos/fotos.html:106
 msgid "Zichtbaarheid"
 msgstr "Visibility"
 
-#: kn/fotos/templates/fotos/fotos.html:113
+#: kn/fotos/templates/fotos/fotos.html:111
 msgid "Verwijder"
 msgstr "Delete"
 
-#: kn/fotos/templates/fotos/fotos.html:124
+#: kn/fotos/templates/fotos/fotos.html:125
 msgid "Tags:"
 msgstr "Tags:"
 
 #: kn/fotos/templates/fotos/fotos.html:136
-msgid "tags"
-msgstr "tags"
-
-#: kn/fotos/templates/fotos/fotos.html:137
 msgid "origineel"
 msgstr "original"
 
@@ -1432,6 +1433,10 @@ msgstr "Member since"
 msgid "Gebruikers"
 msgstr "Users"
 
+#: kn/leden/templates/leden/user_list.html:12
+msgid "vorige"
+msgstr "previous"
+
 #: kn/leden/templates/leden/user_list.html:14
 msgid "pagina"
 msgstr "page"
@@ -1439,6 +1444,10 @@ msgstr "page"
 #: kn/leden/templates/leden/user_list.html:14
 msgid "van de"
 msgstr "of the"
+
+#: kn/leden/templates/leden/user_list.html:16
+msgid "volgende"
+msgstr "next"
 
 #: kn/leden/templates/leden/welcome.mail.txt:4
 msgid ""
@@ -4136,3 +4145,6 @@ msgstr "^planning/"
 #: kn/urls.py:32
 msgid "^barco/"
 msgstr "^barco/"
+
+#~ msgid "tags"
+#~ msgstr "tags"
