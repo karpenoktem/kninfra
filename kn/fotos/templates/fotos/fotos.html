@@ -90,18 +90,18 @@ dit album zien.{% endblocktrans %}</p>
 <div class="template foto-frame">
   <div class="image-wrapper">
     <img class="img"/>
-    <a class="nav prev"><img src="{{ MEDIA_URL }}/fotos/prev.svg" alt="{% trans "vorige" %}" title="{% trans "vorige" %}"/></a>
-    <a class="nav next"><img src="{{ MEDIA_URL }}/fotos/next.svg" alt="{% trans "volgende" %}" title="{% trans "volgende" %}"/></a>
+    <a class="nav prev"><img src="{{ MEDIA_URL }}/fotos/prev.svg" alt="{% trans "Vorige" %}" title="{% trans "Vorige" %}"/></a>
+    <a class="nav next"><img src="{{ MEDIA_URL }}/fotos/next.svg" alt="{% trans "Volgende" %}" title="{% trans "Volgende" %}"/></a>
   </div>
-  <a class="nav close" href><img src="{{ MEDIA_URL }}/fotos/close.svg" alt="Sluiten" title="Sluiten"/></a>
-  <a class="nav open-sidebar" href><img src="{{ MEDIA_URL }}/fotos/sidebar.svg" alt="Tags" title="Tags"/></a>
+  <a class="nav close" href><img src="{{ MEDIA_URL }}/fotos/close.svg" alt="{% trans "Sluiten" %}" title="{% trans "Sluiten" %}"/></a>
+  <a class="nav open-sidebar" href><img src="{{ MEDIA_URL }}/fotos/sidebar.svg" alt="{% trans "Tags" %}" title="{% trans "Tags" %}"/></a>
   <div class="sidebar">
     <form>
 {% if fotos_admin %}
       <input type="text" class="title" name="title" title="{% trans "Titel" %}">
       <textarea class="description" name="description"
         placeholder="{% trans "Beschrijving..." %}"
-        title="{% trans "Beschrijving..." %}"></textarea>
+        title="{% trans "Beschrijving" %}"></textarea>
       <div class="row">
         <select class="visibility" title="{% trans "Zichtbaarheid" %}">
           <option value="world">{% trans "Publiek" %}</option>
@@ -127,13 +127,13 @@ dit album zien.{% endblocktrans %}</p>
       </ul>
 {% if fotos_admin %}
       <div class="save-wrapper">
-        <input type="submit" class="hidden-submit" value="{% trans "Opslaan" %}" tabindex="-1"/>
+        <input type="submit" class="hidden-submit" tabindex="-1"/>
         <span class="status">&nbsp;</span>
       </div>
 {% endif %}
     </form>
     <div class="footer">
-      <a class="orig">origineel</a>
+      <a class="orig">{% trans "origineel" %}</a>
     </div>
   </div>
 </div>
