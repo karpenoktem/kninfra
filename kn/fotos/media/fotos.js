@@ -400,6 +400,9 @@
       delete this.foto.newTags;
     }
     foto = foto || null;
+    if (foto && foto.type != 'foto') {
+      foto = null;
+    }
     this.foto = foto;
     if (!foto) {
       this.apply_url(false);
