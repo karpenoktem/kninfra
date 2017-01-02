@@ -10,7 +10,7 @@
 <script type="text/javascript"
         src="{{ MEDIA_URL }}base/jquery-ui-1.8.22/the.js" defer></script>
 {% endif %}
-<script type="text/javascript" src="{{ MEDIA_URL }}fotos/fotos.js?v=2"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}fotos/fotos.js?v=3"></script>
 <script type="text/javascript">
 'use strict';
 expandHeader = false;
@@ -42,7 +42,7 @@ if ('srcset' in (new Image())) {
 {% block styles %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css"
-        href="{{ MEDIA_URL }}fotos/fotos.css" />
+        href="{{ MEDIA_URL }}fotos/fotos.css?v=3" />
 {% if fotos_admin %}
 <link rel="stylesheet" type="text/css"
     deferred-href="{{ MEDIA_URL }}base/jquery-ui-1.8.22/the.css"/>
