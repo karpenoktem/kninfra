@@ -6,6 +6,8 @@ from django.core.servers.basehttp import FileWrapper
 from django.utils.translation import ugettext as _
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
+from django.utils.http import is_safe_url
+from django.core.exceptions import SuspiciousOperation
 
 def direct_to_folder(request, root, subdir):
     root = os.path.abspath(root)
@@ -28,6 +30,8 @@ def langpicker(request):
         if (hasattr(request, 'user') and request.user.is_authenticated()
                 and language != request.user.preferred_language):
             request.user.set_preferred_language(language)
+    if not is_safe_url(url):
+        raise SuspiciousOperation('redirect URL fails is_safe_url')
     return redirect(url)
 
 # vim: et:sta:bs=2:sw=4:
