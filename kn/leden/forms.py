@@ -101,7 +101,7 @@ class AddGroupForm(forms.Form):
     description = forms.CharField(label=_("Korte beschrijving"))
     parent = EntityChoiceField(label=_("Oudergroep"),
             _type='group',
-            initial=Es.by_name('secretariaat')._id)
+            initial=Es.by_name('groepen')._id)
     true_group = forms.BooleanField(label=_("Volwaardige groep"),
             initial=True)
 
