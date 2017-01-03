@@ -22,7 +22,6 @@ from django.conf import settings
 #  1. The Accept-Language header is ignored if it suggests English.
 #  2. URLs like /nl/... still work even though prefix_default_language
 #     is set to False.
-#  3. A preferred language is stored in the user-object
 # #############################################################################
 
 
@@ -105,16 +104,6 @@ class BackportedLocaleMiddleware(object):
                     1
                 )
                 return self.response_redirect_class(language_url)
-
-        # NOTE In Django 1.10 this is taken care of in other middleware
-        #      and that is why this session update is not in the 1.10
-        #      locale middleware.
-        if hasattr(request, 'session') and language_from_path:
-            request.session['_language'] = language
-            # NOTE customization 3:
-            if (hasattr(request, 'user') and request.user.is_authenticated()
-                    and language != request.user.preferred_language):
-                request.user.set_preferred_language(language)
 
         if not (i18n_patterns_used and language_from_path):
             patch_vary_headers(response, ('Accept-Language',))

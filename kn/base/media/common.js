@@ -183,8 +183,8 @@ $(document).ready(function() {
     });
 
     // language picker
-    $('#langpicker').change(function() {
-        document.location = $(this).val();
+    $('#langpicker').change(function(e) {
+        e.target.form.submit();
     });
 });
 

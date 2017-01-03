@@ -101,6 +101,9 @@ a img {
 }
 
 /* taal kiezer */
-#footer #langpicker {
+#langpicker-form {
 	float: right;
+}
+#langpicker {
+	margin: 0 8px;
 }

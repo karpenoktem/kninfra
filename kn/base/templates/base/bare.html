@@ -84,13 +84,17 @@
                         <small><a id="scrollUp" href="#"
                             >{% trans "Terug naar boven" %}</a></small>
                         {# Language picker #}
-                        <select id="langpicker">
-                        {% for code, name in LANGUAGES %}
-                        <option value="{% if code == "nl" %}/nl{% endif %}{% translate_url code %}"
-                            {% if code == LANGUAGE_CODE %}selected{% endif %}
-                                >{{ name }}</option>
-                        {% endfor %}{# code, name in LANGUAGES ... #}
-                        </select>
+                        <form method="POST" action="{% url "langpicker" %}"
+                            id="langpicker-form">
+                            {% csrf_token %}
+                            <select id="langpicker" name="language-url">
+                            {% for code, name in LANGUAGES %}
+                            <option value="{{ code }}:{% translate_url code %}"
+                                {% if code == LANGUAGE_CODE %}selected{% endif %}
+                                    >{{ name }}</option>
+                            {% endfor %}{# code, name in LANGUAGES ... #}
+                            </select>
+                        </form>
                         {# / Language picker #}
                     </div>
                 </div>
