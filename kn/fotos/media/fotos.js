@@ -332,7 +332,10 @@
 
   // Returns the path according to the current URL
   KNF.prototype.get_url_path = function() {
-    return decodeURI(location.pathname.substr(fotos_root.length));
+    // The indexOf is there so /nl/fotos/ has the same effect as /fotos/ (as
+    // the URL /nl/fotos also gets the URL /fotos/ for fotos_root).
+    return decodeURI(location.pathname.substr(
+          location.pathname.indexOf(fotos_root)+fotos_root.length));
   };
 
   KNF.prototype.get_search_query = function() {
