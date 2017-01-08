@@ -12,14 +12,12 @@ from kn.leden.utils import find_name_for_user, parse_date
 
 @login_required
 def view(request):
-    data = json.loads(request.REQUEST.get('data', {}))
+    data = json.loads(request.REQUEST.get('data', '{}'))
     action = data.get('action')
-    handler = ACTION_HANDLER_MAP.get(action,
-                    ACTION_HANDLER_MAP[None])
+    handler = ACTION_HANDLER_MAP.get(action, None)
+    if handler is None:
+        return JsonHttpResponse({'error': 'No such action'}, status=400)
     return JsonHttpResponse(handler(data, request))
-
-def no_such_action(data, request):
-    return {'error': 'No such action'}
 
 
 def _humanName_of_entity(e):
@@ -249,7 +247,6 @@ ACTION_HANDLER_MAP = {
         'entity_end_study':  entity_end_study,
         'get_last_synced':  get_last_synced,
         'adduser_suggest_username': adduser_suggest_username,
-        None: no_such_action,
         }
 
 # vim: et:sta:bs=2:sw=4:
