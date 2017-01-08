@@ -6,14 +6,12 @@ from kn.base.http import JsonHttpResponse
 from django.core.exceptions import PermissionDenied
 
 def view(request):
-    data = json.loads(request.REQUEST.get('data', {}))
+    data = json.loads(request.REQUEST.get('data', '{}'))
     action = data.get('action')
-    handler = ACTION_HANDLER_MAP.get(action,
-                    ACTION_HANDLER_MAP[None])
+    handler = ACTION_HANDLER_MAP.get(action, None)
+    if handler is None:
+        return JsonHttpResponse({'error': 'No such action'}, status=400)
     return JsonHttpResponse(handler(data, request))
-
-def no_such_action(data, request):
-    return {'error': 'No such action'}
 
 def album_parents_json(album):
     json_parents = {}
@@ -223,7 +221,6 @@ ACTION_HANDLER_MAP = {
         'set-metadata': _set_metadata,
         'remove': _remove,
         'search': _search,
-        None: no_such_action,
         }
 
 # vim: et:sta:bs=2:sw=4:
