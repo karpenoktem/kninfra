@@ -265,6 +265,8 @@ def event_edit(request, eventid):
         raise PermissionDenied
     avform = None
     e = Event.by_id(eventid)
+    if e is None:
+        raise Http404
     if request.method == 'POST':
         if request.POST['action'] == 'remove_event':
             for vacancy in e.vacancies():
