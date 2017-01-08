@@ -33,11 +33,9 @@ Bij voorbaat dank,
 -----------------------------------------------------------
 
   {% blocktrans with first_name=u.first_name last_name=u.last_name \
-                   gender=u.gender dateOfBirth=u.dateOfBirth.date \
-                   names=u.names|join:" " %}\
+                   dateOfBirth=u.dateOfBirth.date names=u.names|join:" " %}\
 Voornaam              {{ first_name }}
   Achternaam            {{ last_name }}
-  Geslacht              {{ gender }}
   Geboortedatum         {{ dateOfBirth }}
   Gebruikersnamen       {{ names }}
 {% endblocktrans %}

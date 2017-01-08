@@ -20,7 +20,6 @@ for u in args_to_users(args):
     data.append((
         u.first_name,
         u.last_name,
-        u.gender,
         u.studentNumber,
         u.institute,
         u.study,

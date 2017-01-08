@@ -15,7 +15,6 @@ Personalia  {{ u.full_name }}
 
   Voornaam              {{ u.first_name }}
   Achternaam            {{ u.last_name }}
-  Geslacht              {{ u.gender }}
   Geboortedatum         {{ u.dateOfBirth.date }}
   Gebruikersnamen       {{ u.names|join:" " }}
 

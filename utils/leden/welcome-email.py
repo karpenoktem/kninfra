@@ -17,9 +17,6 @@ def welcome_email():
              'firstName': m.first_name,
              'lastName': m.last_name,
              'fullName': m.full_name(),
-             'gender': ('onbekend' if m.gender is None
-                else {'m': 'man',
-                      'v': 'vrouw'}.get(m.gender, '?')),
              'dateOfBirth': ('onbekend' if m.dateOfBirth is None
                 else str(m.dateOfBirth)),
              'dateJoined': ('onbekend' if m.dateJoined is None

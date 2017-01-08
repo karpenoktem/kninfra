@@ -461,7 +461,6 @@ def rauth(request):
             properties = {
                 'firstname': user.first_name,
                 'lastname': user.last_name,
-                'gender': user.gender,
                 'fullname': user.full_name,
                 'groups': list(user.cached_groups_names)
             }
@@ -522,7 +521,6 @@ def secr_add_user(request):
                     'nick': fd['first_name'],
                     'given': None,
                     'family': fd['last_name'],
-                    'gender': fd['gender'],
                     'dateOfBirth': date_to_dt(
                         fd['dateOfBirth'])
                 },
@@ -554,7 +552,6 @@ def secr_add_user(request):
             u.save()
             # Then, add the relations.
             groups = ['leden']
-            groups.append({'m': 'mannen', 'v': 'vrouwen'}.get(fd['gender']))
             if fd['incasso']:
                 groups.append('incasso')
             else:
