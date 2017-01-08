@@ -9,8 +9,10 @@ import kn.leden.entities as Es
 from kn.leden.mongo import _id
 from kn.leden import giedo
 from kn.leden.utils import find_name_for_user, parse_date
+from django.views.decorators.http  import require_POST
 
 @login_required
+@require_POST
 def view(request):
     data = json.loads(request.REQUEST.get('data', '{}'))
     action = data.get('action')

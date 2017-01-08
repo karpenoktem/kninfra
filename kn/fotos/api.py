@@ -4,7 +4,9 @@ import kn.leden.entities as Es
 import kn.fotos.entities as fEs
 from kn.base.http import JsonHttpResponse
 from django.core.exceptions import PermissionDenied
+from django.views.decorators.http  import require_POST
 
+@require_POST
 def view(request):
     data = json.loads(request.REQUEST.get('data', '{}'))
     action = data.get('action')
