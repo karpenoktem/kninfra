@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http  import require_POST
 
 from kn.base.http import JsonHttpResponse
 from kn.leden.date import date_to_dt, now, date_to_midnight
@@ -328,6 +329,7 @@ def _api_send_reminder(request):
     send_reminder(v, update=False)
     return JsonHttpResponse({'success': True})
 
+@require_POST
 @login_required
 def planning_api(request):
     action = request.REQUEST.get('action')

@@ -1,5 +1,6 @@
 
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http  import require_POST
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -141,6 +142,7 @@ def _api_get_email_addresses(request):
             'addresses': [s.user.canonical_full_email
                     for s in event.listSubscribed]})
 
+@require_POST
 @login_required
 def api(request):
     action = request.REQUEST.get('action')
