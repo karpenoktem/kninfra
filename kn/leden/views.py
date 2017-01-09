@@ -495,7 +495,11 @@ def accounts_api(request):
     return JsonHttpResponse(ret)
 
 def api_users(request):
-    if not request.REQUEST['key'] in settings.ALLOWED_API_KEYS:
+    verified_key = False
+    for key in settings.ALLOWED_API_KEYS:
+        if constant_time_compare(request.REQUEST['key'], key):
+            verified_key = True
+    if not verified_key:
         raise PermissionDenied
     ret = {}
     for m in Es.users():
