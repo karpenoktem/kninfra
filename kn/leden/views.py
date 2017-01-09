@@ -14,6 +14,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.utils.crypto import constant_time_compare
+from django.utils.http import urlquote
 from django.core.paginator import Paginator, EmptyPage
 from django.core.files.storage import default_storage
 from django.core.servers.basehttp import FileWrapper
@@ -472,11 +473,9 @@ def rauth(request):
             ] )))
         return HttpResponse("INVALID TOKEN")
     if not request.user.is_authenticated():
-        # De replace() is een workaround voor
-        #   http://code.djangoproject.com/ticket/11457
         return redirect_to_login('%s?url=%s' % (
                 reverse('rauth'),
-                request.REQUEST['url'].replace('/', '%2F')))
+                urlquote(request.REQUEST['url'])))
     token = sha256('%s|%s|%s|%s' % (str(request.user.name),
                     date.today(),
                     request.REQUEST['url'],
