@@ -13,6 +13,7 @@ import re
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
+from django.utils.crypto import constant_time_compare
 from django.core.paginator import Paginator, EmptyPage
 from django.core.files.storage import default_storage
 from django.core.servers.basehttp import FileWrapper
@@ -439,7 +440,7 @@ def rauth(request):
             date.today(),
             request.REQUEST['url'],
             settings.SECRET_KEY)).hexdigest()
-        if request.REQUEST['validate'] == token:
+        if constant_time_compare(request.REQUEST['validate'], token):
             return HttpResponse("OK")
         return HttpResponse("INVALID")
     
@@ -456,7 +457,7 @@ def rauth(request):
             date.today(),
             request.REQUEST['url'],
             settings.SECRET_KEY)).hexdigest()
-        if request.REQUEST['token'] == token:
+        if constant_time_compare(request.REQUEST['token'], token):
             user = Es.by_name(request.REQUEST['user'])
             properties = {
                 'firstname': user.first_name,
