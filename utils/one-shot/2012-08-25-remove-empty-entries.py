@@ -26,7 +26,7 @@ def main():
         if e._data['addresses']:
             address = e._data['addresses'][0]
             if (not address['street'] and
-                    not address['city'] and 
+                    not address['city'] and
                     not address['number'] and
                     len(e._data['addresses']) == 1):
                 e._data['addresses'] = []

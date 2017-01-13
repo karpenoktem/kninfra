@@ -54,7 +54,7 @@ def main():
               EQUALITY caseIgnoreIA5Match SYNTAX
               1.3.6.1.4.1.1466.115.121.1.26{{32}} SINGLE-VALUE )
             olcobjectclasses: {{0}}( 1.3.6.1.4.1.7165.2.2.6 NAME
-              'knAccount' DESC 'KN account' SUP top 
+              'knAccount' DESC 'KN account' SUP top
               AUXILIARY MUST ( uid ) MAY ( sambaNTPassword ) )""",
                 'ldapadd')
     ldif("""dn: olcDatabase={{1}}mdb,cn=config

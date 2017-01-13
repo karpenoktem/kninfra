@@ -25,7 +25,7 @@ BORREL_END = hm2s(28)            # 4.00 the next day
 #
 #   101 - The workers preference is unknown.  Determining it has priority.
 #
-# 
+#
 # The score is computed using "preflets" for each worker.
 # A preflet is a function which takes a vacancy and returns a score.
 #
@@ -34,7 +34,7 @@ BORREL_END = hm2s(28)            # 4.00 the next day
 #
 # The preflet  p_borrel(X,Y,Z)  takes a vacancy and determines
 # if it is (like) a borrel-shift.  If it is (like) the first borrel shift,
-# it returns the score X, if it is (like) the second Y 
+# it returns the score X, if it is (like) the second Y
 # and Z if it is like the third.  If the vacancy is not like a borrel-shift
 # (for instance, if it is a Karpe Rockt'em) it returns False.
 #
@@ -65,7 +65,7 @@ def p_borrel_uncurried(first, second, third, not_after, vacancy):
     # Only give a score if this is a borrel
     if event.kind!="borrel":
         return False
-    # the moment the vacancy starts (ends) in seconds after the 
+    # the moment the vacancy starts (ends) in seconds after the
     # start of the monday.
     vbegin = timedelta_to_seconds(vacancy.begin-event.date)
     vend = timedelta_to_seconds(vacancy.end-event.date)
@@ -116,8 +116,8 @@ preferences = {
         # except (as an example) from november first to november seventh,
         # in which period his prefers to do nothing.
         "bramw":    (p_temporary(
-                        datetime(2011, 11, 1), datetime(2011, 11, 7), 
-                        p_borrel(0, 0, 0)), 
+                        datetime(2011, 11, 1), datetime(2011, 11, 7),
+                        p_borrel(0, 0, 0)),
                      p_borrel(  0,  0, 100),),
         "carlien":  (p_borrel( 50, 50, 50),),
         "chaim":    (p_borrel(100, 100, 100),),

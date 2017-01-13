@@ -29,7 +29,7 @@ def pseudo_randstr(l=12, cs=ALPHANUMUL):
 
 """
 Given a list of names,
-returns the users which are 
+returns the users which are
   0.  named in this list,
   1.  members of groups named in this list,
   2.  members of groups of members of groups named in this list,

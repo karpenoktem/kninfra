@@ -115,7 +115,7 @@ rcol = db['relations']  # relations: "giedo is chairman of bestuur from
 # ----------------------------------------------------------------------
 # This is the relation: "mike is chair (voorzitter) of the soco from
 #   2012-02-07 to 2013-03-11, but he should not be put in soco9
-#   (which is forced by the year-override tag)". 
+#   (which is forced by the year-override tag)".
 # { "_id" : ObjectId("4f3086270032a05bfd000005"),
 #   "from" : ISODate("2012-02-07T03:02:15.130Z"),
 #   "how" : ObjectId("4e6fcc85e60edf3dc0000bc8"),
@@ -141,7 +141,7 @@ ncol = db['notes']      # notes on entities by the secretaris
 pcol = db['push_changes'] # Changes to be pushed to remote systems
 # TODO add example
 
-incol = db['informacie_notifications'] # human readable list of notifications 
+incol = db['informacie_notifications'] # human readable list of notifications
                                         #for informacie group
 # TODO add example
 

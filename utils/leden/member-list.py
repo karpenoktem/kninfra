@@ -10,7 +10,7 @@ def main():
     for n, r in enumerate(sorted(Es.query_relations(
             _with=Es.id_by_name('leden'), _from=now, until=now,
             deref_who=True),
-                key=lambda r: r['from'])): 
+                key=lambda r: r['from'])):
         print n+1, r['who'].humanName
 
 

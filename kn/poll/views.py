@@ -22,7 +22,7 @@ def create_questionForm(question):
             super(QuestionForm, self).__init__(*args, **kwargs)
             self.fields['answer'].label = question[0]
         answer = forms.ChoiceField(
-                choices = list(enumerate(question[1])) + 
+                choices = list(enumerate(question[1])) +
                         [(-1, _('(geen antwoord)'))],
                 required=False)
     return QuestionForm
