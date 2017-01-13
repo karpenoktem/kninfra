@@ -1,4 +1,4 @@
-import _import
+import _import # noqa: F401
 
 # Removes some empty entries from the database.
 #               bas@kn.cx

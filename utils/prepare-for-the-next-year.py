@@ -1,4 +1,4 @@
-import _import
+import _import # noqa: F401
 
 # Prepare for the coming change of "verenigingsjaar".
 

@@ -1,5 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import # noqa: F401
 
 import sys
 from kn.poll.models import Poll, Question, AnswerSet, Answer, Filling

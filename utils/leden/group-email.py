@@ -1,7 +1,7 @@
 # vim: et:sta:bs=2:sw=4:
 from __future__ import with_statement
 
-import _import
+import _import # noqa: F401
 import sys
 import cStringIO
 from datetime import date, datetime

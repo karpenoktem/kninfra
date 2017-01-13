@@ -1,4 +1,4 @@
-import _import
+import _import # noqa: F401
 
 # WARNING
 # Please make very sure that this script is up-to-date.  It is a crime
