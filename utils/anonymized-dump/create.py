@@ -9,10 +9,6 @@ from_settings_import("DT_MIN", "DT_MAX", globals())
 from kn.leden.mongo import db
 
 import bson
-import zipfile
-
-import datetime
-import pprint
 
 print 'entities'
 with open('entities.bsons', 'w') as f:
@@ -42,7 +38,6 @@ with open('entities.bsons', 'w') as f:
         if 'temp' in e:
             del e['temp']
         f.write(bson.BSON.encode(e))
-        #pprint.pprint(e)
 
 print 'relations'
 with open('relations.bsons', 'w') as f:

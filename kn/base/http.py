@@ -1,6 +1,6 @@
 import json
 
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.translation import ugettext as _
 
 

@@ -1,7 +1,6 @@
 from itertools import chain
 from hashlib import sha256
 from datetime import date
-from glob import glob
 from os import path
 
 import mimetypes

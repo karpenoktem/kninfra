@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*
 import _import # noqa: F401
 
-from kn.leden.models import OldKnUser, Transaction
+from kn.leden.models import Transaction
 
 def main():
     u2t = dict()

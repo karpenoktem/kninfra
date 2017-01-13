@@ -7,7 +7,6 @@ from tempfile import mkdtemp
 from shutil import copy2, copytree, rmtree
 
 from django.core.mail import EmailMessage
-from django.core.urlresolvers import reverse
 
 import kn.leden.entities as Es
 from django.conf import settings

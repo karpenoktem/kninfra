@@ -4,8 +4,6 @@ import _import # noqa: F401
 import pyx
 import kn.leden.entities as Es
 
-from common import *
-
 def main():
     N = 0
     ages = set([None])

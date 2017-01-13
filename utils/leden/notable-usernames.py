@@ -1,7 +1,7 @@
 # vim: et:sta:bs=2:sw=4:
 import _import # noqa: F401
 
-from kn.leden.models import OldKnUser, OldKnGroup
+from kn.leden.models import OldKnGroup
 
 leden = list(OldKnGroup.objects.get(name='leden').user_set.all())
 leden.extend(OldKnGroup.objects.get(name='leden-oud').user_set.all())

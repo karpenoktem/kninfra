@@ -2,7 +2,7 @@
 import _import # noqa: F401
 from common import *
 
-from kn.leden.models import OldKnUser, OldKnGroup
+from kn.leden.models import OldKnGroup
 from datetime import date, datetime
 import sys
 import re

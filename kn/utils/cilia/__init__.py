@@ -1,9 +1,6 @@
 import threading
 import os.path
 import logging
-import socket
-import select
-import json
 import os
 
 from django.conf import settings

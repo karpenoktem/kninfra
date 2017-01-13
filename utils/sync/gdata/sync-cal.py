@@ -5,7 +5,6 @@ from common import *
 from cal_common import *
 
 from kn.leden.models import OldKnUser, OldKnGroup
-from iso8601 import parse_date
 import gdata.calendar.service
 from gdata.service import RequestError
 import datetime

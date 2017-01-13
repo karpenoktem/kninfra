@@ -1,13 +1,10 @@
 import pwd
 import grp
 import spwd
-import crypt
 import string
 import logging
 import datetime
 import subprocess
-
-from kn.base._random import pseudo_randstr
 
 def unix_setpass(cilia, user, password):
     kn_gid = grp.getgrnam('kn').gr_gid

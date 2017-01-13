@@ -8,7 +8,6 @@ import os
 import sys
 import imp
 import os.path
-import warnings
 
 import django
 

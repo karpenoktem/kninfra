@@ -2,7 +2,7 @@ import time
 
 from django.conf import settings
 
-from kn.utils.whim import WhimDaemon, WhimClient
+from kn.utils.whim import WhimClient
 
 __GIEDO = None
 

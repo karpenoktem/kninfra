@@ -3,8 +3,6 @@ import os.path
 import logging
 
 import kn.leden.entities as Es
-from kn.leden.date import now
-from kn.base._random import pseudo_randstr
 
 from django.conf import settings
 

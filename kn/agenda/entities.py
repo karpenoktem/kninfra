@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
+from kn.leden.mongo import db, SONWrapper, son_property
 
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe

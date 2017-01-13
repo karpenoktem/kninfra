@@ -5,7 +5,6 @@ from __future__ import absolute_import
 
 import _import # noqa: F401
 from common import *
-from datetime import datetime, date
 from Mailman.MailList import MailList
 
 from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias

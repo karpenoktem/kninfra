@@ -3,7 +3,7 @@ from __future__ import with_statement
 
 import _import # noqa: F401
 from common import *
-from kn.leden.models import OldKnGroup, OldKnUser
+from kn.leden.models import OldKnGroup
 
 def forum_email():
     with open('fools-email.template', 'r') as f:
