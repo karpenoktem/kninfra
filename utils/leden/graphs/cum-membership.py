@@ -30,7 +30,7 @@ def main():
         m = data[y][y]
         row = []
         for sy in xrange(len(data) - y):
-            row.append(data[y][y+sy] * 100/ m )
+            row.append(data[y][y+sy] * 100 / m )
         print '\t'.join(map(str, row))
 
 

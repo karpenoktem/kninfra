@@ -74,7 +74,7 @@ def template_write_data_to_file(template, data, write):
                     parts = []
                     for ex in data[row[column]].split(','):
                         if ex[0] == 'g':
-                            parts.append('gewogen:'+ ex[1:])
+                            parts.append('gewogen:' + ex[1:])
                         else:
                             parts.append(ex)
                     write("+".join(parts))
@@ -172,7 +172,7 @@ def barco_enterform(request, repos, formname):
             fd = form.cleaned_data
             csv = StringIO();
             write = lambda x: csv.write(x.encode("utf-8"))
-            write("# Ingevoerd door "+ str(request.user.name) +"\n")
+            write("# Ingevoerd door " + str(request.user.name) + "\n")
             formspec.entered_data_to_file(fd, write, template, prefill)
             
             # commit it to the repository ...

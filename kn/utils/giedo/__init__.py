@@ -294,7 +294,7 @@ class Giedo(WhimDaemon):
 
     def villanet_request(self, params):
         params['apikey'] = settings.VILLANET_SECRET_API_KEY
-        url = "http://www.vvs-nijmegen.nl/knapi.php?"+ urlencode(params)
+        url = "http://www.vvs-nijmegen.nl/knapi.php?" + urlencode(params)
         ret = urllib2.urlopen(url, timeout=1).read()
         ret = ret.strip()
         if ret[:4] == 'OK: ':

@@ -68,13 +68,13 @@ def main():
             break
         _from -= INTERVAL
     users = sorted(data.keys(), cmp=lambda y, x: cmp(data[x][0], data[y][0]))
-    data['others'] =[0]*len(data[users[0]])
+    data['others'] = [0]*len(data[users[0]])
     others = users[MAX_N:]
     for other in others:
         for i in xrange(len(data[other])):
             data['others'][i] += data[other][i]
         del(data[other])
-    for user in reversed(['others']+ users[:MAX_N]):
+    for user in reversed(['others'] + users[:MAX_N]):
         print ','.join(map(str, [user]+list(reversed(data[user]))))
 
 if __name__ == '__main__':

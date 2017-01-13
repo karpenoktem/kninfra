@@ -1235,7 +1235,7 @@ class User(Entity):
     def primary_email(self):
         # the primary email address is always the first one;
         # we ignore the until field.
-        if len(self._data['emailAddresses'])==0:
+        if len(self._data['emailAddresses']) == 0:
             return None
         return self._data['emailAddresses'][0]['email']
 

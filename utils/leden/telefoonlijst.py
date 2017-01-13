@@ -10,7 +10,7 @@ if sys.stdout.encoding is None:
 
 
 def fmt_date(d):
-    if d==None:
+    if d == None:
         return ""
     return str(d.date())
 

@@ -25,7 +25,7 @@ class EntityChoiceFieldWidget(forms.TextInput):
         if value:
             code_set_value = (
                 '''entityChoiceField_set(%(id)s, %(value)s);'''
-                %{'id': json.dumps(final_attrs['id']),
+                % {'id': json.dumps(final_attrs['id']),
                   'value': json.dumps(str(value))})
         return mark_safe(
             u'''<input type='hidden' id=%(id)s name=%(name)s />
@@ -34,7 +34,7 @@ class EntityChoiceFieldWidget(forms.TextInput):
                     create_entityChoiceField(%(id)s, %(params)s);
                     %(code_set_value)s
                 });//--></script>'''
-                %{'name': json.dumps(name),
+                % {'name': json.dumps(name),
                   'id': json.dumps(final_attrs['id']),
                   'params': json.dumps({'type': self.type}),
                   'code_set_value': code_set_value})
@@ -134,7 +134,7 @@ class ChangePasswordForm(forms.Form):
         if new_password != new_password_again:
             errors.append(_("Niet hetzelfde nieuwe wachtwoord "
                             "opnieuw gegeven"))
-        if len(errors)>0:
+        if len(errors) > 0:
             raise forms.ValidationError(errors)
 
         return cleaned_data

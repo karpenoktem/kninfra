@@ -63,7 +63,7 @@ def update_db(giedo):
         _with=year_groups))
     # Check whether all year groups are created
     for g in year_groups:
-        mrels = filter(lambda x: x['with']==g._id, year_group_mrels)
+        mrels = filter(lambda x: x['with'] == g._id, year_group_mrels)
         add_years_to_relations(mrels)
         years = set()
         for rel in mrels:

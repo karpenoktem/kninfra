@@ -22,7 +22,7 @@ def vcard(u):
     l = c.add('email', 'kn')
     l.value = u.primary_email
     l.type_paramlist = ['INTERNET']
-    c.add('X-ABLabel', 'kn').value='kn'
+    c.add('X-ABLabel', 'kn').value = 'kn'
     if not u.telephone is None:
         c.add('tel', 'kn')
         c.tel.value = u.telephone
@@ -38,7 +38,7 @@ def vcard(u):
                         '',
                         u.addr_zipCode,
                         'Nederland')
-        c.add('x-abadr', 'kn').value='nl'
+        c.add('x-abadr', 'kn').value = 'nl'
     return c.serialize()
 
 if __name__ == '__main__':

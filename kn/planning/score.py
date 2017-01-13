@@ -63,7 +63,7 @@ def p_none():
 def p_borrel_uncurried(first, second, third, not_after, vacancy):
     event = vacancy.event
     # Only give a score if this is a borrel
-    if event.kind!="borrel":
+    if event.kind != "borrel":
         return False
     # the moment the vacancy starts (ends) in seconds after the
     # start of the monday.
@@ -194,7 +194,7 @@ def planning_vacancy_worker_score(vacancy, worker):
         preferences[pn][un] = (preferences[pn][un], )
     for preflet in preferences[pn][un]:
         score = preflet(vacancy)
-        if score!=False:
+        if score != False:
             return score
     # If nothing has been set, assume the worker is not available
     return 0

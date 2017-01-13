@@ -14,7 +14,7 @@ GCAL_SCHEME = 'http://schemas.google.com/gCal/2005#'
 
 
 def acl_sync_cal(cs, cal, initial_role):
-    acl_url = 'http://www.google.com/calendar'+ \
+    acl_url = 'http://www.google.com/calendar' + \
                      '/feeds/%s/acl/full' % cal
     feed = cs.GetCalendarAclFeed(acl_url)
     cur = dict()
@@ -71,8 +71,8 @@ def sync_bd(cs, cal):
     rd_lut = dict()
     for m in todo:
         fn_lut[m.full_name()] = m
-        rd_lut[m.full_name()] = ('DTSTART;VALUE=DATE:%s\n'+
-                         'DTEND;VALUE=DATE:%s\n'+
+        rd_lut[m.full_name()] = ('DTSTART;VALUE=DATE:%s\n' +
+                         'DTEND;VALUE=DATE:%s\n' +
                          'RRULE:FREQ=YEARLY\n') % (
                         icaldate(m.dateOfBirth),
                         icaldate(m.dateOfBirth +

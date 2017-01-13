@@ -143,9 +143,9 @@ def planning_view(request):
 
 
 def cmp_None(x, y, cmp=cmp):
-    if x==None:
+    if x == None:
         return -1
-    if y==None:
+    if y == None:
         return 1
     return cmp(x, y)
 
@@ -300,8 +300,8 @@ def event_edit(request, eventid):
                 v = Vacancy({
                     'name': fd['name'],
                     'event': _id(e),
-                    'begin': (begin_date, fd['begin_is_approximate']=="True"),
-                    'end': (end_date, fd['end_is_approximate']=="True"),
+                    'begin': (begin_date, fd['begin_is_approximate'] == "True"),
+                    'end': (end_date, fd['end_is_approximate'] == "True"),
                     'pool': _id(fd['pool']),
                     'assignee': None,
                     'reminder_needed': True,

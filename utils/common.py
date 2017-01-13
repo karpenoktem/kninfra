@@ -48,15 +48,15 @@ def args_to_users(args):
     had = set()  # set of Entities dealt with
     todo = set() # set of Entities to be dealt with
     todo.update(Es.by_names(args).itervalues())
-    while len(todo)>0:
+    while len(todo) > 0:
         e = todo.pop()
         if e in had:
             continue
         had.add(e)
-        if e.type=="user":
+        if e.type == "user":
             ret.add(e)
             continue
-        if e.type!="group":
+        if e.type != "group":
             raise NotImplementedError()
         todo.update(e.get_members())
     return tuple(ret)

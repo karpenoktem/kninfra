@@ -447,7 +447,7 @@ def ik_chpasswd_villanet(request):
                 newpw = form.cleaned_data['new_password']
                 giedo.change_villanet_password(str(request.user.name), oldpw,
                         newpw)
-                t = _("Lieve %s, maar natuurlijk, jouw wachtwoord voor het "+
+                t = _("Lieve %s, maar natuurlijk, jouw wachtwoord voor het " +
                         "villa-netwerk is veranderd.")
                 messages.info(request, t % request.user.first_name)
                 return HttpResponseRedirect(reverse('smoelen-home'))
@@ -557,7 +557,7 @@ def secr_add_user(request):
             u = Es.User({
                 'types': ['user'],
                 'names': [fd['username']],
-                'humanNames': [{'human': fd['first_name']+' '+
+                'humanNames': [{'human': fd['first_name']+' ' +
                              fd['last_name']}],
                 'person': {
                     'titles': [],

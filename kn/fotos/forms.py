@@ -28,7 +28,7 @@ class CreateEventForm(forms.Form):
     fullHumanName = forms.CharField(label=_('Volledige naam voor mensen'))
 
     date.widget.attrs['onblur'] = 'createFullHumanname();'
-    humanName.widget.attrs['onblur'] = ('createTechName(); '+
+    humanName.widget.attrs['onblur'] = ('createTechName(); ' +
                         'createFullHumanname();')
 
 

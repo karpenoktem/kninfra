@@ -34,7 +34,7 @@ def defaultSettings(glbls):
 
     d.DOMAINNAME = 'karpenoktem.nl'
     d.LDAP_HOST = 'localhost'
-    d.LDAP_SUFFIX = 'dc='+ ',dc='.join(d.DOMAINNAME.split('.'))
+    d.LDAP_SUFFIX = 'dc=' + ',dc='.join(d.DOMAINNAME.split('.'))
     d.LDAP_BASE = 'ou=users,' + d.LDAP_SUFFIX
     d.LDAP_USER = 'cn=infra,' + d.LDAP_SUFFIX
     d.LDAP_PASS = None
@@ -183,10 +183,10 @@ def defaultSettings(glbls):
             'kn.leden.auth.MongoBackend',
     )
     d.SESSION_ENGINE = 'kn.leden.sessions'
-    d.LOGIN_REDIRECT_URL='/smoelen/'
+    d.LOGIN_REDIRECT_URL = '/smoelen/'
     d.DEFAULT_FILE_STORAGE = 'kn.base.storage.OurFileSystemStorage'
 
-    d.FORCE_SCRIPT_NAME=''
+    d.FORCE_SCRIPT_NAME = ''
 
     d.SMOELEN_PHOTOS_PATH = 'smoelen'
     d.SMOELEN_WIDTH = 300

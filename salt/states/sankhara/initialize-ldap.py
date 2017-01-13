@@ -9,12 +9,12 @@ import subprocess
 
 def main():
     if not len(sys.argv) == 7:
-        sys.stderr.write('[domain] [admin password] [infra password] '+
-                                '[daan password] [freeradius password] '+
+        sys.stderr.write('[domain] [admin password] [infra password] ' +
+                                '[daan password] [freeradius password] ' +
                                 '[saslauthd password]\n')
         sys.exit(-1)
     domain = sys.argv[1]
-    suffix = 'dc='+ ',dc='.join(domain.split('.'))
+    suffix = 'dc=' + ',dc='.join(domain.split('.'))
     host = domain.split('.')[0]
     admin_pw, infra_pw, daan_pw, freeradius_pw, saslauthd_pw = [
                 subprocess.check_output(['slappasswd', '-s', pw]).strip()

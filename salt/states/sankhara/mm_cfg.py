@@ -14,7 +14,7 @@ add_virtualhost(DEFAULT_URL_HOST, DEFAULT_EMAIL_HOST)
 DEFAULT_SERVER_LANGUAGE = 'en'
 USE_ENVELOPE_SENDER    = 0
 DEFAULT_SEND_REMINDERS = 0
-MTA='Postfix'
+MTA = 'Postfix'
 POSTFIX_STYLE_VIRTUAL_DOMAINS = ['lists.{{ grains['fqdn'] }}']
 VIRTUAL_HOST_OVERVIEW = Off
 DEB_LISTMASTER = 'wortel@{{ grains['fqdn'] }}'

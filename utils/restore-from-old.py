@@ -56,8 +56,8 @@ def main(data):
     ignore_groups_ids = set()
     ignore_groups_members_ids = set()
     year_groups = frozenset(
-        ['leden'+str(x) for x in range(1, 9)]+
-        ['kasco'+str(x) for x in range(1, 9)]+
+        ['leden'+str(x) for x in range(1, 9)] +
+        ['kasco'+str(x) for x in range(1, 9)] +
         ['bestuur'+str(x) for x in range(1, 9)])
     year_groups_ids = dict()
     year_groups_lut = {}
