@@ -340,7 +340,7 @@ def main(data):
         src = scc[0]
         if src in name2id:
             continue
-        if not src in alias_graph:
+        if src not in alias_graph:
             continue
         if not alias_graph[src] in name2id:
             print '  ? %s -> %s' % (src, alias_graph[src])

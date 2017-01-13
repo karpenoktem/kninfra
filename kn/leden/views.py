@@ -67,11 +67,11 @@ def entity_detail(request, name=None, _id=None, type=None):
         e = Es.by_id(_id)
     if e is None:
         raise Http404
-    if type and not type in e.types:
+    if type and type not in e.types:
         raise ValueError, _("Entiteit is niet een %s") % type
     if not type:
         type = e.type
-    if not type in Es.TYPE_MAP:
+    if type not in Es.TYPE_MAP:
         raise ValueError, _("Onbekende entiteit type")
     return globals()['_'+type+'_detail'](request, getattr(e, 'as_'+type)())
 
@@ -114,7 +114,7 @@ def _entity_detail(request, e):
         if year is None:
             year = 'this'
 
-        if not year in year_sets:
+        if year not in year_sets:
             year_sets[year] = set()
         year_sets[year].add(r['who'])
 
@@ -329,9 +329,9 @@ def ik(request):
 
 @login_required
 def ik_chsmoel(request):
-    if not 'smoel' in request.FILES:
+    if 'smoel' not in request.FILES:
         raise ValueError, _("Missende `smoel' in FILES")
-    if not 'id' in request.POST:
+    if 'id' not in request.POST:
         raise ValueError, _("Missende `id' in POST")
     user = Es.by_id(request.POST['id'])
     if not user.name:
@@ -728,7 +728,7 @@ def untag(request):
 
 @login_required
 def user_reset_password(request, _id):
-    if not 'secretariaat' in request.user.cached_groups_names:
+    if 'secretariaat' not in request.user.cached_groups_names:
         raise PermissionDenied
     u = Es.by_id(_id).as_user()
     if not u.is_active:
@@ -744,7 +744,7 @@ def user_reset_password(request, _id):
 
 @login_required
 def note_add(request):
-    if not 'secretariaat' in request.user.cached_groups_names:
+    if 'secretariaat' not in request.user.cached_groups_names:
         raise PermissionDenied
     if 'on' not in request.POST or 'note' not in request.POST:
         raise ValueError, _("missende `on' of `note'")

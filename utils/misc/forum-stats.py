@@ -46,7 +46,7 @@ def main():
     c = db.cursor()
     c.execute('SELECT poster, posted FROM posts')
     for poster, posted in c.fetchall():
-        if not poster in lut:
+        if poster not in lut:
             lut[poster] = list()
         lut[poster].append(posted)
     for l in lut.itervalues():
@@ -56,7 +56,7 @@ def main():
     while True:
         m = 0
         for poster in lut:
-            if not poster in data:
+            if poster not in data:
                 data[poster] = list()
             n = len_lb(lut[poster], _from)
             m = max(n, m)

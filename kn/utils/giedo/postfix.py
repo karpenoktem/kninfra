@@ -33,7 +33,7 @@ def generate_postfix_map(giedo):
         else:
             logging.warn("postfix: unhandled type: %s" % e.type)
         id_email = "%s@%s" % (e.id, settings.MAILDOMAIN)
-        if not id_email in tbl:
+        if id_email not in tbl:
             tbl[id_email] = (e.canonical_email,)
     # handle the non-mailman groups
     for rel in Es.query_relations(_with=non_mailman_groups.keys(),

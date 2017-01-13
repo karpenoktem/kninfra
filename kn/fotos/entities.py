@@ -235,7 +235,7 @@ class FotoEntity(SONWrapper):
         return resize_proportional(width, height, c.maxwidth, c.maxheight)
 
     def ensure_cached(self, cache):
-        if not cache in self.CACHES:
+        if cache not in self.CACHES:
             raise KeyError
         if cache in self.caches or cache == 'full':
             return True
@@ -247,7 +247,7 @@ class FotoEntity(SONWrapper):
             # as the _cache operation may take quite some time, a full
             # .save() might overwrite other changes. (Like other caches.)
             # Thus we perform the change manually.
-            if not 'caches' in self._data:
+            if 'caches' not in self._data:
                 self._data['caches'] = []
             self._data['caches'].append(cache)
             fcol.update({'_id': self._id},

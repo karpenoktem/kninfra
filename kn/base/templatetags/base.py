@@ -57,7 +57,7 @@ def header(context):
                     if fn != '.keep']
         private.extend(public)
         _header_images = {'public': public, 'private': private}
-    if not 'user' in context or not context['user'].is_authenticated():
+    if 'user' not in context or not context['user'].is_authenticated():
         pool = _header_images['public']
     else:
         pool = _header_images['private']

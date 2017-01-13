@@ -80,7 +80,7 @@ def emailfy_name(first, last):
         n = n.replace('  ', ' ')
     n = n.replace(' ', '.').lower()
     for c in n:
-        if not c in EMAIL_ALLOWED:
+        if c not in EMAIL_ALLOWED:
             raise "Invalid character %s found" % c
     return n
 

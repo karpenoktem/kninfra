@@ -17,7 +17,7 @@ def main():
     for r in Es.rcol.find():
         ok = True
         for a in ('who', 'with', 'from', 'until', 'how'):
-            if not a in r:
+            if a not in r:
                 print r['_id'], 'missing attribute', a
                 ok = False
         if not ok:

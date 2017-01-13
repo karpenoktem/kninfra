@@ -17,9 +17,9 @@ def main():
     for event in events:
         ecount += 1
         print 'Event:', event.get('name')
-        if not 'subscriptions' in event:
+        if 'subscriptions' not in event:
             event['subscriptions'] = []
-        if not '_version' in event:
+        if '_version' not in event:
             event['_version'] = 1
         subscriptions = event['subscriptions']
         users = {s['user'] for s in subscriptions}

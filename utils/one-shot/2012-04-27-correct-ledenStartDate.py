@@ -54,7 +54,7 @@ def main():
                                 joined.date()
             rrel = Es.rcol.find({'_id': rel['_id']})[0]
             rrel['from'] = joined
-            if not 'tags' in rrel:
+            if 'tags' not in rrel:
                 rrel['tags'] = []
             if not year_overrides[(False, joined_yr)] in rrel['tags']:
                 rrel['tags'].append(year_overrides[(False, joined_yr)])

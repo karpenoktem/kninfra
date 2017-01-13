@@ -42,19 +42,19 @@ def generate_mailman_changes(giedo):
     for rel in mm_rels:
         em = rel['who'].canonical_email
         gname = gid2name[rel['with']]
-        if not em in ml_members[gname]:
-            if not gname in todo['add']:
+        if em not in ml_members[gname]:
+            if gname not in todo['add']:
                 todo['add'][gname] = []
             todo['add'][gname].append(em)
         else:
             ml_members[gname].remove(em)
     # Check which memberships are superfluous in the current mailing lists
     for n in ml_names:
-        if not n in ml_members:
+        if n not in ml_members:
             logging.warning("Unaccounted e-maillist %s" % n)
             continue
         for em in ml_members[n]:
-            if not n in todo['remove']:
+            if n not in todo['remove']:
                 todo['remove'][n] = []
             todo['remove'][n].append(em)
     return todo

@@ -20,7 +20,7 @@ while True:
 
 firstnames = dict()
 for l in leden:
-    if not l.first_name in firstnames:
+    if l.first_name not in firstnames:
         firstnames[l.first_name] = 0
     firstnames[l.first_name] += 1
 

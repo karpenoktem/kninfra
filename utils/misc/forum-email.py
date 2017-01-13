@@ -28,7 +28,7 @@ def forum_email():
     c.execute('SELECT username FROM users WHERE last_visit=0')
     toEmail = set()
     for username, in c.fetchall():
-        if not username in l5:
+        if username not in l5:
             continue
         toEmail.add(username)
     for username in toEmail:

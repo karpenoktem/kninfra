@@ -85,7 +85,7 @@ def son_property(path, default=None):
     def __setter(self, x):
         obj = self._data
         for bit in path[:-1]:
-            if not bit in obj:
+            if bit not in obj:
                 obj[bit] = {}
             obj = obj[bit]
         obj[path[-1]] = x

@@ -33,7 +33,7 @@ def redirect(request, name):
     if (request.user.groups.filter(
             name=settings.MODERATORS_GROUP).count() == 0):
         return HttpReponse(_("Toegang geweigerd"))
-    if not name in settings.MODED_MAILINGLISTS:
+    if name not in settings.MODED_MAILINGLISTS:
         raise Http404
     ml = Mailman.MailList.MailList(name, True)
     try:

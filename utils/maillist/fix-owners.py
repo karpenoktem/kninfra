@@ -13,7 +13,7 @@ def main():
         try:
             changed = False
             for o in ml.owner:
-                if not o in ALLOWED_OWNERS:
+                if o not in ALLOWED_OWNERS:
                     print 'Removing %s from %s' % (o, x)
                     ml.owner.remove(o)
                     changed = True

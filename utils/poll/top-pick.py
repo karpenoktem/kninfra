@@ -21,13 +21,13 @@ def main(poll):
     for q in reversed(poll.question_set.all()):
         N += 1
         for a in q.filling_set.all():
-            if not a.user in lastUserAnswerVote:
+            if a.user not in lastUserAnswerVote:
                 lastUserAnswerVote[a.user] = dict()
             if a.answer in lastUserAnswerVote[a.user]:
                 # user heeft hier al op gestemd, we halen de punten van zijn eerdere vote weg
                 # (dat is namelijk een lagere vote) en tellen deze vote er zometeen bij op
                 lut[a.answer] -= lastUserAnswerVote[a.user][a.answer]
-            if not a.answer in lut:
+            if a.answer not in lut:
                 lut[a.answer] = 0
             lut[a.answer] += N
             lastUserAnswerVote[a.user][a.answer] = N

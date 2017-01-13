@@ -16,11 +16,11 @@ def group_email():
     plut = dict()
     for g in Gs:
         glut[g.name] = g
-        if not g.parent_id in plut:
+        if g.parent_id not in plut:
             plut[g.parent_id] = list()
         plut[g.parent_id].append(g)
     for g in Gs:
-        if not g.id in plut:
+        if g.id not in plut:
             continue
         plut[g.id].sort(cmp=lambda x, y: cmp(x.humanName, y.humanName))
     tree = list()
@@ -32,7 +32,7 @@ def group_email():
     while stack:
         d, g = stack.pop()
         tree.append((d, g))
-        if not g.id in plut:
+        if g.id not in plut:
             continue
         for g2 in reversed(plut[g.id]):
             if g2 in had:

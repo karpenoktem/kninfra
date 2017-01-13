@@ -190,7 +190,7 @@ class Event(SONWrapper):
         return subscription
 
     def pushHistory(self, historyEvent):
-        if not 'history' in self._data:
+        if 'history' not in self._data:
             self._data['history'] = []
         self._data['history'].append(historyEvent)
     def open(self, user, save=True):

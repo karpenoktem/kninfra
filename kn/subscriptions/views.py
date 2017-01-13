@@ -109,7 +109,7 @@ def event_detail(request, name):
             context_instance=RequestContext(request))
 
 def _api_event_set_opened(request):
-    if not 'id' in request.REQUEST or not isinstance(request.REQUEST['id'], basestring):
+    if 'id' not in request.REQUEST or not isinstance(request.REQUEST['id'], basestring):
         return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
     e = subscr_Es.event_by_id(request.REQUEST['id'])
     if not e:
@@ -128,7 +128,7 @@ def _api_event_set_opened(request):
     return JsonHttpResponse({'success': True})
 
 def _api_get_email_addresses(request):
-    if not 'id' in request.REQUEST:
+    if 'id' not in request.REQUEST:
         return JsonHttpResponse({'error': 'missing arguments'})
     event = subscr_Es.event_by_id(request.REQUEST['id'])
     if not event:

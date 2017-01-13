@@ -7,7 +7,7 @@ from kn.leden.models import OldKnUser, Transaction
 def main():
     u2t = dict()
     for t in Transaction.objects.order_by('date').all():
-        if not t.user in u2t:
+        if t.user not in u2t:
             u2t[t.user] = list()
         u2t[t.user].append(t)
     for u in u2t.iterkeys():

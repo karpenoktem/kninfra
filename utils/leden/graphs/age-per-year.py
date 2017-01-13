@@ -21,9 +21,9 @@ def main():
             if m.dateOfBirth is None:
                 continue
             age = int((start_dt - m.dateOfBirth).days / 365.242)
-            if not age in current:
+            if age not in current:
                 current[age]= 0
-            if not age in ages:
+            if age not in ages:
                 ages.add(age)
             current[age] += 1
         data.append(current)

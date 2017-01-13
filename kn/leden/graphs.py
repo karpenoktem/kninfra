@@ -20,10 +20,10 @@ import kn.leden.entities as Es
 
 @login_required
 def view(request, graph, ext):
-    if not graph in GRAPHS:
+    if graph not in GRAPHS:
         raise Http404
     timeout, update, exts = GRAPHS[graph]
-    if not ext in exts:
+    if ext not in exts:
         raise Http404
     graph_fn = graph + '.' + ext
     path = os.path.join(settings.GRAPHS_PATH, graph_fn)

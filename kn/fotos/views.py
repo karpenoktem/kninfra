@@ -112,7 +112,7 @@ def fotos(request, path=''):
 
 def cache(request, cache, path):
     path = unquote(path)
-    if not cache in fEs.CACHE_TYPES:
+    if cache not in fEs.CACHE_TYPES:
         raise Http404
     entity = fEs.by_path(path)
     if entity is None:

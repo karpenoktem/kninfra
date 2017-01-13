@@ -1117,9 +1117,9 @@ class User(Entity):
         return self._data['emailAddresses'][0]['email']
     @property
     def full_name(self):
-        if (not 'person' in self._data or
-                not 'family' in self._data['person'] or
-                not 'nick' in self._data['person']):
+        if ('person' not in self._data or
+                'family' not in self._data['person'] or
+                'nick' not in self._data['person']):
             return unicode(super(User, self).humanName)
         bits = self._data['person']['family'].split(',', 1)
         if len(bits) == 1:
@@ -1214,7 +1214,7 @@ class User(Entity):
     def study_start(self, study, institute, number, start_date, save=True):
         start_date = datetime.datetime(start_date.year, start_date.month,
                 start_date.day)
-        if not 'studies' in self._data:
+        if 'studies' not in self._data:
             self._data['studies'] = []
         if start_date <= self.last_study_end_date:
             raise EntityException('overlapping study')

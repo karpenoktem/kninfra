@@ -37,7 +37,7 @@ def check_namespace():
         n = n.union(o)
 
     for a in Alias.objects.all():
-        if not a.target in n:
+        if a.target not in n:
             print '%s -> %s, target doesn\'t exist' % \
                     (a.source, a.target)
 

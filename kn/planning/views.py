@@ -319,7 +319,7 @@ def event_edit(request, eventid):
             context_instance=RequestContext(request))
 
 def _api_send_reminder(request):
-    if not 'vacancy_id' in request.REQUEST:
+    if 'vacancy_id' not in request.REQUEST:
         return JsonHttpResponse({'error': 'missing argument'})
     v = Vacancy.by_id(request.REQUEST['vacancy_id'])
     if not v:
@@ -352,7 +352,7 @@ def planning_template(request, poolname):
             'vacancies': list()}
         shifts = dict()
         for v in vacancies:
-            if not v.begin in shifts:
+            if v.begin not in shifts:
                 shifts[v.begin] = {
                     'name': v.name,
                     'begin': v.begin,

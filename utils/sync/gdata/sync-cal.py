@@ -78,7 +78,7 @@ def sync_bd(cs, cal):
     while True:
         for event in feed.entry:
             fn = unicode(event.title.text, 'UTF-8')
-            if not fn in fn_lut:
+            if fn not in fn_lut:
                 print "Deleting stray event: %s" % fn
                 cs.DeleteEvent(event.GetEditLink().href)
                 continue

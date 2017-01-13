@@ -65,7 +65,7 @@ def close_note(data, request):
           >> {action:"close_note", id: "5038b134d4080073f410fafd"}
           << {ok: true}
         ( << {ok: false, error: "Note already closed"} ) """
-    if not 'secretariaat' in request.user.cached_groups_names:
+    if 'secretariaat' not in request.user.cached_groups_names:
         return {'ok': False, 'error': 'Permission denied'}
     note = Es.note_by_id(_id(data.get('id'))) 
     if note is None:
@@ -181,7 +181,7 @@ def entity_end_study(data, request):
     if 'end_date' not in data or not isinstance(data['end_date'], basestring):
         return {'ok': False, 'error': 'Missing argument "end_date"'}
 
-    if not 'secretariaat' in request.user.cached_groups_names:
+    if 'secretariaat' not in request.user.cached_groups_names:
         return {'ok': False, 'error': 'Permission denied'}
 
     e = Es.by_id(data['id'])
@@ -208,7 +208,7 @@ def entity_set_property(data, request):
     if 'value' not in data or not isinstance(data['value'], basestring):
         return {'ok': False, 'error': 'Missing argument "value"'}
 
-    if not 'secretariaat' in request.user.cached_groups_names:
+    if 'secretariaat' not in request.user.cached_groups_names:
         return {'ok': False, 'error': 'Permission denied'}
 
     property = data['property']
@@ -233,7 +233,7 @@ def adduser_suggest_username(data, request):
     if 'last_name' not in data or not isinstance(data['last_name'], basestring):
         return {'ok': False, 'error': 'Missing argument "last_name"'}
 
-    if not 'secretariaat' in request.user.cached_groups_names:
+    if 'secretariaat' not in request.user.cached_groups_names:
         return {'ok': False, 'error': 'Permission denied'}
 
     return {'ok': True,

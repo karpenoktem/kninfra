@@ -7,7 +7,7 @@ def main():
     leden = frozenset(Es.by_name('leden').get_members())
     han = Es.by_id('4e6fcc85e60edf3dc0000015')
     for m in sorted(Es.by_institute(han), key=lambda x: str(x.name)):
-        if not m in leden:
+        if m not in leden:
             continue
         ok = False
         for study in m.studies:
