@@ -9,6 +9,7 @@ import subprocess
 
 from kn.base._random import pseudo_randstr
 
+
 def unix_setpass(cilia, user, password):
     kn_gid = grp.getgrnam('kn').gr_gid
     pwent = pwd.getpwnam(user)
@@ -19,6 +20,7 @@ def unix_setpass(cilia, user, password):
     if ph.returncode == 0:
         return {'success': True}
     return {'success': False}
+
 
 def set_unix_map(cilia, _map):
     # First get the list of all current users

@@ -14,6 +14,8 @@ from kn.leden.mongo import _id
 import kn.poll.entities as poll_Es
 
 # We create for every answerSet a form
+
+
 def create_questionForm(question):
     class QuestionForm(forms.Form):
         def __init__(self, *args, **kwargs):
@@ -24,6 +26,7 @@ def create_questionForm(question):
                         [(-1, _('(geen antwoord)'))],
                 required=False)
     return QuestionForm
+
 
 @login_required
 def vote(request, name):

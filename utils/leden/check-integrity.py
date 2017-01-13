@@ -9,6 +9,7 @@ from_settings_import("DT_MIN", "DT_MAX", globals())
 # Do some too-intensive-for-Giedo sanity checks on the database
 # Currently, check for orphan relations.
 
+
 def main():
     ids = Es.ids()
 

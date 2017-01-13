@@ -6,6 +6,7 @@ import MySQLdb
 from common import *
 from kn.leden.models import OldKnGroup, OldKnUser
 
+
 def forum_email():
     with open('forum-email.template', 'r') as f:
         templ = f.read()

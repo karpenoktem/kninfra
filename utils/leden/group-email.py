@@ -8,6 +8,7 @@ from datetime import date, datetime
 from kn.leden.models import OldKnUser, OldKnGroup
 from common import *
 
+
 def group_email():
     with open('group-email.template', 'r') as f:
         templ = f.read()

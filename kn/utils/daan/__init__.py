@@ -19,6 +19,7 @@ from kn.utils.daan.quassel import apply_quassel_changes, quassel_setpass
 
 from django.conf import settings
 
+
 class Daan(WhimDaemon):
     def __init__(self):
         super(Daan, self).__init__(settings.DAAN_SOCKET)

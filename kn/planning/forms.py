@@ -6,6 +6,7 @@ from django.utils.translation import ugettext as _
 import kn.leden.entities as Es
 from kn.planning.entities import Pool
 
+
 class WorkerChoiceField(forms.ChoiceField):
     def __init__(self, *args, **kwargs):
         # TODO Reduce these queries into one.
@@ -16,6 +17,7 @@ class WorkerChoiceField(forms.ChoiceField):
             del kwargs['sort_choices']
         kwargs['choices'].insert(0, ('', _('Selecteer')))
         super(WorkerChoiceField, self).__init__(*args, **kwargs)
+
 
 class ManagePlanningForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -35,6 +37,7 @@ class ManagePlanningForm(forms.Form):
         for vacancy in vacancies:
             vacancy.set_form_field(self['shift_%s' % vacancy._id])
 
+
 class EventCreateForm(forms.Form):
     name = forms.CharField(label="Naam", initial="Borrel")
     date = forms.DateField(label="Datum", initial=datetime.date.today())
@@ -49,6 +52,7 @@ class EventCreateForm(forms.Form):
         ('vrijdag_met_tappers', _('Vrijdag (met tappers)')),
         ('koken', 'Koken'),
         ))
+
 
 class AddVacancyForm(forms.Form):
     name = forms.CharField(label=_("Shiftnaam"), initial="eerste dienst")

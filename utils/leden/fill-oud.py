@@ -4,6 +4,7 @@ import _import
 
 import kn.leden.entities as Es
 
+
 def main():
     oud = Es.by_name('oud')
     cur_leden, old_leden = Es.by_name('leden').get_current_and_old_members()

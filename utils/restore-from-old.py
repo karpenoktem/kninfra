@@ -16,6 +16,7 @@ from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 from kn.utils.giedo.db import update_db
 
+
 def main(data):
     def str_to_date(s):
         if s is None:

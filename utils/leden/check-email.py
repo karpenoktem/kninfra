@@ -16,6 +16,7 @@ from cStringIO import StringIO
 
 DAYS_IN_YEAR = 365.242199
 
+
 def check_email():
     dt_now = now()
     comm_ids = map(_id, Es.by_name('comms').get_bearers())

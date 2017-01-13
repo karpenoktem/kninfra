@@ -3,6 +3,7 @@ from django.utils.translation import ugettext as _
 
 register = template.Library()
 
+
 @register.filter(name='rel_when')
 def rel_when_filter(r):
     if not isinstance(r, dict):

@@ -9,6 +9,7 @@ from kn.leden.date import now
 
 # TODO (issue #7) handle cycles properly.
 
+
 def generate_postfix_map(giedo):
     tbl = dict() # the virtual map
     non_mailman_groups = {}
@@ -43,6 +44,7 @@ def generate_postfix_map(giedo):
         if email is not None:
             tbl[e.canonical_email].append(email)
     return tbl
+
 
 def generate_postfix_slm_map(giedo):
     # We generate the postfix "sender_login_maps".

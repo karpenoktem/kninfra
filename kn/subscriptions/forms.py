@@ -8,6 +8,7 @@ import kn.subscriptions.entities as subscr_Es
 
 import textwrap
 
+
 def get_allowed_owners(user):
     '''
     Get the entities (often groups) that this owner is allowed to use.
@@ -17,6 +18,7 @@ def get_allowed_owners(user):
     entities = [user] + [g for g in user.cached_groups
                            if subscr_Es.may_set_owner(user, g)]
     return entities
+
 
 def validate_event_name(name):
     if subscr_Es.event_by_name(name):

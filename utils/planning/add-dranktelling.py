@@ -10,6 +10,7 @@ from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 from kn.planning.entities import Pool, Worker, Event, Vacancy
 
+
 def hm2s(hours, minutes=0):
     return (hours * 60 + minutes) * 60
 

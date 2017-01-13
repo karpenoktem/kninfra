@@ -6,6 +6,7 @@ from django.utils import dateparse
 import unidecode
 import datetime
 
+
 def find_name_for_user(first_name, last_name):
     """ Given the first and the last name of a user, find a free name """
     def clean(s, last_name=False, capitalize_tussenvoegsels=False):
@@ -60,6 +61,7 @@ def find_name_for_user(first_name, last_name):
         n = fn + ln + str(i)
         if n not in names:
             return n
+
 
 def parse_date(s):
     '''

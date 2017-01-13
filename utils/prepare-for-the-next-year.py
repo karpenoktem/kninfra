@@ -11,6 +11,7 @@ from kn.leden.mongo import _id
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 
+
 def load_year_overrides():
     print 'loading year-overrides ...'
     year_overrides = {}
@@ -21,6 +22,7 @@ def load_year_overrides():
     years = frozenset([t[1] for t in year_overrides.keys()])
     min_year, max_year = min(years), max(years)
     return years, year_overrides, min_year, max_year
+
 
 def create_year_overrides_for(year):
     """ Creates the year overrides for a certain year """
@@ -35,6 +37,7 @@ def create_year_overrides_for(year):
         'tags': [parent_tag],
         'types': ['tag'],
         'year-override': {'type': False, 'year': year}})
+
 
 def main():
     parser = argparse.ArgumentParser(description="Prepare for the next year")

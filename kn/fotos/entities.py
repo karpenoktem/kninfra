@@ -42,19 +42,24 @@ def ensure_indices():
                       default_language="dutch",
                       sparse=True)
 
+
 def entity(d):
     if d is None:
         return None
     return TYPE_MAP[d['type']](d)
 
+
 def by_id(the_id):
     return entity(fcol.find_one({'_id': _id(the_id)}))
+
 
 def by_oldId(_type, oldId):
     return entity(fcol.find_one({'type': _type, 'oldId': oldId}))
 
+
 def by_path_and_name(p, n):
     return entity(fcol.find_one({'path': p, 'name': n}))
+
 
 def by_path(p):
     bits = p.rsplit('/', 1)
@@ -65,10 +70,12 @@ def by_path(p):
         pp, name = bits
     return by_path_and_name(pp, name)
 
+
 def is_admin(user):
     if user is None:
         return False
     return bool(user.cached_groups_names & frozenset(('fotocie', 'secretariaat')))
+
 
 def actual_visibility(visibility):
     actual = frozenset(visibility)
@@ -82,6 +89,7 @@ def actual_visibility(visibility):
         actual |= implies.get(v, frozenset(v))
 
     return actual
+
 
 class FotoEntity(SONWrapper):
     CACHES = {}
@@ -383,6 +391,7 @@ class FotoEntity(SONWrapper):
         if save:
             self.save()
 
+
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
         super(FotoAlbum, self).__init__(data)
@@ -497,6 +506,7 @@ class FotoAlbum(FotoEntity):
             self.save()
 
         return True
+
 
 class Foto(FotoEntity):
     # keep up to date with fotos.js (onresize)
@@ -620,6 +630,7 @@ class Foto(FotoEntity):
 class Video(FotoEntity):
     def __init__(self, data):
         super(Video, self).__init__(data)
+
 
 def all():
     for d in fcol.find():

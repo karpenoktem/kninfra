@@ -26,6 +26,7 @@ import kn.fotos.entities as fEs
 import kn.leden.entities as Es
 from kn.fotos.api import album_json, album_parents_json
 
+
 def fotos(request, path=''):
     path = unquote(path)
 
@@ -110,6 +111,7 @@ def fotos(request, path=''):
               'people': people},
              context_instance=RequestContext(request))
 
+
 def cache(request, cache, path):
     path = unquote(path)
     if cache not in fEs.CACHE_TYPES:
@@ -139,6 +141,7 @@ def cache(request, cache, path):
     resp['Cache-Control'] = cc
     return resp
 
+
 def compat_view(request):
     path = request.GET.get('foto', '')
     name = None
@@ -146,9 +149,11 @@ def compat_view(request):
         path, name = path.rsplit('/', 1)
     return redirect('fotos', path=path+'#'+name, permanent=True)
 
+
 def compat_foto(request):
     path = request.GET.get('foto', '')
     return redirect('fotos-cache', cache='full', path=path, permanent=True)
+
 
 @login_required
 def fotoadmin_create_event(request):
@@ -171,6 +176,7 @@ def fotoadmin_create_event(request):
     return render_to_response('fotos/admin/create.html',
             {'form': form, 'events': list_events()},
              context_instance=RequestContext(request))
+
 
 @login_required
 def fotoadmin_move(request):

@@ -6,6 +6,7 @@ from kn.leden.mongo import db, _id
 
 wcol = db['planning_workers']
 
+
 def main():
     count = 0
     for vacancy in Vacancy.all():

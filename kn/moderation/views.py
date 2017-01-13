@@ -23,6 +23,7 @@ import Mailman.MailList
 import Mailman.Utils
 from Mailman import mm_cfg
 
+
 @login_required
 def redirect(request, name):
     if not request.build_absolute_uri().startswith(
@@ -49,6 +50,7 @@ def redirect(request, name):
     r[str(bits[0])] = str(bits[1])
     return r
 
+
 def _deactivate_mm(ml, name, user, record, moderators):
     if not ml.emergency:
         return
@@ -68,6 +70,7 @@ def _deactivate_mm(ml, name, user, record, moderators):
                     'name': name,
                     'user': user})
 
+
 def _renew_mm(ml, name, user, record, moderators):
     if not ml.emergency:
         return
@@ -84,6 +87,7 @@ def _renew_mm(ml, name, user, record, moderators):
                 'user': user,
                 'until': until})
     return record
+
 
 def _activate_mm(ml, name, user, record, moderators):
     if ml.emergency:
@@ -103,6 +107,7 @@ def _activate_mm(ml, name, user, record, moderators):
                 'user': user,
                 'until': until})
     return record
+
 
 @login_required
 def overview(request):

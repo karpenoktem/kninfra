@@ -8,6 +8,7 @@ import_mailman()
 from Mailman.Utils import list_names
 from Mailman.MailList import MailList
 
+
 def main():
     url = 'https://%s/mailman/' % settings.MAILDOMAIN
     for x in list_names():

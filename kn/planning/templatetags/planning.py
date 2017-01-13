@@ -2,6 +2,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.filter(name='last_shift')
 def last_shift_filter(worker, pool):
     return pool.last_shift(worker)

@@ -10,6 +10,7 @@ from Mailman.MailList import MailList
 
 from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias
 
+
 def check_geinteresseerden():
     print "GEINTERESSEERDEN"
     es = frozenset(map(lambda m: m.email.lower(),
@@ -18,6 +19,7 @@ def check_geinteresseerden():
     for m in ml.members:
         if m.lower() in es:
             print "%s in geinteresseerden" % m
+
 
 def check_namespace():
     print "NAMESPACE"

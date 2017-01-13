@@ -11,6 +11,7 @@ from kn.leden import giedo
 from kn.leden.utils import find_name_for_user, parse_date
 from django.views.decorators.http  import require_POST
 
+
 @login_required
 @require_POST
 def view(request):
@@ -28,6 +29,7 @@ def _humanName_of_entity(e):
         return "%s (%s)" % (e.humanName, e.name)
     return unicode(e.humanName)
 
+
 def entities_by_keyword(data, request):
     """ Wraps Es.by_keyword.  Finds the first 20 entities matching the given
         keyword.  Example:
@@ -44,6 +46,7 @@ def entities_by_keyword(data, request):
                     for e in Es.by_keyword(data.get('keyword', ''),
                                            _type=_type)]
 
+
 def entity_humanName_by_id(data, request):
     """ Returns the human name of an entity by its id.  Example:
 
@@ -52,12 +55,14 @@ def entity_humanName_by_id(data, request):
     e = Es.by_id(data['id'])
     return None if e is None else _humanName_of_entity(e)
 
+
 def get_last_synced(data, request):
     """ Returns the timestamp when giedo last synced.  Example:
 
           >> {action:"get_last_synced"}
           << 1362912433.822199 """
     return giedo.get_last_synced()
+
 
 def close_note(data, request):
     """ Wraps Note.close()
@@ -77,6 +82,7 @@ def close_note(data, request):
                         Es.by_name('secretariaat').canonical_full_email, {
                             'note': note})
     return {'ok': True}
+
 
 def entity_update_primary(data, request):
     """ Updates an entity
@@ -133,6 +139,7 @@ def entity_update_primary(data, request):
     giedo.sync_async(request)
     return {'ok': True}
 
+
 def entity_update_visibility(data, request):
     """ Updates the visibility of a part of an entity (e.g. email, phone number...)
             Example:
@@ -170,6 +177,7 @@ def entity_update_visibility(data, request):
     giedo.sync_async(request)
     return {'ok': True}
 
+
 def entity_end_study(data, request):
     '''
     End a study at the specified date.
@@ -200,6 +208,7 @@ def entity_end_study(data, request):
 
     return {'ok': True}
 
+
 def entity_set_property(data, request):
     if 'id' not in data or not isinstance(data['id'], basestring):
         return {'ok': False, 'error': 'Missing argument "id"'}
@@ -226,6 +235,7 @@ def entity_set_property(data, request):
         return {'ok': False, 'error': 'Unknown property "%s"' % property}
 
     return {'ok': True}
+
 
 def adduser_suggest_username(data, request):
     if 'first_name' not in data or not isinstance(data['first_name'], basestring):

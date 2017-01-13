@@ -35,6 +35,7 @@ from oauth2client.client import SignedJwtAssertionCredentials
 # See https://developers.google.com/api-client-library/python/apis/calendar/v3
 # for documentation about the APIs used here.
 
+
 def get_credentials():
     key = json.loads(open(settings.GOOGLE_OAUTH2_KEY, 'r').read())
     return SignedJwtAssertionCredentials(
@@ -42,6 +43,7 @@ def get_credentials():
                     private_key=key['private_key'],
                     scope='https://www.googleapis.com/auth/calendar.readonly',
                     user_agent='Karpe Noktem agenda fetcher')
+
 
 def parse_item_date(date):
     # dateTime: specific time
@@ -64,6 +66,7 @@ def fetch_agenda(h, cal_id):
                        parse_item_date(item['start']),
                        parse_item_date(item['end'])))
     return agenda
+
 
 def fetch():
     h = httplib2.Http()

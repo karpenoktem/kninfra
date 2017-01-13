@@ -46,6 +46,7 @@ import kn.leden.entities as Es
 
 logger = logging.getLogger(__name__)
 
+
 @login_required
 def user_list(request, page):
     pr = Paginator(Es.ecol.find({'types': 'user'}).sort(
@@ -58,6 +59,7 @@ def user_list(request, page):
             {'users': [Es.User(m) for m in p.object_list],
              'page_obj': p, 'paginator': pr},
             context_instance=RequestContext(request))
+
 
 @login_required
 def entity_detail(request, name=None, _id=None, type=None):
@@ -74,6 +76,7 @@ def entity_detail(request, name=None, _id=None, type=None):
     if type not in Es.TYPE_MAP:
         raise ValueError, _("Onbekende entiteit type")
     return globals()['_'+type+'_detail'](request, getattr(e, 'as_'+type)())
+
 
 def _entity_detail(request, e):
     def _cmp(x, y):
@@ -187,6 +190,7 @@ def _entity_detail(request, e):
                 'photoHeight': height})
     return ctx
 
+
 def _user_detail(request, user):
     ctx = _entity_detail(request, user)
     ctx['photosUrl'] = reverse('fotos', kwargs={'path': ''}) + \
@@ -211,6 +215,7 @@ def _user_detail(request, user):
     return render_to_response('leden/user_detail.html', ctx,
             context_instance=RequestContext(request))
 
+
 def _group_detail(request, group):
     ctx = _entity_detail(request, group)
     isFreeToJoin = group.has_tag(Es.id_by_name('!free-to-join', True))
@@ -228,10 +233,13 @@ def _group_detail(request, group):
     return render_to_response('leden/group_detail.html', ctx,
             context_instance=RequestContext(request))
 
+
 def _tag_detail(request, tag):
     ctx = _entity_detail(request, tag)
     return render_to_response('leden/tag_detail.html', ctx,
             context_instance=RequestContext(request))
+
+
 def _brand_detail(request, brand):
     ctx = _entity_detail(request, brand)
     def _cmp(x, y):
@@ -253,6 +261,8 @@ def _brand_detail(request, brand):
         r['virtual'] = Es.relation_is_virtual(r)
     return render_to_response('leden/brand_detail.html', ctx,
             context_instance=RequestContext(request))
+
+
 def _study_detail(request, study):
     ctx = _entity_detail(request, study)
     ctx['students'] = students = []
@@ -271,6 +281,8 @@ def _study_detail(request, study):
     ctx['students'].sort(cmp=_cmp)
     return render_to_response('leden/study_detail.html', ctx,
             context_instance=RequestContext(request))
+
+
 def _institute_detail(request, institute):
     ctx = _entity_detail(request, institute)
     ctx['students'] = students = []
@@ -290,6 +302,7 @@ def _institute_detail(request, institute):
     return render_to_response('leden/institute_detail.html', ctx,
             context_instance=RequestContext(request))
 
+
 @login_required
 def entities_by_year_of_birth(request, year):
     _year = int(year)
@@ -304,11 +317,13 @@ def entities_by_year_of_birth(request, year):
     return render_to_response('leden/entities_by_year_of_birth.html', ctx,
             context_instance=RequestContext(request))
 
+
 @login_required
 def years_of_birth(request):
     return render_to_response('leden/years_of_birth.html', {
                     'years': reversed(Es.get_years_of_birth())},
             context_instance=RequestContext(request))
+
 
 @login_required
 def users_underage(request):
@@ -323,9 +338,11 @@ def users_underage(request):
                     'final_date': final_date},
             context_instance=RequestContext(request))
 
+
 @login_required
 def ik(request):
     return HttpResponseRedirect(request.user.get_absolute_url())
+
 
 @login_required
 def ik_chsmoel(request):
@@ -361,6 +378,7 @@ def ik_chsmoel(request):
     Es.notify_informacie('set_smoel', request.user, entity=user)
     return redirect_to_referer(request)
 
+
 @login_required
 def user_smoel(request, name):
     user = Es.by_name(name)
@@ -374,6 +392,7 @@ def user_smoel(request, name):
         raise Http404
     return HttpResponse(FileWrapper(img), content_type="image/jpeg")
 
+
 def _ik_chpasswd_handle_valid_form(request, form):
     oldpw = form.cleaned_data['old_password']
     newpw = form.cleaned_data['new_password']
@@ -381,6 +400,7 @@ def _ik_chpasswd_handle_valid_form(request, form):
     t = _("""Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd.""")
     messages.info(request, t % request.user.first_name)
     return HttpResponseRedirect(reverse('smoelen-home'))
+
 
 @login_required
 def ik_chpasswd(request):
@@ -400,6 +420,7 @@ def ik_chpasswd(request):
     return render_to_response('leden/ik_chpasswd.html',
             { 'form': form, 'errors': errstr},
             context_instance=RequestContext(request))
+
 
 @login_required
 def ik_chpasswd_villanet(request):
@@ -425,6 +446,7 @@ def ik_chpasswd_villanet(request):
     return render_to_response('leden/ik_chpasswd_villanet.html',
             { 'form': form, 'errors': errstr},
             context_instance=RequestContext(request))
+
 
 def rauth(request):
     """
@@ -485,6 +507,7 @@ def rauth(request):
         '?' if request.REQUEST['url'].find('?') == -1 else '&',
         str(request.user.name), token))
 
+
 def accounts_api(request):
     if request.user.is_authenticated():
         ret = {'valid': True,
@@ -493,6 +516,7 @@ def accounts_api(request):
         ret = {'valid': False}
 
     return JsonHttpResponse(ret)
+
 
 def api_users(request):
     verified_key = False
@@ -505,6 +529,7 @@ def api_users(request):
     for m in Es.users():
         ret[str(m.name)] = m.full_name
     return HttpResponse(json.dumps(ret), content_type="text/json")
+
 
 @login_required
 def secr_add_user(request):
@@ -589,6 +614,7 @@ def secr_add_user(request):
             {'form': form},
             context_instance=RequestContext(request))
 
+
 @login_required
 def secr_notes(request):
     if 'secretariaat' not in request.user.cached_groups_names:
@@ -596,6 +622,7 @@ def secr_notes(request):
     return render_to_response('leden/secr_notes.html',
                 {'notes': Es.get_open_notes()},
             context_instance=RequestContext(request))
+
 
 @login_required
 def secr_add_group(request):
@@ -627,6 +654,7 @@ def secr_add_group(request):
     return render_to_response('leden/secr_add_group.html', {'form': form},
             context_instance=RequestContext(request))
 
+
 @login_required
 def relation_end(request, _id):
     rel = Es.relation_by_id(_id)
@@ -642,6 +670,7 @@ def relation_end(request, _id):
 
     giedo.sync_async(request)
     return redirect_to_referer(request)
+
 
 @login_required
 def relation_begin(request):
@@ -680,6 +709,7 @@ def relation_begin(request):
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
+
 def _get_group_and_tag(request):
     '''
     Helper for tag and untag to quickly get the group and tag from a request or
@@ -715,6 +745,7 @@ def tag(request):
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
+
 @login_required
 def untag(request):
     group, tag = _get_group_and_tag(request)
@@ -725,6 +756,7 @@ def untag(request):
     Es.notify_informacie('untag', request.user, entity=group, tag=tag)
     giedo.sync_async(request)
     return redirect_to_referer(request)
+
 
 @login_required
 def user_reset_password(request, _id):
@@ -741,6 +773,7 @@ def user_reset_password(request, _id):
                             'password': pwd})
     messages.info(request, _("Wachtwoord gereset!"))
     return redirect_to_referer(request)
+
 
 @login_required
 def note_add(request):
@@ -759,6 +792,7 @@ def note_add(request):
                             'on': on})
     return redirect_to_referer(request)
 
+
 @login_required
 def secr_update_site_agenda(request):
         if 'secretariaat' not in request.user.cached_groups_names:
@@ -766,6 +800,7 @@ def secr_update_site_agenda(request):
         giedo.update_site_agenda()
         messages.info(request, _("Agenda geupdate!"))
         return redirect_to_referer(request)
+
 
 @login_required
 def ik_openvpn(request):
@@ -787,6 +822,7 @@ def ik_openvpn(request):
             {'password_incorrect': password_incorrect},
             context_instance=RequestContext(request))
 
+
 @login_or_basicauth_required
 def ik_openvpn_download(request, filename):
     m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', filename)
@@ -805,6 +841,7 @@ def ik_openvpn_download(request, filename):
     response['Content-Length'] = default_storage.size(p)
     # XXX use ETags and returns 304's
     return response
+
 
 def language(request):
     return HttpResponse(str(request.LANGUAGE_CODE))

@@ -7,6 +7,7 @@ from django.conf import settings
 
 __mailman_imported = False
 
+
 def import_mailman():
     global __mailman_imported
     if __mailman_imported:

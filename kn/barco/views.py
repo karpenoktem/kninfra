@@ -22,6 +22,8 @@ settings.DRANK_REPOS_PATH = '/home/infra/barco/%s/'
 # The specific behaviour for each different form 
 #  (barform, inventory count, ... ) is stored in a subclass
 #  of the "FormSpecifics" class.
+
+
 class FormSpecifics(object):
     def __init__(self, 
             django_form, 

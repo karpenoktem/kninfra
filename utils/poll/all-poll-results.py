@@ -3,6 +3,7 @@ import _import
 
 import kn.poll.entities as poll_Es
 
+
 def main():
     for p in poll_Es.all_polls():
         print p.humanName

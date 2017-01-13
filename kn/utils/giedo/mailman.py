@@ -11,6 +11,7 @@ import Mailman
 import Mailman.Utils
 import Mailman.MailList
 
+
 def generate_mailman_changes(giedo):
     todo = {'create': [], 'add': {}, 'remove': {}}
     # TODO mm_groups and mm_rels

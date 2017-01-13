@@ -18,6 +18,7 @@ from django.conf import settings
 
 import kn.leden.entities as Es
 
+
 @login_required
 def view(request, graph, ext):
     if graph not in GRAPHS:
@@ -35,6 +36,7 @@ def view(request, graph, ext):
                     os.path.join(settings.GRAPHS_PATH, graph)))
     return HttpResponse(FileWrapper(default_storage.open(path)),
                                 content_type=mimetypes.guess_type(path)[0])
+
 
 def update_member_count(base_path):
     """
@@ -75,6 +77,7 @@ def update_member_count(base_path):
     finally:
         os.chdir(old_wd)
         shutil.rmtree(temp_dir)
+
 
 def _generate_member_count():
     events = []

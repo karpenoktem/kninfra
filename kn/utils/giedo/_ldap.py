@@ -6,6 +6,7 @@ import kn.leden.entities as Es
 
 from django.conf import settings
 
+
 def generate_ldap_changes(giedo):
     if not settings.LDAP_PASS:
         logging.warning('ldap: no credentials available, skipping')

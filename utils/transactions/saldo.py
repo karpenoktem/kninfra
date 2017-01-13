@@ -4,6 +4,7 @@ import _import
 
 from kn.leden.models import OldKnUser, Transaction
 
+
 def main():
     u2t = dict()
     for t in Transaction.objects.order_by('date').all():

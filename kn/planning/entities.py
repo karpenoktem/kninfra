@@ -12,6 +12,7 @@ vcol = db['planning_vacancies']
 
 PLANNER_GROUPS = {'bestuur', 'barco', 'disco', 'chef', 'secretariaat'}
 
+
 def may_manage_planning(user):
     if user is None:
         return False
@@ -23,6 +24,8 @@ def may_manage_planning(user):
 # TODO save vacancies in events?
 
 # ---
+
+
 def ensure_indices():
     vcol.ensure_index('pool')
     vcol.ensure_index('begin')
@@ -66,6 +69,7 @@ class Event(SONWrapper):
 
     def vacancies(self, pool=None):
         return Vacancy.all_by_event(self, pool)
+
 
 class Pool(SONWrapper):
     def __init__(self, data):
@@ -131,15 +135,19 @@ class Pool(SONWrapper):
 # d is an approximation.
 #
 # adt stands for Approximate DateTime.
+
+
 def adt_to_datetime(r):
     if isinstance(r, datetime.datetime):
         return r
     return r[0]
 
+
 def adt_is_approximation(r):
     if isinstance(r, datetime.datetime):
         return False
     return r[1]
+
 
 class Vacancy(SONWrapper):
     formField = None

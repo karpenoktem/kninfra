@@ -15,6 +15,7 @@ yaml.SafeLoader.add_constructor('!id',
         lambda loader, node: bson.objectid.ObjectId(
                         loader.construct_scalar(node)))
 
+
 def main():
     conn = pymongo.Connection(MONGO_HOST)
     db = conn[MONGO_DATABASE]

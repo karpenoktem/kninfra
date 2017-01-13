@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.conf import settings
 
+
 def _lines_of_file_as_set(path):
     """ Opens the file at <path>; reads all lines and returns them in a set """
     ret = set()
@@ -20,6 +21,7 @@ def _lines_of_file_as_set(path):
                 break
             ret.add(l[:-1])
     return ret
+
 
 def homedir(request, root, subdir, path):
     original_root = root

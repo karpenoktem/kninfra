@@ -13,6 +13,7 @@ import atom
 
 GCAL_SCHEME = 'http://schemas.google.com/gCal/2005#'
 
+
 def acl_sync_cal(cs, cal, initial_role):
     acl_url = 'http://www.google.com/calendar'+ \
                      '/feeds/%s/acl/full' % cal
@@ -49,10 +50,12 @@ def acl_sync_cal(cs, cal, initial_role):
             else:
                 raise
 
+
 def icaldate(d):
     return "%s%s%s" % (d.year,
                str(d.month).zfill(2),
                str(d.day).zfill(2))
+
 
 def sync_bd(cs, cal):
     cal_uri = '/calendar/feeds/%s/private/full' % cal

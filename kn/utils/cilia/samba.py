@@ -6,6 +6,7 @@ import subprocess
 
 from kn.base._random import pseudo_randstr
 
+
 def pdbedit_list():
     users = dict()
     ph = subprocess.Popen(['pdbedit', '-L'],
@@ -33,6 +34,7 @@ def pdbedit_list():
             'flag_workstationtrust': 'W' in flags }) # Unused
     return users
 
+
 def samba_setpass(cilia, user, password):
     kn_gid = grp.getgrnam('kn').gr_gid
     pwent = pwd.getpwnam(user)
@@ -42,6 +44,7 @@ def samba_setpass(cilia, user, password):
             stdin=subprocess.PIPE, stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT, close_fds=True)
     return ph.communicate("%s\n" % password)[0]
+
 
 def set_samba_map(cilia, _map):
     l = logging.getLogger(__name__)

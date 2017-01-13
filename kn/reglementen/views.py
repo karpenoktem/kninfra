@@ -5,11 +5,13 @@ from django.template import RequestContext
 
 import kn.reglementen.entities as Es_regl
 
+
 @login_required
 def reglement_list(request):
     return render_to_response('reglementen/reglement_list.html',
             {'reglementen': Es_regl.all()},
             context_instance=RequestContext(request))
+
 
 @login_required
 def reglement_detail(request, name):
@@ -19,6 +21,7 @@ def reglement_detail(request, name):
     return render_to_response('reglementen/reglement_detail.html',
             {'reglement': reglement},
             context_instance=RequestContext(request))
+
 
 @login_required
 def version_detail(request, reglement_name, version_name):

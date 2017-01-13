@@ -12,6 +12,7 @@ import warnings
 
 import django
 
+
 def setup_virtual_package(name, path=os.curdir):
     """ Sets up a package at the given path with a given
         name """

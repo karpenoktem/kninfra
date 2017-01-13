@@ -8,6 +8,7 @@ from kn.base._random import pseudo_randstr
 
 from django.conf import settings
 
+
 def generate_quassel_changes(giedo):
     if not settings.QUASSEL_CONFIGDIR:
         logging.warning('quassel: no config dir available, skipping')

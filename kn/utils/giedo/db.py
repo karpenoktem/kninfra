@@ -5,6 +5,7 @@ from kn.leden.date import now
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 
+
 def update_db(giedo):
     dt_now = now()
     # Load tags
@@ -193,6 +194,7 @@ def update_db(giedo):
         u.save()
         logging.info("%s user %s", ("activated" if is_active else "deactivated"),
                         str(u.name))
+
 
 def _create_yeargroup(g, year, name, tags, groups, id2name):
     n = {'types': ['group', 'tag'],

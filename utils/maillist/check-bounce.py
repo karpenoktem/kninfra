@@ -5,6 +5,7 @@ import_mailman()
 import Mailman.MailList
 import Mailman.Utils
 
+
 def main():
     for name in Mailman.Utils.list_names():
         ml = Mailman.MailList.MailList(name, lock=False)

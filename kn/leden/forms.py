@@ -12,6 +12,7 @@ from django.conf import settings
 
 import kn.leden.entities as Es
 
+
 class EntityChoiceFieldWidget(forms.TextInput):
     def __init__(self, *args, **kwargs):
         if '_type' in kwargs:
@@ -51,6 +52,7 @@ class EntityChoiceField(forms.CharField):
         kwargs['widget'] = EntityChoiceFieldWidget(_type=_type)
         super(EntityChoiceField, self).__init__(*args, **kwargs)
 
+
 def validate_username(username):
     if username in Es.names():
         raise forms.ValidationError(_('Gebruikersnaam is al in gebruik'))
@@ -59,6 +61,7 @@ def validate_username(username):
                 _('Gebruikersnaam bevat een niet-toegestane letter'))
     if not reserved.allowed(username):
         raise forms.ValidationError(_('Gebruikersnaam is niet toegestaan'))
+
 
 class AddUserForm(forms.Form):
     first_name = forms.CharField(label=_("Voornaam"))
@@ -91,6 +94,7 @@ class AddUserForm(forms.Form):
             required=False,
             widget=forms.CheckboxSelectMultiple())
 
+
 class AddGroupForm(forms.Form):
     name = forms.RegexField(label=_("Naam"), regex=r'^[a-z0-9-]{2,64}$')
     humanName = forms.CharField(label=_("Naam voor mensen"))
@@ -102,6 +106,7 @@ class AddGroupForm(forms.Form):
     true_group = forms.BooleanField(label=_("Volwaardige groep"),
             initial=True)
 
+
 class AddStudyForm(forms.Form):
     study = EntityChoiceField(label=_('Studie'), _type='study')
     study_inst = EntityChoiceField(label=_('Onderwijs instelling'),
@@ -109,6 +114,7 @@ class AddStudyForm(forms.Form):
     study_number = forms.CharField(label=_('Studentnummer'), required=False)
     study_from = forms.DateField(label=_('Start op'),
                                  initial=datetime.date.today)
+
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput())

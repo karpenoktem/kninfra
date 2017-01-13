@@ -13,11 +13,13 @@ extensions = {
     'bmp': 'bmp',
 }
 
+
 def list_album(album):
     fotos = {}
     for foto in album.list_all():
         fotos[foto.name] = foto
     return fotos
+
 
 def scan_album(album):
     fotos = list_album(album)

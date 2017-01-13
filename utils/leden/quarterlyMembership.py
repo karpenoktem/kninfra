@@ -7,6 +7,7 @@ import kn.leden.entities as Es
 
 import datetime
 
+
 def main():
     leden = Es.by_name('leden')
     lut = {}

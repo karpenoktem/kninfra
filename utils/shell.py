@@ -21,6 +21,7 @@ from kn.utils.mailman import import_mailman
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 
+
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
     """ Queries relations """
     if who not in (None, -1):
@@ -36,6 +37,7 @@ def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
     return list(Es.query_relations(who, _with, how, _from, until, True,
                     True, True))
 
+
 def del_rel(who, _with, how):
     """ Removes a relation given by names.
 
@@ -47,6 +49,7 @@ def del_rel(who, _with, how):
     Es.rcol.remove({'who': who,
             'with': _with,
             'how': how})
+
 
 def add_rel(who, _with, how, _from, until):
     """ Adds a relation given by strings.
@@ -65,15 +68,18 @@ def add_rel(who, _with, how, _from, until):
             'from': _from,
             'until': until})
 
+
 def str_to_date(s):
     if isinstance(s, basestring):
         return datetime.datetime(*time.strptime(s, '%Y-%m-%d')[:3])
     return s
 
+
 def add_name(name, extra_name):
     e = Es.by_name(name)
     e._data['names'].append(extra_name)
     e.save()
+
 
 def end_rel(who, _with, how, at=None):
     """ Ends a relation given by names.
@@ -89,14 +95,17 @@ def end_rel(who, _with, how, at=None):
             'how': how,
             'until': DT_MAX}, {'$set': {'until': at}})
 
+
 def qe(keyword):
     """ Queries entities by keyword """
     for e in Es.by_keyword(keyword):
         print "%-20s %s" % (_id(e), unicode(e.humanName))
 
+
 def create_study(name):
     return Es.ecol.insert({'types': ['study'],
                            'humanNames': [{'human': name}]})
+
 
 def create_brand(suffix, name):
     Es.ecol.insert({'humanNames': [{'human': name}],

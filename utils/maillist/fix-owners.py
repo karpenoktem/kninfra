@@ -7,6 +7,7 @@ from Mailman.MailList import MailList
 ALLOWED_OWNERS = ['wortel@karpenoktem.nl',
           'secretaris@karpenoktem.nl']
 
+
 def main():
     for x in list_names():
         ml = MailList(x, True)

@@ -5,6 +5,7 @@ import _import
 from common import *
 from kn.leden.models import OldKnGroup, OldKnUser
 
+
 def forum_email():
     with open('fools-email.template', 'r') as f:
         templ = f.read()

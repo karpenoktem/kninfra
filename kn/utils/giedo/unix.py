@@ -8,6 +8,7 @@ from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 from kn.leden.date import now
 
+
 def generate_unix_map(giedo):
     ret = {'groups': {},
            'users': {}}

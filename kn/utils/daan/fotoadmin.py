@@ -12,6 +12,7 @@ import kn.fotos.entities as fEs
 from kn.fotos.roots import FOTO_ROOTS
 from django.conf import settings
 
+
 def fotoadmin_create_event(daan, date, name, humanName):
     if not re.match('^20\d{2}-\d{2}-\d{2}$', date):
         return {'error': 'Invalid date'}
@@ -34,6 +35,7 @@ def fotoadmin_create_event(daan, date, name, humanName):
     album.update_metadata(album.get_parent(), save=False)
     album.save()
     return {'success': True}
+
 
 def fotoadmin_move_fotos(daan, event, store, user, directory):
     if not re.match('^20\d{2}-\d{2}-\d{2}-[a-z0-9-]{3,64}$', event):

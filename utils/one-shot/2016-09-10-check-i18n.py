@@ -4,6 +4,7 @@
 import glob
 import os.path
 
+
 class Program:
     def check_py(self, path):
         with open(path) as f:

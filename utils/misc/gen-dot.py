@@ -11,6 +11,7 @@ from Mailman import MailList, Utils
 MAILDOMAIN = "karpenoktem.nl"
 LISTDOMAIN = "lists.karpenoktem.nl"
 
+
 def gen_dot():
     d = Dot()
     nodes = dict()

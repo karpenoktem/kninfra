@@ -10,6 +10,7 @@ def redirect_to_referer(request):
         return HttpResponse(_("referer header mist"))
     return HttpResponseRedirect(referer)
 
+
 class JsonHttpResponse(HttpResponse):
     def __init__(self, obj, *args, **kwargs):
         if 'content_type' not in kwargs:

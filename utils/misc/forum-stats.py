@@ -9,6 +9,7 @@ from common import *
 INTERVAL = 60*60*24*7
 MAX_N = 12
 
+
 def len_lb(l, x):
     """ returns the size of the lower bound of x in l assuming l
         is sorted """
@@ -17,6 +18,7 @@ def len_lb(l, x):
         return i + 1
     else:
         return i
+
 
 def glb_index(l, x):
     """ finds the greatest lower bound of x in l assuming l is sorted """
@@ -35,6 +37,7 @@ def glb_index(l, x):
     while c != 0 and not l[c] <= x:
         c -= 1
     return c
+
 
 def main():
     lut = dict()

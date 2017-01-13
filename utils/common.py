@@ -10,13 +10,16 @@ ALPHA = 'qwertyuiopasdfghjklzxcvbnm'
 NUM = '1234567890'
 ALPHANUMUL = ALPHA + ALPHA.upper() + NUM
 
+
 def read_ssv_file(filename):
         """ Reads values seperated by spaces in a simple one line file """
         with open(filename) as f:
                 return f.readline()[:-1].split(' ')
 
+
 def sesc(t):
     return t.replace('\\', '\\\\').replace(' ', '\\ ')
+
 
 def pseudo_randstr(l=12, cs=ALPHANUMUL):
     ret = ''
@@ -37,6 +40,8 @@ Entity then "user" or "group" is encountered.
 
 Cycles are accounted for.
 """
+
+
 def args_to_users(args):
     import kn.leden.entities as Es
     ret = set()  # set of Entities found
@@ -56,6 +61,7 @@ def args_to_users(args):
         todo.update(e.get_members())
     return tuple(ret)
 
+
 def print_table(data, separator=' '):
     if len(data) == 0:
         return
@@ -67,6 +73,7 @@ def print_table(data, separator=' '):
         for i, b in enumerate(d):
             l += b + (' ' * (ls[i] - len(b))) + separator
         print l
+
 
 def emailfy_name(first, last):
     first, last = map(lambda x: unicodedata.normalize(

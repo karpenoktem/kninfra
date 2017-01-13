@@ -10,8 +10,10 @@ from django.conf import settings
 conn = pymongo.Connection(settings.MONGO_HOST)
 db = conn[settings.MONGO_DB]
 
+
 class RaceCondition(Exception):
     pass
+
 
 def _id(obj):
     if isinstance(obj, ObjectId):
@@ -21,6 +23,7 @@ def _id(obj):
     if hasattr(obj, '_id'):
         return obj._id
     raise ValueError
+
 
 class SONWrapper(object):
     def __init__(self, data, collection, parent=None, detect_race=False):
@@ -72,6 +75,7 @@ class SONWrapper(object):
         return self._parent._version
     def __repr__(self):
         return "<SONWrapper for %s>" % self._id
+
 
 def son_property(path, default=None):
     """ A convenience shortcut to create properties on SONWrapper

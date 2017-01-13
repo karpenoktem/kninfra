@@ -8,6 +8,7 @@ import re
 # Based on django.template.loader.cached.Loader.  A lot is boilerplate:
 # the magic happens in SlashNewlineStrippingTemplateLoader._process
 
+
 class SlashNewlineStrippingTemplateLoader(BaseLoader):
     is_usable = True
 

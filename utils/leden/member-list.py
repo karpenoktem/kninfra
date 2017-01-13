@@ -4,6 +4,7 @@ import sys
 
 import kn.leden.entities as Es
 
+
 def main():
     now = Es.now()
     for n, r in enumerate(sorted(Es.query_relations(

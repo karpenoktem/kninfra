@@ -19,6 +19,7 @@ from kn.leden.date import date_to_dt
 import kn.subscriptions.entities as subscr_Es
 from kn.subscriptions.forms import get_add_event_form
 
+
 @login_required
 def event_list(request):
     open_events, closed_events, open_leden_events, \
@@ -40,6 +41,7 @@ def event_list(request):
              'open_leden_events': open_leden_events,
              'closed_leden_events': closed_leden_events},
             context_instance=RequestContext(request))
+
 
 @login_required
 def event_detail(request, name):
@@ -108,6 +110,7 @@ def event_detail(request, name):
     return render_to_response('subscriptions/event_detail.html', ctx,
             context_instance=RequestContext(request))
 
+
 def _api_event_set_opened(request):
     if 'id' not in request.REQUEST or not isinstance(request.REQUEST['id'], basestring):
         return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
@@ -127,6 +130,7 @@ def _api_event_set_opened(request):
 
     return JsonHttpResponse({'success': True})
 
+
 def _api_get_email_addresses(request):
     if 'id' not in request.REQUEST:
         return JsonHttpResponse({'error': 'missing arguments'})
@@ -142,6 +146,7 @@ def _api_get_email_addresses(request):
             'addresses': [s.user.canonical_full_email
                     for s in event.listSubscribed]})
 
+
 @require_POST
 @login_required
 def api(request):
@@ -152,6 +157,7 @@ def api(request):
         return _api_event_set_opened(request)
     else:
         return JsonHttpResponse({'error': 'unknown action'})
+
 
 @login_required
 def event_new_or_edit(request, edit=None):

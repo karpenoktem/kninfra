@@ -8,6 +8,7 @@ if sys.stdout.encoding is None:
     reload(sys)
     sys.setdefaultencoding('utf-8')
 
+
 def fmt_date(d):
     if d==None:
         return ""

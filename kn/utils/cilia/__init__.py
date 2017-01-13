@@ -14,6 +14,7 @@ from kn.utils.cilia.samba import set_samba_map, samba_setpass
 from kn.utils.cilia.fotoadmin import fotoadmin_remove_moved_fotos, fotoadmin_scan_userdirs
 from kn.utils.cilia.wolk import apply_wolk_changes, wolk_setpass
 
+
 class Cilia(WhimDaemon):
     def __init__(self):
         super(Cilia, self).__init__(settings.CILIA_SOCKET)

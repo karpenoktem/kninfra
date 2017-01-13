@@ -5,6 +5,7 @@ from kn.leden.mongo import db, _id
 ecol = db['events']
 scol = db['event_subscriptions']
 
+
 def main():
     '''
     Update the database to use more modern subscription system.

@@ -3,6 +3,7 @@ from common import *
 
 import kn.leden.entities as Es
 
+
 def main():
     now = Es.now()
     member_age = {}
@@ -25,6 +26,7 @@ def main():
     print '3rd', sorted(l)[len(l)/4*3]
     print 'min', min(l)
     print 'max', max(l)
+
 
 def main3():
     now = Es.now()

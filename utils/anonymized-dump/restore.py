@@ -12,6 +12,7 @@ import kn.poll.entities as Es_poll
 import kn.reglementen.entities as Es_regl
 import kn.subscriptions.entities as Es_subscr
 
+
 def main():
     print 'Are you sure you want to run this?'
     return

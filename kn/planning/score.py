@@ -2,6 +2,8 @@ from datetime import datetime
 from collections import Iterable
 
 # Returns the amount of seconds in the given amount of hours and minutes
+
+
 def hm2s(h, m=0):
     return 60*(60*h+m)
 
@@ -53,8 +55,10 @@ BORREL_END = hm2s(28)            # 4.00 the next day
 def timedelta_to_seconds(td):
     return td.days*hm2s(24)+td.seconds
 
+
 def p_none():
     return lambda v: -1
+
 
 def p_borrel_uncurried(first, second, third, not_after, vacancy):
     event = vacancy.event
@@ -84,6 +88,7 @@ def p_borrel_uncurried(first, second, third, not_after, vacancy):
         return False
     return min(scores)
 
+
 def p_borrel(first, second, third, not_after=BORREL_END):
     return lambda v: p_borrel_uncurried(first, second, third, not_after, v)
 
@@ -93,6 +98,7 @@ def p_temporary_uc(begin, end, preflet, vacancy):
     if begin <= event.date <= end:
         return preflet(vacancy)
     return False
+
 
 def p_temporary(begin, end, preflet):
     return lambda v: p_temporary_uc(begin, end, preflet, v)
@@ -173,6 +179,7 @@ preferences = {
         "vincentp":   p_borrel(100, 100, 50),
         "yurre":      p_borrel(100, 100, 100),
 }}
+
 
 def planning_vacancy_worker_score(vacancy, worker):
     un = str(worker.name)

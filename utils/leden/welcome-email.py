@@ -7,6 +7,7 @@ from django.core.mail import EmailMessage
 from kn.leden.models import OldKnUser
 from common import *
 
+
 def welcome_email():
     with open('welcome-email.template', 'r') as f:
         templ = f.read()

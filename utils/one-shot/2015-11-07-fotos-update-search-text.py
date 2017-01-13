@@ -2,6 +2,7 @@ import _import
 
 import kn.fotos.entities as fEs
 
+
 def main():
     for e in fEs.all():
         e.update_search_text()

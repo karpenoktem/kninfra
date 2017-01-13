@@ -9,6 +9,7 @@ from os import path
 import sys
 import subprocess
 
+
 def main(username, photo):
     user = OldKnUser.objects.get(username=username)
     subprocess.call(['convert', '-resize', '200x', photo,

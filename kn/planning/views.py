@@ -18,6 +18,7 @@ from kn.planning.entities import Pool, Event, Vacancy, may_manage_planning
 from kn.planning.score import planning_vacancy_worker_score
 from kn.planning.utils import send_reminder
 
+
 def hm2s(hours, minutes=0):
     return (hours * 60 + minutes) * 60
 
@@ -86,6 +87,7 @@ templates = {
             [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 2')]]},
 }
 
+
 @login_required
 def planning_view(request):
     if 'lookbehind' in request.GET:
@@ -138,12 +140,15 @@ def planning_view(request):
             context_instance=RequestContext(request))
 
 # extends cmp with None as bottom
+
+
 def cmp_None(x, y, cmp=cmp):
     if x==None:
         return -1
     if y==None:
         return 1
     return cmp(x, y)
+
 
 @login_required
 def planning_manage(request, poolname):
@@ -214,6 +219,7 @@ def planning_manage(request, poolname):
             {'events': events, 'pool': pool},
            context_instance=RequestContext(request))
 
+
 @login_required
 def planning_poollist(request):
     if not may_manage_planning(request.user):
@@ -223,6 +229,7 @@ def planning_poollist(request):
     return render_to_response('planning/pools.html',
             {'pools': pools},
             context_instance=RequestContext(request))
+
 
 @login_required
 def event_create(request):
@@ -259,6 +266,7 @@ def event_create(request):
         form = EventCreateForm()
     return render_to_response('planning/event_create.html', {'form': form},
             context_instance=RequestContext(request))
+
 
 @login_required
 def event_edit(request, eventid):
@@ -318,6 +326,7 @@ def event_edit(request, eventid):
             'avform': avform, 'vacancies': vacancies},
             context_instance=RequestContext(request))
 
+
 def _api_send_reminder(request):
     if 'vacancy_id' not in request.REQUEST:
         return JsonHttpResponse({'error': 'missing argument'})
@@ -329,6 +338,7 @@ def _api_send_reminder(request):
     send_reminder(v, update=False)
     return JsonHttpResponse({'success': True})
 
+
 @require_POST
 @login_required
 def planning_api(request):
@@ -337,6 +347,7 @@ def planning_api(request):
         return _api_send_reminder(request)
     else:
         return JsonHttpResponse({'error': 'unknown action'})
+
 
 @login_required
 def planning_template(request, poolname):

@@ -7,6 +7,7 @@ import kn.leden.entities as Es
 import MySQLdb
 import random
 
+
 def main():
     fEs.ensure_indices()
     creds = settings.PHOTOS_MYSQL_SECRET

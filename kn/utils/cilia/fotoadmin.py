@@ -5,6 +5,7 @@ import re
 from django.conf import settings
 from kn.fotos.roots import FOTO_ROOTS
 
+
 def fotoadmin_remove_moved_fotos(cilia, store, user, directory):
     if not re.match('^[a-z0-9]{3,32}$', user):
         return {'error': 'Invalid user'}
@@ -23,6 +24,7 @@ def fotoadmin_remove_moved_fotos(cilia, store, user, directory):
         return {'error': 'Security exception'}
     subprocess.call(['rm', '-rf', fotos_path])
     return {'success': True}
+
 
 def fotoadmin_scan_userdirs():
     userdirs = []

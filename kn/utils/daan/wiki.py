@@ -7,11 +7,13 @@ import MySQLdb
 from django.conf import settings
 from kn.base._random import pseudo_randstr
 
+
 def wiki_setpass(daan, user, password):
     subprocess.call(['php', 'maintenance/changePassword.php',
                 '--user', user,
                 '--password', password],
         cwd=settings.MEDIAWIKI_PATH)
+
 
 def apply_wiki_changes(daan, changes):
     if not changes:

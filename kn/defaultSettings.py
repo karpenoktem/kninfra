@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 # That is why defaultSettings() is executed *after* custom settings.
 # To have a nice syntax, we use a small DEFAULTS helper class.
 
+
 def defaultSettings(glbls):
     d = DEFAULTS(glbls)
 
@@ -218,6 +219,7 @@ def defaultSettings(glbls):
         locale.setlocale(locale.LC_ALL, d.LOCALE)
     except locale.Error:
         pass
+
 
 class DEFAULTS(object):
     def __init__(self, dct):

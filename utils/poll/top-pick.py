@@ -13,6 +13,7 @@ from kn.poll.models import Poll, Question, AnswerSet, Answer, Filling
 # This script awards (N - n) points to an answer if it is filed to the n-th
 # question out of N.
 
+
 def main(poll):
     poll = Poll.objects.get(name=poll)
     lut = dict()

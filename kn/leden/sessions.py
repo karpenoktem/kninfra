@@ -7,6 +7,7 @@ from kn.leden.mongo import db
 
 scol = db['sessions']
 
+
 class SessionStore(SessionBase):
     def __init__(self, session_key=None):
         super(SessionStore, self).__init__(session_key)
@@ -43,6 +44,7 @@ class SessionStore(SessionBase):
                 return
             session_key = self.session_key
         scol.remove({'_id': session_key})
+
 
 def ensure_indices():
     scol.ensure_index('expire_dt')

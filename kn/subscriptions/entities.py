@@ -54,24 +54,31 @@ ecol = db['events']
 # When someone has a subscription but no history that person is only invited,
 # not subscribed.
 
+
 def ensure_indices():
     ecol.ensure_index('name', unique=True)
     ecol.ensure_index('owner')
     ecol.ensure_index('date')
 
+
 def all_events():
     for m in ecol.find().sort('date'):
         yield Event(m)
 
+
 def event_by_name(name):
     tmp = ecol.find_one({'name': name})
     return None if tmp is None else Event(tmp)
+
+
 def event_by_id(__id):
     tmp = ecol.find_one({'_id': _id(__id)})
     return None if tmp is None else Event(tmp)
 
+
 def is_superuser(user):
     return 'secretariaat' in user.cached_groups_names
+
 
 def may_set_owner(user, owner):
     if is_superuser(owner):
@@ -223,6 +230,8 @@ class Event(SONWrapper):
             self.save()
 
 # Edit events in the event: 'opened', 'closed', 'edited'.
+
+
 class HistoryEvent(SONWrapper):
     def __init__(self, data, event):
         super(HistoryEvent, self).__init__(data, ecol, event)

@@ -36,6 +36,7 @@ from kn.utils.giedo.wolk import generate_wolk_changes
 from kn.utils.giedo.quassel import generate_quassel_changes
 from kn.utils.giedo.fotos import scan_fotos
 
+
 class Giedo(WhimDaemon):
     def __init__(self):
         super(Giedo, self).__init__(settings.GIEDO_SOCKET)

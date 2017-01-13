@@ -12,19 +12,24 @@ from django.core.urlresolvers import reverse
 import kn.leden.entities as Es
 from django.conf import settings
 
+
 class CreateCertificateException(Exception):
     pass
+
 
 class CreateInstallerException(Exception):
     pass
 
+
 def get_commonName(user):
     return str(user.name) + settings.VPN_COMMONNAME_POSTFIX
+
 
 def user_has_certificate(user):
     commonName = get_commonName(user)
     return os.path.isfile(os.path.join(settings.VPN_KEYSTORE,
         commonName + '.key'))
+
 
 def mail_result(user, filename):
     msg = "Beste %s,\n\nOp\n  %s\nkun je je download vinden.\n\n" \
@@ -36,6 +41,7 @@ def mail_result(user, filename):
                 to=[user.canonical_email])
     # em.attach_file(os.path.join(settings.VPN_INSTALLER_STORAGE, filename))
     em.send()
+
 
 def create_certificate(user):
     assert not user_has_certificate(user)
@@ -71,6 +77,7 @@ def create_certificate(user):
     return True
 
 # TODO reuse code between create_openvpn_{installer,zip}
+
 
 def create_openvpn_installer(giedo, user):
     # Remove old .exe's
@@ -139,6 +146,7 @@ def create_openvpn_installer(giedo, user):
     mail_result(user, fn)
     return True
 
+
 def _create_zip(user):
     # Create a temporary working directory
     _dir = mkdtemp(prefix='openvpn-zip-')
@@ -175,6 +183,7 @@ def _create_zip(user):
     # Clean up
     rmtree(_dir)
 
+
 def create_openvpn_zip(giedo, user):
     # Remove old .zip's
     _file = 'openvpn-config-%s.zip' % str(user.name)
@@ -185,6 +194,7 @@ def create_openvpn_zip(giedo, user):
     # Return
     mail_result(user, _file)
     return True
+
 
 def generate_openvpn_zips(giedo):
     for u in Es.users():

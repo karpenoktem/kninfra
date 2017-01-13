@@ -7,6 +7,7 @@ import json
 
 from kn.utils.whim import WhimClient
 
+
 def main():
         if len(sys.argv) not in (2, 3):
                 print "whim-client <socket> [<message>]"

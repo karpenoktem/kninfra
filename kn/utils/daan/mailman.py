@@ -10,6 +10,7 @@ from kn.utils.mailman import import_mailman
 import_mailman()
 from Mailman import Utils, MailList, UserDesc, Errors, mm_cfg
 
+
 def apply_mailman_changes(daan, changes):
     mlo = {}
     def ensure_opened(l):
