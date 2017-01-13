@@ -22,7 +22,7 @@ from kn.subscriptions.forms import get_add_event_form
 @login_required
 def event_list(request):
     open_events, closed_events, open_leden_events, \
-                closed_leden_events = [],[],[],[]
+                closed_leden_events = [], [], [], []
     for e in reversed(tuple(subscr_Es.all_events())):
         if e.is_open:
             if e.is_official:

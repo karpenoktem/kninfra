@@ -420,7 +420,7 @@ class FotoAlbum(FotoEntity):
                                 "^%s(/|$)" % re.escape(self.full_path))},
                      'type': 'foto',
                      'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                        sort=[('random',-1)]))
+                        sort=[('random', -1)]))
             if f is not None:
                 return f
             if r == 1:

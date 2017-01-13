@@ -168,13 +168,13 @@ def ensure_indices():
     rcol.ensure_index('with')
     rcol.ensure_index('who')
     rcol.ensure_index('tags', sparse=True)
-    rcol.ensure_index([('until',1),
-               ('from',-1)])
+    rcol.ensure_index([('until', 1),
+               ('from', -1)])
     # notes
     ncol.ensure_index([('on', 1),
                        ('at', 1)])
-    ncol.ensure_index([('open',1),
-                       ('at',1)])
+    ncol.ensure_index([('open', 1),
+                       ('at', 1)])
     # informacie notifications
     incol.ensure_index('when')
 
@@ -233,7 +233,7 @@ def id_by_name(n, use_cache=False):
         if n in __id2name_cache:
             ret =  __id2name_cache[n]
     if ret is None:
-        obj = ecol.find_one({'names': n}, {'names':1})
+        obj = ecol.find_one({'names': n}, {'names': 1})
         if obj is None:
             return None
         ret = obj['_id']
@@ -253,8 +253,8 @@ def ids_by_names(ns=None, use_cache=False):
                 nss2.remove(n)
         nss = frozenset(nss2)
     for m in ecol.find({} if ns is None else
-            {'names': {'$in': tuple(nss)}}, {'names':1}):
-        for n in m.get('names',()):
+            {'names': {'$in': tuple(nss)}}, {'names': 1}):
+        for n in m.get('names', ()):
             if ns is None or n in nss:
                 ret[n] = m['_id']
                 if use_cache and ns is not None:
@@ -347,14 +347,14 @@ def names_by_ids(ids=None):
 def ids():
     """ Returns a set of all ids """
     ret = set()
-    for e in ecol.find({}, {'_id':True}):
+    for e in ecol.find({}, {'_id': True}):
         ret.add(e['_id'])
     return ret
 
 def names():
     """ Returns a set of all names """
     ret = set()
-    for e in ecol.find({}, {'names':True}):
+    for e in ecol.find({}, {'names': True}):
         ret.update(e.get('names', ()))
     return ret
 
@@ -641,7 +641,7 @@ def get_open_notes():
     lut = by_ids(list(ids))
     lut[None] = None
     # Actually fetch the notes.
-    for d in ncol.find({'open': True}, sort=[('at',1)]):
+    for d in ncol.find({'open': True}, sort=[('at', 1)]):
         yield Note(d, lut[d['by']])
 
 # Functions to work with informacie-notifications
@@ -655,7 +655,7 @@ def notify_informacie(event, user, **props):
     incol.insert(data)
 
 def pop_all_informacie_notifications():
-    ntfs = list(incol.find({}, sort=[('when',1)]))
+    ntfs = list(incol.find({}, sort=[('when', 1)]))
     incol.remove({'_id': {'$in': [m['_id'] for m in ntfs]}})
     return [InformacieNotification(d) for d in ntfs]
 
@@ -668,7 +668,7 @@ class EntityName(object):
         self._name = name
     @property
     def humanNames(self):
-        for n in self.entity._data.get('humanNames',()):
+        for n in self.entity._data.get('humanNames', ()):
             if n['name'] == self.name:
                 yield EntityHumanName(self._entity, n)
     @property
@@ -774,7 +774,7 @@ class Entity(SONWrapper):
     @property
     def tags(self):
         for m in ecol.find({'_id': {
-                '$in': self._data.get('tags',())}}):
+                '$in': self._data.get('tags', ())}}):
             yield Tag(m)
     def has_tag(self, tag):
         return _id(tag) in self._data.get('tags', ())
@@ -794,7 +794,7 @@ class Entity(SONWrapper):
             self.save()
     @property
     def names(self):
-        for n in self._data.get('names',()):
+        for n in self._data.get('names', ()):
             yield EntityName(self, n)
     @property
     def name(self):
@@ -806,11 +806,11 @@ class Entity(SONWrapper):
         return self._data.get('description', None)
     @property
     def other_names(self):
-        for n in self._data.get('names',())[1:]:
+        for n in self._data.get('names', ())[1:]:
             yield EntityName(self, n)
     @property
     def humanNames(self):
-        for n in self._data.get('humanNames',()):
+        for n in self._data.get('humanNames', ()):
             yield EntityHumanName(self, n)
     @property
     def humanName(self):
@@ -1001,7 +1001,7 @@ class Entity(SONWrapper):
         lut = by_ids(list(ids))
         lut[None] = None
         # Actually fetch the notes.
-        for d in ncol.find({'on': self._id}, sort=[('at',1)]):
+        for d in ncol.find({'on': self._id}, sort=[('at', 1)]):
             yield Note(d, lut[d['by']], lut[d.get('closed_by')])
 
     def __eq__(self, other):
@@ -1041,7 +1041,7 @@ class Group(Entity):
 
 class User(Entity):
     def __init__(self, data):
-        super(User,self).__init__(data)
+        super(User, self).__init__(data)
         self._primary_study = -1
     @permalink
     def get_absolute_url(self):
@@ -1093,7 +1093,7 @@ class User(Entity):
         return self._data.get('password', None)
     @property
     def is_active(self):
-        return self._data.get('is_active',True)
+        return self._data.get('is_active', True)
     def is_authenticated(self):
         # required by django's auth
         return True
@@ -1128,10 +1128,10 @@ class User(Entity):
         return self._data['person']['nick'] + bits[1] + ' ' + bits[0]
     @property
     def first_name(self):
-        return self._data.get('person',{}).get('nick')
+        return self._data.get('person', {}).get('nick')
     @property
     def last_name(self):
-        return self._data.get('person',{}).get('family')
+        return self._data.get('person', {}).get('family')
     @property
     def preferred_language(self):
         return self._data.get('preferred_language', settings.LANGUAGE_CODE)
@@ -1198,7 +1198,7 @@ class User(Entity):
     @property
     def primary_study(self):
         if self._primary_study == -1:
-            self._primary_study = (None if not self._data.get('studies',())
+            self._primary_study = (None if not self._data.get('studies', ())
                 else by_id(self._data['studies'][0]['study']).as_study())
         return self._primary_study
     @property
@@ -1247,7 +1247,7 @@ class User(Entity):
         return study['number'] if self.proper_primary_study else None
     @property
     def dateOfBirth(self):
-        return self._data.get('person',{}).get('dateOfBirth')
+        return self._data.get('person', {}).get('dateOfBirth')
     @property
     def age(self):
         # age is a little difficult to calculate because of leap years

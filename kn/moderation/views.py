@@ -93,7 +93,7 @@ def _activate_mm(ml, name, user, record, moderators):
     now = datetime.datetime.now()
     until = now + settings.MOD_RENEW_INTERVAL
     if record is None:
-        record = mod_Es.ModerationRecord({'list':name})
+        record = mod_Es.ModerationRecord({'list': name})
     record.by = user
     record.at = now
     record.save()

@@ -20,7 +20,7 @@ def len_lb(l, x):
 
 def glb_index(l, x):
     """ finds the greatest lower bound of x in l assuming l is sorted """
-    N = int(2**math.ceil(math.log(len(l),2)))
+    N = int(2**math.ceil(math.log(len(l), 2)))
     c = N / 2
     w = N / 4
     while True:
@@ -64,7 +64,7 @@ def main():
         if m == 0:
             break
         _from -= INTERVAL
-    users = sorted(data.keys(), cmp=lambda y,x: cmp(data[x][0], data[y][0]))
+    users = sorted(data.keys(), cmp=lambda y, x: cmp(data[x][0], data[y][0]))
     data['others'] =[0]*len(data[users[0]])
     others = users[MAX_N:]
     for other in others:
@@ -72,7 +72,7 @@ def main():
             data['others'][i] += data[other][i]
         del(data[other])
     for user in reversed(['others']+ users[:MAX_N]):
-        print ','.join(map(str,[user]+list(reversed(data[user]))))
+        print ','.join(map(str, [user]+list(reversed(data[user]))))
 
 if __name__ == '__main__':
     main()

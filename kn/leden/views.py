@@ -76,8 +76,8 @@ def entity_detail(request, name=None, _id=None, type=None):
     return globals()['_'+type+'_detail'](request, getattr(e, 'as_'+type)())
 
 def _entity_detail(request, e):
-    def _cmp(x,y):
-        r = Es.relation_cmp_until(y,x)
+    def _cmp(x, y):
+        r = Es.relation_cmp_until(y, x)
         if r: return r
         r = cmp(unicode(x['with'].humanName),
                 unicode(y['with'].humanName))
@@ -85,9 +85,9 @@ def _entity_detail(request, e):
         r = cmp(unicode(x['how'].humanName) if x['how'] else None,
             unicode(y['how'].humanName) if y['how'] else None)
         if r: return r
-        return Es.relation_cmp_from(x,y)
-    def _rcmp(x,y):
-        r = Es.relation_cmp_until(y,x)
+        return Es.relation_cmp_from(x, y)
+    def _rcmp(x, y):
+        r = Es.relation_cmp_until(y, x)
         if r: return r
         r = cmp(unicode(x['how'].humanName) if x['how'] else None,
             unicode(y['how'].humanName) if y['how'] else None)
@@ -95,7 +95,7 @@ def _entity_detail(request, e):
         r = cmp(unicode(x['who'].humanName),
                 unicode(y['who'].humanName))
         if r: return r
-        return Es.relation_cmp_from(x,y)
+        return Es.relation_cmp_from(x, y)
     related = sorted(e.get_related(), cmp=_cmp)
     rrelated = sorted(e.get_rrelated(), cmp=_rcmp)
     for r in chain(related, rrelated):
@@ -146,7 +146,7 @@ def _entity_detail(request, e):
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):
         groups = [g for g in Es.groups() if not g.is_virtual]
-        groups.sort(cmp=lambda x,y: cmp(unicode(x.humanName),
+        groups.sort(cmp=lambda x, y: cmp(unicode(x.humanName),
                         unicode(y.humanName)))
         users = sorted(Es.users(), cmp=Es.entity_cmp_humanName)
         brands = sorted(Es.brands(), cmp=Es.entity_cmp_humanName)
@@ -189,7 +189,7 @@ def _entity_detail(request, e):
 
 def _user_detail(request, user):
     ctx = _entity_detail(request, user)
-    ctx['photosUrl'] = reverse('fotos', kwargs={'path':''}) + \
+    ctx['photosUrl'] = reverse('fotos', kwargs={'path': ''}) + \
                                         '?q=tag:'+str(user.name)
     ctx['addStudyFormOpen'] = False
     if request.method == 'POST':
@@ -234,8 +234,8 @@ def _tag_detail(request, tag):
             context_instance=RequestContext(request))
 def _brand_detail(request, brand):
     ctx = _entity_detail(request, brand)
-    def _cmp(x,y):
-        r = Es.relation_cmp_until(y,x)
+    def _cmp(x, y):
+        r = Es.relation_cmp_until(y, x)
         if r: return r
         r = cmp(unicode(x['with'].humanName),
                 unicode(y['with'].humanName))
@@ -243,7 +243,7 @@ def _brand_detail(request, brand):
         r = cmp(unicode(x['who'].humanName),
                 unicode(y['who'].humanName))
         if r: return r
-        return Es.relation_cmp_from(x,y)
+        return Es.relation_cmp_from(x, y)
     ctx['rels'] = sorted(Es.query_relations(how=brand, deref_who=True,
                 deref_with=True), cmp=_cmp)
     for r in ctx['rels']:
@@ -398,7 +398,7 @@ def ik_chpasswd(request):
     errl.extend(form.non_field_errors())
     errstr = humanized_enum(errl)
     return render_to_response('leden/ik_chpasswd.html',
-            { 'form':form, 'errors':errstr},
+            { 'form': form, 'errors': errstr},
             context_instance=RequestContext(request))
 
 @login_required
@@ -423,7 +423,7 @@ def ik_chpasswd_villanet(request):
     errl.extend(form.non_field_errors())
     errstr = humanized_enum(errl)
     return render_to_response('leden/ik_chpasswd_villanet.html',
-            { 'form':form, 'errors':errstr},
+            { 'form': form, 'errors': errstr},
             context_instance=RequestContext(request))
 
 def rauth(request):

@@ -53,7 +53,7 @@ def update_member_count(base_path):
                     painter=pyx.graph.axis.painter.regular(
                             gridattrs=[pyx.attr.changelist([
                                 pyx.color.gray(0.8), None])])))
-    g.plot(pyx.graph.data.points(ret,x=1,y=2),
+    g.plot(pyx.graph.data.points(ret, x=1, y=2),
                 [pyx.graph.style.symbol(size=0.03,
                         symbol=pyx.graph.style.symbol.plus)])
     # TODO split into separate helper

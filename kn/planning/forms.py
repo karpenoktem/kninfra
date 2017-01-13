@@ -55,11 +55,11 @@ class AddVacancyForm(forms.Form):
     begin = forms.RegexField(label=_("Begintijd"), initial="20:30",
             regex=r'^[0123][0-9]:[0-5][0-9]$')
     begin_is_approximate = forms.ChoiceField(initial=False,
-            choices=((True,_("bij benadering")),(False, _("exact"))))
+            choices=((True, _("bij benadering")), (False, _("exact"))))
     end = forms.RegexField(label=_("Eindtijd"), initial="23:00",
             regex=r'^[0123][0-9]:[0-5][0-9]$')
     end_is_approximate = forms.ChoiceField(initial=False,
-            choices=((True,_("bij benadering")),(False, _("exact"))))
+            choices=((True, _("bij benadering")), (False, _("exact"))))
     pool = forms.ChoiceField(label=_("Type"),
             choices=map(lambda x: (x._id, x.name), Pool.all()))
 

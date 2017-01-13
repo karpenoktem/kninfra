@@ -22,7 +22,7 @@ def group_email():
     for g in Gs:
         if not g.id in plut:
             continue
-        plut[g.id].sort(cmp=lambda x,y: cmp(x.humanName, y.humanName))
+        plut[g.id].sort(cmp=lambda x, y: cmp(x.humanName, y.humanName))
     tree = list()
     stack = [(0, glut['besturen']),
          (0, glut['lists']),

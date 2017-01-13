@@ -17,7 +17,7 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
     url(_(r'^groups/(?P<subdir>[^/]+)/(?P<path>.*)'),
-        'kn.browser.views.homedir', {'root':'/mnt/phassa/groups/'},
+        'kn.browser.views.homedir', {'root': '/mnt/phassa/groups/'},
                 name='groupfolder'),
     url(_(r'^smoelen/'), include('kn.leden.urls')),
     url(_(r'^activiteit/'), include('kn.subscriptions.urls')),

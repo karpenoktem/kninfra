@@ -31,7 +31,7 @@ def main(poll):
                 lut[a.answer] = 0
             lut[a.answer] += N
             lastUserAnswerVote[a.user][a.answer] = N
-    for a, n in sorted(lut.items(), cmp=lambda x,y: cmp(y[1], x[1])):
+    for a, n in sorted(lut.items(), cmp=lambda x, y: cmp(y[1], x[1])):
         print "%4s %s" % (n, a)
 
 if __name__ == '__main__':

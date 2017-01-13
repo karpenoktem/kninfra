@@ -16,7 +16,7 @@ def main():
                      'studierichting',
                      'studentnummer'])
     leden = Es.by_name('leden').get_members()
-    leden.sort(cmp=lambda x,y: cmp(str(x.name), str(y.name)))
+    leden.sort(cmp=lambda x, y: cmp(str(x.name), str(y.name)))
     for m in leden:
         if not m.is_user:
             continue

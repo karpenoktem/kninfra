@@ -15,8 +15,8 @@ def ensure_indices():
     vcol.ensure_index('reglement', unique=True)
     vcol.ensure_index('name')
     vcol.ensure_index('reglement')
-    vcol.ensure_index([('until',1),
-                       ('from',-1)])
+    vcol.ensure_index([('until', 1),
+                       ('from', -1)])
 def all():
     for m in rcol.find():
         yield Reglement(m)

@@ -37,7 +37,7 @@ def fotos(request, path=''):
             q = 'album:' + request.GET.get('search_album')
         if request.GET.get('search_tag'):
             q = 'tag:' + request.GET.get('search_tag')
-        url = reverse('fotos', kwargs={'path':path})
+        url = reverse('fotos', kwargs={'path': path})
         if q is not None:
             qs = QueryDict('', mutable=True)
             qs['q'] = q
@@ -53,7 +53,7 @@ def fotos(request, path=''):
             entity = fEs.by_path_and_name(path, name)
             if entity is not None:
                 # Zen Photo used + signs in the filename part of the URL.
-                url = reverse('fotos', kwargs={'path':path}) \
+                url = reverse('fotos', kwargs={'path': path}) \
                         + '#'+filepath_to_uri(name)
                 return redirect(url, permanent=True)
         raise Http404
@@ -61,7 +61,7 @@ def fotos(request, path=''):
     if album._type != 'album':
         # This is a photo, not an album.
         # Backwards compatibility, probably to Zen Photo.
-        url = reverse('fotos', kwargs={'path':album.path}) \
+        url = reverse('fotos', kwargs={'path': album.path}) \
                 + '#'+filepath_to_uri(album.name)
         return redirect(url, permanent=True)
 

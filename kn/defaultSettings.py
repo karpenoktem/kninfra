@@ -201,8 +201,8 @@ def defaultSettings(glbls):
         'irc':       d.BASE_URL+'/irc',
     }
 
-    d.DT_MIN = datetime.datetime(2004,8,31)
-    d.DT_MAX = datetime.datetime(5004,9,1)
+    d.DT_MIN = datetime.datetime(2004, 8, 31)
+    d.DT_MAX = datetime.datetime(5004, 9, 1)
 
     d.USERNAME_CHARS = 'qwertyuiopasdfghjklzxcvbnm123456789-'
 

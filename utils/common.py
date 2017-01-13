@@ -16,7 +16,7 @@ def read_ssv_file(filename):
                 return f.readline()[:-1].split(' ')
 
 def sesc(t):
-    return t.replace('\\','\\\\').replace(' ','\\ ')
+    return t.replace('\\', '\\\\').replace(' ', '\\ ')
 
 def pseudo_randstr(l=12, cs=ALPHANUMUL):
     ret = ''

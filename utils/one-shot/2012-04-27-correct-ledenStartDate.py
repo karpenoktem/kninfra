@@ -26,7 +26,7 @@ def main():
                         t._data['year-override']['year'])] = t._data['_id']
     for rel in sorted(Es.query_relations(-1, Es.id_by_name('leden'), None,
                 None, None, True, False, False),
-                cmp=lambda x,y: cmp(x['from'], y['from'])):
+                cmp=lambda x, y: cmp(x['from'], y['from'])):
         name = str(rel['who'].name)
         if name in had:
             continue

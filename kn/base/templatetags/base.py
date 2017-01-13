@@ -17,8 +17,8 @@ register = template.Library()
 @stringfilter
 @register.filter(name='email')
 def email_filter(value):
-    n, r = conditional_escape(value).split('@',1)
-    d, e = r.rsplit('.',1)
+    n, r = conditional_escape(value).split('@', 1)
+    d, e = r.rsplit('.', 1)
     return mark_safe(("<script type='text/javascript'>email("+
         "'%s', '%s', '%s')</script><noscript>X@Y.Z %s Z=%s,"+
         " Y=%s, X=%s</noscript>") % (\

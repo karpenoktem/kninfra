@@ -28,7 +28,7 @@ def ensure_indices():
     # For Fillings, we want (I)
     #  This compound index, which will allow fast queries for (1) poll and
     #  user at the same time and on (2) poll.
-    fcol.ensure_index([('poll',1), ('user',1)])
+    fcol.ensure_index([('poll', 1), ('user', 1)])
     #  But we also want fast queries on (II) the user.
     fcol.ensure_index('user')
 

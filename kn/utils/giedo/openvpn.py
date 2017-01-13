@@ -154,7 +154,7 @@ def _create_zip(user):
         'installer/client.conf'), 'r') as fh:
         config = fh.read()
     config = config.replace('KNUSERNAME', str(user.name))
-    with open(os.path.join(_dir, 'config', commonName + '.ovpn'),'w') as fh:
+    with open(os.path.join(_dir, 'config', commonName + '.ovpn'), 'w') as fh:
         fh.write(config)
     ## Copy the keypair
     copy2(os.path.join(settings.VPN_KEYSTORE, commonName + '.key'),

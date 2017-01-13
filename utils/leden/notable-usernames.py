@@ -5,7 +5,7 @@ from kn.leden.models import OldKnUser, OldKnGroup
 
 leden = list(OldKnGroup.objects.get(name='leden').user_set.all())
 leden.extend(OldKnGroup.objects.get(name='leden-oud').user_set.all())
-leden.sort(cmp=lambda x,y: cmp(x.first_name, y.first_name))
+leden.sort(cmp=lambda x, y: cmp(x.first_name, y.first_name))
 
 years = list()
 
