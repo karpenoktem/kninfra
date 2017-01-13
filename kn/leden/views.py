@@ -81,24 +81,30 @@ def entity_detail(request, name=None, _id=None, type=None):
 def _entity_detail(request, e):
     def _cmp(x, y):
         r = Es.relation_cmp_until(y, x)
-        if r: return r
+        if r:
+            return r
         r = cmp(unicode(x['with'].humanName),
                 unicode(y['with'].humanName))
-        if r: return r
+        if r:
+            return r
         r = cmp(unicode(x['how'].humanName) if x['how'] else None,
             unicode(y['how'].humanName) if y['how'] else None)
-        if r: return r
+        if r:
+            return r
         return Es.relation_cmp_from(x, y)
 
     def _rcmp(x, y):
         r = Es.relation_cmp_until(y, x)
-        if r: return r
+        if r:
+            return r
         r = cmp(unicode(x['how'].humanName) if x['how'] else None,
             unicode(y['how'].humanName) if y['how'] else None)
-        if r: return r
+        if r:
+            return r
         r = cmp(unicode(x['who'].humanName),
                 unicode(y['who'].humanName))
-        if r: return r
+        if r:
+            return r
         return Es.relation_cmp_from(x, y)
     related = sorted(e.get_related(), cmp=_cmp)
     rrelated = sorted(e.get_rrelated(), cmp=_rcmp)
@@ -246,13 +252,16 @@ def _brand_detail(request, brand):
 
     def _cmp(x, y):
         r = Es.relation_cmp_until(y, x)
-        if r: return r
+        if r:
+            return r
         r = cmp(unicode(x['with'].humanName),
                 unicode(y['with'].humanName))
-        if r: return r
+        if r:
+            return r
         r = cmp(unicode(x['who'].humanName),
                 unicode(y['who'].humanName))
-        if r: return r
+        if r:
+            return r
         return Es.relation_cmp_from(x, y)
     ctx['rels'] = sorted(Es.query_relations(how=brand, deref_who=True,
                 deref_with=True), cmp=_cmp)
@@ -271,7 +280,8 @@ def _study_detail(request, study):
 
     def _cmp(s1, s2):
         r = Es.dt_cmp_until(s2['until'], s1['until'])
-        if r: return r
+        if r:
+            return r
         return cmp(s1['student'].humanName, s2['student'].humanName)
     for student in Es.by_study(study):
         for _study in student.studies:
@@ -292,7 +302,8 @@ def _institute_detail(request, institute):
 
     def _cmp(s1, s2):
         r = Es.dt_cmp_until(s2['until'], s1['until'])
-        if r: return r
+        if r:
+            return r
         return cmp(s1['student'].humanName, s2['student'].humanName)
     for student in Es.by_institute(institute):
         for _study in student.studies:

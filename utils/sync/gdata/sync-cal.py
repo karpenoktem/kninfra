@@ -29,7 +29,8 @@ def acl_sync_cal(cs, cal, initial_role):
         cur[a_rule.scope.value] = a_rule.GetEditLink().href
     for m in OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all():
         acc.add(m.email.lower())
-        if m.email.lower() in cur: continue
+        if m.email.lower() in cur:
+            continue
         todo.add(m)
     for n in frozenset(cur.iterkeys()) - acc:
         print "Deleting stray %s" % n

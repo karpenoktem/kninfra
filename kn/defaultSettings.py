@@ -226,7 +226,8 @@ class DEFAULTS(object):
         self.__dict__['d'] = dct
 
     def __setattr__(self, name, value):
-        if name in self.d: return
+        if name in self.d:
+            return
         self.d[name] = value
 
     def __getattr__(self, name):

@@ -13,7 +13,8 @@ def main():
         u2t[t.user].append(t)
     for u in u2t.iterkeys():
         s = sum(map(lambda u: u.value, u2t[u]))
-        if s == 0: continue
+        if s == 0:
+            continue
 
         cs = 0
         for i, t in enumerate(u2t[u]):

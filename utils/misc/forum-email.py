@@ -14,7 +14,8 @@ def forum_email():
     with open('temp-pwds', 'r') as f:
         while True:
             l = f.readline()
-            if l == '': break
+            if l == '':
+                break
             l = l[:-1]
             usr, pwd = l.split(' ')
             pwd_lut[usr] = pwd

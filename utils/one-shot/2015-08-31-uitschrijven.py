@@ -9,9 +9,12 @@ def main():
         print n
         for rel in e.get_related(_from=Es.now(), until=Es.now()):
             grp = rel['with']
-            if grp.is_virtual: continue
-            if str(grp.name) == 'nibbana': continue
-            if str(grp.name) == 'uilfest': continue
+            if grp.is_virtual:
+                continue
+            if str(grp.name) == 'nibbana':
+                continue
+            if str(grp.name) == 'uilfest':
+                continue
             print ' '+str(grp.name)
             assert rel['until'] is None
             # Es.rcol.update({'_id': rel['_id']},

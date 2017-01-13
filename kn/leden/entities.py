@@ -290,7 +290,8 @@ def by_name(n):
 
 def by_id(n):
     """ Finds an entity by id """
-    if n is None: return None
+    if n is None:
+        return None
     return entity(ecol.find_one({'_id': _id(n)}))
 
 
@@ -534,8 +535,10 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
                 query[attr] = _id(query[attr])
             else:
                 query[attr] = None
-        if query.get('from') is None: query['from'] = DT_MIN
-        if query.get('until') is None: query['until'] = DT_MAX
+        if query.get('from') is None:
+            query['from'] = DT_MIN
+        if query.get('until') is None:
+            query['until'] = DT_MAX
         # When DT_MIN < from < until < DT_MAX we need the most complicated
         # query. However, in the following four cases we can simplify the
         # required query bits.
@@ -590,11 +593,16 @@ def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
                 Only relations intersecting this interval are matched.
     """
     query = {}
-    if who != -1: query['who'] = who
-    if _with != -1: query['with'] = _with
-    if how != -1: query['how'] = how
-    if _from is not None: query['from']  = _from
-    if until is not None: query['until'] = until
+    if who != -1:
+        query['who'] = who
+    if _with != -1:
+        query['with'] = _with
+    if how != -1:
+        query['how'] = how
+    if _from is not None:
+        query['from']  = _from
+    if until is not None:
+        query['until'] = until
     return disj_query_relations([query], deref_who, deref_with, deref_how)
 
 
@@ -662,8 +670,10 @@ def relation_cmp_from(x, y):
 
 
 def remove_relation(who, _with, how,  _from, until):
-    if _from is None: _from = DT_MIN
-    if until is None: until = DT_MAX
+    if _from is None:
+        _from = DT_MIN
+    if until is None:
+        until = DT_MAX
     rcol.remove({'who': _id(who),
              'with': _id(_with),
              'how': None if how is None else _id(how),

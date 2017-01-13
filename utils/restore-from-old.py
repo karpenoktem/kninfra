@@ -130,7 +130,8 @@ def main(data):
             year = int(m['name'][-1:])
             year_groups_lut[m['id']] = (group, year)
             continue
-        if m['name'] == 'leden': m['isVirtual'] = False # fix for leden
+        if m['name'] == 'leden':
+            m['isVirtual'] = False # fix for leden
         n = {   'types': ['tag' if m['isVirtual'] else 'group'],
             'names': [m['name']],
             'humanNames': [{

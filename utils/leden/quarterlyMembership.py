@@ -13,7 +13,8 @@ def main():
     lut = {}
     id2name = {}
     for m in Es.users():
-        if not m.name: continue
+        if not m.name:
+            continue
         lut[str(m.name)] = set()
         id2name[m._id] = str(m.name)
     max_q = Es.date_to_year(Es.now()) * 4

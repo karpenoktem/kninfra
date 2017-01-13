@@ -33,7 +33,8 @@ def gen_dot():
             d.add_node(nodes[target])
         d.add_edge(Edge(nodes[alias], nodes[target]))
     for list in Utils.list_names():
-        if list == 'plukdenacht2008': continue
+        if list == 'plukdenacht2008':
+            continue
         source = list+"@"+LISTDOMAIN
         if source not in nodes:
             nodes[source] = Node(source)
