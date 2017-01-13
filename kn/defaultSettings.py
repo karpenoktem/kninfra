@@ -224,9 +224,11 @@ def defaultSettings(glbls):
 class DEFAULTS(object):
     def __init__(self, dct):
         self.__dict__['d'] = dct
+
     def __setattr__(self, name, value):
         if name in self.d: return
         self.d[name] = value
+
     def __getattr__(self, name):
         return self.d[name]
 

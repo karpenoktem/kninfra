@@ -27,6 +27,7 @@ def update_db(giedo):
             if tags['!year-group'] in g.tag_ids]
     # Find relations on those groups and add the years for which those
     # relations hold.
+
     def add_years_to_relations(rels):
         years_of_year_overrides = [yo[1] for yo in year_overrides.values()]
         until_years = [Es.date_to_year(r['until']) for r in rels
@@ -87,6 +88,7 @@ def update_db(giedo):
             logging.warn("Unknown vgroup type: %s" \
                     % vg._data['virtua']['type'])
     # Find all relations with the sofa virtual groups
+
     def relkey(rel):
         return (rel['who'], rel['how'], rel['with'],
                 rel['from'], rel['until'])

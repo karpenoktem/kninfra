@@ -47,6 +47,7 @@ def reglement_by_id(the_id):
 class Reglement(SONWrapper):
     def __init__(self, data):
         super(Reglement, self).__init__(data, rcol)
+
     @property
     def id(self):
         return str(self._data['_id'])
@@ -69,12 +70,15 @@ class Reglement(SONWrapper):
 class ReglementVersion(SONWrapper):
     def __init__(self, data):
         super(ReglementVersion, self).__init__(data, vcol)
+
     @property
     def id(self):
         return str(self._data['_id'])
+
     @property
     def reglement(self):
         return reglement_by_id(self._data['reglement'])
+
     def to_html(self):
         if 'html' not in self._data:
             self._data['html'] = Document.from_string(self.regl).to_html()

@@ -13,6 +13,7 @@ from Mailman import Utils, MailList, UserDesc, Errors, mm_cfg
 
 def apply_mailman_changes(daan, changes):
     mlo = {}
+
     def ensure_opened(l):
         if l in mlo:
             return True

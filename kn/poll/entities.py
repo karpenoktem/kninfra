@@ -69,9 +69,11 @@ def filling_by_poll(poll):
 class Poll(SONWrapper):
     def __init__(self, data):
         super(Poll, self).__init__(data, pcol)
+
     @property
     def id(self):
         return str(self._data['_id'])
+
     @property
     def createdBy(self):
         return Es.by_id(self._data['createdBy'])
@@ -100,12 +102,15 @@ class Poll(SONWrapper):
 class Filling(SONWrapper):
     def __init__(self, data):
         super(Filling, self).__init__(data, fcol)
+
     @property
     def id(self):
         return str(self._data['_id'])
+
     @property
     def poll(self):
         return Event(poll_by_id(self._data['poll']))
+
     @property
     def user(self):
         return Es.by_id(self._data['user'])

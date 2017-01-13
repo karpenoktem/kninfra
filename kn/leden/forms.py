@@ -21,6 +21,7 @@ class EntityChoiceFieldWidget(forms.TextInput):
         else:
             self.type = None
         super(EntityChoiceFieldWidget, self).__init__(*args, **kwargs)
+
     def render(self, name, value=None, attrs=None):
         final_attrs = self.build_attrs(attrs, name=name)
         code_set_value = ''

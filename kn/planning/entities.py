@@ -91,9 +91,11 @@ class Pool(SONWrapper):
     def all(cls):
         for c in pcol.find():
             yield cls.from_data(c)
+
     @classmethod
     def by_name(cls, n):
         return cls.from_data(pcol.find_one({'name': n}))
+
     @classmethod
     def by_id(cls, id):
         return cls.from_data(pcol.find_one({'_id': _id(id)}))
@@ -187,12 +189,14 @@ class Vacancy(SONWrapper):
 
     def get_event(self):
         return Event.by_id(self.event_id)
+
     def set_event(self, x):
         self.event_id = _id(x)
     event = property(get_event, set_event)
 
     def get_pool(self):
         return Pool.by_id(self.pool_id)
+
     def set_pool(self, x):
         self.pool_id = _id(x)
     pool = property(get_pool, set_pool)

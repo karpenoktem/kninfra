@@ -716,51 +716,64 @@ def pop_all_informacie_notifications():
 
 class EntityName(object):
     """ Wrapper object for a name of an entity """
+
     def __init__(self, entity, name):
         self._entity = entity
         self._name = name
+
     @property
     def humanNames(self):
         for n in self.entity._data.get('humanNames', ()):
             if n['name'] == self.name:
                 yield EntityHumanName(self._entity, n)
+
     @property
     def primary_humanName(self):
         try:
             return next(self.humanNames)
         except StopIteration:
             return None
+
     def __str__(self):
         return self._name
+
     def __repr__(self):
         return "<EntityName %s of %s>" % (self._name, self._entity)
 
 
 class EntityHumanName(object):
     """ Wrapper object for a humanName of an entity """
+
     def __init__(self, entity, data):
         self._entity = entity
         self._data = data
+
     @property
     def name(self):
         return EntityName(self._entity, self._data.get('name'))
+
     @property
     def humanName(self):
         return self._data['human']
+
     @property
     def genitive_prefix(self):
         return self._data.get('genitive_prefix', 'van de')
+
     @property
     def genitive(self):
         return self.genitive_prefix + ' ' + unicode(self)
+
     @property
     def definite_article(self):
         return {'van de': 'de',
                 'van het': 'het',
                 'van': '',
                 }.get(self.genitive_prefix, 'de')
+
     def __unicode__(self):
         return self.humanName
+
     def __repr__(self):
         return "<EntityHumanName %s of %s>" % (
                 self._data, self._entity)
@@ -768,8 +781,10 @@ class EntityHumanName(object):
 
 class Entity(SONWrapper):
     """ Base object for every Entity """
+
     def __init__(self, data):
         super(Entity, self).__init__(data, ecol)
+
     def is_related_with(self, whom, how=None):
         dt = now()
         how = None if how is None else _id(how)
@@ -820,19 +835,24 @@ class Entity(SONWrapper):
     @property
     def type(self):
         return self._data['types'][0]
+
     @property
     def id(self):
         return str(self._id)
+
     @property
     def tag_ids(self):
         return self._data.get('tags', ())
+
     @property
     def tags(self):
         for m in ecol.find({'_id': {
                 '$in': self._data.get('tags', ())}}):
             yield Tag(m)
+
     def has_tag(self, tag):
         return _id(tag) in self._data.get('tags', ())
+
     def tag(self, tag, save=True):
         if self.has_tag(tag):
             raise ValueError(_("Entiteit heeft al deze stempel"))
@@ -841,44 +861,53 @@ class Entity(SONWrapper):
         self._data['tags'].append(_id(tag))
         if save:
             self.save()
+
     def untag(self, tag, save=True):
         if not self.has_tag(tag):
             raise ValueError(_("Eniteit heeft deze stempel nog niet"))
         self._data['tags'].remove(_id(tag))
         if save:
             self.save()
+
     @property
     def names(self):
         for n in self._data.get('names', ()):
             yield EntityName(self, n)
+
     @property
     def name(self):
         nms = self._data.get('names', ())
         nm = nms[0] if len(nms) >= 1 else None
         return nm if nm is None else EntityName(self, nm)
+
     @property
     def description(self):
         return self._data.get('description', None)
+
     @property
     def other_names(self):
         for n in self._data.get('names', ())[1:]:
             yield EntityName(self, n)
+
     @property
     def humanNames(self):
         for n in self._data.get('humanNames', ()):
             yield EntityHumanName(self, n)
+
     @property
     def humanName(self):
         try:
             return next(self.humanNames)
         except StopIteration:
             return None
+
     @permalink
     def get_absolute_url(self):
         if self.name:
             return ('entity-by-name', (),
                     {'name': self.name})
         return ('entity-by-id', (), {'_id': self.id})
+
     @property
     def types(self):
         return set(self._data['types'])
@@ -888,22 +917,32 @@ class Entity(SONWrapper):
 
     @property
     def is_user(self): return 'user' in self._data['types']
+
     @property
     def is_group(self): return 'group' in self._data['types']
+
     @property
     def is_brand(self): return 'brand' in self._data['types']
+
     @property
     def is_tag(self): return 'tag' in self._data['types']
+
     @property
     def is_study(self): return 'study' in self._data['types']
+
     @property
     def is_institute(self): return 'institute' in self._data['types']
 
     def as_user(self): return User(self._data)
+
     def as_group(self): return Group(self._data)
+
     def as_brand(self): return Brand(self._data)
+
     def as_tag(self): return Tag(self._data)
+
     def as_study(self): return Study(self._data)
+
     def as_institute(self): return Institute(self._data)
 
     def as_primary_type(self):
@@ -1043,6 +1082,7 @@ class Entity(SONWrapper):
               'at': dt,
               'closed_by': None,
               'closed_at': None}).save()
+
     def get_notes(self):
         # Prefetch the entities referenced in the by and closed_by fields
         # of the notes.
@@ -1063,10 +1103,12 @@ class Entity(SONWrapper):
         if not isinstance(other, Entity):
             return False
         return other._id == self._id
+
     def __ne__(self, other):
         if not isinstance(other, Entity):
             return True
         return other._id != self._id
+
     def __hash__(self):
         return hash(self._id)
 
@@ -1078,6 +1120,7 @@ class Group(Entity):
             return ('group-by-name', (),
                     {'name': self.name})
         return ('group-by-id', (), {'_id': self.id})
+
     def get_current_and_old_members(self):
         dt = now()
         cur, _all = set(), set()
@@ -1087,10 +1130,12 @@ class Group(Entity):
                     (rel['from'] is None or rel['from'] <= dt)):
                 cur.add(rel['who'])
         return (cur, _all - cur)
+
     def get_members(self):
         dt = now()
         return [r['who'] for r in self.get_rrelated(
                 how=None, _from=dt, until=dt)]
+
     @property
     def is_virtual(self):
         return 'virtual' in self._data
@@ -1100,12 +1145,14 @@ class User(Entity):
     def __init__(self, data):
         super(User, self).__init__(data)
         self._primary_study = -1
+
     @permalink
     def get_absolute_url(self):
         if self.name:
             return ('user-by-name', (),
                     {'name': self.name})
         return ('user-by-id', (), {'_id': self.id})
+
     def set_password(self, pwd, save=True):
         self._data['password'] = make_password(pwd)
         if save:
@@ -1114,6 +1161,7 @@ class User(Entity):
                         {'$set': {'password': self.password}})
             else:
                 self.save()
+
     def set_preferred_language(self, code, save=True):
         self._data['preferred_language'] = code
         if save:
@@ -1140,31 +1188,40 @@ class User(Entity):
             return ok
         # New style password
         return check_password(pwd, self.password, self.set_password)
+
     @property
     def humanName(self):
         return self.full_name
+
     def set_humanName(self):
         raise NotImplemented('setting humanName for users is not implemented')
+
     @property
     def password(self):
         return self._data.get('password', None)
+
     @property
     def is_active(self):
         return self._data.get('is_active', True)
+
     def is_authenticated(self):
         # required by django's auth
         return True
     # Required by Django's auth. framework
+
     @property
     def pk(self):
         return str(_id(self))
+
     def get_username(self):
         # implements Django's User object
         return str(self.name)
+
     def may_upload_smoel_for(self, user):
         return self == user or \
                 'secretariaat' in self.cached_groups_names or \
                 'bestuur' in self.cached_groups_names
+
     @property
     def primary_email(self):
         # the primary email address is always the first one;
@@ -1172,6 +1229,7 @@ class User(Entity):
         if len(self._data['emailAddresses'])==0:
             return None
         return self._data['emailAddresses'][0]['email']
+
     @property
     def full_name(self):
         if ('person' not in self._data or
@@ -1183,15 +1241,19 @@ class User(Entity):
             return self._data['person']['nick'] + ' ' \
                     + self._data['person']['family']
         return self._data['person']['nick'] + bits[1] + ' ' + bits[0]
+
     @property
     def first_name(self):
         return self._data.get('person', {}).get('nick')
+
     @property
     def last_name(self):
         return self._data.get('person', {}).get('family')
+
     @property
     def preferred_language(self):
         return self._data.get('preferred_language', settings.LANGUAGE_CODE)
+
     @property
     def telephones(self):
         ret = []
@@ -1202,6 +1264,7 @@ class User(Entity):
                         else t['until'],
                     'number': t['number']})
         return ret
+
     @property
     def primary_telephone(self):
         telephones = self.telephones
@@ -1223,6 +1286,7 @@ class User(Entity):
                     'zip': a['zip'],
                     'city': a['city']})
         return ret
+
     @property
     def primary_address(self):
         addresses = self.addresses
@@ -1252,22 +1316,26 @@ class User(Entity):
                 tmp['number'] = s['number']
             ret.append(tmp)
         return ret
+
     @property
     def primary_study(self):
         if self._primary_study == -1:
             self._primary_study = (None if not self._data.get('studies', ())
                 else by_id(self._data['studies'][0]['study']).as_study())
         return self._primary_study
+
     @property
     def proper_primary_study(self):
         studies = self.studies
         if not studies:
             return None
         return studies[0]
+
     @property
     def last_study_end_date(self):
         return max([DT_MIN]+map(lambda s: s['until'],
                         self._data.get('studies', ())))
+
     def study_start(self, study, institute, number, start_date, save=True):
         start_date = datetime.datetime(start_date.year, start_date.month,
                 start_date.day)
@@ -1285,6 +1353,7 @@ class User(Entity):
         })
         if save:
             self.save()
+
     def study_end(self, index, end_date, save=True):
         studies = self._data.get('studies', ())
         if index < 0 or index >= len(studies):
@@ -1302,9 +1371,11 @@ class User(Entity):
     def studentNumber(self):
         study = self.proper_primary_study
         return study['number'] if self.proper_primary_study else None
+
     @property
     def dateOfBirth(self):
         return self._data.get('person', {}).get('dateOfBirth')
+
     @property
     def age(self):
         # age is a little difficult to calculate because of leap years
@@ -1312,12 +1383,14 @@ class User(Entity):
         today = datetime.date.today()
         born = self.dateOfBirth
         return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
     @property
     def got_unix_user(self):
         if 'has_unix_user' in self._data:
             return self._data['has_unix_user']
         else:
             return True
+
     @property
     def emailAddresses(self):
         ret = []
@@ -1361,6 +1434,7 @@ class Tag(Entity):
             return ('tag-by-name', (),
                     {'name': self.name})
         return ('tag-by-id', (), {'_id': self.id})
+
     def get_bearers(self):
         return [entity(m) for m in ecol.find({
                 'tags': self._id})]
@@ -1391,6 +1465,7 @@ class Brand(Entity):
             return ('brand-by-name', (),
                     {'name': self.name})
         return ('brand-by-id', (), {'_id': self.id})
+
     @property
     def sofa_suffix(self):
         return self._data.get('sofa_suffix', None)
@@ -1472,12 +1547,15 @@ class InformacieNotification(SONWrapper):
 class PushChange(SONWrapper):
     def __init__(self, data):
         super(PushChange, self).__init__(data, pcol)
+
     @property
     def system(self):
         return self._data['system']
+
     @property
     def action(self):
         return self._data['action']
+
     @property
     def data(self):
         return self._data['data']

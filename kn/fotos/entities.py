@@ -199,6 +199,7 @@ class FotoEntity(SONWrapper):
     def get_thumbnail_url(self):
         return ('fotos-cache', (), {'path': self.full_path,
                                    'cache': 'thumb'})
+
     @permalink
     def get_thumbnail2x_url(self):
         return ('fotos-cache', (), {'path': self.full_path,

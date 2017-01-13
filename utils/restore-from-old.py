@@ -22,9 +22,11 @@ def main(data):
         if s is None:
             return None
         return datetime(*strptime(s, '%Y-%m-%d')[:3])
+
     def year_to_dates(year):
         return (datetime(2003+year, 9, 1),
             datetime(2004+year, 8, 31))
+
     def create_tag(name, humanName, tags=[]):
         return Es.ecol.insert({'types': ['tag'],
                        'names': [name],

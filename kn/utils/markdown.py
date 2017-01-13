@@ -13,6 +13,7 @@ class FixHeadingsExtension(Extension):
     class FixHeadingsProcessor(Treeprocessor):
         """ FixHeadingsProcessor van Daan, zie FixHeadingsExtension voor het
             gebruik van de class.  """
+
         def run(self, root):
             for elem in (elem for elem in root if elem.tag in
                     ('h1', 'h2', 'h3', 'h4', 'h5', 'h6')):

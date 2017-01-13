@@ -41,6 +41,7 @@ def update(agendas):
 class AgendaEvent(SONWrapper):
     def __init__(self, data):
         super(AgendaEvent, self).__init__(data, acol)
+
     @property
     def id(self):
         return str(self._data['_id'])

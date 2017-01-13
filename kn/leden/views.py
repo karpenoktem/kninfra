@@ -89,6 +89,7 @@ def _entity_detail(request, e):
             unicode(y['how'].humanName) if y['how'] else None)
         if r: return r
         return Es.relation_cmp_from(x, y)
+
     def _rcmp(x, y):
         r = Es.relation_cmp_until(y, x)
         if r: return r
@@ -242,6 +243,7 @@ def _tag_detail(request, tag):
 
 def _brand_detail(request, brand):
     ctx = _entity_detail(request, brand)
+
     def _cmp(x, y):
         r = Es.relation_cmp_until(y, x)
         if r: return r
@@ -266,6 +268,7 @@ def _brand_detail(request, brand):
 def _study_detail(request, study):
     ctx = _entity_detail(request, study)
     ctx['students'] = students = []
+
     def _cmp(s1, s2):
         r = Es.dt_cmp_until(s2['until'], s1['until'])
         if r: return r
@@ -286,6 +289,7 @@ def _study_detail(request, study):
 def _institute_detail(request, institute):
     ctx = _entity_detail(request, institute)
     ctx['students'] = students = []
+
     def _cmp(s1, s2):
         r = Es.dt_cmp_until(s2['until'], s1['until'])
         if r: return r

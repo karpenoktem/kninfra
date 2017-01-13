@@ -59,6 +59,7 @@ def get_last_synced():
 
 class SyncStatusMiddleware(object):
     """ Removes `waitingOnGiedoSync` when giedo's sync is done. """
+
     def process_request(self, request):
         if 'waitingOnGiedoSync' not in request.session:
             return

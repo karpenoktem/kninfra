@@ -31,6 +31,7 @@ class WhimClient(object):
         self.event_lut = {}
         self.msg_lut = {}
         self.got_reader = False
+
     def _connect(self):
         """ (Re)connects to socket. """
         if self._family == 'tcp':
@@ -42,6 +43,7 @@ class WhimClient(object):
         self.s = socket.socket(sf, socket.SOCK_STREAM)
         self.s.connect(self._address)
         self.f = self.s.makefile()
+
     def _send(self, bs):
         """ Tries to send some bytes over the socket.  If the socket has been
             closed, try to reconnect. """
@@ -57,6 +59,7 @@ class WhimClient(object):
                         raise
                     first_try = False
                     self._connect()
+
     def send_noret(self, d):
         """ Sends the message `d` to the server, but do not wait for its
             response. """

@@ -76,31 +76,40 @@ class Giedo(WhimDaemon):
     def _gen_quassel(self):
         return {'type': 'quassel',
                 'changes': generate_quassel_changes(self)}
+
     def _gen_wolk(self):
         return {'type': 'wolk',
                 'changes': generate_wolk_changes(self)}
+
     def _gen_ldap(self):
         return {'type': 'ldap',
                 'changes': generate_ldap_changes(self)}
+
     def _gen_postfix_slm(self):
         return {'type': 'postfix-slm',
             'map': generate_postfix_slm_map(self)}
+
     def _gen_postfix(self):
         return {'type': 'postfix',
             'map': generate_postfix_map(self)}
+
     def _gen_mailman(self):
         return {'type': 'mailman',
             'changes': generate_mailman_changes(
                         self)}
+
     def _gen_wiki(self):
         return {'type': 'wiki',
             'changes': generate_wiki_changes(self)}
+
     def _gen_forum(self):
         return {'type': 'forum',
             'changes': generate_forum_changes(self)}
+
     def _gen_unix(self):
         return  {'type': 'unix',
              'map': generate_unix_map(self)}
+
     def _sync_openvpn(self):
         with self.openvpn_lock:
             generate_openvpn_zips(self)

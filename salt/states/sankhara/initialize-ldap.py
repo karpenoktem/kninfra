@@ -20,6 +20,7 @@ def main():
                 subprocess.check_output(['slappasswd', '-s', pw]).strip()
                         for pw in sys.argv[2:7]]
     local = '"gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth"'
+
     def ldif(s, what='ldapmodify'):
         first_line, rest = s.split('\n', 1)
         s = first_line + '\n' + textwrap.dedent(rest)

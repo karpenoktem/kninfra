@@ -36,6 +36,7 @@ class SONWrapper(object):
         self._collection = collection
         self._parent = parent
         self._detect_race = detect_race
+
     def delete(self):
         assert self._data['_id'] is not None
         # TODO check version
@@ -43,6 +44,7 @@ class SONWrapper(object):
             '_id': self._data['_id']})
     # We take the keyword argument update_fields to be compatible with
     # Django's Model.save.  However, we do not use it, yet.
+
     def save(self, update_fields=NotImplemented):
         if self._parent is None:
             if '_id' in self._data:
@@ -63,16 +65,19 @@ class SONWrapper(object):
                         self._data)
         else:
             self._parent.save()
+
     @property
     def _id(self):
         if self._parent is None:
             return self._data['_id']
         return self._parent._id
+
     @property
     def _version(self):
         if self._parent is None:
             return self._data['_version']
         return self._parent._version
+
     def __repr__(self):
         return "<SONWrapper for %s>" % self._id
 
@@ -81,11 +86,13 @@ def son_property(path, default=None):
     """ A convenience shortcut to create properties on SONWrapper
         subclasses.  Will return a getter/setter property that
         gets/sets self._data[path[0]]...[path[-1]] verbatim. """
+
     def __getter(self):
         obj = self._data
         for bit in path[:-1]:
             obj = obj.get(bit, {})
         return obj.get(path[-1], default)
+
     def __setter(self, x):
         obj = self._data
         for bit in path[:-1]:
