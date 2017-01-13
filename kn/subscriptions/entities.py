@@ -3,7 +3,6 @@ import datetime
 
 from django.db.models import permalink
 from django.utils.html import escape, linebreaks
-from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from kn.base.mail import render_then_email

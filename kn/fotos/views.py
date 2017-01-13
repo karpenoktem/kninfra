@@ -1,17 +1,12 @@
-from glob import glob
 import os.path
-from os.path import basename
 from urllib import unquote
 from time import gmtime, strftime
-
-import Image
 
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.utils.translation import ugettext as _
 from django.core.exceptions import PermissionDenied
 from django.core.servers.basehttp import FileWrapper
-from django.core.paginator import EmptyPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required

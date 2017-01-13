@@ -1,11 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
-import subprocess
 import threading
 import os.path
-import logging
-import socket
-import select
-import json
 import os
 
 from kn.utils.whim import WhimDaemon

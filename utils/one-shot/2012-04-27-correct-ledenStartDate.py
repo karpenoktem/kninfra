@@ -1,4 +1,4 @@
-import _import
+import _import # noqa: F401
 
 # In the old administration, we only registered membership of `leden' rounded
 # to years.  However, we kept the registration date separately.  In the
@@ -13,7 +13,6 @@ import _import
 import datetime
 
 import kn.leden.entities as Es
-from kn.leden.mongo import _id
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 

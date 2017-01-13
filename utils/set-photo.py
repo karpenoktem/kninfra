@@ -1,9 +1,7 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import # noqa: F401
 
-from common import *
 from kn.leden.models import OldKnUser
-from django.core.files.storage import default_storage
 from django.conf import settings
 from os import path
 import sys

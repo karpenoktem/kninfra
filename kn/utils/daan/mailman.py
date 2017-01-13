@@ -8,7 +8,7 @@ from django.conf import settings
 
 from kn.utils.mailman import import_mailman
 import_mailman()
-from Mailman import Utils, MailList, UserDesc, Errors, mm_cfg
+from Mailman import Utils, MailList, UserDesc, Errors
 
 
 def apply_mailman_changes(daan, changes):

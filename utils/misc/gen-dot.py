@@ -2,7 +2,7 @@
 # Generates a graphviz dot file
 #  for the sheir fun of it
 
-import _import
+import _import # noqa: F401
 import MySQLdb
 from common import *
 from pydot import Node, Dot, Edge

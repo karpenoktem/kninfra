@@ -1,5 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import # noqa: F401
 
 import vobject
 import tarfile
@@ -7,7 +7,6 @@ import sys
 
 from common import *
 
-from kn.leden.models import OldKnUser
 from cStringIO import StringIO
 
 

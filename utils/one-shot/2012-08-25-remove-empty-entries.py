@@ -1,12 +1,9 @@
-import _import
+import _import # noqa: F401
 
 # Removes some empty entries from the database.
 #               bas@kn.cx
 
-import datetime
-
 import kn.leden.entities as Es
-from kn.leden.mongo import _id
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 

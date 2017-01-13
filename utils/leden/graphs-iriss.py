@@ -8,7 +8,7 @@
 # je het anders niet zou onthouden.  dus hierbij een herinneringsmailtje :)
 #
 # groetjes Iris Smits
-import _import
+import _import # noqa: F401
 import datetime
 
 import kn.leden.entities as Es

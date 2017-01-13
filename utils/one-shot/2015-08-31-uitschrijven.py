@@ -1,5 +1,5 @@
-import _import
-import datetime
+import _import # noqa: F401
+import datetime # noqa: F401
 import kn.leden.entities as Es
 
 

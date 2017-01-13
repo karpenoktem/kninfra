@@ -1,11 +1,10 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import # noqa: F401
 
 from common import *
 from cal_common import *
 
 from kn.leden.models import OldKnUser, OldKnGroup
-from iso8601 import parse_date
 import gdata.calendar.service
 from gdata.service import RequestError
 import datetime

@@ -1,23 +1,23 @@
 # vim: et:sta:bs=2:sw=4:
 from __future__ import absolute_import
 
-import _import
+import _import # noqa: F401
 try:
-    import Mailman.MailList
+    import Mailman.MailList # noqa: F401
 except ImportError:
     pass
 
 import time
 import datetime
-import kn.leden.entities as Es
-import kn.fotos.entities as fEs
-import kn.reglementen.entities as regl_Es
-import kn.poll.entities as poll_Es
-import kn.subscriptions.entities as subscr_Es
-from kn.leden.mongo import _id, ObjectId
-from kn.leden import giedo
+import kn.leden.entities as Es # noqa: F401
+import kn.fotos.entities as fEs # noqa: F401
+import kn.reglementen.entities as regl_Es # noqa: F401
+import kn.poll.entities as poll_Es # noqa: F401
+import kn.subscriptions.entities as subscr_Es # noqa: F401
+from kn.leden.mongo import _id, ObjectId # noqa: F401
+from kn.leden import giedo # noqa: F401
 from kn.leden.date import now
-from kn.utils.mailman import import_mailman
+from kn.utils.mailman import import_mailman # noqa: F401
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 

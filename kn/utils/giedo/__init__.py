@@ -1,14 +1,8 @@
-import os
 import time
 import json
-import socket
-import select
 import urllib2
 import logging
-import os.path
-import itertools
 import threading
-import subprocess
 from urllib import urlencode
 
 import mirte # github.com/bwesterb/mirte

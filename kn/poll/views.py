@@ -5,7 +5,6 @@ from django.http import Http404
 from django.contrib import messages
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import login_required
 

@@ -1,6 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
 
-import _import
+import _import # noqa: F401
 from common import *
 
 from kn.leden.mongo import _id
@@ -11,7 +11,6 @@ from django.core.mail import send_mail
 from django.template import Context, Template
 
 import sys
-from datetime import datetime
 from cStringIO import StringIO
 
 DAYS_IN_YEAR = 365.242199

@@ -1,7 +1,3 @@
-import logging
-
-import os.path
-
 from django.conf import settings
 from subprocess import call
 

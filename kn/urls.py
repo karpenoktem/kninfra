@@ -5,7 +5,6 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 from django.utils.translation import ugettext_lazy as _
 
-from kn.leden import views
 from kn.base.backports import i18n_patterns
 
 urlpatterns = [

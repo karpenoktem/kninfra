@@ -1,8 +1,8 @@
 # vim: et:sta:bs=2:sw=4:
 # -*- coding: utf-8 -*
-import _import
+import _import # noqa: F401
 
-from kn.leden.models import OldKnUser, Transaction
+from kn.leden.models import Transaction
 
 
 def main():

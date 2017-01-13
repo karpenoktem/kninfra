@@ -1,10 +1,9 @@
 # vim: et:sta:bs=2:sw=4:
 from __future__ import with_statement
 
-import _import
+import _import # noqa: F401
 import sys
 from django.core.mail import EmailMessage
-from kn.leden.models import OldKnUser
 from common import *
 
 

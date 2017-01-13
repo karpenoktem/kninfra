@@ -4,9 +4,6 @@ import reserved
 
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
-from django.core.urlresolvers import reverse
-from django.forms.widgets import flatatt
-from django.utils.html import escape
 from django import forms
 from django.conf import settings
 

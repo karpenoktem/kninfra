@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.decorators import login_required
 
 from kn.subscriptions import views
 

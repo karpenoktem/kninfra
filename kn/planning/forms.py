@@ -3,7 +3,6 @@ import datetime
 from django import forms
 from django.utils.translation import ugettext as _
 
-import kn.leden.entities as Es
 from kn.planning.entities import Pool
 
 

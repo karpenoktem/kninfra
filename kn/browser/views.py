@@ -3,7 +3,6 @@ import os.path
 import os
 
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
 from django.core.servers.basehttp import FileWrapper
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response

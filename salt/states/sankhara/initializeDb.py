@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 
-import os.path
-import sys
-
 import yaml
 import bson
 import pymongo

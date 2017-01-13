@@ -1,11 +1,8 @@
-import hashlib
-import logging
 import subprocess
 
 import MySQLdb
 
 from django.conf import settings
-from kn.base._random import pseudo_randstr
 
 
 def wiki_setpass(daan, user, password):

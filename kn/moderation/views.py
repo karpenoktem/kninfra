@@ -1,11 +1,10 @@
 from __future__ import absolute_import
 
 import os
-import sys
 import os.path
 import datetime
 
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response

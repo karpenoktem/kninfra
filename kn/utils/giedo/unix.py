@@ -1,6 +1,3 @@
-import logging
-import itertools
-
 from tarjan.tc import tc        # transitive closure of a graph
 
 import kn.leden.entities as Es

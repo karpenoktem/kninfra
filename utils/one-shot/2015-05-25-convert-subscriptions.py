@@ -1,6 +1,6 @@
-import _import
+import _import # noqa: F401
 
-from kn.leden.mongo import db, _id
+from kn.leden.mongo import db
 
 ecol = db['events']
 scol = db['event_subscriptions']

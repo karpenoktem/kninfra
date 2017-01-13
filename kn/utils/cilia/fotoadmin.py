@@ -2,7 +2,6 @@ import subprocess
 import os.path
 import re
 
-from django.conf import settings
 from kn.fotos.roots import FOTO_ROOTS
 
 
