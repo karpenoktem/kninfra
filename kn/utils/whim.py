@@ -39,7 +39,7 @@ class WhimClient(object):
         elif self._family == 'unix':
             sf = socket.AF_UNIX
         else:
-            raise ValueError, 'unknown family'
+            raise ValueError('unknown family')
         self.s = socket.socket(sf, socket.SOCK_STREAM)
         self.s.connect(self._address)
         self.f = self.s.makefile()
@@ -103,7 +103,7 @@ class WhimClient(object):
         while not got_own_message:
             bits = self.s.recv(4096)
             if not bits:
-                raise IOError, "No data"
+                raise IOError("No data")
             self.unpacker.feed(bits)
             for raw_msg in self.unpacker:
                 mid, msg = raw_msg
@@ -146,7 +146,7 @@ class WhimDaemon(object):
         elif self.family == 'unix':
             sf = socket.AF_UNIX
         else:
-            raise ValueError, 'unknown family'
+            raise ValueError('unknown family')
         ls = self.ls = socket.socket(sf, socket.SOCK_STREAM)
         if self.family == 'unix':
             if os.path.exists(self.address):

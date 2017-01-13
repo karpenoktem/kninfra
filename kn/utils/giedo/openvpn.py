@@ -64,7 +64,7 @@ def create_certificate(user):
         stderr=subprocess.STDOUT)
     ph.communicate()
     if ph.returncode != 0:
-        raise CreateCertificateException, "CSR creation failed"
+        raise CreateCertificateException("CSR creation failed")
     ph = subprocess.Popen(['openssl', 'ca', '-batch', '-days', '1000', '-out',
         commonName + '.crt', '-in', commonName + '.csr', '-md', 'sha1',
         '-config', 'kn-openssl.cnf'
@@ -72,7 +72,7 @@ def create_certificate(user):
         stderr=subprocess.STDOUT)
     ph.communicate()
     if ph.returncode != 0:
-        raise CreateCertificateException, "Signing failed"
+        raise CreateCertificateException("Signing failed")
     return True
 
 # TODO reuse code between create_openvpn_{installer,zip}
@@ -98,7 +98,7 @@ def create_openvpn_installer(giedo, user):
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     version = ph.communicate()[0].splitlines()[0].split(' ')[0]
     if ph.returncode != 0:
-        raise CreateInstallerException, "Version check failed"
+        raise CreateInstallerException("Version check failed")
     ## Write the .nsi
     with open(os.path.join(_dir, 'openvpn-gui.nsi.base'), 'r') as fh:
         nsi = fh.read()
@@ -123,7 +123,7 @@ def create_openvpn_installer(giedo, user):
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     ph.communicate()
     if ph.returncode != 0:
-        raise CreateInstallerException, "Makensis failed"
+        raise CreateInstallerException("Makensis failed")
     zip_outfile = False
     fn = 'openvpn-install-%s-%s.exe' % (version, str(user.name))
     if zip_outfile:
@@ -134,7 +134,7 @@ def create_openvpn_installer(giedo, user):
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         ph.communicate()
         if ph.returncode != 0:
-            raise CreateInstallerException, "Zip failed"
+            raise CreateInstallerException("Zip failed")
         fn = fn_zip
     else:
         # Copy the installer to the storage dir
@@ -178,7 +178,7 @@ def _create_zip(user):
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     ph.communicate()
     if ph.returncode != 0:
-        raise CreateInstallerException, "Zip failed"
+        raise CreateInstallerException("Zip failed")
     # Clean up
     rmtree(_dir)
 

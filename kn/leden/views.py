@@ -69,11 +69,11 @@ def entity_detail(request, name=None, _id=None, type=None):
     if e is None:
         raise Http404
     if type and type not in e.types:
-        raise ValueError, _("Entiteit is niet een %s") % type
+        raise ValueError(_("Entiteit is niet een %s") % type)
     if not type:
         type = e.type
     if type not in Es.TYPE_MAP:
-        raise ValueError, _("Onbekende entiteit type")
+        raise ValueError(_("Onbekende entiteit type"))
     return globals()['_'+type+'_detail'](request, getattr(e, 'as_'+type)())
 
 
@@ -361,12 +361,12 @@ def ik(request):
 @login_required
 def ik_chsmoel(request):
     if 'smoel' not in request.FILES:
-        raise ValueError, _("Missende `smoel' in FILES")
+        raise ValueError(_("Missende `smoel' in FILES"))
     if 'id' not in request.POST:
-        raise ValueError, _("Missende `id' in POST")
+        raise ValueError(_("Missende `id' in POST"))
     user = Es.by_id(request.POST['id'])
     if not user.name:
-        raise ValueError, _("Entiteit heeft geen naam")
+        raise ValueError(_("Entiteit heeft geen naam"))
     if not request.user.may_upload_smoel_for(request.user):
         raise PermissionDenied
     original = default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
@@ -692,7 +692,7 @@ def relation_begin(request):
     d = {}
     for t in ('who', 'with', 'how'):
         if t not in request.POST:
-            raise ValueError, "Missing attr %s" % t
+            raise ValueError("Missing attr %s" % t)
         if t == 'how' and (not request.POST[t] or
                                request.POST[t] == 'null'):
             d[t] = None
@@ -711,7 +711,7 @@ def relation_begin(request):
     except StopIteration:
         ok = True
     if not ok:
-        raise ValueError, _("Deze relatie bestaat al")
+        raise ValueError(_("Deze relatie bestaat al"))
 
     # Add the relation!
     relation_id = Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
@@ -778,7 +778,7 @@ def user_reset_password(request, _id):
         raise PermissionDenied
     u = Es.by_id(_id).as_user()
     if not u.is_active:
-        raise ValueError, _("Gebruiker is niet geactiveerd")
+        raise ValueError(_("Gebruiker is niet geactiveerd"))
     pwd = pseudo_randstr()
     u.set_password(pwd)
     giedo.change_password(str(u.name), pwd, pwd)
@@ -794,7 +794,7 @@ def note_add(request):
     if 'secretariaat' not in request.user.cached_groups_names:
         raise PermissionDenied
     if 'on' not in request.POST or 'note' not in request.POST:
-        raise ValueError, _("missende `on' of `note'")
+        raise ValueError(_("missende `on' of `note'"))
     on = Es.by_id(_id(request.POST['on']))
     if on is None:
         raise Http404
