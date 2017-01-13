@@ -145,7 +145,7 @@ urlpatterns = [
 
     # Backwards compatibility
     url(r'^img/(?P<subdir>.*)', direct_to_folder,
-            {'root': os.path.join(settings.MEDIA_ROOT, 'static/img') }),
+            {'root': os.path.join(settings.MEDIA_ROOT, 'static/img')}),
     url(r'^baragenda/?$', RedirectView.as_view(
                     url='/planning')),  # TODO use reverse_url
 

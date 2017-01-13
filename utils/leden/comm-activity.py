@@ -19,7 +19,7 @@ def main():
         if not m.dateOfBirth:
             continue
         print (age - m.dateOfBirth).days / 365.242, unicode(m.name)
-        l.append( (age - m.dateOfBirth).days / 365.242)
+        l.append((age - m.dateOfBirth).days / 365.242)
     print 'avg', sum(l)/len(l)
     print 'med', sorted(l)[len(l)/2]
     print '1st', sorted(l)[len(l)/4*2]

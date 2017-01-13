@@ -327,7 +327,7 @@ def by_year_of_birth(year):
     for m in ecol.find({'types': 'user',
                         'person.dateOfBirth': {
                                 '$lt': datetime.datetime(year + 1, 1, 1),
-                                '$gte': datetime.datetime(year, 1, 1) }}):
+                                '$gte': datetime.datetime(year, 1, 1)}}):
         yield entity(m)
 
 

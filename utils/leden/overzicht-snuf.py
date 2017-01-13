@@ -39,7 +39,7 @@ def main():
         if not ok:
             writer.writerow([str(m.name),
                              m.first_name.encode('utf-8'),
-                             m.last_name.encode('utf-8') ])
+                             m.last_name.encode('utf-8')])
             continue
 
 if __name__ == '__main__':

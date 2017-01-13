@@ -84,12 +84,12 @@ def main(data):
                 'tags': [year_overrides_tag]})
     print 'institutes'
     for m in data['EduInstitute']:
-        n = {   'types': ['institute'],
+        n = {'types': ['institute'],
             'humanNames': [{'human': m['name']}]}
         conv_inst[m['id']] = Es.ecol.insert(n)
     print 'studies'
     for m in data['Study']:
-        n = {   'types': ['study'],
+        n = {'types': ['study'],
             'humanNames': [{'human': m['name']}]}
         conv_study[m['id']] = Es.ecol.insert(n)
     print 'initial groups'
@@ -132,7 +132,7 @@ def main(data):
             continue
         if m['name'] == 'leden':
             m['isVirtual'] = False  # fix for leden
-        n = {   'types': ['tag' if m['isVirtual'] else 'group'],
+        n = {'types': ['tag' if m['isVirtual'] else 'group'],
             'names': [m['name']],
             'humanNames': [{
                 'name': m['name'],

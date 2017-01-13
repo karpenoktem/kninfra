@@ -23,7 +23,7 @@ def hm2s(hours, minutes=0):
     return (hours * 60 + minutes) * 60
 
 templates = {
-    '': { },
+    '': {},
     'borrel': {
         'tappers': [
             [(hm2s(20, 30), False), (hm2s(23), False), _('eerste dienst')],
@@ -116,7 +116,7 @@ def planning_view(request):
         i += 1
     events = list()
     for e in event_entities:
-        ei = {  'id': _id(e),
+        ei = {'id': _id(e),
                 'name': e.name,
                 'datetime': e.date,
                 'kind': e.kind,
@@ -254,7 +254,7 @@ def event_create(request):
                         'name': period[2],
                         'event': _id(e),
                         'begin': (begin_date, period[0][1]),
-                        'end': (end_date, period[1][1]) ,
+                        'end': (end_date, period[1][1]),
                         'pool': _id(pool),
                         'assignee': None,
                         'reminder_needed': True,
@@ -358,7 +358,7 @@ def planning_template(request, poolname):
         vacancies = list(e.vacancies(pool))
         if not vacancies:
             continue
-        ei = {  'name': e.name,
+        ei = {'name': e.name,
                 'date': e.date,
             'vacancies': list()}
         shifts = dict()

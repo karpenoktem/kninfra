@@ -31,7 +31,7 @@ def pdbedit_list():
             'flag_nullpassword': 'N' in flags,  # Unused
             'flag_disabled': 'D' in flags,
             'flag_noexpire': 'X' in flags,  # Unused
-            'flag_workstationtrust': 'W' in flags })  # Unused
+            'flag_workstationtrust': 'W' in flags})  # Unused
     return users
 
 

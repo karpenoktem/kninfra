@@ -36,7 +36,7 @@ class SessionStore(SessionBase):
             return
 
     def save(self, must_create=False):
-        n = {   '_id': self.session_key,
+        n = {'_id': self.session_key,
             'data': self.encode(self._get_session(
                     no_load=must_create)),
             'expire_dt': self.get_expiry_date()}

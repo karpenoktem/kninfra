@@ -28,7 +28,7 @@ day = datetime.datetime.strptime(sys.argv[1], '%Y-%m-%d')
 e = Event({
     'name': 'Borrel',
     'date': day,
-    'kind': 'borrel' })
+    'kind': 'borrel'})
 e.save()
 
 for _type, periods in typePeriods.items():

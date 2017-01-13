@@ -139,7 +139,7 @@ def _entity_detail(request, e):
            'object': e,
            'chiefs': [],
            'pipos': [],
-           'reps': [] }
+           'reps': []}
     for r in rrelated:
         if r['how'] and Es.relation_is_active(r):
             if str(r['how'].name) == '!brand-hoofd':
@@ -432,7 +432,7 @@ def ik_chpasswd(request):
     errl.extend(form.non_field_errors())
     errstr = humanized_enum(errl)
     return render_to_response('leden/ik_chpasswd.html',
-            { 'form': form, 'errors': errstr},
+            {'form': form, 'errors': errstr},
             context_instance=RequestContext(request))
 
 
@@ -458,7 +458,7 @@ def ik_chpasswd_villanet(request):
     errl.extend(form.non_field_errors())
     errstr = humanized_enum(errl)
     return render_to_response('leden/ik_chpasswd_villanet.html',
-            { 'form': form, 'errors': errstr},
+            {'form': form, 'errors': errstr},
             context_instance=RequestContext(request))
 
 
@@ -506,7 +506,7 @@ def rauth(request):
                 (k, properties[k]) for k in
                 set(s.strip() for s in request.REQUEST.get('fetch').split(','))
                 if k in properties
-            ] )))
+            ])))
         return HttpResponse("INVALID TOKEN")
     if not request.user.is_authenticated():
         return redirect_to_login('%s?url=%s' % (
