@@ -206,7 +206,7 @@ def event_new_or_edit(request, edit=None):
                         edit is None or e.name != name)):
                     name = prefix + name
                 d['name'] = name
-                d['is_open'] = True # default for new events
+                d['is_open'] = True  # default for new events
                 e = subscr_Es.Event(d)
             else:
                 e.update(d, request.user, save=False)

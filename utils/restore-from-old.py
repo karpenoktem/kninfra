@@ -1,5 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
-import _import # noqa: F401
+import _import  # noqa: F401
 
 from datetime import datetime, timedelta
 from time import strptime
@@ -131,7 +131,7 @@ def main(data):
             year_groups_lut[m['id']] = (group, year)
             continue
         if m['name'] == 'leden':
-            m['isVirtual'] = False # fix for leden
+            m['isVirtual'] = False  # fix for leden
         n = {   'types': ['tag' if m['isVirtual'] else 'group'],
             'names': [m['name']],
             'humanNames': [{

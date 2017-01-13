@@ -1,6 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
 
-import _import # noqa: F401
+import _import  # noqa: F401
 
 import kn.leden.entities as Es
 

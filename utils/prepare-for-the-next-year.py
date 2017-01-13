@@ -1,4 +1,4 @@
-import _import # noqa: F401
+import _import  # noqa: F401
 
 # Prepare for the coming change of "verenigingsjaar".
 
@@ -48,7 +48,7 @@ def main():
     # Fetch year overrides
     while True:
         years, year_overrides, min_year, max_year = load_year_overrides()
-        assert len(years) == max_year - min_year + 1 # year-override missing?
+        assert len(years) == max_year - min_year + 1  # year-override missing?
         current_year = Es.date_to_year(datetime.datetime.now())
         if current_year == max_year:
             print ' adding year-overrides for year', current_year + 1

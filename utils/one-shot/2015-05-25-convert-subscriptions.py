@@ -1,4 +1,4 @@
-import _import # noqa: F401
+import _import  # noqa: F401
 
 from kn.leden.mongo import db
 

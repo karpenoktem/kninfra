@@ -1,4 +1,4 @@
-import _import # noqa: F401
+import _import  # noqa: F401
 
 # In the old administration, we only registered membership of `leden' rounded
 # to years.  However, we kept the registration date separately.  In the

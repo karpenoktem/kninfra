@@ -110,7 +110,7 @@ def defaultSettings(glbls):
 
     d.QUASSEL_CONFIGDIR = '/var/lib/quassel'
 
-    d.INTERNAL_IPS = ['83.162.203.144'] # bas
+    d.INTERNAL_IPS = ['83.162.203.144']  # bas
     d.LOCALE = 'nl_NL.UTF-8'
     d.LANGUAGE_CODE = 'nl'
     d.LOCALE_PATHS = [d.INFRA_REPO + '/locale']
@@ -125,7 +125,7 @@ def defaultSettings(glbls):
     # You probably won't change this
     # ############################################################
 
-    d.DATABASES = {'default': {}} # We do not use Django's DB abstraction
+    d.DATABASES = {'default': {}}  # We do not use Django's DB abstraction
     d.CACHE_BACKEND = 'locmem:///'
     d.MANAGERS = d.ADMINS
     d.TIME_ZONE = 'Europe/Amsterdam'

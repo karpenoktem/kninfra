@@ -1,7 +1,7 @@
 # vim: et:sta:bs=2:sw=4:
 from __future__ import with_statement
 
-import _import # noqa: F401
+import _import  # noqa: F401
 import random
 import unicodedata
 import kn.settings
@@ -46,7 +46,7 @@ def args_to_users(args):
     import kn.leden.entities as Es
     ret = set()  # set of Entities found
     had = set()  # set of Entities dealt with
-    todo = set() # set of Entities to be dealt with
+    todo = set()  # set of Entities to be dealt with
     todo.update(Es.by_names(args).itervalues())
     while len(todo) > 0:
         e = todo.pop()

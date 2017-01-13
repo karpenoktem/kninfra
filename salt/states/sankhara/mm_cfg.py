@@ -20,4 +20,4 @@ VIRTUAL_HOST_OVERVIEW = Off
 DEB_LISTMASTER = 'wortel@{{ grains['fqdn'] }}'
 DEFAULT_LIST_ADVERTISED = False
 
-SITE_LOGO = '/mailman-icons/debianpowered.png' # bugfix
+SITE_LOGO = '/mailman-icons/debianpowered.png'  # bugfix

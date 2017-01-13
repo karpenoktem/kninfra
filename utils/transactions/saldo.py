@@ -1,6 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
 # -*- coding: utf-8 -*
-import _import # noqa: F401
+import _import  # noqa: F401
 
 from kn.leden.models import Transaction
 

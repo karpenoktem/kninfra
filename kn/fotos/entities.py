@@ -463,7 +463,7 @@ class FotoAlbum(FotoEntity):
             for result in db.command('text', 'fotos',
                         search=q,
                         filter=query_filter,
-                        limit=96, # dividable by 2, 3 and 4
+                        limit=96,  # dividable by 2, 3 and 4
                       )['results']:
                 yield entity(result['obj'])
             return
@@ -480,7 +480,7 @@ class FotoAlbum(FotoEntity):
                 self.save()
             return updated
 
-        self.date = settings.DT_MIN # NULL date/time
+        self.date = settings.DT_MIN  # NULL date/time
         try:
             self.date = datetime.datetime.strptime(self.name[:10], '%Y-%m-%d')
         except ValueError:
@@ -567,7 +567,7 @@ class Foto(FotoEntity):
                 pass
 
         if self.date is None:
-            self.date = settings.DT_MIN # NULL date/time
+            self.date = settings.DT_MIN  # NULL date/time
             if 'DateTimeOriginal' in exif:
                 try:
                     self.date = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
@@ -604,7 +604,7 @@ class Foto(FotoEntity):
             return
 
         self.rotation = rotation
-        self.caches = [] # invalidate cache
+        self.caches = []  # invalidate cache
         if save:
             self.save()
 

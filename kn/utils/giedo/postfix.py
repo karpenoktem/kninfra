@@ -10,7 +10,7 @@ import kn.leden.entities as Es
 
 
 def generate_postfix_map(giedo):
-    tbl = dict() # the virtual map
+    tbl = dict()  # the virtual map
     non_mailman_groups = {}
     dt_now = now()
     id2email = {}

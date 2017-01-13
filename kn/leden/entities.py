@@ -137,10 +137,10 @@ ncol = db['notes']      # notes on entities by the secretaris
 #   "by" : ObjectId("4e6fcc85e60edf3dc0000410")
 # }
 
-pcol = db['push_changes'] # Changes to be pushed to remote systems
+pcol = db['push_changes']  # Changes to be pushed to remote systems
 # TODO add example
 
-incol = db['informacie_notifications'] # human readable list of notifications
+incol = db['informacie_notifications']  # human readable list of notifications
                                         #for informacie group
 # TODO add example
 

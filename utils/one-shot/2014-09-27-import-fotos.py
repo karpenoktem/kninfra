@@ -1,4 +1,4 @@
-import _import # noqa: F401
+import _import  # noqa: F401
 
 from django.conf import settings
 import kn.fotos.entities as fEs

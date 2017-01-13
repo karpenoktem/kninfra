@@ -125,7 +125,7 @@ def cache(request, cache, path):
     lm = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(st.st_mtime))
     if request.META.get('HTTP_IF_MODIFIED_SINCE', None) == lm:
         return HttpResponseNotModified()
-    cc = 'max-age=30780000' # Cache-Control header
+    cc = 'max-age=30780000'  # Cache-Control header
     if not entity.may_view(None):
         # not publicly cacheable
         cc = 'private, ' + cc

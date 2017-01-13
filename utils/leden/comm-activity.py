@@ -1,4 +1,4 @@
-import _import # noqa: F401
+import _import  # noqa: F401
 from common import *
 
 import kn.leden.entities as Es

@@ -13,7 +13,7 @@ def import_mailman():
     if __mailman_imported:
         return
     try:
-        import Mailman # noqa: F401
+        import Mailman  # noqa: F401
     except ImportError:
         setup_virtual_package('Mailman', os.path.join(
             settings.MAILMAN_PATH, 'Mailman'))

@@ -3,7 +3,7 @@
 
 from __future__ import absolute_import
 
-import _import # noqa: F401
+import _import  # noqa: F401
 from common import *
 from Mailman.MailList import MailList
 

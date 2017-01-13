@@ -24,14 +24,14 @@ def pdbedit_list():
         (username, uid, lanmanhash, nthash, flags,
                 lastchange, empty) = line.split(':')
         users[username].update({
-            'lanmanhash': lanmanhash, # Unused
+            'lanmanhash': lanmanhash,  # Unused
             'nthash': nthash,
             'lastchange': lastchange[4:],
             'flag_user': 'U' in flags,
-            'flag_nullpassword': 'N' in flags, # Unused
+            'flag_nullpassword': 'N' in flags,  # Unused
             'flag_disabled': 'D' in flags,
-            'flag_noexpire': 'X' in flags, # Unused
-            'flag_workstationtrust': 'W' in flags }) # Unused
+            'flag_noexpire': 'X' in flags,  # Unused
+            'flag_workstationtrust': 'W' in flags })  # Unused
     return users
 
 

@@ -5,7 +5,7 @@ import logging
 import threading
 from urllib import urlencode
 
-import mirte # github.com/bwesterb/mirte
+import mirte  # github.com/bwesterb/mirte
 from M2Crypto import RSA
 
 from django.core.files.storage import default_storage

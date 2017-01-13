@@ -1,5 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
-import _import # noqa: F401
+import _import  # noqa: F401
 from common import *
 
 from kn.leden.models import Study, OldKnGroup

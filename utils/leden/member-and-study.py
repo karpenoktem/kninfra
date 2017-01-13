@@ -1,4 +1,4 @@
-import _import # noqa: F401
+import _import  # noqa: F401
 
 import sys
 import csv

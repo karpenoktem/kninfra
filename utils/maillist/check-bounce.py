@@ -1,4 +1,4 @@
-import _import # noqa: F401
+import _import  # noqa: F401
 from kn.utils.mailman import import_mailman
 
 import_mailman()

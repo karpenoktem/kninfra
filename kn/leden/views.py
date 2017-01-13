@@ -376,7 +376,7 @@ def ik_chsmoel(request):
     original.seek(0)
     img = Image.open(original)
     if hasattr(img, '_getexif') and img._getexif() is not None:
-        orientation = int(img._getexif().get(274, '1')) # Orientation
+        orientation = int(img._getexif().get(274, '1'))  # Orientation
         if orientation == 3:
             img = img.transpose(Image.ROTATE_180)
         elif orientation == 6:

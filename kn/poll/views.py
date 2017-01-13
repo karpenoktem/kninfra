@@ -40,7 +40,7 @@ def vote(request, name):
                                    'poll': _id(poll),
                                    'answers': [None]*len(poll.questions)})
     allValid = True
-    forms = [] # question forms
+    forms = []  # question forms
     for q_id, question in enumerate(poll.questions):
         form_kwargs = {'prefix': str(q_id)}
         answer = filling.answers[q_id]
