@@ -25,6 +25,15 @@ kn-boekenlezers:
         - dir_mode: 770
         - group: kn-boekenlezers
         - user: root
+{% if grains['vagrant'] %}
+/groups/boekenlezers/fin.gnucash:
+    file.managed:
+        - source: salt://phassa/fin.gnucash
+Create fin git repository:
+    cmd.script:
+        - source: salt://phassa/finCreateTestRepo
+        - creates: /groups/boekenlezers/fin
+{% endif %}
 sys-moniek:
     user.present:
         - home: /home/sys-moniek
