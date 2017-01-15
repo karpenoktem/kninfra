@@ -1,3 +1,7 @@
+/var/run/infra:
+    file.directory:
+        - user: root
+        - group: sys-interinfra
 kn-boekenlezers:
     group.present:
         - home: /groups/boekenlezers
@@ -11,7 +15,9 @@ sys-moniek:
         - home: /home/sys-moniek
         - shell: /bin/bash
         - gid: kn-boekenlezers
-gitpython:
+        - groups:
+            - sys-interinfra
+GitPython:
     pip.installed
 /home/sys-moniek/.profile:
     file.managed:

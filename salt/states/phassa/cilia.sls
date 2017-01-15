@@ -48,9 +48,6 @@ sarah:
         - template: jinja
         - user: root
         - mode: 600
-/var/run/infra:
-    file.directory:
-        - user: root
 /etc/default/cilia:
     file.managed:
         - source: salt://phassa/cilia.default

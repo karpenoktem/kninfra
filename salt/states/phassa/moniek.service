@@ -4,6 +4,7 @@ Description=moniek manages the financial accounts for giedo
 [Service]
 ExecStart=/home/sys-moniek/bin/moniek
 EnvironmentFile=-/etc/default/moniek
+User=sys-moniek
 
 [Install]
 WantedBy=multi-user.target
