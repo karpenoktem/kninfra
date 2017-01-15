@@ -2,6 +2,7 @@
     file.directory:
         - user: root
         - group: sys-interinfra
+        - dir_mode: 770
 kn-boekenlezers:
     group.present:
         - home: /groups/boekenlezers
