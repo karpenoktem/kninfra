@@ -1,18 +1,8 @@
 cilia packages:
     pkg.installed:
         - pkgs:
-            - python-django
-            - msgpack-python
-            - python-setuptools
-            - python-pyparsing
-            - python-markdown
-            - python-mysqldb
-            - python-pip
             - python-smbpasswd
-mirte:
-    pip.installed
-sarah:
-    pip.installed
+            - python-mysqldb
 /root/.profile:
     file.managed:
         - source: salt://phassa/root.profile

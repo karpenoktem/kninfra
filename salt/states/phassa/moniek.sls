@@ -1,3 +1,17 @@
+moniek packages:
+    pkg.installed:
+        - pkgs:
+            - python-git
+            - python-django
+            - msgpack-python
+            - python-setuptools
+            - python-pyparsing
+            - python-markdown
+            - python-pip
+mirte:
+    pip.installed
+sarah:
+    pip.installed
 /var/run/infra:
     file.directory:
         - user: root
@@ -18,18 +32,29 @@ sys-moniek:
         - gid: kn-boekenlezers
         - groups:
             - sys-interinfra
-GitPython:
-    pip.installed
 /home/sys-moniek/.profile:
     file.managed:
         - source: salt://phassa/moniek.profile
         - template: jinja
+/home/sys-moniek/scm:
+    file.directory:
+        - user: sys-moniek
+/home/sys-moniek/py:
+    file.directory:
+        - user: sys-moniek
+https://github.com/awesterb/koert:
+    git.latest:
+        - user: sys-moniek
+        - target: /home/sys-moniek/scm/koert
+    require:
+        - pkg: git
+/home/sys-moniek/py/koert:
+    file.symlink:
+        - target: /home/sys-moniek/scm/koert
 {% if grains['vagrant'] %}
 /home/sys-moniek/kninfra:
     file.symlink:
         - target: /vagrant
-/home/sys-moniek/py:
-    file.directory
 /home/sys-moniek/py/vagrantSettingsHack:
     file.directory
 /home/sys-moniek/py/vagrantSettingsHack/__init__.py:
