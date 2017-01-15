@@ -857,6 +857,14 @@ def ik_openvpn_download(request, filename):
     return response
 
 
+@login_required
+def ik_balans(request):
+    balans = giedo.fin_get_account(request.user)
+    return render_to_response('leden/ik_balans.html',
+            {'balans': balans},
+            context_instance=RequestContext(request))
+
+
 def language(request):
     return HttpResponse(str(request.LANGUAGE_CODE))
 

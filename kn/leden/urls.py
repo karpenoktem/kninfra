@@ -52,6 +52,7 @@ urlpatterns = [
     url(_(r'^geenalcohol/$'),
         views.users_underage, name='users-underage'),
     url(_(r'^ik/?$'), views.ik, name='ik'),
+    url(_(r'^ik/balans/?$'), views.ik_balans, name='ik-balans'),
     url(_(r'^ik/wachtwoord$'), views.ik_chpasswd, name="chpasswd"),
     url(_(r'^ik/wachtwoord/villanet/$'), views.ik_chpasswd_villanet,
         name="chpasswd-villanet"),
