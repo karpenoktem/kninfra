@@ -1,6 +1,5 @@
 import os.path
 import logging
-import os
 
 from django.conf import settings
 

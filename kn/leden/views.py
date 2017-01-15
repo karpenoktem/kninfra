@@ -865,6 +865,7 @@ def ik_balans(request):
             {'balans': BalansInfo(balans)},
             context_instance=RequestContext(request))
 
+
 class MutInfo:
     def __init__(self, data):
         self.data = data
@@ -872,6 +873,7 @@ class MutInfo:
     @property
     def trdescription(self):
         return self.data['tr-description']
+
 
 class BalansInfo:
     def __init__(self, data):
@@ -895,6 +897,7 @@ class BalansInfo:
     def in_books(self):
         return "debitor" in self.data['accounts'] \
                 or "creditor" in self.data['accounts']
+
 
 def language(request):
     return HttpResponse(str(request.LANGUAGE_CODE))
