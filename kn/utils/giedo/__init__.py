@@ -36,7 +36,7 @@ class Giedo(WhimDaemon):
         super(Giedo, self).__init__(settings.GIEDO_SOCKET)
         self.l = logging.getLogger('giedo')
         self.last_sync_ts = 0
-        self.daan, self.cilia = None, None
+        self.daan, self.cilia, self.moniek = None, None, None
         try:
             self.daan = WhimClient(settings.DAAN_SOCKET)
         except:
@@ -45,6 +45,10 @@ class Giedo(WhimDaemon):
             self.cilia = WhimClient(settings.CILIA_SOCKET)
         except:
             self.l.exception("Couldn't connect to cilia")
+        try:
+            self.moniek = WhimClient(settings.MONIEK_SOCKET)
+        except:
+            self.l.exception("Couldn't connect to moniek")
         self.mirte = mirte.get_a_manager()
         self.threadPool = self.mirte.get_a('threadPool')
         self.operation_lock = threading.Lock()
@@ -267,6 +271,8 @@ class Giedo(WhimDaemon):
                 return self.daan.send(d)
         elif d['type'] == 'last-synced?':
             return self.last_sync_ts
+        elif d['type'] == 'fin-get-account':
+            return self.moniek.send(d)
         else:
                 logging.warn("Unknown command: %s" % d['type'])
 
