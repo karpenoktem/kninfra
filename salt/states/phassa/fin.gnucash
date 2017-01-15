@@ -139,7 +139,7 @@
   <act:parent type="guid">1c916271f4319e297ffdcdb550c77a23</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bas Westerbaan</act:name>
+  <act:name>Test Admin</act:name>
   <act:id type="guid">e1cc1a46a301d0d27639a52a48a85469</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -211,7 +211,7 @@
   <act:parent type="guid">34146deb99fa590750f1e3dd584a8193</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bas Westerbaan</act:name>
+  <act:name>Test Admin</act:name>
   <act:id type="guid">945d5834a29dee7ceb7b49ee2a0d2172</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
