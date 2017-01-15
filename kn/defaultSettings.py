@@ -222,6 +222,9 @@ def defaultSettings(glbls):
     d.FIN_CREDITORS_ACCOUNT = ":Passiva:Crediteuren"
     d.FIN_DEBITORS_ACCOUNT = ":Activa:Vlottende activa:Debiteuren:Leden"
 
+    d.BANK_ACCOUNT_NUMER = "NL81 RABO 0145 9278 22"
+    d.BANK_ACCOUNT_HOLDER = "A.S.V. Karpe Noktem"
+
     try:
         locale.setlocale(locale.LC_ALL, d.LOCALE)
     except locale.Error:
