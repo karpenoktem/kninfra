@@ -3,6 +3,7 @@ from common import *
 
 import gdata.calendar.service
 
+
 def get_cs():
     username, password = read_ssv_file('gaccount.login')
     cs = gdata.calendar.service.CalendarService()

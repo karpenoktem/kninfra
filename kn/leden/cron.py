@@ -4,6 +4,7 @@ import kn.leden.entities as Es
 
 from kn.base.mail import render_then_email
 
+
 def send_informacie_digest():
     """ Sends the notifications for the informacie. """
     ntfs = Es.pop_all_informacie_notifications()

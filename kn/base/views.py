@@ -9,6 +9,7 @@ from django.shortcuts import redirect
 from django.utils.http import is_safe_url
 from django.core.exceptions import SuspiciousOperation
 
+
 def direct_to_folder(request, root, subdir):
     root = os.path.abspath(root)
     p = os.path.abspath(os.path.join(root, subdir))
@@ -22,6 +23,7 @@ def direct_to_folder(request, root, subdir):
         raise Http404
     return HttpResponse(FileWrapper(open(p)),
             content_type=mimetypes.guess_type(p)[0])
+
 
 def langpicker(request):
     language, url = request.POST['language-url'].split(':', 2)

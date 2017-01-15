@@ -18,12 +18,13 @@ from django.conf import settings
 
 import kn.leden.entities as Es
 
+
 @login_required
 def view(request, graph, ext):
-    if not graph in GRAPHS:
+    if graph not in GRAPHS:
         raise Http404
     timeout, update, exts = GRAPHS[graph]
-    if not ext in exts:
+    if ext not in exts:
         raise Http404
     graph_fn = graph + '.' + ext
     path = os.path.join(settings.GRAPHS_PATH, graph_fn)
@@ -35,6 +36,7 @@ def view(request, graph, ext):
                     os.path.join(settings.GRAPHS_PATH, graph)))
     return HttpResponse(FileWrapper(default_storage.open(path)),
                                 content_type=mimetypes.guess_type(path)[0])
+
 
 def update_member_count(base_path):
     """
@@ -53,7 +55,7 @@ def update_member_count(base_path):
                     painter=pyx.graph.axis.painter.regular(
                             gridattrs=[pyx.attr.changelist([
                                 pyx.color.gray(0.8), None])])))
-    g.plot(pyx.graph.data.points(ret,x=1,y=2),
+    g.plot(pyx.graph.data.points(ret, x=1, y=2),
                 [pyx.graph.style.symbol(size=0.03,
                         symbol=pyx.graph.style.symbol.plus)])
     # TODO split into separate helper
@@ -75,6 +77,7 @@ def update_member_count(base_path):
     finally:
         os.chdir(old_wd)
         shutil.rmtree(temp_dir)
+
 
 def _generate_member_count():
     events = []

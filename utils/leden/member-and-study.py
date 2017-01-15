@@ -1,9 +1,10 @@
-import _import
+import _import  # noqa: F401
 
 import sys
 import csv
 
 import kn.leden.entities as Es
+
 
 def main():
     writer = csv.writer(sys.stdout)
@@ -16,7 +17,7 @@ def main():
                      'studierichting',
                      'studentnummer'])
     leden = Es.by_name('leden').get_members()
-    leden.sort(cmp=lambda x,y: cmp(str(x.name), str(y.name)))
+    leden.sort(cmp=lambda x, y: cmp(str(x.name), str(y.name)))
     for m in leden:
         if not m.is_user:
             continue

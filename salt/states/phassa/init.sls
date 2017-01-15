@@ -4,4 +4,5 @@ include:
     - .nfs
     - .samba
     - .nginx
+    - .moniek
     - .cilia

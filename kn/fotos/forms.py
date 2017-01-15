@@ -15,8 +15,10 @@ def list_events():
     events.sort(reverse=True)
     return events
 
+
 def move_fotos_list_events():
     return map(lambda x: (x, x), list_events())
+
 
 class CreateEventForm(forms.Form):
     humanName = forms.CharField(label=_('Naam voor mensen'))
@@ -26,8 +28,9 @@ class CreateEventForm(forms.Form):
     fullHumanName = forms.CharField(label=_('Volledige naam voor mensen'))
 
     date.widget.attrs['onblur'] = 'createFullHumanname();'
-    humanName.widget.attrs['onblur'] = ('createTechName(); '+
+    humanName.widget.attrs['onblur'] = ('createTechName(); ' +
                         'createFullHumanname();')
+
 
 def getMoveFotosForm():
     class MoveFotosForm(forms.Form):

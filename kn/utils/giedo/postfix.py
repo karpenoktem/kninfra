@@ -5,12 +5,12 @@ from tarjan.tc import tc
 from django.conf import settings
 
 import kn.leden.entities as Es
-from kn.leden.date import now
 
 # TODO (issue #7) handle cycles properly.
 
+
 def generate_postfix_map(giedo):
-    tbl = dict() # the virtual map
+    tbl = dict()  # the virtual map
     non_mailman_groups = {}
     dt_now = now()
     id2email = {}
@@ -33,7 +33,7 @@ def generate_postfix_map(giedo):
         else:
             logging.warn("postfix: unhandled type: %s" % e.type)
         id_email = "%s@%s" % (e.id, settings.MAILDOMAIN)
-        if not id_email in tbl:
+        if id_email not in tbl:
             tbl[id_email] = (e.canonical_email,)
     # handle the non-mailman groups
     for rel in Es.query_relations(_with=non_mailman_groups.keys(),
@@ -43,6 +43,7 @@ def generate_postfix_map(giedo):
         if email is not None:
             tbl[e.canonical_email].append(email)
     return tbl
+
 
 def generate_postfix_slm_map(giedo):
     # We generate the postfix "sender_login_maps".

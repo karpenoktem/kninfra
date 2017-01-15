@@ -5,6 +5,7 @@ from kn.leden.date import now
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 
+
 def update_db(giedo):
     dt_now = now()
     # Load tags
@@ -26,6 +27,7 @@ def update_db(giedo):
             if tags['!year-group'] in g.tag_ids]
     # Find relations on those groups and add the years for which those
     # relations hold.
+
     def add_years_to_relations(rels):
         years_of_year_overrides = [yo[1] for yo in year_overrides.values()]
         until_years = [Es.date_to_year(r['until']) for r in rels
@@ -61,7 +63,7 @@ def update_db(giedo):
         _with=year_groups))
     # Check whether all year groups are created
     for g in year_groups:
-        mrels = filter(lambda x: x['with']==g._id, year_group_mrels)
+        mrels = filter(lambda x: x['with'] == g._id, year_group_mrels)
         add_years_to_relations(mrels)
         years = set()
         for rel in mrels:
@@ -86,6 +88,7 @@ def update_db(giedo):
             logging.warn("Unknown vgroup type: %s" \
                     % vg._data['virtua']['type'])
     # Find all relations with the sofa virtual groups
+
     def relkey(rel):
         return (rel['who'], rel['how'], rel['with'],
                 rel['from'], rel['until'])
@@ -140,7 +143,7 @@ def update_db(giedo):
         g = groups[id2name[rel['with']]]
         nm = str(g.name) + '-' + sofa_brands[rel['how']].sofa_suffix
         logging.info("creating sofa %s" % nm)
-        n = {'types': ['group','tag'],
+        n = {'types': ['group', 'tag'],
              'names': [nm],
              'tags': [tags['!virtual-group']],
              'virtual': {
@@ -191,11 +194,12 @@ def update_db(giedo):
             continue
         u._data['is_active'] = is_active
         u.save()
-        logging.info("%s user %s",("activated" if is_active else "deactivated"),
+        logging.info("%s user %s", ("activated" if is_active else "deactivated"),
                         str(u.name))
 
+
 def _create_yeargroup(g, year, name, tags, groups, id2name):
-    n = {'types': ['group','tag'],
+    n = {'types': ['group', 'tag'],
          'tags': [tags['!virtual-group']],
          'virtual': {
              'type': 'year-group',

@@ -1,7 +1,8 @@
-import _import
+import _import  # noqa: F401
 from common import *
 
 import kn.leden.entities as Es
+
 
 def main():
     now = Es.now()
@@ -18,13 +19,14 @@ def main():
         if not m.dateOfBirth:
             continue
         print (age - m.dateOfBirth).days / 365.242, unicode(m.name)
-        l.append( (age - m.dateOfBirth).days / 365.242)
+        l.append((age - m.dateOfBirth).days / 365.242)
     print 'avg', sum(l)/len(l)
     print 'med', sorted(l)[len(l)/2]
     print '1st', sorted(l)[len(l)/4*2]
     print '3rd', sorted(l)[len(l)/4*3]
     print 'min', min(l)
     print 'max', max(l)
+
 
 def main3():
     now = Es.now()

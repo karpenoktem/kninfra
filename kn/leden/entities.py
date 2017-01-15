@@ -13,7 +13,6 @@ from django.utils.crypto import constant_time_compare
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
-from kn.base._random import pseudo_randstr
 
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
@@ -115,7 +114,7 @@ rcol = db['relations']  # relations: "giedo is chairman of bestuur from
 # ----------------------------------------------------------------------
 # This is the relation: "mike is chair (voorzitter) of the soco from
 #   2012-02-07 to 2013-03-11, but he should not be put in soco9
-#   (which is forced by the year-override tag)". 
+#   (which is forced by the year-override tag)".
 # { "_id" : ObjectId("4f3086270032a05bfd000005"),
 #   "from" : ISODate("2012-02-07T03:02:15.130Z"),
 #   "how" : ObjectId("4e6fcc85e60edf3dc0000bc8"),
@@ -138,17 +137,19 @@ ncol = db['notes']      # notes on entities by the secretaris
 #   "by" : ObjectId("4e6fcc85e60edf3dc0000410")
 # }
 
-pcol = db['push_changes'] # Changes to be pushed to remote systems
+pcol = db['push_changes']  # Changes to be pushed to remote systems
 # TODO add example
 
-incol = db['informacie_notifications'] # human readable list of notifications 
+incol = db['informacie_notifications']  # human readable list of notifications
                                         #for informacie group
 # TODO add example
+
 
 def get_hexdigest(algorithm, salt, raw_password):
     """ Used to check old-style passwords. """
     assert algorithm == 'sha1'
     return hashlib.sha1(salt + raw_password).hexdigest()
+
 
 def ensure_indices():
     """ Ensures that the indices we need on the collections are set """
@@ -168,13 +169,13 @@ def ensure_indices():
     rcol.ensure_index('with')
     rcol.ensure_index('who')
     rcol.ensure_index('tags', sparse=True)
-    rcol.ensure_index([('until',1),
-               ('from',-1)])
+    rcol.ensure_index([('until', 1),
+               ('from', -1)])
     # notes
     ncol.ensure_index([('on', 1),
                        ('at', 1)])
-    ncol.ensure_index([('open',1),
-                       ('at',1)])
+    ncol.ensure_index([('open', 1),
+                       ('at', 1)])
     # informacie notifications
     incol.ensure_index('when')
 
@@ -189,16 +190,19 @@ class EntityException(Exception):
     '''
     pass
 
+
 def entity(d):
     """ Given a dictionary, returns an Entity object wrapping it """
     if d is None:
         return None
     return TYPE_MAP[d['types'][0]](d)
 
+
 def of_type(t):
     """ Returns all entities of type @t """
     for m in ecol.find({'types': t}):
         yield TYPE_MAP[t](m)
+
 
 def of_type_by_name(t):
     """ Returns a `name -> entity' dictionary for the
@@ -217,6 +221,7 @@ institutes = functools.partial(of_type, 'institute')
 tags = functools.partial(of_type, 'tag')
 brands = functools.partial(of_type, 'brand')
 
+
 def by_ids(ns):
     """ Find entities by a list of _ids """
     ret = {}
@@ -226,6 +231,7 @@ def by_ids(ns):
 
 __id2name_cache = {}
 
+
 def id_by_name(n, use_cache=False):
     """ Find the _id of entity with name @n """
     ret = None
@@ -233,13 +239,14 @@ def id_by_name(n, use_cache=False):
         if n in __id2name_cache:
             ret =  __id2name_cache[n]
     if ret is None:
-        obj = ecol.find_one({'names': n}, {'names':1})
+        obj = ecol.find_one({'names': n}, {'names': 1})
         if obj is None:
             return None
         ret = obj['_id']
         if use_cache:
             __id2name_cache[n] = ret
     return ret
+
 
 def ids_by_names(ns=None, use_cache=False):
     """ Finds _ids of entities by a list of names """
@@ -253,14 +260,15 @@ def ids_by_names(ns=None, use_cache=False):
                 nss2.remove(n)
         nss = frozenset(nss2)
     for m in ecol.find({} if ns is None else
-            {'names': {'$in': tuple(nss)}}, {'names':1}):
-        for n in m.get('names',()):
+            {'names': {'$in': tuple(nss)}}, {'names': 1}):
+        for n in m.get('names', ()):
             if ns is None or n in nss:
                 ret[n] = m['_id']
                 if use_cache and ns is not None:
                     __id2name_cache[n] = m['_id']
                 continue
     return ret
+
 
 def by_names(ns):
     """ Finds entities by a list of names """
@@ -273,24 +281,30 @@ def by_names(ns):
                 continue
     return ret
 
+
 def by_name(n):
     """ Finds an entity by name """
     return entity(ecol.find_one({'names': n}))
 
+
 def by_id(n):
     """ Finds an entity by id """
-    if n is None: return None
+    if n is None:
+        return None
     return entity(ecol.find_one({'_id': _id(n)}))
+
 
 def by_study(study):
     """ Finds entities by studies.study """
     for m in ecol.find({'studies.study': _id(study)}):
         yield entity(m)
 
+
 def by_institute(institute):
     """ Finds entities by studies.insitute """
     for m in ecol.find({'studies.institute': _id(institute)}):
         yield entity(m)
+
 
 def get_years_of_birth():
     """ Returns the years of birth.
@@ -307,13 +321,15 @@ def get_years_of_birth():
                         )['person']['dateOfBirth'].year
     return xrange(start, end+1)
 
+
 def by_year_of_birth(year):
     """ Finds entities by year of birth """
     for m in ecol.find({'types': 'user',
                         'person.dateOfBirth': {
                                 '$lt': datetime.datetime(year + 1, 1, 1),
-                                '$gte': datetime.datetime(year, 1, 1) }}):
+                                '$gte': datetime.datetime(year, 1, 1)}}):
         yield entity(m)
+
 
 def by_age(max_age=None):
     """ Finds entities under a certain age """
@@ -327,10 +343,12 @@ def by_age(max_age=None):
                                 '$gt': dt}}):
         yield entity(m)
 
+
 def all():
     """ Finds all entities """
     for m in ecol.find():
         yield entity(m)
+
 
 def names_by_ids(ids=None):
     """ Returns an `_id => primary name' dictionary for entities with
@@ -344,22 +362,26 @@ def names_by_ids(ids=None):
             ret[e['_id']] = None
     return ret
 
+
 def ids():
     """ Returns a set of all ids """
     ret = set()
-    for e in ecol.find({}, {'_id':True}):
+    for e in ecol.find({}, {'_id': True}):
         ret.add(e['_id'])
     return ret
+
 
 def names():
     """ Returns a set of all names """
     ret = set()
-    for e in ecol.find({}, {'names':True}):
+    for e in ecol.find({}, {'names': True}):
         ret.update(e.get('names', ()))
     return ret
 
 # Searching entities by keywords
 # ######################################################################
+
+
 def by_keyword(keyword, limit=20, _type=None):
     """ Searches for entities by a keyword. """
     # TODO The current method does not use indices.  It will search
@@ -383,14 +405,18 @@ def by_keyword(keyword, limit=20, _type=None):
 
 # Specialized functions to work with entities.
 # ######################################################################
+
+
 def bearers_by_tag_id(tag_id, _as=entity):
     """ Find the bearers of the tag with @tag_id """
     return map(_as, ecol.find({'tags': tag_id}))
+
 
 def year_to_range(year):
     """ Returns (start_date, end_date) for the given year """
     return (datetime.datetime(2003 + year, 9, 1),
             datetime.datetime(2004 + year, 8, 31))
+
 
 def date_to_year(dt):
     """ Returns the `verenigingsjaar' at the date """
@@ -400,6 +426,7 @@ def date_to_year(dt):
     if year < 1:
         year = 1
     return year
+
 
 def quarter_to_range(quarter):
     """ Translates a quarter to a start and end datetime.
@@ -416,20 +443,24 @@ def quarter_to_range(quarter):
 # Functions to work with relations
 # ######################################################################
 
+
 def relation_is_active_at(rel, dt):
     """ Returns whether @rel is active at @dt """
     return ((rel['until'] is None or rel['until'] >= dt)
             and (rel['from'] is None or rel['from'] <= dt))
 
+
 def relation_is_active(rel):
     """ Returns whether @rel is active now """
     return relation_is_active_at(rel, now())
+
 
 def relation_is_virtual(rel):
     """ Returns whether @rel is "virtual".
 
         Requires rel['with'] to be deref'd """
     return rel['with'].is_group and rel['with'].as_group().is_virtual
+
 
 def user_may_end_relation(user, rel):
     """ Returns whether @user may end @rel """
@@ -445,9 +476,11 @@ def user_may_end_relation(user, rel):
         return True
     return False
 
+
 def end_relation(__id):
     dt = now()
     rcol.update({'_id': _id(__id)}, {'$set': {'until': dt}})
+
 
 def user_may_begin_relation(user, who, _with, how):
     """ Returns whether @user may begin a @how-relation between @who and @_with
@@ -463,6 +496,7 @@ def user_may_begin_relation(user, who, _with, how):
             return True
     return False
 
+
 def add_relation(who, _with, how=None, _from=None, until=None):
     if _from is None:
         _from = DT_MIN
@@ -474,11 +508,14 @@ def add_relation(who, _with, how=None, _from=None, until=None):
                      'from': _from,
                      'until': until})
 
+
 def user_may_tag(user, group, tag):
     return 'secretariaat' in user.cached_groups_names
 
+
 def user_may_untag(user, group, tag):
     return 'secretariaat' in user.cached_groups_names
+
 
 def disj_query_relations(queries, deref_who=False, deref_with=False,
         deref_how=False):
@@ -497,8 +534,10 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
                 query[attr] = _id(query[attr])
             else:
                 query[attr] = None
-        if query.get('from') is None: query['from'] = DT_MIN
-        if query.get('until') is None: query['until'] = DT_MAX
+        if query.get('from') is None:
+            query['from'] = DT_MIN
+        if query.get('until') is None:
+            query['until'] = DT_MAX
         # When DT_MIN < from < until < DT_MAX we need the most complicated
         # query. However, in the following four cases we can simplify the
         # required query bits.
@@ -540,6 +579,7 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
         return cursor
     return __derefence_relations(cursor, deref_who, deref_with, deref_how)
 
+
 def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
             deref_who=False, deref_with=False, deref_how=False):
     """ Find matching relations.
@@ -552,12 +592,18 @@ def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
                 Only relations intersecting this interval are matched.
     """
     query = {}
-    if who != -1: query['who'] = who
-    if _with != -1: query['with'] = _with
-    if how != -1: query['how'] = how
-    if _from is not None: query['from']  = _from
-    if until is not None: query['until'] = until
+    if who != -1:
+        query['who'] = who
+    if _with != -1:
+        query['with'] = _with
+    if how != -1:
+        query['how'] = how
+    if _from is not None:
+        query['from']  = _from
+    if until is not None:
+        query['until'] = until
     return disj_query_relations([query], deref_who, deref_with, deref_how)
+
 
 def __derefence_relations(cursor, deref_who, deref_with, deref_how):
     # Dereference.  First collect the ids of the entities we want to
@@ -588,6 +634,7 @@ def __derefence_relations(cursor, deref_who, deref_with, deref_how):
             rel['until'] = None
         yield rel
 
+
 def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
     cursor = rcol.find({'_id': _id(__id)})
     try:
@@ -598,26 +645,34 @@ def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
     except StopIteration:
         return None
 
+
 def entity_cmp_humanName(x, y):
     return cmp(unicode(x.humanName), unicode(y.humanName))
+
 
 def dt_cmp_until(x, y):
     return cmp(DT_MAX if x is None else x,
             DT_MAX if y is None else y)
 
+
 def dt_cmp_from(x, y):
     return cmp(DT_MIN if x is None else x,
             DT_MIN if y is None else y)
 
+
 def relation_cmp_until(x, y):
     return dt_cmp_until(x['until'], y['until'])
+
 
 def relation_cmp_from(x, y):
     return dt_cmp_from(x['from'], y['from'])
 
+
 def remove_relation(who, _with, how,  _from, until):
-    if _from is None: _from = DT_MIN
-    if until is None: until = DT_MAX
+    if _from is None:
+        _from = DT_MIN
+    if until is None:
+        until = DT_MAX
     rcol.remove({'who': _id(who),
              'with': _id(_with),
              'how': None if how is None else _id(how),
@@ -626,9 +681,12 @@ def remove_relation(who, _with, how,  _from, until):
 
 # Functions to work with notes
 # ######################################################################
+
+
 def note_by_id(the_id):
     tmp = ncol.find_one({'_id': the_id})
     return None if tmp is None else Note(tmp)
+
 
 def get_open_notes():
     # Prefetch the `by' field.  (We do not need to prefetch the `closed_by'
@@ -641,11 +699,12 @@ def get_open_notes():
     lut = by_ids(list(ids))
     lut[None] = None
     # Actually fetch the notes.
-    for d in ncol.find({'open': True}, sort=[('at',1)]):
+    for d in ncol.find({'open': True}, sort=[('at', 1)]):
         yield Note(d, lut[d['by']])
 
 # Functions to work with informacie-notifications
 # ######################################################################
+
 
 def notify_informacie(event, user, **props):
     data = {'when': now(), 'event': event}
@@ -654,67 +713,87 @@ def notify_informacie(event, user, **props):
         data[key] = _id(value)
     incol.insert(data)
 
+
 def pop_all_informacie_notifications():
-    ntfs = list(incol.find({}, sort=[('when',1)]))
+    ntfs = list(incol.find({}, sort=[('when', 1)]))
     incol.remove({'_id': {'$in': [m['_id'] for m in ntfs]}})
     return [InformacieNotification(d) for d in ntfs]
 
 # Models
 # ######################################################################
+
+
 class EntityName(object):
     """ Wrapper object for a name of an entity """
+
     def __init__(self, entity, name):
         self._entity = entity
         self._name = name
+
     @property
     def humanNames(self):
-        for n in self.entity._data.get('humanNames',()):
+        for n in self.entity._data.get('humanNames', ()):
             if n['name'] == self.name:
                 yield EntityHumanName(self._entity, n)
+
     @property
     def primary_humanName(self):
         try:
             return next(self.humanNames)
         except StopIteration:
             return None
+
     def __str__(self):
         return self._name
+
     def __repr__(self):
         return "<EntityName %s of %s>" % (self._name, self._entity)
 
+
 class EntityHumanName(object):
     """ Wrapper object for a humanName of an entity """
+
     def __init__(self, entity, data):
         self._entity = entity
         self._data = data
+
     @property
     def name(self):
         return EntityName(self._entity, self._data.get('name'))
+
     @property
     def humanName(self):
         return self._data['human']
+
     @property
     def genitive_prefix(self):
         return self._data.get('genitive_prefix', 'van de')
+
     @property
     def genitive(self):
         return self.genitive_prefix + ' ' + unicode(self)
+
     @property
     def definite_article(self):
         return {'van de': 'de',
                 'van het': 'het',
                 'van': '',
                 }.get(self.genitive_prefix, 'de')
+
     def __unicode__(self):
         return self.humanName
+
     def __repr__(self):
         return "<EntityHumanName %s of %s>" % (
                 self._data, self._entity)
 
+
 class Entity(SONWrapper):
     """ Base object for every Entity """
+
     def __init__(self, data):
         super(Entity, self).__init__(data, ecol)
+
     def is_related_with(self, whom, how=None):
         dt = now()
         how = None if how is None else _id(how)
@@ -765,19 +844,24 @@ class Entity(SONWrapper):
     @property
     def type(self):
         return self._data['types'][0]
+
     @property
     def id(self):
         return str(self._id)
+
     @property
     def tag_ids(self):
         return self._data.get('tags', ())
+
     @property
     def tags(self):
         for m in ecol.find({'_id': {
-                '$in': self._data.get('tags',())}}):
+                '$in': self._data.get('tags', ())}}):
             yield Tag(m)
+
     def has_tag(self, tag):
         return _id(tag) in self._data.get('tags', ())
+
     def tag(self, tag, save=True):
         if self.has_tag(tag):
             raise ValueError(_("Entiteit heeft al deze stempel"))
@@ -786,44 +870,53 @@ class Entity(SONWrapper):
         self._data['tags'].append(_id(tag))
         if save:
             self.save()
+
     def untag(self, tag, save=True):
         if not self.has_tag(tag):
             raise ValueError(_("Eniteit heeft deze stempel nog niet"))
         self._data['tags'].remove(_id(tag))
         if save:
             self.save()
+
     @property
     def names(self):
-        for n in self._data.get('names',()):
+        for n in self._data.get('names', ()):
             yield EntityName(self, n)
+
     @property
     def name(self):
         nms = self._data.get('names', ())
         nm = nms[0] if len(nms) >= 1 else None
         return nm if nm is None else EntityName(self, nm)
+
     @property
     def description(self):
         return self._data.get('description', None)
+
     @property
     def other_names(self):
-        for n in self._data.get('names',())[1:]:
+        for n in self._data.get('names', ())[1:]:
             yield EntityName(self, n)
+
     @property
     def humanNames(self):
-        for n in self._data.get('humanNames',()):
+        for n in self._data.get('humanNames', ()):
             yield EntityHumanName(self, n)
+
     @property
     def humanName(self):
         try:
             return next(self.humanNames)
         except StopIteration:
             return None
+
     @permalink
     def get_absolute_url(self):
         if self.name:
             return ('entity-by-name', (),
                     {'name': self.name})
         return ('entity-by-id', (), {'_id': self.id})
+
     @property
     def types(self):
         return set(self._data['types'])
@@ -833,22 +926,32 @@ class Entity(SONWrapper):
 
     @property
     def is_user(self): return 'user' in self._data['types']
+
     @property
     def is_group(self): return 'group' in self._data['types']
+
     @property
     def is_brand(self): return 'brand' in self._data['types']
+
     @property
     def is_tag(self): return 'tag' in self._data['types']
+
     @property
     def is_study(self): return 'study' in self._data['types']
+
     @property
     def is_institute(self): return 'institute' in self._data['types']
 
     def as_user(self): return User(self._data)
+
     def as_group(self): return Group(self._data)
+
     def as_brand(self): return Brand(self._data)
+
     def as_tag(self): return Tag(self._data)
+
     def as_study(self): return Study(self._data)
+
     def as_institute(self): return Institute(self._data)
 
     def as_primary_type(self):
@@ -988,6 +1091,7 @@ class Entity(SONWrapper):
               'at': dt,
               'closed_by': None,
               'closed_at': None}).save()
+
     def get_notes(self):
         # Prefetch the entities referenced in the by and closed_by fields
         # of the notes.
@@ -1001,19 +1105,22 @@ class Entity(SONWrapper):
         lut = by_ids(list(ids))
         lut[None] = None
         # Actually fetch the notes.
-        for d in ncol.find({'on': self._id}, sort=[('at',1)]):
+        for d in ncol.find({'on': self._id}, sort=[('at', 1)]):
             yield Note(d, lut[d['by']], lut[d.get('closed_by')])
 
     def __eq__(self, other):
         if not isinstance(other, Entity):
             return False
         return other._id == self._id
+
     def __ne__(self, other):
         if not isinstance(other, Entity):
             return True
         return other._id != self._id
+
     def __hash__(self):
         return hash(self._id)
+
 
 class Group(Entity):
     @permalink
@@ -1022,6 +1129,7 @@ class Group(Entity):
             return ('group-by-name', (),
                     {'name': self.name})
         return ('group-by-id', (), {'_id': self.id})
+
     def get_current_and_old_members(self):
         dt = now()
         cur, _all = set(), set()
@@ -1031,24 +1139,29 @@ class Group(Entity):
                     (rel['from'] is None or rel['from'] <= dt)):
                 cur.add(rel['who'])
         return (cur, _all - cur)
+
     def get_members(self):
         dt = now()
         return [r['who'] for r in self.get_rrelated(
                 how=None, _from=dt, until=dt)]
+
     @property
     def is_virtual(self):
         return 'virtual' in self._data
 
+
 class User(Entity):
     def __init__(self, data):
-        super(User,self).__init__(data)
+        super(User, self).__init__(data)
         self._primary_study = -1
+
     @permalink
     def get_absolute_url(self):
         if self.name:
             return ('user-by-name', (),
                     {'name': self.name})
         return ('user-by-id', (), {'_id': self.id})
+
     def set_password(self, pwd, save=True):
         self._data['password'] = make_password(pwd)
         if save:
@@ -1057,6 +1170,7 @@ class User(Entity):
                         {'$set': {'password': self.password}})
             else:
                 self.save()
+
     def set_preferred_language(self, code, save=True):
         self._data['preferred_language'] = code
         if save:
@@ -1083,58 +1197,72 @@ class User(Entity):
             return ok
         # New style password
         return check_password(pwd, self.password, self.set_password)
+
     @property
     def humanName(self):
         return self.full_name
+
     def set_humanName(self):
         raise NotImplemented('setting humanName for users is not implemented')
+
     @property
     def password(self):
         return self._data.get('password', None)
+
     @property
     def is_active(self):
-        return self._data.get('is_active',True)
+        return self._data.get('is_active', True)
+
     def is_authenticated(self):
         # required by django's auth
         return True
     # Required by Django's auth. framework
+
     @property
     def pk(self):
         return str(_id(self))
+
     def get_username(self):
         # implements Django's User object
         return str(self.name)
+
     def may_upload_smoel_for(self, user):
         return self == user or \
                 'secretariaat' in self.cached_groups_names or \
                 'bestuur' in self.cached_groups_names
+
     @property
     def primary_email(self):
         # the primary email address is always the first one;
         # we ignore the until field.
-        if len(self._data['emailAddresses'])==0:
+        if len(self._data['emailAddresses']) == 0:
             return None
         return self._data['emailAddresses'][0]['email']
+
     @property
     def full_name(self):
-        if (not 'person' in self._data or
-                not 'family' in self._data['person'] or
-                not 'nick' in self._data['person']):
+        if ('person' not in self._data or
+                'family' not in self._data['person'] or
+                'nick' not in self._data['person']):
             return unicode(super(User, self).humanName)
         bits = self._data['person']['family'].split(',', 1)
         if len(bits) == 1:
             return self._data['person']['nick'] + ' ' \
                     + self._data['person']['family']
         return self._data['person']['nick'] + bits[1] + ' ' + bits[0]
+
     @property
     def first_name(self):
-        return self._data.get('person',{}).get('nick')
+        return self._data.get('person', {}).get('nick')
+
     @property
     def last_name(self):
-        return self._data.get('person',{}).get('family')
+        return self._data.get('person', {}).get('family')
+
     @property
     def preferred_language(self):
         return self._data.get('preferred_language', settings.LANGUAGE_CODE)
+
     @property
     def telephones(self):
         ret = []
@@ -1145,6 +1273,7 @@ class User(Entity):
                         else t['until'],
                     'number': t['number']})
         return ret
+
     @property
     def primary_telephone(self):
         telephones = self.telephones
@@ -1166,6 +1295,7 @@ class User(Entity):
                     'zip': a['zip'],
                     'city': a['city']})
         return ret
+
     @property
     def primary_address(self):
         addresses = self.addresses
@@ -1195,26 +1325,30 @@ class User(Entity):
                 tmp['number'] = s['number']
             ret.append(tmp)
         return ret
+
     @property
     def primary_study(self):
         if self._primary_study == -1:
-            self._primary_study = (None if not self._data.get('studies',())
+            self._primary_study = (None if not self._data.get('studies', ())
                 else by_id(self._data['studies'][0]['study']).as_study())
         return self._primary_study
+
     @property
     def proper_primary_study(self):
         studies = self.studies
         if not studies:
             return None
         return studies[0]
+
     @property
     def last_study_end_date(self):
         return max([DT_MIN]+map(lambda s: s['until'],
                         self._data.get('studies', ())))
+
     def study_start(self, study, institute, number, start_date, save=True):
         start_date = datetime.datetime(start_date.year, start_date.month,
                 start_date.day)
-        if not 'studies' in self._data:
+        if 'studies' not in self._data:
             self._data['studies'] = []
         if start_date <= self.last_study_end_date:
             raise EntityException('overlapping study')
@@ -1228,6 +1362,7 @@ class User(Entity):
         })
         if save:
             self.save()
+
     def study_end(self, index, end_date, save=True):
         studies = self._data.get('studies', ())
         if index < 0 or index >= len(studies):
@@ -1245,9 +1380,11 @@ class User(Entity):
     def studentNumber(self):
         study = self.proper_primary_study
         return study['number'] if self.proper_primary_study else None
+
     @property
     def dateOfBirth(self):
-        return self._data.get('person',{}).get('dateOfBirth')
+        return self._data.get('person', {}).get('dateOfBirth')
+
     @property
     def age(self):
         # age is a little difficult to calculate because of leap years
@@ -1255,12 +1392,14 @@ class User(Entity):
         today = datetime.date.today()
         born = self.dateOfBirth
         return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
     @property
     def got_unix_user(self):
         if 'has_unix_user' in self._data:
             return self._data['has_unix_user']
         else:
             return True
+
     @property
     def emailAddresses(self):
         ret = []
@@ -1291,9 +1430,11 @@ class User(Entity):
     def visibility(self):
         return self.preferences.get('visibility', {})
 
+
 def set_locale_on_logon(sender, request, user, **kwargs):
     request.session['_language'] = user.preferred_language
 user_logged_in.connect(set_locale_on_logon)
+
 
 class Tag(Entity):
     @permalink
@@ -1302,9 +1443,11 @@ class Tag(Entity):
             return ('tag-by-name', (),
                     {'name': self.name})
         return ('tag-by-id', (), {'_id': self.id})
+
     def get_bearers(self):
         return [entity(m) for m in ecol.find({
                 'tags': self._id})]
+
 
 class Study(Entity):
     @permalink
@@ -1313,6 +1456,8 @@ class Study(Entity):
             return ('study-by-name', (),
                     {'name': self.name})
         return ('study-by-id', (), {'_id': self.id})
+
+
 class Institute(Entity):
     @permalink
     def get_absolute_url(self):
@@ -1320,6 +1465,8 @@ class Institute(Entity):
             return ('institute-by-name', (),
                     {'name': self.name})
         return ('institute-by-id', (), {'_id': self.id})
+
+
 class Brand(Entity):
     @permalink
     def get_absolute_url(self):
@@ -1327,9 +1474,11 @@ class Brand(Entity):
             return ('brand-by-name', (),
                     {'name': self.name})
         return ('brand-by-id', (), {'_id': self.id})
+
     @property
     def sofa_suffix(self):
         return self._data.get('sofa_suffix', None)
+
 
 class Note(SONWrapper):
     def __init__(self, data, prefetched_by=None, prefetched_closed_by=None):
@@ -1375,6 +1524,7 @@ class Note(SONWrapper):
         if save_now:
             self.save()
 
+
 class InformacieNotification(SONWrapper):
     def __init__(self, data):
         super(InformacieNotification, self).__init__(data, incol)
@@ -1402,15 +1552,19 @@ class InformacieNotification(SONWrapper):
     event = son_property(('event', ))
     when = son_property(('when', ))
 
+
 class PushChange(SONWrapper):
     def __init__(self, data):
         super(PushChange, self).__init__(data, pcol)
+
     @property
     def system(self):
         return self._data['system']
+
     @property
     def action(self):
         return self._data['action']
+
     @property
     def data(self):
         return self._data['data']

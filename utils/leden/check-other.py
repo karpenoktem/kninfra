@@ -3,12 +3,12 @@
 
 from __future__ import absolute_import
 
-import _import
+import _import  # noqa: F401
 from common import *
-from datetime import datetime, date
 from Mailman.MailList import MailList
 
 from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias
+
 
 def check_geinteresseerden():
     print "GEINTERESSEERDEN"
@@ -18,6 +18,7 @@ def check_geinteresseerden():
     for m in ml.members:
         if m.lower() in es:
             print "%s in geinteresseerden" % m
+
 
 def check_namespace():
     print "NAMESPACE"
@@ -37,7 +38,7 @@ def check_namespace():
         n = n.union(o)
 
     for a in Alias.objects.all():
-        if not a.target in n:
+        if a.target not in n:
             print '%s -> %s, target doesn\'t exist' % \
                     (a.source, a.target)
 

@@ -31,6 +31,7 @@ class WhimClient(object):
         self.event_lut = {}
         self.msg_lut = {}
         self.got_reader = False
+
     def _connect(self):
         """ (Re)connects to socket. """
         if self._family == 'tcp':
@@ -38,10 +39,11 @@ class WhimClient(object):
         elif self._family == 'unix':
             sf = socket.AF_UNIX
         else:
-            raise ValueError, 'unknown family'
+            raise ValueError('unknown family')
         self.s = socket.socket(sf, socket.SOCK_STREAM)
         self.s.connect(self._address)
         self.f = self.s.makefile()
+
     def _send(self, bs):
         """ Tries to send some bytes over the socket.  If the socket has been
             closed, try to reconnect. """
@@ -57,6 +59,7 @@ class WhimClient(object):
                         raise
                     first_try = False
                     self._connect()
+
     def send_noret(self, d):
         """ Sends the message `d` to the server, but do not wait for its
             response. """
@@ -100,7 +103,7 @@ class WhimClient(object):
         while not got_own_message:
             bits = self.s.recv(4096)
             if not bits:
-                raise IOError, "No data"
+                raise IOError("No data")
             self.unpacker.feed(bits)
             for raw_msg in self.unpacker:
                 mid, msg = raw_msg
@@ -143,7 +146,7 @@ class WhimDaemon(object):
         elif self.family == 'unix':
             sf = socket.AF_UNIX
         else:
-            raise ValueError, 'unknown family'
+            raise ValueError('unknown family')
         ls = self.ls = socket.socket(sf, socket.SOCK_STREAM)
         if self.family == 'unix':
             if os.path.exists(self.address):

@@ -8,6 +8,7 @@ import MySQLdb
 from django.conf import settings
 from kn.base._random import pseudo_randstr
 
+
 def forum_setpass(daan, user, password):
     creds = settings.FORUM_MYSQL_SECRET
     if not creds:
@@ -23,6 +24,7 @@ def forum_setpass(daan, user, password):
     c.execute("COMMIT;")
     c.close()
     dc.close()
+
 
 def apply_forum_changes(daan, changes):
     if not changes:

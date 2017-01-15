@@ -3,12 +3,12 @@ import os.path
 import os
 
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
 from django.core.servers.basehttp import FileWrapper
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.conf import settings
+
 
 def _lines_of_file_as_set(path):
     """ Opens the file at <path>; reads all lines and returns them in a set """
@@ -20,6 +20,7 @@ def _lines_of_file_as_set(path):
                 break
             ret.add(l[:-1])
     return ret
+
 
 def homedir(request, root, subdir, path):
     original_root = root

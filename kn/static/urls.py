@@ -4,7 +4,7 @@ from django.conf.urls import url
 from django.conf import settings
 from django.views.generic import TemplateView, RedirectView
 from kn.base.views import direct_to_folder
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy  # noqa: F401
 from django.utils.translation import ugettext_lazy as _
 
 from kn.static import views
@@ -145,7 +145,7 @@ urlpatterns = [
 
     # Backwards compatibility
     url(r'^img/(?P<subdir>.*)', direct_to_folder,
-            {'root': os.path.join(settings.MEDIA_ROOT, 'static/img') }),
+            {'root': os.path.join(settings.MEDIA_ROOT, 'static/img')}),
     url(r'^baragenda/?$', RedirectView.as_view(
                     url='/planning')),  # TODO use reverse_url
 

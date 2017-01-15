@@ -1,11 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
-import subprocess
 import threading
 import os.path
-import logging
-import socket
-import select
-import json
 import os
 
 from kn.utils.whim import WhimDaemon
@@ -18,6 +13,7 @@ from kn.utils.daan._ldap import apply_ldap_changes, ldap_setpass
 from kn.utils.daan.quassel import apply_quassel_changes, quassel_setpass
 
 from django.conf import settings
+
 
 class Daan(WhimDaemon):
     def __init__(self):

@@ -6,6 +6,7 @@ from kn.base.http import JsonHttpResponse
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.http  import require_POST
 
+
 @require_POST
 def view(request):
     data = json.loads(request.REQUEST.get('data', '{}'))
@@ -15,6 +16,7 @@ def view(request):
         return JsonHttpResponse({'error': 'No such action'}, status=400)
     return JsonHttpResponse(handler(data, request))
 
+
 def album_parents_json(album):
     json_parents = {}
     current_album = album
@@ -23,6 +25,7 @@ def album_parents_json(album):
         current_album = current_album.get_parent()
 
     return json_parents
+
 
 def album_json(album, user):
     if not album.may_view(user):
@@ -34,6 +37,7 @@ def album_json(album, user):
             'parents': album_parents_json(album),
             'visibility': album.visibility[0],
             'people': people}
+
 
 def entities_json(children, user):
     '''
@@ -77,6 +81,7 @@ def entities_json(children, user):
 
     return entries, people
 
+
 def entity_from_request(data):
     if 'path' not in data:
         return 'Missing path attribute'
@@ -87,12 +92,14 @@ def entity_from_request(data):
         return 'Object not found'
     return entity
 
+
 def _list(data, request):
     album = entity_from_request(data)
     if isinstance(album, basestring):
         return {'error': album}
     user = request.user if request.user.is_authenticated() else None
     return album_json(album, user)
+
 
 def _set_metadata(data, request):
     user = request.user if request.user.is_authenticated() else None
@@ -183,6 +190,7 @@ def _set_metadata(data, request):
 
     return result
 
+
 def _remove(data, request):
     user = request.user if request.user.is_authenticated() else None
     if not fEs.is_admin(user):
@@ -196,6 +204,7 @@ def _remove(data, request):
     foto.update_visibility([])
 
     return {'Ok': True}
+
 
 def _search(data, request):
     album = entity_from_request(data)

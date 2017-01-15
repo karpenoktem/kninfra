@@ -1,5 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import  # noqa: F401
 
 from common import *
 import sys
@@ -8,8 +8,9 @@ if sys.stdout.encoding is None:
     reload(sys)
     sys.setdefaultencoding('utf-8')
 
+
 def fmt_date(d):
-    if d==None:
+    if d == None:
         return ""
     return str(d.date())
 

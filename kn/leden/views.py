@@ -1,7 +1,6 @@
 from itertools import chain
 from hashlib import sha256
 from datetime import date
-from glob import glob
 from os import path
 
 import mimetypes
@@ -46,6 +45,7 @@ import kn.leden.entities as Es
 
 logger = logging.getLogger(__name__)
 
+
 @login_required
 def user_list(request, page):
     pr = Paginator(Es.ecol.find({'types': 'user'}).sort(
@@ -59,6 +59,7 @@ def user_list(request, page):
              'page_obj': p, 'paginator': pr},
             context_instance=RequestContext(request))
 
+
 @login_required
 def entity_detail(request, name=None, _id=None, type=None):
     if name is not None:
@@ -67,35 +68,43 @@ def entity_detail(request, name=None, _id=None, type=None):
         e = Es.by_id(_id)
     if e is None:
         raise Http404
-    if type and not type in e.types:
-        raise ValueError, _("Entiteit is niet een %s") % type
+    if type and type not in e.types:
+        raise ValueError(_("Entiteit is niet een %s") % type)
     if not type:
         type = e.type
-    if not type in Es.TYPE_MAP:
-        raise ValueError, _("Onbekende entiteit type")
+    if type not in Es.TYPE_MAP:
+        raise ValueError(_("Onbekende entiteit type"))
     return globals()['_'+type+'_detail'](request, getattr(e, 'as_'+type)())
 
+
 def _entity_detail(request, e):
-    def _cmp(x,y):
-        r = Es.relation_cmp_until(y,x)
-        if r: return r
+    def _cmp(x, y):
+        r = Es.relation_cmp_until(y, x)
+        if r:
+            return r
         r = cmp(unicode(x['with'].humanName),
                 unicode(y['with'].humanName))
-        if r: return r
+        if r:
+            return r
         r = cmp(unicode(x['how'].humanName) if x['how'] else None,
             unicode(y['how'].humanName) if y['how'] else None)
-        if r: return r
-        return Es.relation_cmp_from(x,y)
-    def _rcmp(x,y):
-        r = Es.relation_cmp_until(y,x)
-        if r: return r
+        if r:
+            return r
+        return Es.relation_cmp_from(x, y)
+
+    def _rcmp(x, y):
+        r = Es.relation_cmp_until(y, x)
+        if r:
+            return r
         r = cmp(unicode(x['how'].humanName) if x['how'] else None,
             unicode(y['how'].humanName) if y['how'] else None)
-        if r: return r
+        if r:
+            return r
         r = cmp(unicode(x['who'].humanName),
                 unicode(y['who'].humanName))
-        if r: return r
-        return Es.relation_cmp_from(x,y)
+        if r:
+            return r
+        return Es.relation_cmp_from(x, y)
     related = sorted(e.get_related(), cmp=_cmp)
     rrelated = sorted(e.get_rrelated(), cmp=_rcmp)
     for r in chain(related, rrelated):
@@ -114,7 +123,7 @@ def _entity_detail(request, e):
         if year is None:
             year = 'this'
 
-        if not year in year_sets:
+        if year not in year_sets:
             year_sets[year] = set()
         year_sets[year].add(r['who'])
 
@@ -130,7 +139,7 @@ def _entity_detail(request, e):
            'object': e,
            'chiefs': [],
            'pipos': [],
-           'reps': [] }
+           'reps': []}
     for r in rrelated:
         if r['how'] and Es.relation_is_active(r):
             if str(r['how'].name) == '!brand-hoofd':
@@ -146,7 +155,7 @@ def _entity_detail(request, e):
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):
         groups = [g for g in Es.groups() if not g.is_virtual]
-        groups.sort(cmp=lambda x,y: cmp(unicode(x.humanName),
+        groups.sort(cmp=lambda x, y: cmp(unicode(x.humanName),
                         unicode(y.humanName)))
         users = sorted(Es.users(), cmp=Es.entity_cmp_humanName)
         brands = sorted(Es.brands(), cmp=Es.entity_cmp_humanName)
@@ -187,9 +196,10 @@ def _entity_detail(request, e):
                 'photoHeight': height})
     return ctx
 
+
 def _user_detail(request, user):
     ctx = _entity_detail(request, user)
-    ctx['photosUrl'] = reverse('fotos', kwargs={'path':''}) + \
+    ctx['photosUrl'] = reverse('fotos', kwargs={'path': ''}) + \
                                         '?q=tag:'+str(user.name)
     ctx['addStudyFormOpen'] = False
     if request.method == 'POST':
@@ -211,6 +221,7 @@ def _user_detail(request, user):
     return render_to_response('leden/user_detail.html', ctx,
             context_instance=RequestContext(request))
 
+
 def _group_detail(request, group):
     ctx = _entity_detail(request, group)
     isFreeToJoin = group.has_tag(Es.id_by_name('!free-to-join', True))
@@ -228,22 +239,29 @@ def _group_detail(request, group):
     return render_to_response('leden/group_detail.html', ctx,
             context_instance=RequestContext(request))
 
+
 def _tag_detail(request, tag):
     ctx = _entity_detail(request, tag)
     return render_to_response('leden/tag_detail.html', ctx,
             context_instance=RequestContext(request))
+
+
 def _brand_detail(request, brand):
     ctx = _entity_detail(request, brand)
-    def _cmp(x,y):
-        r = Es.relation_cmp_until(y,x)
-        if r: return r
+
+    def _cmp(x, y):
+        r = Es.relation_cmp_until(y, x)
+        if r:
+            return r
         r = cmp(unicode(x['with'].humanName),
                 unicode(y['with'].humanName))
-        if r: return r
+        if r:
+            return r
         r = cmp(unicode(x['who'].humanName),
                 unicode(y['who'].humanName))
-        if r: return r
-        return Es.relation_cmp_from(x,y)
+        if r:
+            return r
+        return Es.relation_cmp_from(x, y)
     ctx['rels'] = sorted(Es.query_relations(how=brand, deref_who=True,
                 deref_with=True), cmp=_cmp)
     for r in ctx['rels']:
@@ -253,12 +271,16 @@ def _brand_detail(request, brand):
         r['virtual'] = Es.relation_is_virtual(r)
     return render_to_response('leden/brand_detail.html', ctx,
             context_instance=RequestContext(request))
+
+
 def _study_detail(request, study):
     ctx = _entity_detail(request, study)
     ctx['students'] = students = []
+
     def _cmp(s1, s2):
         r = Es.dt_cmp_until(s2['until'], s1['until'])
-        if r: return r
+        if r:
+            return r
         return cmp(s1['student'].humanName, s2['student'].humanName)
     for student in Es.by_study(study):
         for _study in student.studies:
@@ -271,12 +293,16 @@ def _study_detail(request, study):
     ctx['students'].sort(cmp=_cmp)
     return render_to_response('leden/study_detail.html', ctx,
             context_instance=RequestContext(request))
+
+
 def _institute_detail(request, institute):
     ctx = _entity_detail(request, institute)
     ctx['students'] = students = []
+
     def _cmp(s1, s2):
         r = Es.dt_cmp_until(s2['until'], s1['until'])
-        if r: return r
+        if r:
+            return r
         return cmp(s1['student'].humanName, s2['student'].humanName)
     for student in Es.by_institute(institute):
         for _study in student.studies:
@@ -289,6 +315,7 @@ def _institute_detail(request, institute):
     ctx['students'].sort(cmp=_cmp)
     return render_to_response('leden/institute_detail.html', ctx,
             context_instance=RequestContext(request))
+
 
 @login_required
 def entities_by_year_of_birth(request, year):
@@ -304,11 +331,13 @@ def entities_by_year_of_birth(request, year):
     return render_to_response('leden/entities_by_year_of_birth.html', ctx,
             context_instance=RequestContext(request))
 
+
 @login_required
 def years_of_birth(request):
     return render_to_response('leden/years_of_birth.html', {
                     'years': reversed(Es.get_years_of_birth())},
             context_instance=RequestContext(request))
+
 
 @login_required
 def users_underage(request):
@@ -323,19 +352,21 @@ def users_underage(request):
                     'final_date': final_date},
             context_instance=RequestContext(request))
 
+
 @login_required
 def ik(request):
     return HttpResponseRedirect(request.user.get_absolute_url())
 
+
 @login_required
 def ik_chsmoel(request):
-    if not 'smoel' in request.FILES:
-        raise ValueError, _("Missende `smoel' in FILES")
-    if not 'id' in request.POST:
-        raise ValueError, _("Missende `id' in POST")
+    if 'smoel' not in request.FILES:
+        raise ValueError(_("Missende `smoel' in FILES"))
+    if 'id' not in request.POST:
+        raise ValueError(_("Missende `id' in POST"))
     user = Es.by_id(request.POST['id'])
     if not user.name:
-        raise ValueError, _("Entiteit heeft geen naam")
+        raise ValueError(_("Entiteit heeft geen naam"))
     if not request.user.may_upload_smoel_for(request.user):
         raise PermissionDenied
     original = default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
@@ -345,7 +376,7 @@ def ik_chsmoel(request):
     original.seek(0)
     img = Image.open(original)
     if hasattr(img, '_getexif') and img._getexif() is not None:
-        orientation = int(img._getexif().get(274, '1')) # Orientation
+        orientation = int(img._getexif().get(274, '1'))  # Orientation
         if orientation == 3:
             img = img.transpose(Image.ROTATE_180)
         elif orientation == 6:
@@ -361,6 +392,7 @@ def ik_chsmoel(request):
     Es.notify_informacie('set_smoel', request.user, entity=user)
     return redirect_to_referer(request)
 
+
 @login_required
 def user_smoel(request, name):
     user = Es.by_name(name)
@@ -374,6 +406,7 @@ def user_smoel(request, name):
         raise Http404
     return HttpResponse(FileWrapper(img), content_type="image/jpeg")
 
+
 def _ik_chpasswd_handle_valid_form(request, form):
     oldpw = form.cleaned_data['old_password']
     newpw = form.cleaned_data['new_password']
@@ -381,6 +414,7 @@ def _ik_chpasswd_handle_valid_form(request, form):
     t = _("""Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd.""")
     messages.info(request, t % request.user.first_name)
     return HttpResponseRedirect(reverse('smoelen-home'))
+
 
 @login_required
 def ik_chpasswd(request):
@@ -398,8 +432,9 @@ def ik_chpasswd(request):
     errl.extend(form.non_field_errors())
     errstr = humanized_enum(errl)
     return render_to_response('leden/ik_chpasswd.html',
-            { 'form':form, 'errors':errstr},
+            {'form': form, 'errors': errstr},
             context_instance=RequestContext(request))
+
 
 @login_required
 def ik_chpasswd_villanet(request):
@@ -412,7 +447,7 @@ def ik_chpasswd_villanet(request):
                 newpw = form.cleaned_data['new_password']
                 giedo.change_villanet_password(str(request.user.name), oldpw,
                         newpw)
-                t = _("Lieve %s, maar natuurlijk, jouw wachtwoord voor het "+
+                t = _("Lieve %s, maar natuurlijk, jouw wachtwoord voor het " +
                         "villa-netwerk is veranderd.")
                 messages.info(request, t % request.user.first_name)
                 return HttpResponseRedirect(reverse('smoelen-home'))
@@ -423,8 +458,9 @@ def ik_chpasswd_villanet(request):
     errl.extend(form.non_field_errors())
     errstr = humanized_enum(errl)
     return render_to_response('leden/ik_chpasswd_villanet.html',
-            { 'form':form, 'errors':errstr},
+            {'form': form, 'errors': errstr},
             context_instance=RequestContext(request))
+
 
 def rauth(request):
     """
@@ -470,7 +506,7 @@ def rauth(request):
                 (k, properties[k]) for k in
                 set(s.strip() for s in request.REQUEST.get('fetch').split(','))
                 if k in properties
-            ] )))
+            ])))
         return HttpResponse("INVALID TOKEN")
     if not request.user.is_authenticated():
         return redirect_to_login('%s?url=%s' % (
@@ -485,6 +521,7 @@ def rauth(request):
         '?' if request.REQUEST['url'].find('?') == -1 else '&',
         str(request.user.name), token))
 
+
 def accounts_api(request):
     if request.user.is_authenticated():
         ret = {'valid': True,
@@ -493,6 +530,7 @@ def accounts_api(request):
         ret = {'valid': False}
 
     return JsonHttpResponse(ret)
+
 
 def api_users(request):
     verified_key = False
@@ -506,6 +544,7 @@ def api_users(request):
         ret[str(m.name)] = m.full_name
     return HttpResponse(json.dumps(ret), content_type="text/json")
 
+
 @login_required
 def secr_add_user(request):
     if 'secretariaat' not in request.user.cached_groups_names:
@@ -518,7 +557,7 @@ def secr_add_user(request):
             u = Es.User({
                 'types': ['user'],
                 'names': [fd['username']],
-                'humanNames': [{'human': fd['first_name']+' '+
+                'humanNames': [{'human': fd['first_name']+' ' +
                              fd['last_name']}],
                 'person': {
                     'titles': [],
@@ -589,6 +628,7 @@ def secr_add_user(request):
             {'form': form},
             context_instance=RequestContext(request))
 
+
 @login_required
 def secr_notes(request):
     if 'secretariaat' not in request.user.cached_groups_names:
@@ -596,6 +636,7 @@ def secr_notes(request):
     return render_to_response('leden/secr_notes.html',
                 {'notes': Es.get_open_notes()},
             context_instance=RequestContext(request))
+
 
 @login_required
 def secr_add_group(request):
@@ -627,6 +668,7 @@ def secr_add_group(request):
     return render_to_response('leden/secr_add_group.html', {'form': form},
             context_instance=RequestContext(request))
 
+
 @login_required
 def relation_end(request, _id):
     rel = Es.relation_by_id(_id)
@@ -643,13 +685,14 @@ def relation_end(request, _id):
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
+
 @login_required
 def relation_begin(request):
     # TODO We should use Django forms, or better: use sweet Ajax
     d = {}
     for t in ('who', 'with', 'how'):
         if t not in request.POST:
-            raise ValueError, "Missing attr %s" % t
+            raise ValueError("Missing attr %s" % t)
         if t == 'how' and (not request.POST[t] or
                                request.POST[t] == 'null'):
             d[t] = None
@@ -668,7 +711,7 @@ def relation_begin(request):
     except StopIteration:
         ok = True
     if not ok:
-        raise ValueError, _("Deze relatie bestaat al")
+        raise ValueError(_("Deze relatie bestaat al"))
 
     # Add the relation!
     relation_id = Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
@@ -679,6 +722,7 @@ def relation_begin(request):
 
     giedo.sync_async(request)
     return redirect_to_referer(request)
+
 
 def _get_group_and_tag(request):
     '''
@@ -715,6 +759,7 @@ def tag(request):
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
+
 @login_required
 def untag(request):
     group, tag = _get_group_and_tag(request)
@@ -726,13 +771,14 @@ def untag(request):
     giedo.sync_async(request)
     return redirect_to_referer(request)
 
+
 @login_required
 def user_reset_password(request, _id):
-    if not 'secretariaat' in request.user.cached_groups_names:
+    if 'secretariaat' not in request.user.cached_groups_names:
         raise PermissionDenied
     u = Es.by_id(_id).as_user()
     if not u.is_active:
-        raise ValueError, _("Gebruiker is niet geactiveerd")
+        raise ValueError(_("Gebruiker is niet geactiveerd"))
     pwd = pseudo_randstr()
     u.set_password(pwd)
     giedo.change_password(str(u.name), pwd, pwd)
@@ -742,12 +788,13 @@ def user_reset_password(request, _id):
     messages.info(request, _("Wachtwoord gereset!"))
     return redirect_to_referer(request)
 
+
 @login_required
 def note_add(request):
-    if not 'secretariaat' in request.user.cached_groups_names:
+    if 'secretariaat' not in request.user.cached_groups_names:
         raise PermissionDenied
     if 'on' not in request.POST or 'note' not in request.POST:
-        raise ValueError, _("missende `on' of `note'")
+        raise ValueError(_("missende `on' of `note'"))
     on = Es.by_id(_id(request.POST['on']))
     if on is None:
         raise Http404
@@ -759,6 +806,7 @@ def note_add(request):
                             'on': on})
     return redirect_to_referer(request)
 
+
 @login_required
 def secr_update_site_agenda(request):
         if 'secretariaat' not in request.user.cached_groups_names:
@@ -766,6 +814,7 @@ def secr_update_site_agenda(request):
         giedo.update_site_agenda()
         messages.info(request, _("Agenda geupdate!"))
         return redirect_to_referer(request)
+
 
 @login_required
 def ik_openvpn(request):
@@ -787,6 +836,7 @@ def ik_openvpn(request):
             {'password_incorrect': password_incorrect},
             context_instance=RequestContext(request))
 
+
 @login_or_basicauth_required
 def ik_openvpn_download(request, filename):
     m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', filename)
@@ -805,6 +855,7 @@ def ik_openvpn_download(request, filename):
     response['Content-Length'] = default_storage.size(p)
     # XXX use ETags and returns 304's
     return response
+
 
 def language(request):
     return HttpResponse(str(request.LANGUAGE_CODE))

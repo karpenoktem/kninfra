@@ -5,7 +5,7 @@ include:
     - .nginx
     - .mysqld
     - .phpmyadmin
-    - .wiki
+#    - .wiki    # see https://github.com/karpenoktem/kninfra/issues/421
     - .forum
     - .ldap
     - .mail

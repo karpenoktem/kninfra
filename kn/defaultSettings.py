@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 # That is why defaultSettings() is executed *after* custom settings.
 # To have a nice syntax, we use a small DEFAULTS helper class.
 
+
 def defaultSettings(glbls):
     d = DEFAULTS(glbls)
 
@@ -33,7 +34,7 @@ def defaultSettings(glbls):
 
     d.DOMAINNAME = 'karpenoktem.nl'
     d.LDAP_HOST = 'localhost'
-    d.LDAP_SUFFIX = 'dc='+ ',dc='.join(d.DOMAINNAME.split('.'))
+    d.LDAP_SUFFIX = 'dc=' + ',dc='.join(d.DOMAINNAME.split('.'))
     d.LDAP_BASE = 'ou=users,' + d.LDAP_SUFFIX
     d.LDAP_USER = 'cn=infra,' + d.LDAP_SUFFIX
     d.LDAP_PASS = None
@@ -88,6 +89,7 @@ def defaultSettings(glbls):
     d.GIEDO_SOCKET = '/var/run/infra/S-giedo'
     d.DAAN_SOCKET = '/var/run/infra/S-daan'
     d.CILIA_SOCKET = '/var/run/infra/S-cilia'
+    d.MONIEK_SOCKET = '/var/run/infra/S-moniek'
 
     d.GOOGLE_CALENDAR_IDS = {
         'kn':   'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com',
@@ -109,7 +111,7 @@ def defaultSettings(glbls):
 
     d.QUASSEL_CONFIGDIR = '/var/lib/quassel'
 
-    d.INTERNAL_IPS = ['83.162.203.144'] # bas
+    d.INTERNAL_IPS = ['83.162.203.144']  # bas
     d.LOCALE = 'nl_NL.UTF-8'
     d.LANGUAGE_CODE = 'nl'
     d.LOCALE_PATHS = [d.INFRA_REPO + '/locale']
@@ -124,7 +126,7 @@ def defaultSettings(glbls):
     # You probably won't change this
     # ############################################################
 
-    d.DATABASES = {'default': {}} # We do not use Django's DB abstraction
+    d.DATABASES = {'default': {}}  # We do not use Django's DB abstraction
     d.CACHE_BACKEND = 'locmem:///'
     d.MANAGERS = d.ADMINS
     d.TIME_ZONE = 'Europe/Amsterdam'
@@ -182,10 +184,10 @@ def defaultSettings(glbls):
             'kn.leden.auth.MongoBackend',
     )
     d.SESSION_ENGINE = 'kn.leden.sessions'
-    d.LOGIN_REDIRECT_URL='/smoelen/'
+    d.LOGIN_REDIRECT_URL = '/smoelen/'
     d.DEFAULT_FILE_STORAGE = 'kn.base.storage.OurFileSystemStorage'
 
-    d.FORCE_SCRIPT_NAME=''
+    d.FORCE_SCRIPT_NAME = ''
 
     d.SMOELEN_PHOTOS_PATH = 'smoelen'
     d.SMOELEN_WIDTH = 300
@@ -201,8 +203,8 @@ def defaultSettings(glbls):
         'irc':       d.BASE_URL+'/irc',
     }
 
-    d.DT_MIN = datetime.datetime(2004,8,31)
-    d.DT_MAX = datetime.datetime(5004,9,1)
+    d.DT_MIN = datetime.datetime(2004, 8, 31)
+    d.DT_MAX = datetime.datetime(5004, 9, 1)
 
     d.USERNAME_CHARS = 'qwertyuiopasdfghjklzxcvbnm123456789-'
 
@@ -219,12 +221,16 @@ def defaultSettings(glbls):
     except locale.Error:
         pass
 
+
 class DEFAULTS(object):
     def __init__(self, dct):
         self.__dict__['d'] = dct
+
     def __setattr__(self, name, value):
-        if name in self.d: return
+        if name in self.d:
+            return
         self.d[name] = value
+
     def __getattr__(self, name):
         return self.d[name]
 

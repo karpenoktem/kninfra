@@ -1,5 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import  # noqa: F401
 
 from django.conf import settings
 from kn.utils.mailman import import_mailman
@@ -7,6 +7,7 @@ from kn.utils.mailman import import_mailman
 import_mailman()
 from Mailman.Utils import list_names
 from Mailman.MailList import MailList
+
 
 def main():
     url = 'https://%s/mailman/' % settings.MAILDOMAIN

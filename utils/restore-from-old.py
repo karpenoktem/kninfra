@@ -1,5 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import  # noqa: F401
 
 from datetime import datetime, timedelta
 from time import strptime
@@ -16,14 +16,17 @@ from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 from kn.utils.giedo.db import update_db
 
+
 def main(data):
     def str_to_date(s):
         if s is None:
             return None
-        return datetime(*strptime(s,'%Y-%m-%d')[:3])
+        return datetime(*strptime(s, '%Y-%m-%d')[:3])
+
     def year_to_dates(year):
-        return (datetime(2003+year,9,1),
-            datetime(2004+year,8,31))
+        return (datetime(2003+year, 9, 1),
+            datetime(2004+year, 8, 31))
+
     def create_tag(name, humanName, tags=[]):
         return Es.ecol.insert({'types': ['tag'],
                        'names': [name],
@@ -53,9 +56,9 @@ def main(data):
     ignore_groups_ids = set()
     ignore_groups_members_ids = set()
     year_groups = frozenset(
-        ['leden'+str(x) for x in range(1,9)]+
-        ['kasco'+str(x) for x in range(1,9)]+
-        ['bestuur'+str(x) for x in range(1,9)])
+        ['leden'+str(x) for x in range(1, 9)] +
+        ['kasco'+str(x) for x in range(1, 9)] +
+        ['bestuur'+str(x) for x in range(1, 9)])
     year_groups_ids = dict()
     year_groups_lut = {}
     print 'initial tags'
@@ -68,7 +71,7 @@ def main(data):
             'Sofa merk', [system_tag])
     year_group_tag = create_tag("!year-group", 'Jaargroep',
             [system_tag])
-    for i in xrange(1,9):
+    for i in xrange(1, 9):
         Es.ecol.insert({'types': ['tag'],
                 'humanNames': [{'human': 'Wel jaar %s' % i}],
                 'year-override': {'year': i,
@@ -81,12 +84,12 @@ def main(data):
                 'tags': [year_overrides_tag]})
     print 'institutes'
     for m in data['EduInstitute']:
-        n = {   'types': ['institute'],
+        n = {'types': ['institute'],
             'humanNames': [{'human': m['name']}]}
         conv_inst[m['id']] = Es.ecol.insert(n)
     print 'studies'
     for m in data['Study']:
-        n = {   'types': ['study'],
+        n = {'types': ['study'],
             'humanNames': [{'human': m['name']}]}
         conv_study[m['id']] = Es.ecol.insert(n)
     print 'initial groups'
@@ -127,8 +130,9 @@ def main(data):
             year = int(m['name'][-1:])
             year_groups_lut[m['id']] = (group, year)
             continue
-        if m['name'] == 'leden': m['isVirtual'] = False # fix for leden
-        n = {   'types': ['tag' if m['isVirtual'] else 'group'],
+        if m['name'] == 'leden':
+            m['isVirtual'] = False  # fix for leden
+        n = {'types': ['tag' if m['isVirtual'] else 'group'],
             'names': [m['name']],
             'humanNames': [{
                 'name': m['name'],
@@ -136,7 +140,7 @@ def main(data):
                 'genitive_prefix': m['genitive_prefix']
                 }],
             'description': m['description'],
-            'temp':{
+            'temp': {
                 'is_virtual': m['isVirtual']
             }
             }
@@ -277,7 +281,7 @@ def main(data):
     plan_changes = dict()
     plan_remove = set()
     for r in Es.rcol.find({'until': {'$lt': DT_MAX}}):
-        lut[r['until'] + timedelta(1,0), r['with'],
+        lut[r['until'] + timedelta(1, 0), r['with'],
                 r['how'], r['who']] = r['_id']
     print ' crossreference from'
     for r in Es.rcol.find({'from': {'$gt': DT_MIN}}):
@@ -292,7 +296,7 @@ def main(data):
     done = False
     while not done:
         done = True
-        for k,v in plan_changes.iteritems():
+        for k, v in plan_changes.iteritems():
             if v[1] in plan_changes:
                 plan_changes[k] = plan_changes[v[1]]
                 del plan_changes[v[1]]
@@ -301,7 +305,7 @@ def main(data):
     print ' execute'
     for r in plan_remove:
         Es.rcol.remove({'_id': r})
-    for k,v in plan_changes.iteritems():
+    for k, v in plan_changes.iteritems():
         Es.rcol.update({'_id': k}, {'$set': {'until': v[0]}})
     print 'event'
     for m in data['Event']:
@@ -340,7 +344,7 @@ def main(data):
         src = scc[0]
         if src in name2id:
             continue
-        if not src in alias_graph:
+        if src not in alias_graph:
             continue
         if not alias_graph[src] in name2id:
             print '  ? %s -> %s' % (src, alias_graph[src])

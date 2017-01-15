@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 
-import os.path
-import sys
-
 import yaml
 import bson
 import pymongo
@@ -14,6 +11,7 @@ DB_FILE = '/home/infra/initial-db.yaml'
 yaml.SafeLoader.add_constructor('!id',
         lambda loader, node: bson.objectid.ObjectId(
                         loader.construct_scalar(node)))
+
 
 def main():
     conn = pymongo.Connection(MONGO_HOST)

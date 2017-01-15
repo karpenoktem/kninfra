@@ -1,9 +1,6 @@
 import threading
 import os.path
 import logging
-import socket
-import select
-import json
 import os
 
 from django.conf import settings
@@ -13,6 +10,7 @@ from kn.utils.cilia.unix import set_unix_map, unix_setpass
 from kn.utils.cilia.samba import set_samba_map, samba_setpass
 from kn.utils.cilia.fotoadmin import fotoadmin_remove_moved_fotos, fotoadmin_scan_userdirs
 from kn.utils.cilia.wolk import apply_wolk_changes, wolk_setpass
+
 
 class Cilia(WhimDaemon):
     def __init__(self):

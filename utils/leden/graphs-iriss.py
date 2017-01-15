@@ -8,7 +8,7 @@
 # je het anders niet zou onthouden.  dus hierbij een herinneringsmailtje :)
 #
 # groetjes Iris Smits
-import _import
+import _import  # noqa: F401
 import datetime
 
 import kn.leden.entities as Es
@@ -40,7 +40,7 @@ for rel in Es.query_relations(who=leden, _with=comms, how=None):
         clut[w] = (rel['from'], comms_lut[rel['with']])
 
 had = set()
-for y in range(3,10):
+for y in range(3, 10):
     print
     print 'Jaar', y
     nnever = 0

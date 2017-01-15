@@ -1,9 +1,10 @@
-import _import
+import _import  # noqa: F401
 from kn.utils.mailman import import_mailman
 
 import_mailman()
 import Mailman.MailList
 import Mailman.Utils
+
 
 def main():
     for name in Mailman.Utils.list_names():

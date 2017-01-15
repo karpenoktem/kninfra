@@ -2,6 +2,7 @@ import sys
 import imp
 import os.path
 
+
 def setup_virtual_package(name, path=os.curdir):
         """ Sets up a package at the given path with a given
             name """

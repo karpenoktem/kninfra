@@ -7,6 +7,7 @@ import subprocess
 
 from django.conf import settings
 
+
 def wolk_setpass(cilia, user, passwd):
     if not hasattr(settings, 'WOLK_PATH'):
         logging.warning('wolk: no path available, skipping')
@@ -23,6 +24,7 @@ def wolk_setpass(cilia, user, passwd):
     proc.stdin.write('\n')
     for l in proc.stdout:
         logging.info("wolk.php: %s" % l[:-1])
+
 
 def apply_wolk_changes(cilia, changes):
     if not changes:
