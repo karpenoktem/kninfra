@@ -6,6 +6,7 @@ include:
     - .mysqld
     - .phpmyadmin
 #    - .wiki    # see https://github.com/karpenoktem/kninfra/issues/421
+    - .piwik
     - .forum
     - .ldap
     - .mail
