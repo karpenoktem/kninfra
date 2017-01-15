@@ -9,6 +9,7 @@ import os.path
 
 MODELINE = "# vim: et:sta:bs=2:sw=4:"
 
+
 def check_spaces(path):
     try:
         with open(path) as f:
@@ -30,6 +31,7 @@ def check_spaces(path):
     with open(path, 'w') as f:
         f.write(''.join(lines))
 
+
 def check_tabs(path):
     try:
         with open(path) as f:
@@ -42,6 +44,7 @@ def check_tabs(path):
     with open(path, 'w') as f:
         f.write(txt)
 
+
 def check_stray_whitespace(path):
     try:
         with open(path) as f:
@@ -52,6 +55,7 @@ def check_stray_whitespace(path):
     if lines != stripped_lines:
         with open(path, 'w') as f:
             f.write("\n".join(stripped_lines))
+
 
 def check_modeline(path):
     changed = False
@@ -79,6 +83,7 @@ def check_modeline(path):
     if changed:
         with open(path, 'w') as f:
             f.write(txt)
+
 
 def main(rpath):
     stack = ['']

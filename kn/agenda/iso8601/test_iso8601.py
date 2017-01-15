@@ -1,13 +1,16 @@
 import iso8601
 
+
 def test_iso8601_regex():
     assert iso8601.ISO8601_REGEX.match("2006-10-11T00:14:33Z")
+
 
 def test_timezone_regex():
     assert iso8601.TIMEZONE_REGEX.match("+01:00")
     assert iso8601.TIMEZONE_REGEX.match("+00:00")
     assert iso8601.TIMEZONE_REGEX.match("+01:20")
     assert iso8601.TIMEZONE_REGEX.match("-01:00")
+
 
 def test_parse_date():
     d = iso8601.parse_date("2006-10-20T15:34:56Z")
@@ -19,6 +22,7 @@ def test_parse_date():
     assert d.second == 56
     assert d.tzinfo == iso8601.UTC
 
+
 def test_parse_date_fraction():
     d = iso8601.parse_date("2006-10-20T15:34:56.123Z")
     assert d.year == 2006
@@ -29,6 +33,7 @@ def test_parse_date_fraction():
     assert d.second == 56
     assert d.microsecond == 123000
     assert d.tzinfo == iso8601.UTC
+
 
 def test_parse_date_fraction_2():
     """From bug 6
@@ -44,6 +49,7 @@ def test_parse_date_fraction_2():
     assert d.microsecond == 328000
     assert d.tzinfo == iso8601.UTC
 
+
 def test_parse_date_tz():
     d = iso8601.parse_date("2006-10-20T15:34:56.123+02:30")
     assert d.year == 2006
@@ -58,6 +64,7 @@ def test_parse_date_tz():
     assert offset.days == 0
     assert offset.seconds == 60 * 60 * 2.5
 
+
 def test_parse_invalid_date():
     try:
         iso8601.parse_date(None)
@@ -66,6 +73,7 @@ def test_parse_invalid_date():
     else:
         assert 1 == 2
 
+
 def test_parse_invalid_date2():
     try:
         iso8601.parse_date("23")
@@ -73,6 +81,7 @@ def test_parse_invalid_date2():
         pass
     else:
         assert 1 == 2
+
 
 def test_parse_no_timezone():
     """issue 4 - Handle datetime string without timezone
@@ -91,10 +100,12 @@ def test_parse_no_timezone():
     assert d.microsecond == 0
     assert d.tzinfo == iso8601.UTC
 
+
 def test_parse_no_timezone_different_default():
     tz = iso8601.FixedOffset(2, 0, "test offset")
     d = iso8601.parse_date("2007-01-01T08:00:00", default_timezone=tz)
     assert d.tzinfo == tz
+
 
 def test_space_separator():
     """Handle a separator other than T

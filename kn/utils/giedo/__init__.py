@@ -1,17 +1,11 @@
-import os
 import time
 import json
-import socket
-import select
 import urllib2
 import logging
-import os.path
-import itertools
 import threading
-import subprocess
 from urllib import urlencode
 
-import mirte # github.com/bwesterb/mirte
+import mirte  # github.com/bwesterb/mirte
 from M2Crypto import RSA
 
 from django.core.files.storage import default_storage
@@ -35,6 +29,7 @@ from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.wolk import generate_wolk_changes
 from kn.utils.giedo.quassel import generate_quassel_changes
 from kn.utils.giedo.fotos import scan_fotos
+
 
 class Giedo(WhimDaemon):
     def __init__(self):
@@ -75,31 +70,40 @@ class Giedo(WhimDaemon):
     def _gen_quassel(self):
         return {'type': 'quassel',
                 'changes': generate_quassel_changes(self)}
+
     def _gen_wolk(self):
         return {'type': 'wolk',
                 'changes': generate_wolk_changes(self)}
+
     def _gen_ldap(self):
         return {'type': 'ldap',
                 'changes': generate_ldap_changes(self)}
+
     def _gen_postfix_slm(self):
         return {'type': 'postfix-slm',
             'map': generate_postfix_slm_map(self)}
+
     def _gen_postfix(self):
         return {'type': 'postfix',
             'map': generate_postfix_map(self)}
+
     def _gen_mailman(self):
         return {'type': 'mailman',
             'changes': generate_mailman_changes(
                         self)}
+
     def _gen_wiki(self):
         return {'type': 'wiki',
             'changes': generate_wiki_changes(self)}
+
     def _gen_forum(self):
         return {'type': 'forum',
             'changes': generate_forum_changes(self)}
+
     def _gen_unix(self):
         return  {'type': 'unix',
              'map': generate_unix_map(self)}
+
     def _sync_openvpn(self):
         with self.openvpn_lock:
             generate_openvpn_zips(self)
@@ -290,7 +294,7 @@ class Giedo(WhimDaemon):
 
     def villanet_request(self, params):
         params['apikey'] = settings.VILLANET_SECRET_API_KEY
-        url = "http://www.vvs-nijmegen.nl/knapi.php?"+ urlencode(params)
+        url = "http://www.vvs-nijmegen.nl/knapi.php?" + urlencode(params)
         ret = urllib2.urlopen(url, timeout=1).read()
         ret = ret.strip()
         if ret[:4] == 'OK: ':

@@ -7,9 +7,11 @@ from kn.leden.mongo import db
 
 scol = db['sessions']
 
+
 class SessionStore(SessionBase):
     def __init__(self, session_key=None):
         super(SessionStore, self).__init__(session_key)
+
     def load(self):
         s = scol.find_one({'_id': self.session_key,
               'expire_dt': {
@@ -18,8 +20,10 @@ class SessionStore(SessionBase):
             self.create()
             return {}
         return self.decode(force_unicode(s['data']))
+
     def exists(self, session_key):
         return scol.find_one({'_id': session_key}) is not None
+
     def create(self):
         while True:
             self._session_key = self._get_new_session_key()
@@ -30,19 +34,22 @@ class SessionStore(SessionBase):
             self.modified = True
             self._session_cache = {}
             return
+
     def save(self, must_create=False):
-        n = {   '_id': self.session_key,
+        n = {'_id': self.session_key,
             'data': self.encode(self._get_session(
                     no_load=must_create)),
             'expire_dt': self.get_expiry_date()}
         scol.update({'_id': self.session_key}, n, True)
         # TODO handle errors
+
     def delete(self, session_key=None):
         if session_key is None:
             if self.session_key is None:
                 return
             session_key = self.session_key
         scol.remove({'_id': session_key})
+
 
 def ensure_indices():
     scol.ensure_index('expire_dt')

@@ -3,6 +3,7 @@ import datetime
 from django import forms
 from django.utils.translation import ugettext as _
 
+
 class FormMeta(forms.Form):
     formname = forms.RegexField(label=_("Formuliernaam"), regex=r'\d{3}')
     jsondata = forms.CharField(widget=forms.HiddenInput())

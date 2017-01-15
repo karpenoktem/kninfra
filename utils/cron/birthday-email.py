@@ -1,12 +1,13 @@
 # vim: et:sta:bs=2:sw=4:
 from __future__ import with_statement
 
-import _import
+import _import  # noqa: F401
 import datetime
 
 from common import *
 import kn.leden.entities as Es
 from django.core.mail import EmailMessage
+
 
 def birthday_email():
     with open('birthday-email.template') as f:

@@ -1,7 +1,8 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import  # noqa: F401
 
 import kn.poll.entities as poll_Es
+
 
 def main():
     for p in poll_Es.all_polls():

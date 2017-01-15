@@ -1,25 +1,26 @@
 # vim: et:sta:bs=2:sw=4:
 from __future__ import absolute_import
 
-import _import
+import _import  # noqa: F401
 try:
-    import Mailman.MailList
+    import Mailman.MailList  # noqa: F401
 except ImportError:
     pass
 
 import time
 import datetime
-import kn.leden.entities as Es
-import kn.fotos.entities as fEs
-import kn.reglementen.entities as regl_Es
-import kn.poll.entities as poll_Es
-import kn.subscriptions.entities as subscr_Es
-from kn.leden.mongo import _id, ObjectId
-from kn.leden import giedo
+import kn.leden.entities as Es  # noqa: F401
+import kn.fotos.entities as fEs  # noqa: F401
+import kn.reglementen.entities as regl_Es  # noqa: F401
+import kn.poll.entities as poll_Es  # noqa: F401
+import kn.subscriptions.entities as subscr_Es  # noqa: F401
+from kn.leden.mongo import _id, ObjectId  # noqa: F401
+from kn.leden import giedo  # noqa: F401
 from kn.leden.date import now
-from kn.utils.mailman import import_mailman
+from kn.utils.mailman import import_mailman  # noqa: F401
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
+
 
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
     """ Queries relations """
@@ -36,6 +37,7 @@ def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
     return list(Es.query_relations(who, _with, how, _from, until, True,
                     True, True))
 
+
 def del_rel(who, _with, how):
     """ Removes a relation given by names.
 
@@ -47,6 +49,7 @@ def del_rel(who, _with, how):
     Es.rcol.remove({'who': who,
             'with': _with,
             'how': how})
+
 
 def add_rel(who, _with, how, _from, until):
     """ Adds a relation given by strings.
@@ -65,15 +68,18 @@ def add_rel(who, _with, how, _from, until):
             'from': _from,
             'until': until})
 
+
 def str_to_date(s):
     if isinstance(s, basestring):
         return datetime.datetime(*time.strptime(s, '%Y-%m-%d')[:3])
     return s
 
+
 def add_name(name, extra_name):
     e = Es.by_name(name)
     e._data['names'].append(extra_name)
     e.save()
+
 
 def end_rel(who, _with, how, at=None):
     """ Ends a relation given by names.
@@ -89,14 +95,17 @@ def end_rel(who, _with, how, at=None):
             'how': how,
             'until': DT_MAX}, {'$set': {'until': at}})
 
+
 def qe(keyword):
     """ Queries entities by keyword """
     for e in Es.by_keyword(keyword):
         print "%-20s %s" % (_id(e), unicode(e.humanName))
 
+
 def create_study(name):
     return Es.ecol.insert({'types': ['study'],
                            'humanNames': [{'human': name}]})
+
 
 def create_brand(suffix, name):
     Es.ecol.insert({'humanNames': [{'human': name}],

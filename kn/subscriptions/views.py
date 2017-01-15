@@ -5,7 +5,6 @@ from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import Group
 from django.http import Http404, HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
@@ -19,10 +18,11 @@ from kn.leden.date import date_to_dt
 import kn.subscriptions.entities as subscr_Es
 from kn.subscriptions.forms import get_add_event_form
 
+
 @login_required
 def event_list(request):
     open_events, closed_events, open_leden_events, \
-                closed_leden_events = [],[],[],[]
+                closed_leden_events = [], [], [], []
     for e in reversed(tuple(subscr_Es.all_events())):
         if e.is_open:
             if e.is_official:
@@ -40,6 +40,7 @@ def event_list(request):
              'open_leden_events': open_leden_events,
              'closed_leden_events': closed_leden_events},
             context_instance=RequestContext(request))
+
 
 @login_required
 def event_detail(request, name):
@@ -108,8 +109,9 @@ def event_detail(request, name):
     return render_to_response('subscriptions/event_detail.html', ctx,
             context_instance=RequestContext(request))
 
+
 def _api_event_set_opened(request):
-    if not 'id' in request.REQUEST or not isinstance(request.REQUEST['id'], basestring):
+    if 'id' not in request.REQUEST or not isinstance(request.REQUEST['id'], basestring):
         return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
     e = subscr_Es.event_by_id(request.REQUEST['id'])
     if not e:
@@ -127,8 +129,9 @@ def _api_event_set_opened(request):
 
     return JsonHttpResponse({'success': True})
 
+
 def _api_get_email_addresses(request):
-    if not 'id' in request.REQUEST:
+    if 'id' not in request.REQUEST:
         return JsonHttpResponse({'error': 'missing arguments'})
     event = subscr_Es.event_by_id(request.REQUEST['id'])
     if not event:
@@ -142,6 +145,7 @@ def _api_get_email_addresses(request):
             'addresses': [s.user.canonical_full_email
                     for s in event.listSubscribed]})
 
+
 @require_POST
 @login_required
 def api(request):
@@ -152,6 +156,7 @@ def api(request):
         return _api_event_set_opened(request)
     else:
         return JsonHttpResponse({'error': 'unknown action'})
+
 
 @login_required
 def event_new_or_edit(request, edit=None):
@@ -201,7 +206,7 @@ def event_new_or_edit(request, edit=None):
                         edit is None or e.name != name)):
                     name = prefix + name
                 d['name'] = name
-                d['is_open'] = True # default for new events
+                d['is_open'] = True  # default for new events
                 e = subscr_Es.Event(d)
             else:
                 e.update(d, request.user, save=False)

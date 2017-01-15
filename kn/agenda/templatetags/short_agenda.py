@@ -4,6 +4,7 @@ import kn.agenda.entities as Es_a
 register = template.Library()
 MAX_ITEMS = 10;
 
+
 @register.inclusion_tag('agenda/short_agenda.html')
 def show_short_agenda():
     items = list(Es_a.events(agenda='kn', limit=MAX_ITEMS + 1));

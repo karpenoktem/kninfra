@@ -10,6 +10,7 @@ from kn.leden.date import now
 
 from django.conf import settings
 
+
 def generate_wolk_changes(giedo):
     creds = settings.WOLK_MYSQL_SECRET
     if not creds:

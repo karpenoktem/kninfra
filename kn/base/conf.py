@@ -1,5 +1,6 @@
 from django.conf import settings
 
+
 def from_settings_import(*args):
     """     from_settings_import('SOME_VARIABLE', 'DT_MIN', globals())
     

@@ -42,19 +42,24 @@ def ensure_indices():
                       default_language="dutch",
                       sparse=True)
 
+
 def entity(d):
     if d is None:
         return None
     return TYPE_MAP[d['type']](d)
 
+
 def by_id(the_id):
     return entity(fcol.find_one({'_id': _id(the_id)}))
+
 
 def by_oldId(_type, oldId):
     return entity(fcol.find_one({'type': _type, 'oldId': oldId}))
 
+
 def by_path_and_name(p, n):
     return entity(fcol.find_one({'path': p, 'name': n}))
+
 
 def by_path(p):
     bits = p.rsplit('/', 1)
@@ -65,10 +70,12 @@ def by_path(p):
         pp, name = bits
     return by_path_and_name(pp, name)
 
+
 def is_admin(user):
     if user is None:
         return False
     return bool(user.cached_groups_names & frozenset(('fotocie', 'secretariaat')))
+
 
 def actual_visibility(visibility):
     actual = frozenset(visibility)
@@ -82,6 +89,7 @@ def actual_visibility(visibility):
         actual |= implies.get(v, frozenset(v))
 
     return actual
+
 
 class FotoEntity(SONWrapper):
     CACHES = {}
@@ -191,6 +199,7 @@ class FotoEntity(SONWrapper):
     def get_thumbnail_url(self):
         return ('fotos-cache', (), {'path': self.full_path,
                                    'cache': 'thumb'})
+
     @permalink
     def get_thumbnail2x_url(self):
         return ('fotos-cache', (), {'path': self.full_path,
@@ -235,7 +244,7 @@ class FotoEntity(SONWrapper):
         return resize_proportional(width, height, c.maxwidth, c.maxheight)
 
     def ensure_cached(self, cache):
-        if not cache in self.CACHES:
+        if cache not in self.CACHES:
             raise KeyError
         if cache in self.caches or cache == 'full':
             return True
@@ -247,7 +256,7 @@ class FotoEntity(SONWrapper):
             # as the _cache operation may take quite some time, a full
             # .save() might overwrite other changes. (Like other caches.)
             # Thus we perform the change manually.
-            if not 'caches' in self._data:
+            if 'caches' not in self._data:
                 self._data['caches'] = []
             self._data['caches'].append(cache)
             fcol.update({'_id': self._id},
@@ -383,6 +392,7 @@ class FotoEntity(SONWrapper):
         if save:
             self.save()
 
+
 class FotoAlbum(FotoEntity):
     def __init__(self, data):
         super(FotoAlbum, self).__init__(data)
@@ -420,7 +430,7 @@ class FotoAlbum(FotoEntity):
                                 "^%s(/|$)" % re.escape(self.full_path))},
                      'type': 'foto',
                      'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                        sort=[('random',-1)]))
+                        sort=[('random', -1)]))
             if f is not None:
                 return f
             if r == 1:
@@ -453,7 +463,7 @@ class FotoAlbum(FotoEntity):
             for result in db.command('text', 'fotos',
                         search=q,
                         filter=query_filter,
-                        limit=96, # dividable by 2, 3 and 4
+                        limit=96,  # dividable by 2, 3 and 4
                       )['results']:
                 yield entity(result['obj'])
             return
@@ -470,7 +480,7 @@ class FotoAlbum(FotoEntity):
                 self.save()
             return updated
 
-        self.date = settings.DT_MIN # NULL date/time
+        self.date = settings.DT_MIN  # NULL date/time
         try:
             self.date = datetime.datetime.strptime(self.name[:10], '%Y-%m-%d')
         except ValueError:
@@ -497,6 +507,7 @@ class FotoAlbum(FotoEntity):
             self.save()
 
         return True
+
 
 class Foto(FotoEntity):
     # keep up to date with fotos.js (onresize)
@@ -556,7 +567,7 @@ class Foto(FotoEntity):
                 pass
 
         if self.date is None:
-            self.date = settings.DT_MIN # NULL date/time
+            self.date = settings.DT_MIN  # NULL date/time
             if 'DateTimeOriginal' in exif:
                 try:
                     self.date = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
@@ -593,7 +604,7 @@ class Foto(FotoEntity):
             return
 
         self.rotation = rotation
-        self.caches = [] # invalidate cache
+        self.caches = []  # invalidate cache
         if save:
             self.save()
 
@@ -620,6 +631,7 @@ class Foto(FotoEntity):
 class Video(FotoEntity):
     def __init__(self, data):
         super(Video, self).__init__(data)
+
 
 def all():
     for d in fcol.find():

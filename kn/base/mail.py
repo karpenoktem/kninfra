@@ -13,6 +13,7 @@ import kn.leden.entities as Es
 
 # TODO translate e-mail to the language preferred by the recipient
 
+
 def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
                         reply_to=None, headers=None):
     """ Render an e-mail from a template and send it. """
@@ -44,9 +45,9 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
                 rendered_nodes[node.name] = node.render(context)
     finally:
         translation.activate(request_language)
-    if not 'subject' in rendered_nodes:
+    if 'subject' not in rendered_nodes:
         raise KeyError(_("subject blok mist"))
-    if not 'plain' in rendered_nodes and not 'html' in rendered_nodes:
+    if 'plain' not in rendered_nodes and 'html' not in rendered_nodes:
         raise KeyError(_("html of plain blok mist"))
 
     # Set up e-mail

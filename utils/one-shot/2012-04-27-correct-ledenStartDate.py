@@ -1,4 +1,4 @@
-import _import
+import _import  # noqa: F401
 
 # In the old administration, we only registered membership of `leden' rounded
 # to years.  However, we kept the registration date separately.  In the
@@ -13,7 +13,6 @@ import _import
 import datetime
 
 import kn.leden.entities as Es
-from kn.leden.mongo import _id
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 
@@ -26,7 +25,7 @@ def main():
                         t._data['year-override']['year'])] = t._data['_id']
     for rel in sorted(Es.query_relations(-1, Es.id_by_name('leden'), None,
                 None, None, True, False, False),
-                cmp=lambda x,y: cmp(x['from'], y['from'])):
+                cmp=lambda x, y: cmp(x['from'], y['from'])):
         name = str(rel['who'].name)
         if name in had:
             continue
@@ -54,7 +53,7 @@ def main():
                                 joined.date()
             rrel = Es.rcol.find({'_id': rel['_id']})[0]
             rrel['from'] = joined
-            if not 'tags' in rrel:
+            if 'tags' not in rrel:
                 rrel['tags'] = []
             if not year_overrides[(False, joined_yr)] in rrel['tags']:
                 rrel['tags'].append(year_overrides[(False, joined_yr)])

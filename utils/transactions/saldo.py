@@ -1,18 +1,20 @@
 # vim: et:sta:bs=2:sw=4:
 # -*- coding: utf-8 -*
-import _import
+import _import  # noqa: F401
 
-from kn.leden.models import OldKnUser, Transaction
+from kn.leden.models import Transaction
+
 
 def main():
     u2t = dict()
     for t in Transaction.objects.order_by('date').all():
-        if not t.user in u2t:
+        if t.user not in u2t:
             u2t[t.user] = list()
         u2t[t.user].append(t)
     for u in u2t.iterkeys():
         s = sum(map(lambda u: u.value, u2t[u]))
-        if s == 0: continue
+        if s == 0:
+            continue
 
         cs = 0
         for i, t in enumerate(u2t[u]):

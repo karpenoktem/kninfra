@@ -5,7 +5,6 @@ from django.http import Http404
 from django.contrib import messages
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import login_required
 
@@ -14,16 +13,19 @@ from kn.leden.mongo import _id
 import kn.poll.entities as poll_Es
 
 # We create for every answerSet a form
+
+
 def create_questionForm(question):
     class QuestionForm(forms.Form):
         def __init__(self, *args, **kwargs):
             super(QuestionForm, self).__init__(*args, **kwargs)
             self.fields['answer'].label = question[0]
         answer = forms.ChoiceField(
-                choices = list(enumerate(question[1])) + 
+                choices = list(enumerate(question[1])) +
                         [(-1, _('(geen antwoord)'))],
                 required=False)
     return QuestionForm
+
 
 @login_required
 def vote(request, name):
@@ -38,7 +40,7 @@ def vote(request, name):
                                    'poll': _id(poll),
                                    'answers': [None]*len(poll.questions)})
     allValid = True
-    forms = [] # question forms
+    forms = []  # question forms
     for q_id, question in enumerate(poll.questions):
         form_kwargs = {'prefix': str(q_id)}
         answer = filling.answers[q_id]

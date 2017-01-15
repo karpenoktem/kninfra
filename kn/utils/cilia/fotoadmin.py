@@ -2,15 +2,15 @@ import subprocess
 import os.path
 import re
 
-from django.conf import settings
 from kn.fotos.roots import FOTO_ROOTS
+
 
 def fotoadmin_remove_moved_fotos(cilia, store, user, directory):
     if not re.match('^[a-z0-9]{3,32}$', user):
         return {'error': 'Invalid user'}
     if not re.match('^[^/\\.][^/]*$', directory):
         return {'error': 'Invalid dir'}
-    if not store in FOTO_ROOTS:
+    if store not in FOTO_ROOTS:
         return {'error': 'Invalid store'}
     root = FOTO_ROOTS[store]
     user_path = os.path.join(root.base, user)
@@ -23,6 +23,7 @@ def fotoadmin_remove_moved_fotos(cilia, store, user, directory):
         return {'error': 'Security exception'}
     subprocess.call(['rm', '-rf', fotos_path])
     return {'success': True}
+
 
 def fotoadmin_scan_userdirs():
     userdirs = []

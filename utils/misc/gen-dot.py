@@ -2,7 +2,7 @@
 # Generates a graphviz dot file
 #  for the sheir fun of it
 
-import _import
+import _import  # noqa: F401
 import MySQLdb
 from common import *
 from pydot import Node, Dot, Edge
@@ -10,6 +10,7 @@ from Mailman import MailList, Utils
 
 MAILDOMAIN = "karpenoktem.nl"
 LISTDOMAIN = "lists.karpenoktem.nl"
+
 
 def gen_dot():
     d = Dot()
@@ -23,23 +24,24 @@ def gen_dot():
     for alias, target in c.fetchall():
         assert target[0] == '&'
         target = target[1:]
-        alias+="@"+MAILDOMAIN
-        if not alias in nodes:
+        alias += "@"+MAILDOMAIN
+        if alias not in nodes:
             nodes[alias] = Node(alias)
             d.add_node(nodes[alias])
-        if not target in nodes:
+        if target not in nodes:
             nodes[target] = Node(target)
             d.add_node(nodes[target])
         d.add_edge(Edge(nodes[alias], nodes[target]))
     for list in Utils.list_names():
-        if list == 'plukdenacht2008': continue
+        if list == 'plukdenacht2008':
+            continue
         source = list+"@"+LISTDOMAIN
-        if not source in nodes:
+        if source not in nodes:
             nodes[source] = Node(source)
             d.add_node(nodes[source])
         m = MailList.MailList(list, lock=False)
         for member in m.members:
-            if not member in nodes:
+            if member not in nodes:
                 nodes[member] = Node(member)
                 d.add_node(nodes[member])
             d.add_edge(Edge(nodes[source], nodes[member]))

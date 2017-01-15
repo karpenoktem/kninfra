@@ -1,4 +1,4 @@
-import _import
+import _import  # noqa: F401
 
 # Prepare for the coming change of "verenigingsjaar".
 
@@ -7,9 +7,9 @@ import argparse
 import datetime
 
 import kn.leden.entities as Es
-from kn.leden.mongo import _id
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
+
 
 def load_year_overrides():
     print 'loading year-overrides ...'
@@ -21,6 +21,7 @@ def load_year_overrides():
     years = frozenset([t[1] for t in year_overrides.keys()])
     min_year, max_year = min(years), max(years)
     return years, year_overrides, min_year, max_year
+
 
 def create_year_overrides_for(year):
     """ Creates the year overrides for a certain year """
@@ -36,6 +37,7 @@ def create_year_overrides_for(year):
         'types': ['tag'],
         'year-override': {'type': False, 'year': year}})
 
+
 def main():
     parser = argparse.ArgumentParser(description="Prepare for the next year")
     parser.add_argument('--apply', action='store_true',
@@ -46,7 +48,7 @@ def main():
     # Fetch year overrides
     while True:
         years, year_overrides, min_year, max_year = load_year_overrides()
-        assert len(years) == max_year - min_year + 1 # year-override missing?
+        assert len(years) == max_year - min_year + 1  # year-override missing?
         current_year = Es.date_to_year(datetime.datetime.now())
         if current_year == max_year:
             print ' adding year-overrides for year', current_year + 1
@@ -70,7 +72,7 @@ def main():
             if 'tags' not in rel:
                 rel['tags'] = []
             rel['tags'].append(year_overrides[(False, year-1)])
-            print ' ',Es.by_id(rel['who']).name, '-'+str(year-1)
+            print ' ', Es.by_id(rel['who']).name, '-'+str(year-1)
             if args.apply:
                 Es.rcol.save(rel)
 
@@ -78,7 +80,7 @@ def main():
     print 'exactly on the change of year ...'
     for year in xrange(min_year+1, max_year+1):
         start_of_year = Es.year_to_range(year)[0]
-        window = datetime.timedelta(1,12*60*60)
+        window = datetime.timedelta(1, 12*60*60)
         for rel in Es.rcol.find({'from': {'$gt': start_of_year - window,
                                           '$lt': start_of_year + window}}):
             if rel['from'] == start_of_year:
@@ -96,8 +98,8 @@ def main():
     print 'exactly on the change of year ...'
     for year in xrange(min_year+1, max_year+1):
         start_of_year = Es.year_to_range(year)[0]
-        end_of_year = Es.year_to_range(year)[0] - datetime.timedelta(0,1)
-        window = datetime.timedelta(1,12*60*60)
+        end_of_year = Es.year_to_range(year)[0] - datetime.timedelta(0, 1)
+        window = datetime.timedelta(1, 12*60*60)
         for rel in Es.rcol.find({'until': {'$gt': start_of_year - window,
                                           '$lt': start_of_year + window}}):
             if rel['until'] == end_of_year:

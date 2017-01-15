@@ -1,10 +1,11 @@
-import _import
+import _import  # noqa: F401
 
 import kn.leden.entities as Es
 from kn.planning.entities import Vacancy
 from kn.leden.mongo import db, _id
 
 wcol = db['planning_workers']
+
 
 def main():
     count = 0

@@ -1,8 +1,8 @@
 """ Use crude heuristics to check which files are still not ready
     for translation. """
 
-import glob
 import os.path
+
 
 class Program:
     def check_py(self, path):

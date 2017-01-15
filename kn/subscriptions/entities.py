@@ -3,7 +3,6 @@ import datetime
 
 from django.db.models import permalink
 from django.utils.html import escape, linebreaks
-from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from kn.base.mail import render_then_email
@@ -54,24 +53,31 @@ ecol = db['events']
 # When someone has a subscription but no history that person is only invited,
 # not subscribed.
 
+
 def ensure_indices():
     ecol.ensure_index('name', unique=True)
     ecol.ensure_index('owner')
     ecol.ensure_index('date')
 
+
 def all_events():
     for m in ecol.find().sort('date'):
         yield Event(m)
 
+
 def event_by_name(name):
     tmp = ecol.find_one({'name': name})
     return None if tmp is None else Event(tmp)
+
+
 def event_by_id(__id):
     tmp = ecol.find_one({'_id': _id(__id)})
     return None if tmp is None else Event(tmp)
 
+
 def is_superuser(user):
     return 'secretariaat' in user.cached_groups_names
+
 
 def may_set_owner(user, owner):
     if is_superuser(owner):
@@ -90,25 +96,32 @@ class Event(SONWrapper):
     humanName = son_property(('humanName',))
     date = son_property(('date',))
     may_unsubscribe = son_property(('may_unsubscribe',))
+
     @property
     def id(self):
         return str(self._data['_id'])
+
     @property
     def owner(self):
         return Es.by_id(self._data['owner'])
+
     @property
     def createdBy(self):
         return Es.by_id(self._data['createdBy'])
+
     @property
     def listSubscribed(self):
         return [s for s in self._subscriptions.values() if s.subscribed]
+
     @property
     def listUnsubscribed(self):
         return [s for s in self._subscriptions.values() if s.unsubscribed]
+
     @property
     def listInvited(self):
         return filter(lambda s: s.invited and not s.has_mutations,
                       self._subscriptions.values())
+
     def get_subscription(self, user, create=False):
         '''
         Return Subscription for user, creating it if it doesn't already exist.
@@ -123,15 +136,18 @@ class Event(SONWrapper):
         subscription = Subscription(d, self)
         self._subscriptions[str(_id(user))] = subscription
         return subscription
+
     @property
     def description(self):
         return self._data['description']
+
     @property
     def description_html(self):
         return self._data.get('description_html',
                 linebreaks(escape(self._data['description'])))
         # Let wel: 'description' is een *fallback*, het is niet de bedoeling dat
         # deze bij nieuwe actieviteitne nog gebruikt wordt
+
     @property
     def cost(self):
         return decimal.Decimal(self._data['cost'])
@@ -152,26 +168,31 @@ class Event(SONWrapper):
     @permalink
     def get_absolute_url(self):
         return ('event-detail', (), {'name': self.name})
+
     @property
     def messageId(self):
         """ Unique ID to be used in e.g. References: headers """
         return '<%s@%s>' % (self.get_absolute_url().strip('/'),
                         settings.MAILDOMAIN)
+
     def has_read_access(self, user):
         return  self.owner == user or \
             str(self.owner.name) in user.cached_groups_names or \
                'secretariaat' in user.cached_groups_names or \
                'admlezers' in user.cached_groups_names
+
     def has_write_access(self, user):
         return self.owner == user or \
             str(self.owner.name) in user.cached_groups_names or \
                'secretariaat' in user.cached_groups_names
+
     @property
     def can_subscribe(self):
         if self.max_subscriptions is not None and \
                 len(self.listSubscribed) >= self.max_subscriptions:
             return False
         return self.is_open
+
     @property
     def can_unsubscribe(self):
         return self.is_open and self.may_unsubscribe
@@ -180,19 +201,22 @@ class Event(SONWrapper):
         subscription = self.get_subscription(user, create=True)
         subscription.subscribe(notes)
         return subscription
+
     def unsubscribe(self, user, notes):
         subscription = self.get_subscription(user, create=True)
         subscription.unsubscribe(notes)
         return subscription
+
     def invite(self, user, notes, inviter):
         subscription = self.get_subscription(user, create=True)
         subscription.invite(inviter, notes)
         return subscription
 
     def pushHistory(self, historyEvent):
-        if not 'history' in self._data:
+        if 'history' not in self._data:
             self._data['history'] = []
         self._data['history'].append(historyEvent)
+
     def open(self, user, save=True):
         if self.is_open:
             return
@@ -203,6 +227,7 @@ class Event(SONWrapper):
             'by': _id(user)})
         if save:
             self.save()
+
     def close(self, user, save=True):
         if not self.is_open:
             return
@@ -213,6 +238,7 @@ class Event(SONWrapper):
             'by': _id(user)})
         if save:
             self.save()
+
     def update(self, data, user, save=True):
         self._data.update(data)
         self.pushHistory({
@@ -223,6 +249,8 @@ class Event(SONWrapper):
             self.save()
 
 # Edit events in the event: 'opened', 'closed', 'edited'.
+
+
 class HistoryEvent(SONWrapper):
     def __init__(self, data, event):
         super(HistoryEvent, self).__init__(data, ecol, event)
@@ -258,46 +286,59 @@ class Subscription(SONWrapper):
     @property
     def id(self):
         return str(self._data['_id'])
+
     @property
     def user(self):
         return Es.by_id(self._data['user'])
+
     @property
     def invited(self):
         return 'inviter' in self._data
+
     @property
     def inviter(self):
         return Es.by_id(self._data.get('inviter'))
+
     @property
     def lastMutation(self):
         if not self.history:
             return {}
         return self.history[-1]
+
     def push_mutation(self, mutation):
         if not self.history:
             self.history = []
         self.history.append(mutation)
+
     @property
     def _state(self):
         return self.lastMutation.get('state')
+
     @property
     def has_mutations(self):
         return self._state is not None
+
     @property
     def subscribed(self):
         return self._state == 'subscribed'
+
     @property
     def unsubscribed(self):
         return self._state == 'unsubscribed'
+
     @property
     def date(self):
         # last change date
         return self.lastMutation.get('date') or self.inviteDate
+
     @property
     def userNotes(self):
         return self.lastMutation.get('notes')
+
     @property
     def notes(self):
         return self.userNotes or self.inviterNotes
+
     @property
     def subscriber(self):
         subscriber = self.lastMutation.get('subscriber')
@@ -314,6 +355,7 @@ class Subscription(SONWrapper):
         self.push_mutation(mutation)
         self.save()
         self.send_notification(mutation)
+
     def unsubscribe(self, notes):
         assert self.subscribed
         mutation = {
@@ -323,6 +365,7 @@ class Subscription(SONWrapper):
         self.push_mutation(mutation)
         self.save()
         self.send_notification(mutation)
+
     def invite(self, inviter, notes):
         assert not self.invited and not self.has_mutations
         self._data['inviter'] = _id(inviter)

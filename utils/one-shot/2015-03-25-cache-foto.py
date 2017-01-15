@@ -1,9 +1,8 @@
-import _import
+import _import  # noqa: F401
 
-from django.conf import settings
 import kn.fotos.entities as fEs
-import kn.leden.entities as Es
 import multiprocessing
+
 
 def cache(the_id):
      e = fEs.by_id(the_id)
@@ -11,6 +10,7 @@ def cache(the_id):
      for c in e.CACHES:
          print c
          e.ensure_cached(c)
+
 
 def main():
     pool = multiprocessing.Pool(7)

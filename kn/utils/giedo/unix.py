@@ -1,12 +1,10 @@
-import logging
-import itertools
-
 from tarjan.tc import tc        # transitive closure of a graph
 
 import kn.leden.entities as Es
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
 from kn.leden.date import now
+
 
 def generate_unix_map(giedo):
     ret = {'groups': {},

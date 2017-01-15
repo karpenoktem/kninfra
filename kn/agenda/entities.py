@@ -1,15 +1,17 @@
 from datetime import datetime
 
-from kn.leden.mongo import db, SONWrapper, _id, son_property, ObjectId
+from kn.leden.mongo import db, SONWrapper, son_property
 
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 
 acol = db['agenda']
 
+
 def ensure_indices():
     acol.ensure_index([('agenda', 1),
                        ('start', 1)])
+
 
 def events(agenda=None, limit=None):
     query = {'end': {'$gte': datetime.now()}}
@@ -20,6 +22,7 @@ def events(agenda=None, limit=None):
         cursor = cursor.limit(limit)
     for m in cursor:
         yield AgendaEvent(m)
+
 
 def update(agendas):
     """ Clear all current agenda events and replace by `agendas', which is a
@@ -34,9 +37,11 @@ def update(agendas):
                          'start': start,
                          'end': end}).save()
 
+
 class AgendaEvent(SONWrapper):
     def __init__(self, data):
         super(AgendaEvent, self).__init__(data, acol)
+
     @property
     def id(self):
         return str(self._data['_id'])

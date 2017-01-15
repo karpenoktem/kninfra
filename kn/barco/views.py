@@ -19,15 +19,17 @@ from kn.barco.forms import BarformMeta, InvCountMeta
 settings.DRANK_REPOSITORIES = ['drank6', 'drank7', 'drank8', 'drank9']
 settings.DRANK_REPOS_PATH = '/home/infra/barco/%s/'
 
-# The specific behaviour for each different form 
+# The specific behaviour for each different form
 #  (barform, inventory count, ... ) is stored in a subclass
 #  of the "FormSpecifics" class.
+
+
 class FormSpecifics(object):
-    def __init__(self, 
-            django_form, 
-            django_template, 
-            dir_in_repo, 
-            template_path, # see explanation below
+    def __init__(self,
+            django_form,
+            django_template,
+            dir_in_repo,
+            template_path,  # see explanation below
             weights_path
             ):
         self.django_form = django_form
@@ -36,7 +38,7 @@ class FormSpecifics(object):
         self.weights_path = weights_path
         self.dir_in_repo = dir_in_repo
 
-    def entered_data_to_file(self, fd, csv, template): 
+    def entered_data_to_file(self, fd, csv, template):
         raise NotImplementedError
 
 
@@ -72,7 +74,7 @@ def template_write_data_to_file(template, data, write):
                     parts = []
                     for ex in data[row[column]].split(','):
                         if ex[0] == 'g':
-                            parts.append('gewogen:'+ ex[1:])
+                            parts.append('gewogen:' + ex[1:])
                         else:
                             parts.append(ex)
                     write("+".join(parts))
@@ -170,11 +172,11 @@ def barco_enterform(request, repos, formname):
             fd = form.cleaned_data
             csv = StringIO();
             write = lambda x: csv.write(x.encode("utf-8"))
-            write("# Ingevoerd door "+ str(request.user.name) +"\n")
+            write("# Ingevoerd door " + str(request.user.name) + "\n")
             formspec.entered_data_to_file(fd, write, template, prefill)
             
             # commit it to the repository ...
-            fn = os.path.join(formspec.dir_in_repo,'%s.csv'%(fd['formname']))
+            fn = os.path.join(formspec.dir_in_repo, '%s.csv'%(fd['formname']))
             with open(os.path.join(repopath, fn), 'w') as fh:
                 fh.write(csv.getvalue())
             subprocess.call(['/usr/bin/git', 'add', fn], cwd=repopath)
@@ -191,10 +193,10 @@ def barco_enterform(request, repos, formname):
 
             # and get back to the user:
             messages.info(request, _("Opgeslagen!"))
-            return HttpResponseRedirect(reverse('barco-enterform', 
-                args=(repos,formname)))
+            return HttpResponseRedirect(reverse('barco-enterform',
+                args=(repos, formname)))
     form = formspec.django_form()
-    return render_to_response(formspec.django_template, 
+    return render_to_response(formspec.django_template,
             {'fields': template, 'form': form, 'prefill': prefill,
                 'weight_fields': list(weight_fields)},
         context_instance=RequestContext(request))

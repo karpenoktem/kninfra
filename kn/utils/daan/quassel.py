@@ -22,6 +22,7 @@ def quassel_setpass(daan, user, password):
     except sqlite3.OperationalError:
         logging.exception("OperationalError")
 
+
 def apply_quassel_changes(daan, changes):
     if not changes:
         return
