@@ -6,6 +6,7 @@ include:
     - .mysqld
     - .phpmyadmin
     - .wiki
+    - .piwik
     - .forum
     - .ldap
     - .mail
