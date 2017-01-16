@@ -1,10 +1,9 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import  # noqa: F401
 
 import pyx
 import kn.leden.entities as Es
 
-from common import *
 
 def main():
     N = 0
@@ -21,9 +20,9 @@ def main():
             if m.dateOfBirth is None:
                 continue
             age = int((start_dt - m.dateOfBirth).days / 365.242)
-            if not age in current:
-                current[age]= 0
-            if not age in ages:
+            if age not in current:
+                current[age] = 0
+            if age not in ages:
                 ages.add(age)
             current[age] += 1
         data.append(current)

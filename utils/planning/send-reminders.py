@@ -1,5 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import  # noqa: F401
 
 from kn.planning.entities import Vacancy
 from kn.planning.utils import send_reminder

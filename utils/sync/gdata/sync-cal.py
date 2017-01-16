@@ -1,11 +1,10 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import  # noqa: F401
 
 from common import *
 from cal_common import *
 
 from kn.leden.models import OldKnUser, OldKnGroup
-from iso8601 import parse_date
 import gdata.calendar.service
 from gdata.service import RequestError
 import datetime
@@ -13,8 +12,9 @@ import atom
 
 GCAL_SCHEME = 'http://schemas.google.com/gCal/2005#'
 
+
 def acl_sync_cal(cs, cal, initial_role):
-    acl_url = 'http://www.google.com/calendar'+ \
+    acl_url = 'http://www.google.com/calendar' + \
                      '/feeds/%s/acl/full' % cal
     feed = cs.GetCalendarAclFeed(acl_url)
     cur = dict()
@@ -28,7 +28,8 @@ def acl_sync_cal(cs, cal, initial_role):
         cur[a_rule.scope.value] = a_rule.GetEditLink().href
     for m in OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all():
         acc.add(m.email.lower())
-        if m.email.lower() in cur: continue
+        if m.email.lower() in cur:
+            continue
         todo.add(m)
     for n in frozenset(cur.iterkeys()) - acc:
         print "Deleting stray %s" % n
@@ -49,10 +50,12 @@ def acl_sync_cal(cs, cal, initial_role):
             else:
                 raise
 
+
 def icaldate(d):
     return "%s%s%s" % (d.year,
                str(d.month).zfill(2),
                str(d.day).zfill(2))
+
 
 def sync_bd(cs, cal):
     cal_uri = '/calendar/feeds/%s/private/full' % cal
@@ -68,8 +71,8 @@ def sync_bd(cs, cal):
     rd_lut = dict()
     for m in todo:
         fn_lut[m.full_name()] = m
-        rd_lut[m.full_name()] = ('DTSTART;VALUE=DATE:%s\n'+
-                         'DTEND;VALUE=DATE:%s\n'+
+        rd_lut[m.full_name()] = ('DTSTART;VALUE=DATE:%s\n' +
+                         'DTEND;VALUE=DATE:%s\n' +
                          'RRULE:FREQ=YEARLY\n') % (
                         icaldate(m.dateOfBirth),
                         icaldate(m.dateOfBirth +
@@ -78,7 +81,7 @@ def sync_bd(cs, cal):
     while True:
         for event in feed.entry:
             fn = unicode(event.title.text, 'UTF-8')
-            if not fn in fn_lut:
+            if fn not in fn_lut:
                 print "Deleting stray event: %s" % fn
                 cs.DeleteEvent(event.GetEditLink().href)
                 continue

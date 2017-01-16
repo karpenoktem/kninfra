@@ -1,12 +1,12 @@
 # vim: et:sta:bs=2:sw=4:
 from __future__ import with_statement
 
-import _import
+import _import  # noqa: F401
 import sys
 import cStringIO
-from datetime import date, datetime
-from kn.leden.models import OldKnUser, OldKnGroup
+from kn.leden.models import OldKnGroup
 from common import *
+
 
 def group_email():
     with open('group-email.template', 'r') as f:
@@ -16,13 +16,13 @@ def group_email():
     plut = dict()
     for g in Gs:
         glut[g.name] = g
-        if not g.parent_id in plut:
+        if g.parent_id not in plut:
             plut[g.parent_id] = list()
         plut[g.parent_id].append(g)
     for g in Gs:
-        if not g.id in plut:
+        if g.id not in plut:
             continue
-        plut[g.id].sort(cmp=lambda x,y: cmp(x.humanName, y.humanName))
+        plut[g.id].sort(cmp=lambda x, y: cmp(x.humanName, y.humanName))
     tree = list()
     stack = [(0, glut['besturen']),
          (0, glut['lists']),
@@ -32,7 +32,7 @@ def group_email():
     while stack:
         d, g = stack.pop()
         tree.append((d, g))
-        if not g.id in plut:
+        if g.id not in plut:
             continue
         for g2 in reversed(plut[g.id]):
             if g2 in had:

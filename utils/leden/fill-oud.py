@@ -1,8 +1,9 @@
-import _import
+import _import  # noqa: F401
 
 """ Adds old members to oud """
 
 import kn.leden.entities as Es
+
 
 def main():
     oud = Es.by_name('oud')

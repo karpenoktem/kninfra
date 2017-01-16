@@ -2,6 +2,7 @@ from django.core.mail import EmailMessage
 
 import kn.leden.entities as Es
 
+
 def send_reminder(vacancy, update=True):
     to = vacancy.assignee
     e = vacancy.event

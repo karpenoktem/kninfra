@@ -20,6 +20,7 @@ pcol = db['polls']
 #  'date': datetime(2011, 11, 12, 12, 12)}
 fcol = db['polls_filling']
 
+
 def ensure_indices():
     # For Poll, we want (1) fast queries on the name
     pcol.ensure_index('name', unique=True)
@@ -28,37 +29,51 @@ def ensure_indices():
     # For Fillings, we want (I)
     #  This compound index, which will allow fast queries for (1) poll and
     #  user at the same time and on (2) poll.
-    fcol.ensure_index([('poll',1), ('user',1)])
+    fcol.ensure_index([('poll', 1), ('user', 1)])
     #  But we also want fast queries on (II) the user.
     fcol.ensure_index('user')
 
 # Query functions
 # ######################################################################
+
+
 def all_polls():
     for m in pcol.find().sort('date'):
         yield Poll(m)
+
+
 def poll_by_name(name):
     tmp = pcol.find_one({'name': name})
     return None if tmp is None else Poll(tmp)
+
+
 def poll_by_id(__id):
     tmp =  pcol.find_one({'_id': _id(__id)})
     return None if tmp is None else Poll(tmp)
+
+
 def filling_by_user_and_poll(user, poll):
     tmp = fcol.find_one({'poll': _id(poll),
                          'user': _id(user)})
     return None if tmp is None else Filling(tmp)
+
+
 def filling_by_poll(poll):
     for tmp in fcol.find({'poll': _id(poll)}):
         yield Filling(tmp)
 
 # Models
 # ######################################################################
+
+
 class Poll(SONWrapper):
     def __init__(self, data):
         super(Poll, self).__init__(data, pcol)
+
     @property
     def id(self):
         return str(self._data['_id'])
+
     @property
     def createdBy(self):
         return Es.by_id(self._data['createdBy'])
@@ -83,15 +98,19 @@ class Poll(SONWrapper):
     def get_absolute_url(self):
         return ('poll', (), {'name': self.name})
 
+
 class Filling(SONWrapper):
     def __init__(self, data):
         super(Filling, self).__init__(data, fcol)
+
     @property
     def id(self):
         return str(self._data['_id'])
+
     @property
     def poll(self):
         return Event(poll_by_id(self._data['poll']))
+
     @property
     def user(self):
         return Es.by_id(self._data['user'])

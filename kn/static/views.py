@@ -6,6 +6,7 @@ import os
 
 _slideshow_images = None
 
+
 def home(request):
     global _slideshow_images
     if _slideshow_images is None:
@@ -19,6 +20,8 @@ def home(request):
             context_instance=RequestContext(request))
 
 # legacy URL redirect view
+
+
 def hink_stap(request, name):
     return redirect(settings.EXTERNAL_URLS[name], permanent=True)
 

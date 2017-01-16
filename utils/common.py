@@ -1,7 +1,7 @@
 # vim: et:sta:bs=2:sw=4:
 from __future__ import with_statement
 
-import _import
+import _import  # noqa: F401
 import random
 import unicodedata
 import kn.settings
@@ -10,13 +10,16 @@ ALPHA = 'qwertyuiopasdfghjklzxcvbnm'
 NUM = '1234567890'
 ALPHANUMUL = ALPHA + ALPHA.upper() + NUM
 
+
 def read_ssv_file(filename):
         """ Reads values seperated by spaces in a simple one line file """
         with open(filename) as f:
                 return f.readline()[:-1].split(' ')
 
+
 def sesc(t):
-    return t.replace('\\','\\\\').replace(' ','\\ ')
+    return t.replace('\\', '\\\\').replace(' ', '\\ ')
+
 
 def pseudo_randstr(l=12, cs=ALPHANUMUL):
     ret = ''
@@ -26,7 +29,7 @@ def pseudo_randstr(l=12, cs=ALPHANUMUL):
 
 """
 Given a list of names,
-returns the users which are 
+returns the users which are
   0.  named in this list,
   1.  members of groups named in this list,
   2.  members of groups of members of groups named in this list,
@@ -37,24 +40,27 @@ Entity then "user" or "group" is encountered.
 
 Cycles are accounted for.
 """
+
+
 def args_to_users(args):
     import kn.leden.entities as Es
     ret = set()  # set of Entities found
     had = set()  # set of Entities dealt with
-    todo = set() # set of Entities to be dealt with
+    todo = set()  # set of Entities to be dealt with
     todo.update(Es.by_names(args).itervalues())
-    while len(todo)>0:
+    while len(todo) > 0:
         e = todo.pop()
         if e in had:
             continue
         had.add(e)
-        if e.type=="user":
+        if e.type == "user":
             ret.add(e)
             continue
-        if e.type!="group":
+        if e.type != "group":
             raise NotImplementedError()
         todo.update(e.get_members())
     return tuple(ret)
+
 
 def print_table(data, separator=' '):
     if len(data) == 0:
@@ -68,6 +74,7 @@ def print_table(data, separator=' '):
             l += b + (' ' * (ls[i] - len(b))) + separator
         print l
 
+
 def emailfy_name(first, last):
     first, last = map(lambda x: unicodedata.normalize(
                 'NFKD', x).encode('ASCII', 'ignore'),
@@ -80,7 +87,7 @@ def emailfy_name(first, last):
         n = n.replace('  ', ' ')
     n = n.replace(' ', '.').lower()
     for c in n:
-        if not c in EMAIL_ALLOWED:
+        if c not in EMAIL_ALLOWED:
             raise "Invalid character %s found" % c
     return n
 

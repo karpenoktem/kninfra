@@ -31,6 +31,7 @@ def i18n_patterns(*urls, **kwargs):
     return [BackportedLocaleRegexURLResolver(list(urls),
                 prefix_default_language=prefix_default_language)]
 
+
 class BackportedLocaleRegexURLResolver(RegexURLResolver):
     def __init__(self, urlconf_name, default_kwargs=None, app_name=None,
 	namespace=None, prefix_default_language=True):
@@ -54,6 +55,7 @@ class BackportedLocaleRegexURLResolver(RegexURLResolver):
                 re.UNICODE
             )
         return self._regex_dict[language_code]
+
 
 class BackportedLocaleMiddleware(object):
     response_redirect_class = HttpResponseRedirect
@@ -111,6 +113,7 @@ class BackportedLocaleMiddleware(object):
             response['Content-Language'] = language
         return response
 
+
 @lru_cache.lru_cache(maxsize=None)
 def backported_is_language_prefix_patterns_used(urlconf):
     for url_pattern in get_resolver(urlconf).url_patterns:
@@ -118,8 +121,10 @@ def backported_is_language_prefix_patterns_used(urlconf):
             return True, url_pattern.prefix_default_language
     return False, False
 
+
 def backported_escape_uri_path(path):
     return quote(force_bytes(path), safe=b"/:@&+$,-_.!~*'()")
+
 
 def backported_get_full_path(self, force_append_slash=False):
     return '%s%s%s' % (

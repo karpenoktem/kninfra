@@ -6,12 +6,14 @@ This module depends on Markdown: http://pypi.python.org/pypi/Markdown """
 from markdown import Extension, Markdown
 from markdown.treeprocessors import Treeprocessor
 
+
 class FixHeadingsExtension(Extension):
     """ FixHeadingsExtension wordt gebruikt als extension voor markdown.Markdown
         zodat header tags veranderd worden '<h2>' -> '<div class="md_h2">' """
     class FixHeadingsProcessor(Treeprocessor):
         """ FixHeadingsProcessor van Daan, zie FixHeadingsExtension voor het
             gebruik van de class.  """
+
         def run(self, root):
             for elem in (elem for elem in root if elem.tag in
                     ('h1', 'h2', 'h3', 'h4', 'h5', 'h6')):

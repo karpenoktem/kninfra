@@ -1,11 +1,11 @@
 # vim: et:sta:bs=2:sw=4:
-import _import
+import _import  # noqa: F401
 
-from kn.leden.models import OldKnUser, OldKnGroup
+from kn.leden.models import OldKnGroup
 
 leden = list(OldKnGroup.objects.get(name='leden').user_set.all())
 leden.extend(OldKnGroup.objects.get(name='leden-oud').user_set.all())
-leden.sort(cmp=lambda x,y: cmp(x.first_name, y.first_name))
+leden.sort(cmp=lambda x, y: cmp(x.first_name, y.first_name))
 
 years = list()
 
@@ -20,7 +20,7 @@ while True:
 
 firstnames = dict()
 for l in leden:
-    if not l.first_name in firstnames:
+    if l.first_name not in firstnames:
         firstnames[l.first_name] = 0
     firstnames[l.first_name] += 1
 

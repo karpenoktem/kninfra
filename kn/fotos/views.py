@@ -1,17 +1,12 @@
-from glob import glob
 import os.path
-from os.path import basename
 from urllib import unquote
 from time import gmtime, strftime
-
-import Image
 
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.utils.translation import ugettext as _
 from django.core.exceptions import PermissionDenied
 from django.core.servers.basehttp import FileWrapper
-from django.core.paginator import EmptyPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
@@ -26,6 +21,7 @@ import kn.fotos.entities as fEs
 import kn.leden.entities as Es
 from kn.fotos.api import album_json, album_parents_json
 
+
 def fotos(request, path=''):
     path = unquote(path)
 
@@ -37,7 +33,7 @@ def fotos(request, path=''):
             q = 'album:' + request.GET.get('search_album')
         if request.GET.get('search_tag'):
             q = 'tag:' + request.GET.get('search_tag')
-        url = reverse('fotos', kwargs={'path':path})
+        url = reverse('fotos', kwargs={'path': path})
         if q is not None:
             qs = QueryDict('', mutable=True)
             qs['q'] = q
@@ -53,7 +49,7 @@ def fotos(request, path=''):
             entity = fEs.by_path_and_name(path, name)
             if entity is not None:
                 # Zen Photo used + signs in the filename part of the URL.
-                url = reverse('fotos', kwargs={'path':path}) \
+                url = reverse('fotos', kwargs={'path': path}) \
                         + '#'+filepath_to_uri(name)
                 return redirect(url, permanent=True)
         raise Http404
@@ -61,7 +57,7 @@ def fotos(request, path=''):
     if album._type != 'album':
         # This is a photo, not an album.
         # Backwards compatibility, probably to Zen Photo.
-        url = reverse('fotos', kwargs={'path':album.path}) \
+        url = reverse('fotos', kwargs={'path': album.path}) \
                 + '#'+filepath_to_uri(album.name)
         return redirect(url, permanent=True)
 
@@ -110,9 +106,10 @@ def fotos(request, path=''):
               'people': people},
              context_instance=RequestContext(request))
 
+
 def cache(request, cache, path):
     path = unquote(path)
-    if not cache in fEs.CACHE_TYPES:
+    if cache not in fEs.CACHE_TYPES:
         raise Http404
     entity = fEs.by_path(path)
     if entity is None:
@@ -128,7 +125,7 @@ def cache(request, cache, path):
     lm = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(st.st_mtime))
     if request.META.get('HTTP_IF_MODIFIED_SINCE', None) == lm:
         return HttpResponseNotModified()
-    cc = 'max-age=30780000' # Cache-Control header
+    cc = 'max-age=30780000'  # Cache-Control header
     if not entity.may_view(None):
         # not publicly cacheable
         cc = 'private, ' + cc
@@ -139,6 +136,7 @@ def cache(request, cache, path):
     resp['Cache-Control'] = cc
     return resp
 
+
 def compat_view(request):
     path = request.GET.get('foto', '')
     name = None
@@ -146,9 +144,11 @@ def compat_view(request):
         path, name = path.rsplit('/', 1)
     return redirect('fotos', path=path+'#'+name, permanent=True)
 
+
 def compat_foto(request):
     path = request.GET.get('foto', '')
     return redirect('fotos-cache', cache='full', path=path, permanent=True)
+
 
 @login_required
 def fotoadmin_create_event(request):
@@ -171,6 +171,7 @@ def fotoadmin_create_event(request):
     return render_to_response('fotos/admin/create.html',
             {'form': form, 'events': list_events()},
              context_instance=RequestContext(request))
+
 
 @login_required
 def fotoadmin_move(request):

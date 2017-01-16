@@ -1,18 +1,17 @@
 # vim: et:sta:bs=2:sw=4:
 
-import _import
+import _import  # noqa: F401
 
-from common import *
 import kn.leden.entities as Es
 
-import datetime
 
 def main():
     leden = Es.by_name('leden')
     lut = {}
     id2name = {}
     for m in Es.users():
-        if not m.name: continue
+        if not m.name:
+            continue
         lut[str(m.name)] = set()
         id2name[m._id] = str(m.name)
     max_q = Es.date_to_year(Es.now()) * 4
@@ -24,9 +23,9 @@ def main():
     for i, name in enumerate(sorted(id2name.itervalues())):
         if i % 20 == 0:
             print
-            print '%20s %s' % ('year', ' '.join([str(((q - 1) / 4) + 1 ).ljust(7)
+            print '%20s %s' % ('year', ' '.join([str(((q - 1) / 4) + 1).ljust(7)
                                     for q in xrange(1, max_q + 1, 4)]))
-            print '%20s %s' % ('quarter', ' '.join([str(((q - 1) % 4) + 1 )
+            print '%20s %s' % ('quarter', ' '.join([str(((q - 1) % 4) + 1)
                                     for q in xrange(1, max_q + 1)]))
         print '%-20s %s' % (name, ' '.join(['*' if q in lut[name] else ' '
                                 for q in xrange(1, max_q + 1)]))

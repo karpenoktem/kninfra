@@ -12,6 +12,7 @@ vcol = db['planning_vacancies']
 
 PLANNER_GROUPS = {'bestuur', 'barco', 'disco', 'chef', 'secretariaat'}
 
+
 def may_manage_planning(user):
     if user is None:
         return False
@@ -23,11 +24,13 @@ def may_manage_planning(user):
 # TODO save vacancies in events?
 
 # ---
+
+
 def ensure_indices():
     vcol.ensure_index('pool')
     vcol.ensure_index('begin')
     vcol.ensure_index('event')
-    vcol.ensure_index([('reminder_needed',1), ('event',1)])
+    vcol.ensure_index([('reminder_needed', 1), ('event', 1)])
     pcol.ensure_index('name')
     ecol.ensure_index('date')
 
@@ -67,6 +70,7 @@ class Event(SONWrapper):
     def vacancies(self, pool=None):
         return Vacancy.all_by_event(self, pool)
 
+
 class Pool(SONWrapper):
     def __init__(self, data):
         super(Pool, self).__init__(data, pcol)
@@ -87,9 +91,11 @@ class Pool(SONWrapper):
     def all(cls):
         for c in pcol.find():
             yield cls.from_data(c)
+
     @classmethod
     def by_name(cls, n):
         return cls.from_data(pcol.find_one({'name': n}))
+
     @classmethod
     def by_id(cls, id):
         return cls.from_data(pcol.find_one({'_id': _id(id)}))
@@ -131,15 +137,19 @@ class Pool(SONWrapper):
 # d is an approximation.
 #
 # adt stands for Approximate DateTime.
+
+
 def adt_to_datetime(r):
-    if isinstance(r,datetime.datetime):
+    if isinstance(r, datetime.datetime):
         return r
     return r[0]
 
+
 def adt_is_approximation(r):
-    if isinstance(r,datetime.datetime):
+    if isinstance(r, datetime.datetime):
         return False
     return r[1]
+
 
 class Vacancy(SONWrapper):
     formField = None
@@ -179,12 +189,14 @@ class Vacancy(SONWrapper):
 
     def get_event(self):
         return Event.by_id(self.event_id)
+
     def set_event(self, x):
         self.event_id = _id(x)
     event = property(get_event, set_event)
 
     def get_pool(self):
         return Pool.by_id(self.pool_id)
+
     def set_pool(self, x):
         self.pool_id = _id(x)
     pool = property(get_pool, set_pool)

@@ -6,15 +6,18 @@ from django.contrib.auth.views import redirect_to_login
 
 import kn.leden.entities as Es
 
+
 class MongoBackend(object):
     def authenticate(self, username=None, password=None):
         user = Es.by_name(username)
-        if user is None or not user.check_password(password):
+        if user is None or not user.is_user \
+                or not user.check_password(password):
             return None
         return user
 
     def get_user(self, pk):
         return Es.by_id(pk)
+
 
 def login_or_basicauth_required(view):
     """ Require Django session or credentials via HTTP basic auth. """

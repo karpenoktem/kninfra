@@ -1,14 +1,12 @@
-import _import
+import _import  # noqa: F401
 
 # Removes some empty entries from the database.
 #               bas@kn.cx
 
-import datetime
-
 import kn.leden.entities as Es
-from kn.leden.mongo import _id
 from kn.base.conf import from_settings_import
 from_settings_import("DT_MIN", "DT_MAX", globals())
+
 
 def main():
     for e in Es.users():
@@ -25,7 +23,7 @@ def main():
         if e._data['addresses']:
             address = e._data['addresses'][0]
             if (not address['street'] and
-                    not address['city'] and 
+                    not address['city'] and
                     not address['number'] and
                     len(e._data['addresses']) == 1):
                 e._data['addresses'] = []

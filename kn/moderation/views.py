@@ -1,11 +1,10 @@
 from __future__ import absolute_import
 
 import os
-import sys
 import os.path
 import datetime
 
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
@@ -23,6 +22,7 @@ import Mailman.MailList
 import Mailman.Utils
 from Mailman import mm_cfg
 
+
 @login_required
 def redirect(request, name):
     if not request.build_absolute_uri().startswith(
@@ -33,7 +33,7 @@ def redirect(request, name):
     if (request.user.groups.filter(
             name=settings.MODERATORS_GROUP).count() == 0):
         return HttpReponse(_("Toegang geweigerd"))
-    if not name in settings.MODED_MAILINGLISTS:
+    if name not in settings.MODED_MAILINGLISTS:
         raise Http404
     ml = Mailman.MailList.MailList(name, True)
     try:
@@ -48,6 +48,7 @@ def redirect(request, name):
     r =  HttpResponseRedirect(settings.MOD_UI_URI % name)
     r[str(bits[0])] = str(bits[1])
     return r
+
 
 def _deactivate_mm(ml, name, user, record, moderators):
     if not ml.emergency:
@@ -68,6 +69,7 @@ def _deactivate_mm(ml, name, user, record, moderators):
                     'name': name,
                     'user': user})
 
+
 def _renew_mm(ml, name, user, record, moderators):
     if not ml.emergency:
         return
@@ -85,6 +87,7 @@ def _renew_mm(ml, name, user, record, moderators):
                 'until': until})
     return record
 
+
 def _activate_mm(ml, name, user, record, moderators):
     if ml.emergency:
         return
@@ -93,7 +96,7 @@ def _activate_mm(ml, name, user, record, moderators):
     now = datetime.datetime.now()
     until = now + settings.MOD_RENEW_INTERVAL
     if record is None:
-        record = mod_Es.ModerationRecord({'list':name})
+        record = mod_Es.ModerationRecord({'list': name})
     record.by = user
     record.at = now
     record.save()
@@ -103,6 +106,7 @@ def _activate_mm(ml, name, user, record, moderators):
                 'user': user,
                 'until': until})
     return record
+
 
 @login_required
 def overview(request):

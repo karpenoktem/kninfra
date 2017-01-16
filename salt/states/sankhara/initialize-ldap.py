@@ -9,17 +9,18 @@ import subprocess
 
 def main():
     if not len(sys.argv) == 7:
-        sys.stderr.write('[domain] [admin password] [infra password] '+
-                                '[daan password] [freeradius password] '+
+        sys.stderr.write('[domain] [admin password] [infra password] ' +
+                                '[daan password] [freeradius password] ' +
                                 '[saslauthd password]\n')
         sys.exit(-1)
     domain = sys.argv[1]
-    suffix = 'dc='+ ',dc='.join(domain.split('.'))
+    suffix = 'dc=' + ',dc='.join(domain.split('.'))
     host = domain.split('.')[0]
     admin_pw, infra_pw, daan_pw, freeradius_pw, saslauthd_pw = [
                 subprocess.check_output(['slappasswd', '-s', pw]).strip()
                         for pw in sys.argv[2:7]]
     local = '"gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth"'
+
     def ldif(s, what='ldapmodify'):
         first_line, rest = s.split('\n', 1)
         s = first_line + '\n' + textwrap.dedent(rest)
@@ -53,7 +54,7 @@ def main():
               EQUALITY caseIgnoreIA5Match SYNTAX
               1.3.6.1.4.1.1466.115.121.1.26{{32}} SINGLE-VALUE )
             olcobjectclasses: {{0}}( 1.3.6.1.4.1.7165.2.2.6 NAME
-              'knAccount' DESC 'KN account' SUP top 
+              'knAccount' DESC 'KN account' SUP top
               AUXILIARY MUST ( uid ) MAY ( sambaNTPassword ) )""",
                 'ldapadd')
     ldif("""dn: olcDatabase={{1}}mdb,cn=config

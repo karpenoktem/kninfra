@@ -4,13 +4,11 @@ import reserved
 
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
-from django.core.urlresolvers import reverse
-from django.forms.widgets import flatatt
-from django.utils.html import escape
 from django import forms
 from django.conf import settings
 
 import kn.leden.entities as Es
+
 
 class EntityChoiceFieldWidget(forms.TextInput):
     def __init__(self, *args, **kwargs):
@@ -20,13 +18,14 @@ class EntityChoiceFieldWidget(forms.TextInput):
         else:
             self.type = None
         super(EntityChoiceFieldWidget, self).__init__(*args, **kwargs)
+
     def render(self, name, value=None, attrs=None):
         final_attrs = self.build_attrs(attrs, name=name)
         code_set_value = ''
         if value:
             code_set_value = (
                 '''entityChoiceField_set(%(id)s, %(value)s);'''
-                %{'id': json.dumps(final_attrs['id']),
+                % {'id': json.dumps(final_attrs['id']),
                   'value': json.dumps(str(value))})
         return mark_safe(
             u'''<input type='hidden' id=%(id)s name=%(name)s />
@@ -35,7 +34,7 @@ class EntityChoiceFieldWidget(forms.TextInput):
                     create_entityChoiceField(%(id)s, %(params)s);
                     %(code_set_value)s
                 });//--></script>'''
-                %{'name': json.dumps(name),
+                % {'name': json.dumps(name),
                   'id': json.dumps(final_attrs['id']),
                   'params': json.dumps({'type': self.type}),
                   'code_set_value': code_set_value})
@@ -51,6 +50,7 @@ class EntityChoiceField(forms.CharField):
         kwargs['widget'] = EntityChoiceFieldWidget(_type=_type)
         super(EntityChoiceField, self).__init__(*args, **kwargs)
 
+
 def validate_username(username):
     if username in Es.names():
         raise forms.ValidationError(_('Gebruikersnaam is al in gebruik'))
@@ -59,6 +59,7 @@ def validate_username(username):
                 _('Gebruikersnaam bevat een niet-toegestane letter'))
     if not reserved.allowed(username):
         raise forms.ValidationError(_('Gebruikersnaam is niet toegestaan'))
+
 
 class AddUserForm(forms.Form):
     first_name = forms.CharField(label=_("Voornaam"))
@@ -91,6 +92,7 @@ class AddUserForm(forms.Form):
             required=False,
             widget=forms.CheckboxSelectMultiple())
 
+
 class AddGroupForm(forms.Form):
     name = forms.RegexField(label=_("Naam"), regex=r'^[a-z0-9-]{2,64}$')
     humanName = forms.CharField(label=_("Naam voor mensen"))
@@ -102,6 +104,7 @@ class AddGroupForm(forms.Form):
     true_group = forms.BooleanField(label=_("Volwaardige groep"),
             initial=True)
 
+
 class AddStudyForm(forms.Form):
     study = EntityChoiceField(label=_('Studie'), _type='study')
     study_inst = EntityChoiceField(label=_('Onderwijs instelling'),
@@ -109,6 +112,7 @@ class AddStudyForm(forms.Form):
     study_number = forms.CharField(label=_('Studentnummer'), required=False)
     study_from = forms.DateField(label=_('Start op'),
                                  initial=datetime.date.today)
+
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput())
@@ -130,7 +134,7 @@ class ChangePasswordForm(forms.Form):
         if new_password != new_password_again:
             errors.append(_("Niet hetzelfde nieuwe wachtwoord "
                             "opnieuw gegeven"))
-        if len(errors)>0:
+        if len(errors) > 0:
             raise forms.ValidationError(errors)
 
         return cleaned_data

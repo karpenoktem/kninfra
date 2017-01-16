@@ -1,6 +1,6 @@
 import json
 
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.translation import ugettext as _
 
 
@@ -9,6 +9,7 @@ def redirect_to_referer(request):
     if referer is None:
         return HttpResponse(_("referer header mist"))
     return HttpResponseRedirect(referer)
+
 
 class JsonHttpResponse(HttpResponse):
     def __init__(self, obj, *args, **kwargs):

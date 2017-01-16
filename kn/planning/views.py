@@ -18,73 +18,75 @@ from kn.planning.entities import Pool, Event, Vacancy, may_manage_planning
 from kn.planning.score import planning_vacancy_worker_score
 from kn.planning.utils import send_reminder
 
+
 def hm2s(hours, minutes=0):
     return (hours * 60 + minutes) * 60
 
 templates = {
-    '': { },
+    '': {},
     'borrel': {
         'tappers': [
-            [(hm2s(20, 30),False), (hm2s(23),False), _('eerste dienst')],
-            [(hm2s(23),False), (hm2s(25),False), _('tweede dienst')],
-            [(hm2s(25),False), (hm2s(28),True), _('derde dienst')]],
+            [(hm2s(20, 30), False), (hm2s(23), False), _('eerste dienst')],
+            [(hm2s(23), False), (hm2s(25), False), _('tweede dienst')],
+            [(hm2s(25), False), (hm2s(28), True), _('derde dienst')]],
         'sooscie': [
-            [(hm2s(20, 30),False), (hm2s(24),False), _('openen')],
-            [(hm2s(24),False), (hm2s(28),True), _('sluiten')]],
+            [(hm2s(20, 30), False), (hm2s(24), False), _('openen')],
+            [(hm2s(24), False), (hm2s(28), True), _('sluiten')]],
         'draai': [
-            [(hm2s(20, 45),False), (hm2s(23),False), _('openen')],
-            [(hm2s(23),False), (hm2s(24),False), _('prime-time')],
-            [(hm2s(24),False), (hm2s(25),True), _('sluiten')]]},
+            [(hm2s(20, 45), False), (hm2s(23), False), _('openen')],
+            [(hm2s(23), False), (hm2s(24), False), _('prime-time')],
+            [(hm2s(24), False), (hm2s(25), True), _('sluiten')]]},
     'kleinfeest': {
         'tappers': [
-            [(hm2s(20, 30),False), (hm2s(23),False), _('eerste dienst')],
-            [(hm2s(23),False), (hm2s(25),False), _('tweede dienst')],
-            [(hm2s(25),False), (hm2s(28),True), _('derde dienst')]],
+            [(hm2s(20, 30), False), (hm2s(23), False), _('eerste dienst')],
+            [(hm2s(23), False), (hm2s(25), False), _('tweede dienst')],
+            [(hm2s(25), False), (hm2s(28), True), _('derde dienst')]],
         'bestuur': [
-            [(hm2s(20, 30),False), (hm2s(24),False), _('openen')],
-            [(hm2s(24),False), (hm2s(28),True), _('sluiten')]]},
+            [(hm2s(20, 30), False), (hm2s(24), False), _('openen')],
+            [(hm2s(24), False), (hm2s(28), True), _('sluiten')]]},
     'grootfeest': {
         'tappers': [
-            [(hm2s(20, 30),False), (hm2s(23),False), _('eerste dienst, tapper 1')],
-            [(hm2s(20, 30),False), (hm2s(23),False), _('eerste dienst, tapper 2')],
-            [(hm2s(23),False), (hm2s(25),False), _('tweede dienst, tapper 1')],
-            [(hm2s(23),False), (hm2s(25),False), _('tweede dienst, tapper 2')],
-            [(hm2s(25),False), (hm2s(28),True), _('derde dienst, tapper 1')],
-            [(hm2s(25),False), (hm2s(28),True), _('derde dienst, tapper 2')]],
+            [(hm2s(20, 30), False), (hm2s(23), False), _('eerste dienst, tapper 1')],
+            [(hm2s(20, 30), False), (hm2s(23), False), _('eerste dienst, tapper 2')],
+            [(hm2s(23), False), (hm2s(25), False), _('tweede dienst, tapper 1')],
+            [(hm2s(23), False), (hm2s(25), False), _('tweede dienst, tapper 2')],
+            [(hm2s(25), False), (hm2s(28), True), _('derde dienst, tapper 1')],
+            [(hm2s(25), False), (hm2s(28), True), _('derde dienst, tapper 2')]],
         'bestuur': [
-            [(hm2s(20, 30),False), (hm2s(24),False), _('openen')],
-            [(hm2s(24),False), (hm2s(28),True), _('sluiten')]]},
+            [(hm2s(20, 30), False), (hm2s(24), False), _('openen')],
+            [(hm2s(24), False), (hm2s(28), True), _('sluiten')]]},
     'dranktelling': {
         'barco': [
-            [(hm2s(20),True), (hm2s(20, 30),False), _('Teller 1')],
-            [(hm2s(20),True), (hm2s(20, 30),False), _('Teller 2')]]},
+            [(hm2s(20), True), (hm2s(20, 30), False), _('Teller 1')],
+            [(hm2s(20), True), (hm2s(20, 30), False), _('Teller 2')]]},
     'dranklevering': {
         'barco': [
-            [(hm2s(9),False), (hm2s(13),False), _('Persoon 1')],
-            [(hm2s(9),False), (hm2s(13),False), _('Persoon 2')]]},
+            [(hm2s(9), False), (hm2s(13), False), _('Persoon 1')],
+            [(hm2s(9), False), (hm2s(13), False), _('Persoon 2')]]},
     'vrijdag_met_tappers': {
         'tappers': [
-            [(hm2s(20, 30),False), (hm2s(23),False), _('eerste dienst')],
-            [(hm2s(23),False), (hm2s(25),False), _('tweede dienst')],
-            [(hm2s(25),False), (hm2s(28),True), _('derde dienst')]],
+            [(hm2s(20, 30), False), (hm2s(23), False), _('eerste dienst')],
+            [(hm2s(23), False), (hm2s(25), False), _('tweede dienst')],
+            [(hm2s(25), False), (hm2s(28), True), _('derde dienst')]],
         'bestuur': [
-            [(hm2s(17),False), (hm2s(22),False), _('openen')],
-            [(hm2s(22),False), (hm2s(27),True), _('sluiten')]],
+            [(hm2s(17), False), (hm2s(22), False), _('openen')],
+            [(hm2s(22), False), (hm2s(27), True), _('sluiten')]],
         'cocks': [
-            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 1')],
-            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 2')]]},
+            [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 1')],
+            [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 2')]]},
     'vrijdag_zonder_tappers': {
         'bestuur': [
-            [(hm2s(17),False), (hm2s(22),False), _('openen')],
-            [(hm2s(22),False), (hm2s(27),True), _('sluiten')]],
+            [(hm2s(17), False), (hm2s(22), False), _('openen')],
+            [(hm2s(22), False), (hm2s(27), True), _('sluiten')]],
         'cocks': [
-            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 1')],
-            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 2')]]},
+            [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 1')],
+            [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 2')]]},
     'koken': {
         'cocks': [
-            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 1')],
-            [(hm2s(17),True), (hm2s(19,30),False), _('Kok 2')]]},
+            [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 1')],
+            [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 2')]]},
 }
+
 
 @login_required
 def planning_view(request):
@@ -114,7 +116,7 @@ def planning_view(request):
         i += 1
     events = list()
     for e in event_entities:
-        ei = {  'id': _id(e),
+        ei = {'id': _id(e),
                 'name': e.name,
                 'datetime': e.date,
                 'kind': e.kind,
@@ -138,12 +140,15 @@ def planning_view(request):
             context_instance=RequestContext(request))
 
 # extends cmp with None as bottom
-def cmp_None(x,y,cmp=cmp):
-    if x==None:
+
+
+def cmp_None(x, y, cmp=cmp):
+    if x == None:
         return -1
-    if y==None:
+    if y == None:
         return 1
-    return cmp(x,y)
+    return cmp(x, y)
+
 
 @login_required
 def planning_manage(request, poolname):
@@ -214,6 +219,7 @@ def planning_manage(request, poolname):
             {'events': events, 'pool': pool},
            context_instance=RequestContext(request))
 
+
 @login_required
 def planning_poollist(request):
     if not may_manage_planning(request.user):
@@ -223,6 +229,7 @@ def planning_poollist(request):
     return render_to_response('planning/pools.html',
             {'pools': pools},
             context_instance=RequestContext(request))
+
 
 @login_required
 def event_create(request):
@@ -247,7 +254,7 @@ def event_create(request):
                         'name': period[2],
                         'event': _id(e),
                         'begin': (begin_date, period[0][1]),
-                        'end': (end_date, period[1][1]) ,
+                        'end': (end_date, period[1][1]),
                         'pool': _id(pool),
                         'assignee': None,
                         'reminder_needed': True,
@@ -259,6 +266,7 @@ def event_create(request):
         form = EventCreateForm()
     return render_to_response('planning/event_create.html', {'form': form},
             context_instance=RequestContext(request))
+
 
 @login_required
 def event_edit(request, eventid):
@@ -292,8 +300,8 @@ def event_edit(request, eventid):
                 v = Vacancy({
                     'name': fd['name'],
                     'event': _id(e),
-                    'begin': (begin_date, fd['begin_is_approximate']=="True"),
-                    'end': (end_date, fd['end_is_approximate']=="True"),
+                    'begin': (begin_date, fd['begin_is_approximate'] == "True"),
+                    'end': (end_date, fd['end_is_approximate'] == "True"),
                     'pool': _id(fd['pool']),
                     'assignee': None,
                     'reminder_needed': True,
@@ -318,8 +326,9 @@ def event_edit(request, eventid):
             'avform': avform, 'vacancies': vacancies},
             context_instance=RequestContext(request))
 
+
 def _api_send_reminder(request):
-    if not 'vacancy_id' in request.REQUEST:
+    if 'vacancy_id' not in request.REQUEST:
         return JsonHttpResponse({'error': 'missing argument'})
     v = Vacancy.by_id(request.REQUEST['vacancy_id'])
     if not v:
@@ -328,6 +337,7 @@ def _api_send_reminder(request):
         raise PermissionDenied
     send_reminder(v, update=False)
     return JsonHttpResponse({'success': True})
+
 
 @require_POST
 @login_required
@@ -338,6 +348,7 @@ def planning_api(request):
     else:
         return JsonHttpResponse({'error': 'unknown action'})
 
+
 @login_required
 def planning_template(request, poolname):
     pool = Pool.by_name(poolname)
@@ -347,12 +358,12 @@ def planning_template(request, poolname):
         vacancies = list(e.vacancies(pool))
         if not vacancies:
             continue
-        ei = {  'name': e.name,
+        ei = {'name': e.name,
                 'date': e.date,
             'vacancies': list()}
         shifts = dict()
         for v in vacancies:
-            if not v.begin in shifts:
+            if v.begin not in shifts:
                 shifts[v.begin] = {
                     'name': v.name,
                     'begin': v.begin,

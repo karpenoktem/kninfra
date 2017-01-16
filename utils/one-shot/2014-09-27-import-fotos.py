@@ -1,4 +1,4 @@
-import _import
+import _import  # noqa: F401
 
 from django.conf import settings
 import kn.fotos.entities as fEs
@@ -6,6 +6,7 @@ import kn.leden.entities as Es
 
 import MySQLdb
 import random
+
 
 def main():
     fEs.ensure_indices()
@@ -92,9 +93,9 @@ def main():
         if user is None:
             continue
 
-        if not 'tags' in foto._data:
+        if 'tags' not in foto._data:
             foto._data['tags'] = []
-        if not user._id in foto._data['tags']:
+        if user._id not in foto._data['tags']:
             foto._data['tags'].append(user._id)
             foto.save()
 

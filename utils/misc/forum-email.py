@@ -1,10 +1,11 @@
 # vim: et:sta:bs=2:sw=4:
 from __future__ import with_statement
 
-import _import
+import _import  # noqa: F401
 import MySQLdb
 from common import *
 from kn.leden.models import OldKnGroup, OldKnUser
+
 
 def forum_email():
     with open('forum-email.template', 'r') as f:
@@ -13,7 +14,8 @@ def forum_email():
     with open('temp-pwds', 'r') as f:
         while True:
             l = f.readline()
-            if l == '': break
+            if l == '':
+                break
             l = l[:-1]
             usr, pwd = l.split(' ')
             pwd_lut[usr] = pwd
@@ -28,7 +30,7 @@ def forum_email():
     c.execute('SELECT username FROM users WHERE last_visit=0')
     toEmail = set()
     for username, in c.fetchall():
-        if not username in l5:
+        if username not in l5:
             continue
         toEmail.add(username)
     for username in toEmail:

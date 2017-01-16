@@ -6,6 +6,7 @@ import smbpasswd
 
 from django.conf import settings
 
+
 def ldap_setpass(daan, user, password):
     if not password:
         return
@@ -41,6 +42,7 @@ def ldap_setpass(daan, user, password):
         l.unbind_s()
 
 # TODO exception safety
+
 
 def apply_ldap_changes(daan, changes):
     if not changes:

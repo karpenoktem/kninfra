@@ -1,6 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
 
-import _import
+import _import  # noqa: F401
 from common import *
 
 from kn.leden.mongo import _id
@@ -11,10 +11,10 @@ from django.core.mail import send_mail
 from django.template import Context, Template
 
 import sys
-from datetime import datetime
 from cStringIO import StringIO
 
 DAYS_IN_YEAR = 365.242199
+
 
 def check_email():
     dt_now = now()
@@ -30,7 +30,7 @@ def check_email():
         templ = Template(template_text.getvalue())
     for m in args_to_users(sys.argv[1:]):
         rels = m.get_related()
-        rels = sorted(rels, cmp=lambda x,y: cmp(str(x['with'].humanName),
+        rels = sorted(rels, cmp=lambda x, y: cmp(str(x['with'].humanName),
                             str(y['with'].humanName)))
         comms = []
         lists = []

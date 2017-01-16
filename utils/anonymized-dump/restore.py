@@ -1,9 +1,8 @@
-import _import
+import _import  # noqa: F401
 
 from kn.leden.mongo import db
 
 import bson
-import pymongo
 
 import kn.leden.entities as Es
 import kn.moderation.entities as Es_mod
@@ -11,6 +10,7 @@ import kn.planning.entities as Es_plan
 import kn.poll.entities as Es_poll
 import kn.reglementen.entities as Es_regl
 import kn.subscriptions.entities as Es_subscr
+
 
 def main():
     print 'Are you sure you want to run this?'

@@ -1,6 +1,7 @@
-import _import
+import _import  # noqa: F401
 
 import kn.fotos.entities as fEs
+
 
 def main():
     for e in fEs.all():

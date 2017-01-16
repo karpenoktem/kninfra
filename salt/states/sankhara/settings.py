@@ -10,7 +10,7 @@ WIKI_MYSQL_SECRET = ('localhost', 'giedo',
 #                        '{{ pillar['secrets']['mysql_giedo'] }}', 'wolk')
 LDAP_PASS = '{{ pillar['secrets']['ldap_infra'] }}'
 DOMAINNAME = '{{ grains['fqdn'] }}'
-INFRA_UID = 2000 # Keep in synch. with kninfra.sls
+INFRA_UID = 2000  # Keep in synch. with kninfra.sls
 
 from kn.defaultSettings import defaultSettings
 defaultSettings(globals())
