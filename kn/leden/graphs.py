@@ -12,8 +12,8 @@ from django.core.files.storage import default_storage
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse, Http404
 
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
+from kn.base.conf import DT_MAX
+
 from django.conf import settings
 
 import kn.leden.entities as Es

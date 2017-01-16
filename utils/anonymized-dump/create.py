@@ -4,8 +4,8 @@ import _import  # noqa: F401
 # Please make very sure that this script is up-to-date.  It is a crime
 # to leak private data entrusted to us.
 
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
+from kn.base.conf import DT_MIN, DT_MAX
+
 from kn.leden.mongo import db
 
 import bson

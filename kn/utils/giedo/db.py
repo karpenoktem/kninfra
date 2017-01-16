@@ -2,8 +2,8 @@ import logging
 
 import kn.leden.entities as Es
 from kn.leden.date import now
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
+from kn.base.conf import DT_MIN, DT_MAX
+
 
 
 def update_db(giedo):
