@@ -70,6 +70,8 @@ urlpatterns = [
         views.secr_add_group, name='secr-add-group'),
     url(_(r'^secretariaat/notes$'),
         views.secr_notes, name='secr-notes'),
+    url(_(r'^fiscus/email-debitors$'),
+        views.fiscus_debtmail, name='fiscus-debtmail'),
     url(_(r'^relaties/(?P<_id>[^/]+)/beindig$'),
         views.relation_end, name='relation-end'),
     url(_(r'^relaties/begin$'),

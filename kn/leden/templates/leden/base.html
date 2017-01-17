@@ -51,6 +51,13 @@
             </ul>
         </li>
         {% endif %}
+        {% if "fiscus" in user.cached_groups_names %}
+        <li><span>{% trans "Fiscus" %}</span>
+            <ul>
+                <li><a href="{% url "fiscus-debtmail"  %}">{% trans "Debiteuren e-mailen" %}</a></li>
+            </ul>
+        </li>
+        {% endif %}
         {% if "fotocie" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
         <li><a href="{% url "fotos" "" %}">{% trans "Foto's" %}</a>
             <ul>

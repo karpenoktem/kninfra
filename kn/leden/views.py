@@ -30,6 +30,7 @@ from kn.leden.date import now, date_to_dt
 from kn.leden.mongo import _id
 from kn.leden import giedo
 from kn.leden.balans import BalansInfo
+from kn.leden.fiscus import Debitors
 
 from kn.base._random import pseudo_randstr
 from kn.base.http import redirect_to_referer, JsonHttpResponse
@@ -667,6 +668,14 @@ def secr_add_group(request):
     else:
         form = AddGroupForm()
     return render_to_response('leden/secr_add_group.html', {'form': form},
+            context_instance=RequestContext(request))
+
+@login_required
+def fiscus_debtmail(request):
+    if 'fiscus' not in request.user.cached_groups_names:
+        raise PermissionDenied
+    debitors = Debitors(giedo.fin_get_debitors())
+    return render_to_response('leden/fiscus_debtmail.html', {'debitors': debitors},
             context_instance=RequestContext(request))
 
 
