@@ -2,7 +2,6 @@ from itertools import chain
 from hashlib import sha256
 from datetime import date
 from os import path
-from decimal import Decimal
 
 import mimetypes
 import logging
@@ -30,6 +29,7 @@ from kn.leden.auth import login_or_basicauth_required
 from kn.leden.date import now, date_to_dt
 from kn.leden.mongo import _id
 from kn.leden import giedo
+from kn.leden.balans import BalansInfo
 
 from kn.base._random import pseudo_randstr
 from kn.base.http import redirect_to_referer, JsonHttpResponse
@@ -865,38 +865,6 @@ def ik_balans(request):
             {'balans': BalansInfo(balans)},
             context_instance=RequestContext(request))
 
-
-class MutInfo:
-    def __init__(self, data):
-        self.data = data
-
-    @property
-    def trdescription(self):
-        return self.data['tr-description']
-
-
-class BalansInfo:
-    def __init__(self, data):
-        self.data = data
-        self.total = Decimal(data['total'])
-        self.mutations = [MutInfo(mut) for mut in data['mutations']]
-
-    @property
-    def abstotal(self):
-        return abs(self.total)
-
-    @property
-    def our_account_number(self):
-        return settings.BANK_ACCOUNT_NUMBER
-
-    @property
-    def our_account_holder(self):
-        return settings.BANK_ACCOUNT_HOLDER
-
-    @property
-    def in_books(self):
-        return "debitor" in self.data['accounts'] \
-                or "creditor" in self.data['accounts']
 
 
 def language(request):

@@ -7,9 +7,9 @@
 {% if balans.in_books %}
 <p>
 {% if balans.total < 0 %}
-{% blocktrans with bedrag=balans.total %}
+{% blocktrans with bedrag=balans.abstotal %}
 Volgens de boekhouding krijg je
-nog € {{ bedrag }} van ons.
+nog <strong>€ {{ bedrag }}</strong> van ons.
 {% endblocktrans %}
 {% elif balans.total == 0 %}
 {% blocktrans %}
@@ -19,7 +19,7 @@ niets verschuldigd (in financiële zin).
 {% elif balans.total > 0 %}
 {% blocktrans with bedrag=balans.abstotal %} 
 Volgens de boekhouding ben je 
-ons nog  € {{ bedrag }} veschuldigd.
+ons nog  <strong>€ {{ bedrag }}</strong> veschuldigd.
 {% endblocktrans %}
 {% endif %}
 </p>
@@ -58,18 +58,22 @@ in onze boekhouding.
 </p>
 {% endif %}
 <p>
-{% blocktrans with rekeningnummer=balans.our_account_number rekeninghouder=balans_our_account_name %}
+{% blocktrans with rekeningnummer=balans.our_account_number rekeninghouder=balans.our_account_holder %}
 Betalingen kunnen gericht worden aan {{ rekeningnummer }}
 ten name van {{ rekeninghouder }}.
 {% endblocktrans %}
 </p>
-
 <p>
 {% blocktrans with email="penningmeester@karpenoktem.nl"  %}
-Mist een declaratie of een betaling,
-of heb je een andere brandende vraag van financiële aard?
-Neem dan contact
+Heb je vragen?  Neem dan contact
 op met de penningmeester via {{ email }}!
+{% endblocktrans %}
+</p>
+<p>
+{% blocktrans with datum=balans.mtime %}
+( Het bovenstaande overzicht is gebaseerd op de 
+boekhouding van {{ datum }} en kan dus geen betalingen, declaraties en andere gebeurtenissen
+van een latere datum bevatten. )
 {% endblocktrans %}
 </p>
 {% endblock %}

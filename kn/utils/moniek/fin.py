@@ -9,8 +9,10 @@ def fin_get_account(moniek, name, full_name):
             settings.FIN_REPO_PATH,
             settings.FIN_FILENAME,
             cachepath=settings.FIN_CACHE_PATH)
-    return get_user_balance(gcf.book,
+    result = get_user_balance(gcf.book,
             settings.FIN_CREDITORS_ACCOUNT+":"+full_name,
             settings.FIN_DEBITORS_ACCOUNT+":"+full_name)
+    result['mtime'] = gcf.mtime
+    return result
 
 # vim: et:sta:bs=2:sw=4:
