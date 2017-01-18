@@ -271,7 +271,7 @@ class Giedo(WhimDaemon):
                 return self.daan.send(d)
         elif d['type'] == 'last-synced?':
             return self.last_sync_ts
-        elif d['type'] == 'fin-get-account' or d['type'] == 'fin-get-debitors':
+        elif d['type'] in ('fin-get-account', 'fin-get-debitors'):
             return self.moniek.send(d)
         else:
                 logging.warn("Unknown command: %s" % d['type'])

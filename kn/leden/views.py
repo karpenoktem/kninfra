@@ -693,7 +693,7 @@ def fiscus_debtmail(request):
                     'quaestor_name': 'de Penningmeester', 
                     'account_number': settings.BANK_ACCOUNT_NUMBER,
                     'account_holder': settings.BANK_ACCOUNT_HOLDER,
-                    'first_name': user.full_name,
+                    'first_name': user.first_name,
                     'debt': debitors.data[user.full_name]['debt']
                 }
             try:
