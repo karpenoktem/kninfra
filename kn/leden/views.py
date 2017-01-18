@@ -8,6 +8,7 @@ import logging
 import Image
 import json
 import re
+import smtplib
 
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -21,7 +22,9 @@ from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
-from django.template import RequestContext
+from django.template import RequestContext, Context
+from django.template.loader import get_template
+from django.template.loader_tags import BlockNode
 from django.contrib import messages
 
 from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm, AddStudyForm
@@ -674,10 +677,57 @@ def secr_add_group(request):
 def fiscus_debtmail(request):
     if 'fiscus' not in request.user.cached_groups_names:
         raise PermissionDenied
-    debitors = Debitors(giedo.fin_get_debitors())
-    return render_to_response('leden/fiscus_debtmail.html', {'debitors': debitors},
-            context_instance=RequestContext(request))
 
+    debitors = Debitors(giedo.fin_get_debitors())
+    emailed_users = {}
+
+    if request.method == 'POST' and 'debitor' in request.POST:
+        users_to_email = request.POST.getlist('debitor')
+        for user_name in users_to_email:
+            user = Es.by_name(user_name)
+            
+            emailed_users[user_name]=False
+            ctx = {
+                    'BASE_URL': settings.BASE_URL,
+                    # TODO: get the real name of the quaestor
+                    'quaestor_name': 'de Penningmeester', 
+                    'account_number': settings.BANK_ACCOUNT_NUMBER,
+                    'account_holder': settings.BANK_ACCOUNT_HOLDER,
+                    'first_name': user.full_name,
+                    'debt': debitors.data[user.full_name]['debt']
+                }
+            try:
+                render_then_email("leden/debitor.mail.txt",
+                        to=user, ctx=ctx,
+                        cc=[], # ADD penningmeester
+                        from_email="penningmeester@karpenoktem.nl",
+                        reply_to="penningmeester@karpenoktem.nl")
+                emailed_users[user_name]=True
+            except smtplib.SMTPRecipientsRefused:
+                pass
+
+
+    # get a sample of the email that will be sent for the quaestor's review.
+    email = ""
+    email_template = get_template('leden/debitor.mail.txt')
+    ctx = {
+            'BASE_URL': settings.BASE_URL,
+            'quaestor_name': 'de Penningmeester', # TODO: get the real name
+            'account_number': settings.BANK_ACCOUNT_NUMBER,
+            'account_holder': settings.BANK_ACCOUNT_HOLDER,
+            'first_name': '< Naam >',
+            'debt': '< Debet >'
+        }
+    context = Context(ctx)
+    for node in email_template:
+        if isinstance(node, BlockNode) and node.name=="plain":
+            email = node.render(context)
+            break
+
+    return render_to_response('leden/fiscus_debtmail.html', 
+            {'debitors': debitors, 'email':email, 
+                'emailed_users':emailed_users},
+            context_instance=RequestContext(request))
 
 @login_required
 def relation_end(request, _id):

@@ -10,20 +10,18 @@
 
 {% block plain %}\
 {% url "ik-balans" as url_ik_balans %}\
-{% blocktrans with first_name=user.first_name \
-                   name=user.name %}\
+{% blocktrans %}\
 Beste {{ first_name }},
 
-Volgens onze boekhouding ben je ons nog € {{ bedrag }} verschuldigd, zie:
+Volgens onze boekhouding ben je ons nog € {{ debt }} verschuldigd, zie:
 
    {{ BASE_URL }}{{ url_ik_balans }}
 
-Zou je dit bedrag over kunnen boeken naar {{ rekeningnummer }}
-ten name van {{ rekeninghouder }} ?
+Zou je dit bedrag over kunnen boeken naar {{ account_number }}
+ten name van {{ account_holder }} ?
 
 Met een vriendelijke groet,
 
-	{{ penningmeesternaam }}
-   
+	{{ quaestor_name }}
 {% endblocktrans %}
 {% endblock %}
