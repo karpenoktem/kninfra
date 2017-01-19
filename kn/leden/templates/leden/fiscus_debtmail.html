@@ -4,25 +4,6 @@
 
 {% block body %}
 
-{% if emailed_users %}
-<p>
-Ok, een email sturen naar
-	<ul>
-		{% for user,success in emailed_users.items %}
-		<li> {% blocktrans %}
-			{{ user }} is
-			{% endblocktrans %}
-		{% if success %}
-		{% trans "gelukt." %}
-		{% else %}
-		{% trans "mislukt." %}
-		{% endif %}
-		</li>
-		{% endfor %}
-
-	</ul>
-</p>
-{% else %}
 <form action="" method="post">
 	{% csrf_token %}
 	<p>
@@ -44,7 +25,7 @@ Ok, een email sturen naar
 			<th>{% trans "Naam" %}</th>
 			<th>{% trans "E-mail" %}</th>
 		</tr>
-		{% for name, debdata in debitors.data.items %}
+		{% for name, debdata in data.items %}
 		<tr>
 			<td>{% if debdata.user %}
 				<input type="checkbox" name="debitor" value="{{ debdata.user.name }}" checked ></td>
@@ -60,7 +41,6 @@ Ok, een email sturen naar
 		{% endfor %}
 	</table>
 </form>
-{% endif %}
 
 
 {% endblock %}

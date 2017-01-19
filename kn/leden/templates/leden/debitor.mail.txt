@@ -1,7 +1,7 @@
 {% load i18n %}
 
 {% block from %}
-{% trans "Penningmeester van Karpe Noktem <penningmeester@karpenoktem.nl>" %}
+{{ quaestor.name }}  <{{ quaestor.email }}>
 {% endblock %}
 
 {% block subject %}
@@ -10,7 +10,7 @@
 
 {% block plain %}\
 {% url "ik-balans" as url_ik_balans %}\
-{% blocktrans %}\
+{% blocktrans with quaestor_name=quaestor.name %}\
 Beste {{ first_name }},
 
 Volgens onze boekhouding ben je ons nog € {{ debt }} verschuldigd, zie:

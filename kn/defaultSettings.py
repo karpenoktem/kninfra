@@ -225,6 +225,8 @@ def defaultSettings(glbls):
     d.BANK_ACCOUNT_NUMBER = "NL81 RABO 0145 9278 22"
     d.BANK_ACCOUNT_HOLDER = "A.S.V. Karpe Noktem"
 
+    d.QUAESTOR_USERNAME = "penningmeester"
+
     try:
         locale.setlocale(locale.LC_ALL, d.LOCALE)
     except locale.Error:
