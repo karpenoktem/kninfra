@@ -501,7 +501,7 @@ class FotoAlbum(FotoEntity):
 
         if recursive:
             for foto in self.list_all():
-                updated = foto._update_effective_visibility(self, save=save) or updated
+                foto._update_effective_visibility(self, save=save)
 
         if save:
             self.save()
