@@ -33,7 +33,7 @@ def _humanName_of_entity(e):
 def entities_by_keyword(data, request):
     """ Wraps Es.by_keyword.  Finds the first 20 entities matching the given
         keyword.  Example:
-        
+
           >> {action:"by_keyword", keyword: "giedo"}
           << [["4e6fcc85e60edf3dc0000270", "Giedo Jansen (giedo)"]]
 
