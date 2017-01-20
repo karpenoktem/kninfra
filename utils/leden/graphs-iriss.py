@@ -12,8 +12,8 @@ import _import  # noqa: F401
 import datetime
 
 import kn.leden.entities as Es
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
+from kn.base.conf import DT_MIN, DT_MAX
+
 from kn.leden.mongo import _id
 
 llut = dict()

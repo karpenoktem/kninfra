@@ -12,8 +12,8 @@ from tarjan import tarjan
 import kn.leden.entities as Es
 import kn.subscriptions.entities as subscr_Es
 import kn.moderation.entities as mod_Es
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
+from kn.base.conf import DT_MIN, DT_MAX
+
 from kn.utils.giedo.db import update_db
 
 

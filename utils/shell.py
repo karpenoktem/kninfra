@@ -18,8 +18,8 @@ from kn.leden.mongo import _id, ObjectId  # noqa: F401
 from kn.leden import giedo  # noqa: F401
 from kn.leden.date import now
 from kn.utils.mailman import import_mailman  # noqa: F401
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
+from kn.base.conf import DT_MIN, DT_MAX
+
 
 
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):

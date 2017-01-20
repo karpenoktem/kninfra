@@ -2,8 +2,8 @@
 import _import  # noqa: F401
 
 import kn.leden.entities as Es
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
+from kn.base.conf import DT_MIN, DT_MAX
+
 
 # Do some too-intensive-for-Giedo sanity checks on the database
 # Currently, check for orphan relations.
