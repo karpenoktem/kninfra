@@ -8,15 +8,15 @@ from datetime import datetime
 
 
 def main():
-        name = datetime.now().strftime("%Y%m%d%H%M%S")
-        os.chdir(os.path.expanduser("~/dumps"))
-        os.mkdir(name)
-        os.chdir(name)
-        fh = subprocess.Popen(['mongodump'], stdout=subprocess.PIPE)
-        fh.communicate()
-        os.chdir('..')
-        subprocess.call(['tar', 'Jcf', name+'.tar.xz', name])
-        subprocess.call(['rm', '-r', name])
+    name = datetime.now().strftime("%Y%m%d%H%M%S")
+    os.chdir(os.path.expanduser("~/dumps"))
+    os.mkdir(name)
+    os.chdir(name)
+    fh = subprocess.Popen(['mongodump'], stdout=subprocess.PIPE)
+    fh.communicate()
+    os.chdir('..')
+    subprocess.call(['tar', 'Jcf', name+'.tar.xz', name])
+    subprocess.call(['rm', '-r', name])
 
 if __name__ == '__main__':
-        main()
+    main()

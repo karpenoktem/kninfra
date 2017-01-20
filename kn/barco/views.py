@@ -94,24 +94,24 @@ class BarformSpecifics(FormSpecifics):
                 weights_path=None)
 
     def entered_data_to_file(self, fd, write, template, prefill):
-            write("Bar;;;;\n\n")
-            write(fd['pricebase'])
-            write(";")
-            write(str(fd['date']))
-            write(";")
-            write(fd['tapper'])
-            write(";")
-            write(fd['dienst'])
-            write(";")
-            write(str(fd['beginkas']))
-            write(";")
-            write(str(fd['eindkas']))
-            if fd['comments'] != '':
-                write("\n\n# XXX ")
-                write(fd['comments'].replace("\r\n", "\n")\
-                        .replace("\n", "\n# "))
-            write("\n\n")
-            template_write_data_to_file(template, prefill, write)
+        write("Bar;;;;\n\n")
+        write(fd['pricebase'])
+        write(";")
+        write(str(fd['date']))
+        write(";")
+        write(fd['tapper'])
+        write(";")
+        write(fd['dienst'])
+        write(";")
+        write(str(fd['beginkas']))
+        write(";")
+        write(str(fd['eindkas']))
+        if fd['comments'] != '':
+            write("\n\n# XXX ")
+            write(fd['comments'].replace("\r\n", "\n")\
+                    .replace("\n", "\n# "))
+        write("\n\n")
+        template_write_data_to_file(template, prefill, write)
 
 
 class InvCountSpecifics(FormSpecifics):
@@ -124,15 +124,15 @@ class InvCountSpecifics(FormSpecifics):
                 dir_in_repo="inventory")
 
     def entered_data_to_file(self, fd, write, template, prefill):
-            write("voorraadtelling\n\n")
-            write(str(fd['date']))
-            write(" # tellers: ")
-            write(fd['tellers'])
-            if fd['comments'] != '':
-                write("\n\n# XXX ")
-                write(fd['comments'].replace("\n", "\n# "))
-            write("\n\n")
-            template_write_data_to_file(template, prefill, write)
+        write("voorraadtelling\n\n")
+        write(str(fd['date']))
+        write(" # tellers: ")
+        write(fd['tellers'])
+        if fd['comments'] != '':
+            write("\n\n# XXX ")
+            write(fd['comments'].replace("\n", "\n# "))
+        write("\n\n")
+        template_write_data_to_file(template, prefill, write)
 
 
 settings.BARCO_FORMS = {

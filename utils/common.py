@@ -12,9 +12,9 @@ ALPHANUMUL = ALPHA + ALPHA.upper() + NUM
 
 
 def read_ssv_file(filename):
-        """ Reads values seperated by spaces in a simple one line file """
-        with open(filename) as f:
-                return f.readline()[:-1].split(' ')
+    """ Reads values seperated by spaces in a simple one line file """
+    with open(filename) as f:
+        return f.readline()[:-1].split(' ')
 
 
 def sesc(t):

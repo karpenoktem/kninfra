@@ -34,7 +34,7 @@ def i18n_patterns(*urls, **kwargs):
 
 class BackportedLocaleRegexURLResolver(RegexURLResolver):
     def __init__(self, urlconf_name, default_kwargs=None, app_name=None,
-	namespace=None, prefix_default_language=True):
+        namespace=None, prefix_default_language=True):
         super(BackportedLocaleRegexURLResolver, self).__init__(
                     None, urlconf_name, default_kwargs, app_name, namespace)
         self.prefix_default_language = prefix_default_language

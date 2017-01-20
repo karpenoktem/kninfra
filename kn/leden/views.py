@@ -809,18 +809,18 @@ def note_add(request):
 
 @login_required
 def secr_update_site_agenda(request):
-        if 'secretariaat' not in request.user.cached_groups_names:
-                raise PermissionDenied
-        giedo.update_site_agenda()
-        messages.info(request, _("Agenda geupdate!"))
-        return redirect_to_referer(request)
+    if 'secretariaat' not in request.user.cached_groups_names:
+        raise PermissionDenied
+    giedo.update_site_agenda()
+    messages.info(request, _("Agenda geupdate!"))
+    return redirect_to_referer(request)
 
 
 @login_required
 def ik_openvpn(request):
     password_incorrect = False
     if 'want' in request.POST and 'password' in request.POST:
-        # TODO password versions
+    # TODO password versions
         if request.user.check_password(request.POST['password']):
             giedo.change_password(str(request.user.name),
                     request.POST['password'],

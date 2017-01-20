@@ -268,7 +268,7 @@ class Giedo(WhimDaemon):
         elif d['type'] == 'last-synced?':
             return self.last_sync_ts
         else:
-                logging.warn("Unknown command: %s" % d['type'])
+            logging.warn("Unknown command: %s" % d['type'])
 
     def villanet_encrypt_password(self, password):
         ctx = self.villanet_key.public_encrypt(password, RSA.pkcs1_padding)

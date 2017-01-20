@@ -5,11 +5,11 @@ import multiprocessing
 
 
 def cache(the_id):
-     e = fEs.by_id(the_id)
-     print the_id
-     for c in e.CACHES:
-         print c
-         e.ensure_cached(c)
+    e = fEs.by_id(the_id)
+    print the_id
+    for c in e.CACHES:
+        print c
+        e.ensure_cached(c)
 
 
 def main():
