@@ -7,7 +7,6 @@ import argparse
 import datetime
 
 import kn.leden.entities as Es
-from kn.base.conf import DT_MAX
 
 
 

@@ -4,7 +4,6 @@ import MySQLdb
 from tarjan.tc import tc
 
 import kn.leden.entities as Es
-from kn.base.conf import DT_MAX
 
 from kn.leden.date import now
 

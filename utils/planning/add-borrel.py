@@ -4,8 +4,6 @@ import _import  # noqa: F401
 import sys
 import datetime
 
-from kn.base.conf import DT_MAX
-
 from kn.leden.mongo import _id
 from kn.planning.entities import Pool, Event, Vacancy
 

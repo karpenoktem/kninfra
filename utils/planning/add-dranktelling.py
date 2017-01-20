@@ -5,7 +5,6 @@ import sys
 import datetime
 
 from kn.leden.mongo import _id
-from kn.base.conf import DT_MAX
 
 from kn.planning.entities import Pool, Event, Vacancy
 
