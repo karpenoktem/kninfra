@@ -44,8 +44,8 @@
   </slot>
 </book:slots>
 <gnc:count-data cd:type="commodity">1</gnc:count-data>
-<gnc:count-data cd:type="account">20</gnc:count-data>
-<gnc:count-data cd:type="transaction">2</gnc:count-data>
+<gnc:count-data cd:type="account">21</gnc:count-data>
+<gnc:count-data cd:type="transaction">4</gnc:count-data>
 <gnc:commodity version="2.0.0">
   <cmdty:space>ISO4217</cmdty:space>
   <cmdty:id>EUR</cmdty:id>
@@ -171,7 +171,7 @@
     </slot>
     <slot>
       <slot:key>last-num</slot:key>
-      <slot:value type="string">1337</slot:value>
+      <slot:value type="string">123123</slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">62516ceb5c1acd46f9d2ee9466cee408</act:parent>
@@ -247,7 +247,7 @@
     </slot>
     <slot>
       <slot:key>last-num</slot:key>
-      <slot:value type="string">1337</slot:value>
+      <slot:value type="string">90</slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">438ae15afdd24d1af6b6b942071108ce</act:parent>
@@ -289,6 +289,23 @@
 <gnc:account version="2.0.0">
   <act:name>Breicie</act:name>
   <act:id type="guid">74f8784f8a3a89b8eba0ad59b89c3d90</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>color</slot:key>
+      <slot:value type="string">Not Set</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">7b8c995482b4d4e3384f602d8a44081d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kasco</act:name>
+  <act:id type="guid">2a3610132e671414b1fc2fdf62ce42b0</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -419,16 +436,55 @@
     <trn:split>
       <split:id type="guid">33dbd5b84b3730fa9df92a8aa8d8b2d5</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>666/100</split:value>
-      <split:quantity>666/100</split:quantity>
+      <split:value>1300/100</split:value>
+      <split:quantity>1300/100</split:quantity>
       <split:account type="guid">e1cc1a46a301d0d27639a52a48a85469</split:account>
     </trn:split>
     <trn:split>
       <split:id type="guid">37e5758ae2313bcf0a2fb588fba99b65</split:id>
       <split:reconciled-state>n</split:reconciled-state>
-      <split:value>-666/100</split:value>
-      <split:quantity>-666/100</split:quantity>
+      <split:value>-1300/100</split:value>
+      <split:quantity>-1300/100</split:quantity>
       <split:account type="guid">74f8784f8a3a89b8eba0ad59b89c3d90</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">db0c62bb546753eb1f529cfdb3c16dd3</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:num>123123</trn:num>
+  <trn:date-posted>
+    <ts:date>2017-01-17 00:00:00 +0100</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2017-01-17 23:22:04 +0100</ts:date>
+  </trn:date-entered>
+  <trn:description>kascokosten</trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>date-posted</slot:key>
+      <slot:value type="gdate">
+        <gdate>2017-01-17</gdate>
+      </slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">8b8415beb3b1052c256adfc4efdb3261</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>1000000/100</split:value>
+      <split:quantity>1000000/100</split:quantity>
+      <split:account type="guid">85db42b7ab1c6d580acbbeb5321c84fa</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">47d2c7b8ae6bbfe70a193c7b1dcd85f9</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-1000000/100</split:value>
+      <split:quantity>-1000000/100</split:quantity>
+      <split:account type="guid">2a3610132e671414b1fc2fdf62ce42b0</split:account>
     </trn:split>
   </trn:splits>
 </gnc:transaction>
@@ -469,6 +525,45 @@
       <split:value>-987/100</split:value>
       <split:quantity>-987/100</split:quantity>
       <split:account type="guid">945d5834a29dee7ceb7b49ee2a0d2172</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">ed17b066564611d3b7333714ad86463c</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:num>90</trn:num>
+  <trn:date-posted>
+    <ts:date>2017-01-17 00:00:00 +0100</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2017-01-17 23:22:50 +0100</ts:date>
+  </trn:date-entered>
+  <trn:description>korting</trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>date-posted</slot:key>
+      <slot:value type="gdate">
+        <gdate>2017-01-17</gdate>
+      </slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">57645250df598d914e687c6998f541ac</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>5/100</split:value>
+      <split:quantity>5/100</split:quantity>
+      <split:account type="guid">2a3610132e671414b1fc2fdf62ce42b0</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">2659b9056e0c4548a88382ef0b62a1ec</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-5/100</split:value>
+      <split:quantity>-5/100</split:quantity>
+      <split:account type="guid">2fae3a19410e54b0d5b005a89030dfe5</split:account>
     </trn:split>
   </trn:splits>
 </gnc:transaction>

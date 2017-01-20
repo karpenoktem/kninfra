@@ -1,6 +1,13 @@
 from decimal import Decimal
 from django.conf import settings
 from time import strftime,gmtime
+import entities as Es
+
+def quaestor():
+    return {
+            "email": "%s@%s" %(settings.QUAESTOR_USERNAME, settings.MAILDOMAIN),
+            "name": "de penningmeester"
+            }
 
 class MutInfo:
     def __init__(self, data):

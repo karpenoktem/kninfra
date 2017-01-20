@@ -106,4 +106,9 @@ def fin_get_account(user):
         'full_name': user.full_name
     })
 
+def fin_get_debitors():
+    return get_giedo_connection().send({
+        'type': 'fin-get-debitors'
+    })
+
 # vim: et:sta:bs=2:sw=4:

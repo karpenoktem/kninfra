@@ -64,9 +64,9 @@ ten name van {{ rekeninghouder }}.
 {% endblocktrans %}
 </p>
 <p>
-{% blocktrans with email="penningmeester@karpenoktem.nl"  %}
+{% blocktrans with name=quaestor.name email=quaestor.email %}
 Heb je vragen?  Neem dan contact
-op met de penningmeester via {{ email }}!
+op met {{ name }} via {{ email }}!
 {% endblocktrans %}
 </p>
 <p>
