@@ -1050,7 +1050,7 @@ class Entity(SONWrapper):
     @property
     def canonical_full_email(self):
         """ Returns the string
-            
+
                 "[human name]" <[canonical e-mail]>
             """
         addr = self.canonical_email

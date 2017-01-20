@@ -4,7 +4,7 @@ import os
 import os.path
 import datetime
 
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response

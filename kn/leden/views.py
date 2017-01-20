@@ -480,7 +480,7 @@ def rauth(request):
         if constant_time_compare(request.REQUEST['validate'], token):
             return HttpResponse("OK")
         return HttpResponse("INVALID")
-    
+
     '''
     The next check will allow you to request information about the user that
     is currently logged in using the 'fetch'-get attribute with the property

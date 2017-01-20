@@ -5,7 +5,7 @@ import re
 
 from django.core.urlresolvers import (RegexURLResolver, get_resolver,
         get_script_prefix, is_valid_path)
-                                    
+
 from django.utils.six.moves.urllib.parse import quote
 from django.utils.translation import get_language
 from django.utils.cache import patch_vary_headers

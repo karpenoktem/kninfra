@@ -161,7 +161,7 @@ class Vacancy(SONWrapper):
     pool_id = son_property(('pool',))
     assignee_id = son_property(('assignee',))
     reminder_needed = son_property(('reminder_needed',))
- 
+
     @property
     def begin(self):
         return adt_to_datetime(self.begin_raw)

@@ -134,7 +134,7 @@ class InvCountSpecifics(FormSpecifics):
             write("\n\n")
             template_write_data_to_file(template, prefill, write)
 
-      
+
 settings.BARCO_FORMS = {
         'barform': BarformSpecifics(),
         'invcount': InvCountSpecifics(),
@@ -174,7 +174,7 @@ def barco_enterform(request, repos, formname):
             write = lambda x: csv.write(x.encode("utf-8"))
             write("# Ingevoerd door " + str(request.user.name) + "\n")
             formspec.entered_data_to_file(fd, write, template, prefill)
-            
+
             # commit it to the repository ...
             fn = os.path.join(formspec.dir_in_repo, '%s.csv'%(fd['formname']))
             with open(os.path.join(repopath, fn), 'w') as fh:
