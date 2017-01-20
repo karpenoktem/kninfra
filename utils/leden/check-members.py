@@ -1,6 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
-from common import *
+from common import DAYS_IN_YEAR, INST_HAN, INST_RU, MEMBER_GROUP, args_to_users
 
 from kn.leden.models import OldKnGroup
 from datetime import date, datetime

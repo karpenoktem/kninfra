@@ -1,7 +1,7 @@
 # vim: et:sta:bs=2:sw=4:
 
 import _import  # noqa: F401
-from common import *
+from common import args_to_users
 
 from kn.leden.mongo import _id
 import kn.leden.entities as Es

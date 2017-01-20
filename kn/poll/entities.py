@@ -109,7 +109,7 @@ class Filling(SONWrapper):
 
     @property
     def poll(self):
-        return Event(poll_by_id(self._data['poll']))
+        return Poll(poll_by_id(self._data['poll']))
 
     @property
     def user(self):

@@ -4,7 +4,7 @@ from __future__ import with_statement
 import _import  # noqa: F401
 import sys
 from django.core.mail import EmailMessage
-from common import *
+from common import args_to_users
 
 
 def welcome_email():

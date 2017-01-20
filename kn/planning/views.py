@@ -1,5 +1,7 @@
 from random import shuffle
 
+import datetime
+
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
@@ -13,10 +15,10 @@ from kn.base.http import JsonHttpResponse
 from kn.leden.date import date_to_dt, now, date_to_midnight
 from kn.leden.mongo import _id
 
-from kn.planning.forms import *
 from kn.planning.entities import Pool, Event, Vacancy, may_manage_planning
 from kn.planning.score import planning_vacancy_worker_score
 from kn.planning.utils import send_reminder
+from kn.planning.forms import ManagePlanningForm, AddVacancyForm, EventCreateForm
 
 
 def hm2s(hours, minutes=0):

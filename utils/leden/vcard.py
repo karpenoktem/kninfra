@@ -5,7 +5,7 @@ import vobject
 import tarfile
 import sys
 
-from common import *
+from common import args_to_users
 
 from cStringIO import StringIO
 

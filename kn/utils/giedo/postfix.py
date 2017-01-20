@@ -5,6 +5,7 @@ from tarjan.tc import tc
 from django.conf import settings
 
 import kn.leden.entities as Es
+from kn.leden.date import now
 
 # TODO (issue #7) handle cycles properly.
 

@@ -1,7 +1,7 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
 
-from common import *
+from common import MEMBER_GROUP
 import kn.leden.entities as Es
 
 for m in Es.by_name(MEMBER_GROUP).get_members():

@@ -4,7 +4,7 @@ from __future__ import with_statement
 import time
 import math
 import MySQLdb
-from common import *
+from common import read_ssv_file
 
 INTERVAL = 60*60*24*7
 MAX_N = 12

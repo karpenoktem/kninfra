@@ -5,7 +5,7 @@ import _import  # noqa: F401
 import sys
 import cStringIO
 from kn.leden.models import OldKnGroup
-from common import *
+from common import args_to_users
 
 
 def group_email():

@@ -3,7 +3,7 @@ from __future__ import with_statement
 
 import _import  # noqa: F401
 import MySQLdb
-from common import *
+from common import read_ssv_file, MEMBER_GROUP
 from kn.leden.models import OldKnGroup, OldKnUser
 
 

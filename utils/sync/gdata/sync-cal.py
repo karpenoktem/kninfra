@@ -1,8 +1,8 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
 
-from common import *
-from cal_common import *
+from common import MEMBER_GROUP, GCAL_BD, GCAL_UIT
+from cal_common import get_cs
 
 from kn.leden.models import OldKnUser, OldKnGroup
 import gdata.calendar.service

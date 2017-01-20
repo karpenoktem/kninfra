@@ -4,7 +4,7 @@
 
 import _import  # noqa: F401
 import MySQLdb
-from common import *
+from common import read_ssv_file
 from pydot import Node, Dot, Edge
 from Mailman import MailList, Utils
 

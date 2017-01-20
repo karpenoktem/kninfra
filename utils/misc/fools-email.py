@@ -2,7 +2,7 @@
 from __future__ import with_statement
 
 import _import  # noqa: F401
-from common import *
+from common import MEMBER_GROUP
 from kn.leden.models import OldKnGroup
 
 
