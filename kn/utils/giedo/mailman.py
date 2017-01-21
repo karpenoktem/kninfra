@@ -7,9 +7,9 @@ import kn.leden.entities as Es
 from kn.leden.date import now
 
 import_mailman()
-import Mailman
-import Mailman.Utils
-import Mailman.MailList
+import Mailman  # noqa: E402
+import Mailman.Utils  # noqa: E402
+import Mailman.MailList  # noqa: E402
 
 
 def generate_mailman_changes(giedo):

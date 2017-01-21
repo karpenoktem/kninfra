@@ -18,9 +18,9 @@ from django.conf import settings
 
 import_mailman()
 
-import Mailman.MailList
-import Mailman.Utils
-from Mailman import mm_cfg
+import Mailman.MailList  # noqa: E402
+import Mailman.Utils  # noqa: E402
+from Mailman import mm_cfg  # noqa: E402
 
 
 @login_required

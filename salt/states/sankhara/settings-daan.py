@@ -12,7 +12,7 @@ LDAP_PASS = '{{ pillar['secrets']['ldap_daan'] }}'
 DOMAINNAME = '{{ grains['fqdn'] }}'
 INFRA_UID = 2000  # Keep in synch. with kninfra.sls
 
-from kn.defaultSettings import defaultSettings
+from kn.defaultSettings import defaultSettings  # noqa: E402
 defaultSettings(globals())
 
 LDAP_USER = 'cn=daan,' + LDAP_SUFFIX

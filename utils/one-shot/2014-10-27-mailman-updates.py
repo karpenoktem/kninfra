@@ -5,8 +5,8 @@ from django.conf import settings
 from kn.utils.mailman import import_mailman
 
 import_mailman()
-from Mailman.Utils import list_names
-from Mailman.MailList import MailList
+from Mailman.Utils import list_names  # noqa: E402
+from Mailman.MailList import MailList  # noqa: E402
 
 
 def main():
