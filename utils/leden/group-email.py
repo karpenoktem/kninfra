@@ -25,9 +25,9 @@ def group_email():
         plut[g.id].sort(cmp=lambda x, y: cmp(x.humanName, y.humanName))
     tree = list()
     stack = [(0, glut['besturen']),
-         (0, glut['lists']),
-         (0, glut['groepen']),
-         (0, glut['comms'])]
+             (0, glut['lists']),
+             (0, glut['groepen']),
+             (0, glut['comms'])]
     had = set(stack)
     while stack:
         d, g = stack.pop()
@@ -51,15 +51,15 @@ def group_email():
         s2 = cStringIO.StringIO()
         for _s in m.oldseat_set.all():
             s2.write("  %s %s %s\n" % (_s.humanName,
-                         _s.group.genitive_prefix,
-                         _s.group.humanName))
+                                       _s.group.genitive_prefix,
+                                       _s.group.humanName))
         stext = s2.getvalue()
         stext = '(geen)' if stext == '' else stext
         em = templ % {'fullName': m.full_name(),
-                  'seats': stext,
-                  'tree': s.getvalue()}
+                      'seats': stext,
+                      'tree': s.getvalue()}
         m.email_user('Overzicht groepen, commissies en e-maillijsten',
-             em, from_email='secretaris@karpenoktem.nl')
+                     em, from_email='secretaris@karpenoktem.nl')
 
 if __name__ == '__main__':
     group_email()

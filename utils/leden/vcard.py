@@ -14,9 +14,9 @@ def vcard(u):
     c = vobject.vCard()
     c.add('n')
     ln = ' '.join(reversed(map(lambda x: x.strip(),
-                   u.last_name.split(',', 1))))
+                               u.last_name.split(',', 1))))
     c.n.value = vobject.vcard.Name(ln,
-                       given=u.first_name)
+                                   given=u.first_name)
     c.add('fn')
     c.fn.value = u.full_name()
     l = c.add('email', 'kn')
@@ -33,11 +33,11 @@ def vcard(u):
         not u.addr_zipCode is None):
         l = c.add('adr', 'kn')
         l.value = vobject.vcard.Address(' '.join((u.addr_street,
-                              u.addr_number)),
-                        u.addr_city,
-                        '',
-                        u.addr_zipCode,
-                        'Nederland')
+                                                  u.addr_number)),
+                                        u.addr_city,
+                                        '',
+                                        u.addr_zipCode,
+                                        'Nederland')
         c.add('x-abadr', 'kn').value = 'nl'
     return c.serialize()
 

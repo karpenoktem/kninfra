@@ -158,13 +158,13 @@ class WhimDaemon(object):
         ls.listen(8)
         while True:
             rs, ws, xs = select.select(list(self.sockets) + [ls],
-                    [], [])
+                                       [], [])
             if ls in rs:
                 s, addr = ls.accept()
                 self.sockets.add(s)
                 self.sock_state[s] = (s.makefile(),
-                              msgpack.Unpacker(),
-                              threading.Lock())
+                                      msgpack.Unpacker(),
+                                      threading.Lock())
                 rs.remove(ls)
             for s in rs:
                 self.handle_socket(s)

@@ -71,6 +71,6 @@ def fotoadmin_move_fotos(daan, event, store, user, directory):
     if subprocess.call(['chmod', '-R', '644', target_path]) != 0:
         return {'error': 'chmod failed'}
     if subprocess.call(['find', target_path, '-type', 'd', '-exec',
-            'chmod', '755', '{}', '+']) != 0:
+                        'chmod', '755', '{}', '+']) != 0:
         return {'error': 'chmod (dirs) failed'}
     return {'success': True}

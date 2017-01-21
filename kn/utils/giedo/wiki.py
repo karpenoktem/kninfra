@@ -15,7 +15,7 @@ def generate_wiki_changes(self):
     users = dict()
     id2name = dict()
     dc = MySQLdb.connect(creds[0], user=creds[1],
-            passwd=creds[2], db=creds[3])
+                         passwd=creds[2], db=creds[3])
     c = dc.cursor()
     c.execute("SELECT user_id, user_name FROM user")
     todo = {'add': [], 'remove': [], 'activate': [], 'deactivate': []}
@@ -37,7 +37,7 @@ def generate_wiki_changes(self):
             del users[user]
     for name, user in users.iteritems():
         todo['add'].append((name, unicode(user.humanName),
-                    user.canonical_email))
+                            user.canonical_email))
 
     c.execute("SELECT ug_user FROM user_groups WHERE ug_group=%s", 'leden')
     for uid, in c.fetchall():

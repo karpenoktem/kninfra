@@ -170,7 +170,7 @@ def ensure_indices():
     rcol.ensure_index('who')
     rcol.ensure_index('tags', sparse=True)
     rcol.ensure_index([('until', 1),
-               ('from', -1)])
+                       ('from', -1)])
     # notes
     ncol.ensure_index([('on', 1),
                        ('at', 1)])
@@ -260,7 +260,7 @@ def ids_by_names(ns=None, use_cache=False):
                 nss2.remove(n)
         nss = frozenset(nss2)
     for m in ecol.find({} if ns is None else
-            {'names': {'$in': tuple(nss)}}, {'names': 1}):
+                       {'names': {'$in': tuple(nss)}}, {'names': 1}):
         for n in m.get('names', ()):
             if ns is None or n in nss:
                 ret[n] = m['_id']
@@ -312,12 +312,12 @@ def get_years_of_birth():
         NOTE Currently, simply queries for the minimum and maximum date of
         birth and assumes all in between are used. """
     start = ecol.find_one({'person.dateOfBirth': {'$ne': None}},
-                     {'person.dateOfBirth': 1},
-                     sort=[('person.dateOfBirth', 1)]
+                          {'person.dateOfBirth': 1},
+                          sort=[('person.dateOfBirth', 1)]
                         )['person']['dateOfBirth'].year
     end = ecol.find_one({'person.dateOfBirth': {'$ne': None}},
-                     {'person.dateOfBirth': 1},
-                     sort=[('person.dateOfBirth', -1)]
+                        {'person.dateOfBirth': 1},
+                        sort=[('person.dateOfBirth', -1)]
                         )['person']['dateOfBirth'].year
     return xrange(start, end+1)
 
@@ -503,10 +503,10 @@ def add_relation(who, _with, how=None, _from=None, until=None):
     if until is None:
         until = DT_MAX
     return rcol.insert({'who': _id(who),
-                     'with': _id(_with),
-                     'how': None if how is None else _id(how),
-                     'from': _from,
-                     'until': until})
+                        'with': _id(_with),
+                        'how': None if how is None else _id(how),
+                        'from': _from,
+                        'until': until})
 
 
 def user_may_tag(user, group, tag):
@@ -518,7 +518,7 @@ def user_may_untag(user, group, tag):
 
 
 def disj_query_relations(queries, deref_who=False, deref_with=False,
-        deref_how=False):
+                         deref_how=False):
     """ Find relations matching any one of @queries.
         See @query_relations. """
     if not queries:
@@ -560,14 +560,14 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
         else:
             qa, qb, qc = dict(query), dict(query), dict(query)
             qa['until'] = {'$gte': query['from'],
-                       '$lte': query['until']}
+                           '$lte': query['until']}
             # NOTE we have to set these void conditions, otherwise
             #      mongo will not use its indices.
             qa['from'] = {'$gte': DT_MIN}
             bits.append(qa)
             qb['until'] = {'$gte': DT_MIN}
             qb['from'] = {'$gte': query['from'],
-                      '$lte': query['until']}
+                          '$lte': query['until']}
             bits.append(qb)
             qc['until'] = {'$gte': query['until']}
             qc['from'] = {'$lte': query['from']}
@@ -581,7 +581,7 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
 
 
 def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
-            deref_who=False, deref_with=False, deref_how=False):
+                    deref_who=False, deref_with=False, deref_how=False):
     """ Find matching relations.
 
     For each of {who, _with, how}:
@@ -641,7 +641,7 @@ def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
         if not deref_how and not deref_who and not deref_with:
             return next(cursor)
         return next(__derefence_relations(cursor, deref_who,
-            deref_with, deref_how))
+                                          deref_with, deref_how))
     except StopIteration:
         return None
 
@@ -652,12 +652,12 @@ def entity_cmp_humanName(x, y):
 
 def dt_cmp_until(x, y):
     return cmp(DT_MAX if x is None else x,
-            DT_MAX if y is None else y)
+               DT_MAX if y is None else y)
 
 
 def dt_cmp_from(x, y):
     return cmp(DT_MIN if x is None else x,
-            DT_MIN if y is None else y)
+               DT_MIN if y is None else y)
 
 
 def relation_cmp_until(x, y):
@@ -674,10 +674,10 @@ def remove_relation(who, _with, how,  _from, until):
     if until is None:
         until = DT_MAX
     rcol.remove({'who': _id(who),
-             'with': _id(_with),
-             'how': None if how is None else _id(how),
-             'from': _from,
-             'until': until})
+                 'with': _id(_with),
+                 'how': None if how is None else _id(how),
+                 'from': _from,
+                 'until': until})
 
 # Functions to work with notes
 # ######################################################################
@@ -812,7 +812,7 @@ class Entity(SONWrapper):
         if not hasattr(self, '_groups_cache'):
             dt = now()
             self._groups_cache = [rel['with']
-                for rel in self.get_related(
+                                  for rel in self.get_related(
                     None, dt, dt, False, True, False)]
         return self._groups_cache
 
@@ -827,14 +827,14 @@ class Entity(SONWrapper):
 
     # get reverse-related
     def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
-                deref_with=True, deref_how=True):
+                     deref_with=True, deref_how=True):
         return query_relations(-1, self, how, _from, until, deref_who,
-                deref_with, deref_how)
+                               deref_with, deref_how)
 
     def get_related(self, how=-1, _from=None, until=None, deref_who=True,
-                deref_with=True, deref_how=True):
+                    deref_with=True, deref_how=True):
         return query_relations(self, -1, how, _from, until, deref_who,
-                deref_with, deref_how)
+                               deref_with, deref_how)
 
     def get_tags(self):
         for m in ecol.find({'_id': {'$in': self._data.get('tags', ())}}
@@ -983,10 +983,10 @@ class Entity(SONWrapper):
         if studies:
             studies[0]['until'] = dt
         studies.insert(0, {'study': _id(study),
-                   'institute': _id(institute),
-                   'number': number,
-                   'from': dt,
-                   'until': DT_MAX})
+                           'institute': _id(institute),
+                           'number': number,
+                           'from': dt,
+                           'until': DT_MAX})
         if save:
             self.save()
 
@@ -999,8 +999,8 @@ class Entity(SONWrapper):
         if addrs:
             addrs[0]['until'] = dt
         addrs.insert(0, {'number': new,
-                 'from': dt,
-                 'until': DT_MAX})
+                         'from': dt,
+                         'until': DT_MAX})
         if save:
             self.save()
 
@@ -1013,8 +1013,8 @@ class Entity(SONWrapper):
         if addrs:
             addrs[0]['until'] = dt
         addrs.insert(0, {'email': new,
-                 'from': dt,
-                 'until': DT_MAX})
+                         'from': dt,
+                         'until': DT_MAX})
         if save:
             self.save()
 
@@ -1025,7 +1025,8 @@ class Entity(SONWrapper):
             self._data['preferences'] = {}
         preferences = self._data['preferences']
 
-        if 'visibility' not in preferences or type(preferences['visibility']) == list:
+        if ('visibility' not in preferences
+                or type(preferences['visibility']) == list):
             preferences['visibility'] = {}
         visprefs = preferences['visibility']
 
@@ -1167,7 +1168,7 @@ class User(Entity):
         if save:
             if '_id' in self._data:
                 ecol.update({'_id': self._id},
-                        {'$set': {'password': self.password}})
+                            {'$set': {'password': self.password}})
             else:
                 self.save()
 
@@ -1175,8 +1176,10 @@ class User(Entity):
         self._data['preferred_language'] = code
         if save:
             if '_id' in self._data:
-                ecol.update({'_id': self._id},
-                    {'$set': {'preferred_language': self.preferred_language}})
+                ecol.update(
+                    {'_id': self._id},
+                    {'$set': {'preferred_language': self.preferred_language}}
+                )
             else:
                 self.save()
 
@@ -1189,7 +1192,7 @@ class User(Entity):
         if isinstance(self.password, dict):
             # Old style passwords
             dg = get_hexdigest(self.password['algorithm'],
-                       self.password['salt'], pwd)
+                               self.password['salt'], pwd)
             ok = (dg == self.password['hash'])
             if ok:
                 # Upgrade to new-style password
@@ -1269,9 +1272,9 @@ class User(Entity):
         for t in self._data.get('telephones', ()):
             ret.append({'from': None if t['from'] == DT_MIN
                         else t['from'],
-                    'until': None if t['until'] == DT_MAX
+                        'until': None if t['until'] == DT_MAX
                         else t['until'],
-                    'number': t['number']})
+                        'number': t['number']})
         return ret
 
     @property
@@ -1288,12 +1291,12 @@ class User(Entity):
         for a in addresses:
             ret.append({'from': None if a['from'] == DT_MIN
                         else a['from'],
-                    'until': None if a['until'] == DT_MAX
+                        'until': None if a['until'] == DT_MAX
                         else a['until'],
-                    'street': a['street'],
-                    'number': a['number'],
-                    'zip': a['zip'],
-                    'city': a['city']})
+                        'street': a['street'],
+                        'number': a['number'],
+                        'zip': a['zip'],
+                        'city': a['city']})
         return ret
 
     @property
@@ -1329,8 +1332,9 @@ class User(Entity):
     @property
     def primary_study(self):
         if self._primary_study == -1:
-            self._primary_study = (None if not self._data.get('studies', ())
-                else by_id(self._data['studies'][0]['study']).as_study())
+            self._primary_study = (
+                None if not self._data.get('studies', ())
+                    else by_id(self._data['studies'][0]['study']).as_study())
         return self._primary_study
 
     @property
@@ -1343,11 +1347,11 @@ class User(Entity):
     @property
     def last_study_end_date(self):
         return max([DT_MIN]+map(lambda s: s['until'],
-                        self._data.get('studies', ())))
+                                self._data.get('studies', ())))
 
     def study_start(self, study, institute, number, start_date, save=True):
         start_date = datetime.datetime(start_date.year, start_date.month,
-                start_date.day)
+                                       start_date.day)
         if 'studies' not in self._data:
             self._data['studies'] = []
         if start_date <= self.last_study_end_date:
@@ -1391,7 +1395,8 @@ class User(Entity):
         # see http://stackoverflow.com/a/9754466
         today = datetime.date.today()
         born = self.dateOfBirth
-        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        return (today.year - born.year
+                    - ((today.month, today.day) < (born.month, born.day)))
 
     @property
     def got_unix_user(self):

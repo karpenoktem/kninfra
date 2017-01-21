@@ -14,10 +14,10 @@ def home(request):
         path = os.path.join(settings.MEDIA_ROOT, 'static/slideshow')
         for fn in sorted(os.listdir(path)):
             _slideshow_images.append(os.path.join(settings.MEDIA_URL,
-                                        'static/slideshow', fn))
+                                                  'static/slideshow', fn))
     return render_to_response('static/home.html',
-            {'slideshow_images': _slideshow_images},
-            context_instance=RequestContext(request))
+                              {'slideshow_images': _slideshow_images},
+                              context_instance=RequestContext(request))
 
 # legacy URL redirect view
 

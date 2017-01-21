@@ -19,6 +19,6 @@ print fmt % ("NAME  ", "FROM  ", "UNTIL  ", "NUMBER  ")
 for m in args_to_users(sys.argv[1:]):
     for nr in m.telephones:
         print  fmt % (m.full_name,
-                fmt_date(nr['from']),
-                fmt_date(nr['until']),
-                nr['number'])
+                      fmt_date(nr['from']),
+                      fmt_date(nr['until']),
+                      nr['number'])

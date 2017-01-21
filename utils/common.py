@@ -66,8 +66,8 @@ def print_table(data, separator=' '):
     if len(data) == 0:
         return
     ls = map(lambda x: max(map(lambda y: len(data[y][x]),
-                   xrange(len(data)))),
-         xrange(len(data[0])))
+                               xrange(len(data)))),
+             xrange(len(data[0])))
     for d in data:
         l = ''
         for i, b in enumerate(d):

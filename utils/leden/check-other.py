@@ -12,8 +12,10 @@ from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias
 
 def check_geinteresseerden():
     print "GEINTERESSEERDEN"
-    es = frozenset(map(lambda m: m.email.lower(),
-        OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all()))
+    es = frozenset(map(
+        lambda m: m.email.lower(),
+        OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all()
+    ))
     ml = MailList('geinteresseerden', False)
     for m in ml.members:
         if m.lower() in es:
@@ -23,7 +25,7 @@ def check_geinteresseerden():
 def check_namespace():
     print "NAMESPACE"
     cn = set(map(lambda c: c.name,
-        filter(lambda c: not c.isVirtual, OldKnGroup.objects.all())))
+                 filter(lambda c: not c.isVirtual, OldKnGroup.objects.all())))
     un = set(map(lambda m: m.username, OldKnUser.objects.all()))
     sn = set(map(lambda s: s.name if s.isGlobal else s.group.name \
                     + '-' + s.name, OldSeat.objects.all()))

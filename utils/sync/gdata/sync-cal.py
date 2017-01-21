@@ -23,7 +23,7 @@ def acl_sync_cal(cs, cal, initial_role):
     for a_rule in feed.entry:
         if not a_rule.role.value == GCAL_SCHEME + initial_role:
             print "%s: unknown role: %s" % (a_rule.scope.value,
-                            a_rule.role.value)
+                                            a_rule.role.value)
             continue
         cur[a_rule.scope.value] = a_rule.GetEditLink().href
     for m in OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all():
@@ -53,8 +53,8 @@ def acl_sync_cal(cs, cal, initial_role):
 
 def icaldate(d):
     return "%s%s%s" % (d.year,
-               str(d.month).zfill(2),
-               str(d.day).zfill(2))
+                       str(d.month).zfill(2),
+                       str(d.day).zfill(2))
 
 
 def sync_bd(cs, cal):
@@ -62,21 +62,21 @@ def sync_bd(cs, cal):
     now = datetime.datetime.now().date()
     now2 = datetime.date(now.year + 1, now.month, now.day)
     query = gdata.calendar.service.CalendarEventQuery(cal,
-            'private', 'full')
+                                                      'private', 'full')
     query.start_min = str(now)
     query.start_max = str(now2)
     todo = set(filter(lambda x: not x.dateOfBirth is None,
-              OldKnUser.objects.all()))
+                      OldKnUser.objects.all()))
     fn_lut = dict()
     rd_lut = dict()
     for m in todo:
         fn_lut[m.full_name()] = m
         rd_lut[m.full_name()] = ('DTSTART;VALUE=DATE:%s\n' +
-                         'DTEND;VALUE=DATE:%s\n' +
-                         'RRULE:FREQ=YEARLY\n') % (
+                                 'DTEND;VALUE=DATE:%s\n' +
+                                 'RRULE:FREQ=YEARLY\n') % (
                         icaldate(m.dateOfBirth),
                         icaldate(m.dateOfBirth +
-                            datetime.timedelta(1)))
+                                 datetime.timedelta(1)))
     feed = cs.CalendarQuery(query)
     while True:
         for event in feed.entry:
@@ -103,7 +103,7 @@ def sync_bd(cs, cal):
         if feed.GetNextLink() is None:
             break
         feed = cs.Query(feed.GetNextLink().href,
-            converter=gdata.calendar.CalendarEventFeedFromString)
+                        converter=gdata.calendar.CalendarEventFeedFromString)
     for m in todo:
         if m.dateOfBirth is None:
             continue

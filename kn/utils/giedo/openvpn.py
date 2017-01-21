@@ -27,7 +27,7 @@ def get_commonName(user):
 def user_has_certificate(user):
     commonName = get_commonName(user)
     return os.path.isfile(os.path.join(settings.VPN_KEYSTORE,
-        commonName + '.key'))
+                                       commonName + '.key'))
 
 
 def mail_result(user, filename):
@@ -37,7 +37,7 @@ def mail_result(user, filename):
     # url = reverse('ik-openvpn-download', kwargs={'file': filename})
     url = 'http://karpenoktem.nl/smoelen/ik/openvpn/%s' % filename
     em = EmailMessage('OpenVPN', msg % (user.first_name, url),
-                to=[user.canonical_email])
+                      to=[user.canonical_email])
     # em.attach_file(os.path.join(settings.VPN_INSTALLER_STORAGE, filename))
     em.send()
 
@@ -57,19 +57,22 @@ def create_certificate(user):
         logging.warning('vpn: no config file available, skipping')
         return False
     ph = subprocess.Popen(['openssl', 'req', '-batch', '-days', '1000',
-        '-nodes', '-new', '-newkey', 'rsa:1024', '-keyout', commonName +
-        '.key', '-out', commonName + '.csr', '-config',
-        settings.VPN_OPENSSL_CONFIG],
-        cwd=settings.VPN_KEYSTORE, env=env, stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT)
+                           '-nodes', '-new', '-newkey', 'rsa:1024',
+                           '-keyout', commonName + '.key',
+                           '-out', commonName + '.csr', '-config',
+                           settings.VPN_OPENSSL_CONFIG],
+                          cwd=settings.VPN_KEYSTORE, env=env,
+                          stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT)
     ph.communicate()
     if ph.returncode != 0:
         raise CreateCertificateException("CSR creation failed")
     ph = subprocess.Popen(['openssl', 'ca', '-batch', '-days', '1000', '-out',
-        commonName + '.crt', '-in', commonName + '.csr', '-md', 'sha1',
-        '-config', 'kn-openssl.cnf'
+                           commonName + '.crt', '-in',
+                           commonName + '.csr', '-md', 'sha1',
+                           '-config', 'kn-openssl.cnf'
         ], cwd=settings.VPN_KEYSTORE, env=env, stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT)
+                          stderr=subprocess.STDOUT)
     ph.communicate()
     if ph.returncode != 0:
         raise CreateCertificateException("Signing failed")
@@ -94,8 +97,8 @@ def create_openvpn_installer(giedo, user):
     # Personalize the installer and config-file
     ## Check the git-revision
     ph = subprocess.Popen(['git', 'reflog'],
-            cwd=settings.VPN_INSTALLER_REPOS,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                          cwd=settings.VPN_INSTALLER_REPOS,
+                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     version = ph.communicate()[0].splitlines()[0].split(' ')[0]
     if ph.returncode != 0:
         raise CreateInstallerException("Version check failed")
@@ -111,16 +114,16 @@ def create_openvpn_installer(giedo, user):
         config = fh.read()
     config = config.replace('KNUSERNAME', str(user.name))
     with open(os.path.join(_dir, 'openvpn/config', commonName + '.ovpn'),
-            'w') as fh:
+              'w') as fh:
         fh.write(config)
     ## Copy the keypair
     copy2(os.path.join(settings.VPN_KEYSTORE, commonName + '.key'),
-        os.path.join(_dir, 'openvpn/config/'))
+          os.path.join(_dir, 'openvpn/config/'))
     copy2(os.path.join(settings.VPN_KEYSTORE, commonName + '.crt'),
-        os.path.join(_dir, 'openvpn/config/'))
+          os.path.join(_dir, 'openvpn/config/'))
     ## Run makensis
     ph = subprocess.Popen(['makensis', 'openvpn-gui.nsi'], cwd=_dir,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     ph.communicate()
     if ph.returncode != 0:
         raise CreateInstallerException("Makensis failed")
@@ -158,19 +161,19 @@ def _create_zip(user):
     # Personalize the installer and config-file
     ## Write the OpenVPN config
     with open(os.path.join(settings.VPN_INSTALLER_REPOS,
-        'installer/client.conf'), 'r') as fh:
+                           'installer/client.conf'), 'r') as fh:
         config = fh.read()
     config = config.replace('KNUSERNAME', str(user.name))
     with open(os.path.join(_dir, 'config', commonName + '.ovpn'), 'w') as fh:
         fh.write(config)
     ## Copy the keypair
     copy2(os.path.join(settings.VPN_KEYSTORE, commonName + '.key'),
-        os.path.join(_dir, 'config/'))
+          os.path.join(_dir, 'config/'))
     copy2(os.path.join(settings.VPN_KEYSTORE, commonName + '.crt'),
-        os.path.join(_dir, 'config/'))
+          os.path.join(_dir, 'config/'))
     ## Add ca.crt
     copy2(os.path.join(settings.VPN_KEYSTORE, 'ca.crt'),
-        os.path.join(_dir, 'config/'))
+          os.path.join(_dir, 'config/'))
     ## Run zip
     ph = subprocess.Popen(['zip', '-r', os.path.join(
         settings.VPN_INSTALLER_STORAGE,
@@ -199,8 +202,10 @@ def generate_openvpn_zips(giedo):
     for u in Es.users():
         if not u.is_active:
             continue
-        if not os.path.isfile(os.path.join(settings.VPN_INSTALLER_STORAGE,
-            'openvpn-config-%s.zip' % str(u.name))):
+        if not os.path.isfile(
+            os.path.join(
+                settings.VPN_INSTALLER_STORAGE,
+                'openvpn-config-%s.zip' % str(u.name))):
             _create_zip(u)
 
 if __name__ == '__main__':

@@ -73,10 +73,12 @@ def fotos(request, path=''):
         if not title:
             title = album.name
         # respond with a nice error message
-        response = render_to_response('fotos/fotos.html',
-                  {'fotos': {'parents': album_parents_json(album)},
-                   'error': 'permission-denied'},
-                  context_instance=RequestContext(request))
+        response = render_to_response(
+            'fotos/fotos.html',
+            {'fotos': {'parents': album_parents_json(album)},
+             'error': 'permission-denied'},
+            context_instance=RequestContext(request)
+        )
         response.status_code = 403
         return response
 
@@ -101,10 +103,10 @@ def fotos(request, path=''):
 
     fotos = album_json(album, user)
     return render_to_response('fotos/fotos.html',
-             {'fotos': fotos,
-              'fotos_admin': fEs.is_admin(user),
-              'people': people},
-             context_instance=RequestContext(request))
+                              {'fotos': fotos,
+                               'fotos_admin': fEs.is_admin(user),
+                               'people': people},
+                              context_instance=RequestContext(request))
 
 
 def cache(request, cache, path):
@@ -159,7 +161,7 @@ def fotoadmin_create_event(request):
         if form.is_valid():
             cd = form.cleaned_data
             ret = giedo.fotoadmin_create_event(str(cd['date']),
-                    cd['name'], cd['fullHumanName'])
+                                               cd['name'], cd['fullHumanName'])
             if ret.get('success', False):
                 messages.info(request, _('Fotoalbum aangemaakt!'))
             else:
@@ -169,8 +171,8 @@ def fotoadmin_create_event(request):
     else:
         form = CreateEventForm()
     return render_to_response('fotos/admin/create.html',
-            {'form': form, 'events': list_events()},
-             context_instance=RequestContext(request))
+                              {'form': form, 'events': list_events()},
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -188,7 +190,7 @@ def fotoadmin_move(request):
     else:
         form = MoveFotosForm()
     return render_to_response('fotos/admin/move.html',
-            {'form': form},
-             context_instance=RequestContext(request))
+                              {'form': form},
+                              context_instance=RequestContext(request))
 
 # vim: et:sta:bs=2:sw=4:

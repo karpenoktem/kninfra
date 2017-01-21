@@ -35,11 +35,11 @@ def event_list(request):
             else:
                 closed_leden_events.append(e)
     return render_to_response('subscriptions/event_list.html',
-            {'open_events': open_events,
-             'closed_events': closed_events,
-             'open_leden_events': open_leden_events,
-             'closed_leden_events': closed_leden_events},
-            context_instance=RequestContext(request))
+                              {'open_events': open_events,
+                               'closed_events': closed_events,
+                               'open_leden_events': open_leden_events,
+                               'closed_leden_events': closed_leden_events},
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -107,11 +107,12 @@ def event_detail(request, name):
            'has_read_access': has_read_access,
            'has_write_access': has_write_access}
     return render_to_response('subscriptions/event_detail.html', ctx,
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 def _api_event_set_opened(request):
-    if 'id' not in request.REQUEST or not isinstance(request.REQUEST['id'], basestring):
+    if ('id' not in request.REQUEST
+            or not isinstance(request.REQUEST['id'], basestring)):
         return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
     e = subscr_Es.event_by_id(request.REQUEST['id'])
     if not e:
@@ -125,7 +126,9 @@ def _api_event_set_opened(request):
     elif opened is False:
         e.close(request.user)
     else:
-        return JsonHttpResponse({'error': 'invalid or missing argument "opened"'})
+        return JsonHttpResponse({
+            'error': 'invalid or missing argument "opened"'
+        })
 
     return JsonHttpResponse({'success': True})
 
@@ -143,7 +146,7 @@ def _api_get_email_addresses(request):
     return JsonHttpResponse({
             'success': True,
             'addresses': [s.user.canonical_full_email
-                    for s in event.listSubscribed]})
+                          for s in event.listSubscribed]})
 
 
 @require_POST
@@ -179,7 +182,9 @@ def event_new_or_edit(request, edit=None):
                 # Check some more constraints.
                 owner = Es.by_id(fd['owner'])
                 if not request.user.is_related_with(owner):
-                    raise PermissionDenied(_('Gebruiker niet verwant met eigenaar'))
+                    raise PermissionDenied(
+                        _('Gebruiker niet verwant met eigenaar')
+                    )
                 if not subscr_Es.may_set_owner(request.user, owner):
                     raise PermissionDenied(_('Mag deze eigenaar niet kiezen'))
             d = {
@@ -211,15 +216,17 @@ def event_new_or_edit(request, edit=None):
             else:
                 e.update(d, request.user, save=False)
             e.save()
-            render_then_email('subscriptions/' +
-                    ('event-edited' if edit else 'new-event') + '.mail.txt',
-                    Es.by_name('secretariaat').canonical_full_email, {
-                        'event': e,
-                        'user': request.user},
-                    headers={
-                        'In-Reply-To': e.messageId,
-                        'References': e.messageId,
-                    },
+            render_then_email(
+                'subscriptions/' +
+                  ('event-edited' if edit else 'new-event') + '.mail.txt',
+                Es.by_name('secretariaat').canonical_full_email, {
+                    'event': e,
+                    'user': request.user
+                },
+                headers={
+                    'In-Reply-To': e.messageId,
+                    'References': e.messageId,
+                },
             )
             return HttpResponseRedirect(reverse('event-detail', args=(e.name,)))
     elif edit is None:
@@ -230,6 +237,6 @@ def event_new_or_edit(request, edit=None):
     ctx = {'form': form,
            'edit': edit}
     return render_to_response('subscriptions/event_new_or_edit.html', ctx,
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 # vim: et:sta:bs=2:sw=4:

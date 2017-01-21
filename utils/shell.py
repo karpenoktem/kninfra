@@ -35,7 +35,7 @@ def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
     if until not in (None, -1):
         until = str_to_date(until)
     return list(Es.query_relations(who, _with, how, _from, until, True,
-                    True, True))
+                                   True, True))
 
 
 def del_rel(who, _with, how):
@@ -47,8 +47,8 @@ def del_rel(who, _with, how):
     how = Es.ecol.find_one({'sofa_suffix': how})['_id'] \
             if how is not None else None
     Es.rcol.remove({'who': who,
-            'with': _with,
-            'how': how})
+                    'with': _with,
+                    'how': how})
 
 
 def add_rel(who, _with, how, _from, until):
@@ -63,10 +63,10 @@ def add_rel(who, _with, how, _from, until):
     _from = str_to_date(_from) if _from is not None else DT_MIN
     until = str_to_date(until) if until is not None else DT_MAX
     Es.rcol.insert({'who': who,
-            'with': _with,
-            'how': how,
-            'from': _from,
-            'until': until})
+                    'with': _with,
+                    'how': how,
+                    'from': _from,
+                    'until': until})
 
 
 def str_to_date(s):
@@ -91,9 +91,9 @@ def end_rel(who, _with, how, at=None):
             if how is not None else None
     at = str_to_date(at) if at is not None else now()
     Es.rcol.update({'who': who,
-            'with': _with,
-            'how': how,
-            'until': DT_MAX}, {'$set': {'until': at}})
+                    'with': _with,
+                    'how': how,
+                    'until': DT_MAX}, {'$set': {'until': at}})
 
 
 def qe(keyword):

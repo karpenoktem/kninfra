@@ -20,7 +20,7 @@ def generate_mailman_changes(giedo):
     dt_now = now()
     mm_groups = [g for g in Es.groups() if g.got_mailman_list and g.name]
     mm_rels = Es.query_relations(_with=mm_groups, how=None, _from=dt_now,
-            until=dt_now, deref_who=True)
+                                 until=dt_now, deref_who=True)
     # TODO do we want to cache these?
     # Get the current mailing lists
     ml_names = frozenset(Mailman.Utils.list_names())
@@ -32,12 +32,14 @@ def generate_mailman_changes(giedo):
         gid2name[g._id] = str(g.name)
         if not str(g.name) in ml_names:
             todo['create'].append((str(g.name),
-                    unicode(g.humanName)))
+                                   unicode(g.humanName)))
             c_ms = set([])
         else:
             c_ms = set([x[0] for x in
-                Mailman.MailList.MailList(str(g.name),
-                    lock=False).members.iteritems()])
+                        Mailman.MailList.MailList(
+                            str(g.name),
+                            lock=False
+                        ).members.iteritems()])
         ml_members[str(g.name)] = c_ms
     # Check which memberships are missing in the current mailing lists
     for rel in mm_rels:

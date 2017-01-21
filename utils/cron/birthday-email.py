@@ -20,10 +20,10 @@ def birthday_email():
             user.dateOfBirth.month != now.month):
             continue
         email = EmailMessage("Hartelijk gefeliciteerd!",
-                     templ % {'firstName': user.first_name},
-                     'webcie@karpenoktem.nl',
-                     [user.canonical_email],
-                     ['webcie@karpenoktem.nl'])
+                             templ % {'firstName': user.first_name},
+                             'webcie@karpenoktem.nl',
+                             [user.canonical_email],
+                             ['webcie@karpenoktem.nl'])
         email.send()
 
 if __name__ == '__main__':

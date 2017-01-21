@@ -14,7 +14,7 @@ class SessionStore(SessionBase):
 
     def load(self):
         s = scol.find_one({'_id': self.session_key,
-              'expire_dt': {
+                           'expire_dt': {
                   '$gt': datetime.datetime.now()}})
         if s is None:
             self.create()
@@ -37,9 +37,9 @@ class SessionStore(SessionBase):
 
     def save(self, must_create=False):
         n = {'_id': self.session_key,
-            'data': self.encode(self._get_session(
+             'data': self.encode(self._get_session(
                     no_load=must_create)),
-            'expire_dt': self.get_expiry_date()}
+             'expire_dt': self.get_expiry_date()}
         scol.update({'_id': self.session_key}, n, True)
         # TODO handle errors
 

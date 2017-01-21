@@ -28,7 +28,7 @@ def redirect(request, name):
     if not request.build_absolute_uri().startswith(
             settings.MOD_DESIRED_URI_PREFIX):
         return HttpResponseRedirect(settings.MOD_DESIRED_URI_PREFIX +
-                        request.get_full_path())
+                                    request.get_full_path())
     name = str(name)
     if (request.user.groups.filter(
             name=settings.MODERATORS_GROUP).count() == 0):
@@ -61,11 +61,11 @@ def _deactivate_mm(ml, name, user, record, moderators):
     ml.Save()
     if user is None:
         render_then_email('moderation/timed-out.mail.txt',
-                moderators.canonical_full_email, {
+                          moderators.canonical_full_email, {
                     'name': name})
     else:
         render_then_email('moderation/disabled-by.mail.txt',
-                moderators.canonical_full_email, {
+                          moderators.canonical_full_email, {
                     'name': name,
                     'user': user})
 
@@ -81,7 +81,7 @@ def _renew_mm(ml, name, user, record, moderators):
     record.at = now
     record.save()
     render_then_email('moderation/extended.mail.txt',
-            moderators.canonical_full_email, {
+                      moderators.canonical_full_email, {
                 'name': name,
                 'user': user,
                 'until': until})
@@ -101,7 +101,7 @@ def _activate_mm(ml, name, user, record, moderators):
     record.at = now
     record.save()
     render_then_email('moderation/enabled.mail.txt',
-            moderators.canonical_full_email, {
+                      moderators.canonical_full_email, {
                 'name': name,
                 'user': user,
                 'until': until})
@@ -131,31 +131,31 @@ def overview(request):
             if toggle_with_name == name:
                 if  ml.emergency:
                     _deactivate_mm(ml, name, request.user,
-                            r, moderators)
+                                   r, moderators)
                 else:
                     r = _activate_mm(ml, name, request.user,
-                            r, moderators)
+                                     r, moderators)
             if renew_with_name == name:
                 r = _renew_mm(ml, name, request.user, r,
-                        moderators)
+                              moderators)
             by = None if r is None else r.by
             remaining = (None if r is None else r.at +
-                settings.MOD_RENEW_INTERVAL -
-                datetime.datetime.now())
+                         settings.MOD_RENEW_INTERVAL -
+                         datetime.datetime.now())
             until = (None if r is None else r.at +
-                    settings.MOD_RENEW_INTERVAL)
+                     settings.MOD_RENEW_INTERVAL)
             lists.append({'name': name,
-                      'real_name': ml.real_name,
-                      'modmode': ml.emergency,
-                      'by': by,
-                      'remaining': remaining,
-                      'description': ml.description,
-                      'queue': len(ml.GetHeldMessageIds())})
+                          'real_name': ml.real_name,
+                          'modmode': ml.emergency,
+                          'by': by,
+                          'remaining': remaining,
+                          'description': ml.description,
+                          'queue': len(ml.GetHeldMessageIds())})
         finally:
             ml.Unlock()
     return render_to_response('moderation/overview.html',
-            {'lists': lists,
-             'is_moderator': is_moderator},
-            context_instance=RequestContext(request))
+                              {'lists': lists,
+                               'is_moderator': is_moderator},
+                              context_instance=RequestContext(request))
 
 # vim: et:sta:bs=2:sw=4:

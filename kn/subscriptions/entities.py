@@ -144,7 +144,7 @@ class Event(SONWrapper):
     @property
     def description_html(self):
         return self._data.get('description_html',
-                linebreaks(escape(self._data['description'])))
+                              linebreaks(escape(self._data['description'])))
         # Let wel: 'description' is een *fallback*, het is niet de bedoeling dat
         # deze bij nieuwe actieviteitne nog gebruikt wordt
 
@@ -156,7 +156,7 @@ class Event(SONWrapper):
     is_open = son_property(('is_open',))
     is_official = son_property(('is_official',), True)
     has_public_subscriptions = son_property(('has_public_subscriptions',),
-                                    False)
+                                            False)
 
     def __unicode__(self):
         return unicode('%s (%s)' % (self.humanName, self.owner))
@@ -173,7 +173,7 @@ class Event(SONWrapper):
     def messageId(self):
         """ Unique ID to be used in e.g. References: headers """
         return '<%s@%s>' % (self.get_absolute_url().strip('/'),
-                        settings.MAILDOMAIN)
+                            settings.MAILDOMAIN)
 
     def has_read_access(self, user):
         return  self.owner == user or \
@@ -281,7 +281,7 @@ class Subscription(SONWrapper):
 
     def __unicode__(self):
         return unicode(u"<Subscription(%s for %s)>" % (self.user.humanName,
-                        self.event.humanName))
+                                                       self.event.humanName))
 
     @property
     def id(self):
@@ -374,8 +374,9 @@ class Subscription(SONWrapper):
         self.save()
         self.send_notification({'state': 'invited'})
 
-    def send_notification(self, mutation,
-            template='subscriptions/subscription-notification.mail.html'):
+    def send_notification(self, mutation, template=None):
+        if not template:
+            template = 'subscriptions/subscription-notification.mail.html'
         cc = [self.event.owner.canonical_full_email]
         if self.invited:
             cc.append(self.inviter.canonical_full_email)
@@ -384,7 +385,7 @@ class Subscription(SONWrapper):
         # https://tools.ietf.org/html/rfc5322#section-3.6.4
         # They are used here for proper threading in mail applications.
         render_then_email(template, self.user,
-                ctx={
+                          ctx={
                     'mutation': mutation,
                     'subscription': self,
                     'event': self.event,

@@ -40,8 +40,8 @@ def create_year_overrides_for(year):
 def main():
     parser = argparse.ArgumentParser(description="Prepare for the next year")
     parser.add_argument('--apply', action='store_true',
-                    help=('Apply the changes.  By default the changes '
-                          'are only displayed'))
+                        help=('Apply the changes.  By default the changes '
+                              'are only displayed'))
     args = parser.parse_args()
 
     # Fetch year overrides
@@ -85,10 +85,12 @@ def main():
             if rel['from'] == start_of_year:
                 continue
             how = Es.by_id(rel['how'])
-            print ' {} {} (as {}): {} -> {}'.format(unicode(Es.by_id(rel['who'])),
-                            str(Es.by_id(rel['with'])),
-                            how._data['sofa_suffix'] if how else 'member',
-                            rel['from'], start_of_year)
+            print ' {} {} (as {}): {} -> {}'.format(
+                unicode(Es.by_id(rel['who'])),
+                str(Es.by_id(rel['with'])),
+                how._data['sofa_suffix'] if how else 'member',
+                rel['from'], start_of_year
+            )
             if args.apply:
                 rel['from'] = start_of_year
                 Es.rcol.save(rel)
@@ -100,14 +102,16 @@ def main():
         end_of_year = Es.year_to_range(year)[0] - datetime.timedelta(0, 1)
         window = datetime.timedelta(1, 12*60*60)
         for rel in Es.rcol.find({'until': {'$gt': start_of_year - window,
-                                          '$lt': start_of_year + window}}):
+                                           '$lt': start_of_year + window}}):
             if rel['until'] == end_of_year:
                 continue
             how = Es.by_id(rel['how'])
-            print ' {} {} (as {}): {} -> {}'.format(unicode(Es.by_id(rel['who'])),
-                            str(Es.by_id(rel['with'])),
-                            how._data['sofa_suffix'] if how else 'member',
-                            rel['until'], end_of_year)
+            print ' {} {} (as {}): {} -> {}'.format(
+                unicode(Es.by_id(rel['who'])),
+                str(Es.by_id(rel['with'])),
+                how._data['sofa_suffix'] if how else 'member',
+                rel['until'], end_of_year
+            )
             if args.apply:
                 rel['until'] = end_of_year
                 Es.rcol.save(rel)

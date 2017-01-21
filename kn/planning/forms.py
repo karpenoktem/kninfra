@@ -10,7 +10,7 @@ class WorkerChoiceField(forms.ChoiceField):
     def __init__(self, *args, **kwargs):
         # TODO Reduce these queries into one.
         kwargs['choices'] = [(e._id, unicode(e.humanName))
-                    for e in kwargs['choices']]
+                             for e in kwargs['choices']]
         if kwargs.get('sort_choices', False):
             kwargs['choices'].sort(key=lambda x: x[1])
             del kwargs['sort_choices']
@@ -55,15 +55,23 @@ class EventCreateForm(forms.Form):
 
 class AddVacancyForm(forms.Form):
     name = forms.CharField(label=_("Shiftnaam"), initial="eerste dienst")
-    begin = forms.RegexField(label=_("Begintijd"), initial="20:30",
-            regex=r'^[0123][0-9]:[0-5][0-9]$')
-    begin_is_approximate = forms.ChoiceField(initial=False,
-            choices=((True, _("bij benadering")), (False, _("exact"))))
+    begin = forms.RegexField(
+        label=_("Begintijd"), initial="20:30",
+        regex=r'^[0123][0-9]:[0-5][0-9]$'
+    )
+    begin_is_approximate = forms.ChoiceField(
+        initial=False,
+        choices=((True, _("bij benadering")), (False, _("exact")))
+    )
     end = forms.RegexField(label=_("Eindtijd"), initial="23:00",
-            regex=r'^[0123][0-9]:[0-5][0-9]$')
-    end_is_approximate = forms.ChoiceField(initial=False,
-            choices=((True, _("bij benadering")), (False, _("exact"))))
-    pool = forms.ChoiceField(label=_("Type"),
-            choices=map(lambda x: (x._id, x.name), Pool.all()))
+                           regex=r'^[0123][0-9]:[0-5][0-9]$')
+    end_is_approximate = forms.ChoiceField(
+        initial=False,
+        choices=((True, _("bij benadering")), (False, _("exact")))
+    )
+    pool = forms.ChoiceField(
+        label=_("Type"),
+        choices=map(lambda x: (x._id, x.name), Pool.all())
+    )
 
 # vim: et:sta:bs=2:sw=4:

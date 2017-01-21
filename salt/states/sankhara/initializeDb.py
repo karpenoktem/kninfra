@@ -9,7 +9,7 @@ MONGO_HOST = 'localhost'
 DB_FILE = '/home/infra/initial-db.yaml'
 
 yaml.SafeLoader.add_constructor('!id',
-        lambda loader, node: bson.objectid.ObjectId(
+                                lambda loader, node: bson.objectid.ObjectId(
                         loader.construct_scalar(node)))
 
 

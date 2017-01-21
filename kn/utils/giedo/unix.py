@@ -32,7 +32,7 @@ def generate_unix_map(giedo):
     # Get all groups and create a look-up-table for group membership
     gs = tuple(Es.groups())
     mrels = Es.query_relations(how=None, _with=gs, _from=dt_now,
-                until=dt_now)
+                               until=dt_now)
     mlut = dict()
     for g in gs:
         mlut[g._id] = []
@@ -61,7 +61,7 @@ def generate_unix_map(giedo):
         if not g.got_unix_group:
             continue
         ret['groups'][str(g.name)] = [str(ulut[c].name)
-                for c in memb_graph[g._id] if c in ulut]
+                                      for c in memb_graph[g._id] if c in ulut]
     return ret
 
 # vim: et:sta:bs=2:sw=4:

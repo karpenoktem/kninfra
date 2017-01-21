@@ -108,7 +108,7 @@ class Pool(SONWrapper):
 
     def last_shift(self, worker):
         for v in vcol.find({'assignee': _id(worker), 'pool': _id(self)},
-                sort=[('begin', DESCENDING)], limit=1):
+                           sort=[('begin', DESCENDING)], limit=1):
             return Vacancy(v).begin.date()
 
     def last_shifts(self):
@@ -128,7 +128,7 @@ class Pool(SONWrapper):
         Is this user allowed to manage this pool?
         '''
         return bool(user.cached_groups_names & set(['secretariaat',
-            self.administrator]))
+                                                    self.administrator]))
 
 # Generic functions for Vacancy.begin and end.
 #

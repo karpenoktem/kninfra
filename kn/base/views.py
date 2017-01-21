@@ -22,7 +22,7 @@ def direct_to_folder(request, root, subdir):
     if os.stat(p).st_mode & 4 != 4:
         raise Http404
     return HttpResponse(FileWrapper(open(p)),
-            content_type=mimetypes.guess_type(p)[0])
+                        content_type=mimetypes.guess_type(p)[0])
 
 
 def langpicker(request):

@@ -26,11 +26,11 @@ settings.DRANK_REPOS_PATH = '/home/infra/barco/%s/'
 
 class FormSpecifics(object):
     def __init__(self,
-            django_form,
-            django_template,
-            dir_in_repo,
-            template_path,  # see explanation below
-            weights_path
+                 django_form,
+                 django_template,
+                 dir_in_repo,
+                 template_path,  # see explanation below
+                 weights_path
             ):
         self.django_form = django_form
         self.django_template = django_template
@@ -181,24 +181,26 @@ def barco_enterform(request, repos, formname):
                 fh.write(csv.getvalue())
             subprocess.call(['/usr/bin/git', 'add', fn], cwd=repopath)
             msg = (_("Barform %s ingevoerd via kninfra\n\n"
-                    "Signed-off-by: kninfra <root@karpenoktem.nl>") %
+                     "Signed-off-by: kninfra <root@karpenoktem.nl>") %
                     fd['formname'])
             # XXX Is it safe to use canonical_full_email?
             author = "%s <%s>" % (str(request.user.humanName),
-                    request.user.canonical_email)
+                                  request.user.canonical_email)
             subprocess.call(['/usr/bin/git', 'commit', '--author', author,
-                '-m', msg, fn], cwd=repopath)
+                             '-m', msg, fn], cwd=repopath)
             subprocess.call(['/usr/bin/git', 'pull', '--rebase'], cwd=repopath)
             subprocess.call(['/usr/bin/git', 'push'], cwd=repopath)
 
             # and get back to the user:
             messages.info(request, _("Opgeslagen!"))
             return HttpResponseRedirect(reverse('barco-enterform',
-                args=(repos, formname)))
+                                                args=(repos, formname)))
     form = formspec.django_form()
-    return render_to_response(formspec.django_template,
-            {'fields': template, 'form': form, 'prefill': prefill,
-                'weight_fields': list(weight_fields)},
-        context_instance=RequestContext(request))
+    return render_to_response(
+        formspec.django_template,
+        {'fields': template, 'form': form, 'prefill': prefill,
+         'weight_fields': list(weight_fields)},
+        context_instance=RequestContext(request)
+    )
 
 # vim: et:sta:bs=2:sw=4:

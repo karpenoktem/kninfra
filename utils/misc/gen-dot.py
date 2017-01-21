@@ -17,10 +17,10 @@ def gen_dot():
     nodes = dict()
     login = read_ssv_file('vpopmail.login')
     db = MySQLdb.connect(host='localhost', user=login[0],
-        passwd=login[2], db=login[1])
+                         passwd=login[2], db=login[1])
     c = db.cursor()
     c.execute("SELECT alias, valias_line FROM valias WHERE domain=%s",
-        (MAILDOMAIN, ))
+              (MAILDOMAIN, ))
     for alias, target in c.fetchall():
         assert target[0] == '&'
         target = target[1:]

@@ -15,8 +15,8 @@ def wolk_setpass(cilia, user, passwd):
     wolk_script = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                     'wolk.php')
     proc = subprocess.Popen(['sudo', '-u', settings.WOLK_USER, 'php',
-                    wolk_script], cwd=settings.WOLK_PATH,
-                    stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                             wolk_script], cwd=settings.WOLK_PATH,
+                            stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     proc.stdin.write(json.dumps({
                         'type': 'setpass',
                         'user': user,
@@ -32,8 +32,8 @@ def apply_wolk_changes(cilia, changes):
     wolk_script = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                     'wolk.php')
     proc = subprocess.Popen(['sudo', '-u', settings.WOLK_USER, 'php',
-                    wolk_script], cwd=settings.WOLK_PATH,
-                    stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                             wolk_script], cwd=settings.WOLK_PATH,
+                            stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     proc.stdin.write(json.dumps({
                         'type': 'apply_changes',
                         'changes': changes}))

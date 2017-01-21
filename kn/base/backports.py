@@ -4,7 +4,7 @@
 import re
 
 from django.core.urlresolvers import (RegexURLResolver, get_resolver,
-        get_script_prefix, is_valid_path)
+                                      get_script_prefix, is_valid_path)
 
 from django.utils.six.moves.urllib.parse import quote
 from django.utils.translation import get_language
@@ -28,13 +28,15 @@ from django.conf import settings
 def i18n_patterns(*urls, **kwargs):
     prefix_default_language = kwargs.pop('prefix_default_language', True)
     assert not kwargs, 'Unexpected kwargs for i18n_patterns(): %s' % kwargs
-    return [BackportedLocaleRegexURLResolver(list(urls),
-                prefix_default_language=prefix_default_language)]
+    return [BackportedLocaleRegexURLResolver(
+        list(urls),
+        prefix_default_language=prefix_default_language
+    )]
 
 
 class BackportedLocaleRegexURLResolver(RegexURLResolver):
     def __init__(self, urlconf_name, default_kwargs=None, app_name=None,
-        namespace=None, prefix_default_language=True):
+                 namespace=None, prefix_default_language=True):
         super(BackportedLocaleRegexURLResolver, self).__init__(
                     None, urlconf_name, default_kwargs, app_name, namespace)
         self.prefix_default_language = prefix_default_language
@@ -99,8 +101,10 @@ class BackportedLocaleMiddleware(object):
 
             if path_valid or path_needs_slash:
                 script_prefix = get_script_prefix()
-                language_url = backported_get_full_path(request,
-                        force_append_slash=path_needs_slash).replace(
+                language_url = backported_get_full_path(
+                        request,
+                        force_append_slash=path_needs_slash
+                ).replace(
                     script_prefix,
                     '%s%s/' % (script_prefix, language),
                     1

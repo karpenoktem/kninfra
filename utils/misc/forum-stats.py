@@ -43,9 +43,9 @@ def main():
     lut = dict()
     login = read_ssv_file('forum.login')
     db = MySQLdb.connect(host='localhost',
-                 user=login[0],
-                 passwd=login[2],
-                 db=login[1])
+                         user=login[0],
+                         passwd=login[2],
+                         db=login[1])
     c = db.cursor()
     c.execute('SELECT poster, posted FROM posts')
     for poster, posted in c.fetchall():

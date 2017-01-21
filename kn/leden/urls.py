@@ -7,7 +7,7 @@ from kn.leden import views, api, graphs
 
 urlpatterns = [
     url(r'^$',
-    login_required(TemplateView.as_view(template_name='leden/home.html')),
+        login_required(TemplateView.as_view(template_name='leden/home.html')),
                name='smoelen-home'),
     url(_(r'^gebruikers/(?:p/(?P<page>[0-9]+)/)?$'),
         views.user_list, name='user-list'),

@@ -13,13 +13,13 @@ def hm2s(hours, minutes=0):
 
 typePeriods = {
     'tappers': [[hm2s(20, 30), hm2s(23), 'eerste dienst'],
-    [hm2s(23), hm2s(25), 'tweede dienst'],
-    [hm2s(25), hm2s(28), 'derde dienst']],
+                [hm2s(23), hm2s(25), 'tweede dienst'],
+                [hm2s(25), hm2s(28), 'derde dienst']],
     'bestuur': [[hm2s(20, 30), hm2s(24), 'openen'],
-    [hm2s(24), hm2s(28), 'sluiten']],
+                [hm2s(24), hm2s(28), 'sluiten']],
     'draai': [[hm2s(20, 45), hm2s(23), 'openen'],
-    [hm2s(23), hm2s(24), 'prime-time'],
-    [hm2s(24), hm2s(25), 'sluiten']]}
+              [hm2s(23), hm2s(24), 'prime-time'],
+              [hm2s(24), hm2s(25), 'sluiten']]}
 
 day = datetime.datetime.strptime(sys.argv[1], '%Y-%m-%d')
 

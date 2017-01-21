@@ -1,7 +1,7 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.template import TemplateDoesNotExist
 from django.template.loader import (BaseLoader, find_template_loader,
-                    make_origin, get_template_from_string)
+                                    make_origin, get_template_from_string)
 
 import re
 
@@ -38,7 +38,9 @@ class SlashNewlineStrippingTemplateLoader(BaseLoader):
                                                     name, dirs)
                 else:
                     template, display_name = loader(name, dirs)
-                return (template, make_origin(display_name,
+                return (template,
+                        make_origin(
+                            display_name,
                             loader.load_template_source, name, dirs))
             except TemplateDoesNotExist:
                 pass
@@ -51,7 +53,7 @@ class SlashNewlineStrippingTemplateLoader(BaseLoader):
         template = self._process(template)
         try:
             template = get_template_from_string(template, origin,
-                                template_name)
+                                                template_name)
         except TemplateDoesNotExist:
             # from django.template.loader.cached.Loader:
             # If compiling the template we found raises

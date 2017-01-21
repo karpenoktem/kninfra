@@ -55,9 +55,9 @@ def user_list(request, page):
     except EmptyPage:
         raise Http404
     return render_to_response('leden/user_list.html',
-            {'users': [Es.User(m) for m in p.object_list],
-             'page_obj': p, 'paginator': pr},
-            context_instance=RequestContext(request))
+                              {'users': [Es.User(m) for m in p.object_list],
+                               'page_obj': p, 'paginator': pr},
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -87,7 +87,7 @@ def _entity_detail(request, e):
         if r:
             return r
         r = cmp(unicode(x['how'].humanName) if x['how'] else None,
-            unicode(y['how'].humanName) if y['how'] else None)
+                unicode(y['how'].humanName) if y['how'] else None)
         if r:
             return r
         return Es.relation_cmp_from(x, y)
@@ -97,7 +97,7 @@ def _entity_detail(request, e):
         if r:
             return r
         r = cmp(unicode(x['how'].humanName) if x['how'] else None,
-            unicode(y['how'].humanName) if y['how'] else None)
+                unicode(y['how'].humanName) if y['how'] else None)
         if r:
             return r
         r = cmp(unicode(x['who'].humanName),
@@ -156,20 +156,20 @@ def _entity_detail(request, e):
             and (e.is_group or e.is_user)):
         groups = [g for g in Es.groups() if not g.is_virtual]
         groups.sort(cmp=lambda x, y: cmp(unicode(x.humanName),
-                        unicode(y.humanName)))
+                                         unicode(y.humanName)))
         users = sorted(Es.users(), cmp=Es.entity_cmp_humanName)
         brands = sorted(Es.brands(), cmp=Es.entity_cmp_humanName)
         ctx.update({'users': users,
-                'brands': brands,
-                'groups': groups,
-                'may_add_related': True,
-                'may_add_rrelated': True,
-                'may_tag': True,
-                'may_untag': True})
+                    'brands': brands,
+                    'groups': groups,
+                    'may_add_related': True,
+                    'may_add_rrelated': True,
+                    'may_tag': True,
+                    'may_untag': True})
     ctx['may_upload_smoel'] = e.name and request.user.may_upload_smoel_for(e)
     if e.is_tag:
         ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
-                        cmp=Es.entity_cmp_humanName)})
+                                          cmp=Es.entity_cmp_humanName)})
 
     # Check whether entity has a photo
     photos_path = (path.join(settings.SMOELEN_PHOTOS_PATH, str(e.name))
@@ -212,14 +212,14 @@ def _user_detail(request, user):
                 fd = addStudyForm.cleaned_data
                 # TODO: catch error when study start overlaps with last study
                 user.study_start(fd['study'], fd['study_inst'],
-                        fd['study_number'], fd['study_from'])
+                                 fd['study_number'], fd['study_from'])
                 return redirect_to_referer(request)
     else:
         addStudyForm = AddStudyForm()
     if user.last_study_end_date < DT_MAX:
         ctx['addStudyForm'] = addStudyForm
     return render_to_response('leden/user_detail.html', ctx,
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 def _group_detail(request, group):
@@ -234,16 +234,16 @@ def _group_detail(request, group):
         for r in rel:
             rel_id = r['_id']
     ctx.update({'isFreeToJoin': group.has_tag(Es.by_name('!free-to-join')),
-        'request': request,
-        'relation_with_group': rel_id})
+                'request': request,
+                'relation_with_group': rel_id})
     return render_to_response('leden/group_detail.html', ctx,
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 def _tag_detail(request, tag):
     ctx = _entity_detail(request, tag)
     return render_to_response('leden/tag_detail.html', ctx,
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 def _brand_detail(request, brand):
@@ -263,14 +263,14 @@ def _brand_detail(request, brand):
             return r
         return Es.relation_cmp_from(x, y)
     ctx['rels'] = sorted(Es.query_relations(how=brand, deref_who=True,
-                deref_with=True), cmp=_cmp)
+                                            deref_with=True), cmp=_cmp)
     for r in ctx['rels']:
         r['id'] = r['_id']
         r['until_year'] = (None if r['until'] is None else
-                    Es.date_to_year(r['until']))
+                           Es.date_to_year(r['until']))
         r['virtual'] = Es.relation_is_virtual(r)
     return render_to_response('leden/brand_detail.html', ctx,
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 def _study_detail(request, study):
@@ -292,7 +292,7 @@ def _study_detail(request, study):
                              'institute': _study['institute']})
     ctx['students'].sort(cmp=_cmp)
     return render_to_response('leden/study_detail.html', ctx,
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 def _institute_detail(request, institute):
@@ -314,7 +314,7 @@ def _institute_detail(request, institute):
                              'study': _study['study']})
     ctx['students'].sort(cmp=_cmp)
     return render_to_response('leden/institute_detail.html', ctx,
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -329,7 +329,7 @@ def entities_by_year_of_birth(request, year):
     if _year - 1 in years:
         ctx['previous_year'] = _year - 1
     return render_to_response('leden/entities_by_year_of_birth.html', ctx,
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -346,7 +346,9 @@ def users_underage(request):
     final_date = None
     if users:
         youngest = users[-1]
-        final_date = youngest.dateOfBirth.replace(year=youngest.dateOfBirth.year+18)
+        final_date = youngest.dateOfBirth.replace(
+            year=youngest.dateOfBirth.year + 18
+        )
     return render_to_response('leden/entities_underage.html', {
                     'users': users,
                     'final_date': final_date},
@@ -369,8 +371,10 @@ def ik_chsmoel(request):
         raise ValueError(_("Entiteit heeft geen naam"))
     if not request.user.may_upload_smoel_for(request.user):
         raise PermissionDenied
-    original = default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
-            str(user.name)) + ".orig", 'wb+')
+    original = default_storage.open(
+        path.join(settings.SMOELEN_PHOTOS_PATH,
+                  str(user.name)) + ".orig", 'wb+'
+    )
     for chunk in request.FILES['smoel'].chunks():
         original.write(chunk)
     original.seek(0)
@@ -387,8 +391,10 @@ def ik_chsmoel(request):
                                         settings.SMOELEN_WIDTH*2,
                                         settings.SMOELEN_HEIGHT*2)
     img = img.resize((width, height), Image.ANTIALIAS)
-    img.save(default_storage.open(path.join(settings.SMOELEN_PHOTOS_PATH,
-            str(user.name)) + ".jpg", 'w'), "JPEG")
+    img.save(default_storage.open(
+        path.join(settings.SMOELEN_PHOTOS_PATH,
+                  str(user.name)) + ".jpg", 'w'
+    ), "JPEG")
     Es.notify_informacie('set_smoel', request.user, entity=user)
     return redirect_to_referer(request)
 
@@ -424,7 +430,7 @@ def ik_chpasswd(request):
         if form.is_valid():
             try:
                 return _ik_chpasswd_handle_valid_form(request,
-                        form)
+                                                      form)
             except giedo.ChangePasswordError as e:
                 errl.extend(e.args)
     else:
@@ -432,8 +438,8 @@ def ik_chpasswd(request):
     errl.extend(form.non_field_errors())
     errstr = humanized_enum(errl)
     return render_to_response('leden/ik_chpasswd.html',
-            {'form': form, 'errors': errstr},
-            context_instance=RequestContext(request))
+                              {'form': form, 'errors': errstr},
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -446,7 +452,7 @@ def ik_chpasswd_villanet(request):
                 oldpw = form.cleaned_data['old_password']
                 newpw = form.cleaned_data['new_password']
                 giedo.change_villanet_password(str(request.user.name), oldpw,
-                        newpw)
+                                               newpw)
                 t = _("Lieve %s, maar natuurlijk, jouw wachtwoord voor het " +
                         "villa-netwerk is veranderd.")
                 messages.info(request, t % request.user.first_name)
@@ -458,8 +464,8 @@ def ik_chpasswd_villanet(request):
     errl.extend(form.non_field_errors())
     errstr = humanized_enum(errl)
     return render_to_response('leden/ik_chpasswd_villanet.html',
-            {'form': form, 'errors': errstr},
-            context_instance=RequestContext(request))
+                              {'form': form, 'errors': errstr},
+                              context_instance=RequestContext(request))
 
 
 def rauth(request):
@@ -513,9 +519,9 @@ def rauth(request):
                 reverse('rauth'),
                 urlquote(request.REQUEST['url'])))
     token = sha256('%s|%s|%s|%s' % (str(request.user.name),
-                    date.today(),
-                    request.REQUEST['url'],
-                    settings.SECRET_KEY)).hexdigest()
+                                    date.today(),
+                                    request.REQUEST['url'],
+                                    settings.SECRET_KEY)).hexdigest()
     return HttpResponseRedirect('%s%suser=%s&token=%s' % (
         request.REQUEST['url'],
         '?' if request.REQUEST['url'].find('?') == -1 else '&',
@@ -558,7 +564,7 @@ def secr_add_user(request):
                 'types': ['user'],
                 'names': [fd['username']],
                 'humanNames': [{'human': fd['first_name']+' ' +
-                             fd['last_name']}],
+                                fd['last_name']}],
                 'person': {
                     'titles': [],
                     'nick': fd['first_name'],
@@ -601,11 +607,11 @@ def secr_add_user(request):
                 groups.append('geen-incasso')
             for group in groups:
                 Es.add_relation(u, Es.id_by_name(group,
-                                use_cache=True),
-                        _from=date_to_dt(fd['dateJoined']))
+                                                 use_cache=True),
+                                _from=date_to_dt(fd['dateJoined']))
             for l in fd['addToList']:
                 Es.add_relation(u, Es.id_by_name(l, use_cache=True),
-                    _from=now())
+                                _from=now())
             # Let giedo synch. to create the e-mail adresses, unix user, etc.
             # TODO use giedo.async() and let giedo send the welcome e-mail
             giedo.sync()
@@ -621,12 +627,12 @@ def secr_add_user(request):
                             'u': u})
             Es.notify_informacie('adduser', request.user, entity=u._id)
             return HttpResponseRedirect(reverse('user-by-name',
-                    args=(fd['username'],)))
+                                                args=(fd['username'],)))
     else:
         form = AddUserForm()
     return render_to_response('leden/secr_add_user.html',
-            {'form': form},
-            context_instance=RequestContext(request))
+                              {'form': form},
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -634,8 +640,8 @@ def secr_notes(request):
     if 'secretariaat' not in request.user.cached_groups_names:
         raise PermissionDenied
     return render_to_response('leden/secr_notes.html',
-                {'notes': Es.get_open_notes()},
-            context_instance=RequestContext(request))
+                              {'notes': Es.get_open_notes()},
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -653,8 +659,8 @@ def secr_add_group(request):
                 'use_mailman_list': fd['true_group'],
                 'has_unix_group': fd['true_group'],
                 'humanNames': [{'name': nm,
-                    'human': fd['humanName'],
-                    'genitive_prefix': fd['genitive_prefix']}],
+                                'human': fd['humanName'],
+                                'genitive_prefix': fd['genitive_prefix']}],
                     'description': fd['description'],
                 'tags': [_id(fd['parent'])]})
             logging.info("Added group %s" % nm)
@@ -666,7 +672,7 @@ def secr_add_group(request):
     else:
         form = AddGroupForm()
     return render_to_response('leden/secr_add_group.html', {'form': form},
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -707,7 +713,7 @@ def relation_begin(request):
     ok = False
     try:
         next(Es.query_relations(who=d['who'], _with=d['with'],
-            how=d['how'], _from=dt, until=DT_MAX))
+                                how=d['how'], _from=dt, until=DT_MAX))
     except StopIteration:
         ok = True
     if not ok:
@@ -823,18 +829,18 @@ def ik_openvpn(request):
     # TODO password versions
         if request.user.check_password(request.POST['password']):
             giedo.change_password(str(request.user.name),
-                    request.POST['password'],
-                    request.POST['password'])
+                                  request.POST['password'],
+                                  request.POST['password'])
             giedo.openvpn_create(str(request.user.name),
-                    request.POST['want'])
+                                 request.POST['want'])
             messages.info(request, _("Je verzoek wordt verwerkt. "
-                    "Verwacht binnen 5 minuten een e-mail."))
+                                     "Verwacht binnen 5 minuten een e-mail."))
             return HttpResponseRedirect(reverse('smoelen-home'))
         else:
             password_incorrect = True
     return render_to_response('leden/ik_openvpn.html',
-            {'password_incorrect': password_incorrect},
-            context_instance=RequestContext(request))
+                              {'password_incorrect': password_incorrect},
+                              context_instance=RequestContext(request))
 
 
 @login_or_basicauth_required
@@ -850,8 +856,10 @@ def ik_openvpn_download(request, filename):
     p = path.join(settings.VPN_INSTALLER_PATH, filename)
     if not default_storage.exists(p):
         raise Http404
-    response = HttpResponse(FileWrapper(default_storage.open(p)),
-            content_type=mimetypes.guess_type(default_storage.path(p))[0])
+    response = HttpResponse(
+        FileWrapper(default_storage.open(p)),
+        content_type=mimetypes.guess_type(default_storage.path(p))[0]
+    )
     response['Content-Length'] = default_storage.size(p)
     # XXX use ETags and returns 304's
     return response

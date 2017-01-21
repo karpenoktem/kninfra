@@ -8,7 +8,7 @@ def main():
     now = Es.now()
     member_age = {}
     for rel in Es.query_relations(-1, Es.by_name('leden'), None,
-                None, deref_who=True):
+                                  None, deref_who=True):
         if not rel['from']:
             rel['from'] = Es.DT_MIN
         if rel['who'] not in member_age:
@@ -32,11 +32,11 @@ def main3():
     now = Es.now()
     member_age = {}
     for rel in Es.query_relations(-1, Es.by_name('leden'), None,
-                None, deref_who=True):
+                                  None, deref_who=True):
         if rel['who'] not in member_age:
             member_age[rel['who']] = 0
         member_age[rel['who']] = max(member_age[rel['who']],
-                            (now-rel['from']).days / 365.0)
+                                     (now-rel['from']).days / 365.0)
 
     #for comm in Es.by_name('comms').get_bearers():
     for comm in [Es.by_name('draai')]:
@@ -45,13 +45,13 @@ def main3():
         members.sort(key=lambda x: x[1])
         for member in members:
             print " %-20s%.2f" % (unicode(member[0].name),
-                            member[1] if member[1] else -1)
+                                  member[1] if member[1] else -1)
 
 
 
 def main2():
     rels = list(Es.query_relations(-1, Es.by_name('comms').get_bearers(),
-                    None, now, deref_who=True, deref_with=True))
+                                   None, now, deref_who=True, deref_with=True))
     lut = {}
     for rel in rels:
         if rel['from'] is None:

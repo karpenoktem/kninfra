@@ -62,8 +62,10 @@ def vote(request, name):
             filling.answers[q_id] = int(form.cleaned_data['answer'])
         filling.date = datetime.datetime.now()
         filling.save()
-    return render_to_response('poll/vote.html',
-            {'forms': forms, 'poll': poll, 'initial': initial},
-            context_instance=RequestContext(request))
+    return render_to_response(
+        'poll/vote.html',
+        {'forms': forms, 'poll': poll, 'initial': initial},
+        context_instance=RequestContext(request)
+    )
 
 # vim: et:sta:bs=2:sw=4:

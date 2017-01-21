@@ -198,12 +198,12 @@ class FotoEntity(SONWrapper):
     @permalink
     def get_thumbnail_url(self):
         return ('fotos-cache', (), {'path': self.full_path,
-                                   'cache': 'thumb'})
+                                    'cache': 'thumb'})
 
     @permalink
     def get_thumbnail2x_url(self):
         return ('fotos-cache', (), {'path': self.full_path,
-                                   'cache': 'thumb2x'})
+                                    'cache': 'thumb2x'})
 
     def lock_cache(self, cache):
         ret = lcol.find_and_modify({'_id': self._id},
@@ -403,14 +403,16 @@ class FotoAlbum(FotoEntity):
 
     def list(self, user):
         required_visibility = self.required_visibility(user)
-        albums = map(entity, fcol.find({'path': self.full_path,
-                           'type': 'album',
-                           'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                           ).sort([('date', -1), ('name', 1)]))
-        fotos = map(entity, fcol.find({'path': self.full_path,
-                           'type': {'$ne': 'album'},
-                           'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                           ).sort([('date', 1), ('name', 1)]))
+        albums = map(entity, fcol.find(
+            {'path': self.full_path,
+             'type': 'album',
+             'effectiveVisibility': {'$in': tuple(required_visibility)}}
+        ).sort([('date', -1), ('name', 1)]))
+        fotos = map(entity, fcol.find(
+            {'path': self.full_path,
+             'type': {'$ne': 'album'},
+             'effectiveVisibility': {'$in': tuple(required_visibility)}},
+        ).sort([('date', 1), ('name', 1)]))
 
         return albums+fotos
 
@@ -440,7 +442,8 @@ class FotoAlbum(FotoEntity):
     def search(self, q, user):
         required_visibility = self.required_visibility(user)
         query_filter = {'path': self.mongo_path_prefix,
-                        'effectiveVisibility': {'$in': tuple(required_visibility)}}
+                        'effectiveVisibility': {
+                            '$in': tuple(required_visibility)}}
         if q.startswith('album:'):
             album = q[len('album:'):]
             query_filter['type'] = 'album'
@@ -461,9 +464,9 @@ class FotoAlbum(FotoEntity):
         else:
             # do a full-text search
             for result in db.command('text', 'fotos',
-                        search=q,
-                        filter=query_filter,
-                        limit=96,  # dividable by 2, 3 and 4
+                                     search=q,
+                                     filter=query_filter,
+                                     limit=96,  # dividable by 2, 3 and 4
                       )['results']:
                 yield entity(result['obj'])
             return
@@ -570,7 +573,10 @@ class Foto(FotoEntity):
             self.date = settings.DT_MIN  # NULL date/time
             if 'DateTimeOriginal' in exif:
                 try:
-                    self.date = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
+                    self.date = datetime.datetime.strptime(
+                            exif['DateTimeOriginal'],
+                            '%Y:%m:%d %H:%M:%S'
+                    )
                 except ValueError:
                     # Ignore: the timestamp did not match the format.
                     # For example, the year might be below year 1 (a zero
@@ -618,14 +624,16 @@ class Foto(FotoEntity):
             os.makedirs(target_dir)
 
         size = '%dx%d' % self.get_cache_size(cache)
-        subprocess.check_call(['convert',
-                         source,
-                         '-strip',
-                         '-rotate', str(self.rotation),
-                         '-resize', size,
-                         '-interlace', 'Plane',
-                         '-quality', str(self.CACHES[cache].quality),
-                         target])
+        subprocess.check_call([
+            'convert',
+            source,
+            '-strip',
+            '-rotate', str(self.rotation),
+            '-resize', size,
+            '-interlace', 'Plane',
+            '-quality', str(self.CACHES[cache].quality),
+            target
+        ])
 
 
 class Video(FotoEntity):

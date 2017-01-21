@@ -15,7 +15,7 @@ def generate_forum_changes(self):
         return None
     users = dict()
     dc = MySQLdb.connect(creds[0], user=creds[1],
-            passwd=creds[2], db=creds[3])
+                         passwd=creds[2], db=creds[3])
     c = dc.cursor()
     c.execute("SELECT username, realname FROM users")
     todo = {'add': [], 'remove': [], 'update-realname': []}
@@ -35,11 +35,11 @@ def generate_forum_changes(self):
         else:
             if users[user].humanName != realname:
                 todo['update-realname'].append((user,
-                    unicode(users[user].humanName)))
+                                                unicode(users[user].humanName)))
             del users[user]
     for name, user in users.iteritems():
         todo['add'].append((name, unicode(user.humanName),
-                    user.canonical_email))
+                            user.canonical_email))
     c.close()
     dc.close()
     return todo

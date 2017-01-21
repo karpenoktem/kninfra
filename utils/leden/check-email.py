@@ -31,7 +31,7 @@ def check_email():
     for m in args_to_users(sys.argv[1:]):
         rels = m.get_related()
         rels = sorted(rels, cmp=lambda x, y: cmp(str(x['with'].humanName),
-                            str(y['with'].humanName)))
+                                                 str(y['with'].humanName)))
         comms = []
         lists = []
         others = []

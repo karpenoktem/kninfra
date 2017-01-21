@@ -65,8 +65,8 @@ class Daan(WhimDaemon):
         elif d['type'] == 'fotoadmin-create-event':
             with self.fotoadmin_lock:
                 return fotoadmin_create_event(self, d['date'],
-                        d['name'], d['humanname'])
+                                              d['name'], d['humanname'])
         elif d['type'] == 'fotoadmin-move-fotos':
             with self.fotoadmin_lock:
                 return fotoadmin_move_fotos(self, d['event'],
-                        d['store'], d['user'], d['dir'])
+                                            d['store'], d['user'], d['dir'])

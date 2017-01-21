@@ -57,8 +57,11 @@ def apply_mailman_changes(daan, changes):
             if not ensure_opened(l):
                 continue
             for em in changes['remove'][l]:
-                mlo[l].ApprovedDeleteMember(em,
-                    admin_notif=False, userack=False)
+                mlo[l].ApprovedDeleteMember(
+                    em,
+                    admin_notif=False,
+                    userack=False
+                )
     finally:
         for ml in mlo.values():
             ml.Save()

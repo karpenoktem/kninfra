@@ -5,7 +5,7 @@ from Mailman.Utils import list_names
 from Mailman.MailList import MailList
 
 ALLOWED_OWNERS = ['wortel@karpenoktem.nl',
-          'secretaris@karpenoktem.nl']
+                  'secretaris@karpenoktem.nl']
 
 
 def main():
