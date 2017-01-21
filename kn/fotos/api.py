@@ -233,6 +233,7 @@ def _search(data, request):
     return {'results': results,
             'people': people}
 
+
 ACTION_HANDLER_MAP = {
     'list': _list,
     'set-metadata': _set_metadata,

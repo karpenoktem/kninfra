@@ -54,6 +54,8 @@ def check_commissions():
             if c.user_set.count() != 0:
                 print "%s: virtual commission got members" % \
                     c.name
+
+
 if __name__ == '__main__':
     check_commissions()
     check_namespace()

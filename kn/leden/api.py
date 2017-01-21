@@ -258,6 +258,7 @@ def adduser_suggest_username(data, request):
             data['first_name'],
             data['last_name'])}
 
+
 ACTION_HANDLER_MAP = {
     'entity_humanName_by_id': entity_humanName_by_id,
     'entities_by_keyword': entities_by_keyword,

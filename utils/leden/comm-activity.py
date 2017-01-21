@@ -72,6 +72,7 @@ def main2():
         for member, time in mpairs:
             print ' %-20s%.2f' % (member.name, time)
 
+
 if __name__ == '__main__':
     main3()
 

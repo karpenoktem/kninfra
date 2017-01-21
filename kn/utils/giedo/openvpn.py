@@ -219,6 +219,7 @@ def generate_openvpn_zips(giedo):
                 'openvpn-config-%s.zip' % str(u.name))):
             _create_zip(u)
 
+
 if __name__ == '__main__':
     create_openvpn_installer(None, Es.by_name('jille'))
 

@@ -34,6 +34,7 @@ class FixHeadingsExtension(Extension):
             '_end'
         )
 
+
 parser = Markdown(extensions=[FixHeadingsExtension()], safe_mode="escape")
 
 # vim: et:sta:bs=2:sw=4:

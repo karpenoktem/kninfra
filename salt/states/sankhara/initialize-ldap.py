@@ -151,5 +151,6 @@ def main():
     with open('/root/.ldap-initialized', 'w'):
         pass
 
+
 if __name__ == '__main__':
     main()

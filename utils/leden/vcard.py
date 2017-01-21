@@ -41,6 +41,7 @@ def vcard(u):
         c.add('x-abadr', 'kn').value = 'nl'
     return c.serialize()
 
+
 if __name__ == '__main__':
     tb = StringIO()
     tf = tarfile.open(mode='w', fileobj=tb)

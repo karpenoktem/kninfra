@@ -111,6 +111,7 @@ def _generate_member_count():
     ret = [(1 + days2 / 365.242, N2) for days2, N2 in ret]
     return ret
 
+
 GRAPHS = {
     # <name>:       (seconds_to_cache, update_functions, extensions)
     'member-count': (60 * 60, update_member_count, ('png', 'pdf'))

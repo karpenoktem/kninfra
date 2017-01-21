@@ -77,5 +77,6 @@ def main():
     for user in reversed(['others'] + users[:MAX_N]):
         print ','.join(map(str, [user] + list(reversed(data[user]))))
 
+
 if __name__ == '__main__':
     main()

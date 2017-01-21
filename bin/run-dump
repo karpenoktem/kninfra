@@ -18,5 +18,6 @@ def main():
     subprocess.call(['tar', 'Jcf', name + '.tar.xz', name])
     subprocess.call(['rm', '-r', name])
 
+
 if __name__ == '__main__':
     main()

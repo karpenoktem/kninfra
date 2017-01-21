@@ -34,5 +34,6 @@ def main():
         print u'         totaal €%s' % s
         print
 
+
 if __name__ == '__main__':
     main()

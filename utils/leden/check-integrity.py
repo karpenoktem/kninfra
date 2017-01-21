@@ -27,5 +27,6 @@ def main():
                 id2name.get(r['with'], r['with']), \
                 id2name.get(r['how'], r['how'])
 
+
 if __name__ == '__main__':
     main()

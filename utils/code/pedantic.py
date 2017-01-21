@@ -103,6 +103,7 @@ def main(rpath):
                 check_modeline(cpath)
                 check_stray_whitespace(cpath)
 
+
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         path = os.path.expanduser('~/repo-dev')

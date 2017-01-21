@@ -28,6 +28,7 @@ TIMEZONE_REGEX = re.compile(
 class ParseError(Exception):
     """Raised when there is a problem parsing a date string"""
 
+
 # Yoinked from python docs
 ZERO = timedelta(0)
 
@@ -45,6 +46,8 @@ class Utc(tzinfo):
 
     def dst(self, dt):
         return ZERO
+
+
 UTC = Utc()
 
 

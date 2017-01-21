@@ -11,6 +11,7 @@ from kn.planning.entities import Pool, Event, Vacancy
 def hm2s(hours, minutes=0):
     return (hours * 60 + minutes) * 60
 
+
 typePeriods = {
     'tappers': [[hm2s(20, 30), hm2s(23), 'eerste dienst'],
                 [hm2s(23), hm2s(25), 'tweede dienst'],

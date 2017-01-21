@@ -47,5 +47,6 @@ def gen_dot():
             d.add_edge(Edge(nodes[source], nodes[member]))
     d.write('the.dot')
 
+
 if __name__ == '__main__':
     gen_dot()

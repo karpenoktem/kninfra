@@ -353,6 +353,7 @@ def main(data):
         Es.ecol.update({'names': alias_graph[src]},
                        {'$push': {'names': src}})
 
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     if len(sys.argv) == 1:

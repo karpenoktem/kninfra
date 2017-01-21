@@ -25,5 +25,6 @@ def birthday_email():
                              ['webcie@karpenoktem.nl'])
         email.send()
 
+
 if __name__ == '__main__':
     birthday_email()

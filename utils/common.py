@@ -27,6 +27,7 @@ def pseudo_randstr(l=12, cs=ALPHANUMUL):
         ret += cs[random.randint(0, len(cs) - 1)]
     return ret
 
+
 """
 Given a list of names,
 returns the users which are
@@ -90,6 +91,7 @@ def emailfy_name(first, last):
         if c not in EMAIL_ALLOWED:
             raise "Invalid character %s found" % c
     return n
+
 
 MAILDOMAIN = kn.settings.MAILDOMAIN
 LISTDOMAIN = 'lists.' + MAILDOMAIN

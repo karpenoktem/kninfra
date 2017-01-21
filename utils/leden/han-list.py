@@ -21,5 +21,6 @@ def main():
         print "%-30s %-10s %s" % (m.full_name, study['number'],
                                   unicode(study['study'].humanName))
 
+
 if __name__ == '__main__':
     main()

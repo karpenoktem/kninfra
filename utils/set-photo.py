@@ -14,6 +14,7 @@ def main(username, photo):
                      "jpg:%s.jpg" % (path.join(settings.SMOELEN_PHOTOS_PATH,
                                                user.username))])
 
+
 if __name__ == '__main__':
     if not len(sys.argv) == 3:
         print "python set-photo.py <username> <path-to-photo>"

@@ -118,6 +118,7 @@ def main():
                 rel['until'] = end_of_year
                 Es.rcol.save(rel)
 
+
 if __name__ == '__main__':
     main()
 

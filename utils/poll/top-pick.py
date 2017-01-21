@@ -36,6 +36,7 @@ def main(poll):
     for a, n in sorted(lut.items(), cmp=lambda x, y: cmp(y[1], x[1])):
         print "%4s %s" % (n, a)
 
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print 'usage: python top-pick.py <poll>'

@@ -61,5 +61,6 @@ def group_email():
         m.email_user('Overzicht groepen, commissies en e-maillijsten',
                      em, from_email='secretaris@karpenoktem.nl')
 
+
 if __name__ == '__main__':
     group_email()

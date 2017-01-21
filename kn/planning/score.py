@@ -7,6 +7,7 @@ from collections import Iterable
 def hm2s(h, m=0):
     return 60 * (60 * h + m)
 
+
 BORREL_START = hm2s(20, 30)
 BORREL_FIRST_SWITCH = hm2s(23)
 BORREL_SECOND_SWITCH = hm2s(25)  # 1.00 the next day

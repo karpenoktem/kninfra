@@ -79,5 +79,6 @@ def check_members(members):
                 len(m.groups.filter(name=MEMBER_GROUP)) > 0):
             print "%s: not active" % m.username
 
+
 if __name__ == '__main__':
     check_members(args_to_users(sys.argv[1:]))

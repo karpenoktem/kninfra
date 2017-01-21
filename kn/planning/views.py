@@ -25,6 +25,7 @@ from kn.planning.forms import (ManagePlanningForm,
 def hm2s(hours, minutes=0):
     return (hours * 60 + minutes) * 60
 
+
 templates = {
     '': {},
     'borrel': {

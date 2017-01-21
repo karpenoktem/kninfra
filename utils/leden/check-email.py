@@ -52,5 +52,6 @@ def check_email():
                   em, 'secretaris@karpenoktem.nl',
                   [m.primary_email])
 
+
 if __name__ == '__main__':
     check_email()

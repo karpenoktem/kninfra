@@ -116,6 +116,7 @@ def sync_bd(cs, cal):
         cs.InsertEvent(event, cal_uri)
         print 'Added %s' % m.full_name()
 
+
 if __name__ == '__main__':
     cs = get_cs()
     print 'BIRTHDAY ACCESS'

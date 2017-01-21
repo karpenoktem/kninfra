@@ -42,5 +42,6 @@ class Program:
                 if c_fn.endswith('.html') or c_fn.endswith('.mail.txt'):
                     self.check_html(c_path)
 
+
 if __name__ == '__main__':
     Program().main()

@@ -216,6 +216,7 @@ def of_type_by_name(t):
             ret[n] = e
     return ret
 
+
 groups = functools.partial(of_type, 'group')
 users = functools.partial(of_type, 'user')
 studies = functools.partial(of_type, 'study')
@@ -230,6 +231,7 @@ def by_ids(ns):
     for m in ecol.find({'_id': {'$in': ns}}):
         ret[m['_id']] = entity(m)
     return ret
+
 
 __id2name_cache = {}
 
@@ -1429,6 +1431,8 @@ class User(Entity):
 
 def set_locale_on_logon(sender, request, user, **kwargs):
     request.session['_language'] = user.preferred_language
+
+
 user_logged_in.connect(set_locale_on_logon)
 
 
@@ -1571,6 +1575,7 @@ class PushChange(SONWrapper):
     @property
     def data(self):
         return self._data['data']
+
 
 # List of type of entities
 # ######################################################################

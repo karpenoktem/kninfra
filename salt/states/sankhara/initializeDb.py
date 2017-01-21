@@ -23,5 +23,6 @@ def main():
         for d in dump[collection]:
             db[collection].insert(d)
 
+
 if __name__ == '__main__':
     main()

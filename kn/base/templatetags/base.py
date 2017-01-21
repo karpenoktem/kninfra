@@ -48,6 +48,7 @@ def json_filter(data):
 def lookup_filter(dict, index):
     return dict.get(index, '')
 
+
 _header_images = None
 
 

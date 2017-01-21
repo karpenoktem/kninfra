@@ -14,6 +14,7 @@ def fmt_date(d):
         return ""
     return str(d.date())
 
+
 fmt = "%35s%12s%12s%15s"
 print fmt % ("NAME  ", "FROM  ", "UNTIL  ", "NUMBER  ")
 for m in args_to_users(sys.argv[1:]):

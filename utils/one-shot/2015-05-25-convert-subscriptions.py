@@ -65,6 +65,7 @@ def main():
         scol.remove({'event': event['_id']})
     print 'Moved %d subscriptions into %d events.' % (scount, ecount)
 
+
 if __name__ == '__main__':
     main()
 
