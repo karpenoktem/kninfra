@@ -62,12 +62,12 @@ def _deactivate_mm(ml, name, user, record, moderators):
     if user is None:
         render_then_email('moderation/timed-out.mail.txt',
                           moderators.canonical_full_email, {
-                    'name': name})
+                              'name': name})
     else:
         render_then_email('moderation/disabled-by.mail.txt',
                           moderators.canonical_full_email, {
-                    'name': name,
-                    'user': user})
+                              'name': name,
+                              'user': user})
 
 
 def _renew_mm(ml, name, user, record, moderators):
@@ -82,9 +82,9 @@ def _renew_mm(ml, name, user, record, moderators):
     record.save()
     render_then_email('moderation/extended.mail.txt',
                       moderators.canonical_full_email, {
-                'name': name,
-                'user': user,
-                'until': until})
+                          'name': name,
+                          'user': user,
+                          'until': until})
     return record
 
 
@@ -102,9 +102,9 @@ def _activate_mm(ml, name, user, record, moderators):
     record.save()
     render_then_email('moderation/enabled.mail.txt',
                       moderators.canonical_full_email, {
-                'name': name,
-                'user': user,
-                'until': until})
+                          'name': name,
+                          'user': user,
+                          'until': until})
     return record
 
 

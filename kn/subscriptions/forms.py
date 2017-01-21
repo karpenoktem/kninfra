@@ -32,8 +32,8 @@ def get_add_event_form(user, superuser=False, editing=False):
             name = forms.RegexField(label=_('Naam voor computers'),
                                     regex=r'^[a-z0-9-]+$',
                                     widget=forms.TextInput(attrs={
-                        'required': '',
-                        'pattern':  '[a-z0-9-]+'}),
+                                        'required': '',
+                                        'pattern':  '[a-z0-9-]+'}),
                     validators=[validate_event_name])
         description = forms.CharField(
             label=_('Beschrijving'),
@@ -42,12 +42,12 @@ def get_add_event_form(user, superuser=False, editing=False):
         cost = forms.DecimalField(label=_('Kosten'),
                                   initial='0',
                                   widget=forms.NumberInput(attrs={
-                    'required': '',
-                    'min':      '0'}))
+                                      'required': '',
+                                      'min':      '0'}))
         date = forms.DateField(label=_('Datum'),
                                widget=forms.DateInput(attrs={
-                    'required':    '',
-                    'placeholder': 'jjjj-mm-dd'}))
+                                   'required':    '',
+                                   'placeholder': 'jjjj-mm-dd'}))
         max_subscriptions = forms.IntegerField(
             required=False,
             label=_('Maximum aantal deelnemers (optioneel)'),

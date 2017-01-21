@@ -118,8 +118,8 @@ def defaultSettings(glbls):
     d.LANGUAGES = [
         ('nl', _('Nederlands')),
         ('en', _('Engels')),
-    #    ('de', _('Duits')),
-    #    ('en_PI', _('Piraat')),
+        #    ('de', _('Duits')),
+        #    ('en_PI', _('Piraat')),
     ]
 
     # You probably won't change this

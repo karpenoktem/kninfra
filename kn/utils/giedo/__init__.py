@@ -152,9 +152,9 @@ class Giedo(WhimDaemon):
             if remote != local:
                 pc = Es.PushChange({'system': 'villanet',
                                     'action': 'changeUser', 'data': {
-                        'username': name,
-                        'till': local
-                        }})
+                                        'username': name,
+                                        'till': local
+                                        }})
                 pc.save()
         self.push_changes_event.set()
 
@@ -225,9 +225,9 @@ class Giedo(WhimDaemon):
                     return {'error': 'wrong current password'}
                 pc = Es.PushChange({'system': 'villanet',
                                     'action': 'changeUser', 'data': {
-                        'username': d['user'],
-                        'password': self.villanet_encrypt_password(d['newpass'])
-                            }})
+                                        'username': d['user'],
+                                        'password': self.villanet_encrypt_password(d['newpass'])
+                                        }})
                 pc.save()
                 self.push_changes_event.set()
                 return {'success': True}

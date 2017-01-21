@@ -386,15 +386,15 @@ class Subscription(SONWrapper):
         # They are used here for proper threading in mail applications.
         render_then_email(template, self.user,
                           ctx={
-                    'mutation': mutation,
-                    'subscription': self,
-                    'event': self.event,
-                },
+                              'mutation': mutation,
+                              'subscription': self,
+                              'event': self.event,
+                              },
                 cc=cc,
                 reply_to=self.event.owner.canonical_full_email,
                 headers={
                     'In-Reply-To': self.event.messageId,
                     'References': self.event.messageId,
-                })
+                              })
 
 # vim: et:sta:bs=2:sw=4:

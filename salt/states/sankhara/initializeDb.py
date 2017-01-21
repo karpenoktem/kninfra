@@ -10,7 +10,7 @@ DB_FILE = '/home/infra/initial-db.yaml'
 
 yaml.SafeLoader.add_constructor('!id',
                                 lambda loader, node: bson.objectid.ObjectId(
-                        loader.construct_scalar(node)))
+                                    loader.construct_scalar(node)))
 
 
 def main():

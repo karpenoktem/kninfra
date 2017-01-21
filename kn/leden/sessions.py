@@ -15,7 +15,7 @@ class SessionStore(SessionBase):
     def load(self):
         s = scol.find_one({'_id': self.session_key,
                            'expire_dt': {
-                  '$gt': datetime.datetime.now()}})
+                               '$gt': datetime.datetime.now()}})
         if s is None:
             self.create()
             return {}

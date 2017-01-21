@@ -223,11 +223,11 @@ def event_new_or_edit(request, edit=None):
                 Es.by_name('secretariaat').canonical_full_email, {
                     'event': e,
                     'user': request.user
-                },
+                      },
                 headers={
                     'In-Reply-To': e.messageId,
                     'References': e.messageId,
-                },
+                      },
             )
             return HttpResponseRedirect(reverse('event-detail', args=(e.name,)))
     elif edit is None:

@@ -65,7 +65,7 @@ class AddUserForm(forms.Form):
     first_name = forms.CharField(label=_("Voornaam"))
     last_name = forms.CharField(label=_("Achternaam"),
                                 widget=forms.TextInput(attrs={
-                        'placeholder': _('bijv.: Vaart, van der')}))
+                                    'placeholder': _('bijv.: Vaart, van der')}))
     username = forms.CharField(label=_("Gebruikersnaam"),
                                validators=[validate_username])
     email = forms.EmailField(label=_("E-Mail adres"))
@@ -76,7 +76,7 @@ class AddUserForm(forms.Form):
     addr_city = forms.CharField(label=_("Woonplaats"))
     telephone = forms.CharField(label=_("Telefoonnummer"),
                                 widget=forms.TextInput(attrs={
-                        'placeholder': _('bijv.: +31612345678')}))
+                                    'placeholder': _('bijv.: +31612345678')}))
     study_number = forms.CharField(label=_("Studentnummer"), required=False)
     study_inst = EntityChoiceField(label=_("Onderwijs instelling"),
                                    _type='institute')

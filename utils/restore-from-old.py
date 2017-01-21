@@ -31,8 +31,8 @@ def main(data):
         return Es.ecol.insert({'types': ['tag'],
                                'names': [name],
                                'humanNames': [{
-                           'name': name,
-                           'human': humanName}],
+                                   'name': name,
+                                   'human': humanName}],
                        'tags': tags})
     print 'dropping'
     Es.ecol.drop()

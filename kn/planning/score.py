@@ -105,7 +105,7 @@ def p_temporary(begin, end, preflet):
 
 
 preferences = {
-"tappers": {
+    "tappers": {
         "anne":     (p_borrel(100,  0,  0),),
         "annette":  (p_borrel(0,  0,  0),),
         # In words:  Bas prefers the first and second shift,
@@ -154,8 +154,8 @@ preferences = {
         "maxm":     (p_borrel(100, 100,  0),),
         "greet":    (p_borrel(100, 100,  0),),
         "ids":      (p_borrel(100, 100,  0),),
-},
-"draai": {
+        },
+    "draai": {
         "bart":       p_borrel(100, 100,  0),
         "barts":      p_borrel(0,  0,  0),
         "bas":        p_borrel(100, 100,  0),
@@ -178,7 +178,7 @@ preferences = {
         "stan":       p_borrel(50, 50,  0),
         "vincentp":   p_borrel(100, 100, 50),
         "yurre":      p_borrel(100, 100, 100),
-}}
+        }}
 
 
 def planning_vacancy_worker_score(vacancy, worker):
