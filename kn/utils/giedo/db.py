@@ -5,7 +5,6 @@ from kn.leden.date import now
 from kn.base.conf import DT_MIN, DT_MAX
 
 
-
 def update_db(giedo):
     dt_now = now()
     # Load tags

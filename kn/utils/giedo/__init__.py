@@ -67,7 +67,6 @@ class Giedo(WhimDaemon):
                   ('quassel', self.daan, self._gen_quassel))
         self.push_changes_event.set()
 
-
     def _gen_quassel(self):
         return {'type': 'quassel',
                 'changes': generate_quassel_changes(self)}

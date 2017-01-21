@@ -6,7 +6,6 @@ import _import  # noqa: F401
 import kn.leden.entities as Es
 
 
-
 def main():
     for e in Es.users():
         # Remove empty study entries

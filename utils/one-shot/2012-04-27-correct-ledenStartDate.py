@@ -15,7 +15,6 @@ import datetime
 import kn.leden.entities as Es
 
 
-
 def main():
     year_overrides = dict()
     had = set()

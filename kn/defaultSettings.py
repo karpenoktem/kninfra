@@ -132,7 +132,6 @@ def defaultSettings(glbls):
     d.SITE_ID = 1
     d.USE_I18N = True
 
-
     d.ROOT_URLCONF = 'kn.urls'
     d.TEMPLATE_LOADERS = (
         ('kn.base.template.SlashNewlineStrippingTemplateLoader', (

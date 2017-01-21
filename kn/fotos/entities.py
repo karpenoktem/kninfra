@@ -521,7 +521,6 @@ class Foto(FotoEntity):
               'full': cache_tuple(None, None, None, None, None),
               }
 
-
     def __init__(self, data):
         super(Foto, self).__init__(data)
 

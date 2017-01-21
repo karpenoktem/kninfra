@@ -21,7 +21,6 @@ from kn.utils.mailman import import_mailman  # noqa: F401
 from kn.base.conf import DT_MIN, DT_MAX
 
 
-
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):
     """ Queries relations """
     if who not in (None, -1):

@@ -9,7 +9,6 @@ import datetime
 import kn.leden.entities as Es
 
 
-
 def load_year_overrides():
     print 'loading year-overrides ...'
     year_overrides = {}

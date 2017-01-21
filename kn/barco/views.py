@@ -141,7 +141,6 @@ settings.BARCO_FORMS = {
         }
 
 
-
 @login_required
 def barco_enterform(request, repos, formname):
     if repos not in settings.DRANK_REPOSITORIES:

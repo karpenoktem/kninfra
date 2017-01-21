@@ -46,7 +46,6 @@ def main3():
                                   member[1] if member[1] else -1)
 
 
-
 def main2():
     rels = list(Es.query_relations(-1, Es.by_name('comms').get_bearers(),
                                    None, now(), deref_who=True, deref_with=True))
