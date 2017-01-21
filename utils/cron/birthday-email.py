@@ -13,7 +13,7 @@ def birthday_email():
     with open('birthday-email.template') as f:
         templ = f.read()
     now = datetime.datetime.now().date()
-        for user in Es.by_name('leden').get_members():
+    for user in Es.by_name('leden').get_members():
         if user.dateOfBirth is None:
             continue
         if (user.dateOfBirth.day != now.day or
