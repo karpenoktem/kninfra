@@ -14,7 +14,7 @@ def find_name_for_user(first_name, last_name):
             names and optionally capitalize letters that came
             from tussenvoegsels. """
         if last_name and ',' in s:
-            bits  = s.split(',', 2)
+            bits = s.split(',', 2)
             s = bits[1] + ' ' + bits[0]
         s = unidecode.unidecode(s).lower()
         s = filter(lambda x: x in settings.USERNAME_CHARS + ' ', s)

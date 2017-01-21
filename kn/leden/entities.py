@@ -599,7 +599,7 @@ def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
     if how != -1:
         query['how'] = how
     if _from is not None:
-        query['from']  = _from
+        query['from'] = _from
     if until is not None:
         query['until'] = until
     return disj_query_relations([query], deref_who, deref_with, deref_how)

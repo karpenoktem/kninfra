@@ -84,7 +84,7 @@ class BackportedLocaleMiddleware(object):
                                 request.path_info)
         urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
         ret = bp_is_language_prefix_patterns_used(urlconf)
-        i18n_patterns_used, prefixed_default_language  = ret
+        i18n_patterns_used, prefixed_default_language = ret
 
         if (response.status_code == 404 and not language_from_path
                 and i18n_patterns_used):
