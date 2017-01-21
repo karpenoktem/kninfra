@@ -305,7 +305,6 @@ def event_edit(request, eventid):
             avform = AddVacancyForm(request.POST)
             if avform.is_valid():
                 fd = avform.cleaned_data
-                day = e.date
                 (begin_hour, begin_minute) = map(int, fd['begin'].split(':'))
                 (end_hour, end_minute) = map(int, fd['end'].split(':'))
                 begin_offset = hm2s(begin_hour, begin_minute)

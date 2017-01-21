@@ -85,7 +85,7 @@ def event_detail(request, name):
             messages.error(request, _("%s is al aangemeld") % user.full_name)
         else:
             notes = request.POST['notes']
-            other_subscription = event.invite(user, notes, request.user)
+            event.invite(user, notes, request.user)
         return HttpResponseRedirect(reverse('event-detail',
                                             args=(event.name,)))
 

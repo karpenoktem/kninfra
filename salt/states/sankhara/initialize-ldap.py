@@ -148,7 +148,7 @@ def main():
             objectClass: simpleSecurityObject
             userPassword: {infra_pw}""",
          'ldapadd')
-    with open('/root/.ldap-initialized', 'w') as f:
+    with open('/root/.ldap-initialized', 'w'):
         pass
 
 if __name__ == '__main__':

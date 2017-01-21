@@ -214,7 +214,7 @@ class FotoEntity(SONWrapper):
         return cache not in ret.get('cacheLocks', ())
 
     def unlock_cache(self, cache):
-        ret = lcol.update({'_id': self._id},
+        lcol.update({'_id': self._id},
                           {'$pull': {'cacheLocks': cache}})
 
     def get_cache_path(self, cache):

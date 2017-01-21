@@ -72,8 +72,6 @@ class BackportedLocaleMiddleware(object):
         i18n_patterns_used, prefixed_default_language = ret
         language = translation.get_language_from_request(
                                 request, check_path=i18n_patterns_used)
-        language_from_path = translation.get_language_from_path(
-                                request.path_info)
         if (not language and i18n_patterns_used
                 and not prefixed_default_language):
             language = settings.LANGUAGE_CODE

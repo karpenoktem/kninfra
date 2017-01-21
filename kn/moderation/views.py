@@ -142,8 +142,6 @@ def overview(request):
             remaining = (None if r is None else r.at +
                          settings.MOD_RENEW_INTERVAL -
                          datetime.datetime.now())
-            until = (None if r is None else r.at +
-                     settings.MOD_RENEW_INTERVAL)
             lists.append({'name': name,
                           'real_name': ml.real_name,
                           'modmode': ml.emergency,

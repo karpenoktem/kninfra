@@ -27,8 +27,8 @@ def main():
                 print 'Updating url_host of %s (was %s)' % (x, ml.web_page_url)
                 ml.web_page_url = url
                 changed = True
-            # if changed:
-            #    print 'Saving %s' % x
+            if changed:
+               print 'Saving %s' % x
             #    ml.Save()
         finally:
             ml.Unlock()

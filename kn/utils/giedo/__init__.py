@@ -169,7 +169,7 @@ class Giedo(WhimDaemon):
         def _sync_action(func, *args):
             try:
                 func(*args)
-            except Exception as e:
+            except Exception:
                 logging.exception("Uncaught exception")
             with todo_lock:
                 todo[0] -= 1
