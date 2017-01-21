@@ -87,7 +87,7 @@ def update_db(giedo):
         elif vg._data['virtual']['type'] == 'year-group':
             yeargroup_vgroups.append(vg)
         else:
-            logging.warn("Unknown vgroup type: %s" \
+            logging.warn("Unknown vgroup type: %s"
                          % vg._data['virtua']['type'])
     # Find all relations with the sofa virtual groups
 

@@ -27,7 +27,7 @@ def check_namespace():
     cn = set(map(lambda c: c.name,
                  filter(lambda c: not c.isVirtual, OldKnGroup.objects.all())))
     un = set(map(lambda m: m.username, OldKnUser.objects.all()))
-    sn = set(map(lambda s: s.name if s.isGlobal else s.group.name \
+    sn = set(map(lambda s: s.name if s.isGlobal else s.group.name
                  + '-' + s.name, OldSeat.objects.all()))
     an = set(map(lambda a: a.source, Alias.objects.all()))
 
