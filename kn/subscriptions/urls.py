@@ -5,7 +5,7 @@ from kn.subscriptions import views
 
 urlpatterns = [
     url(r'^/?$',
-            views.event_list, name='event-list'),
+        views.event_list, name='event-list'),
     url(r'^(?P<name>[a-zA-Z0-9\-.]+)/?$',
         views.event_detail, name='event-detail'),
     url(_(r'^!api/?$'),

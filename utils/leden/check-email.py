@@ -51,8 +51,8 @@ def check_email():
                         'lists': lists,
                         'others': others}))
         send_mail('Controle Karpe Noktem ledenadministratie',
-                    em, 'secretaris@karpenoktem.nl',
-                    [m.primary_email])
+                  em, 'secretaris@karpenoktem.nl',
+                  [m.primary_email])
 
 if __name__ == '__main__':
     check_email()

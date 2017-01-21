@@ -82,70 +82,70 @@ urlpatterns = [
 
     url(_(r'^introPoster2016/?$'), TemplateView.as_view(
             template_name='static/introPoster2016.html'),
-            name='introPoster2016'),
+        name='introPoster2016'),
     url(_(r'^introPoster2015/?$'), TemplateView.as_view(
             template_name='static/introPoster2015.html'),
-            name='introPoster2015'),
+        name='introPoster2015'),
     url(_(r'^introPoster2014/?$'), TemplateView.as_view(
             template_name='static/introPoster2014.html'),
-            name='introPoster2014'),
+        name='introPoster2014'),
     url(_(r'^introPoster2013/?$'), TemplateView.as_view(
             template_name='static/introPoster2013.html'),
-            name='introPoster2013'),
+        name='introPoster2013'),
     url(_(r'^introPoster2012/?$'), TemplateView.as_view(
             template_name='static/introPoster2012.html'),
-            name='introPoster2012'),
+        name='introPoster2012'),
     url(_(r'^introPoster2011/?$'), TemplateView.as_view(
             template_name='static/introPoster2011.html'),
-            name='introPoster2011'),
+        name='introPoster2011'),
     url(_(r'^introPoster2010/?$'), TemplateView.as_view(
             template_name='static/introPoster2010.html'),
-            name='introPoster2010'),
+        name='introPoster2010'),
     url(_(r'^introPoster2009/?$'), TemplateView.as_view(
             template_name='static/introPoster2009.html'),
-            name='introPoster2009'),
+        name='introPoster2009'),
     url(_(r'^lustrumPoster5/?$'), TemplateView.as_view(
             template_name='static/lustrumPoster5.html'),
-            name='lustrumPoster5'),
+        name='lustrumPoster5'),
     url(_(r'^lustrumPoster(?:10)?/?$'), TemplateView.as_view(
             template_name='static/lustrumPoster10.html'),
-            name='lustrumPoster10'),
+        name='lustrumPoster10'),
     url(_(r'^openweekPoster2013/?$'), TemplateView.as_view(
             template_name='static/openweekPoster2013.html'),
-            name='openweekPoster2013'),
+        name='openweekPoster2013'),
     url(_(r'^openweekPoster2014/?$'), TemplateView.as_view(
             template_name='static/openweekPoster2014.html'),
-            name='openweekPoster2014'),
+        name='openweekPoster2014'),
     url(_(r'^openweekPoster2015/?$'), TemplateView.as_view(
             template_name='static/openweekPoster2015.html'),
-            name='openweekPoster2015'),
+        name='openweekPoster2015'),
     url(_(r'^openweek2Poster2015/?$'), TemplateView.as_view(
             template_name='static/openweek2Poster2015.html'),
-            name='openweek2Poster2015'),
+        name='openweek2Poster2015'),
     url(_(r'^openweekPoster2016/?$'), TemplateView.as_view(
             template_name='static/openweekPoster2016.html'),
-            name='openweekPoster2016'),
+        name='openweekPoster2016'),
 
     url(_(r'^lustrum/?$'), TemplateView.as_view(
             template_name='static/lustrum.html'),
-            name='lustrum'),
+        name='lustrum'),
     url(_(r'^intro2008/?$'), TemplateView.as_view(
             template_name='static/intro2008.html'),
-            name='intro2008'),
+        name='intro2008'),
     url(_(r'^intro2009/?$'), TemplateView.as_view(
             template_name='static/intro2009.html'),
-            name='intro2009'),
+        name='intro2009'),
     url(_(r'^intro2010/?$'), TemplateView.as_view(
             template_name='static/intro2010.html'),
-            name='intro2010'),
+        name='intro2010'),
 
     # legacy redirect URLs
     url(_(r'^hink-stap/(?P<name>wiki|forum|stukken)$'),
-            views.hink_stap, name='hinkstap'),
+        views.hink_stap, name='hinkstap'),
 
     # Backwards compatibility
     url(r'^img/(?P<subdir>.*)', direct_to_folder,
-            {'root': os.path.join(settings.MEDIA_ROOT, 'static/img')}),
+        {'root': os.path.join(settings.MEDIA_ROOT, 'static/img')}),
     url(r'^baragenda/?$', RedirectView.as_view(
                     url='/planning')),  # TODO use reverse_url
 

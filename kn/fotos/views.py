@@ -132,7 +132,7 @@ def cache(request, cache, path):
         # not publicly cacheable
         cc = 'private, ' + cc
     resp = HttpResponse(FileWrapper(open(entity.get_cache_path(cache))),
-                            content_type=entity.get_cache_mimetype(cache))
+                        content_type=entity.get_cache_mimetype(cache))
     resp['Content-Length'] = str(st.st_size)
     resp['Last-Modified'] = lm
     resp['Cache-Control'] = cc
@@ -166,7 +166,7 @@ def fotoadmin_create_event(request):
                 messages.info(request, _('Fotoalbum aangemaakt!'))
             else:
                 messages.error(request, _('Er is een fout opgetreden: %s') %
-                                ret.get('error', _('geen foutmelding')))
+                               ret.get('error', _('geen foutmelding')))
             return redirect('fotoadmin-move')
     else:
         form = CreateEventForm()

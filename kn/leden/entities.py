@@ -400,7 +400,7 @@ def by_keyword(keyword, limit=20, _type=None):
     if _type:
         query_dict['types'] = _type
     cursor = ecol.find(query_dict, limit=(0 if limit is None else limit),
-                            sort=[('humanNames.human', 1)])
+                       sort=[('humanNames.human', 1)])
     return map(entity, cursor)
 
 # Specialized functions to work with entities.
@@ -437,7 +437,7 @@ def quarter_to_range(quarter):
     endCMonths = quarter * 3 + 8
     endYears, endMonths = divmod(endCMonths, 12)
     end = (datetime.datetime(2004 + endYears, endMonths + 1, 1)
-                - datetime.timedelta(1))
+           - datetime.timedelta(1))
     return start, end
 
 # Functions to work with relations
@@ -1319,9 +1319,9 @@ class User(Entity):
         lut = by_ids(tuple(ids))
         for s in studies:
             tmp = {'from': None if s['from'] == DT_MIN
-                        else s['from'],
+                   else s['from'],
                    'until': None if s['until'] == DT_MAX
-                        else s['until'],
+                   else s['until'],
                    'study': lut.get(s['study']),
                    'institute': lut.get(s['institute'])}
             if 'number' in s:
@@ -1396,7 +1396,7 @@ class User(Entity):
         today = datetime.date.today()
         born = self.dateOfBirth
         return (today.year - born.year
-                    - ((today.month, today.day) < (born.month, born.day)))
+                - ((today.month, today.day) < (born.month, born.day)))
 
     @property
     def got_unix_user(self):

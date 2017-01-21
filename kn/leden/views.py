@@ -111,8 +111,8 @@ def _entity_detail(request, e):
         r['may_end'] = Es.user_may_end_relation(request.user, r)
         r['id'] = r['_id']
         r['until_year'] = (None if r['until'] is None
-                                or r['until'] >= now()
-                                else Es.date_to_year(r['until']))
+                           or r['until'] >= now()
+                           else Es.date_to_year(r['until']))
         r['virtual'] = Es.relation_is_virtual(r)
     tags = [t.as_primary_type() for t in e.get_tags()]
 
@@ -173,7 +173,7 @@ def _entity_detail(request, e):
 
     # Check whether entity has a photo
     photos_path = (path.join(settings.SMOELEN_PHOTOS_PATH, str(e.name))
-                        if e.name else None)
+                   if e.name else None)
     if photos_path and default_storage.exists(photos_path + '.jpg'):
         img = Image.open(default_storage.open(photos_path + '.jpg'))
         width, height = img.size
@@ -199,8 +199,8 @@ def _entity_detail(request, e):
 
 def _user_detail(request, user):
     ctx = _entity_detail(request, user)
-    ctx['photosUrl'] = reverse('fotos', kwargs={'path': ''}) + \
-                                        '?q=tag:'+str(user.name)
+    ctx['photosUrl'] = (reverse('fotos', kwargs={'path': ''})
+                        + '?q=tag:'+str(user.name))
     ctx['addStudyFormOpen'] = False
     if request.method == 'POST':
         addStudyForm = AddStudyForm(request.POST)
@@ -229,7 +229,7 @@ def _group_detail(request, group):
     if isFreeToJoin:
         dt = now()
         rel = list(Es.query_relations(request.user, group, None,
-                                        dt, dt, False, False, False))
+                                      dt, dt, False, False, False))
         assert len(rel) <= 1
         for r in rel:
             rel_id = r['_id']
@@ -322,7 +322,7 @@ def entities_by_year_of_birth(request, year):
     _year = int(year)
     ctx = {'year': _year,
            'users': sorted(Es.by_year_of_birth(_year),
-                                    key=lambda x: x.humanName)}
+                           key=lambda x: x.humanName)}
     years = Es.get_years_of_birth()
     if _year + 1 in years:
         ctx['next_year'] = _year + 1
@@ -454,7 +454,7 @@ def ik_chpasswd_villanet(request):
                 giedo.change_villanet_password(str(request.user.name), oldpw,
                                                newpw)
                 t = _("Lieve %s, maar natuurlijk, jouw wachtwoord voor het " +
-                        "villa-netwerk is veranderd.")
+                      "villa-netwerk is veranderd.")
                 messages.info(request, t % request.user.first_name)
                 return HttpResponseRedirect(reverse('smoelen-home'))
             except giedo.ChangePasswordError as e:
@@ -700,12 +700,12 @@ def relation_begin(request):
         if t not in request.POST:
             raise ValueError("Missing attr %s" % t)
         if t == 'how' and (not request.POST[t] or
-                               request.POST[t] == 'null'):
+                           request.POST[t] == 'null'):
             d[t] = None
         else:
             d[t] = _id(request.POST[t])
     if not Es.user_may_begin_relation(request.user, d['who'], d['with'],
-                                                                d['how']):
+                                      d['how']):
         raise PermissionDenied
 
     # Check whether such a relation already exists
@@ -806,7 +806,7 @@ def note_add(request):
         raise Http404
     on.add_note(request.POST['note'], request.user)
     render_then_email("leden/new-note.mail.txt",
-                        Es.by_name('secretariaat').canonical_full_email, {
+                      Es.by_name('secretariaat').canonical_full_email, {
                             'user': request.user,
                             'note': request.POST['note'],
                             'on': on})

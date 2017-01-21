@@ -29,11 +29,11 @@ def view(request, graph, ext):
     # Check if we should update the graph
     if (not default_storage.exists(path) or
             datetime.datetime.now() - default_storage.created_time(path)
-                > datetime.timedelta(seconds=timeout)):
+        > datetime.timedelta(seconds=timeout)):
         update(default_storage.path(
                     os.path.join(settings.GRAPHS_PATH, graph)))
     return HttpResponse(FileWrapper(default_storage.open(path)),
-                                content_type=mimetypes.guess_type(path)[0])
+                        content_type=mimetypes.guess_type(path)[0])
 
 
 def update_member_count(base_path):

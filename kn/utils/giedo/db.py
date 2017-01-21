@@ -43,10 +43,10 @@ def update_db(giedo):
                        Es.date_to_year(dt_now),
                        Es.date_to_year(dt_now))
         for rel in rels:
-            s = min_from if rel['from'] == DT_MIN \
-                    else Es.date_to_year(rel['from'])
-            t = max_until if rel['until'] == DT_MAX \
-                    else Es.date_to_year(rel['until'])
+            s = (min_from if rel['from'] == DT_MIN
+                 else Es.date_to_year(rel['from']))
+            t = (max_until if rel['until'] == DT_MAX
+                 else Es.date_to_year(rel['until']))
             years = set(range(s, t+1))
             for tid in rel.get('tags', ()):
                 if tid not in year_overrides:

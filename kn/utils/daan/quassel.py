@@ -17,7 +17,7 @@ def quassel_setpass(daan, user, password):
     c = conn.cursor()
     try:
         c.execute("UPDATE quasseluser SET password=? where username=?",
-                                        (hashed_pw, user))
+                  (hashed_pw, user))
         conn.commit()
     except sqlite3.OperationalError:
         logging.exception("OperationalError")
@@ -46,7 +46,7 @@ def apply_quassel_changes(daan, changes):
         logging.info('quassel: adding %s', user)
         hashed_pw = hashlib.sha1(pseudo_randstr()).hexdigest()
         c.execute("INSERT INTO quasseluser(username, password) VALUES (?, ?)",
-                    (user, hashed_pw))
+                  (user, hashed_pw))
     conn.commit()
 
 # vim: et:sta:bs=2:sw=4:

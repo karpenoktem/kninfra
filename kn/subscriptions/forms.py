@@ -13,7 +13,7 @@ def get_allowed_owners(user):
     '''
 
     entities = [user] + [g for g in user.cached_groups
-                           if subscr_Es.may_set_owner(user, g)]
+                         if subscr_Es.may_set_owner(user, g)]
     return entities
 
 

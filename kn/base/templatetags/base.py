@@ -57,11 +57,11 @@ def header(context):
     path = os.path.join(settings.MEDIA_ROOT, 'base/headers')
     if _header_images is None:
         public = [os.path.join('public', fn)
-                    for fn in os.listdir(os.path.join(path, 'public'))
-                    if fn != '.keep']
+                  for fn in os.listdir(os.path.join(path, 'public'))
+                  if fn != '.keep']
         private = [os.path.join('private', fn)
-                    for fn in os.listdir(os.path.join(path, 'private'))
-                    if fn != '.keep']
+                   for fn in os.listdir(os.path.join(path, 'private'))
+                   if fn != '.keep']
         private.extend(public)
         _header_images = {'public': public, 'private': private}
     if 'user' not in context or not context['user'].is_authenticated():

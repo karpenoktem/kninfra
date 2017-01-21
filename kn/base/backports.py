@@ -46,7 +46,7 @@ class BackportedLocaleRegexURLResolver(RegexURLResolver):
         language_code = get_language() or settings.LANGUAGE_CODE
         if language_code not in self._regex_dict:
             if (language_code == settings.LANGUAGE_CODE
-                        and not self.prefix_default_language):
+                and not self.prefix_default_language):
                 # NOTE this is customization 2 --- see comment above.
                 regex_string = '^(?:%s/)?' % language_code
                 # regex_string = ''
@@ -68,8 +68,8 @@ class BackportedLocaleMiddleware(object):
                 and request.META['HTTP_ACCEPT_LANGUAGE'].lower().startswith('en')):
             del(request.META['HTTP_ACCEPT_LANGUAGE'])
         urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-        i18n_patterns_used, prefixed_default_language \
-                = backported_is_language_prefix_patterns_used(urlconf)
+        ret = bp_is_language_prefix_patterns_used(urlconf)
+        i18n_patterns_used, prefixed_default_language = ret
         language = translation.get_language_from_request(
                                 request, check_path=i18n_patterns_used)
         language_from_path = translation.get_language_from_path(
@@ -85,8 +85,8 @@ class BackportedLocaleMiddleware(object):
         language_from_path = translation.get_language_from_path(
                                 request.path_info)
         urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-        i18n_patterns_used, prefixed_default_language \
-                = backported_is_language_prefix_patterns_used(urlconf)
+        ret = bp_is_language_prefix_patterns_used(urlconf)
+        i18n_patterns_used, prefixed_default_language  = ret
 
         if (response.status_code == 404 and not language_from_path
                 and i18n_patterns_used):
@@ -119,7 +119,7 @@ class BackportedLocaleMiddleware(object):
 
 
 @lru_cache.lru_cache(maxsize=None)
-def backported_is_language_prefix_patterns_used(urlconf):
+def bp_is_language_prefix_patterns_used(urlconf):
     for url_pattern in get_resolver(urlconf).url_patterns:
         if isinstance(url_pattern,  BackportedLocaleRegexURLResolver):
             return True, url_pattern.prefix_default_language

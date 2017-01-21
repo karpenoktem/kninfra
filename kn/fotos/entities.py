@@ -152,7 +152,7 @@ class FotoEntity(SONWrapper):
             parent_effective_visibility = parent.effective_visibility
 
         visibilities = actual_visibility(parent_effective_visibility) & \
-                       actual_visibility(self.visibility)
+        actual_visibility(self.visibility)
         order = ['world', 'leden', 'hidden']+self.visibility
         if visibilities:
             for v in order:
@@ -174,7 +174,7 @@ class FotoEntity(SONWrapper):
 
     def may_view(self, user):
         return bool(self.required_visibility(user)
-                        & frozenset(self.effective_visibility))
+                    & frozenset(self.effective_visibility))
 
     @property
     def full_path(self):

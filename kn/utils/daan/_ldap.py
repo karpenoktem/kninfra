@@ -22,7 +22,7 @@ def ldap_setpass(daan, user, password):
         # Set SAMBA password entries (to support MSCHAPv2 authentication
         # for WiFi via FreeRADIUS via LDAP).
         res = l.search_s(settings.LDAP_BASE, ldap.SCOPE_ONELEVEL,
-                                'uid=%s' % user)
+                         'uid=%s' % user)
         if not res:
             return
         _o = res[0][1]
@@ -56,7 +56,7 @@ def apply_ldap_changes(daan, changes):
         for uid, mail, sn, cn in changes['upsert']:
             dn = 'uid=%s,%s' % (uid, settings.LDAP_BASE)
             res = l.search_s(settings.LDAP_BASE, ldap.SCOPE_ONELEVEL,
-                                    'uid=%s' % uid)
+                             'uid=%s' % uid)
             if not res:
                 entry = {'objectClass': ['inetOrgPerson'],
                          'uid': [uid],

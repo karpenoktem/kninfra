@@ -24,7 +24,7 @@ def fotoadmin_create_event(daan, date, name, humanName):
         return {'error': 'Event already exists'}
     os.mkdir(path, 0775)
     os.chown(path, pwd.getpwnam('fotos').pw_uid,
-               grp.getgrnam('fotos').gr_gid)
+             grp.getgrnam('fotos').gr_gid)
     album = fEs.entity({
         'type': 'album',
         'path': '',

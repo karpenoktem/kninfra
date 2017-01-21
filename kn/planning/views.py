@@ -125,9 +125,9 @@ def planning_view(request):
     events = list()
     for e in event_entities:
         ei = {'id': _id(e),
-                'name': e.name,
-                'datetime': e.date,
-                'kind': e.kind,
+              'name': e.name,
+              'datetime': e.date,
+              'kind': e.kind,
               'vacancies': dict()}
         for index in poolid2index.values():
             ei['vacancies'][index] = list()
@@ -376,7 +376,7 @@ def planning_template(request, poolname):
         if not vacancies:
             continue
         ei = {'name': e.name,
-                'date': e.date,
+              'date': e.date,
               'vacancies': list()}
         shifts = dict()
         for v in vacancies:

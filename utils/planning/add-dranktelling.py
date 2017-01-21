@@ -13,7 +13,7 @@ def hm2s(hours, minutes=0):
     return (hours * 60 + minutes) * 60
 
 begin = datetime.datetime.strptime('%s %s' % (sys.argv[1], sys.argv[2]),
-                                                '%Y-%m-%d %H:%M')
+                                   '%Y-%m-%d %H:%M')
 
 e = Event({
     'name': 'Dranktelling',

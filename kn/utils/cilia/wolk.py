@@ -13,7 +13,7 @@ def wolk_setpass(cilia, user, passwd):
         logging.warning('wolk: no path available, skipping')
         return None
     wolk_script = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                    'wolk.php')
+                               'wolk.php')
     proc = subprocess.Popen(['sudo', '-u', settings.WOLK_USER, 'php',
                              wolk_script], cwd=settings.WOLK_PATH,
                             stdin=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -30,7 +30,7 @@ def apply_wolk_changes(cilia, changes):
     if not changes:
         return
     wolk_script = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                    'wolk.php')
+                               'wolk.php')
     proc = subprocess.Popen(['sudo', '-u', settings.WOLK_USER, 'php',
                              wolk_script], cwd=settings.WOLK_PATH,
                             stdin=subprocess.PIPE, stdout=subprocess.PIPE)

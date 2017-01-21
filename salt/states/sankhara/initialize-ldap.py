@@ -10,8 +10,8 @@ import subprocess
 def main():
     if not len(sys.argv) == 7:
         sys.stderr.write('[domain] [admin password] [infra password] ' +
-                                '[daan password] [freeradius password] ' +
-                                '[saslauthd password]\n')
+                         '[daan password] [freeradius password] ' +
+                         '[saslauthd password]\n')
         sys.exit(-1)
     domain = sys.argv[1]
     suffix = 'dc=' + ',dc='.join(domain.split('.'))
@@ -25,9 +25,9 @@ def main():
         first_line, rest = s.split('\n', 1)
         s = first_line + '\n' + textwrap.dedent(rest)
         s = s.format(suffix=suffix, host=host, admin_pw=admin_pw,
-                        daan_pw=daan_pw, freeradius_pw=freeradius_pw,
-                        infra_pw=infra_pw, saslauthd_pw=saslauthd_pw,
-                        local=local)
+                     daan_pw=daan_pw, freeradius_pw=freeradius_pw,
+                     infra_pw=infra_pw, saslauthd_pw=saslauthd_pw,
+                     local=local)
         pipe = subprocess.Popen([what, '-Y', 'EXTERNAL', '-H', 'ldapi:///'],
                                 stdin=subprocess.PIPE)
         pipe.stdin.write(s)
@@ -56,7 +56,7 @@ def main():
             olcobjectclasses: {{0}}( 1.3.6.1.4.1.7165.2.2.6 NAME
               'knAccount' DESC 'KN account' SUP top
               AUXILIARY MUST ( uid ) MAY ( sambaNTPassword ) )""",
-                'ldapadd')
+         'ldapadd')
     ldif("""dn: olcDatabase={{1}}mdb,cn=config
             changetype: modify
             delete: olcAccess""")
@@ -114,40 +114,40 @@ def main():
             objectClass: top
             objectClass: organization
             o: {host}""",
-                'ldapadd')
+         'ldapadd')
     ldif("""dn: ou=users,{suffix}
             ou: users
             objectClass: organizationalUnit
             objectClass: top""",
-                'ldapadd')
+         'ldapadd')
     ldif("""dn: cn=saslauthd,{suffix}
             cn: saslauthd
             objectClass: organizationalRole
             objectClass: top
             objectClass: simpleSecurityObject
             userPassword: {saslauthd_pw}""",
-                'ldapadd')
+         'ldapadd')
     ldif("""dn: cn=freeradius,{suffix}
             cn: freeradius
             objectClass: organizationalRole
             objectClass: top
             objectClass: simpleSecurityObject
             userPassword: {freeradius_pw}""",
-                'ldapadd')
+         'ldapadd')
     ldif("""dn: cn=daan,{suffix}
             cn: daan
             objectClass: organizationalRole
             objectClass: top
             objectClass: simpleSecurityObject
             userPassword: {daan_pw}""",
-                'ldapadd')
+         'ldapadd')
     ldif("""dn: cn=infra,{suffix}
             cn: infra
             objectClass: organizationalRole
             objectClass: top
             objectClass: simpleSecurityObject
             userPassword: {infra_pw}""",
-                'ldapadd')
+         'ldapadd')
     with open('/root/.ldap-initialized', 'w') as f:
         pass
 

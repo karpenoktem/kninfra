@@ -43,8 +43,8 @@ def entities_by_keyword(data, request):
     if _type and not isinstance(_type, basestring):
         _type = None
     return [[e.id, _humanName_of_entity(e)]
-                    for e in Es.by_keyword(data.get('keyword', ''),
-                                           _type=_type)]
+            for e in Es.by_keyword(data.get('keyword', ''),
+                                   _type=_type)]
 
 
 def entity_humanName_by_id(data, request):
@@ -79,7 +79,7 @@ def close_note(data, request):
         return {'ok': False, 'error': 'Note already closed'}
     note.close(_id(request.user))
     render_then_email('leden/note-closed.mail.txt',
-                        Es.by_name('secretariaat').canonical_full_email, {
+                      Es.by_name('secretariaat').canonical_full_email, {
                             'note': note})
     return {'ok': True}
 

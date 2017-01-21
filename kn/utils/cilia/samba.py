@@ -22,7 +22,7 @@ def pdbedit_list():
                           stderr=subprocess.STDOUT, close_fds=True)
     for line in ph.communicate()[0].splitlines():
         (username, uid, lanmanhash, nthash, flags,
-                lastchange, empty) = line.split(':')
+         lastchange, empty) = line.split(':')
         users[username].update({
             'lanmanhash': lanmanhash,  # Unused
             'nthash': nthash,

@@ -282,7 +282,7 @@ def main(data):
     plan_remove = set()
     for r in Es.rcol.find({'until': {'$lt': DT_MAX}}):
         lut[r['until'] + timedelta(1, 0), r['with'],
-                r['how'], r['who']] = r['_id']
+            r['how'], r['who']] = r['_id']
     print ' crossreference from'
     for r in Es.rcol.find({'from': {'$gt': DT_MIN}}):
         n = (r['from'], r['with'], r['how'], r['who'])

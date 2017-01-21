@@ -66,8 +66,8 @@ def defaultSettings(glbls):
     d.LISTS_MAILDOMAIN = 'lists.' + d.DOMAINNAME
     d.MAILMAN_PATH = '/var/lib/mailman'
     d.MAILMAN_DEFAULT_OWNER = 'wortel@'+d.MAILDOMAIN
-    d.DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@%s>' \
-                                    % d.MAILDOMAIN
+    d.DEFAULT_FROM_EMAIL = (
+        'Karpe Noktems ledenadministratie <root@%s>' % d.MAILDOMAIN)
 
     d.MONGO_HOST = 'localhost'
     d.MONGO_DB = 'kn'

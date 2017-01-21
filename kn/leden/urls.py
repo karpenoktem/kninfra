@@ -8,7 +8,7 @@ from kn.leden import views, api, graphs
 urlpatterns = [
     url(r'^$',
         login_required(TemplateView.as_view(template_name='leden/home.html')),
-               name='smoelen-home'),
+        name='smoelen-home'),
     url(_(r'^gebruikers/(?:p/(?P<page>[0-9]+)/)?$'),
         views.user_list, name='user-list'),
     url(_(r'^naamdrager/(?P<name>[^/]+)/$'),
@@ -60,7 +60,7 @@ urlpatterns = [
     url(_(r'^api/?$'), api.view, name='leden-api'),
     url(_(r'^ik/openvpn/$'), views.ik_openvpn, name="ik-openvpn"),
     url(_(r'^ik/openvpn/(?P<filename>.+(exe|zip))$'), views.ik_openvpn_download,
-                name="ik-openvpn-download"),
+        name="ik-openvpn-download"),
     url(_(r'^secretariaat/inschrijven$'),
         views.secr_add_user, name='secr-add-user'),
     url(_(r'^secretariaat/update-site-agenda/$'),

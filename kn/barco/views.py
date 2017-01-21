@@ -109,7 +109,7 @@ class BarformSpecifics(FormSpecifics):
         if fd['comments'] != '':
             write("\n\n# XXX ")
             write(fd['comments'].replace("\r\n", "\n")\
-                    .replace("\n", "\n# "))
+                  .replace("\n", "\n# "))
         write("\n\n")
         template_write_data_to_file(template, prefill, write)
 
@@ -182,7 +182,7 @@ def barco_enterform(request, repos, formname):
             subprocess.call(['/usr/bin/git', 'add', fn], cwd=repopath)
             msg = (_("Barform %s ingevoerd via kninfra\n\n"
                      "Signed-off-by: kninfra <root@karpenoktem.nl>") %
-                    fd['formname'])
+                   fd['formname'])
             # XXX Is it safe to use canonical_full_email?
             author = "%s <%s>" % (str(request.user.humanName),
                                   request.user.canonical_email)

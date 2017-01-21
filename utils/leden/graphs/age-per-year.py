@@ -61,7 +61,7 @@ def main():
         cdata.append(d2)
     g.plot(pyx.graph.data.points(
         [[_year+1]+[d.get(age, 0) for age in xrange(min(*ages), max(*ages))]
-                    for _year, d in enumerate(cdata)],
+         for _year, d in enumerate(cdata)],
             xname=0, y=1, **colass), styles)
     g.writePDFfile('age-per-year')
 
