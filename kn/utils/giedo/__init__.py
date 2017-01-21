@@ -223,11 +223,13 @@ class Giedo(WhimDaemon):
                 u = u.as_user()
                 if not u.check_password(d['oldpass']):
                     return {'error': 'wrong current password'}
-                pc = Es.PushChange({'system': 'villanet',
-                                    'action': 'changeUser', 'data': {
-                                        'username': d['user'],
-                                        'password': self.villanet_encrypt_password(d['newpass'])
-                                    }})
+                encrypted_pass = self.villanet_encrypt_password(d['newpass'])
+                pc = Es.PushChange(
+                    {'system': 'villanet',
+                     'action': 'changeUser', 'data': {
+                         'username': d['user'],
+                         'password': encrypted_pass
+                     }})
                 pc.save()
                 self.push_changes_event.set()
                 return {'success': True}

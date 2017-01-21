@@ -18,7 +18,8 @@ from kn.leden.mongo import _id
 from kn.planning.entities import Pool, Event, Vacancy, may_manage_planning
 from kn.planning.score import planning_vacancy_worker_score
 from kn.planning.utils import send_reminder
-from kn.planning.forms import ManagePlanningForm, AddVacancyForm, EventCreateForm
+from kn.planning.forms import (ManagePlanningForm,
+                               AddVacancyForm, EventCreateForm)
 
 
 def hm2s(hours, minutes=0):
@@ -315,7 +316,8 @@ def event_edit(request, eventid):
                 v = Vacancy({
                     'name': fd['name'],
                     'event': _id(e),
-                    'begin': (begin_date, fd['begin_is_approximate'] == "True"),
+                    'begin': (begin_date,
+                              fd['begin_is_approximate'] == "True"),
                     'end': (end_date, fd['end_is_approximate'] == "True"),
                     'pool': _id(fd['pool']),
                     'assignee': None,

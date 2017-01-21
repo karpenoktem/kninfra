@@ -24,7 +24,8 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib import messages
 
-from kn.leden.forms import ChangePasswordForm, AddUserForm, AddGroupForm, AddStudyForm
+from kn.leden.forms import (ChangePasswordForm, AddUserForm,
+                            AddGroupForm, AddStudyForm)
 from kn.leden.auth import login_or_basicauth_required
 from kn.leden.date import now, date_to_dt
 from kn.leden.mongo import _id

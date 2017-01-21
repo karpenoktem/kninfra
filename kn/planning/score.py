@@ -189,9 +189,9 @@ def planning_vacancy_worker_score(vacancy, worker):
         # assume (s)he is available so that we'll get his/her preferences asap.
         return 101
     if not isinstance(preferences[pn][un], Iterable):
-        # Check if the prefetlist is not an iterable, and make it an iterable if needed
-        # This allows us to use a single preference without putting it in a
-        # tuple
+        # Check if the prefetlist is not an iterable, and make it an
+        # iterable if needed. This allows us to use a single preference
+        # without putting it in a tuple
         preferences[pn][un] = (preferences[pn][un], )
     for preflet in preferences[pn][un]:
         score = preflet(vacancy)

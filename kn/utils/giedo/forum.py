@@ -34,8 +34,9 @@ def generate_forum_changes(self):
             logging.info("forum: removing user %s", user)
         else:
             if users[user].humanName != realname:
-                todo['update-realname'].append((user,
-                                                unicode(users[user].humanName)))
+                todo['update-realname'].append(
+                    (user, unicode(users[user].humanName))
+                )
             del users[user]
     for name, user in users.iteritems():
         todo['add'].append((name, unicode(user.humanName),

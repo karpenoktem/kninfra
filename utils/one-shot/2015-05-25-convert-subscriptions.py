@@ -27,7 +27,8 @@ def main():
         for subscription in scol.find({'event': event['_id']}).sort('date'):
             scount += 1
             if subscription['user'] in users:
-                print 'WARNING: duplicate subscription for user:', subscription['user']
+                print ('WARNING: duplicate subscription for user:',
+                       subscription['user'])
                 continue
             users.add(subscription['user'])
             subscription2 = {

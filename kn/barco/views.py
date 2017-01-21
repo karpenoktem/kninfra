@@ -173,7 +173,10 @@ def barco_enterform(request, repos, formname):
             # Dump the entered data to a file ...
             fd = form.cleaned_data
             csv = StringIO()
-            write = lambda x: csv.write(x.encode("utf-8"))
+
+            def write(x):
+                csv.write(x.encode("utf-8"))
+
             write("# Ingevoerd door " + str(request.user.name) + "\n")
             formspec.entered_data_to_file(fd, write, template, prefill)
 

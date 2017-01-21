@@ -18,7 +18,8 @@ from oauth2client.client import SignedJwtAssertionCredentials
 
 # How to configure the agenda:
 #
-#  - Go to https://console.developers.google.com/project and make a new project.
+#  - Go to https://console.developers.google.com/project and make a new
+#    project.
 #  - Under APIs & auth / APIs, enable the Calendar API (you can disable all
 #    other APIs).
 #  - Under APIs & auth / Credentials, create a new Client ID, with type

@@ -108,9 +108,9 @@ def update_db(giedo):
             sofa_lut[k] = []
         sofa_lut[k].append(svg)
     # Check whether all year-group relations are in place
-    # If there are two relations between an entity and a group in the same year,
-    # we do not want this relation to be handled twice.  Thus we keep a seperate
-    # look-up-table to prevent this.
+    # If there are two relations between an entity and a group in the
+    # same year, we do not want this relation to be handled twice.
+    # Thus we keep a seperate look-up-table to prevent this.
     year_vgroup_rel_ok = set()
     for mrel in year_group_mrels:
         g = groups[id2name[mrel['with']]]

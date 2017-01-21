@@ -59,10 +59,13 @@ def set_samba_map(cilia, _map):
         if user not in smbusers:
             l.info("Added %s", user)
             bogus_password = pseudo_randstr(16)
-            ph = subprocess.Popen(['pdbedit', '-a', '-t',
-                                   '-u', user, '-f', fn],
-                                  stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                  stderr=subprocess.STDOUT, close_fds=True)
+            ph = subprocess.Popen(
+                ['pdbedit', '-a', '-t', '-u', user, '-f', fn],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                close_fds=True
+            )
             ph.communicate("%s\n%s\n" % (bogus_password,
                                          bogus_password))
             added_users = True

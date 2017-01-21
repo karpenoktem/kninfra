@@ -5,7 +5,6 @@ from common import args_to_users
 
 from kn.leden.mongo import _id
 import kn.leden.entities as Es
-from kn.leden.date import now
 
 from django.core.mail import send_mail
 from django.template import Context, Template

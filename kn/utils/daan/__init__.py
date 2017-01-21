@@ -8,7 +8,8 @@ from kn.utils.daan.postfix import set_postfix_map, set_postfix_slm_map
 from kn.utils.daan.mailman import apply_mailman_changes
 from kn.utils.daan.wiki import apply_wiki_changes, wiki_setpass
 from kn.utils.daan.forum import apply_forum_changes, forum_setpass
-from kn.utils.daan.fotoadmin import fotoadmin_create_event, fotoadmin_move_fotos
+from kn.utils.daan.fotoadmin import (fotoadmin_create_event,
+                                     fotoadmin_move_fotos)
 from kn.utils.daan._ldap import apply_ldap_changes, ldap_setpass
 from kn.utils.daan.quassel import apply_quassel_changes, quassel_setpass
 

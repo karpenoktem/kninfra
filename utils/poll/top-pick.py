@@ -25,8 +25,9 @@ def main(poll):
             if a.user not in lastUserAnswerVote:
                 lastUserAnswerVote[a.user] = dict()
             if a.answer in lastUserAnswerVote[a.user]:
-                # user heeft hier al op gestemd, we halen de punten van zijn eerdere vote weg
-                # (dat is namelijk een lagere vote) en tellen deze vote er zometeen bij op
+                # user heeft hier al op gestemd, we halen de punten
+                # van zijn eerdere vote weg (dat is namelijk een
+                # lagere vote) en tellen deze vote er zometeen bij op
                 lut[a.answer] -= lastUserAnswerVote[a.user][a.answer]
             if a.answer not in lut:
                 lut[a.answer] = 0

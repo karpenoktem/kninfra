@@ -51,9 +51,12 @@ class SONWrapper(object):
             if '_id' in self._data:
                 if self._detect_race:
                     self._data['_version'] += 1
-                    result = self._collection.update({
-                        '_id': self._data['_id'],
-                        '_version': self._data['_version'] - 1}, self._data, w=1)
+                    result = self._collection.update(
+                        {'_id': self._data['_id'],
+                         '_version': self._data['_version'] - 1},
+                        self._data,
+                        w=1
+                    )
                     if result['n'] < 1:
                         raise RaceCondition('Document was not saved')
                 else:

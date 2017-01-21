@@ -19,10 +19,10 @@ def defaultSettings(glbls):
     # Settings you must set.
     # ############################################################
 
-    #CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
-    #SECRET_KEY = 'CHANGE ME'
-    #ALLOWED_API_KEYS = ('CHANGE ME',)
-    #MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
+    # CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
+    # SECRET_KEY = 'CHANGE ME'
+    # ALLOWED_API_KEYS = ('CHANGE ME',)
+    # MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 
     # You are very likely to override these
     # ############################################################
@@ -141,7 +141,7 @@ def defaultSettings(glbls):
     )
     d.MIDDLEWARE_CLASSES = (
         'django.contrib.sessions.middleware.SessionMiddleware',
-        #'django.middleware.locale.LocaleMiddleware',
+        # 'django.middleware.locale.LocaleMiddleware',
         'kn.base.backports.BackportedLocaleMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',

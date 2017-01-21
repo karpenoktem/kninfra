@@ -146,8 +146,8 @@ class Event(SONWrapper):
     def description_html(self):
         return self._data.get('description_html',
                               linebreaks(escape(self._data['description'])))
-        # Let wel: 'description' is een *fallback*, het is niet de bedoeling dat
-        # deze bij nieuwe actieviteitne nog gebruikt wordt
+        # Let wel: 'description' is een *fallback*, het is niet de
+        # bedoeling dat deze bij nieuwe actieviteiten nog gebruikt wordt
 
     @property
     def cost(self):
@@ -177,15 +177,15 @@ class Event(SONWrapper):
                             settings.MAILDOMAIN)
 
     def has_read_access(self, user):
-        return  self.owner == user or \
-            str(self.owner.name) in user.cached_groups_names or \
-            'secretariaat' in user.cached_groups_names or \
-            'admlezers' in user.cached_groups_names
+        return (self.owner == user or
+                str(self.owner.name) in user.cached_groups_names or
+                'secretariaat' in user.cached_groups_names or
+                'admlezers' in user.cached_groups_names)
 
     def has_write_access(self, user):
-        return self.owner == user or \
-            str(self.owner.name) in user.cached_groups_names or \
-            'secretariaat' in user.cached_groups_names
+        return (self.owner == user or
+                str(self.owner.name) in user.cached_groups_names or
+                'secretariaat' in user.cached_groups_names)
 
     @property
     def can_subscribe(self):

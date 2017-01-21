@@ -11,7 +11,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import Http404, HttpResponse, HttpResponseNotModified, QueryDict
+from django.http import (Http404, HttpResponse,
+                         HttpResponseNotModified, QueryDict)
 from django.utils.encoding import filepath_to_uri
 
 from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
@@ -84,8 +85,9 @@ def fotos(request, path=''):
 
     people = None
     if fEs.is_admin(user):
-        # Get all members (now or in the past), and sort them first by whether they
-        # are active (active members first) and then by their name.
+        # Get all members (now or in the past), and sort them first
+        # by whether they are active (active members first) and
+        # then by their name.
         humanNames = {}
         active = []
         inactive = []

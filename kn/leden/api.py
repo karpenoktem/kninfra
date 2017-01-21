@@ -143,9 +143,11 @@ def entity_update_primary(data, request):
 
 
 def entity_update_visibility(data, request):
-    """ Updates the visibility of a part of an entity (e.g. email, phone number...)
+    """ Updates the visibility of a part of an entity (e.g. email,
+        phone number...)
             Example:
-            >> {action:"entity_update_visibility",id:"4e6fcc85e60edf3dc0000270",
+            >> {action:"entity_update_visibility",
+                id:"4e6fcc85e60edf3dc0000270",
                 property: "telephone",
                 visible: False}
             << {ok: true}

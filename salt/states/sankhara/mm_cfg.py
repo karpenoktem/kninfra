@@ -1,3 +1,5 @@
+# flake8: noqa
+
 from Defaults import *
 
 MAILMAN_SITE_LIST = 'mailman'

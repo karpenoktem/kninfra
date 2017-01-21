@@ -158,7 +158,7 @@ def ensure_indices():
     # entities
     # NOTE On some versions of Mongo, a unique sparse index does not allow
     #      more than one entitity without a name.
-    #ecol.ensure_index('names', unique=True, sparse=True)
+    # ecol.ensure_index('names', unique=True, sparse=True)
     ecol.ensure_index('names', sparse=True)
     ecol.ensure_index('types')
     ecol.ensure_index('tags', sparse=True)
@@ -590,7 +590,8 @@ def query_relations(who=-1, _with=-1, how=-1, _from=None, until=None,
         when left on default, it will match all.
         when a tuple or list, it will match on any of those.
         when a single element, it will match that element.
-                The "from" and "until" should be datetime.datetime's and form an interval.
+                The "from" and "until" should be datetime.datetime's
+                    and form an interval.
                 Only relations intersecting this interval are matched.
     """
     query = {}
@@ -1288,21 +1289,6 @@ class User(Entity):
         if not telephones:
             return None
         return telephones[0]['number']
-
-    @property
-    def addresses(self):
-        ret = []
-        addresses = self._data.get('addresses', ())
-        for a in addresses:
-            ret.append({'from': None if a['from'] == DT_MIN
-                        else a['from'],
-                        'until': None if a['until'] == DT_MAX
-                        else a['until'],
-                        'street': a['street'],
-                        'number': a['number'],
-                        'zip': a['zip'],
-                        'city': a['city']})
-        return ret
 
     @property
     def primary_address(self):

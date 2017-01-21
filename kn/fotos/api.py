@@ -189,9 +189,9 @@ def _set_metadata(data, request):
                     'add_foto_event', request.user, fotoEvent=event)
             entity.set_informacie_notified()
         elif was_visible and not is_visible:
-            # Do not send a mail when an old album (pre-notifications) is set to
-            # invisible and back to visible. Act like a notification has already
-            # been sent.
+            # Do not send a mail when an old album (pre-notifications)
+            # is set to invisible and back to visible. Act like a
+            # notification has already been sent.
             entity.set_informacie_notified()
 
     return result

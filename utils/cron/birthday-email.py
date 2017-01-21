@@ -4,7 +4,6 @@ from __future__ import with_statement
 import _import  # noqa: F401
 import datetime
 
-from common import *
 import kn.leden.entities as Es
 from django.core.mail import EmailMessage
 
