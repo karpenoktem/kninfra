@@ -36,7 +36,7 @@ def main3():
         member_age[rel['who']] = max(member_age[rel['who']],
                                      (now()-rel['from']).days / 365.0)
 
-    #for comm in Es.by_name('comms').get_bearers():
+    # for comm in Es.by_name('comms').get_bearers():
     for comm in [Es.by_name('draai')]:
         print unicode(comm.humanName)
         members = [(m, member_age.get(m)) for m in comm.get_members()]

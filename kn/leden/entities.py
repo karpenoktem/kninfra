@@ -141,7 +141,7 @@ pcol = db['push_changes']  # Changes to be pushed to remote systems
 # TODO add example
 
 incol = db['informacie_notifications']  # human readable list of notifications
-                                        #for informacie group
+                                        # for informacie group
 # TODO add example
 
 

@@ -95,33 +95,33 @@ def create_openvpn_installer(giedo, user):
             return False
     commonName = get_commonName(user)
     # Personalize the installer and config-file
-    ## Check the git-revision
+    # Check the git-revision
     ph = subprocess.Popen(['git', 'reflog'],
                           cwd=settings.VPN_INSTALLER_REPOS,
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     version = ph.communicate()[0].splitlines()[0].split(' ')[0]
     if ph.returncode != 0:
         raise CreateInstallerException("Version check failed")
-    ## Write the .nsi
+    # Write the .nsi
     with open(os.path.join(_dir, 'openvpn-gui.nsi.base'), 'r') as fh:
         nsi = fh.read()
     nsi = nsi.replace('KNUSERNAME', str(user.name))
     nsi = nsi.replace('KNOPENVPNVERSION', version)
     with open(os.path.join(_dir, 'openvpn-gui.nsi'), 'w') as fh:
         fh.write(nsi)
-    ## Write the OpenVPN config
+    # Write the OpenVPN config
     with open(os.path.join(_dir, 'client.conf'), 'r') as fh:
         config = fh.read()
     config = config.replace('KNUSERNAME', str(user.name))
     with open(os.path.join(_dir, 'openvpn/config', commonName + '.ovpn'),
               'w') as fh:
         fh.write(config)
-    ## Copy the keypair
+    # Copy the keypair
     copy2(os.path.join(settings.VPN_KEYSTORE, commonName + '.key'),
           os.path.join(_dir, 'openvpn/config/'))
     copy2(os.path.join(settings.VPN_KEYSTORE, commonName + '.crt'),
           os.path.join(_dir, 'openvpn/config/'))
-    ## Run makensis
+    # Run makensis
     ph = subprocess.Popen(['makensis', 'openvpn-gui.nsi'], cwd=_dir,
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     ph.communicate()
@@ -131,7 +131,7 @@ def create_openvpn_installer(giedo, user):
     fn = 'openvpn-install-%s-%s.exe' % (version, str(user.name))
     if zip_outfile:
         fn_zip = 'openvpn-install-%s-%s.zip' % (version, str(user.name))
-        ## Run zip
+        # Run zip
         ph = subprocess.Popen(['zip', os.path.join(
             settings.VPN_INSTALLER_STORAGE, fn_zip), fn], cwd=_dir,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -159,22 +159,22 @@ def _create_zip(user):
             return False
     commonName = get_commonName(user)
     # Personalize the installer and config-file
-    ## Write the OpenVPN config
+    # Write the OpenVPN config
     with open(os.path.join(settings.VPN_INSTALLER_REPOS,
                            'installer/client.conf'), 'r') as fh:
         config = fh.read()
     config = config.replace('KNUSERNAME', str(user.name))
     with open(os.path.join(_dir, 'config', commonName + '.ovpn'), 'w') as fh:
         fh.write(config)
-    ## Copy the keypair
+    # Copy the keypair
     copy2(os.path.join(settings.VPN_KEYSTORE, commonName + '.key'),
           os.path.join(_dir, 'config/'))
     copy2(os.path.join(settings.VPN_KEYSTORE, commonName + '.crt'),
           os.path.join(_dir, 'config/'))
-    ## Add ca.crt
+    # Add ca.crt
     copy2(os.path.join(settings.VPN_KEYSTORE, 'ca.crt'),
           os.path.join(_dir, 'config/'))
-    ## Run zip
+    # Run zip
     ph = subprocess.Popen(['zip', '-r', os.path.join(
         settings.VPN_INSTALLER_STORAGE,
         'openvpn-config-%s.zip' % str(user.name)), 'config'], cwd=_dir,

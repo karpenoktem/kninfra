@@ -4,9 +4,9 @@ ALLOWED_API_KEYS = ('{{ pillar['secrets']['apikey'] }}',)
 MAILMAN_DEFAULT_PASSWORD = '{{ pillar['secrets']['mailman_default'] }}'
 WIKI_MYSQL_SECRET = ('localhost', 'giedo',
                      '{{ pillar['secrets']['mysql_giedo'] }}', 'wiki')
-#FORUM_MYSQL_SECRET = ('localhost', 'giedo',
+# FORUM_MYSQL_SECRET = ('localhost', 'giedo',
 #                        '{{ pillar['secrets']['mysql_giedo'] }}', 'forum')
-#WOLK_MYSQL_SECRET = ('localhost', 'giedo',
+# WOLK_MYSQL_SECRET = ('localhost', 'giedo',
 #                        '{{ pillar['secrets']['mysql_giedo'] }}', 'wolk')
 LDAP_PASS = '{{ pillar['secrets']['ldap_infra'] }}'
 DOMAINNAME = '{{ grains['fqdn'] }}'
