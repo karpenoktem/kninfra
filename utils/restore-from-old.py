@@ -360,7 +360,7 @@ if __name__ == '__main__':
     print 'loading json'
     d = {}
     for fn in sys.argv[1:]:
-        print ' %s'%fn
+        print ' %s' %fn
         with open(fn) as f:
             d_bit = json.load(f)
             for k, v in d_bit.iteritems():

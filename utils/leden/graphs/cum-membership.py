@@ -13,7 +13,7 @@ def main():
     data = [[0 for i in xrange(1, N)] for j in xrange(1, N)]
     groups = list()
     for i in xrange(1, N):
-        groups.append(Es.by_name('leden%s'%i).get_members())
+        groups.append(Es.by_name('leden%s' %i).get_members())
     users = reduce(lambda x, y: x+y, groups, [])
     groups = map(frozenset, groups)
     for user in frozenset(users):

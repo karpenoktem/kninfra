@@ -37,7 +37,7 @@ def main():
             year = _year + 1
             f.write('%s %s ' % (year, d.get(None, 0)))
             for age in xrange(min(*ages), max(*ages)):
-                f.write('%2d '%d.get(age, 0))
+                f.write('%2d ' %d.get(age, 0))
             f.write('\n')
     g = pyx.graph.graphxy(width=14, x=pyx.graph.axis.bar())
     colass = {}

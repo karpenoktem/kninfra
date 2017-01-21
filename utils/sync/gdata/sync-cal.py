@@ -110,7 +110,7 @@ def sync_bd(cs, cal):
         event = gdata.calendar.CalendarEventEntry()
         event.title = atom.Title(text=m.full_name())
         event.content = atom.Content(
-            text='Verjaardag van %s'%m.full_name())
+            text='Verjaardag van %s' %m.full_name())
         event.recurrence = gdata.calendar.Recurrence(
                     text=rd_lut[m.full_name()])
         cs.InsertEvent(event, cal_uri)

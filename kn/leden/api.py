@@ -109,7 +109,7 @@ def entity_update_primary(data, request):
             return {'ok': False, 'error': '"new" should be a dict'}
         for attr in ('street', 'number', 'zip', 'city'):
             if attr not in new or not isinstance(new[attr], basestring):
-                return {'ok': False, 'error': 'Missing argument "new.%s"'%attr}
+                return {'ok': False, 'error': 'Missing argument "new.%s"' %attr}
     else:
         return {'ok': False, 'error': 'Unknown update type: "%s"' % typ}
     e = Es.by_id(data['id'])
