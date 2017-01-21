@@ -151,9 +151,9 @@ def planning_view(request):
 
 
 def cmp_None(x, y, cmp=cmp):
-    if x == None:
+    if x is None:
         return -1
-    if y == None:
+    if y is None:
         return 1
     return cmp(x, y)
 
@@ -194,7 +194,7 @@ def planning_manage(request, poolname):
                     vacancy.assignee = None
                     vacancy.reminder_needed = True
                 else:
-                    if vacancy.assignee_id == None or \
+                    if vacancy.assignee_id is None or \
                             _id(vacancy.assignee_id) != _id(worker):
                         delta = datetime.timedelta(days=5)
                         vacancy.reminder_needed = now() + delta < e.date
