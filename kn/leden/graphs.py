@@ -106,7 +106,7 @@ def _generate_member_count():
             old_days = days
             old_N = N
     ret.append([days, N])
-    ret = [(1 + days / 365.242, N) for days, N in ret]
+    ret = [(1 + days2 / 365.242, N2) for days2, N2 in ret]
     return ret
 
 GRAPHS = {
