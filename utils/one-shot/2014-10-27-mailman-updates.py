@@ -28,7 +28,7 @@ def main():
                 ml.web_page_url = url
                 changed = True
             if changed:
-               print 'Saving %s' % x
+                print 'Saving %s' % x
             #    ml.Save()
         finally:
             ml.Unlock()
