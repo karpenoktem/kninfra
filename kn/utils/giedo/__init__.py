@@ -17,7 +17,7 @@ import kn.leden.entities as Es
 from kn.leden.date import now
 
 from kn.utils.giedo.db import update_db
-from kn.utils.giedo.postfix import (generate_postfix_map, 
+from kn.utils.giedo.postfix import (generate_postfix_map,
                                     generate_postfix_slm_map)
 from kn.utils.giedo.mailman import generate_mailman_changes
 from kn.utils.giedo.wiki import generate_wiki_changes
@@ -33,6 +33,7 @@ from kn.utils.giedo.fotos import scan_fotos
 
 
 class Giedo(WhimDaemon):
+
     def __init__(self):
         super(Giedo, self).__init__(settings.GIEDO_SOCKET)
         self.l = logging.getLogger('giedo')
@@ -56,15 +57,15 @@ class Giedo(WhimDaemon):
             self.villanet_key = RSA.load_pub_key(default_storage.path(
                 "villanet.pem"))
         self.ss_actions = (
-                  ('postfix', self.daan, self._gen_postfix),
-                  ('postfix-slm', self.daan, self._gen_postfix_slm),
-                  ('mailman', self.daan, self._gen_mailman),
-                  ('forum', self.daan, self._gen_forum),
-                  ('unix', self.cilia, self._gen_unix),
-                  ('wiki', self.daan, self._gen_wiki),
-                  ('ldap', self.daan, self._gen_ldap),
-                  ('wolk', self.cilia, self._gen_wolk),
-                  ('quassel', self.daan, self._gen_quassel))
+            ('postfix', self.daan, self._gen_postfix),
+            ('postfix-slm', self.daan, self._gen_postfix_slm),
+            ('mailman', self.daan, self._gen_mailman),
+            ('forum', self.daan, self._gen_forum),
+            ('unix', self.cilia, self._gen_unix),
+            ('wiki', self.daan, self._gen_wiki),
+            ('ldap', self.daan, self._gen_ldap),
+            ('wolk', self.cilia, self._gen_wolk),
+            ('quassel', self.daan, self._gen_quassel))
         self.push_changes_event.set()
 
     def _gen_quassel(self):
@@ -101,8 +102,8 @@ class Giedo(WhimDaemon):
                 'changes': generate_forum_changes(self)}
 
     def _gen_unix(self):
-        return  {'type': 'unix',
-                 'map': generate_unix_map(self)}
+        return {'type': 'unix',
+                'map': generate_unix_map(self)}
 
     def _sync_openvpn(self):
         with self.openvpn_lock:
@@ -133,10 +134,10 @@ class Giedo(WhimDaemon):
         dt_max = settings.DT_MAX.strftime('%Y-%m-%d')
         for name in kn - vn:
             data = {
-                    'username': name,
-                    'password': self.villanet_encrypt_password(
-                        pseudo_randstr(16)),
-                }
+                'username': name,
+                'password': self.villanet_encrypt_password(
+                    pseudo_randstr(16)),
+            }
             if users[name] != dt_max:
                 data['till'] = users[name]
             pc = Es.PushChange({'system': 'villanet', 'action': 'addUser',
@@ -153,7 +154,7 @@ class Giedo(WhimDaemon):
                                     'action': 'changeUser', 'data': {
                                         'username': name,
                                         'till': local
-                                        }})
+                                    }})
                 pc.save()
         self.push_changes_event.set()
 
@@ -226,7 +227,7 @@ class Giedo(WhimDaemon):
                                     'action': 'changeUser', 'data': {
                                         'username': d['user'],
                                         'password': self.villanet_encrypt_password(d['newpass'])
-                                        }})
+                                    }})
                 pc.save()
                 self.push_changes_event.set()
                 return {'success': True}
@@ -289,7 +290,9 @@ class Giedo(WhimDaemon):
                     if not ret[0]:
                         continue
                 else:
-                    logging.warn("Unknown PushChange system %s " % pc['system'])
+                    logging.warn(
+                        "Unknown PushChange system %s " %
+                        pc['system'])
                 Es.pcol.remove({'_id': pc['_id']})
 
     def villanet_request(self, params):

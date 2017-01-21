@@ -18,6 +18,7 @@ import mirte
 
 
 class WhimClient(object):
+
     def __init__(self, address, family='unix'):
         self._address = address
         self._family = family
@@ -128,6 +129,7 @@ class WhimClient(object):
 
 
 class WhimDaemon(object):
+
     def __init__(self, address, family='unix'):
         self.threadPool = mirte.get_a_manager().get_a('threadPool')
         self.sockets = set()
@@ -153,7 +155,7 @@ class WhimDaemon(object):
                 os.unlink(self.address)
         ls.bind(self.address)
         if self.family == 'unix':
-            os.chmod(self.address, 0600)
+            os.chmod(self.address, 0o600)
         self.pre_mainloop()
         ls.listen(8)
         while True:

@@ -45,10 +45,10 @@ def check_email():
                 others.append(rel)
         print m.name
         em = templ.render(Context({
-                        'u': m,
-                        'comms': comms,
-                        'lists': lists,
-                        'others': others}))
+            'u': m,
+            'comms': comms,
+            'lists': lists,
+            'others': others}))
         send_mail('Controle Karpe Noktem ledenadministratie',
                   em, 'secretaris@karpenoktem.nl',
                   [m.primary_email])

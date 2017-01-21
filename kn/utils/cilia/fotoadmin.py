@@ -35,10 +35,11 @@ def fotoadmin_scan_userdirs():
             if not os.path.isdir(fotodir):
                 continue
             for name in os.listdir(fotodir):
-                if fotodir[0] == '.' or not os.path.isdir(os.path.join(fotodir, name)):
+                if fotodir[0] == '.' or not os.path.isdir(
+                        os.path.join(fotodir, name)):
                     continue
-                path = user+'/'+name
-                userdirs.append((store+'/'+path, path))
+                path = user + '/' + name
+                userdirs.append((store + '/' + path, path))
     return userdirs
 
 # vim: et:sta:bs=2:sw=4:

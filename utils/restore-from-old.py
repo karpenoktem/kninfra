@@ -24,8 +24,8 @@ def main(data):
         return datetime(*strptime(s, '%Y-%m-%d')[:3])
 
     def year_to_dates(year):
-        return (datetime(2003+year, 9, 1),
-                datetime(2004+year, 8, 31))
+        return (datetime(2003 + year, 9, 1),
+                datetime(2004 + year, 8, 31))
 
     def create_tag(name, humanName, tags=[]):
         return Es.ecol.insert({'types': ['tag'],
@@ -33,7 +33,7 @@ def main(data):
                                'humanNames': [{
                                    'name': name,
                                    'human': humanName}],
-                       'tags': tags})
+                               'tags': tags})
     print 'dropping'
     Es.ecol.drop()
     Es.rcol.drop()
@@ -56,9 +56,9 @@ def main(data):
     ignore_groups_ids = set()
     ignore_groups_members_ids = set()
     year_groups = frozenset(
-        ['leden'+str(x) for x in range(1, 9)] +
-        ['kasco'+str(x) for x in range(1, 9)] +
-        ['bestuur'+str(x) for x in range(1, 9)])
+        ['leden' + str(x) for x in range(1, 9)] +
+        ['kasco' + str(x) for x in range(1, 9)] +
+        ['bestuur' + str(x) for x in range(1, 9)])
     year_groups_ids = dict()
     year_groups_lut = {}
     print 'initial tags'
@@ -135,15 +135,15 @@ def main(data):
         n = {'types': ['tag' if m['isVirtual'] else 'group'],
              'names': [m['name']],
              'humanNames': [{
-                'name': m['name'],
-                'human': m['humanName'],
-                'genitive_prefix': m['genitive_prefix']
-                }],
+                 'name': m['name'],
+                 'human': m['humanName'],
+                 'genitive_prefix': m['genitive_prefix']
+             }],
              'description': m['description'],
              'temp': {
-                'is_virtual': m['isVirtual']
-            }
-            }
+            'is_virtual': m['isVirtual']
+        }
+        }
         conv_group[m['id']] = {'id': Es.ecol.insert(n),
                                'name': m['name'],
                                'humanName': m['humanName']}
@@ -214,7 +214,7 @@ def main(data):
             },
             'is_active': m['is_active'],
             'password': pwd
-            }
+        }
         conv_user[m['id']] = Es.ecol.insert(n)
         for g in m['groups']:
             if g in ignore_groups_ids or \
@@ -266,9 +266,9 @@ def main(data):
                  'with': gdat['id'],
                  'how': conv_seat[m['name']]['id']},
              'humanNames': [{
-                    'name': gdat['name'] + '-' + m['name'],
-                'human': m['humanName'] +
-                    ' ' + gdat['humanName']}]}
+                 'name': gdat['name'] + '-' + m['name'],
+                 'human': m['humanName'] +
+                 ' ' + gdat['humanName']}]}
         i = Es.ecol.insert(n)
         Es.rcol.insert({'who': conv_user[m['user']],
                         'from': _from,
@@ -360,7 +360,7 @@ if __name__ == '__main__':
     print 'loading json'
     d = {}
     for fn in sys.argv[1:]:
-        print ' %s' %fn
+        print ' %s' % fn
         with open(fn) as f:
             d_bit = json.load(f)
             for k, v in d_bit.iteritems():

@@ -42,7 +42,7 @@ def check_namespace():
     for a in Alias.objects.all():
         if a.target not in n:
             print '%s -> %s, target doesn\'t exist' % \
-                    (a.source, a.target)
+                (a.source, a.target)
 
 
 def check_commissions():
@@ -53,7 +53,7 @@ def check_commissions():
         if c.isVirtual:
             if c.user_set.count() != 0:
                 print "%s: virtual commission got members" % \
-                        c.name
+                    c.name
 if __name__ == '__main__':
     check_commissions()
     check_namespace()

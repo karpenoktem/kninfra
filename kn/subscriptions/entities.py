@@ -88,6 +88,7 @@ def may_set_owner(user, owner):
 
 
 class Event(SONWrapper):
+
     def __init__(self, data):
         super(Event, self).__init__(data, ecol, detect_race=True)
         self._subscriptions = {str(d['user']): Subscription(d, self)
@@ -178,13 +179,13 @@ class Event(SONWrapper):
     def has_read_access(self, user):
         return  self.owner == user or \
             str(self.owner.name) in user.cached_groups_names or \
-               'secretariaat' in user.cached_groups_names or \
-               'admlezers' in user.cached_groups_names
+            'secretariaat' in user.cached_groups_names or \
+            'admlezers' in user.cached_groups_names
 
     def has_write_access(self, user):
         return self.owner == user or \
             str(self.owner.name) in user.cached_groups_names or \
-               'secretariaat' in user.cached_groups_names
+            'secretariaat' in user.cached_groups_names
 
     @property
     def can_subscribe(self):
@@ -252,6 +253,7 @@ class Event(SONWrapper):
 
 
 class HistoryEvent(SONWrapper):
+
     def __init__(self, data, event):
         super(HistoryEvent, self).__init__(data, ecol, event)
         self.event = event
@@ -270,6 +272,7 @@ class HistoryEvent(SONWrapper):
 # subscription can also be 'unsubscribed' (see _state).
 # You could also call this an RSVP.
 class Subscription(SONWrapper):
+
     def __init__(self, data, event):
         super(Subscription, self).__init__(data, ecol, event)
         self.event = event
@@ -389,12 +392,12 @@ class Subscription(SONWrapper):
                               'mutation': mutation,
                               'subscription': self,
                               'event': self.event,
-                              },
-                cc=cc,
-                reply_to=self.event.owner.canonical_full_email,
-                headers={
-                    'In-Reply-To': self.event.messageId,
-                    'References': self.event.messageId,
-                              })
+                          },
+                          cc=cc,
+                          reply_to=self.event.owner.canonical_full_email,
+                          headers={
+                              'In-Reply-To': self.event.messageId,
+                              'References': self.event.messageId,
+                          })
 
 # vim: et:sta:bs=2:sw=4:

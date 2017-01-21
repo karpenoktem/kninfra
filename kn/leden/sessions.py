@@ -9,6 +9,7 @@ scol = db['sessions']
 
 
 class SessionStore(SessionBase):
+
     def __init__(self, session_key=None):
         super(SessionStore, self).__init__(session_key)
 
@@ -38,7 +39,7 @@ class SessionStore(SessionBase):
     def save(self, must_create=False):
         n = {'_id': self.session_key,
              'data': self.encode(self._get_session(
-                    no_load=must_create)),
+                 no_load=must_create)),
              'expire_dt': self.get_expiry_date()}
         scol.update({'_id': self.session_key}, n, True)
         # TODO handle errors

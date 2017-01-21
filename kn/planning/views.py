@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http  import require_POST
+from django.views.decorators.http import require_POST
 
 from kn.base.http import JsonHttpResponse
 from kn.leden.date import date_to_dt, now, date_to_midnight
@@ -137,7 +137,7 @@ def planning_view(request):
                 'begin_time': v.begin_time,
                 'end_time': v.end_time,
                 'assignee': v.assignee.humanName
-                        if v.assignee else "?"})
+                if v.assignee else "?"})
         for index in poolid2index.values():
             ei['vacancies'][index].sort(key=lambda x: x['begin'])
         events.append(ei)
@@ -238,7 +238,8 @@ def planning_manage(request, poolname):
 @login_required
 def planning_poollist(request):
     if not may_manage_planning(request.user):
-        # There's no planning you can change anyway, so what are you doing here?
+        # There's no planning you can change anyway, so what are you doing
+        # here?
         raise PermissionDenied
     pools = list(Pool.all())
     return render_to_response('planning/pools.html',
@@ -339,7 +340,7 @@ def event_edit(request, eventid):
         'planning/event_edit.html',
         {'name': e.name, 'kind': e.kind, 'date': e.date.date(),
          'avform': avform, 'vacancies': vacancies},
-         context_instance=RequestContext(request)
+        context_instance=RequestContext(request)
     )
 
 

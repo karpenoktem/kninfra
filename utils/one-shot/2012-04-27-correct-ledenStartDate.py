@@ -18,7 +18,9 @@ import kn.leden.entities as Es
 def main():
     year_overrides = dict()
     had = set()
-    for t in Es.bearers_by_tag_id(Es.id_by_name('!year-overrides'), _as=Es.Tag):
+    for t in Es.bearers_by_tag_id(
+            Es.id_by_name('!year-overrides'),
+            _as=Es.Tag):
         year_overrides[(t._data['year-override']['type'],
                         t._data['year-override']['year'])] = t._data['_id']
     for rel in sorted(Es.query_relations(-1, Es.id_by_name('leden'), None,
@@ -32,7 +34,7 @@ def main():
             had.add(name)
             continue
         joined = datetime.datetime.strptime(
-                rel['who']._data['temp']['joined'], '%Y-%m-%d')
+            rel['who']._data['temp']['joined'], '%Y-%m-%d')
         if joined == rel['from']:
             had.add(name)
             continue
@@ -40,7 +42,7 @@ def main():
         from_yr = Es.date_to_year(rel['from'])
         if joined_yr == from_yr or joined_yr == 0:
             print name, rel['from'].date(), ' -> ', \
-                                joined.date()
+                joined.date()
             rrel = Es.rcol.find({'_id': rel['_id']})[0]
             rrel['from'] = joined
             Es.rcol.save(rrel)
@@ -48,7 +50,7 @@ def main():
             continue
         if joined_yr == from_yr - 1:
             print name, rel['from'].date(), ' -> ', \
-                                joined.date()
+                joined.date()
             rrel = Es.rcol.find({'_id': rel['_id']})[0]
             rrel['from'] = joined
             if 'tags' not in rrel:

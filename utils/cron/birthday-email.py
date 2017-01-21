@@ -17,7 +17,7 @@ def birthday_email():
         if user.dateOfBirth is None:
             continue
         if (user.dateOfBirth.day != now.day or
-            user.dateOfBirth.month != now.month):
+                user.dateOfBirth.month != now.month):
             continue
         email = EmailMessage("Hartelijk gefeliciteerd!",
                              templ % {'firstName': user.first_name},

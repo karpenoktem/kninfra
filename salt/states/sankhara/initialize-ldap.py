@@ -17,8 +17,8 @@ def main():
     suffix = 'dc=' + ',dc='.join(domain.split('.'))
     host = domain.split('.')[0]
     admin_pw, infra_pw, daan_pw, freeradius_pw, saslauthd_pw = [
-                subprocess.check_output(['slappasswd', '-s', pw]).strip()
-                        for pw in sys.argv[2:7]]
+        subprocess.check_output(['slappasswd', '-s', pw]).strip()
+        for pw in sys.argv[2:7]]
     local = '"gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth"'
 
     def ldif(s, what='ldapmodify'):

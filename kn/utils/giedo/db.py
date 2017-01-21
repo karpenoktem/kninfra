@@ -46,7 +46,7 @@ def update_db(giedo):
                  else Es.date_to_year(rel['from']))
             t = (max_until if rel['until'] == DT_MAX
                  else Es.date_to_year(rel['until']))
-            years = set(range(s, t+1))
+            years = set(range(s, t + 1))
             for tid in rel.get('tags', ()):
                 if tid not in year_overrides:
                     continue
@@ -124,8 +124,8 @@ def update_db(giedo):
             if (not relkey(rrel) in vgroup_rlut and relkey(rrel)
                     not in year_vgroup_rel_ok):
                 logging.info("vgroup: adding %s -> %s (%s)" % (
-                        id2name[mrel['who']], yg.name,
-                        id2name.get(mrel['how'])))
+                    id2name[mrel['who']], yg.name,
+                    id2name.get(mrel['how'])))
                 Es.rcol.insert(rrel)
             elif relkey(rrel) in vgroup_rlut:
                 del vgroup_rlut[relkey(rrel)]
@@ -154,7 +154,7 @@ def update_db(giedo):
              'humanNames': [{
                  'name': nm,
                  'human': unicode(g.humanName) + ' ' +
-                unicode(sofa_brands[rel['how']].humanName)}]}
+                 unicode(sofa_brands[rel['how']].humanName)}]}
         n['_id'] = Es.ecol.insert(n)
         groups[nm] = Es.Group(n)
         id2name[n['_id']] = nm
@@ -188,7 +188,7 @@ def update_db(giedo):
     # Set is_active on Users if and only if they are not in the `leden' group.
     # TODO We might optimize this by including it in a more generic process
     active_users = [rel['who'] for rel in Es.by_name('leden').get_rrelated(
-                            None, dt_now, dt_now, False, False, False)]
+        None, dt_now, dt_now, False, False, False)]
     for u in Es.users():
         is_active = u._id in active_users
         if u.is_active == is_active:

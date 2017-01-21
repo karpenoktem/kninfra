@@ -4,7 +4,7 @@ import kn.leden.entities as Es
 import kn.fotos.entities as fEs
 from kn.base.http import JsonHttpResponse
 from django.core.exceptions import PermissionDenied
-from django.views.decorators.http  import require_POST
+from django.views.decorators.http import require_POST
 
 
 @require_POST
@@ -57,7 +57,7 @@ def entities_json(children, user):
             entry['visibility'] = child.visibility[0]
 
         if child.description:
-            entry['description'] = child.description;
+            entry['description'] = child.description
         if child._type == 'foto':
             entry['largeSize'] = child.get_cache_size('large')
             entry['large2xSize'] = child.get_cache_size('large2x')
@@ -173,14 +173,20 @@ def _set_metadata(data, request):
 
     # Send a mail when a new album comes online.
     if not entity.notified_informacie:
-        if not was_visible and is_visible and isinstance(entity, fEs.FotoAlbum):
+        if not was_visible and is_visible and isinstance(
+                entity, fEs.FotoAlbum):
             event = entity
             while event.depth > 1:
                 event = event.get_parent()
             if entity.depth > 1:
-                Es.notify_informacie('add_foto_album', request.user, fotoEvent=event, fotoAlbum=entity)
+                Es.notify_informacie(
+                    'add_foto_album',
+                    request.user,
+                    fotoEvent=event,
+                    fotoAlbum=entity)
             else:
-                Es.notify_informacie('add_foto_event', request.user, fotoEvent=event)
+                Es.notify_informacie(
+                    'add_foto_event', request.user, fotoEvent=event)
             entity.set_informacie_notified()
         elif was_visible and not is_visible:
             # Do not send a mail when an old album (pre-notifications) is set to
@@ -228,10 +234,10 @@ def _search(data, request):
             'people': people}
 
 ACTION_HANDLER_MAP = {
-        'list': _list,
-        'set-metadata': _set_metadata,
-        'remove': _remove,
-        'search': _search,
-        }
+    'list': _list,
+    'set-metadata': _set_metadata,
+    'remove': _remove,
+    'search': _search,
+}
 
 # vim: et:sta:bs=2:sw=4:

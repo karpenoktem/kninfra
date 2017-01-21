@@ -24,7 +24,7 @@ def gen_dot():
     for alias, target in c.fetchall():
         assert target[0] == '&'
         target = target[1:]
-        alias += "@"+MAILDOMAIN
+        alias += "@" + MAILDOMAIN
         if alias not in nodes:
             nodes[alias] = Node(alias)
             d.add_node(nodes[alias])
@@ -35,7 +35,7 @@ def gen_dot():
     for list in Utils.list_names():
         if list == 'plukdenacht2008':
             continue
-        source = list+"@"+LISTDOMAIN
+        source = list + "@" + LISTDOMAIN
         if source not in nodes:
             nodes[source] = Node(source)
             d.add_node(nodes[source])

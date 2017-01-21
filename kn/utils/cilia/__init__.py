@@ -14,6 +14,7 @@ from kn.utils.cilia.wolk import apply_wolk_changes, wolk_setpass
 
 
 class Cilia(WhimDaemon):
+
     def __init__(self):
         super(Cilia, self).__init__(settings.CILIA_SOCKET)
         self.unix_lock = threading.Lock()

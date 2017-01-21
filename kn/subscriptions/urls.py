@@ -14,6 +14,6 @@ urlpatterns = [
         views.event_new_or_edit, name='event-new'),
     url(_(r'^(?P<edit>[a-zA-Z0-9\-.]+)/edit/?$'),
         views.event_new_or_edit, name='event-edit'),
-    ]
+]
 
 # vim: et:sta:bs=2:sw=4:

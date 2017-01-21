@@ -11,6 +11,7 @@ import kn.leden.entities as Es
 
 
 class EntityChoiceFieldWidget(forms.TextInput):
+
     def __init__(self, *args, **kwargs):
         if '_type' in kwargs:
             self.type = kwargs['_type']
@@ -34,13 +35,14 @@ class EntityChoiceFieldWidget(forms.TextInput):
                     create_entityChoiceField(%(id)s, %(params)s);
                     %(code_set_value)s
                 });//--></script>'''
-                % {'name': json.dumps(name),
-                   'id': json.dumps(final_attrs['id']),
-                   'params': json.dumps({'type': self.type}),
-                   'code_set_value': code_set_value})
+            % {'name': json.dumps(name),
+               'id': json.dumps(final_attrs['id']),
+               'params': json.dumps({'type': self.type}),
+               'code_set_value': code_set_value})
 
 
 class EntityChoiceField(forms.CharField):
+
     def __init__(self, *args, **kwargs):
         if '_type' in kwargs:
             _type = kwargs['_type']
@@ -56,16 +58,18 @@ def validate_username(username):
         raise forms.ValidationError(_('Gebruikersnaam is al in gebruik'))
     if any(map(lambda c: c not in settings.USERNAME_CHARS, username)):
         raise forms.ValidationError(
-                _('Gebruikersnaam bevat een niet-toegestane letter'))
+            _('Gebruikersnaam bevat een niet-toegestane letter'))
     if not reserved.allowed(username):
         raise forms.ValidationError(_('Gebruikersnaam is niet toegestaan'))
 
 
 class AddUserForm(forms.Form):
     first_name = forms.CharField(label=_("Voornaam"))
-    last_name = forms.CharField(label=_("Achternaam"),
-                                widget=forms.TextInput(attrs={
-                                    'placeholder': _('bijv.: Vaart, van der')}))
+    last_name = forms.CharField(
+        label=_("Achternaam"),
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': _('bijv.: Vaart, van der')}))
     username = forms.CharField(label=_("Gebruikersnaam"),
                                validators=[validate_username])
     email = forms.EmailField(label=_("E-Mail adres"))

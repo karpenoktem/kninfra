@@ -24,7 +24,7 @@ def sesc(t):
 def pseudo_randstr(l=12, cs=ALPHANUMUL):
     ret = ''
     for i in xrange(l):
-        ret += cs[random.randint(0, len(cs)-1)]
+        ret += cs[random.randint(0, len(cs) - 1)]
     return ret
 
 """
@@ -77,8 +77,8 @@ def print_table(data, separator=' '):
 
 def emailfy_name(first, last):
     first, last = map(lambda x: unicodedata.normalize(
-                'NFKD', x).encode('ASCII', 'ignore'),
-                (first, last))
+        'NFKD', x).encode('ASCII', 'ignore'),
+        (first, last))
     if ',' in last:
         bits = last.split(',', 1)
         last = bits[1] + ' ' + bits[0]
@@ -92,13 +92,13 @@ def emailfy_name(first, last):
     return n
 
 MAILDOMAIN = kn.settings.MAILDOMAIN
-LISTDOMAIN = 'lists.'+MAILDOMAIN
+LISTDOMAIN = 'lists.' + MAILDOMAIN
 
 EMAIL_ALLOWED = frozenset(
-            map(lambda x: chr(ord('a') + x), xrange(26)) +
-            map(lambda x: chr(ord('A') + x), xrange(26)) +
-            map(lambda x: chr(ord('0') + x), xrange(10)) +
-            ['.', '-'])
+    map(lambda x: chr(ord('a') + x), xrange(26)) +
+    map(lambda x: chr(ord('A') + x), xrange(26)) +
+    map(lambda x: chr(ord('0') + x), xrange(10)) +
+    ['.', '-'])
 
 GALLERY_PATH = '/var/galleries/kn/'
 MEMBERS_HOME = '/home/kn/'

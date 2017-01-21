@@ -16,6 +16,7 @@ from django.conf import settings
 
 
 class Daan(WhimDaemon):
+
     def __init__(self):
         super(Daan, self).__init__(settings.DAAN_SOCKET)
         self.postfix_lock = threading.Lock()

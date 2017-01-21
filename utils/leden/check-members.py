@@ -24,7 +24,7 @@ def check_members(members):
         else:
             if m.dateJoined < date(2004, 4, 1):
                 print "%s: joined before constitution" % \
-                        m.username
+                    m.username
             c = 0
             while True:
                 c += 1
@@ -36,13 +36,13 @@ def check_members(members):
                 if len(ledeng[c].user_set.filter(
                         username=m.username)) == 0:
                     print "%s: should be in leden%s" \
-                            % (m.username, c)
+                        % (m.username, c)
 
         if m.dateOfBirth is None:
             print "%s: dateOfBirth is None" % m.username
         else:
             age = (datetime.now().date() - m.dateOfBirth).days \
-                    / DAYS_IN_YEAR
+                / DAYS_IN_YEAR
             if age < 15:
                 print "%s: age < 15" % m.username
             elif age > 40:

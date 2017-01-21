@@ -39,13 +39,13 @@ def redirect(request, name):
     try:
         if ml.mod_password is None:
             ml.mod_password = Mailman.Utils.sha_new(
-                    os.urandom(10)).hexdigest()
+                os.urandom(10)).hexdigest()
             ml.Save()
         c = ml.MakeCookie(mm_cfg.AuthListModerator)
     finally:
         ml.Unlock()
     bits = str(c).split(': ')
-    r =  HttpResponseRedirect(settings.MOD_UI_URI % name)
+    r = HttpResponseRedirect(settings.MOD_UI_URI % name)
     r[str(bits[0])] = str(bits[1])
     return r
 
@@ -129,7 +129,7 @@ def overview(request):
         ml = Mailman.MailList.MailList(name, True)
         try:
             if toggle_with_name == name:
-                if  ml.emergency:
+                if ml.emergency:
                     _deactivate_mm(ml, name, request.user,
                                    r, moderators)
                 else:

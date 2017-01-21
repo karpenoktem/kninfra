@@ -25,6 +25,7 @@ settings.DRANK_REPOS_PATH = '/home/infra/barco/%s/'
 
 
 class FormSpecifics(object):
+
     def __init__(self,
                  django_form,
                  django_template,
@@ -64,9 +65,9 @@ def template_write_data_to_file(template, data, write):
             if row[column] == '':
                 continue
             if row[column][0] == '!':
-                write("# ");
+                write("# ")
                 write(row[column][1:])
-                write("\n");
+                write("\n")
             else:
                 write(row[column])
                 write(";")
@@ -85,13 +86,14 @@ def template_write_data_to_file(template, data, write):
 
 
 class BarformSpecifics(FormSpecifics):
+
     def __init__(self):
         super(BarformSpecifics, self).__init__(
-                django_form=BarformMeta,
-                django_template="barco/barform.html",
-                dir_in_repo="barforms",
-                template_path="barforms/form-template-active.csv",
-                weights_path=None)
+            django_form=BarformMeta,
+            django_template="barco/barform.html",
+            dir_in_repo="barforms",
+            template_path="barforms/form-template-active.csv",
+            weights_path=None)
 
     def entered_data_to_file(self, fd, write, template, prefill):
         write("Bar;;;;\n\n")
@@ -115,13 +117,14 @@ class BarformSpecifics(FormSpecifics):
 
 
 class InvCountSpecifics(FormSpecifics):
+
     def __init__(self):
         super(InvCountSpecifics, self).__init__(
-                django_form=InvCountMeta,
-                django_template="barco/form.html",
-                template_path="inventory/form-template-active.csv",
-                weights_path="weights.csv",
-                dir_in_repo="inventory")
+            django_form=InvCountMeta,
+            django_template="barco/form.html",
+            template_path="inventory/form-template-active.csv",
+            weights_path="weights.csv",
+            dir_in_repo="inventory")
 
     def entered_data_to_file(self, fd, write, template, prefill):
         write("voorraadtelling\n\n")
@@ -136,9 +139,9 @@ class InvCountSpecifics(FormSpecifics):
 
 
 settings.BARCO_FORMS = {
-        'barform': BarformSpecifics(),
-        'invcount': InvCountSpecifics(),
-        }
+    'barform': BarformSpecifics(),
+    'invcount': InvCountSpecifics(),
+}
 
 
 @login_required
@@ -169,13 +172,16 @@ def barco_enterform(request, repos, formname):
         if form.is_valid():
             # Dump the entered data to a file ...
             fd = form.cleaned_data
-            csv = StringIO();
+            csv = StringIO()
             write = lambda x: csv.write(x.encode("utf-8"))
             write("# Ingevoerd door " + str(request.user.name) + "\n")
             formspec.entered_data_to_file(fd, write, template, prefill)
 
             # commit it to the repository ...
-            fn = os.path.join(formspec.dir_in_repo, '%s.csv' %(fd['formname']))
+            fn = os.path.join(
+                formspec.dir_in_repo,
+                '%s.csv' %
+                (fd['formname']))
             with open(os.path.join(repopath, fn), 'w') as fh:
                 fh.write(csv.getvalue())
             subprocess.call(['/usr/bin/git', 'add', fn], cwd=repopath)

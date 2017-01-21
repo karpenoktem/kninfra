@@ -35,7 +35,8 @@ def main():
             }
             if 'subscribedBy' in subscription:
                 subscription2['inviter'] = subscription['subscribedBy']
-                subscription2['inviterNotes'] = subscription['subscribedBy_notes']
+                subscription2['inviterNotes'] = subscription[
+                    'subscribedBy_notes']
                 subscription2['inviteDate'] = subscription['date']
                 if 'dateConfirmed' in subscription:
                     subscription2['history'] = [{
@@ -50,7 +51,8 @@ def main():
                     mutation['date'] = subscription['date']
                 subscription2['history'] = [mutation]
             if 'userNotes' in subscription:
-                subscription2['history'][0]['notes'] = subscription['userNotes']
+                subscription2['history'][0][
+                    'notes'] = subscription['userNotes']
             subscriptions.append(subscription2)
         if 'mailBody' in event:
             event['subscribedMailBody'] = event['mailBody']

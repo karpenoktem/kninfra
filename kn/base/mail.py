@@ -14,8 +14,15 @@ import kn.leden.entities as Es
 # TODO translate e-mail to the language preferred by the recipient
 
 
-def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
-                      reply_to=None, headers=None):
+def render_then_email(
+        template_name,
+        to,
+        ctx={},
+        cc=[],
+        bcc=[],
+        from_email=None,
+        reply_to=None,
+        headers=None):
     """ Render an e-mail from a template and send it. """
     # What language to send the mail in?
     language = settings.LANGUAGE_CODE

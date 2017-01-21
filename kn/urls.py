@@ -9,7 +9,7 @@ from kn.base.backports import i18n_patterns
 
 urlpatterns = [
     url(r'^favicon.ico$', RedirectView.as_view(
-            url=settings.MEDIA_URL + 'base/favicon.ico')),
+        url=settings.MEDIA_URL + 'base/favicon.ico')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -33,6 +33,6 @@ urlpatterns += i18n_patterns(
     url(r'', include('kn.agenda.urls')),
     url(r'', include('kn.static.urls')),
     url(r'', include('kn.fotos.urls')),
-        prefix_default_language=False)
+    prefix_default_language=False)
 
 # vim: et:sta:bs=2:sw=4:

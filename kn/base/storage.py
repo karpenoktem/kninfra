@@ -5,9 +5,10 @@ from django.conf import settings
 
 
 class OurFileSystemStorage(FileSystemStorage):
+
     def __init__(self):
         super(OurFileSystemStorage, self).__init__(
-                settings.STORAGE_ROOT,
-                settings.STORAGE_URL)
+            settings.STORAGE_ROOT,
+            settings.STORAGE_URL)
 
 # vim: et:sta:bs=2:sw=4:

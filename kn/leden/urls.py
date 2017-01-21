@@ -81,7 +81,7 @@ urlpatterns = [
         views.note_add, name='add-note'),
 
     url(_(r'^statistieken/?$'), login_required(TemplateView.as_view(
-            template_name='leden/stats.html')), name='stats'),
+        template_name='leden/stats.html')), name='stats'),
     url(_(r'^grafiek/(?P<graph>[-a-z/]+)\.(?P<ext>[a-z]+)/?$'),
         graphs.view, name='graphs'),
 
@@ -93,6 +93,6 @@ urlpatterns = [
     # for now, just shows the guessed language
     url(_(r'^taal$'),
         views.language, name='taal'),
-        ]
+]
 
 # vim: et:sta:bs=2:sw=4:

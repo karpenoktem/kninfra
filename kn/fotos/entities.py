@@ -17,7 +17,13 @@ import subprocess
 from collections import namedtuple
 
 
-cache_tuple = namedtuple('cache_tuple', ('ext', 'mimetype', 'maxwidth', 'maxheight', 'quality'))
+cache_tuple = namedtuple(
+    'cache_tuple',
+    ('ext',
+     'mimetype',
+     'maxwidth',
+     'maxheight',
+     'quality'))
 
 fcol = db['fotos']
 lcol = db['fotoLocks']
@@ -74,7 +80,9 @@ def by_path(p):
 def is_admin(user):
     if user is None:
         return False
-    return bool(user.cached_groups_names & frozenset(('fotocie', 'secretariaat')))
+    return bool(
+        user.cached_groups_names & frozenset(
+            ('fotocie', 'secretariaat')))
 
 
 def actual_visibility(visibility):
@@ -153,7 +161,7 @@ class FotoEntity(SONWrapper):
 
         visibilities = actual_visibility(parent_effective_visibility) & \
             actual_visibility(self.visibility)
-        order = ['world', 'leden', 'hidden']+self.visibility
+        order = ['world', 'leden', 'hidden'] + self.visibility
         if visibilities:
             for v in order:
                 if v in visibilities:
@@ -215,7 +223,7 @@ class FotoEntity(SONWrapper):
 
     def unlock_cache(self, cache):
         lcol.update({'_id': self._id},
-                          {'$pull': {'cacheLocks': cache}})
+                    {'$pull': {'cacheLocks': cache}})
 
     def get_cache_path(self, cache):
         if cache == 'full':
@@ -272,7 +280,8 @@ class FotoEntity(SONWrapper):
         '''
         Load metadata from file if it doesn't exist yet
         '''
-        return self._update_effective_visibility(parent, save=save, recursive=False)
+        return self._update_effective_visibility(
+            parent, save=save, recursive=False)
 
     def update_search_text(self, save=True):
         self._search_text = ''
@@ -295,7 +304,7 @@ class FotoEntity(SONWrapper):
             return {'$exists': True, '$ne': None}
         # non-root entity
         return {'$regex': re.compile(
-                            "^%s(/|$)" % re.escape(self.full_path))}
+            "^%s(/|$)" % re.escape(self.full_path))}
 
     def get_parent(self):
         if self.is_root:
@@ -394,6 +403,7 @@ class FotoEntity(SONWrapper):
 
 
 class FotoAlbum(FotoEntity):
+
     def __init__(self, data):
         super(FotoAlbum, self).__init__(data)
 
@@ -414,7 +424,7 @@ class FotoAlbum(FotoEntity):
              'effectiveVisibility': {'$in': tuple(required_visibility)}},
         ).sort([('date', 1), ('name', 1)]))
 
-        return albums+fotos
+        return albums + fotos
 
     def list_all(self):
         '''
@@ -427,12 +437,12 @@ class FotoAlbum(FotoEntity):
         required_visibility = self.required_visibility(user)
         while True:
             f = entity(fcol.find_one(
-                    {'random': {'$lt': r},
-                     'path': {'$regex': re.compile(
-                                "^%s(/|$)" % re.escape(self.full_path))},
-                     'type': 'foto',
-                     'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                        sort=[('random', -1)]))
+                {'random': {'$lt': r},
+                 'path': {'$regex': re.compile(
+                     "^%s(/|$)" % re.escape(self.full_path))},
+                 'type': 'foto',
+                 'effectiveVisibility': {'$in': tuple(required_visibility)}},
+                sort=[('random', -1)]))
             if f is not None:
                 return f
             if r == 1:
@@ -498,7 +508,11 @@ class FotoAlbum(FotoEntity):
         if recursive and not save:
             raise ValueError('recursion without save is not recommended')
 
-        if not super(FotoAlbum, self)._update_effective_visibility(parent, save=False):
+        if not super(
+                FotoAlbum,
+                self)._update_effective_visibility(
+                parent,
+                save=False):
             # effective visibility did not change, so children won't change too
             return False
 
@@ -562,7 +576,8 @@ class Foto(FotoEntity):
                     self.rotation = 90
                 elif orientation == 8:
                     self.rotation = 270
-                # other rotations are mirrored, and won't occur much in practice
+                # other rotations are mirrored, and won't occur much in
+                # practice
             except ValueError:
                 # Rotation cannot be converted to an int (invalid input),
                 # ignore.
@@ -573,8 +588,8 @@ class Foto(FotoEntity):
             if 'DateTimeOriginal' in exif:
                 try:
                     self.date = datetime.datetime.strptime(
-                            exif['DateTimeOriginal'],
-                            '%Y:%m:%d %H:%M:%S'
+                        exif['DateTimeOriginal'],
+                        '%Y:%m:%d %H:%M:%S'
                     )
                 except ValueError:
                     # Ignore: the timestamp did not match the format.
@@ -636,6 +651,7 @@ class Foto(FotoEntity):
 
 
 class Video(FotoEntity):
+
     def __init__(self, data):
         super(Video, self).__init__(data)
 
@@ -645,17 +661,17 @@ def all():
         yield entity(d)
 
 CACHE_TYPES = (
-        'thumb',
-        'thumb2x',
-        'large',
-        'large2x',
-        'full',
-    )
+    'thumb',
+    'thumb2x',
+    'large',
+    'large2x',
+    'full',
+)
 
 TYPE_MAP = {
-        'album':        FotoAlbum,
-        'foto':         Foto,
-        'video':        Video
-    }
+    'album': FotoAlbum,
+    'foto': Foto,
+    'video': Video
+}
 
 # vim: et:sta:bs=2:sw=4:

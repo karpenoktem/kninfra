@@ -39,7 +39,7 @@ def group_email():
                 continue
             if g2.isHidden:
                 continue
-            stack.append((d+1, g2))
+            stack.append((d + 1, g2))
             had.add(g2)
     for m in args_to_users(sys.argv[1:]):
         mlut = set(m.groups.all())

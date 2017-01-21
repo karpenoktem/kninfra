@@ -33,8 +33,8 @@ def get_add_event_form(user, superuser=False, editing=False):
                                     regex=r'^[a-z0-9-]+$',
                                     widget=forms.TextInput(attrs={
                                         'required': '',
-                                        'pattern':  '[a-z0-9-]+'}),
-                    validators=[validate_event_name])
+                                        'pattern': '[a-z0-9-]+'}),
+                                    validators=[validate_event_name])
         description = forms.CharField(
             label=_('Beschrijving'),
             widget=forms.Textarea(attrs={'required': ''})
@@ -43,10 +43,10 @@ def get_add_event_form(user, superuser=False, editing=False):
                                   initial='0',
                                   widget=forms.NumberInput(attrs={
                                       'required': '',
-                                      'min':      '0'}))
+                                      'min': '0'}))
         date = forms.DateField(label=_('Datum'),
                                widget=forms.DateInput(attrs={
-                                   'required':    '',
+                                   'required': '',
                                    'placeholder': 'jjjj-mm-dd'}))
         max_subscriptions = forms.IntegerField(
             required=False,

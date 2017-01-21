@@ -1,6 +1,6 @@
 
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http  import require_POST
+from django.views.decorators.http import require_POST
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -22,7 +22,7 @@ from kn.subscriptions.forms import get_add_event_form
 @login_required
 def event_list(request):
     open_events, closed_events, open_leden_events, \
-                closed_leden_events = [], [], [], []
+        closed_leden_events = [], [], [], []
     for e in reversed(tuple(subscr_Es.all_events())):
         if e.is_open:
             if e.is_official:
@@ -145,9 +145,9 @@ def _api_get_email_addresses(request):
         raise PermissionDenied
     # XXX We can optimize this query
     return JsonHttpResponse({
-            'success': True,
-            'addresses': [s.user.canonical_full_email
-                          for s in event.listSubscribed]})
+        'success': True,
+        'addresses': [s.user.canonical_full_email
+                      for s in event.listSubscribed]})
 
 
 @require_POST
@@ -193,7 +193,7 @@ def event_new_or_edit(request, edit=None):
                 'owner': _id(fd['owner']),
                 'description': fd['description'],
                 'description_html': kn.utils.markdown.parser.convert(
-                                                fd['description']),
+                    fd['description']),
                 'has_public_subscriptions': fd['has_public_subscriptions'],
                 'may_unsubscribe': fd['may_unsubscribe'],
                 'humanName': fd['humanName'],
@@ -219,17 +219,18 @@ def event_new_or_edit(request, edit=None):
             e.save()
             render_then_email(
                 'subscriptions/' +
-                  ('event-edited' if edit else 'new-event') + '.mail.txt',
+                ('event-edited' if edit else 'new-event') + '.mail.txt',
                 Es.by_name('secretariaat').canonical_full_email, {
                     'event': e,
                     'user': request.user
-                      },
+                },
                 headers={
                     'In-Reply-To': e.messageId,
                     'References': e.messageId,
-                      },
+                },
             )
-            return HttpResponseRedirect(reverse('event-detail', args=(e.name,)))
+            return HttpResponseRedirect(
+                reverse('event-detail', args=(e.name,)))
     elif edit is None:
         form = AddEventForm()
     else:

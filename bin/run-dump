@@ -15,7 +15,7 @@ def main():
     fh = subprocess.Popen(['mongodump'], stdout=subprocess.PIPE)
     fh.communicate()
     os.chdir('..')
-    subprocess.call(['tar', 'Jcf', name+'.tar.xz', name])
+    subprocess.call(['tar', 'Jcf', name + '.tar.xz', name])
     subprocess.call(['rm', '-r', name])
 
 if __name__ == '__main__':

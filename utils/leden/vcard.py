@@ -28,9 +28,9 @@ def vcard(u):
         c.tel.value = u.telephone
         c.tel.type_param = 'CELL'
     if (u.addr_street is not None and
-        u.addr_city is not None and
-        u.addr_number is not None and
-        u.addr_zipCode is not None):
+            u.addr_city is not None and
+            u.addr_number is not None and
+            u.addr_zipCode is not None):
         l = c.add('adr', 'kn')
         l.value = vobject.vcard.Address(' '.join((u.addr_street,
                                                   u.addr_number)),

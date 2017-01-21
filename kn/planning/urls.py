@@ -15,6 +15,6 @@ urlpatterns = [
         name='planning_manage'),
     url(_(r'^manage/(?P<poolname>[^/]+)/template/?$'), views.planning_template,
         name='planning_template'),
-    ]
+]
 
 # vim: et:sta:bs=2:sw=4:

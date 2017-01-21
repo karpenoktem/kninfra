@@ -9,7 +9,7 @@ import kn.leden.entities as Es
 from kn.leden.mongo import _id
 from kn.leden import giedo
 from kn.leden.utils import find_name_for_user, parse_date
-from django.views.decorators.http  import require_POST
+from django.views.decorators.http import require_POST
 
 
 @login_required
@@ -80,7 +80,7 @@ def close_note(data, request):
     note.close(_id(request.user))
     render_then_email('leden/note-closed.mail.txt',
                       Es.by_name('secretariaat').canonical_full_email, {
-                            'note': note})
+                          'note': note})
     return {'ok': True}
 
 
@@ -109,7 +109,9 @@ def entity_update_primary(data, request):
             return {'ok': False, 'error': '"new" should be a dict'}
         for attr in ('street', 'number', 'zip', 'city'):
             if attr not in new or not isinstance(new[attr], basestring):
-                return {'ok': False, 'error': 'Missing argument "new.%s"' %attr}
+                return {
+                    'ok': False,
+                    'error': 'Missing argument "new.%s"' % attr}
     else:
         return {'ok': False, 'error': 'Unknown update type: "%s"' % typ}
     e = Es.by_id(data['id'])
@@ -203,7 +205,7 @@ def entity_end_study(data, request):
         return {'ok': False, 'error': 'No valid end date given'}
     try:
         e.study_end(data['study'], end_date)
-    except Es.EntityException, why:
+    except Es.EntityException as why:
         return {'ok': False, 'error': why.message}
 
     return {'ok': True}
@@ -238,27 +240,32 @@ def entity_set_property(data, request):
 
 
 def adduser_suggest_username(data, request):
-    if 'first_name' not in data or not isinstance(data['first_name'], basestring):
+    if 'first_name' not in data or not isinstance(
+            data['first_name'], basestring):
         return {'ok': False, 'error': 'Missing argument "first_name"'}
-    if 'last_name' not in data or not isinstance(data['last_name'], basestring):
+    if 'last_name' not in data or not isinstance(
+            data['last_name'], basestring):
         return {'ok': False, 'error': 'Missing argument "last_name"'}
 
     if 'secretariaat' not in request.user.cached_groups_names:
         return {'ok': False, 'error': 'Permission denied'}
 
-    return {'ok': True,
-            'username': find_name_for_user(data['first_name'], data['last_name'])}
+    return {
+        'ok': True,
+        'username': find_name_for_user(
+            data['first_name'],
+            data['last_name'])}
 
 ACTION_HANDLER_MAP = {
-        'entity_humanName_by_id': entity_humanName_by_id,
-        'entities_by_keyword': entities_by_keyword,
-        'close_note': close_note,
-        'entity_set_property': entity_set_property,
-        'entity_update_primary':  entity_update_primary,
-        'entity_update_visibility':  entity_update_visibility,
-        'entity_end_study':  entity_end_study,
-        'get_last_synced':  get_last_synced,
-        'adduser_suggest_username': adduser_suggest_username,
-        }
+    'entity_humanName_by_id': entity_humanName_by_id,
+    'entities_by_keyword': entities_by_keyword,
+    'close_note': close_note,
+    'entity_set_property': entity_set_property,
+    'entity_update_primary': entity_update_primary,
+    'entity_update_visibility': entity_update_visibility,
+    'entity_end_study': entity_end_study,
+    'get_last_synced': get_last_synced,
+    'adduser_suggest_username': adduser_suggest_username,
+}
 
 # vim: et:sta:bs=2:sw=4:

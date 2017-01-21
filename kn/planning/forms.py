@@ -7,6 +7,7 @@ from kn.planning.entities import Pool
 
 
 class WorkerChoiceField(forms.ChoiceField):
+
     def __init__(self, *args, **kwargs):
         # TODO Reduce these queries into one.
         kwargs['choices'] = [(e._id, unicode(e.humanName))
@@ -19,6 +20,7 @@ class WorkerChoiceField(forms.ChoiceField):
 
 
 class ManagePlanningForm(forms.Form):
+
     def __init__(self, *args, **kwargs):
         vacancies = kwargs['vacancies']
         del kwargs['vacancies']
@@ -27,11 +29,11 @@ class ManagePlanningForm(forms.Form):
         super(ManagePlanningForm, self).__init__(*args, **kwargs)
         for vacancy in vacancies:
             field = WorkerChoiceField(label='%s - %s' % (
-                    vacancy.begin_time, vacancy.end_time),
-                    choices=pool.workers(),
-                    sort_choices=True,
-                    initial=vacancy.assignee_id,
-                    required=False)
+                vacancy.begin_time, vacancy.end_time),
+                choices=pool.workers(),
+                sort_choices=True,
+                initial=vacancy.assignee_id,
+                required=False)
             self.fields['shift_%s' % vacancy._id] = field
         for vacancy in vacancies:
             vacancy.set_form_field(self['shift_%s' % vacancy._id])
@@ -50,7 +52,7 @@ class EventCreateForm(forms.Form):
         ('vrijdag_zonder_tappers', _('Vrijdag')),
         ('vrijdag_met_tappers', _('Vrijdag (met tappers)')),
         ('koken', 'Koken'),
-        ))
+    ))
 
 
 class AddVacancyForm(forms.Form):

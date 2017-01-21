@@ -23,10 +23,10 @@ def list_album(album):
 def scan_album(album):
     fotos = list_album(album)
 
-    names = os.listdir(os.path.join(settings.PHOTOS_DIR, album.full_path))
-    names.sort()
+    album_path = os.path.join(settings.PHOTOS_DIR, album.full_path)
+    names = sorted(os.listdir(album_path))
     for name in names:
-        filepath = os.path.join(settings.PHOTOS_DIR, album.full_path, name)
+        filepath = os.path.join(album_path, name)
         if name[0] == '.':
             continue
         entity = fotos.get(name, None)
@@ -85,4 +85,3 @@ def scan_fotos():
     scan_album(album)
 
     return {'success': True}
-

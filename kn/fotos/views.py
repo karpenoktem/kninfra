@@ -50,7 +50,7 @@ def fotos(request, path=''):
             if entity is not None:
                 # Zen Photo used + signs in the filename part of the URL.
                 url = reverse('fotos', kwargs={'path': path}) \
-                        + '#'+filepath_to_uri(name)
+                    + '#' + filepath_to_uri(name)
                 return redirect(url, permanent=True)
         raise Http404
 
@@ -58,7 +58,7 @@ def fotos(request, path=''):
         # This is a photo, not an album.
         # Backwards compatibility, probably to Zen Photo.
         url = reverse('fotos', kwargs={'path': album.path}) \
-                + '#'+filepath_to_uri(album.name)
+            + '#' + filepath_to_uri(album.name)
         return redirect(url, permanent=True)
 
     user = request.user if request.user.is_authenticated() else None
@@ -98,7 +98,7 @@ def fotos(request, path=''):
         active.sort()
         inactive.sort()
         people = []
-        for name in active+inactive:
+        for name in active + inactive:
             people.append((name, humanNames[name]))
 
     fotos = album_json(album, user)
@@ -144,7 +144,7 @@ def compat_view(request):
     name = None
     if '/' in path:
         path, name = path.rsplit('/', 1)
-    return redirect('fotos', path=path+'#'+name, permanent=True)
+    return redirect('fotos', path=path + '#' + name, permanent=True)
 
 
 def compat_foto(request):

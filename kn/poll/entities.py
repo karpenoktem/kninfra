@@ -48,7 +48,7 @@ def poll_by_name(name):
 
 
 def poll_by_id(__id):
-    tmp =  pcol.find_one({'_id': _id(__id)})
+    tmp = pcol.find_one({'_id': _id(__id)})
     return None if tmp is None else Poll(tmp)
 
 
@@ -67,6 +67,7 @@ def filling_by_poll(poll):
 
 
 class Poll(SONWrapper):
+
     def __init__(self, data):
         super(Poll, self).__init__(data, pcol)
 
@@ -100,6 +101,7 @@ class Poll(SONWrapper):
 
 
 class Filling(SONWrapper):
+
     def __init__(self, data):
         super(Filling, self).__init__(data, fcol)
 
@@ -120,6 +122,6 @@ class Filling(SONWrapper):
 
     def __unicode__(self):
         return unicode(u"answers of %s for %s" % (
-                self.user.humanName, self.poll.humanName))
+            self.user.humanName, self.poll.humanName))
 
 # vim: et:sta:bs=2:sw=4:

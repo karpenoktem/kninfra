@@ -42,6 +42,7 @@ def reglement_by_id(the_id):
 
 
 class Reglement(SONWrapper):
+
     def __init__(self, data):
         super(Reglement, self).__init__(data, rcol)
 
@@ -65,6 +66,7 @@ class Reglement(SONWrapper):
 
 
 class ReglementVersion(SONWrapper):
+
     def __init__(self, data):
         super(ReglementVersion, self).__init__(data, vcol)
 
@@ -96,7 +98,7 @@ class ReglementVersion(SONWrapper):
     def get_absolute_url(self):
         # TODO eliminate the query in self.reglement.name
         return ('version-detail', (), {
-                            'reglement_name': self.reglement.name,
-                            'version_name': self.name})
+            'reglement_name': self.reglement.name,
+            'version_name': self.name})
 
 # vim: et:sta:bs=2:sw=4:

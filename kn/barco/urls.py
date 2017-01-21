@@ -10,7 +10,7 @@ urlpatterns = [
 
     # legacy:
     url(r'^(?P<repos>[^/]+)/barform/$', RedirectView.as_view(
-                url='/barco/%(repos)s/enter/barform/')),
-    ]
+        url='/barco/%(repos)s/enter/barform/')),
+]
 
 # vim: et:sta:bs=2:sw=4:

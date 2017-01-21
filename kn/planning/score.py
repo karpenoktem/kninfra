@@ -5,7 +5,7 @@ from collections import Iterable
 
 
 def hm2s(h, m=0):
-    return 60*(60*h+m)
+    return 60 * (60 * h + m)
 
 BORREL_START = hm2s(20, 30)
 BORREL_FIRST_SWITCH = hm2s(23)
@@ -53,7 +53,7 @@ BORREL_END = hm2s(28)            # 4.00 the next day
 
 
 def timedelta_to_seconds(td):
-    return td.days*hm2s(24)+td.seconds
+    return td.days * hm2s(24) + td.seconds
 
 
 def p_none():
@@ -67,8 +67,8 @@ def p_borrel_uncurried(first, second, third, not_after, vacancy):
         return False
     # the moment the vacancy starts (ends) in seconds after the
     # start of the monday.
-    vbegin = timedelta_to_seconds(vacancy.begin-event.date)
-    vend = timedelta_to_seconds(vacancy.end-event.date)
+    vbegin = timedelta_to_seconds(vacancy.begin - event.date)
+    vend = timedelta_to_seconds(vacancy.end - event.date)
     # Only give a score for vacancies within the BORREL-interval
     if vbegin < BORREL_START:
         return False
@@ -106,79 +106,79 @@ def p_temporary(begin, end, preflet):
 
 preferences = {
     "tappers": {
-        "anne":     (p_borrel(100,  0,  0),),
-        "annette":  (p_borrel(0,  0,  0),),
+        "anne": (p_borrel(100, 0, 0),),
+        "annette": (p_borrel(0, 0, 0),),
         # In words:  Bas prefers the first and second shift,
         # but not the last shift and not after 12.00 PM.
-        "bas":      (p_borrel(100, 100, 0, hm2s(24)),),
-        "bente":    (p_borrel(100, 50,  0),),
+        "bas": (p_borrel(100, 100, 0, hm2s(24)),),
+        "bente": (p_borrel(100, 50, 0),),
         # In words:  Bram prefers the last shift,
         # except (as an example) from november first to november seventh,
         # in which period his prefers to do nothing.
-        "bramw":    (p_temporary(
-                        datetime(2011, 11, 1), datetime(2011, 11, 7),
-                        p_borrel(0, 0, 0)),
-                     p_borrel(0,  0, 100),),
-        "carlien":  (p_borrel(50, 50, 50),),
-        "chaim":    (p_borrel(100, 100, 100),),
-        "dennisi":  (p_borrel(100, 100,  0),),
-        "frits":    (p_borrel(50, 100,  0),),
-        "hugo":     (p_borrel(50, 100, 100),),
-        "jean":     (p_borrel(0,  0, 50),),
-        "jille":    (p_borrel(0,  0,  0),),
-        "judithvds": (p_borrel(0,  0,  0),),
-        "jurrien":  (p_borrel(50, 100, 100),),
-        "koen":     (p_borrel(50, 50, 50),),
-        "lisa":     (p_borrel(0, 100, 100),),
-        "loesje":   (p_borrel(100, 100,  0),),
-        "louise":   (p_borrel(50, 50, 50),),
-        "manon":    (p_borrel(0,  0,  0),),
-        "niek":     (p_borrel(100, 100,  0),),
-        "nieks":    (p_borrel(0, 100,  0),),
-        "olivier":  (p_borrel(100, 50,  0),),
+        "bramw": (p_temporary(
+            datetime(2011, 11, 1), datetime(2011, 11, 7),
+            p_borrel(0, 0, 0)),
+            p_borrel(0, 0, 100),),
+        "carlien": (p_borrel(50, 50, 50),),
+        "chaim": (p_borrel(100, 100, 100),),
+        "dennisi": (p_borrel(100, 100, 0),),
+        "frits": (p_borrel(50, 100, 0),),
+        "hugo": (p_borrel(50, 100, 100),),
+        "jean": (p_borrel(0, 0, 50),),
+        "jille": (p_borrel(0, 0, 0),),
+        "judithvds": (p_borrel(0, 0, 0),),
+        "jurrien": (p_borrel(50, 100, 100),),
+        "koen": (p_borrel(50, 50, 50),),
+        "lisa": (p_borrel(0, 100, 100),),
+        "loesje": (p_borrel(100, 100, 0),),
+        "louise": (p_borrel(50, 50, 50),),
+        "manon": (p_borrel(0, 0, 0),),
+        "niek": (p_borrel(100, 100, 0),),
+        "nieks": (p_borrel(0, 100, 0),),
+        "olivier": (p_borrel(100, 50, 0),),
         "petervdv": (p_borrel(100, 100, 100),),
-        "bramh":    (p_borrel(100, 100, 100),),
-        "remco":    (p_borrel(50, 50, 50),),
-        "rik":      (p_borrel(100, 100, 50),),
-        "robin":    (p_borrel(50, 50,  0),),
-        "sara":     (p_borrel(0, 50, 50),),
-        "shane":    (p_borrel(100, 100,  0),),
-        "simon":    (p_borrel(100, 100, 50),),
-        "steef":    (p_borrel(100, 100, 100),),
-        "tijn":     (p_borrel(100, 100,  0),),
-        "timj":     (p_borrel(0, 100,  0),),
-        "tomn":     (p_borrel(100, 100,  0),),
-        "olafs":    (p_borrel(100, 100,  0),),
-        "vincentw": (p_borrel(100, 100,  0),),
-        "claire":   (p_borrel(100, 100,  0),),
-        "maxm":     (p_borrel(100, 100,  0),),
-        "greet":    (p_borrel(100, 100,  0),),
-        "ids":      (p_borrel(100, 100,  0),),
-        },
+        "bramh": (p_borrel(100, 100, 100),),
+        "remco": (p_borrel(50, 50, 50),),
+        "rik": (p_borrel(100, 100, 50),),
+        "robin": (p_borrel(50, 50, 0),),
+        "sara": (p_borrel(0, 50, 50),),
+        "shane": (p_borrel(100, 100, 0),),
+        "simon": (p_borrel(100, 100, 50),),
+        "steef": (p_borrel(100, 100, 100),),
+        "tijn": (p_borrel(100, 100, 0),),
+        "timj": (p_borrel(0, 100, 0),),
+        "tomn": (p_borrel(100, 100, 0),),
+        "olafs": (p_borrel(100, 100, 0),),
+        "vincentw": (p_borrel(100, 100, 0),),
+        "claire": (p_borrel(100, 100, 0),),
+        "maxm": (p_borrel(100, 100, 0),),
+        "greet": (p_borrel(100, 100, 0),),
+        "ids": (p_borrel(100, 100, 0),),
+    },
     "draai": {
-        "bart":       p_borrel(100, 100,  0),
-        "barts":      p_borrel(0,  0,  0),
-        "bas":        p_borrel(100, 100,  0),
-        "daansp":     p_borrel(100, 50,  0),
-        "felix":      p_borrel(100, 100,  0),
-        "ids":        p_borrel(100, 100,  0),
-        "jille":      p_borrel(100, 100, 50),
-        "koen":       p_borrel(0,  0,  0),
+        "bart": p_borrel(100, 100, 0),
+        "barts": p_borrel(0, 0, 0),
+        "bas": p_borrel(100, 100, 0),
+        "daansp": p_borrel(100, 50, 0),
+        "felix": p_borrel(100, 100, 0),
+        "ids": p_borrel(100, 100, 0),
+        "jille": p_borrel(100, 100, 50),
+        "koen": p_borrel(0, 0, 0),
         "lisettevdl": p_none(),
-        "marjolijn":  p_none(),
-        "michiel":    p_borrel(0, 100, 100),
-        "mikel":      p_borrel(0,  0,  0),
-        "nick":       p_none(),
-        "pepijn":     p_borrel(100, 100, 100),
-        "petervdv":   p_borrel(100,  0,  0),
-        "pp":         p_borrel(100,  0,  0),
-        "rik":        p_borrel(100, 100, 50),
-        "robert":     p_none(),
-        "sjorsg":     p_borrel(50, 50, 25),
-        "stan":       p_borrel(50, 50,  0),
-        "vincentp":   p_borrel(100, 100, 50),
-        "yurre":      p_borrel(100, 100, 100),
-        }}
+        "marjolijn": p_none(),
+        "michiel": p_borrel(0, 100, 100),
+        "mikel": p_borrel(0, 0, 0),
+        "nick": p_none(),
+        "pepijn": p_borrel(100, 100, 100),
+        "petervdv": p_borrel(100, 0, 0),
+        "pp": p_borrel(100, 0, 0),
+        "rik": p_borrel(100, 100, 50),
+        "robert": p_none(),
+        "sjorsg": p_borrel(50, 50, 25),
+        "stan": p_borrel(50, 50, 0),
+        "vincentp": p_borrel(100, 100, 50),
+        "yurre": p_borrel(100, 100, 100),
+    }}
 
 
 def planning_vacancy_worker_score(vacancy, worker):
@@ -190,11 +190,12 @@ def planning_vacancy_worker_score(vacancy, worker):
         return 101
     if not isinstance(preferences[pn][un], Iterable):
         # Check if the prefetlist is not an iterable, and make it an iterable if needed
-        # This allows us to use a single preference without putting it in a tuple
+        # This allows us to use a single preference without putting it in a
+        # tuple
         preferences[pn][un] = (preferences[pn][un], )
     for preflet in preferences[pn][un]:
         score = preflet(vacancy)
-        if score != False:
+        if score:
             return score
     # If nothing has been set, assume the worker is not available
     return 0

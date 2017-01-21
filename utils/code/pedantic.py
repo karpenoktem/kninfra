@@ -17,17 +17,17 @@ def check_spaces(path):
     except IOError:
         return
     tabs = map(lambda x: len(re.match('^ *', x).group(0)), lines)
-    fours =  len(filter(lambda x: x != 0 and x % 4 == 0, tabs))
-    eights =  len(filter(lambda x: x != 0 and x % 8 == 0, tabs))
+    fours = len(filter(lambda x: x != 0 and x % 4 == 0, tabs))
+    eights = len(filter(lambda x: x != 0 and x % 8 == 0, tabs))
     if eights < 0.90 * fours:
         return
     if eights < 5 or fours < 5:
         return
-    print path, 'fours -> eights',  fours, eights
+    print path, 'fours -> eights', fours, eights
     for i in xrange(len(lines)):
         s = tabs[i] / 8 * 4
         s += tabs[i] % 8
-        lines[i] = (' '*s) + lines[i].strip(' ')
+        lines[i] = (' ' * s) + lines[i].strip(' ')
     with open(path, 'w') as f:
         f.write(''.join(lines))
 

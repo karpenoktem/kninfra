@@ -28,10 +28,10 @@ def view(request, graph, ext):
     path = os.path.join(settings.GRAPHS_PATH, graph_fn)
     # Check if we should update the graph
     if (not default_storage.exists(path) or
-            datetime.datetime.now() - default_storage.created_time(path)
-        > datetime.timedelta(seconds=timeout)):
+        datetime.datetime.now() - default_storage.created_time(path)
+            > datetime.timedelta(seconds=timeout)):
         update(default_storage.path(
-                    os.path.join(settings.GRAPHS_PATH, graph)))
+            os.path.join(settings.GRAPHS_PATH, graph)))
     return HttpResponse(FileWrapper(default_storage.open(path)),
                         content_type=mimetypes.guess_type(path)[0])
 
@@ -64,8 +64,10 @@ def update_member_count(base_path):
         )
     )
     g.plot(
-        pyx.graph.data.points(ret, x=1, y=2),
-        [pyx.graph.style.symbol(size=0.03, symbol=pyx.graph.style.symbol.plus)])
+        pyx.graph.data.points(
+            ret, x=1, y=2), [
+            pyx.graph.style.symbol(
+                size=0.03, symbol=pyx.graph.style.symbol.plus)])
     # TODO split into separate helper
     # work-around for PyX trying to write in the current directory
     old_wd = os.getcwd()
@@ -110,8 +112,8 @@ def _generate_member_count():
     return ret
 
 GRAPHS = {
-        # <name>:       (seconds_to_cache, update_functions, extensions)
-        'member-count': (60 * 60, update_member_count, ('png', 'pdf'))
-        }
+    # <name>:       (seconds_to_cache, update_functions, extensions)
+    'member-count': (60 * 60, update_member_count, ('png', 'pdf'))
+}
 
 # vim: et:sta:bs=2:sw=4:

@@ -35,7 +35,7 @@ class SlashNewlineStrippingTemplateLoader(BaseLoader):
             try:
                 if hasattr(loader, 'load_template_source'):
                     template, display_name = loader.load_template_source(
-                                                    name, dirs)
+                        name, dirs)
                 else:
                     template, display_name = loader(name, dirs)
                 return (template,

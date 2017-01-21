@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 @login_required
 def user_list(request, page):
     pr = Paginator(Es.ecol.find({'types': 'user'}).sort(
-            'humanNames.human', 1), 20)
+        'humanNames.human', 1), 20)
     try:
         p = pr.page(1 if page is None else page)
     except EmptyPage:
@@ -74,7 +74,10 @@ def entity_detail(request, name=None, _id=None, type=None):
         type = e.type
     if type not in Es.TYPE_MAP:
         raise ValueError(_("Onbekende entiteit type"))
-    return globals()['_'+type+'_detail'](request, getattr(e, 'as_'+type)())
+    return globals()['_' + type + '_detail'](
+        request,
+        getattr(e, 'as_' + type)()
+    )
 
 
 def _entity_detail(request, e):
@@ -191,16 +194,16 @@ def _entity_detail(request, e):
             # smoel was created as normal image, probably 300px wide
             pass
         ctx.update({
-                'hasPhoto': True,
-                'photoWidth': width,
-                'photoHeight': height})
+            'hasPhoto': True,
+            'photoWidth': width,
+            'photoHeight': height})
     return ctx
 
 
 def _user_detail(request, user):
     ctx = _entity_detail(request, user)
     ctx['photosUrl'] = (reverse('fotos', kwargs={'path': ''})
-                        + '?q=tag:'+str(user.name))
+                        + '?q=tag:' + str(user.name))
     ctx['addStudyFormOpen'] = False
     if request.method == 'POST':
         addStudyForm = AddStudyForm(request.POST)
@@ -335,8 +338,8 @@ def entities_by_year_of_birth(request, year):
 @login_required
 def years_of_birth(request):
     return render_to_response('leden/years_of_birth.html', {
-                    'years': reversed(Es.get_years_of_birth())},
-            context_instance=RequestContext(request))
+        'years': reversed(Es.get_years_of_birth())},
+        context_instance=RequestContext(request))
 
 
 @login_required
@@ -350,9 +353,9 @@ def users_underage(request):
             year=youngest.dateOfBirth.year + 18
         )
     return render_to_response('leden/entities_underage.html', {
-                    'users': users,
-                    'final_date': final_date},
-            context_instance=RequestContext(request))
+        'users': users,
+        'final_date': final_date},
+        context_instance=RequestContext(request))
 
 
 @login_required
@@ -388,8 +391,8 @@ def ik_chsmoel(request):
         elif orientation == 8:
             img = img.transpose(Image.ROTATE_90)
     width, height = resize_proportional(img.size[0], img.size[1],
-                                        settings.SMOELEN_WIDTH*2,
-                                        settings.SMOELEN_HEIGHT*2)
+                                        settings.SMOELEN_WIDTH * 2,
+                                        settings.SMOELEN_HEIGHT * 2)
     img = img.resize((width, height), Image.ANTIALIAS)
     img.save(default_storage.open(
         path.join(settings.SMOELEN_PHOTOS_PATH,
@@ -516,8 +519,8 @@ def rauth(request):
         return HttpResponse("INVALID TOKEN")
     if not request.user.is_authenticated():
         return redirect_to_login('%s?url=%s' % (
-                reverse('rauth'),
-                urlquote(request.REQUEST['url'])))
+            reverse('rauth'),
+            urlquote(request.REQUEST['url'])))
     token = sha256('%s|%s|%s|%s' % (str(request.user.name),
                                     date.today(),
                                     request.REQUEST['url'],
@@ -563,7 +566,7 @@ def secr_add_user(request):
             u = Es.User({
                 'types': ['user'],
                 'names': [fd['username']],
-                'humanNames': [{'human': fd['first_name']+' ' +
+                'humanNames': [{'human': fd['first_name'] + ' ' +
                                 fd['last_name']}],
                 'person': {
                     'titles': [],
@@ -596,7 +599,7 @@ def secr_add_user(request):
                      'number': fd['study_number']}],
                 'is_active': True,
                 'password': None
-                })
+            })
             logging.info("Added user %s" % fd['username'])
             u.save()
             # Then, add the relations.
@@ -620,11 +623,11 @@ def secr_add_user(request):
             u.set_password(pwd)
             giedo.change_password(str(u.name), pwd, pwd)
             render_then_email("leden/set-password.mail.txt", u, {
-                            'user': u,
-                            'password': pwd})
+                'user': u,
+                'password': pwd})
             # Send the welcome e-mail
             render_then_email("leden/welcome.mail.txt", u, {
-                            'u': u})
+                'u': u})
             Es.notify_informacie('adduser', request.user, entity=u._id)
             return HttpResponseRedirect(reverse('user-by-name',
                                                 args=(fd['username'],)))
@@ -661,7 +664,7 @@ def secr_add_group(request):
                 'humanNames': [{'name': nm,
                                 'human': fd['humanName'],
                                 'genitive_prefix': fd['genitive_prefix']}],
-                    'description': fd['description'],
+                'description': fd['description'],
                 'tags': [_id(fd['parent'])]})
             logging.info("Added group %s" % nm)
             g.save()
@@ -789,8 +792,8 @@ def user_reset_password(request, _id):
     u.set_password(pwd)
     giedo.change_password(str(u.name), pwd, pwd)
     render_then_email("leden/reset-password.mail.txt", u, {
-                            'user': u,
-                            'password': pwd})
+        'user': u,
+        'password': pwd})
     messages.info(request, _("Wachtwoord gereset!"))
     return redirect_to_referer(request)
 
@@ -807,9 +810,9 @@ def note_add(request):
     on.add_note(request.POST['note'], request.user)
     render_then_email("leden/new-note.mail.txt",
                       Es.by_name('secretariaat').canonical_full_email, {
-                            'user': request.user,
-                            'note': request.POST['note'],
-                            'on': on})
+                          'user': request.user,
+                          'note': request.POST['note'],
+                          'on': on})
     return redirect_to_referer(request)
 
 
@@ -826,7 +829,7 @@ def secr_update_site_agenda(request):
 def ik_openvpn(request):
     password_incorrect = False
     if 'want' in request.POST and 'password' in request.POST:
-    # TODO password versions
+        # TODO password versions
         if request.user.check_password(request.POST['password']):
             giedo.change_password(str(request.user.name),
                                   request.POST['password'],

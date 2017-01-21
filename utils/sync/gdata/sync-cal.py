@@ -15,7 +15,7 @@ GCAL_SCHEME = 'http://schemas.google.com/gCal/2005#'
 
 def acl_sync_cal(cs, cal, initial_role):
     acl_url = 'http://www.google.com/calendar' + \
-                     '/feeds/%s/acl/full' % cal
+        '/feeds/%s/acl/full' % cal
     feed = cs.GetCalendarAclFeed(acl_url)
     cur = dict()
     acc = set()
@@ -43,9 +43,9 @@ def acl_sync_cal(cs, cal, initial_role):
         print 'Adding %s' % m.email
         try:
             cs.InsertAclEntry(rule, acl_url)
-        except RequestError, e:
+        except RequestError as e:
             if (e.args[0]['status'] == 409 and
-                e.args[0]['reason'] == 'Conflict'):
+                    e.args[0]['reason'] == 'Conflict'):
                 print 'Warning: Version Conflict -- skipped'
             else:
                 raise
@@ -74,9 +74,9 @@ def sync_bd(cs, cal):
         rd_lut[m.full_name()] = ('DTSTART;VALUE=DATE:%s\n' +
                                  'DTEND;VALUE=DATE:%s\n' +
                                  'RRULE:FREQ=YEARLY\n') % (
-                        icaldate(m.dateOfBirth),
-                        icaldate(m.dateOfBirth +
-                                 datetime.timedelta(1)))
+            icaldate(m.dateOfBirth),
+            icaldate(m.dateOfBirth +
+                     datetime.timedelta(1)))
     feed = cs.CalendarQuery(query)
     while True:
         for event in feed.entry:
@@ -96,8 +96,8 @@ def sync_bd(cs, cal):
                 continue
             if event.recurrence.text != rd_lut[fn]:
                 print "RECC: %s %s != %s; deleting" % (
-                        fn, rd_lut[fn],
-                        event.recurrence.text)
+                    fn, rd_lut[fn],
+                    event.recurrence.text)
                 cs.DeleteEvent(event.GetEditLink().href)
                 continue
         if feed.GetNextLink() is None:
@@ -110,9 +110,9 @@ def sync_bd(cs, cal):
         event = gdata.calendar.CalendarEventEntry()
         event.title = atom.Title(text=m.full_name())
         event.content = atom.Content(
-            text='Verjaardag van %s' %m.full_name())
+            text='Verjaardag van %s' % m.full_name())
         event.recurrence = gdata.calendar.Recurrence(
-                    text=rd_lut[m.full_name()])
+            text=rd_lut[m.full_name()])
         cs.InsertEvent(event, cal_uri)
         print 'Added %s' % m.full_name()
 

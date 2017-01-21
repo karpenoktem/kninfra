@@ -1,7 +1,7 @@
 import datetime
 
 from kn.leden.date import now
-from kn.leden.mongo import  db, SONWrapper, son_property, _id
+from kn.leden.mongo import db, SONWrapper, son_property, _id
 import kn.leden.entities as Es
 
 from pymongo import DESCENDING
@@ -36,6 +36,7 @@ def ensure_indices():
 
 
 class Event(SONWrapper):
+
     def __init__(self, data):
         super(Event, self).__init__(data, ecol)
 
@@ -72,6 +73,7 @@ class Event(SONWrapper):
 
 
 class Pool(SONWrapper):
+
     def __init__(self, data):
         super(Pool, self).__init__(data, pcol)
         self._group = None
@@ -223,12 +225,12 @@ class Vacancy(SONWrapper):
     @property
     def begin_time(self):
         return ("~" if self.begin_is_approximate else "") \
-                + self.begin.strftime('%H:%M')
+            + self.begin.strftime('%H:%M')
 
     @property
     def end_time(self):
         return ("~" if self.end_is_approximate else "") \
-                + self.end.strftime('%H:%M')
+            + self.end.strftime('%H:%M')
 
     @property
     def id(self):
@@ -236,7 +238,7 @@ class Vacancy(SONWrapper):
 
     @classmethod
     def by_id(cls, id):
-        return cls.from_data(vcol.find_one({'_id':  _id(id)}))
+        return cls.from_data(vcol.find_one({'_id': _id(id)}))
 
     @classmethod
     def all(cls):
@@ -260,7 +262,8 @@ class Vacancy(SONWrapper):
     def all_needing_reminder(cls):
         dt = now() + datetime.timedelta(days=7)
         events = map(lambda e: e['_id'], ecol.find({'date': {'$lte': dt}}))
-        for v in vcol.find({'reminder_needed': True, 'event': {'$in': events}}):
+        for v in vcol.find({'reminder_needed': True,
+                            'event': {'$in': events}}):
             yield cls.from_data(v)
 
 # vim: et:sta:bs=2:sw=4:

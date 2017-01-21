@@ -10,8 +10,9 @@ class FormMeta(forms.Form):
 
 
 class BarformMeta(FormMeta):
-    pricebase = forms.ChoiceField(label=_("Prijsbasis"), choices=
-                                  [('v9a', 'v9a'), ('v8a', 'v8a')])
+    pricebase = forms.ChoiceField(
+        label=_("Prijsbasis"), choices=[
+            ('v9a', 'v9a'), ('v8a', 'v8a')])
     date = forms.DateField(label=_("Datum"), initial=datetime.date.today())
     tapper = forms.CharField(label=_("Tapper"))
     dienst = forms.CharField(label=_("Dienst"))
