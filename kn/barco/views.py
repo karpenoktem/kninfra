@@ -31,7 +31,7 @@ class FormSpecifics(object):
                  dir_in_repo,
                  template_path,  # see explanation below
                  weights_path
-            ):
+                 ):
         self.django_form = django_form
         self.django_template = django_template
         self.template_path = template_path

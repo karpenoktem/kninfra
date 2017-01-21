@@ -185,7 +185,7 @@ def main(data):
                 {'email': m['email'],
                  'from': DT_MIN,
                  'until': DT_MAX
-                }],
+                 }],
             'addresses': [
                 {'street': m['addr_street'],
                  'number': m['addr_number'],
@@ -193,7 +193,7 @@ def main(data):
                  'city': m['addr_city'],
                  'from': DT_MIN,
                  'until': DT_MAX
-                }],
+                 }],
             'telephones': [
                 {'number': m['telephone'],
                  'from': DT_MIN,

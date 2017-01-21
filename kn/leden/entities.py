@@ -314,7 +314,7 @@ def get_years_of_birth():
     start = ecol.find_one({'person.dateOfBirth': {'$ne': None}},
                           {'person.dateOfBirth': 1},
                           sort=[('person.dateOfBirth', 1)]
-                        )['person']['dateOfBirth'].year
+                          )['person']['dateOfBirth'].year
     end = ecol.find_one({'person.dateOfBirth': {'$ne': None}},
                         {'person.dateOfBirth': 1},
                         sort=[('person.dateOfBirth', -1)]
@@ -838,7 +838,7 @@ class Entity(SONWrapper):
 
     def get_tags(self):
         for m in ecol.find({'_id': {'$in': self._data.get('tags', ())}}
-                ).sort('humanNames.human', 1):
+                           ).sort('humanNames.human', 1):
             yield Tag(m)
 
     @property

@@ -38,7 +38,7 @@ def welcome_email():
                        else m.study),
              'studentNumber': ('onbekend' if m.telephone is None
                                else m.studentNumber),
-            })
+             })
         email = EmailMessage(
             "Welkom bij Karpe Noktem!", em,
             'Secretaris Karpe Noktem <secretaris@karpenoktem.nl>',

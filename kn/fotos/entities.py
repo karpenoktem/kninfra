@@ -467,7 +467,7 @@ class FotoAlbum(FotoEntity):
                                      search=q,
                                      filter=query_filter,
                                      limit=96,  # dividable by 2, 3 and 4
-                      )['results']:
+                                     )['results']:
                 yield entity(result['obj'])
             return
 

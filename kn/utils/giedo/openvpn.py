@@ -71,7 +71,7 @@ def create_certificate(user):
                            commonName + '.crt', '-in',
                            commonName + '.csr', '-md', 'sha1',
                            '-config', 'kn-openssl.cnf'
-        ], cwd=settings.VPN_KEYSTORE, env=env, stdout=subprocess.PIPE,
+                           ], cwd=settings.VPN_KEYSTORE, env=env, stdout=subprocess.PIPE,
                           stderr=subprocess.STDOUT)
     ph.communicate()
     if ph.returncode != 0:
