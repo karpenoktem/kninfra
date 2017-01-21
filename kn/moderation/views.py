@@ -54,7 +54,7 @@ def _deactivate_mm(ml, name, user, record, moderators):
     if not ml.emergency:
         return
     ml.emergency = False
-    if not record is None:
+    if record is not None:
         record.delete()
     for id in ml.GetHeldMessageIds():
         ml.HandleRequest(id, mm_cfg.APPROVE)

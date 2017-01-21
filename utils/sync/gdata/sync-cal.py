@@ -65,7 +65,7 @@ def sync_bd(cs, cal):
                                                       'private', 'full')
     query.start_min = str(now)
     query.start_max = str(now2)
-    todo = set(filter(lambda x: not x.dateOfBirth is None,
+    todo = set(filter(lambda x: x.dateOfBirth is not None,
                       OldKnUser.objects.all()))
     fn_lut = dict()
     rd_lut = dict()

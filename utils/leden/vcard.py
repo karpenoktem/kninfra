@@ -23,14 +23,14 @@ def vcard(u):
     l.value = u.primary_email
     l.type_paramlist = ['INTERNET']
     c.add('X-ABLabel', 'kn').value = 'kn'
-    if not u.telephone is None:
+    if u.telephone is not None:
         c.add('tel', 'kn')
         c.tel.value = u.telephone
         c.tel.type_param = 'CELL'
-    if (not u.addr_street is None and
-        not u.addr_city is None and
-        not u.addr_number is None and
-        not u.addr_zipCode is None):
+    if (u.addr_street is not None and
+        u.addr_city is not None and
+        u.addr_number is not None and
+        u.addr_zipCode is not None):
         l = c.add('adr', 'kn')
         l.value = vobject.vcard.Address(' '.join((u.addr_street,
                                                   u.addr_number)),
