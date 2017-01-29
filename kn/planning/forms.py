@@ -2,6 +2,7 @@ import datetime
 
 from django import forms
 from django.utils.translation import ugettext as _
+from django.utils import six
 
 from kn.planning.entities import Pool
 
@@ -10,7 +11,7 @@ class WorkerChoiceField(forms.ChoiceField):
 
     def __init__(self, *args, **kwargs):
         # TODO Reduce these queries into one.
-        kwargs['choices'] = [(e._id, unicode(e.humanName))
+        kwargs['choices'] = [(e._id, six.text_type(e.humanName))
                              for e in kwargs['choices']]
         if kwargs.get('sort_choices', False):
             kwargs['choices'].sort(key=lambda x: x[1])

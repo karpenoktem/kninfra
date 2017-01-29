@@ -33,7 +33,7 @@ def generate_mailman_changes(giedo):
         gid2name[g._id] = str(g.name)
         if not str(g.name) in ml_names:
             todo['create'].append((str(g.name),
-                                   unicode(g.humanName)))
+                                   six.text_type(g.humanName)))
             c_ms = set([])
         else:
             c_ms = set([x[0] for x in six.iteritems(Mailman.MailList.MailList(

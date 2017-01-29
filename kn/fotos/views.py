@@ -14,6 +14,7 @@ from django.contrib import messages
 from django.http import (Http404, HttpResponse,
                          HttpResponseNotModified, QueryDict)
 from django.utils.encoding import filepath_to_uri
+from django.utils import six
 
 from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
 from kn.leden import giedo
@@ -92,7 +93,7 @@ def fotos(request, path=''):
         active = []
         inactive = []
         for u in Es.users():
-            humanNames[str(u.name)] = unicode(u.humanName)
+            humanNames[str(u.name)] = six.text_type(u.humanName)
             if u.is_active:
                 active.append(str(u.name))
             else:

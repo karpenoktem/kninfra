@@ -5,6 +5,8 @@ import csv
 
 import kn.leden.entities as Es
 
+from django.utils import six
+
 
 def main():
     writer = csv.writer(sys.stdout)
@@ -31,8 +33,8 @@ def main():
                  m.last_name.encode('utf-8'),
                  study['from'].date() if study['from'] else '',
                  study['until'].date() if study['until'] else '',
-                 unicode(study['institute'].humanName),
-                 unicode(study['study'].humanName),
+                 six.text_type(study['institute'].humanName),
+                 six.text_type(study['study'].humanName),
                  study['number']])
 
 

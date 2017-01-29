@@ -124,7 +124,7 @@ class Filling(SONWrapper):
 
     @six.python_2_unicode_compatible
     def __str__(self):
-        return unicode(u"answers of %s for %s" % (
-            self.user.humanName, self.poll.humanName))
+        return six.u("answers of %s for %s") % (
+            self.user.humanName, self.poll.humanName)
 
 # vim: et:sta:bs=2:sw=4:

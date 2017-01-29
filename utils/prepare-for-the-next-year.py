@@ -9,6 +9,7 @@ import datetime
 import kn.leden.entities as Es
 
 from django.utils.six.moves import range
+from django.utils import six
 
 
 def load_year_overrides():
@@ -90,7 +91,7 @@ def main():
                 continue
             how = Es.by_id(rel['how'])
             print(' {} {} (as {}): {} -> {}'.format(
-                unicode(Es.by_id(rel['who'])),
+                six.text_type(Es.by_id(rel['who'])),
                 str(Es.by_id(rel['with'])),
                 how._data['sofa_suffix'] if how else 'member',
                 rel['from'], start_of_year
@@ -111,7 +112,7 @@ def main():
                 continue
             how = Es.by_id(rel['how'])
             print(' {} {} (as {}): {} -> {}'.format(
-                unicode(Es.by_id(rel['who'])),
+                six.text_type(Es.by_id(rel['who'])),
                 str(Es.by_id(rel['with'])),
                 how._data['sofa_suffix'] if how else 'member',
                 rel['until'], end_of_year

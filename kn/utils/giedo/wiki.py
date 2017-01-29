@@ -37,7 +37,7 @@ def generate_wiki_changes(self):
             id2name[uid] = user
             del users[user]
     for name, user in six.iteritems(users):
-        todo['add'].append((name, unicode(user.humanName),
+        todo['add'].append((name, six.text_type(user.humanName),
                             user.canonical_email))
 
     c.execute("SELECT ug_user FROM user_groups WHERE ug_group=%s", 'leden')

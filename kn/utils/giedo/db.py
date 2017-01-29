@@ -4,6 +4,8 @@ import kn.leden.entities as Es
 from kn.leden.date import now
 from kn.base.conf import DT_MIN, DT_MAX
 
+from django.utils import six
+
 
 def update_db(giedo):
     dt_now = now()
@@ -153,8 +155,8 @@ def update_db(giedo):
                  'how': rel['how']},
              'humanNames': [{
                  'name': nm,
-                 'human': unicode(g.humanName) + ' ' +
-                 unicode(sofa_brands[rel['how']].humanName)}]}
+                 'human': six.text_type(g.humanName) + ' ' +
+                 six.text_type(sofa_brands[rel['how']].humanName)}]}
         n['_id'] = Es.ecol.insert(n)
         groups[nm] = Es.Group(n)
         id2name[n['_id']] = nm
@@ -212,7 +214,7 @@ def _create_yeargroup(g, year, name, tags, groups, id2name):
          'names': [name],
          'humanNames': [{
              'name': name,
-             'human': unicode(g.humanName) + ' jaar ' + str(year)}]}
+             'human': six.text_type(g.humanName) + ' jaar ' + str(year)}]}
     n['_id'] = Es.ecol.insert(n)
     groups[name] = Es.entity(n)
     id2name[n['_id']] = name

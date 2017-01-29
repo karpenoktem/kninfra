@@ -6,6 +6,8 @@ import datetime
 
 import kn.leden.entities as Es
 
+from django.utils.six import text_type
+
 
 def main():
     writer = csv.writer(sys.stdout)
@@ -31,8 +33,8 @@ def main():
                     [str(m.name),
                      m.first_name.encode('utf-8'),
                      m.last_name.encode('utf-8'),
-                     unicode(study['institute'].humanName).encode('utf-8'),
-                     unicode(study['study'].humanName).encode('utf-8'),
+                     text_type(study['institute'].humanName).encode('utf-8'),
+                     text_type(study['study'].humanName).encode('utf-8'),
                      study['number']])
                 ok = True
                 break

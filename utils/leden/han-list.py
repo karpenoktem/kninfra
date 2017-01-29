@@ -3,6 +3,8 @@ import _import  # noqa: F401
 
 import kn.leden.entities as Es
 
+from django.utils import six
+
 
 def main():
     leden = frozenset(Es.by_name('leden').get_members())
@@ -19,7 +21,7 @@ def main():
         if not ok:
             continue
         print("%-30s %-10s %s" % (m.full_name, study['number'],
-                                  unicode(study['study'].humanName)))
+                                  six.text_type(study['study'].humanName)))
 
 
 if __name__ == '__main__':

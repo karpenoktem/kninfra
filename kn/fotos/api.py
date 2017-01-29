@@ -76,7 +76,7 @@ def entities_json(children, user):
             if tagged:
                 for tag in tagged:
                     tags.append(str(tag.name))
-                    people[str(tag.name)] = unicode(tag.humanName)
+                    people[str(tag.name)] = six.text_type(tag.humanName)
                 entry['tags'] = tags
 
         entries.append(entry)

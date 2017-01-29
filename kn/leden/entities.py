@@ -654,7 +654,7 @@ def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
 
 
 def entity_cmp_humanName(x, y):
-    return cmp(unicode(x.humanName), unicode(y.humanName))
+    return cmp(six.text_type(x.humanName), six.text_type(y.humanName))
 
 
 def dt_cmp_until(x, y):
@@ -778,7 +778,7 @@ class EntityHumanName(object):
 
     @property
     def genitive(self):
-        return self.genitive_prefix + ' ' + unicode(self)
+        return self.genitive_prefix + ' ' + six.text_type(self)
 
     @property
     def definite_article(self):
@@ -1066,7 +1066,7 @@ class Entity(SONWrapper):
         addr = self.canonical_email
         if not addr:
             return None
-        return email.utils.formataddr((unicode(self.humanName), addr))
+        return email.utils.formataddr((six.text_type(self.humanName), addr))
 
     @property
     def canonical_email(self):
@@ -1258,7 +1258,7 @@ class User(Entity):
         if ('person' not in self._data or
                 'family' not in self._data['person'] or
                 'nick' not in self._data['person']):
-            return unicode(super(User, self).humanName)
+            return six.text_type(super(User, self).humanName)
         bits = self._data['person']['family'].split(',', 1)
         if len(bits) == 1:
             return self._data['person']['nick'] + ' ' \

@@ -92,7 +92,7 @@ def generate_wolk_changes(giedo):
             continue
         missing_groups.remove(group)
     for user in missing_users:
-        todo['addUser'].append((user, unicode(users[user].humanName)))
+        todo['addUser'].append((user, six.text_type(users[user].humanName)))
     todo['addGroup'] = list(missing_groups)
     for group, missing_members in six.iteritems(groups):
         for user in missing_members:

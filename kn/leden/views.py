@@ -23,6 +23,7 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib import messages
+from django.utils import six
 
 from kn.leden.forms import (ChangePasswordForm, AddUserForm,
                             AddGroupForm, AddStudyForm)
@@ -86,12 +87,12 @@ def _entity_detail(request, e):
         r = Es.relation_cmp_until(y, x)
         if r:
             return r
-        r = cmp(unicode(x['with'].humanName),
-                unicode(y['with'].humanName))
+        r = cmp(six.text_type(x['with'].humanName),
+                six.text_type(y['with'].humanName))
         if r:
             return r
-        r = cmp(unicode(x['how'].humanName) if x['how'] else None,
-                unicode(y['how'].humanName) if y['how'] else None)
+        r = cmp(six.text_type(x['how'].humanName) if x['how'] else None,
+                six.text_type(y['how'].humanName) if y['how'] else None)
         if r:
             return r
         return Es.relation_cmp_from(x, y)
@@ -100,12 +101,12 @@ def _entity_detail(request, e):
         r = Es.relation_cmp_until(y, x)
         if r:
             return r
-        r = cmp(unicode(x['how'].humanName) if x['how'] else None,
-                unicode(y['how'].humanName) if y['how'] else None)
+        r = cmp(six.text_type(x['how'].humanName) if x['how'] else None,
+                six.text_type(y['how'].humanName) if y['how'] else None)
         if r:
             return r
-        r = cmp(unicode(x['who'].humanName),
-                unicode(y['who'].humanName))
+        r = cmp(six.text_type(x['who'].humanName),
+                six.text_type(y['who'].humanName))
         if r:
             return r
         return Es.relation_cmp_from(x, y)
@@ -159,8 +160,8 @@ def _entity_detail(request, e):
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):
         groups = [g for g in Es.groups() if not g.is_virtual]
-        groups.sort(cmp=lambda x, y: cmp(unicode(x.humanName),
-                                         unicode(y.humanName)))
+        groups.sort(cmp=lambda x, y: cmp(six.text_type(x.humanName),
+                                         six.text_type(y.humanName)))
         users = sorted(Es.users(), cmp=Es.entity_cmp_humanName)
         brands = sorted(Es.brands(), cmp=Es.entity_cmp_humanName)
         ctx.update({'users': users,
@@ -257,12 +258,12 @@ def _brand_detail(request, brand):
         r = Es.relation_cmp_until(y, x)
         if r:
             return r
-        r = cmp(unicode(x['with'].humanName),
-                unicode(y['with'].humanName))
+        r = cmp(six.text_type(x['with'].humanName),
+                six.text_type(y['with'].humanName))
         if r:
             return r
-        r = cmp(unicode(x['who'].humanName),
-                unicode(y['who'].humanName))
+        r = cmp(six.text_type(x['who'].humanName),
+                six.text_type(y['who'].humanName))
         if r:
             return r
         return Es.relation_cmp_from(x, y)

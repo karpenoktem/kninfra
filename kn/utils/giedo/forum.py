@@ -36,11 +36,11 @@ def generate_forum_changes(self):
         else:
             if users[user].humanName != realname:
                 todo['update-realname'].append(
-                    (user, unicode(users[user].humanName))
+                    (user, six.text_type(users[user].humanName))
                 )
             del users[user]
     for name, user in six.iteritems(users):
-        todo['add'].append((name, unicode(user.humanName),
+        todo['add'].append((name, six.text_type(user.humanName),
                             user.canonical_email))
     c.close()
     dc.close()

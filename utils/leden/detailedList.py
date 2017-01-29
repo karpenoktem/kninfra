@@ -3,6 +3,7 @@ import _import  # noqa: F401
 
 import sys
 from optparse import OptionParser
+from django.utils import six
 from common import args_to_users, print_table
 
 op = OptionParser()
@@ -30,5 +31,5 @@ for u in args_to_users(args):
         u.addr_zipCode,
         u.addr_city,
         u.telephone))
-data = map(lambda r: map(lambda x: unicode(x), r), data)
+data = map(lambda r: map(lambda x: six.text_type(x), r), data)
 print_table(data, separator=options.separator)
