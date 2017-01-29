@@ -7,10 +7,11 @@ import kn.leden.entities as Es
 from kn.leden.date import now
 from django.utils import six
 
-import_mailman()
-import Mailman  # noqa: E402
-import Mailman.Utils  # noqa: E402
-import Mailman.MailList  # noqa: E402
+if six.PY2:  # HACK see #438
+    import_mailman()
+    import Mailman  # noqa: E402
+    import Mailman.Utils  # noqa: E402
+    import Mailman.MailList  # noqa: E402
 
 
 def generate_mailman_changes(giedo):

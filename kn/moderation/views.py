@@ -7,6 +7,7 @@ import datetime
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
+from django.utils import six
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
@@ -16,11 +17,11 @@ from kn.utils.mailman import import_mailman
 from kn.base.mail import render_then_email
 from django.conf import settings
 
-import_mailman()
-
-import Mailman.MailList  # noqa: E402
-import Mailman.Utils  # noqa: E402
-from Mailman import mm_cfg  # noqa: E402
+if six.PY2:  # HACK see #438
+    import_mailman()
+    import Mailman.MailList  # noqa: E402
+    import Mailman.Utils  # noqa: E402
+    from Mailman import mm_cfg  # noqa: E402
 
 
 @login_required

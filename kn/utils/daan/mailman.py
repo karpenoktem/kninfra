@@ -5,10 +5,13 @@ import logging
 import os
 
 from django.conf import settings
+from django.utils import six
 
 from kn.utils.mailman import import_mailman
-import_mailman()
-from Mailman import Utils, MailList, UserDesc, Errors  # noqa: E402
+
+if six.PY2:  # HACK see #438
+    import_mailman()
+    from Mailman import Utils, MailList, UserDesc, Errors  # noqa: E402
 
 
 def apply_mailman_changes(daan, changes):
