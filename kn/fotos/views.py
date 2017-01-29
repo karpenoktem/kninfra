@@ -1,7 +1,7 @@
 import os.path
 from time import gmtime, strftime
 
-from django.utils.six.moves.urllib.parse
+from django.utils.six.moves.urllib.parse import unquote
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.utils.translation import ugettext as _
