@@ -1,9 +1,10 @@
 from kn.leden.mongo import db, SONWrapper, _id, son_property
 import kn.leden.entities as Es
 from kn.fotos.utils import resize_proportional
-from django.conf import settings
 
+from django.conf import settings
 from django.db.models import permalink
+from django.utils import six
 
 import os
 import re
@@ -612,7 +613,7 @@ class Foto(FotoEntity):
         super(Foto, self).update_search_text(save=False)
         if 'tags' in self._data:
             tags = []
-            for user_id, user in Es.by_ids(self._data['tags']).iteritems():
+            for user_id, user in six.iteritems(Es.by_ids(self._data['tags'])):
                 tags.extend((user.first_name, user.last_name))
             self._search_text += ' '.join(filter(bool, tags))
 

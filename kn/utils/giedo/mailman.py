@@ -5,6 +5,7 @@ import logging
 from kn.utils.mailman import import_mailman
 import kn.leden.entities as Es
 from kn.leden.date import now
+from django.utils import six
 
 import_mailman()
 import Mailman  # noqa: E402
@@ -35,11 +36,10 @@ def generate_mailman_changes(giedo):
                                    unicode(g.humanName)))
             c_ms = set([])
         else:
-            c_ms = set([x[0] for x in
-                        Mailman.MailList.MailList(
-                            str(g.name),
-                            lock=False
-            ).members.iteritems()])
+            c_ms = set([x[0] for x in six.iteritems(Mailman.MailList.MailList(
+                    str(g.name),
+                    lock=False
+                ).members)])
         ml_members[str(g.name)] = c_ms
     # Check which memberships are missing in the current mailing lists
     for rel in mm_rels:

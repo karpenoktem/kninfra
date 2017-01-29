@@ -3,6 +3,8 @@ from common import now
 
 import kn.leden.entities as Es
 
+from django.utils import six
+
 
 def main():
     member_age = {}
@@ -14,7 +16,7 @@ def main():
             member_age[rel['who']] = Es.DT_MAX
         member_age[rel['who']] = rel['from']
     l = []
-    for m, age in member_age.iteritems():
+    for m, age in six.iteritems(member_age):
         if not m.dateOfBirth:
             continue
         print (age - m.dateOfBirth).days / 365.242, unicode(m.name)

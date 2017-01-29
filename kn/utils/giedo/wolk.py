@@ -8,6 +8,7 @@ import kn.leden.entities as Es
 from kn.leden.date import now
 
 from django.conf import settings
+from django.utils import six
 
 
 def generate_wolk_changes(giedo):
@@ -93,7 +94,7 @@ def generate_wolk_changes(giedo):
     for user in missing_users:
         todo['addUser'].append((user, unicode(users[user].humanName)))
     todo['addGroup'] = list(missing_groups)
-    for group, missing_members in groups.iteritems():
+    for group, missing_members in six.iteritems(groups):
         for user in missing_members:
             todo['addUserToGroup'].append((user, group))
     return todo

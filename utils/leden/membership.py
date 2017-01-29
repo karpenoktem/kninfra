@@ -1,6 +1,8 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
 
+from django.utils import six
+
 import sys
 from common import args_to_users
 import kn.leden.entities as Es
@@ -26,7 +28,7 @@ while True:
 nyears = i - 1
 N = 0
 
-for m, ys in users.iteritems():
+for m, ys in six.iteritems(users):
     N += 1
     if N % 20 == 0:
         print "%15s" % '',

@@ -2,6 +2,8 @@ import subprocess
 import os.path
 import re
 
+import six
+
 from kn.fotos.roots import FOTO_ROOTS
 
 
@@ -27,7 +29,7 @@ def fotoadmin_remove_moved_fotos(cilia, store, user, directory):
 
 def fotoadmin_scan_userdirs():
     userdirs = []
-    for store, root in FOTO_ROOTS.iteritems():
+    for store, root in six.iteritems(FOTO_ROOTS):
         for user in os.listdir(root.base):
             if user[0] == '.':
                 continue

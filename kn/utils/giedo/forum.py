@@ -6,6 +6,7 @@ import MySQLdb
 import kn.leden.entities as Es
 
 from django.conf import settings
+from django.utils import six
 
 
 def generate_forum_changes(self):
@@ -38,7 +39,7 @@ def generate_forum_changes(self):
                     (user, unicode(users[user].humanName))
                 )
             del users[user]
-    for name, user in users.iteritems():
+    for name, user in six.iteritems(users):
         todo['add'].append((name, unicode(user.humanName),
                             user.canonical_email))
     c.close()
