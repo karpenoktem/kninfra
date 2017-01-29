@@ -74,7 +74,7 @@ class AddVacancyForm(forms.Form):
     )
     pool = forms.ChoiceField(
         label=_("Type"),
-        choices=map(lambda x: (x._id, x.name), Pool.all())
+        choices=[(x._id, x.name) for x in Pool.all()]
     )
 
 # vim: et:sta:bs=2:sw=4:

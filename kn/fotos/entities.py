@@ -414,16 +414,16 @@ class FotoAlbum(FotoEntity):
 
     def list(self, user):
         required_visibility = self.required_visibility(user)
-        albums = map(entity, fcol.find(
+        albums = [entity(x) for x in fcol.find(
             {'path': self.full_path,
              'type': 'album',
              'effectiveVisibility': {'$in': tuple(required_visibility)}}
-        ).sort([('date', -1), ('name', 1)]))
-        fotos = map(entity, fcol.find(
+        ).sort([('date', -1), ('name', 1)])]
+        fotos = [entity(x) for x in fcol.find(
             {'path': self.full_path,
-             'type': {'$ne': 'album'},
-             'effectiveVisibility': {'$in': tuple(required_visibility)}},
-        ).sort([('date', 1), ('name', 1)]))
+                 'type': {'$ne': 'album'},
+                 'effectiveVisibility': {'$in': tuple(required_visibility)}},
+        ).sort([('date', 1), ('name', 1)])]
 
         return albums + fotos
 
@@ -431,7 +431,9 @@ class FotoAlbum(FotoEntity):
         '''
         Return all children regardless of visibility.
         '''
-        return map(entity, fcol.find({'path': self.full_path}).sort('name', 1))
+        return [entity(x) for x in fcol.find(
+            {'path': self.full_path}
+        ).sort('name', 1)]
 
     def get_random_foto_for(self, user):
         r = random.random()

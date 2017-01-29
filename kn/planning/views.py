@@ -391,8 +391,8 @@ def planning_template(request, poolname):
                     'end_time': v.end_time,
                     'assignees': list()}
             shifts[v.begin]['assignees'].append(v.assignee)
-        ei['vacancies'] = map(lambda x: x[1], sorted(shifts.items(),
-                                                     key=lambda x: x[0]))
+        ei['vacancies'] = [x[1] for x
+                           in sorted(shifts.items(), key=lambda x: x[0])]
         events.append(ei)
     events.sort(key=lambda x: x['date'])
     return render_to_response('planning/template.html', {'events': events},

@@ -10,6 +10,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+from django.utils import six
 
 from koert.drank.rikf import open_rikf_ar
 
@@ -164,11 +165,11 @@ def barco_enterform(request, repos, formname):
     prefill = {}
     if request.method == 'POST':
         form = (formspec.django_form)(request.POST)
-        prefill = json.loads(request.POST['jsondata'])
+        raw_prefill = json.loads(request.POST['jsondata'])
         # The keys are unicode and that gives trouble when passing it to
         # the template and |safe'ing it. This line maps all keys and values to
         # non-unicode.
-        prefill = dict(map(lambda x: (str(x[0]), str(x[1])), prefill.items()))
+        prefill = {str(x): str(y) for x, y in six.iteritems(raw_prefill)}
         if form.is_valid():
             # Dump the entered data to a file ...
             fd = form.cleaned_data

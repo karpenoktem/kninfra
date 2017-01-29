@@ -31,5 +31,5 @@ for u in args_to_users(args):
         u.addr_zipCode,
         u.addr_city,
         u.telephone))
-data = map(lambda r: map(lambda x: six.text_type(x), r), data)
+data = [[six.text_type(x) for x in r] for r in data]
 print_table(data, separator=options.separator)

@@ -56,7 +56,7 @@ class EntityChoiceField(forms.CharField):
 def validate_username(username):
     if username in Es.names():
         raise forms.ValidationError(_('Gebruikersnaam is al in gebruik'))
-    if any(map(lambda c: c not in settings.USERNAME_CHARS, username)):
+    if any([c not in settings.USERNAME_CHARS for c in username]):
         raise forms.ValidationError(
             _('Gebruikersnaam bevat een niet-toegestane letter'))
     if not reserved.allowed(username):

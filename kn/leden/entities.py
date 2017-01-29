@@ -407,7 +407,7 @@ def by_keyword(keyword, limit=20, _type=None):
         query_dict['types'] = _type
     cursor = ecol.find(query_dict, limit=(0 if limit is None else limit),
                        sort=[('humanNames.human', 1)])
-    return map(entity, cursor)
+    return [entity(x) for x in cursor]
 
 # Specialized functions to work with entities.
 # ######################################################################
@@ -415,7 +415,7 @@ def by_keyword(keyword, limit=20, _type=None):
 
 def bearers_by_tag_id(tag_id, _as=entity):
     """ Find the bearers of the tag with @tag_id """
-    return map(_as, ecol.find({'tags': tag_id}))
+    return [_as(x) for x in ecol.find({'tags': tag_id})]
 
 
 def year_to_range(year):
@@ -535,7 +535,7 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
             if attr not in query:
                 continue
             elif isinstance(query[attr], (list, tuple)):
-                query[attr] = {'$in': map(_id, query[attr])}
+                query[attr] = {'$in': [_id(x) for x in query[attr]]}
             elif query[attr] is not None:
                 query[attr] = _id(query[attr])
             else:
@@ -1342,8 +1342,8 @@ class User(Entity):
 
     @property
     def last_study_end_date(self):
-        return max([DT_MIN] + map(lambda s: s['until'],
-                                  self._data.get('studies', ())))
+        return max([DT_MIN] +
+                   [s['until'] for s in self._data.get('studies', ())])
 
     def study_start(self, study, institute, number, start_date, save=True):
         start_date = datetime.datetime(start_date.year, start_date.month,

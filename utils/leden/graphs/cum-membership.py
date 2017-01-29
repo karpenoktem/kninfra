@@ -18,7 +18,7 @@ def main():
     for i in range(1, N):
         groups.append(Es.by_name('leden%s' % i).get_members())
     users = reduce(lambda x, y: x + y, groups, [])
-    groups = map(frozenset, groups)
+    groups = [frozenset(x) for x in groups]
     for user in frozenset(users):
         first = None
         for i in range(1, N):

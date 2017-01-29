@@ -16,8 +16,8 @@ DAYS_IN_YEAR = 365.242199
 
 
 def check_email():
-    comm_ids = map(_id, Es.by_name('comms').get_bearers())
-    list_ids = map(_id, Es.by_name('lists-opted').get_bearers())
+    comm_ids = [_id(x) for x in Es.by_name('comms').get_bearers()]
+    list_ids = [_id(x) for x in Es.by_name('lists-opted').get_bearers()]
     with open('check-email.template') as f:
         template_text = StringIO()
         for line in f:

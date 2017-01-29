@@ -68,9 +68,9 @@ def args_to_users(args):
 def print_table(data, separator=' '):
     if len(data) == 0:
         return
-    ls = map(lambda x: max(map(lambda y: len(data[y][x]),
-                               range(len(data)))),
-             range(len(data[0])))
+    ls = [max([len(data[y][x])
+               for y in range(len(data))])
+          for x in range(len(data[0]))]
     for d in data:
         l = ''
         for i, b in enumerate(d):
@@ -99,9 +99,9 @@ MAILDOMAIN = kn.settings.MAILDOMAIN
 LISTDOMAIN = 'lists.' + MAILDOMAIN
 
 EMAIL_ALLOWED = frozenset(
-    map(lambda x: chr(ord('a') + x), range(26)) +
-    map(lambda x: chr(ord('A') + x), range(26)) +
-    map(lambda x: chr(ord('0') + x), range(10)) +
+    [chr(ord('a') + x) for x in range(26)] +
+    [chr(ord('A') + x) for x in range(26)] +
+    [chr(ord('0') + x) for x in range(10)] +
     ['.', '-'])
 
 GALLERY_PATH = '/var/galleries/kn/'
