@@ -3,6 +3,7 @@ import datetime
 
 from django.db.models import permalink
 from django.utils.html import escape, linebreaks
+from django.utils import six
 from django.conf import settings
 
 from kn.base.mail import render_then_email
@@ -159,8 +160,9 @@ class Event(SONWrapper):
     has_public_subscriptions = son_property(('has_public_subscriptions',),
                                             False)
 
-    def __unicode__(self):
-        return unicode('%s (%s)' % (self.humanName, self.owner))
+    @six.python_2_unicode_compatible
+    def __str__(self):
+        return six.u('%s (%s)') % (self.humanName, self.owner)
 
     @property
     def history(self):
@@ -282,9 +284,10 @@ class Subscription(SONWrapper):
     date = son_property(('date',))
     history = son_property(('history',),)
 
-    def __unicode__(self):
-        return unicode(u"<Subscription(%s for %s)>" % (self.user.humanName,
-                                                       self.event.humanName))
+    @six.python_2_unicode_compatible
+    def __str__(self):
+        return six.u("<Subscription(%s for %s)>") % (self.user.humanName,
+                                                     self.event.humanName))
 
     @property
     def id(self):

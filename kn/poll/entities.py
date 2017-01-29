@@ -1,4 +1,5 @@
 from django.db.models import permalink
+from django.utils import six
 
 from kn.leden.mongo import db, SONWrapper, _id, son_property
 import kn.leden.entities as Es
@@ -92,7 +93,8 @@ class Poll(SONWrapper):
     def fillings(self):
         return filling_by_poll(self)
 
-    def __unicode__(self):
+    @six.python_2_unicode_compatible
+    def __str__(self):
         return self.humanName
 
     @permalink
@@ -120,7 +122,8 @@ class Filling(SONWrapper):
     answers = son_property(('answers',))
     date = son_property(('date',))
 
-    def __unicode__(self):
+    @six.python_2_unicode_compatible
+    def __str__(self):
         return unicode(u"answers of %s for %s" % (
             self.user.humanName, self.poll.humanName))
 

@@ -11,6 +11,7 @@ from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.hashers import check_password, make_password
 from django.utils.crypto import constant_time_compare
 from django.utils.six.moves import range
+from django.utils import six
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
@@ -786,7 +787,8 @@ class EntityHumanName(object):
                 'van': '',
                 }.get(self.genitive_prefix, 'de')
 
-    def __unicode__(self):
+    @six.python_2_unicode_compatible
+    def __str__(self):
         return self.humanName
 
     def __repr__(self):

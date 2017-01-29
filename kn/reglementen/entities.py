@@ -1,4 +1,5 @@
 from django.db.models import permalink
+from django.utils import six
 
 from regl.model import Document
 
@@ -57,7 +58,8 @@ class Reglement(SONWrapper):
         for v in vcol.find({'reglement': self._id}).sort('until'):
             yield ReglementVersion(v)
 
-    def __unicode__(self):
+    @six.python_2_unicode_compatible
+    def __str__(self):
         return self.humanName
 
     @permalink
@@ -91,7 +93,8 @@ class ReglementVersion(SONWrapper):
     valid_from = son_property(('from',))
     valid_until = son_property(('until',))
 
-    def __unicode__(self):
+    @six.python_2_unicode_compatible
+    def __str__(self):
         return self.humanName
 
     @permalink

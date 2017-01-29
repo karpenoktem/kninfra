@@ -4,6 +4,7 @@ from kn.leden.mongo import db, SONWrapper, son_property
 
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
+from django.utils import six
 
 acol = db['agenda']
 
@@ -80,7 +81,8 @@ class AgendaEvent(SONWrapper):
             self.start.date().strftime('%a %e %b'),
             self.end.date().strftime('%a %e %b')))
 
-    def __unicode__(self):
+    @six.python_2_unicode_compatible
+    def __str__(self):
         return self.title
 
 # vim: et:sta:bs=2:sw=4:
