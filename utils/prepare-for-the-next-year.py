@@ -30,12 +30,12 @@ def create_year_overrides_for(year):
     """ Creates the year overrides for a certain year """
     parent_tag = Es.id_by_name('!year-overrides')
     Es.ecol.insert({
-        'humanNames': [{u'human': u'Wel jaar {}'.format(year)}],
+        'humanNames': [{six.u('human'): six.u('Wel jaar {}').format(year)}],
         'tags': [parent_tag],
         'types': ['tag'],
         'year-override': {'type': True, 'year': year}})
     Es.ecol.insert({
-        'humanNames': [{u'human': u'Niet jaar {}'.format(year)}],
+        'humanNames': [{six.u('human'): six.u('Niet jaar {}').format(year)}],
         'tags': [parent_tag],
         'types': ['tag'],
         'year-override': {'type': False, 'year': year}})

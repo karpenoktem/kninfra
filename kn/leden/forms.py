@@ -4,6 +4,7 @@ import reserved
 
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
+from django.utils import six
 from django import forms
 from django.conf import settings
 
@@ -29,12 +30,12 @@ class EntityChoiceFieldWidget(forms.TextInput):
                 % {'id': json.dumps(final_attrs['id']),
                    'value': json.dumps(str(value))})
         return mark_safe(
-            u'''<input type='hidden' id=%(id)s name=%(name)s />
+            six.u('''<input type='hidden' id=%(id)s name=%(name)s />
                 <script type='text/javascript'>//<!--
                 $(function(){
                     create_entityChoiceField(%(id)s, %(params)s);
                     %(code_set_value)s
-                });//--></script>'''
+                });//--></script>''')
             % {'name': json.dumps(name),
                'id': json.dumps(final_attrs['id']),
                'params': json.dumps({'type': self.type}),
