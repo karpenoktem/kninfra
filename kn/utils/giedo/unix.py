@@ -1,8 +1,7 @@
-from tarjan.tc import tc        # transitive closure of a graph
+from tarjan.tc import tc  # transitive closure of a graph
 
 import kn.leden.entities as Es
 from kn.base.conf import DT_MIN
-
 from kn.leden.date import now
 
 

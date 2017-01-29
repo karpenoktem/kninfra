@@ -2,11 +2,12 @@
 import _import  # noqa: F401
 
 from django.conf import settings
+
 from kn.utils.mailman import import_mailman
 
 import_mailman()
-from Mailman.Utils import list_names  # noqa: E402
-from Mailman.MailList import MailList  # noqa: E402
+from Mailman.Utils import list_names   # noqa: E402 isort:skip
+from Mailman.MailList import MailList  # noqa: E402 isort:skip
 
 
 def main():

@@ -1,8 +1,8 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
-
 import sys
 from optparse import OptionParser
+
 from common import args_to_users, print_table
 
 op = OptionParser()

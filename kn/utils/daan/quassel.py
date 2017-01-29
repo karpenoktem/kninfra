@@ -1,9 +1,10 @@
-import os.path
-import sqlite3
 import hashlib
 import logging
+import os.path
+import sqlite3
 
 from django.conf import settings
+
 from kn.base._random import pseudo_randstr
 
 

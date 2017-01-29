@@ -1,13 +1,13 @@
 import mimetypes
-import os.path
 import os
+import os.path
 
+from django.core.exceptions import SuspiciousOperation
 from django.core.servers.basehttp import FileWrapper
-from django.utils.translation import ugettext as _
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
 from django.utils.http import is_safe_url
-from django.core.exceptions import SuspiciousOperation
+from django.utils.translation import ugettext as _
 
 
 def direct_to_folder(request, root, subdir):

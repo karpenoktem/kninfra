@@ -1,11 +1,10 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
-
-import sys
 import datetime
+import sys
 
 from kn.leden.mongo import _id
-from kn.planning.entities import Pool, Event, Vacancy
+from kn.planning.entities import Event, Pool, Vacancy
 
 
 def hm2s(hours, minutes=0):

@@ -1,10 +1,9 @@
 from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import RedirectView
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import RedirectView
 
-from kn.fotos import views
-from kn.fotos import api
+from kn.fotos import api, views
 
 urlpatterns = [
     # backwards compatibility with knfotos

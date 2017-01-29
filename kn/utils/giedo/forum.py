@@ -1,11 +1,11 @@
-import logging
 import itertools
+import logging
 
 import MySQLdb
 
-import kn.leden.entities as Es
-
 from django.conf import settings
+
+import kn.leden.entities as Es
 
 
 def generate_forum_changes(self):

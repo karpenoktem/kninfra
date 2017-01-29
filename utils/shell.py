@@ -2,23 +2,24 @@
 from __future__ import absolute_import
 
 import _import  # noqa: F401
-try:
-    import Mailman.MailList  # noqa: F401
-except ImportError:
-    pass
-
-import time
 import datetime
-import kn.leden.entities as Es  # noqa: F401
+import time
+
 import kn.fotos.entities as fEs  # noqa: F401
-import kn.reglementen.entities as regl_Es  # noqa: F401
+import kn.leden.entities as Es  # noqa: F401
 import kn.poll.entities as poll_Es  # noqa: F401
+import kn.reglementen.entities as regl_Es  # noqa: F401
 import kn.subscriptions.entities as subscr_Es  # noqa: F401
-from kn.leden.mongo import _id, ObjectId  # noqa: F401
+from kn.base.conf import DT_MAX, DT_MIN
 from kn.leden import giedo  # noqa: F401
 from kn.leden.date import now
+from kn.leden.mongo import ObjectId, _id  # noqa: F401
 from kn.utils.mailman import import_mailman  # noqa: F401
-from kn.base.conf import DT_MIN, DT_MAX
+
+try:
+    import Mailman.MailList  # noqa: F401 isort:skip
+except ImportError:
+    pass
 
 
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):

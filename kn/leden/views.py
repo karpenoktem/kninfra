@@ -1,48 +1,43 @@
-from itertools import chain
-from hashlib import sha256
+import json
+import logging
+import mimetypes
+import re
 from datetime import date
+from hashlib import sha256
+from itertools import chain
 from os import path
 
-import mimetypes
-import logging
 import Image
-import json
-import re
-
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import redirect_to_login
-from django.utils.crypto import constant_time_compare
-from django.utils.http import urlquote
-from django.core.paginator import Paginator, EmptyPage
-from django.core.files.storage import default_storage
-from django.core.servers.basehttp import FileWrapper
-from django.core.exceptions import PermissionDenied
-from django.utils.translation import ugettext as _
-from django.shortcuts import render_to_response
-from django.core.urlresolvers import reverse
-from django.template import RequestContext
-from django.contrib import messages
-
-from kn.leden.forms import (ChangePasswordForm, AddUserForm,
-                            AddGroupForm, AddStudyForm)
-from kn.leden.auth import login_or_basicauth_required
-from kn.leden.date import now, date_to_dt
-from kn.leden.mongo import _id
-from kn.leden import giedo
-
-from kn.base._random import pseudo_randstr
-from kn.base.http import redirect_to_referer, JsonHttpResponse
-from kn.base.mail import render_then_email
-from kn.base.text import humanized_enum
-
-from kn.fotos.utils import resize_proportional
-
-from kn.base.conf import DT_MIN, DT_MAX
 
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import redirect_to_login
+from django.core.exceptions import PermissionDenied
+from django.core.files.storage import default_storage
+from django.core.paginator import EmptyPage, Paginator
+from django.core.servers.basehttp import FileWrapper
+from django.core.urlresolvers import reverse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.utils.crypto import constant_time_compare
+from django.utils.http import urlquote
+from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
+from kn.base._random import pseudo_randstr
+from kn.base.conf import DT_MAX, DT_MIN
+from kn.base.http import JsonHttpResponse, redirect_to_referer
+from kn.base.mail import render_then_email
+from kn.base.text import humanized_enum
+from kn.fotos.utils import resize_proportional
+from kn.leden import giedo
+from kn.leden.auth import login_or_basicauth_required
+from kn.leden.date import date_to_dt, now
+from kn.leden.forms import (AddGroupForm, AddStudyForm, AddUserForm,
+                            ChangePasswordForm)
+from kn.leden.mongo import _id
 
 logger = logging.getLogger(__name__)
 

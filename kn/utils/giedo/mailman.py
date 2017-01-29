@@ -2,14 +2,15 @@ from __future__ import absolute_import
 
 import logging
 
-from kn.utils.mailman import import_mailman
 import kn.leden.entities as Es
 from kn.leden.date import now
+from kn.utils.mailman import import_mailman
 
 import_mailman()
-import Mailman  # noqa: E402
-import Mailman.Utils  # noqa: E402
-import Mailman.MailList  # noqa: E402
+
+import Mailman           # noqa: E402 isort:skip 
+import Mailman.Utils     # noqa: E402 isort:skip
+import Mailman.MailList  # noqa: E402 isort:skip
 
 
 def generate_mailman_changes(giedo):

@@ -1,16 +1,16 @@
 # vim: et:sta:bs=2:sw=4:
-import subprocess
-import os.path
-import random
 import grp
-import pwd
 import os
+import os.path
+import pwd
+import random
 import re
+import subprocess
 
+from django.conf import settings
 
 import kn.fotos.entities as fEs
 from kn.fotos.roots import FOTO_ROOTS
-from django.conf import settings
 
 
 def fotoadmin_create_event(daan, date, name, humanName):

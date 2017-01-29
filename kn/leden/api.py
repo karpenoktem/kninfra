@@ -1,15 +1,15 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from kn.base.validators import email_re
+from django.views.decorators.http import require_POST
 
+import kn.leden.entities as Es
 from kn.base.http import JsonHttpResponse
 from kn.base.mail import render_then_email
-import kn.leden.entities as Es
-from kn.leden.mongo import _id
+from kn.base.validators import email_re
 from kn.leden import giedo
+from kn.leden.mongo import _id
 from kn.leden.utils import find_name_for_user, parse_date
-from django.views.decorators.http import require_POST
 
 
 @login_required

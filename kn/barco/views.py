@@ -1,19 +1,19 @@
-from cStringIO import StringIO
-import subprocess
-import os.path
 import json
-
-from django.contrib import messages
-from django.utils.translation import ugettext as _
-from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.core.urlresolvers import reverse
-from django.template import RequestContext
+import os.path
+import subprocess
+from cStringIO import StringIO
 
 from koert.drank.rikf import open_rikf_ar
 
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.utils.translation import ugettext as _
+
 from kn.barco.forms import BarformMeta, InvCountMeta
 
 settings.DRANK_REPOSITORIES = ['drank6', 'drank7', 'drank8', 'drank9']

@@ -1,7 +1,6 @@
 """ Scheduled functions """
 
 import kn.leden.entities as Es
-
 from kn.base.mail import render_then_email
 
 

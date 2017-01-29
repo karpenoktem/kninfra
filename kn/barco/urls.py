@@ -1,6 +1,6 @@
 from django.conf.urls import url
-from django.views.generic import RedirectView
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import RedirectView
 
 from kn.barco import views
 

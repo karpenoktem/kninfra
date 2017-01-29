@@ -1,13 +1,14 @@
-import threading
-import os.path
-import logging
-import socket
-import select
 import errno
+import logging
 import os
+import os.path
+import select
+import socket
+import threading
 
-import msgpack
 import mirte
+import msgpack
+
 
 """ Whim is a very simple server/client protocol.
 

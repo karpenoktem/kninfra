@@ -1,7 +1,7 @@
 import _import  # noqa: F401
+import multiprocessing
 
 import kn.fotos.entities as fEs
-import multiprocessing
 
 
 def cache(the_id):

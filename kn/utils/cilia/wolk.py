@@ -1,8 +1,8 @@
 # Applies changes to owncloud.  Basiclly forwards everything to wolk.php
 
 import json
-import os.path
 import logging
+import os.path
 import subprocess
 
 from django.conf import settings

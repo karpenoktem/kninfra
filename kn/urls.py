@@ -1,9 +1,9 @@
-from django.contrib import auth
 from django.conf import settings
-from django.conf.urls import url, include
+from django.conf.urls import include, url
 from django.conf.urls.static import static
-from django.views.generic import RedirectView
+from django.contrib import auth
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import RedirectView
 
 from kn.base.backports import i18n_patterns
 
