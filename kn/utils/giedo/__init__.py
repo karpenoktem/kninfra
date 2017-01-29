@@ -1,14 +1,14 @@
 import time
 import json
-import urllib2
 import logging
 import threading
-from urllib import urlencode
 
 import mirte  # github.com/bwesterb/mirte
 from M2Crypto import RSA
 
 from django.core.files.storage import default_storage
+from django.utils.six.moves.urllib.parse import urlencode
+from django.utils.six.moves import urllib
 
 from django.conf import settings
 from kn.utils.whim import WhimDaemon, WhimClient
@@ -300,7 +300,7 @@ class Giedo(WhimDaemon):
     def villanet_request(self, params):
         params['apikey'] = settings.VILLANET_SECRET_API_KEY
         url = "http://www.vvs-nijmegen.nl/knapi.php?" + urlencode(params)
-        ret = urllib2.urlopen(url, timeout=1).read()
+        ret = urllib.request.urlopen(url, timeout=1).read()
         ret = ret.strip()
         if ret[:4] == 'OK: ':
             return (True, ret[4:])
