@@ -29,6 +29,9 @@ kn-boekenlezers:
 /groups/boekenlezers/fin.gnucash:
     file.managed:
         - source: salt://phassa/fin.gnucash
+/groups/boekenlezers/fin.yaml:
+    file.managed:
+        - source: salt://phassa/fin.yaml
 Create fin git repository:
     cmd.script:
         - source: salt://phassa/finCreateTestRepo

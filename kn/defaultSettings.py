@@ -215,11 +215,7 @@ def defaultSettings(glbls):
     # http://daniel.hepper.net/blog/2014/04/fixing-1_6-w001-when-upgrading
     d.TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-    d.FIN_REPO_PATH = "/groups/boekenlezers/fin"
-    d.FIN_FILENAME = "Boekhouding Jaar 13.gnucash"
-    d.FIN_CACHE_PATH = "/groups/boekenlezers/fin.cached"
-    d.FIN_CREDITORS_ACCOUNT = ":Passiva:Crediteuren"
-    d.FIN_DEBITORS_ACCOUNT = ":Activa:Vlottende activa:Debiteuren:Leden"
+    d.FIN_YAML_PATH = "/groups/boekenlezers/fin.yaml"
 
     d.BANK_ACCOUNT_NUMBER = "NL81 RABO 0145 9278 22"
     d.BANK_ACCOUNT_HOLDER = "A.S.V. Karpe Noktem"

@@ -2,7 +2,7 @@ import logging
 
 from django.conf import settings
 
-from koert.gnucash.tools import open_gcf_in_git_repo
+from koert.gnucash.tools import open_yaml
 
 from kn.utils.whim import WhimDaemon
 
@@ -25,9 +25,6 @@ class Moniek(WhimDaemon):
     @property
     def gcf(self):
         # TODO: add caching
-        return open_gcf_in_git_repo(
-            settings.FIN_REPO_PATH,
-            settings.FIN_FILENAME,
-            cachepath=settings.FIN_CACHE_PATH)
+        return open_yaml(settings.FIN_YAML_PATH)
 
 # vim: et:sta:bs=2:sw=4:
