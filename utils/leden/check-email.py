@@ -42,7 +42,7 @@ def check_email():
                 lists.append(rel)
             else:
                 others.append(rel)
-        print m.name
+        print(m.name)
         em = templ.render(Context({
             'u': m,
             'comms': comms,

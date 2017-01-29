@@ -11,7 +11,7 @@ def main():
         _with=Es.id_by_name('leden'), _from=now, until=now,
         deref_who=True),
             key=lambda r: r['from'])):
-        print n + 1, r['who'].humanName
+        print(n + 1, r['who'].humanName)
 
 
 if __name__ == '__main__':

@@ -41,5 +41,5 @@ for _type, periods in typePeriods.items():
             'pool': _id(pool),
             'assignee': None,
         })
-        print v._data
+        print(v._data)
         v.save()

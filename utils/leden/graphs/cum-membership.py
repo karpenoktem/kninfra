@@ -25,14 +25,14 @@ def main():
                     first = i
                 data[first - 1][i - 1] += 1
     for r in data:
-        print '\t'.join(map(str, r))
-    print
+        print('\t'.join(map(str, r)))
+    print()
     for y in xrange(len(data)):
         m = data[y][y]
         row = []
         for sy in xrange(len(data) - y):
             row.append(data[y][y + sy] * 100 / m)
-        print '\t'.join(map(str, row))
+        print('\t'.join(map(str, row)))
 
 
 if __name__ == '__main__':

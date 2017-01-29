@@ -9,7 +9,7 @@ if sys.stdout.encoding is None:
     sys.setdefaultencoding('utf-8')
 
 for m in args_to_users(sys.argv[1:]):
-    print "%-35s %-7s %-16s %s" % (m.primary_address.get('street'),
+    print("%-35s %-7s %-16s %s" % (m.primary_address.get('street'),
                                    m.primary_address.get('number'),
                                    m.primary_address.get('city'),
-                                   m.name)
+                                   m.name))

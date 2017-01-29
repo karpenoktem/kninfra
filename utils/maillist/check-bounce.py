@@ -10,7 +10,7 @@ def main():
     for name in Mailman.Utils.list_names():
         ml = Mailman.MailList.MailList(name, lock=False)
         if ml.bounce_info:
-            print name, ml.bounce_info
+            print(name, ml.bounce_info)
 
 
 if __name__ == '__main__':

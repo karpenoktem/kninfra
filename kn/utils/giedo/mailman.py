@@ -37,9 +37,9 @@ def generate_mailman_changes(giedo):
             c_ms = set([])
         else:
             c_ms = set([x[0] for x in six.iteritems(Mailman.MailList.MailList(
-                    str(g.name),
-                    lock=False
-                ).members)])
+                str(g.name),
+                lock=False
+            ).members)])
         ml_members[str(g.name)] = c_ms
     # Check which memberships are missing in the current mailing lists
     for rel in mm_rels:

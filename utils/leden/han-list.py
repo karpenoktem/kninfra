@@ -18,8 +18,8 @@ def main():
                 ok = True
         if not ok:
             continue
-        print "%-30s %-10s %s" % (m.full_name, study['number'],
-                                  unicode(study['study'].humanName))
+        print("%-30s %-10s %s" % (m.full_name, study['number'],
+                                  unicode(study['study'].humanName)))
 
 
 if __name__ == '__main__':

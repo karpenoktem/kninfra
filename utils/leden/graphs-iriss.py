@@ -41,8 +41,8 @@ for rel in Es.query_relations(who=leden, _with=comms, how=None):
 
 had = set()
 for y in range(3, 10):
-    print
-    print 'Jaar', y
+    print()
+    print('Jaar', y)
     nnever = 0
     nalways = 0
     navg = 0
@@ -62,7 +62,7 @@ for y in range(3, 10):
         avg_sum += clut[l][0] - llut[l]
         navg += 1
 
-    print "Onbekend (actief)     %s" % nalways
-    print "Nooit actief geweest  %s" % nnever
-    print "Actief                %s" % navg
-    print "Actief gem. na        %s" % (avg_sum / navg)
+    print("Onbekend (actief)     %s" % nalways)
+    print("Nooit actief geweest  %s" % nnever)
+    print("Actief                %s" % navg)
+    print("Actief gem. na        %s" % (avg_sum / navg))

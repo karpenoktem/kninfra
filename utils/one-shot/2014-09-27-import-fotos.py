@@ -26,7 +26,7 @@ def main():
         root.update_metadata(None, save=False)
         root.save()
 
-    print 'albums'
+    print('albums')
     c.execute("SELECT id, name, path, humanname, visibility, description "
               + "FROM fa_albums ORDER BY path")
     for oldId, name, path, humanName, visibility, description in c.fetchall():
@@ -56,7 +56,7 @@ def main():
         album.update_metadata(album.get_parent(), save=False)
         album.save()
 
-    print 'fotos'
+    print('fotos')
     c.execute("SELECT id, name, path, visibility, rotation FROM fa_photos")
     for oldId, name, path, visibility, rotation in c.fetchall():
         if fEs.by_oldId('foto', oldId) is not None:
@@ -82,7 +82,7 @@ def main():
         foto.update_metadata(foto.get_parent(), save=False)
         foto.save()
 
-    print 'tags'
+    print('tags')
     c.execute("SELECT photo_id, username FROM fa_tags")
     for oldId, username in c.fetchall():
         foto = fEs.by_oldId('foto', oldId)
@@ -99,7 +99,7 @@ def main():
             foto._data['tags'].append(user._id)
             foto.save()
 
-    print 'done'
+    print('done')
 
 
 if __name__ == '__main__':

@@ -23,22 +23,22 @@ def main():
             lut[id2name[m['who']]].add(q)
     for i, name in enumerate(sorted(id2name.itervalues())):
         if i % 20 == 0:
-            print
-            print '%20s %s' % (
+            print()
+            print('%20s %s' % (
                 'year',
                 ' '.join([str(((q - 1) / 4) + 1).ljust(7)
                           for q in xrange(1, max_q + 1, 4)])
-            )
-            print '%20s %s' % (
+            ))
+            print('%20s %s' % (
                 'quarter',
                 ' '.join([str(((q - 1) % 4) + 1)
                           for q in xrange(1, max_q + 1)])
-            )
-        print '%-20s %s' % (
+            ))
+        print('%-20s %s' % (
             name,
             ' '.join(['*' if q in lut[name] else ' '
                       for q in xrange(1, max_q + 1)])
-        )
+        ))
 
 
 if __name__ == '__main__':

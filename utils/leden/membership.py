@@ -1,4 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
+from __future__ import print_function
+
 import _import  # noqa: F401
 
 from django.utils import six
@@ -31,11 +33,11 @@ N = 0
 for m, ys in six.iteritems(users):
     N += 1
     if N % 20 == 0:
-        print "%15s" % '',
+        print("%15s" % '', end=' ')
         for y in xrange(1, nyears + 1):
-            print y,
-        print
-    print "%15s" % m,
+            print(y, end=' ')
+        print()
+    print("%15s" % m, end=' ')
     for y in xrange(1, nyears + 1):
-        print '*' if y in ys else ' ',
-    print
+        print('*' if y in ys else ' ', end=' ')
+    print()

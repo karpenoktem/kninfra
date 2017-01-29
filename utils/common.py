@@ -73,7 +73,7 @@ def print_table(data, separator=' '):
         l = ''
         for i, b in enumerate(d):
             l += b + (' ' * (ls[i] - len(b))) + separator
-        print l
+        print(l)
 
 
 def emailfy_name(first, last):

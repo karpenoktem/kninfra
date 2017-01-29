@@ -51,4 +51,4 @@ if __name__ == '__main__':
         ti.size = len(td)
         tf.addfile(ti, StringIO(td))
     tf.close()
-    print tb.getvalue()
+    print(tb.getvalue())
