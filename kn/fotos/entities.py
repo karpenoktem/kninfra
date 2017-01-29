@@ -8,7 +8,7 @@ from django.utils import six
 
 import os
 import re
-import Image
+import PIL.Image
 from PIL.ExifTags import TAGS
 import random
 import datetime
@@ -557,7 +557,7 @@ class Foto(FotoEntity):
                 self.save()
             return updated
 
-        img = Image.open(self.original_path)
+        img = PIL.Image.open(self.original_path)
         exif = {}
         if hasattr(img, '_getexif'):
             exifData = img._getexif()

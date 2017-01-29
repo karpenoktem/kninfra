@@ -5,7 +5,7 @@ from os import path
 
 import mimetypes
 import logging
-import Image
+import PIL.Image
 import json
 import re
 
@@ -180,7 +180,7 @@ def _entity_detail(request, e):
     photos_path = (path.join(settings.SMOELEN_PHOTOS_PATH, str(e.name))
                    if e.name else None)
     if photos_path and default_storage.exists(photos_path + '.jpg'):
-        img = Image.open(default_storage.open(photos_path + '.jpg'))
+        img = PIL.Image.open(default_storage.open(photos_path + '.jpg'))
         width, height = img.size
         if default_storage.exists(photos_path + '.orig'):
             # smoel was created using newer strategy. Shrink until it fits the
@@ -383,19 +383,19 @@ def ik_chsmoel(request):
     for chunk in request.FILES['smoel'].chunks():
         original.write(chunk)
     original.seek(0)
-    img = Image.open(original)
+    img = PIL.Image.open(original)
     if hasattr(img, '_getexif') and img._getexif() is not None:
         orientation = int(img._getexif().get(274, '1'))  # Orientation
         if orientation == 3:
-            img = img.transpose(Image.ROTATE_180)
+            img = img.transpose(PIL.Image.ROTATE_180)
         elif orientation == 6:
-            img = img.transpose(Image.ROTATE_270)
+            img = img.transpose(PIL.Image.ROTATE_270)
         elif orientation == 8:
-            img = img.transpose(Image.ROTATE_90)
+            img = img.transpose(PIL.Image.ROTATE_90)
     width, height = resize_proportional(img.size[0], img.size[1],
                                         settings.SMOELEN_WIDTH * 2,
                                         settings.SMOELEN_HEIGHT * 2)
-    img = img.resize((width, height), Image.ANTIALIAS)
+    img = img.resize((width, height), PIL.Image.ANTIALIAS)
     img.save(default_storage.open(
         path.join(settings.SMOELEN_PHOTOS_PATH,
                   str(user.name)) + ".jpg", 'w'
