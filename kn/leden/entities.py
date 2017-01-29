@@ -653,26 +653,34 @@ def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
         return None
 
 
-def entity_cmp_humanName(x, y):
-    return cmp(six.text_type(x.humanName), six.text_type(y.humanName))
+def entity_humanName(x):
+    """ Returns the human name of an entity or None if None is given.
+        Useful for the key argument in a sort function. """
+    return None if x is None else six.text_type(x.humanName)
 
 
-def dt_cmp_until(x, y):
-    return cmp(DT_MAX if x is None else x,
-               DT_MAX if y is None else y)
+def dt_until(x):
+    """ Treat a datetime from the db as one which is used as an until-date:
+        None is interpreted as DT_MAX. Useful for sorting. """
+    return x if x else DT_MAX
 
 
-def dt_cmp_from(x, y):
-    return cmp(DT_MIN if x is None else x,
-               DT_MIN if y is None else y)
+def dt_from(x):
+    """ Treat a datetime from the db as one which is used as an from-date:
+        None is interpreted as DT_MIN. Useful for sorting. """
+    return x if x else DT_MIN
 
 
-def relation_cmp_until(x, y):
-    return dt_cmp_until(x['until'], y['until'])
+def relation_until(x):
+    """ Returns the datetime until the given relations holds.
+        Useful as `key' argument for sort functions. """
+    return dt_until(x['until'])
 
 
-def relation_cmp_from(x, y):
-    return dt_cmp_from(x['from'], y['from'])
+def relation_from(x):
+    """ Returns the datetime from which the given relations holds.
+        Useful as `key' argument for sort functions. """
+    return dt_from(x['from'])
 
 
 def remove_relation(who, _with, how, _from, until):

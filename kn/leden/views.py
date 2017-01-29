@@ -23,7 +23,6 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib import messages
-from django.utils import six
 
 from kn.leden.forms import (ChangePasswordForm, AddUserForm,
                             AddGroupForm, AddStudyForm)
@@ -83,35 +82,14 @@ def entity_detail(request, name=None, _id=None, type=None):
 
 
 def _entity_detail(request, e):
-    def _cmp(x, y):
-        r = Es.relation_cmp_until(y, x)
-        if r:
-            return r
-        r = cmp(six.text_type(x['with'].humanName),
-                six.text_type(y['with'].humanName))
-        if r:
-            return r
-        r = cmp(six.text_type(x['how'].humanName) if x['how'] else None,
-                six.text_type(y['how'].humanName) if y['how'] else None)
-        if r:
-            return r
-        return Es.relation_cmp_from(x, y)
-
-    def _rcmp(x, y):
-        r = Es.relation_cmp_until(y, x)
-        if r:
-            return r
-        r = cmp(six.text_type(x['how'].humanName) if x['how'] else None,
-                six.text_type(y['how'].humanName) if y['how'] else None)
-        if r:
-            return r
-        r = cmp(six.text_type(x['who'].humanName),
-                six.text_type(y['who'].humanName))
-        if r:
-            return r
-        return Es.relation_cmp_from(x, y)
-    related = sorted(e.get_related(), cmp=_cmp)
-    rrelated = sorted(e.get_rrelated(), cmp=_rcmp)
+    related = sorted(e.get_related(),
+                     key=lambda x: (Es.DT_MIN - Es.relation_until(x),
+                                    Es.entity_humanName(x['with']),
+                                    Es.entity_humanName(x['how'])))
+    rrelated = sorted(e.get_rrelated(),
+                      key=lambda x: (Es.DT_MIN - Es.relation_until(x),
+                                     Es.entity_humanName(x['how']),
+                                     Es.entity_humanName(x['who'])))
     for r in chain(related, rrelated):
         r['may_end'] = Es.user_may_end_relation(request.user, r)
         r['id'] = r['_id']
@@ -140,7 +118,7 @@ def _entity_detail(request, e):
            'rrelated': rrelated,
            'year_counts': year_counts,
            'now': now(),
-           'tags': sorted(tags, Es.entity_cmp_humanName),
+           'tags': sorted(tags, key=Es.entity_humanName),
            'object': e,
            'chiefs': [],
            'pipos': [],
@@ -160,10 +138,9 @@ def _entity_detail(request, e):
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):
         groups = [g for g in Es.groups() if not g.is_virtual]
-        groups.sort(cmp=lambda x, y: cmp(six.text_type(x.humanName),
-                                         six.text_type(y.humanName)))
-        users = sorted(Es.users(), cmp=Es.entity_cmp_humanName)
-        brands = sorted(Es.brands(), cmp=Es.entity_cmp_humanName)
+        groups.sort(key=Es.entity_humanName)
+        users = sorted(Es.users(), key=Es.entity_humanName)
+        brands = sorted(Es.brands(), key=Es.entity_humanName)
         ctx.update({'users': users,
                     'brands': brands,
                     'groups': groups,
@@ -174,7 +151,7 @@ def _entity_detail(request, e):
     ctx['may_upload_smoel'] = e.name and request.user.may_upload_smoel_for(e)
     if e.is_tag:
         ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
-                                          cmp=Es.entity_cmp_humanName)})
+                                          key=Es.entity_humanName)})
 
     # Check whether entity has a photo
     photos_path = (path.join(settings.SMOELEN_PHOTOS_PATH, str(e.name))
@@ -253,22 +230,11 @@ def _tag_detail(request, tag):
 
 def _brand_detail(request, brand):
     ctx = _entity_detail(request, brand)
-
-    def _cmp(x, y):
-        r = Es.relation_cmp_until(y, x)
-        if r:
-            return r
-        r = cmp(six.text_type(x['with'].humanName),
-                six.text_type(y['with'].humanName))
-        if r:
-            return r
-        r = cmp(six.text_type(x['who'].humanName),
-                six.text_type(y['who'].humanName))
-        if r:
-            return r
-        return Es.relation_cmp_from(x, y)
     ctx['rels'] = sorted(Es.query_relations(how=brand, deref_who=True,
-                                            deref_with=True), cmp=_cmp)
+                                            deref_with=True),
+                         key=lambda x: (Es.DT_MIN - Es.relation_until(x),
+                                        Es.entity_humanName(x['with']),
+                                        Es.entity_humanName(x['who'])))
     for r in ctx['rels']:
         r['id'] = r['_id']
         r['until_year'] = (None if r['until'] is None else
@@ -282,11 +248,6 @@ def _study_detail(request, study):
     ctx = _entity_detail(request, study)
     ctx['students'] = students = []
 
-    def _cmp(s1, s2):
-        r = Es.dt_cmp_until(s2['until'], s1['until'])
-        if r:
-            return r
-        return cmp(s1['student'].humanName, s2['student'].humanName)
     for student in Es.by_study(study):
         for _study in student.studies:
             if _study['study'] != study:
@@ -295,7 +256,8 @@ def _study_detail(request, study):
                              'from': _study['from'],
                              'until': _study['until'],
                              'institute': _study['institute']})
-    ctx['students'].sort(cmp=_cmp)
+    ctx['students'].sort(key=lambda s: (Es.dt_until(s['until']),
+                                        s['student'].humanName))
     return render_to_response('leden/study_detail.html', ctx,
                               context_instance=RequestContext(request))
 
@@ -304,11 +266,6 @@ def _institute_detail(request, institute):
     ctx = _entity_detail(request, institute)
     ctx['students'] = students = []
 
-    def _cmp(s1, s2):
-        r = Es.dt_cmp_until(s2['until'], s1['until'])
-        if r:
-            return r
-        return cmp(s1['student'].humanName, s2['student'].humanName)
     for student in Es.by_institute(institute):
         for _study in student.studies:
             if _study['institute'] != institute:
@@ -317,7 +274,8 @@ def _institute_detail(request, institute):
                              'from': _study['from'],
                              'until': _study['until'],
                              'study': _study['study']})
-    ctx['students'].sort(cmp=_cmp)
+    ctx['students'].sort(key=lambda s: (Es.dt_until(s['until']),
+                                        s['student'].humanName))
     return render_to_response('leden/institute_detail.html', ctx,
                               context_instance=RequestContext(request))
 

@@ -28,8 +28,7 @@ def check_email():
         templ = Template(template_text.getvalue())
     for m in args_to_users(sys.argv[1:]):
         rels = m.get_related()
-        rels = sorted(rels, cmp=lambda x, y: cmp(str(x['with'].humanName),
-                                                 str(y['with'].humanName)))
+        rels = sorted(rels, key=lambda x: Es.entity_humanName(x['with']))
         comms = []
         lists = []
         others = []

@@ -13,7 +13,7 @@ from django.views.decorators.http import require_POST
 
 from kn.base.http import JsonHttpResponse
 from kn.leden.date import date_to_dt, now, date_to_midnight
-from kn.leden.mongo import _id
+from kn.leden.mongo import _id, DT_MIN
 
 from kn.planning.entities import Pool, Event, Vacancy, may_manage_planning
 from kn.planning.score import planning_vacancy_worker_score
@@ -149,16 +149,6 @@ def planning_view(request):
                                'pools': pools_tpl},
                               context_instance=RequestContext(request))
 
-# extends cmp with None as bottom
-
-
-def cmp_None(x, y, cmp=cmp):
-    if x is None:
-        return -1
-    if y is None:
-        return 1
-    return cmp(x, y)
-
 
 @login_required
 def planning_manage(request, poolname):
@@ -223,7 +213,8 @@ def planning_manage(request, poolname):
             for score in found_scores:
                 scorers = workers_by_score[score]
                 shuffle(scorers)
-                scorers.sort(key=lambda x: shifts[_id(x)], cmp=cmp_None)
+                scorers.sort(key=lambda x: shifts[_id(x)]
+                             if shifts[_id(x)] else DT_MIN)
                 for scorer in scorers:
                     vacancy.suggestions.append({
                         'scorer': scorer,
