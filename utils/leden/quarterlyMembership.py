@@ -5,6 +5,7 @@ import _import  # noqa: F401
 import kn.leden.entities as Es
 
 from django.utils.six.moves import range
+from django.utils import six
 
 
 def main():
@@ -23,7 +24,7 @@ def main():
                                     deref_who=False, deref_with=False,
                                     deref_how=False):
             lut[id2name[m['who']]].add(q)
-    for i, name in enumerate(sorted(id2name.itervalues())):
+    for i, name in enumerate(sorted(six.itervalues(id2name))):
         if i % 20 == 0:
             print()
             print('%20s %s' % (

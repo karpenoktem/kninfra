@@ -6,6 +6,7 @@ import unicodedata
 import kn.settings
 
 from django.utils.six.moves import range
+from django.utils import six
 
 ALPHA = 'qwertyuiopasdfghjklzxcvbnm'
 NUM = '1234567890'
@@ -49,7 +50,7 @@ def args_to_users(args):
     ret = set()  # set of Entities found
     had = set()  # set of Entities dealt with
     todo = set()  # set of Entities to be dealt with
-    todo.update(Es.by_names(args).itervalues())
+    todo.update(six.itervalues(Es.by_names(args)))
     while len(todo) > 0:
         e = todo.pop()
         if e in had:
