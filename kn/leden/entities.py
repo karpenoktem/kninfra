@@ -10,6 +10,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.hashers import check_password, make_password
 from django.utils.crypto import constant_time_compare
+from django.utils.six.moves import range
 
 from kn.leden.date import now
 from kn.leden.mongo import db, SONWrapper, _id, son_property
@@ -323,7 +324,7 @@ def get_years_of_birth():
                         {'person.dateOfBirth': 1},
                         sort=[('person.dateOfBirth', -1)]
                         )['person']['dateOfBirth'].year
-    return xrange(start, end + 1)
+    return range(start, end + 1)
 
 
 def by_year_of_birth(year):

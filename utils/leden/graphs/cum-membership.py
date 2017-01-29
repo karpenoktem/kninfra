@@ -3,6 +3,8 @@ import _import  # noqa: F401
 import kn.leden.entities as Es
 from functools import reduce
 
+from django.utils.six.moves import range
+
 
 def main():
     N = 0
@@ -11,15 +13,15 @@ def main():
         g = Es.by_name('leden%s' % N)
         if g is None:
             break
-    data = [[0 for i in xrange(1, N)] for j in xrange(1, N)]
+    data = [[0 for i in range(1, N)] for j in range(1, N)]
     groups = list()
-    for i in xrange(1, N):
+    for i in range(1, N):
         groups.append(Es.by_name('leden%s' % i).get_members())
     users = reduce(lambda x, y: x + y, groups, [])
     groups = map(frozenset, groups)
     for user in frozenset(users):
         first = None
-        for i in xrange(1, N):
+        for i in range(1, N):
             if user in groups[i - 1]:
                 if first is None:
                     first = i
@@ -27,10 +29,10 @@ def main():
     for r in data:
         print('\t'.join(map(str, r)))
     print()
-    for y in xrange(len(data)):
+    for y in range(len(data)):
         m = data[y][y]
         row = []
-        for sy in xrange(len(data) - y):
+        for sy in range(len(data) - y):
             row.append(data[y][y + sy] * 100 / m)
         print('\t'.join(map(str, row)))
 

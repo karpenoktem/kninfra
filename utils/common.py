@@ -5,6 +5,8 @@ import random
 import unicodedata
 import kn.settings
 
+from django.utils.six.moves import range
+
 ALPHA = 'qwertyuiopasdfghjklzxcvbnm'
 NUM = '1234567890'
 ALPHANUMUL = ALPHA + ALPHA.upper() + NUM
@@ -22,7 +24,7 @@ def sesc(t):
 
 def pseudo_randstr(l=12, cs=ALPHANUMUL):
     ret = ''
-    for i in xrange(l):
+    for i in range(l):
         ret += cs[random.randint(0, len(cs) - 1)]
     return ret
 
@@ -66,8 +68,8 @@ def print_table(data, separator=' '):
     if len(data) == 0:
         return
     ls = map(lambda x: max(map(lambda y: len(data[y][x]),
-                               xrange(len(data)))),
-             xrange(len(data[0])))
+                               range(len(data)))),
+             range(len(data[0])))
     for d in data:
         l = ''
         for i, b in enumerate(d):
@@ -96,9 +98,9 @@ MAILDOMAIN = kn.settings.MAILDOMAIN
 LISTDOMAIN = 'lists.' + MAILDOMAIN
 
 EMAIL_ALLOWED = frozenset(
-    map(lambda x: chr(ord('a') + x), xrange(26)) +
-    map(lambda x: chr(ord('A') + x), xrange(26)) +
-    map(lambda x: chr(ord('0') + x), xrange(10)) +
+    map(lambda x: chr(ord('a') + x), range(26)) +
+    map(lambda x: chr(ord('A') + x), range(26)) +
+    map(lambda x: chr(ord('0') + x), range(10)) +
     ['.', '-'])
 
 GALLERY_PATH = '/var/galleries/kn/'

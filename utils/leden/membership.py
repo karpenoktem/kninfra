@@ -4,6 +4,7 @@ from __future__ import print_function
 import _import  # noqa: F401
 
 from django.utils import six
+from django.utils.six.moves import range
 
 import sys
 from common import args_to_users
@@ -34,10 +35,10 @@ for m, ys in six.iteritems(users):
     N += 1
     if N % 20 == 0:
         print("%15s" % '', end=' ')
-        for y in xrange(1, nyears + 1):
+        for y in range(1, nyears + 1):
             print(y, end=' ')
         print()
     print("%15s" % m, end=' ')
-    for y in xrange(1, nyears + 1):
+    for y in range(1, nyears + 1):
         print('*' if y in ys else ' ', end=' ')
     print()
