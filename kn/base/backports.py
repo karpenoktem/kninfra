@@ -69,7 +69,7 @@ class BackportedLocaleMiddleware(object):
                 'HTTP_ACCEPT_LANGUAGE'].lower().startswith('en')):
             del(request.META['HTTP_ACCEPT_LANGUAGE'])
         urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-        ret = bp_is_language_prefix_patterns_used(urlconf)
+        ret = is_language_prefix_patterns_used(urlconf)
         i18n_patterns_used, prefixed_default_language = ret
         language = translation.get_language_from_request(
             request, check_path=i18n_patterns_used)
@@ -84,7 +84,7 @@ class BackportedLocaleMiddleware(object):
         language_from_path = translation.get_language_from_path(
             request.path_info)
         urlconf = getattr(request, 'urlconf', settings.ROOT_URLCONF)
-        ret = bp_is_language_prefix_patterns_used(urlconf)
+        ret = is_language_prefix_patterns_used(urlconf)
         i18n_patterns_used, prefixed_default_language = ret
 
         if (response.status_code == 404 and not language_from_path
@@ -118,7 +118,7 @@ class BackportedLocaleMiddleware(object):
 
 
 @lru_cache.lru_cache(maxsize=None)
-def bp_is_language_prefix_patterns_used(urlconf):
+def is_language_prefix_patterns_used(urlconf):
     for url_pattern in get_resolver(urlconf).url_patterns:
         if isinstance(url_pattern, BackportedLocaleRegexURLResolver):
             return True, url_pattern.prefix_default_language
