@@ -132,17 +132,16 @@ def main(data):
             continue
         if m['name'] == 'leden':
             m['isVirtual'] = False  # fix for leden
-        n = {'types': ['tag' if m['isVirtual'] else 'group'],
-             'names': [m['name']],
-             'humanNames': [{
+        n = {
+            'types': ['tag' if m['isVirtual'] else 'group'],
+            'names': [m['name']],
+            'humanNames': [{
                  'name': m['name'],
                  'human': m['humanName'],
                  'genitive_prefix': m['genitive_prefix']
-             }],
-             'description': m['description'],
-             'temp': {
-            'is_virtual': m['isVirtual']
-        }
+            }],
+            'description': m['description'],
+            'temp': {'is_virtual': m['isVirtual']}
         }
         conv_group[m['id']] = {'id': Es.ecol.insert(n),
                                'name': m['name'],
