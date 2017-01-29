@@ -14,8 +14,15 @@ import kn.leden.entities as Es
 # TODO translate e-mail to the language preferred by the recipient
 
 
-def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
-                        reply_to=None, headers=None):
+def render_then_email(
+        template_name,
+        to,
+        ctx={},
+        cc=[],
+        bcc=[],
+        from_email=None,
+        reply_to=None,
+        headers=None):
     """ Render an e-mail from a template and send it. """
     # What language to send the mail in?
     language = settings.LANGUAGE_CODE
@@ -28,7 +35,7 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
         if not isinstance(addrs[what], (tuple, list)):
             addrs[what] = [addrs[what]]
         addrs[what] = map(lambda x: x.canonical_full_email
-                        if isinstance(x, Es.User) else x, addrs[what])
+                          if isinstance(x, Es.User) else x, addrs[what])
     if headers is None:
         headers = {}
 
@@ -57,7 +64,7 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
         headers['Reply-To'] = reply_to
     if not from_email:
         from_email = rendered_nodes.get('from',
-                settings.DEFAULT_FROM_EMAIL).strip()
+                                        settings.DEFAULT_FROM_EMAIL).strip()
 
     if 'plain' in rendered_nodes:
         plain = rendered_nodes['plain'].strip()
@@ -66,12 +73,14 @@ def render_then_email(template_name, to, ctx={}, cc=[], bcc=[], from_email=None,
         h.ignore_links = True
         plain = h.handle(rendered_nodes['html']).strip()
 
-    email = django.core.mail.EmailMultiAlternatives(rendered_nodes['subject'].strip(),
-                          plain,
-                          from_email,
-                          addrs['to'],
-                          headers=headers,
-                          bcc=(addrs['cc'] + addrs['bcc']))
+    email = django.core.mail.EmailMultiAlternatives(
+        rendered_nodes['subject'].strip(),
+        plain,
+        from_email,
+        addrs['to'],
+        headers=headers,
+        bcc=(addrs['cc'] + addrs['bcc'])
+    )
 
     if 'html' in rendered_nodes:
         email.attach_alternative(rendered_nodes['html'].strip(), "text/html")

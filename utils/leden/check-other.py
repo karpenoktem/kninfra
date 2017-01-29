@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 import _import  # noqa: F401
-from common import *
+from common import MEMBER_GROUP
 from Mailman.MailList import MailList
 
 from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias
@@ -12,8 +12,10 @@ from kn.leden.models import OldKnUser, OldKnGroup, OldSeat, Alias
 
 def check_geinteresseerden():
     print "GEINTERESSEERDEN"
-    es = frozenset(map(lambda m: m.email.lower(),
-        OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all()))
+    es = frozenset(map(
+        lambda m: m.email.lower(),
+        OldKnGroup.objects.get(name=MEMBER_GROUP).user_set.all()
+    ))
     ml = MailList('geinteresseerden', False)
     for m in ml.members:
         if m.lower() in es:
@@ -23,10 +25,10 @@ def check_geinteresseerden():
 def check_namespace():
     print "NAMESPACE"
     cn = set(map(lambda c: c.name,
-        filter(lambda c: not c.isVirtual, OldKnGroup.objects.all())))
+                 filter(lambda c: not c.isVirtual, OldKnGroup.objects.all())))
     un = set(map(lambda m: m.username, OldKnUser.objects.all()))
-    sn = set(map(lambda s: s.name if s.isGlobal else s.group.name \
-                    + '-' + s.name, OldSeat.objects.all()))
+    sn = set(map(lambda s: s.name if s.isGlobal else s.group.name
+                 + '-' + s.name, OldSeat.objects.all()))
     an = set(map(lambda a: a.source, Alias.objects.all()))
 
     n = set()
@@ -40,7 +42,7 @@ def check_namespace():
     for a in Alias.objects.all():
         if a.target not in n:
             print '%s -> %s, target doesn\'t exist' % \
-                    (a.source, a.target)
+                (a.source, a.target)
 
 
 def check_commissions():
@@ -51,7 +53,9 @@ def check_commissions():
         if c.isVirtual:
             if c.user_set.count() != 0:
                 print "%s: virtual commission got members" % \
-                        c.name
+                    c.name
+
+
 if __name__ == '__main__':
     check_commissions()
     check_namespace()

@@ -17,7 +17,13 @@ import subprocess
 from collections import namedtuple
 
 
-cache_tuple = namedtuple('cache_tuple', ('ext', 'mimetype', 'maxwidth', 'maxheight', 'quality'))
+cache_tuple = namedtuple(
+    'cache_tuple',
+    ('ext',
+     'mimetype',
+     'maxwidth',
+     'maxheight',
+     'quality'))
 
 fcol = db['fotos']
 lcol = db['fotoLocks']
@@ -74,7 +80,9 @@ def by_path(p):
 def is_admin(user):
     if user is None:
         return False
-    return bool(user.cached_groups_names & frozenset(('fotocie', 'secretariaat')))
+    return bool(
+        user.cached_groups_names & frozenset(
+            ('fotocie', 'secretariaat')))
 
 
 def actual_visibility(visibility):
@@ -152,8 +160,8 @@ class FotoEntity(SONWrapper):
             parent_effective_visibility = parent.effective_visibility
 
         visibilities = actual_visibility(parent_effective_visibility) & \
-                       actual_visibility(self.visibility)
-        order = ['world', 'leden', 'hidden']+self.visibility
+            actual_visibility(self.visibility)
+        order = ['world', 'leden', 'hidden'] + self.visibility
         if visibilities:
             for v in order:
                 if v in visibilities:
@@ -174,7 +182,7 @@ class FotoEntity(SONWrapper):
 
     def may_view(self, user):
         return bool(self.required_visibility(user)
-                        & frozenset(self.effective_visibility))
+                    & frozenset(self.effective_visibility))
 
     @property
     def full_path(self):
@@ -198,12 +206,12 @@ class FotoEntity(SONWrapper):
     @permalink
     def get_thumbnail_url(self):
         return ('fotos-cache', (), {'path': self.full_path,
-                                   'cache': 'thumb'})
+                                    'cache': 'thumb'})
 
     @permalink
     def get_thumbnail2x_url(self):
         return ('fotos-cache', (), {'path': self.full_path,
-                                   'cache': 'thumb2x'})
+                                    'cache': 'thumb2x'})
 
     def lock_cache(self, cache):
         ret = lcol.find_and_modify({'_id': self._id},
@@ -214,8 +222,8 @@ class FotoEntity(SONWrapper):
         return cache not in ret.get('cacheLocks', ())
 
     def unlock_cache(self, cache):
-        ret = lcol.update({'_id': self._id},
-                          {'$pull': {'cacheLocks': cache}})
+        lcol.update({'_id': self._id},
+                    {'$pull': {'cacheLocks': cache}})
 
     def get_cache_path(self, cache):
         if cache == 'full':
@@ -272,7 +280,8 @@ class FotoEntity(SONWrapper):
         '''
         Load metadata from file if it doesn't exist yet
         '''
-        return self._update_effective_visibility(parent, save=save, recursive=False)
+        return self._update_effective_visibility(
+            parent, save=save, recursive=False)
 
     def update_search_text(self, save=True):
         self._search_text = ''
@@ -295,7 +304,7 @@ class FotoEntity(SONWrapper):
             return {'$exists': True, '$ne': None}
         # non-root entity
         return {'$regex': re.compile(
-                            "^%s(/|$)" % re.escape(self.full_path))}
+            "^%s(/|$)" % re.escape(self.full_path))}
 
     def get_parent(self):
         if self.is_root:
@@ -394,6 +403,7 @@ class FotoEntity(SONWrapper):
 
 
 class FotoAlbum(FotoEntity):
+
     def __init__(self, data):
         super(FotoAlbum, self).__init__(data)
 
@@ -403,16 +413,18 @@ class FotoAlbum(FotoEntity):
 
     def list(self, user):
         required_visibility = self.required_visibility(user)
-        albums = map(entity, fcol.find({'path': self.full_path,
-                           'type': 'album',
-                           'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                           ).sort([('date', -1), ('name', 1)]))
-        fotos = map(entity, fcol.find({'path': self.full_path,
-                           'type': {'$ne': 'album'},
-                           'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                           ).sort([('date', 1), ('name', 1)]))
+        albums = map(entity, fcol.find(
+            {'path': self.full_path,
+             'type': 'album',
+             'effectiveVisibility': {'$in': tuple(required_visibility)}}
+        ).sort([('date', -1), ('name', 1)]))
+        fotos = map(entity, fcol.find(
+            {'path': self.full_path,
+             'type': {'$ne': 'album'},
+             'effectiveVisibility': {'$in': tuple(required_visibility)}},
+        ).sort([('date', 1), ('name', 1)]))
 
-        return albums+fotos
+        return albums + fotos
 
     def list_all(self):
         '''
@@ -425,12 +437,12 @@ class FotoAlbum(FotoEntity):
         required_visibility = self.required_visibility(user)
         while True:
             f = entity(fcol.find_one(
-                    {'random': {'$lt': r},
-                     'path': {'$regex': re.compile(
-                                "^%s(/|$)" % re.escape(self.full_path))},
-                     'type': 'foto',
-                     'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                        sort=[('random', -1)]))
+                {'random': {'$lt': r},
+                 'path': {'$regex': re.compile(
+                     "^%s(/|$)" % re.escape(self.full_path))},
+                 'type': 'foto',
+                 'effectiveVisibility': {'$in': tuple(required_visibility)}},
+                sort=[('random', -1)]))
             if f is not None:
                 return f
             if r == 1:
@@ -440,7 +452,8 @@ class FotoAlbum(FotoEntity):
     def search(self, q, user):
         required_visibility = self.required_visibility(user)
         query_filter = {'path': self.mongo_path_prefix,
-                        'effectiveVisibility': {'$in': tuple(required_visibility)}}
+                        'effectiveVisibility': {
+                            '$in': tuple(required_visibility)}}
         if q.startswith('album:'):
             album = q[len('album:'):]
             query_filter['type'] = 'album'
@@ -461,10 +474,10 @@ class FotoAlbum(FotoEntity):
         else:
             # do a full-text search
             for result in db.command('text', 'fotos',
-                        search=q,
-                        filter=query_filter,
-                        limit=96,  # dividable by 2, 3 and 4
-                      )['results']:
+                                     search=q,
+                                     filter=query_filter,
+                                     limit=96,  # dividable by 2, 3 and 4
+                                     )['results']:
                 yield entity(result['obj'])
             return
 
@@ -495,13 +508,17 @@ class FotoAlbum(FotoEntity):
         if recursive and not save:
             raise ValueError('recursion without save is not recommended')
 
-        if not super(FotoAlbum, self)._update_effective_visibility(parent, save=False):
+        if not super(
+                FotoAlbum,
+                self)._update_effective_visibility(
+                parent,
+                save=False):
             # effective visibility did not change, so children won't change too
             return False
 
         if recursive:
             for foto in self.list_all():
-                updated = foto._update_effective_visibility(self, save=save) or updated
+                foto._update_effective_visibility(self, save=save)
 
         if save:
             self.save()
@@ -517,7 +534,6 @@ class Foto(FotoEntity):
               'large2x': cache_tuple('jpg', 'image/jpeg', 1700, 1700, 90),
               'full': cache_tuple(None, None, None, None, None),
               }
-
 
     def __init__(self, data):
         super(Foto, self).__init__(data)
@@ -560,7 +576,8 @@ class Foto(FotoEntity):
                     self.rotation = 90
                 elif orientation == 8:
                     self.rotation = 270
-                # other rotations are mirrored, and won't occur much in practice
+                # other rotations are mirrored, and won't occur much in
+                # practice
             except ValueError:
                 # Rotation cannot be converted to an int (invalid input),
                 # ignore.
@@ -570,7 +587,10 @@ class Foto(FotoEntity):
             self.date = settings.DT_MIN  # NULL date/time
             if 'DateTimeOriginal' in exif:
                 try:
-                    self.date = datetime.datetime.strptime(exif['DateTimeOriginal'], '%Y:%m:%d %H:%M:%S')
+                    self.date = datetime.datetime.strptime(
+                        exif['DateTimeOriginal'],
+                        '%Y:%m:%d %H:%M:%S'
+                    )
                 except ValueError:
                     # Ignore: the timestamp did not match the format.
                     # For example, the year might be below year 1 (a zero
@@ -618,17 +638,20 @@ class Foto(FotoEntity):
             os.makedirs(target_dir)
 
         size = '%dx%d' % self.get_cache_size(cache)
-        subprocess.check_call(['convert',
-                         source,
-                         '-strip',
-                         '-rotate', str(self.rotation),
-                         '-resize', size,
-                         '-interlace', 'Plane',
-                         '-quality', str(self.CACHES[cache].quality),
-                         target])
+        subprocess.check_call([
+            'convert',
+            source,
+            '-strip',
+            '-rotate', str(self.rotation),
+            '-resize', size,
+            '-interlace', 'Plane',
+            '-quality', str(self.CACHES[cache].quality),
+            target
+        ])
 
 
 class Video(FotoEntity):
+
     def __init__(self, data):
         super(Video, self).__init__(data)
 
@@ -637,18 +660,19 @@ def all():
     for d in fcol.find():
         yield entity(d)
 
+
 CACHE_TYPES = (
-        'thumb',
-        'thumb2x',
-        'large',
-        'large2x',
-        'full',
-    )
+    'thumb',
+    'thumb2x',
+    'large',
+    'large2x',
+    'full',
+)
 
 TYPE_MAP = {
-        'album':        FotoAlbum,
-        'foto':         Foto,
-        'video':        Video
-    }
+    'album': FotoAlbum,
+    'foto': Foto,
+    'video': Video
+}
 
 # vim: et:sta:bs=2:sw=4:

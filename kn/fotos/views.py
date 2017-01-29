@@ -11,7 +11,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import Http404, HttpResponse, HttpResponseNotModified, QueryDict
+from django.http import (Http404, HttpResponse,
+                         HttpResponseNotModified, QueryDict)
 from django.utils.encoding import filepath_to_uri
 
 from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
@@ -50,7 +51,7 @@ def fotos(request, path=''):
             if entity is not None:
                 # Zen Photo used + signs in the filename part of the URL.
                 url = reverse('fotos', kwargs={'path': path}) \
-                        + '#'+filepath_to_uri(name)
+                    + '#' + filepath_to_uri(name)
                 return redirect(url, permanent=True)
         raise Http404
 
@@ -58,7 +59,7 @@ def fotos(request, path=''):
         # This is a photo, not an album.
         # Backwards compatibility, probably to Zen Photo.
         url = reverse('fotos', kwargs={'path': album.path}) \
-                + '#'+filepath_to_uri(album.name)
+            + '#' + filepath_to_uri(album.name)
         return redirect(url, permanent=True)
 
     user = request.user if request.user.is_authenticated() else None
@@ -73,17 +74,20 @@ def fotos(request, path=''):
         if not title:
             title = album.name
         # respond with a nice error message
-        response = render_to_response('fotos/fotos.html',
-                  {'fotos': {'parents': album_parents_json(album)},
-                   'error': 'permission-denied'},
-                  context_instance=RequestContext(request))
+        response = render_to_response(
+            'fotos/fotos.html',
+            {'fotos': {'parents': album_parents_json(album)},
+             'error': 'permission-denied'},
+            context_instance=RequestContext(request)
+        )
         response.status_code = 403
         return response
 
     people = None
     if fEs.is_admin(user):
-        # Get all members (now or in the past), and sort them first by whether they
-        # are active (active members first) and then by their name.
+        # Get all members (now or in the past), and sort them first
+        # by whether they are active (active members first) and
+        # then by their name.
         humanNames = {}
         active = []
         inactive = []
@@ -96,15 +100,15 @@ def fotos(request, path=''):
         active.sort()
         inactive.sort()
         people = []
-        for name in active+inactive:
+        for name in active + inactive:
             people.append((name, humanNames[name]))
 
     fotos = album_json(album, user)
     return render_to_response('fotos/fotos.html',
-             {'fotos': fotos,
-              'fotos_admin': fEs.is_admin(user),
-              'people': people},
-             context_instance=RequestContext(request))
+                              {'fotos': fotos,
+                               'fotos_admin': fEs.is_admin(user),
+                               'people': people},
+                              context_instance=RequestContext(request))
 
 
 def cache(request, cache, path):
@@ -130,7 +134,7 @@ def cache(request, cache, path):
         # not publicly cacheable
         cc = 'private, ' + cc
     resp = HttpResponse(FileWrapper(open(entity.get_cache_path(cache))),
-                            content_type=entity.get_cache_mimetype(cache))
+                        content_type=entity.get_cache_mimetype(cache))
     resp['Content-Length'] = str(st.st_size)
     resp['Last-Modified'] = lm
     resp['Cache-Control'] = cc
@@ -142,7 +146,7 @@ def compat_view(request):
     name = None
     if '/' in path:
         path, name = path.rsplit('/', 1)
-    return redirect('fotos', path=path+'#'+name, permanent=True)
+    return redirect('fotos', path=path + '#' + name, permanent=True)
 
 
 def compat_foto(request):
@@ -159,18 +163,18 @@ def fotoadmin_create_event(request):
         if form.is_valid():
             cd = form.cleaned_data
             ret = giedo.fotoadmin_create_event(str(cd['date']),
-                    cd['name'], cd['fullHumanName'])
+                                               cd['name'], cd['fullHumanName'])
             if ret.get('success', False):
                 messages.info(request, _('Fotoalbum aangemaakt!'))
             else:
                 messages.error(request, _('Er is een fout opgetreden: %s') %
-                                ret.get('error', _('geen foutmelding')))
+                               ret.get('error', _('geen foutmelding')))
             return redirect('fotoadmin-move')
     else:
         form = CreateEventForm()
     return render_to_response('fotos/admin/create.html',
-            {'form': form, 'events': list_events()},
-             context_instance=RequestContext(request))
+                              {'form': form, 'events': list_events()},
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -188,7 +192,7 @@ def fotoadmin_move(request):
     else:
         form = MoveFotosForm()
     return render_to_response('fotos/admin/move.html',
-            {'form': form},
-             context_instance=RequestContext(request))
+                              {'form': form},
+                              context_instance=RequestContext(request))
 
 # vim: et:sta:bs=2:sw=4:

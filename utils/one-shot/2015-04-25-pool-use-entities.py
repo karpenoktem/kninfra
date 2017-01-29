@@ -21,6 +21,7 @@ def main():
         count += 1
     print 'Converted %d vacancies.' % count
 
+
 if __name__ == '__main__':
     main()
 

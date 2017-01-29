@@ -12,8 +12,8 @@ from tarjan import tarjan
 import kn.leden.entities as Es
 import kn.subscriptions.entities as subscr_Es
 import kn.moderation.entities as mod_Es
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
+from kn.base.conf import DT_MIN, DT_MAX
+
 from kn.utils.giedo.db import update_db
 
 
@@ -24,16 +24,16 @@ def main(data):
         return datetime(*strptime(s, '%Y-%m-%d')[:3])
 
     def year_to_dates(year):
-        return (datetime(2003+year, 9, 1),
-            datetime(2004+year, 8, 31))
+        return (datetime(2003 + year, 9, 1),
+                datetime(2004 + year, 8, 31))
 
     def create_tag(name, humanName, tags=[]):
         return Es.ecol.insert({'types': ['tag'],
-                       'names': [name],
-                       'humanNames': [{
-                           'name': name,
-                           'human': humanName}],
-                       'tags': tags})
+                               'names': [name],
+                               'humanNames': [{
+                                   'name': name,
+                                   'human': humanName}],
+                               'tags': tags})
     print 'dropping'
     Es.ecol.drop()
     Es.rcol.drop()
@@ -56,41 +56,41 @@ def main(data):
     ignore_groups_ids = set()
     ignore_groups_members_ids = set()
     year_groups = frozenset(
-        ['leden'+str(x) for x in range(1, 9)] +
-        ['kasco'+str(x) for x in range(1, 9)] +
-        ['bestuur'+str(x) for x in range(1, 9)])
+        ['leden' + str(x) for x in range(1, 9)] +
+        ['kasco' + str(x) for x in range(1, 9)] +
+        ['bestuur' + str(x) for x in range(1, 9)])
     year_groups_ids = dict()
     year_groups_lut = {}
     print 'initial tags'
     system_tag = create_tag('!system', 'Systeemstempels')
     year_overrides_tag = create_tag('!year-overrides',
-            'Jaarlidmaatschapstempels', [system_tag])
+                                    'Jaarlidmaatschapstempels', [system_tag])
     virtual_group_tag = create_tag("!virtual-group",
-            'Virtuele groep', [system_tag])
+                                   'Virtuele groep', [system_tag])
     sofa_brand_tag = create_tag("!sofa-brand",
-            'Sofa merk', [system_tag])
+                                'Sofa merk', [system_tag])
     year_group_tag = create_tag("!year-group", 'Jaargroep',
-            [system_tag])
+                                [system_tag])
     for i in xrange(1, 9):
         Es.ecol.insert({'types': ['tag'],
-                'humanNames': [{'human': 'Wel jaar %s' % i}],
-                'year-override': {'year': i,
-                          'type': True},
-                'tags': [year_overrides_tag]})
+                        'humanNames': [{'human': 'Wel jaar %s' % i}],
+                        'year-override': {'year': i,
+                                          'type': True},
+                        'tags': [year_overrides_tag]})
         Es.ecol.insert({'types': ['tag'],
-                'humanNames': [{'human': 'Niet jaar %s' % i}],
-                'year-override': {'year': i,
-                          'type': False},
-                'tags': [year_overrides_tag]})
+                        'humanNames': [{'human': 'Niet jaar %s' % i}],
+                        'year-override': {'year': i,
+                                          'type': False},
+                        'tags': [year_overrides_tag]})
     print 'institutes'
     for m in data['EduInstitute']:
         n = {'types': ['institute'],
-            'humanNames': [{'human': m['name']}]}
+             'humanNames': [{'human': m['name']}]}
         conv_inst[m['id']] = Es.ecol.insert(n)
     print 'studies'
     for m in data['Study']:
         n = {'types': ['study'],
-            'humanNames': [{'human': m['name']}]}
+             'humanNames': [{'human': m['name']}]}
         conv_study[m['id']] = Es.ecol.insert(n)
     print 'initial groups'
     conv_group_byname['bestuur'] = {
@@ -132,21 +132,20 @@ def main(data):
             continue
         if m['name'] == 'leden':
             m['isVirtual'] = False  # fix for leden
-        n = {'types': ['tag' if m['isVirtual'] else 'group'],
+        n = {
+            'types': ['tag' if m['isVirtual'] else 'group'],
             'names': [m['name']],
             'humanNames': [{
-                'name': m['name'],
-                'human': m['humanName'],
-                'genitive_prefix': m['genitive_prefix']
-                }],
+                 'name': m['name'],
+                 'human': m['humanName'],
+                 'genitive_prefix': m['genitive_prefix']
+            }],
             'description': m['description'],
-            'temp': {
-                'is_virtual': m['isVirtual']
-            }
-            }
+            'temp': {'is_virtual': m['isVirtual']}
+        }
         conv_group[m['id']] = {'id': Es.ecol.insert(n),
-                       'name': m['name'],
-                       'humanName': m['humanName']}
+                               'name': m['name'],
+                               'humanName': m['humanName']}
         conv_group_byname[m['name']] = conv_group[m['id']]
     print 'group hierarchy'
     for m in data['OldKnGroup']:
@@ -157,7 +156,7 @@ def main(data):
                 print " %s was orphaned" % m['name']
                 continue
             Es.ecol.update({'_id': conv_group[m['id']]['id']},
-                {'$push': {'tags': conv_group[
+                           {'$push': {'tags': conv_group[
                             m['parent']]['id']}})
     print 'users'
     for m in data['OldKnUser']:
@@ -172,7 +171,7 @@ def main(data):
             'types': ['user'],
             'names': [m['username']],
             'humanNames': [{'human': m['first_name'] + ' ' +
-                         m['last_name']}],
+                            m['last_name']}],
             'person': {
                 'titles': [],
                 'nick': m['first_name'],
@@ -185,7 +184,7 @@ def main(data):
                 {'email': m['email'],
                  'from': DT_MIN,
                  'until': DT_MAX
-                }],
+                 }],
             'addresses': [
                 {'street': m['addr_street'],
                  'number': m['addr_number'],
@@ -193,7 +192,7 @@ def main(data):
                  'city': m['addr_city'],
                  'from': DT_MIN,
                  'until': DT_MAX
-                }],
+                 }],
             'telephones': [
                 {'number': m['telephone'],
                  'from': DT_MIN,
@@ -214,7 +213,7 @@ def main(data):
             },
             'is_active': m['is_active'],
             'password': pwd
-            }
+        }
         conv_user[m['id']] = Es.ecol.insert(n)
         for g in m['groups']:
             if g in ignore_groups_ids or \
@@ -246,7 +245,7 @@ def main(data):
              'names': [m['name']],
              'tags': [sofa_brand_tag],
              'humanNames': [{'name': m['name'],
-                     'human': m['humanName']}]}
+                             'human': m['humanName']}]}
         conv_seat[m['name']] = {'id': Es.ecol.insert(n)}
     print 'seats'
     for m in data['OldSeat']:
@@ -266,15 +265,15 @@ def main(data):
                  'with': gdat['id'],
                  'how': conv_seat[m['name']]['id']},
              'humanNames': [{
-                    'name': gdat['name'] + '-' + m['name'],
-                'human': m['humanName'] +
-                    ' ' + gdat['humanName']}]}
+                 'name': gdat['name'] + '-' + m['name'],
+                 'human': m['humanName'] +
+                 ' ' + gdat['humanName']}]}
         i = Es.ecol.insert(n)
         Es.rcol.insert({'who': conv_user[m['user']],
-                'from': _from,
-                'until': until,
-                'how': conv_seat[m['name']]['id'],
-                'with': gdat['id']})
+                        'from': _from,
+                        'until': until,
+                        'how': conv_seat[m['name']]['id'],
+                        'with': gdat['id']})
     print 'merging relations'
     print ' list until'
     lut = dict()
@@ -282,7 +281,7 @@ def main(data):
     plan_remove = set()
     for r in Es.rcol.find({'until': {'$lt': DT_MAX}}):
         lut[r['until'] + timedelta(1, 0), r['with'],
-                r['how'], r['who']] = r['_id']
+            r['how'], r['who']] = r['_id']
     print ' crossreference from'
     for r in Es.rcol.find({'from': {'$gt': DT_MIN}}):
         n = (r['from'], r['with'], r['how'], r['who'])
@@ -351,7 +350,8 @@ def main(data):
             continue
         name2id[src] = name2id[alias_graph[src]]
         Es.ecol.update({'names': alias_graph[src]},
-                   {'$push': {'names': src}})
+                       {'$push': {'names': src}})
+
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
@@ -360,7 +360,7 @@ if __name__ == '__main__':
     print 'loading json'
     d = {}
     for fn in sys.argv[1:]:
-        print ' %s'%fn
+        print ' %s' % fn
         with open(fn) as f:
             d_bit = json.load(f)
             for k, v in d_bit.iteritems():

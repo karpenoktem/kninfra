@@ -14,15 +14,20 @@ import re
 __all__ = ["parse_date", "ParseError"]
 
 # Adapted from http://delete.me.uk/2005/03/iso8601.html
-ISO8601_REGEX = re.compile(r"(?P<year>[0-9]{4})(-(?P<month>[0-9]{1,2})(-(?P<day>[0-9]{1,2})"
-    r"((?P<separator>.)(?P<hour>[0-9]{2}):(?P<minute>[0-9]{2})(:(?P<second>[0-9]{2})(\.(?P<fraction>[0-9]+))?)?"
+ISO8601_REGEX = re.compile(
+    r"(?P<year>[0-9]{4})(-(?P<month>[0-9]{1,2})(-(?P<day>[0-9]{1,2})"
+    r"((?P<separator>.)(?P<hour>[0-9]{2}):(?P<minute>[0-9]{2})"
+    r"(:(?P<second>[0-9]{2})(\.(?P<fraction>[0-9]+))?)?"
     r"(?P<timezone>Z|(([-+])([0-9]{2}):([0-9]{2})))?)?)?)?"
 )
-TIMEZONE_REGEX = re.compile("(?P<prefix>[+-])(?P<hours>[0-9]{2}).(?P<minutes>[0-9]{2})")
+TIMEZONE_REGEX = re.compile(
+    "(?P<prefix>[+-])(?P<hours>[0-9]{2}).(?P<minutes>[0-9]{2})"
+)
 
 
 class ParseError(Exception):
     """Raised when there is a problem parsing a date string"""
+
 
 # Yoinked from python docs
 ZERO = timedelta(0)
@@ -30,7 +35,7 @@ ZERO = timedelta(0)
 
 class Utc(tzinfo):
     """UTC
-    
+
     """
 
     def utcoffset(self, dt):
@@ -41,12 +46,14 @@ class Utc(tzinfo):
 
     def dst(self, dt):
         return ZERO
+
+
 UTC = Utc()
 
 
 class FixedOffset(tzinfo):
     """Fixed offset in hours and minutes from UTC
-    
+
     """
 
     def __init__(self, offset_hours, offset_minutes, name):
@@ -61,14 +68,14 @@ class FixedOffset(tzinfo):
 
     def dst(self, dt):
         return ZERO
-    
+
     def __repr__(self):
         return "<FixedOffset %r>" % self.__name
 
 
 def parse_timezone(tzstring, default_timezone=UTC):
     """Parses ISO 8601 time zone specs into tzinfo offsets
-    
+
     """
     if tzstring == "Z":
         return default_timezone
@@ -88,7 +95,7 @@ def parse_timezone(tzstring, default_timezone=UTC):
 
 def parse_date(datestring, default_timezone=UTC):
     """Parses ISO 8601 dates into datetime objects
-    
+
     The timezone is parsed from the date string. However it is quite common to
     have dates without a timezone (not strictly correct). In this case the
     default timezone specified in default_timezone is used. This is UTC by
@@ -105,6 +112,8 @@ def parse_date(datestring, default_timezone=UTC):
         groups["fraction"] = 0
     else:
         groups["fraction"] = int(float("0.%s" % groups["fraction"]) * 1e6)
-    return datetime(int(groups["year"]), int(groups["month"]), int(groups["day"]),
+    return datetime(
+        int(groups["year"]), int(groups["month"]), int(groups["day"]),
         int(groups["hour"]), int(groups["minute"]), int(groups["second"]),
-        int(groups["fraction"]), tz)
+        int(groups["fraction"]), tz
+    )

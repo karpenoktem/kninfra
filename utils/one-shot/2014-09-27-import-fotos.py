@@ -28,7 +28,7 @@ def main():
 
     print 'albums'
     c.execute("SELECT id, name, path, humanname, visibility, description "
-                        + "FROM fa_albums ORDER BY path")
+              + "FROM fa_albums ORDER BY path")
     for oldId, name, path, humanName, visibility, description in c.fetchall():
         if path and not path.endswith('/'):
             continue
@@ -100,6 +100,7 @@ def main():
             foto.save()
 
     print 'done'
+
 
 if __name__ == '__main__':
     main()

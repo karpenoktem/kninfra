@@ -11,8 +11,9 @@ import subprocess
 def main(username, photo):
     user = OldKnUser.objects.get(username=username)
     subprocess.call(['convert', '-resize', '200x', photo,
-            "jpg:%s.jpg" % (path.join(settings.SMOELEN_PHOTOS_PATH,
-                    user.username))])
+                     "jpg:%s.jpg" % (path.join(settings.SMOELEN_PHOTOS_PATH,
+                                               user.username))])
+
 
 if __name__ == '__main__':
     if not len(sys.argv) == 3:

@@ -17,13 +17,14 @@ import kn.poll.entities as poll_Es
 
 def create_questionForm(question):
     class QuestionForm(forms.Form):
+
         def __init__(self, *args, **kwargs):
             super(QuestionForm, self).__init__(*args, **kwargs)
             self.fields['answer'].label = question[0]
         answer = forms.ChoiceField(
-                choices = list(enumerate(question[1])) +
-                        [(-1, _('(geen antwoord)'))],
-                required=False)
+            choices=list(enumerate(question[1])) +
+            [(-1, _('(geen antwoord)'))],
+            required=False)
     return QuestionForm
 
 
@@ -38,7 +39,7 @@ def vote(request, name):
         initial = True
         filling = poll_Es.Filling({'user': _id(request.user),
                                    'poll': _id(poll),
-                                   'answers': [None]*len(poll.questions)})
+                                   'answers': [None] * len(poll.questions)})
     allValid = True
     forms = []  # question forms
     for q_id, question in enumerate(poll.questions):
@@ -62,8 +63,10 @@ def vote(request, name):
             filling.answers[q_id] = int(form.cleaned_data['answer'])
         filling.date = datetime.datetime.now()
         filling.save()
-    return render_to_response('poll/vote.html',
-            {'forms': forms, 'poll': poll, 'initial': initial},
-            context_instance=RequestContext(request))
+    return render_to_response(
+        'poll/vote.html',
+        {'forms': forms, 'poll': poll, 'initial': initial},
+        context_instance=RequestContext(request)
+    )
 
 # vim: et:sta:bs=2:sw=4:

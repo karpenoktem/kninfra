@@ -28,13 +28,13 @@ def set_unix_map(cilia, _map):
     for user in _map['users']:
         # This filters accents
         fn = filter(lambda x: x in string.printable,
-                _map['users'][user]['full_name'])
+                    _map['users'][user]['full_name'])
         expire_date = _map['users'][user]['expire_date']
         if user not in c_users:
             home = '/home/%s' % user
             subprocess.call(['mkdir', home])
             subprocess.call(['useradd', '-d', home, '-g', 'kn',
-                '-c', fn, '-e', expire_date, user])
+                             '-c', fn, '-e', expire_date, user])
             subprocess.call(['chown', '%s:kn' % user, home])
             subprocess.call(['chmod', '750', home])
         else:
@@ -46,28 +46,30 @@ def set_unix_map(cilia, _map):
             # the unix Epoch starts at 01:00 instead of 00:00.
             # This will give an off-by-one in the date, so let's
             # correct it.
-            expday = int(datetime.datetime.strptime(expire_date,
-                    '%Y-%m-%d').strftime('%s')) / 86400 + 1
+            expday = int(datetime.datetime.strptime(
+                expire_date,
+                '%Y-%m-%d').strftime('%s')
+            ) / 86400 + 1
             spwent = spwd.getspnam(user)
             if expday != spwent.sp_expire:
                 subprocess.call(['usermod', '-e',
-                        expire_date, user])
+                                 expire_date, user])
     for user in c_users_surplus:
         logging.info("Removing stray user %s", user)
         subprocess.call(['userdel', '-r', user])
     # Get list of all groups
     gs = grp.getgrall()
     c_groups = set([g.gr_name for g in gs
-            if g.gr_name.startswith('kn-')])
+                    if g.gr_name.startswith('kn-')])
     # Determine which are missing
     created_group = False
     for g in _map['groups']:
-        gname = ('kn-%s'%g)[:128]
+        gname = ('kn-%s' % g)[:128]
         if gname not in c_groups:
-            home = '/groups/%s'%g
+            home = '/groups/%s' % g
             subprocess.call(['mkdir', home])
             subprocess.call(['groupadd', gname])
-            subprocess.call(['chown', 'root:%s'%gname, home])
+            subprocess.call(['chown', 'root:%s' % gname, home])
             subprocess.call(['chmod', '770', home])
             created_group = True
     if created_group:
@@ -77,7 +79,7 @@ def set_unix_map(cilia, _map):
     for g in gs:
         glut[g.gr_name] = g
     for g in _map['groups']:
-        gname = ('kn-'+g)[:128]
+        gname = ('kn-' + g)[:128]
         c_memb = set(glut[gname].gr_mem)
         w_memb = set(_map['groups'][g])
         for m in w_memb:

@@ -7,6 +7,7 @@ def main():
     for e in fEs.all():
         e.update_search_text()
 
+
 if __name__ == '__main__':
     main()
 

@@ -4,7 +4,6 @@ from __future__ import with_statement
 import _import  # noqa: F401
 import datetime
 
-from common import *
 import kn.leden.entities as Es
 from django.core.mail import EmailMessage
 
@@ -13,18 +12,19 @@ def birthday_email():
     with open('birthday-email.template') as f:
         templ = f.read()
     now = datetime.datetime.now().date()
-        for user in Es.by_name('leden').get_members():
+    for user in Es.by_name('leden').get_members():
         if user.dateOfBirth is None:
             continue
         if (user.dateOfBirth.day != now.day or
-            user.dateOfBirth.month != now.month):
+                user.dateOfBirth.month != now.month):
             continue
         email = EmailMessage("Hartelijk gefeliciteerd!",
-                     templ % {'firstName': user.first_name},
-                     'webcie@karpenoktem.nl',
-                     [user.canonical_email],
-                     ['webcie@karpenoktem.nl'])
+                             templ % {'firstName': user.first_name},
+                             'webcie@karpenoktem.nl',
+                             [user.canonical_email],
+                             ['webcie@karpenoktem.nl'])
         email.send()
+
 
 if __name__ == '__main__':
     birthday_email()

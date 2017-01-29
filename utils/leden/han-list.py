@@ -16,8 +16,11 @@ def main():
                 continue
             if study['until'] is None or study['until'] >= Es.now():
                 ok = True
+        if not ok:
+            continue
         print "%-30s %-10s %s" % (m.full_name, study['number'],
-                        unicode(study['study'].humanName))
+                                  unicode(study['study'].humanName))
+
 
 if __name__ == '__main__':
     main()

@@ -4,8 +4,6 @@ import _import  # noqa: F401
 #               bas@kn.cx
 
 import kn.leden.entities as Es
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
 
 
 def main():
@@ -35,6 +33,7 @@ def main():
                     len(e._data['telephones']) == 1):
                 e._data['telephones'] = []
                 e.save()
+
 
 if __name__ == '__main__':
     main()

@@ -4,8 +4,8 @@ import _import  # noqa: F401
 # Please make very sure that this script is up-to-date.  It is a crime
 # to leak private data entrusted to us.
 
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
+from kn.base.conf import DT_MIN, DT_MAX
+
 from kn.leden.mongo import db
 
 import bson
@@ -22,17 +22,17 @@ with open('entities.bsons', 'w') as f:
                     del s['number']
         if 'addresses' in e:
             e['addresses'] = [
-                    {'city': '<private>',
-                     'street': '<private>',
-                     'zip': '<private>',
-                     'number': '<private>',
-                     'from': DT_MIN,
-                     'until': DT_MAX}]
+                {'city': '<private>',
+                 'street': '<private>',
+                 'zip': '<private>',
+                 'number': '<private>',
+                 'from': DT_MIN,
+                 'until': DT_MAX}]
         if 'emailAddresses' in e and 'names' in e and e['names']:
             e['emailAddresses'] = [
-                    {'from': DT_MIN,
-                     'until': DT_MAX,
-                     'email': e['names'][0] + '@kn.cx'}]
+                {'from': DT_MIN,
+                 'until': DT_MAX,
+                 'email': e['names'][0] + '@kn.cx'}]
         if 'password' in e:
             e['password'] = None
         if 'temp' in e:

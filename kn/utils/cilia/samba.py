@@ -10,19 +10,19 @@ from kn.base._random import pseudo_randstr
 def pdbedit_list():
     users = dict()
     ph = subprocess.Popen(['pdbedit', '-L'],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT, close_fds=True)
+                          stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT, close_fds=True)
     for line in ph.communicate()[0].splitlines():
         (username, uid, realname) = line.split(':', 2)
         users[username] = {'username': username,
-                   'uid': uid,
-                   'realname': realname}
+                           'uid': uid,
+                           'realname': realname}
     ph = subprocess.Popen(['pdbedit', '-Lw'],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT, close_fds=True)
+                          stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT, close_fds=True)
     for line in ph.communicate()[0].splitlines():
         (username, uid, lanmanhash, nthash, flags,
-                lastchange, empty) = line.split(':')
+         lastchange, empty) = line.split(':')
         users[username].update({
             'lanmanhash': lanmanhash,  # Unused
             'nthash': nthash,
@@ -41,8 +41,8 @@ def samba_setpass(cilia, user, password):
     if pwent.pw_gid != kn_gid:
         return {'error': "Permission denied. Gid is not kn"}
     ph = subprocess.Popen(['smbpasswd', '-as', user],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT, close_fds=True)
+                          stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT, close_fds=True)
     return ph.communicate("%s\n" % password)[0]
 
 
@@ -55,16 +55,19 @@ def set_samba_map(cilia, _map):
     for user in _map['users']:
         # This filters accents
         fn = filter(lambda x: x in string.printable,
-                _map['users'][user]['full_name'])
+                    _map['users'][user]['full_name'])
         if user not in smbusers:
             l.info("Added %s", user)
             bogus_password = pseudo_randstr(16)
-            ph = subprocess.Popen(['pdbedit', '-a', '-t',
-                        '-u', user, '-f', fn],
-                stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT, close_fds=True)
+            ph = subprocess.Popen(
+                ['pdbedit', '-a', '-t', '-u', user, '-f', fn],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                close_fds=True
+            )
             ph.communicate("%s\n%s\n" % (bogus_password,
-                            bogus_password))
+                                         bogus_password))
             added_users = True
             continue
         smbusers_surplus.remove(user)

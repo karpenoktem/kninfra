@@ -12,8 +12,8 @@ import _import  # noqa: F401
 import datetime
 
 import kn.leden.entities as Es
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
+from kn.base.conf import DT_MIN, DT_MAX
+
 from kn.leden.mongo import _id
 
 llut = dict()
@@ -47,7 +47,7 @@ for y in range(3, 10):
     nalways = 0
     navg = 0
     avg_sum = datetime.timedelta(0)
-    for l in Es.by_name('leden'+str(y)).get_members():
+    for l in Es.by_name('leden' + str(y)).get_members():
         if l not in llut:
             continue
         if l in had:

@@ -3,7 +3,7 @@ from __future__ import with_statement
 
 import _import  # noqa: F401
 import MySQLdb
-from common import *
+from common import read_ssv_file, MEMBER_GROUP
 from kn.leden.models import OldKnGroup, OldKnUser
 
 
@@ -23,9 +23,9 @@ def forum_email():
         name=MEMBER_GROUP).user_set.all()))
     login = read_ssv_file('forum.login')
     db = MySQLdb.connect(host='localhost',
-                 user=login[0],
-                 passwd=login[2],
-                 db=login[1])
+                         user=login[0],
+                         passwd=login[2],
+                         db=login[1])
     c = db.cursor()
     c.execute('SELECT username FROM users WHERE last_visit=0')
     toEmail = set()
@@ -36,12 +36,13 @@ def forum_email():
     for username in toEmail:
         m = OldKnUser.objects.get(username=username)
         txt = templ % ({'fullName': m.full_name(),
-                'password': pwd_lut[m.username],
-                'userName': username})
+                        'password': pwd_lut[m.username],
+                        'userName': username})
         m.email_user(
             'Karpe Noktem forum',
             txt, from_email='bas@karpenoktem.nl')
         print username
+
 
 if __name__ == '__main__':
     forum_email()

@@ -5,6 +5,7 @@ from tarjan.tc import tc
 from django.conf import settings
 
 import kn.leden.entities as Es
+from kn.leden.date import now
 
 # TODO (issue #7) handle cycles properly.
 
@@ -37,7 +38,7 @@ def generate_postfix_map(giedo):
             tbl[id_email] = (e.canonical_email,)
     # handle the non-mailman groups
     for rel in Es.query_relations(_with=non_mailman_groups.keys(),
-            _from=dt_now, until=dt_now, how=None):
+                                  _from=dt_now, until=dt_now, how=None):
         e = non_mailman_groups[rel['with']]
         email = id2email.get(rel['who'])
         if email is not None:
@@ -90,7 +91,7 @@ def generate_postfix_slm_map(giedo):
         mlut_u[g_id] = [c for c in mlut[g_id] if c in ulut]
     mlut_g_tc = tc(mlut_g)  # transitive closure
     for g in gs:
-        to_consider = tuple(mlut_g[g._id]) + (g._id,)
+        to_consider = tuple(mlut_g_tc[g._id]) + (g._id,)
         for sg_id in to_consider:
             for u_id in mlut_u[sg_id]:
                 for name in g.names:

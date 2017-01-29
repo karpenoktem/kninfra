@@ -2,7 +2,7 @@
 from __future__ import with_statement
 
 import _import  # noqa: F401
-from common import *
+from common import MEMBER_GROUP
 from kn.leden.models import OldKnGroup
 
 
@@ -16,6 +16,7 @@ def forum_email():
             'LEES DIT: BELANGRIJK',
             txt, from_email='karpenoktemwebcie@hotmail.com')
         print m.username
+
 
 if __name__ == '__main__':
     forum_email()

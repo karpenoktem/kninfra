@@ -29,4 +29,4 @@ for l in leden:
             or firstnames[l.first_name] > 1:
         memb = ' '.join(['*' if l in year else ' ' for year in years])
         print "%-12s %-15s  %-20s %-20s" % (l.username, l.first_name,
-                            l.last_name, memb)
+                                            l.last_name, memb)

@@ -4,7 +4,7 @@
 
 import _import  # noqa: F401
 import MySQLdb
-from common import *
+from common import read_ssv_file
 from pydot import Node, Dot, Edge
 from Mailman import MailList, Utils
 
@@ -17,14 +17,14 @@ def gen_dot():
     nodes = dict()
     login = read_ssv_file('vpopmail.login')
     db = MySQLdb.connect(host='localhost', user=login[0],
-        passwd=login[2], db=login[1])
+                         passwd=login[2], db=login[1])
     c = db.cursor()
     c.execute("SELECT alias, valias_line FROM valias WHERE domain=%s",
-        (MAILDOMAIN, ))
+              (MAILDOMAIN, ))
     for alias, target in c.fetchall():
         assert target[0] == '&'
         target = target[1:]
-        alias += "@"+MAILDOMAIN
+        alias += "@" + MAILDOMAIN
         if alias not in nodes:
             nodes[alias] = Node(alias)
             d.add_node(nodes[alias])
@@ -35,7 +35,7 @@ def gen_dot():
     for list in Utils.list_names():
         if list == 'plukdenacht2008':
             continue
-        source = list+"@"+LISTDOMAIN
+        source = list + "@" + LISTDOMAIN
         if source not in nodes:
             nodes[source] = Node(source)
             d.add_node(nodes[source])
@@ -46,6 +46,7 @@ def gen_dot():
                 d.add_node(nodes[member])
             d.add_edge(Edge(nodes[source], nodes[member]))
     d.write('the.dot')
+
 
 if __name__ == '__main__':
     gen_dot()

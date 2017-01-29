@@ -15,7 +15,7 @@ def main():
                 continue
             if str(grp.name) == 'uilfest':
                 continue
-            print ' '+str(grp.name)
+            print ' ' + str(grp.name)
             assert rel['until'] is None
             # Es.rcol.update({'_id': rel['_id']},
             #                {'$set': {'until': datetime.datetime(2015,8,31)}})

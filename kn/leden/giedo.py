@@ -21,9 +21,9 @@ class ChangePasswordError(Exception):
 def change_password(user, old, new):
     giedo = get_giedo_connection()
     ret = giedo.send({'type': 'setpass',
-              'user': user,
-              'oldpass': old,
-              'newpass': new})
+                      'user': user,
+                      'oldpass': old,
+                      'newpass': new})
     if 'error' in ret:
         raise ChangePasswordError(ret['error'])
 
@@ -31,9 +31,9 @@ def change_password(user, old, new):
 def change_villanet_password(user, old, new):
     giedo = get_giedo_connection()
     ret = giedo.send({'type': 'set-villanet-password',
-              'user': user,
-              'oldpass': old,
-              'newpass': new})
+                      'user': user,
+                      'oldpass': old,
+                      'newpass': new})
     if 'error' in ret:
         raise ChangePasswordError(ret['error'])
 
@@ -77,17 +77,17 @@ def fotoadmin_scan_userdirs():
 
 def fotoadmin_create_event(date, name, humanName):
     return get_giedo_connection().send({'type': 'fotoadmin-create-event',
-        'date': date,
-        'name': name,
-        'humanname': humanName})
+                                        'date': date,
+                                        'name': name,
+                                        'humanname': humanName})
 
 
 def fotoadmin_move_fotos(event, store, user, dir):
     return get_giedo_connection().send({'type': 'fotoadmin-move-fotos',
-        'event': event,
-        'store': store,
-        'user': user,
-        'dir': dir})
+                                        'event': event,
+                                        'store': store,
+                                        'user': user,
+                                        'dir': dir})
 
 
 def openvpn_create(user, want):
@@ -95,8 +95,8 @@ def openvpn_create(user, want):
         @user   the user for whom to create the installer
         @want   either 'zip' or 'exe' """
     get_giedo_connection().send({'type': 'openvpn_create',
-        'user': user,
-        'want': want})
+                                 'user': user,
+                                 'want': want})
 
 
 def fin_get_account(user):

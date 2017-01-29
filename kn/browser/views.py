@@ -27,7 +27,7 @@ def homedir(request, root, subdir, path):
     root = os.path.abspath(root)
     p1 = os.path.realpath(os.path.join(root, subdir, 'public_html', path))
     p2 = os.path.realpath(os.path.join(root, subdir,
-        'protected_html', path))
+                                       'protected_html', path))
     if (not p1[:len(root)] == root or not p2[:len(root)] == root):
         raise ValueError(_("Going outside of the root"))
     if os.path.exists(p1):
@@ -44,7 +44,7 @@ def homedir(request, root, subdir, path):
         if os.stat(p).st_mode & 4 != 4:
             raise Http404
         response = HttpResponse(FileWrapper(open(p)),
-                content_type=mimetypes.guess_type(p)[0])
+                                content_type=mimetypes.guess_type(p)[0])
         response['Content-Length'] = os.path.getsize(p)
         response['Content-Disposition'] = 'attachment'
         return response
@@ -58,13 +58,15 @@ def homedir(request, root, subdir, path):
     if os.path.isfile(os.path.join(p2, '.ignore')):
         l -= _lines_of_file_as_set(os.path.join(p2, '.ignore'))
     _p = os.path.join(subdir, '...', path)
-    return render_to_response('browser/dirlist.html',
-            {'list': [(c, os.path.join(path, c),
+    return render_to_response(
+        'browser/dirlist.html',
+        {'list': [(c, os.path.join(path, c),
                    os.path.isdir(os.path.join(p1, c)) or
                    os.path.isdir(os.path.join(p2, c)))
-                    for c in sorted(l)],
-             'subdir': subdir, 'root': original_root,
-             'path': _p},
-                                context_instance=RequestContext(request))
+                  for c in sorted(l)],
+         'subdir': subdir, 'root': original_root,
+         'path': _p},
+        context_instance=RequestContext(request)
+    )
 
 # vim: et:sta:bs=2:sw=4:

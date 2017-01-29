@@ -3,12 +3,12 @@ import _import  # noqa: F401
 
 import sys
 from optparse import OptionParser
-from common import *
+from common import args_to_users, print_table
 
 op = OptionParser()
 op.add_option('-s', '--separator', dest='separator', default=' ',
-        metavar='CHAR', type=str,
-        help="The seoarator between spaces")
+              metavar='CHAR', type=str,
+              help="The seoarator between spaces")
 options, args = op.parse_args()
 
 if sys.stdout.encoding is None:

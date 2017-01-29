@@ -39,6 +39,7 @@ def update(agendas):
 
 
 class AgendaEvent(SONWrapper):
+
     def __init__(self, data):
         super(AgendaEvent, self).__init__(data, acol)
 
@@ -55,8 +56,8 @@ class AgendaEvent(SONWrapper):
     def description(self):
         text = self._data.get('description', '')
         text = text.replace('Villa van Schaeck',
-                    '<a href="%s">Villa van Schaeck</a>' %
-                                                    reverse('route'))
+                            '<a href="%s">Villa van Schaeck</a>' %
+                            reverse('route'))
         return text
 
     @property
@@ -73,11 +74,11 @@ class AgendaEvent(SONWrapper):
             return self.start.date().strftime('%A %e %B')
         if self.start.month == self.end.month:
             return mark_safe("{} &mdash; {}".format(
-                    self.start.date().strftime('%a %e'),
-                    self.end.date().strftime('%a %e %B')))
+                self.start.date().strftime('%a %e'),
+                self.end.date().strftime('%a %e %B')))
         return mark_safe("{} &mdash; {}".format(
-                self.start.date().strftime('%a %e %b'),
-                self.end.date().strftime('%a %e %b')))
+            self.start.date().strftime('%a %e %b'),
+            self.end.date().strftime('%a %e %b')))
 
     def __unicode__(self):
         return self.title

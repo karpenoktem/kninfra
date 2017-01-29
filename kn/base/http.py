@@ -12,6 +12,7 @@ def redirect_to_referer(request):
 
 
 class JsonHttpResponse(HttpResponse):
+
     def __init__(self, obj, *args, **kwargs):
         if 'content_type' not in kwargs:
             kwargs['content_type'] = 'application/json; charset=utf-8'

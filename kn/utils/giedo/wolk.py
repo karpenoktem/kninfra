@@ -4,8 +4,7 @@ import MySQLdb
 from tarjan.tc import tc
 
 import kn.leden.entities as Es
-from kn.base.conf import from_settings_import
-from_settings_import("DT_MIN", "DT_MAX", globals())
+
 from kn.leden.date import now
 
 from django.conf import settings
@@ -62,13 +61,13 @@ def generate_wolk_changes(giedo):
         if not g.got_unix_group:
             continue
         groups[str(g.name)] = set([str(ulut[c].name)
-                for c in memb_graph[g._id] if c in ulut])
+                                   for c in memb_graph[g._id] if c in ulut])
 
     # Now, check which users and groups actually exist in owncloud
     missing_users = set(users.keys())
     missing_groups = set(groups.keys())
     dc = MySQLdb.connect(creds[0], user=creds[1],
-                    passwd=creds[2], db=creds[3])
+                         passwd=creds[2], db=creds[3])
     c = dc.cursor()
     c.execute("SELECT gid, uid FROM oc_group_user")
     for group, user in c.fetchall():

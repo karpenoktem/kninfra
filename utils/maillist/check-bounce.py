@@ -2,8 +2,8 @@ import _import  # noqa: F401
 from kn.utils.mailman import import_mailman
 
 import_mailman()
-import Mailman.MailList
-import Mailman.Utils
+import Mailman.MailList  # noqa: E402
+import Mailman.Utils  # noqa: E402
 
 
 def main():

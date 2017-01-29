@@ -41,6 +41,7 @@ def main():
     for e in bson.decode_all(open('events.bsons').read()):
         db['events'].save(e)
 
+
 if __name__ == '__main__':
     main()
 

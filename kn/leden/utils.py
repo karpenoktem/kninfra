@@ -14,7 +14,7 @@ def find_name_for_user(first_name, last_name):
             names and optionally capitalize letters that came
             from tussenvoegsels. """
         if last_name and ',' in s:
-            bits  = s.split(',', 2)
+            bits = s.split(',', 2)
             s = bits[1] + ' ' + bits[0]
         s = unidecode.unidecode(s).lower()
         s = filter(lambda x: x in settings.USERNAME_CHARS + ' ', s)
@@ -35,7 +35,7 @@ def find_name_for_user(first_name, last_name):
     users_with_same_fn = [u for u in Es.users() if u.first_name
                                 and clean(u.first_name) == fn]
     # Try first_name or first_name with a few letters of the last_name appended
-    for i in xrange(len(ln)+1):
+    for i in xrange(len(ln) + 1):
         n = fn + ln[:i]
         # Don't try giedov, but directly giedovdm if the name is derived
         # from `Giedo van der Meer'.

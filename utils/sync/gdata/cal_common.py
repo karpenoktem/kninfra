@@ -1,5 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
-from common import *
+from common import read_ssv_file
 
 import gdata.calendar.service
 

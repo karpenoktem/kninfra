@@ -25,13 +25,14 @@ settings.DRANK_REPOS_PATH = '/home/infra/barco/%s/'
 
 
 class FormSpecifics(object):
+
     def __init__(self,
-            django_form,
-            django_template,
-            dir_in_repo,
-            template_path,  # see explanation below
-            weights_path
-            ):
+                 django_form,
+                 django_template,
+                 dir_in_repo,
+                 template_path,  # see explanation below
+                 weights_path
+                 ):
         self.django_form = django_form
         self.django_template = django_template
         self.template_path = template_path
@@ -64,9 +65,9 @@ def template_write_data_to_file(template, data, write):
             if row[column] == '':
                 continue
             if row[column][0] == '!':
-                write("# ");
+                write("# ")
                 write(row[column][1:])
-                write("\n");
+                write("\n")
             else:
                 write(row[column])
                 write(";")
@@ -85,61 +86,62 @@ def template_write_data_to_file(template, data, write):
 
 
 class BarformSpecifics(FormSpecifics):
+
     def __init__(self):
         super(BarformSpecifics, self).__init__(
-                django_form=BarformMeta,
-                django_template="barco/barform.html",
-                dir_in_repo="barforms",
-                template_path="barforms/form-template-active.csv",
-                weights_path=None)
+            django_form=BarformMeta,
+            django_template="barco/barform.html",
+            dir_in_repo="barforms",
+            template_path="barforms/form-template-active.csv",
+            weights_path=None)
 
     def entered_data_to_file(self, fd, write, template, prefill):
-            write("Bar;;;;\n\n")
-            write(fd['pricebase'])
-            write(";")
-            write(str(fd['date']))
-            write(";")
-            write(fd['tapper'])
-            write(";")
-            write(fd['dienst'])
-            write(";")
-            write(str(fd['beginkas']))
-            write(";")
-            write(str(fd['eindkas']))
-            if fd['comments'] != '':
-                write("\n\n# XXX ")
-                write(fd['comments'].replace("\r\n", "\n")\
-                        .replace("\n", "\n# "))
-            write("\n\n")
-            template_write_data_to_file(template, prefill, write)
+        write("Bar;;;;\n\n")
+        write(fd['pricebase'])
+        write(";")
+        write(str(fd['date']))
+        write(";")
+        write(fd['tapper'])
+        write(";")
+        write(fd['dienst'])
+        write(";")
+        write(str(fd['beginkas']))
+        write(";")
+        write(str(fd['eindkas']))
+        if fd['comments'] != '':
+            write("\n\n# XXX ")
+            write(fd['comments'].replace("\r\n", "\n")
+                  .replace("\n", "\n# "))
+        write("\n\n")
+        template_write_data_to_file(template, prefill, write)
 
 
 class InvCountSpecifics(FormSpecifics):
+
     def __init__(self):
         super(InvCountSpecifics, self).__init__(
-                django_form=InvCountMeta,
-                django_template="barco/form.html",
-                template_path="inventory/form-template-active.csv",
-                weights_path="weights.csv",
-                dir_in_repo="inventory")
+            django_form=InvCountMeta,
+            django_template="barco/form.html",
+            template_path="inventory/form-template-active.csv",
+            weights_path="weights.csv",
+            dir_in_repo="inventory")
 
     def entered_data_to_file(self, fd, write, template, prefill):
-            write("voorraadtelling\n\n")
-            write(str(fd['date']))
-            write(" # tellers: ")
-            write(fd['tellers'])
-            if fd['comments'] != '':
-                write("\n\n# XXX ")
-                write(fd['comments'].replace("\n", "\n# "))
-            write("\n\n")
-            template_write_data_to_file(template, prefill, write)
+        write("voorraadtelling\n\n")
+        write(str(fd['date']))
+        write(" # tellers: ")
+        write(fd['tellers'])
+        if fd['comments'] != '':
+            write("\n\n# XXX ")
+            write(fd['comments'].replace("\n", "\n# "))
+        write("\n\n")
+        template_write_data_to_file(template, prefill, write)
 
-      
+
 settings.BARCO_FORMS = {
-        'barform': BarformSpecifics(),
-        'invcount': InvCountSpecifics(),
-        }
-
+    'barform': BarformSpecifics(),
+    'invcount': InvCountSpecifics(),
+}
 
 
 @login_required
@@ -170,35 +172,43 @@ def barco_enterform(request, repos, formname):
         if form.is_valid():
             # Dump the entered data to a file ...
             fd = form.cleaned_data
-            csv = StringIO();
-            write = lambda x: csv.write(x.encode("utf-8"))
+            csv = StringIO()
+
+            def write(x):
+                csv.write(x.encode("utf-8"))
+
             write("# Ingevoerd door " + str(request.user.name) + "\n")
             formspec.entered_data_to_file(fd, write, template, prefill)
-            
+
             # commit it to the repository ...
-            fn = os.path.join(formspec.dir_in_repo, '%s.csv'%(fd['formname']))
+            fn = os.path.join(
+                formspec.dir_in_repo,
+                '%s.csv' %
+                (fd['formname']))
             with open(os.path.join(repopath, fn), 'w') as fh:
                 fh.write(csv.getvalue())
             subprocess.call(['/usr/bin/git', 'add', fn], cwd=repopath)
             msg = (_("Barform %s ingevoerd via kninfra\n\n"
-                    "Signed-off-by: kninfra <root@karpenoktem.nl>") %
-                    fd['formname'])
+                     "Signed-off-by: kninfra <root@karpenoktem.nl>") %
+                   fd['formname'])
             # XXX Is it safe to use canonical_full_email?
             author = "%s <%s>" % (str(request.user.humanName),
-                    request.user.canonical_email)
+                                  request.user.canonical_email)
             subprocess.call(['/usr/bin/git', 'commit', '--author', author,
-                '-m', msg, fn], cwd=repopath)
+                             '-m', msg, fn], cwd=repopath)
             subprocess.call(['/usr/bin/git', 'pull', '--rebase'], cwd=repopath)
             subprocess.call(['/usr/bin/git', 'push'], cwd=repopath)
 
             # and get back to the user:
             messages.info(request, _("Opgeslagen!"))
             return HttpResponseRedirect(reverse('barco-enterform',
-                args=(repos, formname)))
+                                                args=(repos, formname)))
     form = formspec.django_form()
-    return render_to_response(formspec.django_template,
-            {'fields': template, 'form': form, 'prefill': prefill,
-                'weight_fields': list(weight_fields)},
-        context_instance=RequestContext(request))
+    return render_to_response(
+        formspec.django_template,
+        {'fields': template, 'form': form, 'prefill': prefill,
+         'weight_fields': list(weight_fields)},
+        context_instance=RequestContext(request)
+    )
 
 # vim: et:sta:bs=2:sw=4:

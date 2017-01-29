@@ -12,6 +12,6 @@ def send_informacie_digest():
         return
     render_then_email('leden/informacie-digest.mail.txt',
                       Es.by_name('informacie').canonical_full_email, {
-                                'ntfs': ntfs})
+                          'ntfs': ntfs})
 
 # vim: et:sta:bs=2:sw=4:

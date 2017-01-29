@@ -1,11 +1,26 @@
 
 Korte notities wat betreft de coding style die we gebruiken.
-Nogal wat code is niet consistent hierin, maar probeer je er in nieuwe code aan
-te houden.
 
 Algemeen (Python, HTML, JavaScript):
  - Niet meer dan 80 tekens per regel.
  - Inspringen met 4 spaties (de-facto standaard van Python).
+
+Python:
+ - We gebruiken flake8, wat PEP8 + (een beetje) is.  Installeren met
+
+        pip install flake8
+
+   Uitvoeren met
+
+        flake8 .
+ - Omdat dit handmatig doen moeite is, kun je autopep8 gebruiken.  Installeren
+   kan met het commando
+
+        pip install autopep8
+
+   en uitvoeren met
+
+        autopep8 -aari .
 
 CSS:
  - Meestal worden hier toch tabs in plaats van spaties gebruikt voor het

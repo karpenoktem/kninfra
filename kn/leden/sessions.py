@@ -9,13 +9,14 @@ scol = db['sessions']
 
 
 class SessionStore(SessionBase):
+
     def __init__(self, session_key=None):
         super(SessionStore, self).__init__(session_key)
 
     def load(self):
         s = scol.find_one({'_id': self.session_key,
-              'expire_dt': {
-                  '$gt': datetime.datetime.now()}})
+                           'expire_dt': {
+                               '$gt': datetime.datetime.now()}})
         if s is None:
             self.create()
             return {}
@@ -37,9 +38,9 @@ class SessionStore(SessionBase):
 
     def save(self, must_create=False):
         n = {'_id': self.session_key,
-            'data': self.encode(self._get_session(
-                    no_load=must_create)),
-            'expire_dt': self.get_expiry_date()}
+             'data': self.encode(self._get_session(
+                 no_load=must_create)),
+             'expire_dt': self.get_expiry_date()}
         scol.update({'_id': self.session_key}, n, True)
         # TODO handle errors
 

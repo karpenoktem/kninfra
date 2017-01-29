@@ -26,14 +26,15 @@ def main():
             continue
         for study in m.studies:
             writer.writerow(
-                    [str(m.name),
-                     m.first_name.encode('utf-8'),
-                     m.last_name.encode('utf-8'),
-                     study['from'].date() if study['from'] else '',
-                     study['until'].date() if study['until'] else '',
-                     unicode(study['institute'].humanName),
-                     unicode(study['study'].humanName),
-                     study['number']])
+                [str(m.name),
+                 m.first_name.encode('utf-8'),
+                 m.last_name.encode('utf-8'),
+                 study['from'].date() if study['from'] else '',
+                 study['until'].date() if study['until'] else '',
+                 unicode(study['institute'].humanName),
+                 unicode(study['study'].humanName),
+                 study['number']])
+
 
 if __name__ == '__main__':
     main()
