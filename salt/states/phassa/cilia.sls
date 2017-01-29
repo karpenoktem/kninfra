@@ -9,6 +9,7 @@ cilia packages:
             - python-mysqldb
             - python-pip
             - python-smbpasswd
+            - python-six
 mirte:
     pip.installed
 sarah:

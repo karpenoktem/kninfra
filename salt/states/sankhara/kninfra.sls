@@ -19,6 +19,7 @@ kninfra packages:
             - python-m2crypto
             - python-pyx
             - python-unidecode
+            - python-six
             - gettext
             - imagemagick
 mirte:
