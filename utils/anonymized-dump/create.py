@@ -10,8 +10,6 @@ from kn.leden.mongo import db
 # to leak private data entrusted to us.
 
 
-
-
 print 'entities'
 with open('entities.bsons', 'w') as f:
     for e in db.entities.find():

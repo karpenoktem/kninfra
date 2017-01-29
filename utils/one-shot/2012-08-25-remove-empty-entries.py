@@ -7,7 +7,6 @@ import kn.leden.entities as Es
 #               bas@kn.cx
 
 
-
 def main():
     for e in Es.users():
         # Remove empty study entries

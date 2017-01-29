@@ -5,7 +5,6 @@ import kn.leden.entities as Es
 """ Adds old members to oud """
 
 
-
 def main():
     oud = Es.by_name('oud')
     cur_leden, old_leden = Es.by_name('leden').get_current_and_old_members()

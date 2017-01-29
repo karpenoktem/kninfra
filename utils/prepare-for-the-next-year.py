@@ -8,9 +8,6 @@ import kn.leden.entities as Es
 # Prepare for the coming change of "verenigingsjaar".
 
 
-
-
-
 def load_year_overrides():
     print 'loading year-overrides ...'
     year_overrides = {}

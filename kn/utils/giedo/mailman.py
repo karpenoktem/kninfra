@@ -8,7 +8,7 @@ from kn.utils.mailman import import_mailman
 
 import_mailman()
 
-import Mailman           # noqa: E402 isort:skip 
+import Mailman           # noqa: E402 isort:skip
 import Mailman.Utils     # noqa: E402 isort:skip
 import Mailman.MailList  # noqa: E402 isort:skip
 

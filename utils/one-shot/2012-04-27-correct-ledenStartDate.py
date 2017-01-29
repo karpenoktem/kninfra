@@ -15,8 +15,6 @@ import kn.leden.entities as Es
 #                       2012-04-27       bas@kn.cx
 
 
-
-
 def main():
     year_overrides = dict()
     had = set()
