@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
+from django.utils import six
 
 from kn.base.mail import render_then_email
 from kn.base.http import JsonHttpResponse
@@ -113,7 +114,7 @@ def event_detail(request, name):
 
 def _api_event_set_opened(request):
     if ('id' not in request.REQUEST
-            or not isinstance(request.REQUEST['id'], basestring)):
+            or not isinstance(request.REQUEST['id'], six.string_types)):
         return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
     e = subscr_Es.event_by_id(request.REQUEST['id'])
     if not e:

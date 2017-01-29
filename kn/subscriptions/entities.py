@@ -287,7 +287,7 @@ class Subscription(SONWrapper):
     @six.python_2_unicode_compatible
     def __str__(self):
         return six.u("<Subscription(%s for %s)>") % (self.user.humanName,
-                                                     self.event.humanName))
+                                                     self.event.humanName)
 
     @property
     def id(self):

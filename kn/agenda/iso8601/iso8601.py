@@ -9,6 +9,7 @@ datetime.datetime(2007, 1, 25, 12, 0, tzinfo=<iso8601.iso8601.Utc ...>)
 """
 
 from datetime import datetime, timedelta, tzinfo
+import six
 import re
 
 __all__ = ["parse_date", "ParseError"]
@@ -101,7 +102,7 @@ def parse_date(datestring, default_timezone=UTC):
     default timezone specified in default_timezone is used. This is UTC by
     default.
     """
-    if not isinstance(datestring, basestring):
+    if not isinstance(datestring, six.string_types):
         raise ParseError("Expecting a string %r" % datestring)
     m = ISO8601_REGEX.match(datestring)
     if not m:

@@ -9,6 +9,9 @@ except ImportError:
 
 import time
 import datetime
+
+from django.utils import six
+
 import kn.leden.entities as Es  # noqa: F401
 import kn.fotos.entities as fEs  # noqa: F401
 import kn.reglementen.entities as regl_Es  # noqa: F401
@@ -69,7 +72,7 @@ def add_rel(who, _with, how, _from, until):
 
 
 def str_to_date(s):
-    if isinstance(s, basestring):
+    if isinstance(s, six.string_types):
         return datetime.datetime(*time.strptime(s, '%Y-%m-%d')[:3])
     return s
 

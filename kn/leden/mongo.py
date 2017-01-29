@@ -6,6 +6,7 @@ except ImportError:
     from bson import ObjectId
 
 from django.conf import settings
+from django.utils import six
 
 conn = pymongo.Connection(settings.MONGO_HOST)
 db = conn[settings.MONGO_DB]
@@ -18,7 +19,7 @@ class RaceCondition(Exception):
 def _id(obj):
     if isinstance(obj, ObjectId):
         return obj
-    if isinstance(obj, basestring):
+    if isinstance(obj, six.string_types):
         return ObjectId(obj)
     if hasattr(obj, '_id'):
         return obj._id
