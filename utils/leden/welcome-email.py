@@ -18,31 +18,34 @@ def welcome_email():
              'lastName': m.last_name,
              'fullName': m.full_name(),
              'dateOfBirth': ('onbekend' if m.dateOfBirth is None
-                else str(m.dateOfBirth)),
+                             else str(m.dateOfBirth)),
              'dateJoined': ('onbekend' if m.dateJoined is None
-                else str(m.dateJoined)),
+                            else str(m.dateJoined)),
              'email': m.email,
              'telephone': ('onbekend' if m.telephone is None
-                else m.telephone),
+                           else m.telephone),
              'addr_street': ('onbekend' if m.telephone is None
-                else m.addr_street),
+                             else m.addr_street),
              'addr_number': ('onbekend' if m.telephone is None
-                else m.addr_number),
+                             else m.addr_number),
              'addr_city': ('onbekend' if m.telephone is None
-                else m.addr_city),
+                           else m.addr_city),
              'addr_zipCode': ('onbekend' if m.telephone is None
-                else m.addr_zipCode),
+                              else m.addr_zipCode),
              'institute': ('onbekend' if m.telephone is None
-                else m.institute),
+                           else m.institute),
              'study': ('onbekend' if m.telephone is None
-                else m.study),
+                       else m.study),
              'studentNumber': ('onbekend' if m.telephone is None
-                else m.studentNumber),
-            })
-        email = EmailMessage("Welkom bij Karpe Noktem!", em,
+                               else m.studentNumber),
+             })
+        email = EmailMessage(
+            "Welkom bij Karpe Noktem!", em,
             'Secretaris Karpe Noktem <secretaris@karpenoktem.nl>',
-            [m.email], ['bestuur@karpenoktem.nl'])
+            [m.email], ['bestuur@karpenoktem.nl']
+        )
         email.send()
+
 
 if __name__ == '__main__':
     welcome_email()

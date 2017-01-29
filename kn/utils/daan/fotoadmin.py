@@ -22,9 +22,9 @@ def fotoadmin_create_event(daan, date, name, humanName):
     path = os.path.join(settings.PHOTOS_DIR, event)
     if os.path.isdir(path):
         return {'error': 'Event already exists'}
-    os.mkdir(path, 0775)
+    os.mkdir(path, 0o775)
     os.chown(path, pwd.getpwnam('fotos').pw_uid,
-               grp.getgrnam('fotos').gr_gid)
+             grp.getgrnam('fotos').gr_gid)
     album = fEs.entity({
         'type': 'album',
         'path': '',
@@ -71,6 +71,6 @@ def fotoadmin_move_fotos(daan, event, store, user, directory):
     if subprocess.call(['chmod', '-R', '644', target_path]) != 0:
         return {'error': 'chmod failed'}
     if subprocess.call(['find', target_path, '-type', 'd', '-exec',
-            'chmod', '755', '{}', '+']) != 0:
+                        'chmod', '755', '{}', '+']) != 0:
         return {'error': 'chmod (dirs) failed'}
     return {'success': True}

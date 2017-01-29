@@ -5,17 +5,16 @@ from kn.leden.date import now
 from kn.base.conf import DT_MIN, DT_MAX
 
 
-
 def update_db(giedo):
     dt_now = now()
     # Load tags
     # TODO cache this
     tags = Es.ids_by_names(('!year-group', '!year-overrides',
-            '!virtual-group', '!sofa-brand'))
+                            '!virtual-group', '!sofa-brand'))
     year_overrides = {}
     for t in Es.bearers_by_tag_id(tags['!year-overrides'], _as=Es.Tag):
         year_overrides[t._id] = (t._data['year-override']['type'],
-                      t._data['year-override']['year'])
+                                 t._data['year-override']['year'])
 
     # Load _id -> name lut.
     id2name = Es.names_by_ids()
@@ -24,28 +23,30 @@ def update_db(giedo):
     groups_set = frozenset(groups.values())
     # Find groups that have a virtual group for each year
     year_groups = [g for g in groups_set
-            if tags['!year-group'] in g.tag_ids]
+                   if tags['!year-group'] in g.tag_ids]
     # Find relations on those groups and add the years for which those
     # relations hold.
 
     def add_years_to_relations(rels):
         years_of_year_overrides = [yo[1] for yo in year_overrides.values()]
         until_years = [Es.date_to_year(r['until']) for r in rels
-                    if r['until'] != DT_MAX]
-        max_until = max(max(until_years) if until_years else 0,
-                max(years_of_year_overrides) if years_of_year_overrides else 0,
-                Es.date_to_year(dt_now))
+                       if r['until'] != DT_MAX]
+        max_until = max(
+            max(until_years) if until_years else 0,
+            max(years_of_year_overrides) if years_of_year_overrides else 0,
+            Es.date_to_year(dt_now)
+        )
         from_years = [Es.date_to_year(r['from']) for r in rels
-                    if r['from'] != DT_MIN]
+                      if r['from'] != DT_MIN]
         min_from = min(min(from_years) if from_years else
-                Es.date_to_year(dt_now),
-                Es.date_to_year(dt_now))
+                       Es.date_to_year(dt_now),
+                       Es.date_to_year(dt_now))
         for rel in rels:
-            s = min_from if rel['from'] == DT_MIN \
-                    else Es.date_to_year(rel['from'])
-            t = max_until if rel['until'] == DT_MAX \
-                    else Es.date_to_year(rel['until'])
-            years = set(range(s, t+1))
+            s = (min_from if rel['from'] == DT_MIN
+                 else Es.date_to_year(rel['from']))
+            t = (max_until if rel['until'] == DT_MAX
+                 else Es.date_to_year(rel['until']))
+            years = set(range(s, t + 1))
             for tid in rel.get('tags', ()):
                 if tid not in year_overrides:
                     continue
@@ -73,10 +74,10 @@ def update_db(giedo):
             if n not in groups:
                 logging.info("Creating yeargroup %s" % n)
                 _create_yeargroup(g, year, n, tags, groups,
-                           id2name)
+                                  id2name)
     # Find all virtual groups
     virtual_groups = [g for g in groups_set
-            if tags['!virtual-group'] in g.tag_ids]
+                      if tags['!virtual-group'] in g.tag_ids]
     sofa_vgroups = []
     yeargroup_vgroups = []
     for vg in virtual_groups:
@@ -85,8 +86,8 @@ def update_db(giedo):
         elif vg._data['virtual']['type'] == 'year-group':
             yeargroup_vgroups.append(vg)
         else:
-            logging.warn("Unknown vgroup type: %s" \
-                    % vg._data['virtua']['type'])
+            logging.warn("Unknown vgroup type: %s"
+                         % vg._data['virtua']['type'])
     # Find all relations with the sofa virtual groups
 
     def relkey(rel):
@@ -101,30 +102,30 @@ def update_db(giedo):
     for svg in sofa_vgroups:
         w = dict(svg._data['virtual'])
         sofa_queries.append({'how': w['how'],
-                     'with': w['with']})
+                             'with': w['with']})
         k = (w['how'], w['with'])
         if k not in sofa_lut:
             sofa_lut[k] = []
         sofa_lut[k].append(svg)
     # Check whether all year-group relations are in place
-    # If there are two relations between an entity and a group in the same year,
-    # we do not want this relation to be handled twice.  Thus we keep a seperate
-    # look-up-table to prevent this.
+    # If there are two relations between an entity and a group in the
+    # same year, we do not want this relation to be handled twice.
+    # Thus we keep a seperate look-up-table to prevent this.
     year_vgroup_rel_ok = set()
     for mrel in year_group_mrels:
         g = groups[id2name[mrel['with']]]
         for year in mrel['years']:
             yg = groups[str(g.name) + str(year)]
             rrel = {'who': mrel['who'],
-                'with': yg._id,
-                'how': mrel['how'],
-                'from': DT_MIN,
-                'until': DT_MAX}
+                    'with': yg._id,
+                    'how': mrel['how'],
+                    'from': DT_MIN,
+                    'until': DT_MAX}
             if (not relkey(rrel) in vgroup_rlut and relkey(rrel)
                     not in year_vgroup_rel_ok):
                 logging.info("vgroup: adding %s -> %s (%s)" % (
-                        id2name[mrel['who']], yg.name,
-                        id2name.get(mrel['how'])))
+                    id2name[mrel['who']], yg.name,
+                    id2name.get(mrel['how'])))
                 Es.rcol.insert(rrel)
             elif relkey(rrel) in vgroup_rlut:
                 del vgroup_rlut[relkey(rrel)]
@@ -153,23 +154,23 @@ def update_db(giedo):
              'humanNames': [{
                  'name': nm,
                  'human': unicode(g.humanName) + ' ' +
-                unicode(sofa_brands[rel['how']].humanName)}]}
+                 unicode(sofa_brands[rel['how']].humanName)}]}
         n['_id'] = Es.ecol.insert(n)
         groups[nm] = Es.Group(n)
         id2name[n['_id']] = nm
         sofa_vgroups.append(g)
         sofa_lut[rel['how'], rel['with']] = [groups[nm]]
         sofa_queries.append({'how': rel['how'],
-                     'with': rel['with']})
+                             'with': rel['with']})
     # Find all relations for the sofa virtual groups and check whether
     # the appropriate relations to the sofas are generated
     for rel in Es.disj_query_relations(sofa_queries):
         for svg in sofa_lut[(rel['how'], rel['with'])]:
             rrel = {'how': None,
-                'from': rel['from'],
-                'until': rel['until'],
-                'who': rel['who'],
-                'with': svg._id}
+                    'from': rel['from'],
+                    'until': rel['until'],
+                    'who': rel['who'],
+                    'with': svg._id}
             if not relkey(rrel) in vgroup_rlut:
                 logging.info("sofa: adding %s to %s" % (
                     id2name[rrel['who']], str(svg.name)))
@@ -183,19 +184,22 @@ def update_db(giedo):
             id2name[relkey[0]], id2name.get(relkey[2]),
             id2name.get(relkey[1])))
         Es.remove_relation(relkey[0], relkey[2], relkey[1], relkey[3],
-                relkey[4])
+                           relkey[4])
     # Set is_active on Users if and only if they are not in the `leden' group.
     # TODO We might optimize this by including it in a more generic process
     active_users = [rel['who'] for rel in Es.by_name('leden').get_rrelated(
-                            None, dt_now, dt_now, False, False, False)]
+        None, dt_now, dt_now, False, False, False)]
     for u in Es.users():
         is_active = u._id in active_users
         if u.is_active == is_active:
             continue
         u._data['is_active'] = is_active
         u.save()
-        logging.info("%s user %s", ("activated" if is_active else "deactivated"),
-                        str(u.name))
+        logging.info(
+            "%s user %s",
+            ("activated" if is_active else "deactivated"),
+            str(u.name)
+        )
 
 
 def _create_yeargroup(g, year, name, tags, groups, id2name):

@@ -38,7 +38,7 @@ def generate_postfix_map(giedo):
             tbl[id_email] = (e.canonical_email,)
     # handle the non-mailman groups
     for rel in Es.query_relations(_with=non_mailman_groups.keys(),
-            _from=dt_now, until=dt_now, how=None):
+                                  _from=dt_now, until=dt_now, how=None):
         e = non_mailman_groups[rel['with']]
         email = id2email.get(rel['who'])
         if email is not None:

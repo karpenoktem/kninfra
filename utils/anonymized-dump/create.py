@@ -22,17 +22,17 @@ with open('entities.bsons', 'w') as f:
                     del s['number']
         if 'addresses' in e:
             e['addresses'] = [
-                    {'city': '<private>',
-                     'street': '<private>',
-                     'zip': '<private>',
-                     'number': '<private>',
-                     'from': DT_MIN,
-                     'until': DT_MAX}]
+                {'city': '<private>',
+                 'street': '<private>',
+                 'zip': '<private>',
+                 'number': '<private>',
+                 'from': DT_MIN,
+                 'until': DT_MAX}]
         if 'emailAddresses' in e and 'names' in e and e['names']:
             e['emailAddresses'] = [
-                    {'from': DT_MIN,
-                     'until': DT_MAX,
-                     'email': e['names'][0] + '@kn.cx'}]
+                {'from': DT_MIN,
+                 'until': DT_MAX,
+                 'email': e['names'][0] + '@kn.cx'}]
         if 'password' in e:
             e['password'] = None
         if 'temp' in e:

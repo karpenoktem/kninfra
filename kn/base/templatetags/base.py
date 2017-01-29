@@ -20,9 +20,9 @@ register = template.Library()
 def email_filter(value):
     n, r = conditional_escape(value).split('@', 1)
     d, e = r.rsplit('.', 1)
-    return mark_safe(("<script type='text/javascript'>email(" +
-        "'%s', '%s', '%s')</script><noscript>X@Y.Z %s Z=%s," +
-        " Y=%s, X=%s</noscript>") % (\
+    return mark_safe(("<script type='text/javascript'>email("
+                      "'%s', '%s', '%s')</script><noscript>X@Y.Z %s Z=%s,"
+                      " Y=%s, X=%s</noscript>") % (
         e, d, n, _('waar'), e, d, n))
 
 
@@ -48,6 +48,7 @@ def json_filter(data):
 def lookup_filter(dict, index):
     return dict.get(index, '')
 
+
 _header_images = None
 
 
@@ -57,11 +58,11 @@ def header(context):
     path = os.path.join(settings.MEDIA_ROOT, 'base/headers')
     if _header_images is None:
         public = [os.path.join('public', fn)
-                    for fn in os.listdir(os.path.join(path, 'public'))
-                    if fn != '.keep']
+                  for fn in os.listdir(os.path.join(path, 'public'))
+                  if fn != '.keep']
         private = [os.path.join('private', fn)
-                    for fn in os.listdir(os.path.join(path, 'private'))
-                    if fn != '.keep']
+                   for fn in os.listdir(os.path.join(path, 'private'))
+                   if fn != '.keep']
         private.extend(public)
         _header_images = {'public': public, 'private': private}
     if 'user' not in context or not context['user'].is_authenticated():

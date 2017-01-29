@@ -28,12 +28,12 @@ def view(request, graph, ext):
     path = os.path.join(settings.GRAPHS_PATH, graph_fn)
     # Check if we should update the graph
     if (not default_storage.exists(path) or
-            datetime.datetime.now() - default_storage.created_time(path)
-                > datetime.timedelta(seconds=timeout)):
+        datetime.datetime.now() - default_storage.created_time(path)
+            > datetime.timedelta(seconds=timeout)):
         update(default_storage.path(
-                    os.path.join(settings.GRAPHS_PATH, graph)))
+            os.path.join(settings.GRAPHS_PATH, graph)))
     return HttpResponse(FileWrapper(default_storage.open(path)),
-                                content_type=mimetypes.guess_type(path)[0])
+                        content_type=mimetypes.guess_type(path)[0])
 
 
 def update_member_count(base_path):
@@ -45,17 +45,29 @@ def update_member_count(base_path):
     ret = _generate_member_count()
     if len(ret) < 3:
         ret = list(enumerate(range(3)))
-    g = pyx.graph.graphxy(width=20, x=pyx.graph.axis.linear(min=1,
-                    painter=pyx.graph.axis.painter.regular(
-                            gridattrs=[pyx.attr.changelist([
-                                pyx.color.gray(0.8)])])),
-                y=pyx.graph.axis.linear(
-                    painter=pyx.graph.axis.painter.regular(
-                            gridattrs=[pyx.attr.changelist([
-                                pyx.color.gray(0.8), None])])))
-    g.plot(pyx.graph.data.points(ret, x=1, y=2),
-                [pyx.graph.style.symbol(size=0.03,
-                        symbol=pyx.graph.style.symbol.plus)])
+    g = pyx.graph.graphxy(
+        width=20,
+        x=pyx.graph.axis.linear(
+            min=1,
+            painter=pyx.graph.axis.painter.regular(
+                gridattrs=[
+                    pyx.attr.changelist([pyx.color.gray(0.8)])
+                ]
+            )
+        ),
+        y=pyx.graph.axis.linear(
+            painter=pyx.graph.axis.painter.regular(
+                gridattrs=[
+                    pyx.attr.changelist([pyx.color.gray(0.8), None])
+                ]
+            )
+        )
+    )
+    g.plot(
+        pyx.graph.data.points(
+            ret, x=1, y=2), [
+            pyx.graph.style.symbol(
+                size=0.03, symbol=pyx.graph.style.symbol.plus)])
     # TODO split into separate helper
     # work-around for PyX trying to write in the current directory
     old_wd = os.getcwd()
@@ -96,12 +108,13 @@ def _generate_member_count():
             old_days = days
             old_N = N
     ret.append([days, N])
-    ret = [(1 + days / 365.242, N) for days, N in ret]
+    ret = [(1 + days2 / 365.242, N2) for days2, N2 in ret]
     return ret
 
+
 GRAPHS = {
-        # <name>:       (seconds_to_cache, update_functions, extensions)
-        'member-count': (60 * 60, update_member_count, ('png', 'pdf'))
-        }
+    # <name>:       (seconds_to_cache, update_functions, extensions)
+    'member-count': (60 * 60, update_member_count, ('png', 'pdf'))
+}
 
 # vim: et:sta:bs=2:sw=4:

@@ -19,10 +19,10 @@ def defaultSettings(glbls):
     # Settings you must set.
     # ############################################################
 
-    #CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
-    #SECRET_KEY = 'CHANGE ME'
-    #ALLOWED_API_KEYS = ('CHANGE ME',)
-    #MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
+    # CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
+    # SECRET_KEY = 'CHANGE ME'
+    # ALLOWED_API_KEYS = ('CHANGE ME',)
+    # MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 
     # You are very likely to override these
     # ############################################################
@@ -65,9 +65,9 @@ def defaultSettings(glbls):
 
     d.LISTS_MAILDOMAIN = 'lists.' + d.DOMAINNAME
     d.MAILMAN_PATH = '/var/lib/mailman'
-    d.MAILMAN_DEFAULT_OWNER = 'wortel@'+d.MAILDOMAIN
-    d.DEFAULT_FROM_EMAIL = 'Karpe Noktems ledenadministratie <root@%s>' \
-                                    % d.MAILDOMAIN
+    d.MAILMAN_DEFAULT_OWNER = 'wortel@' + d.MAILDOMAIN
+    d.DEFAULT_FROM_EMAIL = (
+        'Karpe Noktems ledenadministratie <root@%s>' % d.MAILDOMAIN)
 
     d.MONGO_HOST = 'localhost'
     d.MONGO_DB = 'kn'
@@ -75,15 +75,15 @@ def defaultSettings(glbls):
     d.MODED_MAILINGLISTS = ['discussie', 'in', 'uit', 'test']
     d.MODERATORS_GROUP = 'moderators'
     d.MOD_UI_URI = '/mailman/admindb/%s'
-    d.MOD_RENEW_INTERVAL = datetime.timedelta(0, 15*60)
+    d.MOD_RENEW_INTERVAL = datetime.timedelta(0, 15 * 60)
     d.MOD_DESIRED_URI_PREFIX = d.SCHEME + '://www.' + d.DOMAINNAME
 
     d.MEDIAWIKI_PATH = '/srv/' + d.DOMAINNAME + '/htdocs/mediawiki'
 
     d.ADMINS = (
-            ('Bas Westerbaan', 'bas@karpenoktem.nl'),
-            ('Jille Timmermans', 'jille@karpenoktem.nl'),
-            ('Bram Westerbaan', 'bramw@karpenoktem.nl'),
+        ('Bas Westerbaan', 'bas@karpenoktem.nl'),
+        ('Jille Timmermans', 'jille@karpenoktem.nl'),
+        ('Bram Westerbaan', 'bramw@karpenoktem.nl'),
     )
 
     d.GIEDO_SOCKET = '/var/run/infra/S-giedo'
@@ -91,7 +91,7 @@ def defaultSettings(glbls):
     d.CILIA_SOCKET = '/var/run/infra/S-cilia'
 
     d.GOOGLE_CALENDAR_IDS = {
-        'kn':   'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com',
+        'kn': 'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com',
         'zeus': 'a9jl7tuhqg7oe8stapcu9uhvk8@group.calendar.google.com',
     }
 
@@ -118,8 +118,8 @@ def defaultSettings(glbls):
     d.LANGUAGES = [
         ('nl', _('Nederlands')),
         ('en', _('Engels')),
-    #    ('de', _('Duits')),
-    #    ('en_PI', _('Piraat')),
+        #    ('de', _('Duits')),
+        #    ('en_PI', _('Piraat')),
     ]
 
     # You probably won't change this
@@ -132,7 +132,6 @@ def defaultSettings(glbls):
     d.SITE_ID = 1
     d.USE_I18N = True
 
-
     d.ROOT_URLCONF = 'kn.urls'
     d.TEMPLATE_LOADERS = (
         ('kn.base.template.SlashNewlineStrippingTemplateLoader', (
@@ -141,46 +140,46 @@ def defaultSettings(glbls):
         )),
     )
     d.MIDDLEWARE_CLASSES = (
-            'django.contrib.sessions.middleware.SessionMiddleware',
-            #'django.middleware.locale.LocaleMiddleware',
-            'kn.base.backports.BackportedLocaleMiddleware',
-            'django.middleware.common.CommonMiddleware',
-            'django.middleware.csrf.CsrfViewMiddleware',
-            'django.contrib.auth.middleware.AuthenticationMiddleware',
-            'django.contrib.messages.middleware.MessageMiddleware',
-            'kn.leden.giedo.SyncStatusMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        # 'django.middleware.locale.LocaleMiddleware',
+        'kn.base.backports.BackportedLocaleMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'kn.leden.giedo.SyncStatusMiddleware',
     )
     d.INSTALLED_APPS = (
-            'django.contrib.auth',
-            'django.contrib.contenttypes',
-            'django.contrib.sessions',
-            'django.contrib.messages',
-            'kn.leden',
-            'kn.poll',
-            'kn.subscriptions',
-            'kn.browser',
-            'kn.reglementen',
-            'kn.base',
-            'kn.moderation',
-            'kn.planning',
-            'kn.fotos',
-            'kn.barco',
-            'kn.static',
-            'kn.agenda',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'kn.leden',
+        'kn.poll',
+        'kn.subscriptions',
+        'kn.browser',
+        'kn.reglementen',
+        'kn.base',
+        'kn.moderation',
+        'kn.planning',
+        'kn.fotos',
+        'kn.barco',
+        'kn.static',
+        'kn.agenda',
     )
     d.TEMPLATE_CONTEXT_PROCESSORS = (
-            "django.contrib.auth.context_processors.auth",
-            "django.core.context_processors.debug",
-            "django.core.context_processors.i18n",
-            "django.core.context_processors.media",
-            "django.contrib.messages.context_processors.messages",
-            "kn.base.context_processors.base_url",
-            "kn.leden.context_processors.may_manage_planning",
-            "django.core.context_processors.request",
+        "django.contrib.auth.context_processors.auth",
+        "django.core.context_processors.debug",
+        "django.core.context_processors.i18n",
+        "django.core.context_processors.media",
+        "django.contrib.messages.context_processors.messages",
+        "kn.base.context_processors.base_url",
+        "kn.leden.context_processors.may_manage_planning",
+        "django.core.context_processors.request",
     )
     d.TEMPLATE_DIRS = ()
     d.AUTHENTICATION_BACKENDS = (
-            'kn.leden.auth.MongoBackend',
+        'kn.leden.auth.MongoBackend',
     )
     d.SESSION_ENGINE = 'kn.leden.sessions'
     d.LOGIN_REDIRECT_URL = '/smoelen/'
@@ -195,11 +194,11 @@ def defaultSettings(glbls):
     d.GRAPHS_PATH = 'graphs'
 
     d.EXTERNAL_URLS = {
-        'stukken':   d.BASE_URL+'/groups/leden/',
-        'wiki':      d.BASE_URL+'/wiki',
-        'wiki-home': d.BASE_URL+'/wiki/Hoofdpagina',
-        'forum':     d.BASE_URL+'/forum/',
-        'irc':       d.BASE_URL+'/irc',
+        'stukken': d.BASE_URL + '/groups/leden/',
+        'wiki': d.BASE_URL + '/wiki',
+        'wiki-home': d.BASE_URL + '/wiki/Hoofdpagina',
+        'forum': d.BASE_URL + '/forum/',
+        'irc': d.BASE_URL + '/irc',
     }
 
     d.DT_MIN = datetime.datetime(2004, 8, 31)
@@ -222,6 +221,7 @@ def defaultSettings(glbls):
 
 
 class DEFAULTS(object):
+
     def __init__(self, dct):
         self.__dict__['d'] = dct
 

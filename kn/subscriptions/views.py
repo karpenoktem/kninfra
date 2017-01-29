@@ -1,6 +1,6 @@
 
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http  import require_POST
+from django.views.decorators.http import require_POST
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -22,7 +22,7 @@ from kn.subscriptions.forms import get_add_event_form
 @login_required
 def event_list(request):
     open_events, closed_events, open_leden_events, \
-                closed_leden_events = [], [], [], []
+        closed_leden_events = [], [], [], []
     for e in reversed(tuple(subscr_Es.all_events())):
         if e.is_open:
             if e.is_official:
@@ -35,11 +35,11 @@ def event_list(request):
             else:
                 closed_leden_events.append(e)
     return render_to_response('subscriptions/event_list.html',
-            {'open_events': open_events,
-             'closed_events': closed_events,
-             'open_leden_events': open_leden_events,
-             'closed_leden_events': closed_leden_events},
-            context_instance=RequestContext(request))
+                              {'open_events': open_events,
+                               'closed_events': closed_events,
+                               'open_leden_events': open_leden_events,
+                               'closed_leden_events': closed_leden_events},
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -85,13 +85,14 @@ def event_detail(request, name):
             messages.error(request, _("%s is al aangemeld") % user.full_name)
         else:
             notes = request.POST['notes']
-            other_subscription = event.invite(user, notes, request.user)
+            event.invite(user, notes, request.user)
         return HttpResponseRedirect(reverse('event-detail',
                                             args=(event.name,)))
 
-    users = filter(lambda u: event.get_subscription(u) is None and \
-                             u != request.user,
-                   Es.by_name('leden').get_members())
+    users = filter(
+        lambda u: event.get_subscription(u) is None and u != request.user,
+        Es.by_name('leden').get_members()
+    )
     users.sort(key=lambda u: unicode(u.humanName))
     listSubscribed = sorted(event.listSubscribed, key=lambda s: s.date)
     listUnsubscribed = sorted(event.listUnsubscribed, key=lambda s: s.date)
@@ -107,11 +108,12 @@ def event_detail(request, name):
            'has_read_access': has_read_access,
            'has_write_access': has_write_access}
     return render_to_response('subscriptions/event_detail.html', ctx,
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 def _api_event_set_opened(request):
-    if 'id' not in request.REQUEST or not isinstance(request.REQUEST['id'], basestring):
+    if ('id' not in request.REQUEST
+            or not isinstance(request.REQUEST['id'], basestring)):
         return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
     e = subscr_Es.event_by_id(request.REQUEST['id'])
     if not e:
@@ -125,7 +127,9 @@ def _api_event_set_opened(request):
     elif opened is False:
         e.close(request.user)
     else:
-        return JsonHttpResponse({'error': 'invalid or missing argument "opened"'})
+        return JsonHttpResponse({
+            'error': 'invalid or missing argument "opened"'
+        })
 
     return JsonHttpResponse({'success': True})
 
@@ -141,9 +145,9 @@ def _api_get_email_addresses(request):
         raise PermissionDenied
     # XXX We can optimize this query
     return JsonHttpResponse({
-            'success': True,
-            'addresses': [s.user.canonical_full_email
-                    for s in event.listSubscribed]})
+        'success': True,
+        'addresses': [s.user.canonical_full_email
+                      for s in event.listSubscribed]})
 
 
 @require_POST
@@ -179,7 +183,9 @@ def event_new_or_edit(request, edit=None):
                 # Check some more constraints.
                 owner = Es.by_id(fd['owner'])
                 if not request.user.is_related_with(owner):
-                    raise PermissionDenied(_('Gebruiker niet verwant met eigenaar'))
+                    raise PermissionDenied(
+                        _('Gebruiker niet verwant met eigenaar')
+                    )
                 if not subscr_Es.may_set_owner(request.user, owner):
                     raise PermissionDenied(_('Mag deze eigenaar niet kiezen'))
             d = {
@@ -187,7 +193,7 @@ def event_new_or_edit(request, edit=None):
                 'owner': _id(fd['owner']),
                 'description': fd['description'],
                 'description_html': kn.utils.markdown.parser.convert(
-                                                fd['description']),
+                    fd['description']),
                 'has_public_subscriptions': fd['has_public_subscriptions'],
                 'may_unsubscribe': fd['may_unsubscribe'],
                 'humanName': fd['humanName'],
@@ -211,17 +217,20 @@ def event_new_or_edit(request, edit=None):
             else:
                 e.update(d, request.user, save=False)
             e.save()
-            render_then_email('subscriptions/' +
-                    ('event-edited' if edit else 'new-event') + '.mail.txt',
-                    Es.by_name('secretariaat').canonical_full_email, {
-                        'event': e,
-                        'user': request.user},
-                    headers={
-                        'In-Reply-To': e.messageId,
-                        'References': e.messageId,
-                    },
+            render_then_email(
+                'subscriptions/' +
+                ('event-edited' if edit else 'new-event') + '.mail.txt',
+                Es.by_name('secretariaat').canonical_full_email, {
+                    'event': e,
+                    'user': request.user
+                },
+                headers={
+                    'In-Reply-To': e.messageId,
+                    'References': e.messageId,
+                },
             )
-            return HttpResponseRedirect(reverse('event-detail', args=(e.name,)))
+            return HttpResponseRedirect(
+                reverse('event-detail', args=(e.name,)))
     elif edit is None:
         form = AddEventForm()
     else:
@@ -230,6 +239,6 @@ def event_new_or_edit(request, edit=None):
     ctx = {'form': form,
            'edit': edit}
     return render_to_response('subscriptions/event_new_or_edit.html', ctx,
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 # vim: et:sta:bs=2:sw=4:

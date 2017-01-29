@@ -9,6 +9,6 @@ urlpatterns = [
         views.reglement_detail, name='reglement-detail'),
     url(r'^(?P<reglement_name>[^/]+)/(?P<version_name>[^/]+)/?$',
         views.version_detail, name='version-detail'),
-    ]
+]
 
 # vim: et:sta:bs=2:sw=4:

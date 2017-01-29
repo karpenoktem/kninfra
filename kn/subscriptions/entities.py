@@ -88,6 +88,7 @@ def may_set_owner(user, owner):
 
 
 class Event(SONWrapper):
+
     def __init__(self, data):
         super(Event, self).__init__(data, ecol, detect_race=True)
         self._subscriptions = {str(d['user']): Subscription(d, self)
@@ -144,9 +145,9 @@ class Event(SONWrapper):
     @property
     def description_html(self):
         return self._data.get('description_html',
-                linebreaks(escape(self._data['description'])))
-        # Let wel: 'description' is een *fallback*, het is niet de bedoeling dat
-        # deze bij nieuwe actieviteitne nog gebruikt wordt
+                              linebreaks(escape(self._data['description'])))
+        # Let wel: 'description' is een *fallback*, het is niet de
+        # bedoeling dat deze bij nieuwe actieviteiten nog gebruikt wordt
 
     @property
     def cost(self):
@@ -156,7 +157,7 @@ class Event(SONWrapper):
     is_open = son_property(('is_open',))
     is_official = son_property(('is_official',), True)
     has_public_subscriptions = son_property(('has_public_subscriptions',),
-                                    False)
+                                            False)
 
     def __unicode__(self):
         return unicode('%s (%s)' % (self.humanName, self.owner))
@@ -173,18 +174,18 @@ class Event(SONWrapper):
     def messageId(self):
         """ Unique ID to be used in e.g. References: headers """
         return '<%s@%s>' % (self.get_absolute_url().strip('/'),
-                        settings.MAILDOMAIN)
+                            settings.MAILDOMAIN)
 
     def has_read_access(self, user):
-        return  self.owner == user or \
-            str(self.owner.name) in user.cached_groups_names or \
-               'secretariaat' in user.cached_groups_names or \
-               'admlezers' in user.cached_groups_names
+        return (self.owner == user or
+                str(self.owner.name) in user.cached_groups_names or
+                'secretariaat' in user.cached_groups_names or
+                'admlezers' in user.cached_groups_names)
 
     def has_write_access(self, user):
-        return self.owner == user or \
-            str(self.owner.name) in user.cached_groups_names or \
-               'secretariaat' in user.cached_groups_names
+        return (self.owner == user or
+                str(self.owner.name) in user.cached_groups_names or
+                'secretariaat' in user.cached_groups_names)
 
     @property
     def can_subscribe(self):
@@ -252,6 +253,7 @@ class Event(SONWrapper):
 
 
 class HistoryEvent(SONWrapper):
+
     def __init__(self, data, event):
         super(HistoryEvent, self).__init__(data, ecol, event)
         self.event = event
@@ -270,6 +272,7 @@ class HistoryEvent(SONWrapper):
 # subscription can also be 'unsubscribed' (see _state).
 # You could also call this an RSVP.
 class Subscription(SONWrapper):
+
     def __init__(self, data, event):
         super(Subscription, self).__init__(data, ecol, event)
         self.event = event
@@ -281,7 +284,7 @@ class Subscription(SONWrapper):
 
     def __unicode__(self):
         return unicode(u"<Subscription(%s for %s)>" % (self.user.humanName,
-                        self.event.humanName))
+                                                       self.event.humanName))
 
     @property
     def id(self):
@@ -374,8 +377,9 @@ class Subscription(SONWrapper):
         self.save()
         self.send_notification({'state': 'invited'})
 
-    def send_notification(self, mutation,
-            template='subscriptions/subscription-notification.mail.html'):
+    def send_notification(self, mutation, template=None):
+        if not template:
+            template = 'subscriptions/subscription-notification.mail.html'
         cc = [self.event.owner.canonical_full_email]
         if self.invited:
             cc.append(self.inviter.canonical_full_email)
@@ -384,16 +388,16 @@ class Subscription(SONWrapper):
         # https://tools.ietf.org/html/rfc5322#section-3.6.4
         # They are used here for proper threading in mail applications.
         render_then_email(template, self.user,
-                ctx={
-                    'mutation': mutation,
-                    'subscription': self,
-                    'event': self.event,
-                },
-                cc=cc,
-                reply_to=self.event.owner.canonical_full_email,
-                headers={
-                    'In-Reply-To': self.event.messageId,
-                    'References': self.event.messageId,
-                })
+                          ctx={
+                              'mutation': mutation,
+                              'subscription': self,
+                              'event': self.event,
+                          },
+                          cc=cc,
+                          reply_to=self.event.owner.canonical_full_email,
+                          headers={
+                              'In-Reply-To': self.event.messageId,
+                              'References': self.event.messageId,
+                          })
 
 # vim: et:sta:bs=2:sw=4:

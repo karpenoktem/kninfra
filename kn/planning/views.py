@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http  import require_POST
+from django.views.decorators.http import require_POST
 
 from kn.base.http import JsonHttpResponse
 from kn.leden.date import date_to_dt, now, date_to_midnight
@@ -18,11 +18,13 @@ from kn.leden.mongo import _id
 from kn.planning.entities import Pool, Event, Vacancy, may_manage_planning
 from kn.planning.score import planning_vacancy_worker_score
 from kn.planning.utils import send_reminder
-from kn.planning.forms import ManagePlanningForm, AddVacancyForm, EventCreateForm
+from kn.planning.forms import (ManagePlanningForm,
+                               AddVacancyForm, EventCreateForm)
 
 
 def hm2s(hours, minutes=0):
     return (hours * 60 + minutes) * 60
+
 
 templates = {
     '': {},
@@ -48,12 +50,18 @@ templates = {
             [(hm2s(24), False), (hm2s(28), True), _('sluiten')]]},
     'grootfeest': {
         'tappers': [
-            [(hm2s(20, 30), False), (hm2s(23), False), _('eerste dienst, tapper 1')],
-            [(hm2s(20, 30), False), (hm2s(23), False), _('eerste dienst, tapper 2')],
-            [(hm2s(23), False), (hm2s(25), False), _('tweede dienst, tapper 1')],
-            [(hm2s(23), False), (hm2s(25), False), _('tweede dienst, tapper 2')],
-            [(hm2s(25), False), (hm2s(28), True), _('derde dienst, tapper 1')],
-            [(hm2s(25), False), (hm2s(28), True), _('derde dienst, tapper 2')]],
+            [(hm2s(20, 30), False), (hm2s(23), False),
+                _('eerste dienst, tapper 1')],
+            [(hm2s(20, 30), False), (hm2s(23), False),
+                _('eerste dienst, tapper 2')],
+            [(hm2s(23), False), (hm2s(25), False),
+                _('tweede dienst, tapper 1')],
+            [(hm2s(23), False), (hm2s(25), False),
+                _('tweede dienst, tapper 2')],
+            [(hm2s(25), False), (hm2s(28), True),
+                _('derde dienst, tapper 1')],
+            [(hm2s(25), False), (hm2s(28), True),
+                _('derde dienst, tapper 2')]],
         'bestuur': [
             [(hm2s(20, 30), False), (hm2s(24), False), _('openen')],
             [(hm2s(24), False), (hm2s(28), True), _('sluiten')]]},
@@ -102,8 +110,8 @@ def planning_view(request):
     for pool in pools:
         poolids.add(_id(pool))
     # TODO reduce number of queries
-    event_entities = list(Event.all_since_datetime(date_to_midnight(now())
-            - datetime.timedelta(days=lookbehind)))
+    event_entities = list(Event.all_since_datetime(
+        date_to_midnight(now()) - datetime.timedelta(days=lookbehind)))
     used_pools = set()
     for e in event_entities:
         for v in e.vacancies():
@@ -119,10 +127,10 @@ def planning_view(request):
     events = list()
     for e in event_entities:
         ei = {'id': _id(e),
-                'name': e.name,
-                'datetime': e.date,
-                'kind': e.kind,
-            'vacancies': dict()}
+              'name': e.name,
+              'datetime': e.date,
+              'kind': e.kind,
+              'vacancies': dict()}
         for index in poolid2index.values():
             ei['vacancies'][index] = list()
         for v in e.vacancies():
@@ -131,23 +139,23 @@ def planning_view(request):
                 'begin_time': v.begin_time,
                 'end_time': v.end_time,
                 'assignee': v.assignee.humanName
-                        if v.assignee else "?"})
+                if v.assignee else "?"})
         for index in poolid2index.values():
             ei['vacancies'][index].sort(key=lambda x: x['begin'])
         events.append(ei)
     events.sort(key=lambda x: x['datetime'])
     return render_to_response('planning/overview.html',
-            {'events': events,
-             'pools': pools_tpl},
-            context_instance=RequestContext(request))
+                              {'events': events,
+                               'pools': pools_tpl},
+                              context_instance=RequestContext(request))
 
 # extends cmp with None as bottom
 
 
 def cmp_None(x, y, cmp=cmp):
-    if x == None:
+    if x is None:
         return -1
-    if y == None:
+    if y is None:
         return 1
     return cmp(x, y)
 
@@ -167,16 +175,20 @@ def planning_manage(request, poolname):
         eid = _id(e)
         vacancies = list(e.vacancies(pool=pool))
         events[eid] = {'vacancies': vacancies, 'date': e.date.date(),
-                'name': e.name, 'kind': e.kind, 'id': eid}
+                       'name': e.name, 'kind': e.kind, 'id': eid}
         posted = False
         events[eid]['vacancies'].sort(key=lambda v: v.begin)
         if request.method == 'POST' and _id(request.POST['eid']) == eid:
-            events[eid]['form'] = ManagePlanningForm(request.POST, pool=pool,
-                    vacancies=events[eid]['vacancies'])
+            events[eid]['form'] = ManagePlanningForm(
+                request.POST, pool=pool,
+                vacancies=events[eid]['vacancies']
+            )
             posted = True
         else:
-            events[eid]['form'] = ManagePlanningForm(pool=pool,
-                    vacancies=events[eid]['vacancies'])
+            events[eid]['form'] = ManagePlanningForm(
+                pool=pool,
+                vacancies=events[eid]['vacancies']
+            )
         if posted and events[eid]['form'].is_valid():
             for vacancy in events[eid]['vacancies']:
                 worker = request.POST['shift_%s' % vacancy._id]
@@ -184,7 +196,7 @@ def planning_manage(request, poolname):
                     vacancy.assignee = None
                     vacancy.reminder_needed = True
                 else:
-                    if vacancy.assignee_id == None or \
+                    if vacancy.assignee_id is None or \
                             _id(vacancy.assignee_id) != _id(worker):
                         delta = datetime.timedelta(days=5)
                         vacancy.reminder_needed = now() + delta < e.date
@@ -202,7 +214,7 @@ def planning_manage(request, poolname):
             workers_by_score = dict()
             for worker in workers:
                 score = planning_vacancy_worker_score(vacancy,
-                                    worker)
+                                                      worker)
                 if score not in workers_by_score:
                     workers_by_score[score] = list()
                 workers_by_score[score].append(worker)
@@ -213,24 +225,28 @@ def planning_manage(request, poolname):
                 shuffle(scorers)
                 scorers.sort(key=lambda x: shifts[_id(x)], cmp=cmp_None)
                 for scorer in scorers:
-                    vacancy.suggestions.append({'scorer': scorer, 'score': score})
+                    vacancy.suggestions.append({
+                        'scorer': scorer,
+                        'score': score
+                    })
 
     events = list(events.values())
     events.sort(key=lambda e: e['date'])
     return render_to_response('planning/manage.html',
-            {'events': events, 'pool': pool},
-           context_instance=RequestContext(request))
+                              {'events': events, 'pool': pool},
+                              context_instance=RequestContext(request))
 
 
 @login_required
 def planning_poollist(request):
     if not may_manage_planning(request.user):
-        # There's no planning you can change anyway, so what are you doing here?
+        # There's no planning you can change anyway, so what are you doing
+        # here?
         raise PermissionDenied
     pools = list(Pool.all())
     return render_to_response('planning/pools.html',
-            {'pools': pools},
-            context_instance=RequestContext(request))
+                              {'pools': pools},
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -263,11 +279,11 @@ def event_create(request):
                     })
                     v.save()
             return HttpResponseRedirect(reverse('planning-event-edit',
-                args=(e._id,)))
+                                                args=(e._id,)))
     else:
         form = EventCreateForm()
     return render_to_response('planning/event_create.html', {'form': form},
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 @login_required
@@ -287,12 +303,11 @@ def event_edit(request, eventid):
         elif request.POST['action'] == 'remove_vacancy':
             Vacancy.by_id(_id(request.POST['vacancy_id'])).delete()
             return HttpResponseRedirect(reverse('planning-event-edit',
-                args=(eventid,)))
+                                                args=(eventid,)))
         elif request.POST['action'] == 'add_vacancy':
             avform = AddVacancyForm(request.POST)
             if avform.is_valid():
                 fd = avform.cleaned_data
-                day = e.date
                 (begin_hour, begin_minute) = map(int, fd['begin'].split(':'))
                 (end_hour, end_minute) = map(int, fd['end'].split(':'))
                 begin_offset = hm2s(begin_hour, begin_minute)
@@ -302,7 +317,8 @@ def event_edit(request, eventid):
                 v = Vacancy({
                     'name': fd['name'],
                     'event': _id(e),
-                    'begin': (begin_date, fd['begin_is_approximate'] == "True"),
+                    'begin': (begin_date,
+                              fd['begin_is_approximate'] == "True"),
                     'end': (end_date, fd['end_is_approximate'] == "True"),
                     'pool': _id(fd['pool']),
                     'assignee': None,
@@ -310,7 +326,7 @@ def event_edit(request, eventid):
                 })
                 v.save()
                 return HttpResponseRedirect(reverse('planning-event-edit',
-                    args=(eventid,)))
+                                                    args=(eventid,)))
     if avform is None:
         avform = AddVacancyForm()
     pools = dict()
@@ -323,10 +339,12 @@ def event_edit(request, eventid):
         v.vid = str(v._id)
         vacancies.append(v)
     vacancies.sort(key=lambda x: str(x.pool_id) + str(x.begin))
-    return render_to_response('planning/event_edit.html',
-            {'name': e.name, 'kind': e.kind, 'date': e.date.date(),
-            'avform': avform, 'vacancies': vacancies},
-            context_instance=RequestContext(request))
+    return render_to_response(
+        'planning/event_edit.html',
+        {'name': e.name, 'kind': e.kind, 'date': e.date.date(),
+         'avform': avform, 'vacancies': vacancies},
+        context_instance=RequestContext(request)
+    )
 
 
 def _api_send_reminder(request):
@@ -361,8 +379,8 @@ def planning_template(request, poolname):
         if not vacancies:
             continue
         ei = {'name': e.name,
-                'date': e.date,
-            'vacancies': list()}
+              'date': e.date,
+              'vacancies': list()}
         shifts = dict()
         for v in vacancies:
             if v.begin not in shifts:
@@ -374,10 +392,10 @@ def planning_template(request, poolname):
                     'assignees': list()}
             shifts[v.begin]['assignees'].append(v.assignee)
         ei['vacancies'] = map(lambda x: x[1], sorted(shifts.items(),
-            key=lambda x: x[0]))
+                                                     key=lambda x: x[0]))
         events.append(ei)
     events.sort(key=lambda x: x['date'])
     return render_to_response('planning/template.html', {'events': events},
-            context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
 # vim: et:sta:bs=2:sw=4:

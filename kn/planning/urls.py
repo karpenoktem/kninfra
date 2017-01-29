@@ -8,13 +8,13 @@ urlpatterns = [
     url(_(r'^!api/?$'), views.planning_api),
     url(_(r'^manage/$'), views.planning_poollist, name='planning-poollist'),
     url(_(r'^manage/event/new/$'), views.event_create,
-                        name='planning-event-create'),
+        name='planning-event-create'),
     url(_(r'^manage/event/(?P<eventid>[^/]+)/$'), views.event_edit,
-                        name='planning-event-edit'),
+        name='planning-event-edit'),
     url(_(r'^manage/(?P<poolname>[^/]+)/$'), views.planning_manage,
-                        name='planning_manage'),
+        name='planning_manage'),
     url(_(r'^manage/(?P<poolname>[^/]+)/template/?$'), views.planning_template,
-                        name='planning_template'),
-    ]
+        name='planning_template'),
+]
 
 # vim: et:sta:bs=2:sw=4:

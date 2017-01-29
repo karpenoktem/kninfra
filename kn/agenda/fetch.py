@@ -18,7 +18,8 @@ from oauth2client.client import SignedJwtAssertionCredentials
 
 # How to configure the agenda:
 #
-#  - Go to https://console.developers.google.com/project and make a new project.
+#  - Go to https://console.developers.google.com/project and make a new
+#    project.
 #  - Under APIs & auth / APIs, enable the Calendar API (you can disable all
 #    other APIs).
 #  - Under APIs & auth / Credentials, create a new Client ID, with type
@@ -39,10 +40,10 @@ from oauth2client.client import SignedJwtAssertionCredentials
 def get_credentials():
     key = json.loads(open(settings.GOOGLE_OAUTH2_KEY, 'r').read())
     return SignedJwtAssertionCredentials(
-                    service_account_name=key['client_email'],
-                    private_key=key['private_key'],
-                    scope='https://www.googleapis.com/auth/calendar.readonly',
-                    user_agent='Karpe Noktem agenda fetcher')
+        service_account_name=key['client_email'],
+        private_key=key['private_key'],
+        scope='https://www.googleapis.com/auth/calendar.readonly',
+        user_agent='Karpe Noktem agenda fetcher')
 
 
 def parse_item_date(date):
@@ -50,7 +51,7 @@ def parse_item_date(date):
     if 'dateTime' in date:
         return parse_date(date['dateTime'])
     # date: all-day event
-    return parse_date(date['date']+'T00:00:00Z')
+    return parse_date(date['date'] + 'T00:00:00Z')
 
 
 def fetch_agenda(h, cal_id):

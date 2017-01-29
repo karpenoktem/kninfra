@@ -17,13 +17,14 @@ import kn.leden.entities as Es
 from kn.leden.date import now
 
 from kn.utils.giedo.db import update_db
-from kn.utils.giedo.postfix import generate_postfix_map, \
-                                   generate_postfix_slm_map
+from kn.utils.giedo.postfix import (generate_postfix_map,
+                                    generate_postfix_slm_map)
 from kn.utils.giedo.mailman import generate_mailman_changes
 from kn.utils.giedo.wiki import generate_wiki_changes
 from kn.utils.giedo.forum import generate_forum_changes
 from kn.utils.giedo.unix import generate_unix_map
-from kn.utils.giedo.openvpn import create_openvpn_installer, create_openvpn_zip, generate_openvpn_zips
+from kn.utils.giedo.openvpn import (create_openvpn_installer,
+                                    create_openvpn_zip, generate_openvpn_zips)
 from kn.utils.giedo.siteagenda import update_site_agenda
 from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.wolk import generate_wolk_changes
@@ -32,6 +33,7 @@ from kn.utils.giedo.fotos import scan_fotos
 
 
 class Giedo(WhimDaemon):
+
     def __init__(self):
         super(Giedo, self).__init__(settings.GIEDO_SOCKET)
         self.l = logging.getLogger('giedo')
@@ -55,17 +57,16 @@ class Giedo(WhimDaemon):
             self.villanet_key = RSA.load_pub_key(default_storage.path(
                 "villanet.pem"))
         self.ss_actions = (
-                  ('postfix', self.daan, self._gen_postfix),
-                  ('postfix-slm', self.daan, self._gen_postfix_slm),
-                  ('mailman', self.daan, self._gen_mailman),
-                  ('forum', self.daan, self._gen_forum),
-                  ('unix', self.cilia, self._gen_unix),
-                  ('wiki', self.daan, self._gen_wiki),
-                  ('ldap', self.daan, self._gen_ldap),
-                  ('wolk', self.cilia, self._gen_wolk),
-                  ('quassel', self.daan, self._gen_quassel))
+            ('postfix', self.daan, self._gen_postfix),
+            ('postfix-slm', self.daan, self._gen_postfix_slm),
+            ('mailman', self.daan, self._gen_mailman),
+            ('forum', self.daan, self._gen_forum),
+            ('unix', self.cilia, self._gen_unix),
+            ('wiki', self.daan, self._gen_wiki),
+            ('ldap', self.daan, self._gen_ldap),
+            ('wolk', self.cilia, self._gen_wolk),
+            ('quassel', self.daan, self._gen_quassel))
         self.push_changes_event.set()
-
 
     def _gen_quassel(self):
         return {'type': 'quassel',
@@ -81,28 +82,28 @@ class Giedo(WhimDaemon):
 
     def _gen_postfix_slm(self):
         return {'type': 'postfix-slm',
-            'map': generate_postfix_slm_map(self)}
+                'map': generate_postfix_slm_map(self)}
 
     def _gen_postfix(self):
         return {'type': 'postfix',
-            'map': generate_postfix_map(self)}
+                'map': generate_postfix_map(self)}
 
     def _gen_mailman(self):
         return {'type': 'mailman',
-            'changes': generate_mailman_changes(
+                'changes': generate_mailman_changes(
                         self)}
 
     def _gen_wiki(self):
         return {'type': 'wiki',
-            'changes': generate_wiki_changes(self)}
+                'changes': generate_wiki_changes(self)}
 
     def _gen_forum(self):
         return {'type': 'forum',
-            'changes': generate_forum_changes(self)}
+                'changes': generate_forum_changes(self)}
 
     def _gen_unix(self):
-        return  {'type': 'unix',
-             'map': generate_unix_map(self)}
+        return {'type': 'unix',
+                'map': generate_unix_map(self)}
 
     def _sync_openvpn(self):
         with self.openvpn_lock:
@@ -133,27 +134,27 @@ class Giedo(WhimDaemon):
         dt_max = settings.DT_MAX.strftime('%Y-%m-%d')
         for name in kn - vn:
             data = {
-                    'username': name,
-                    'password': self.villanet_encrypt_password(
-                        pseudo_randstr(16)),
-                }
+                'username': name,
+                'password': self.villanet_encrypt_password(
+                    pseudo_randstr(16)),
+            }
             if users[name] != dt_max:
                 data['till'] = users[name]
             pc = Es.PushChange({'system': 'villanet', 'action': 'addUser',
-                'data': data})
+                                'data': data})
             pc.save()
         for name in vn - kn:
             logging.info("Stray user %s" % name)
         for name in vn & kn:
             remote = (ret[name]['till'][:10] if ret[name]['till'] is not None
-                    else '')
+                      else '')
             local = users[name] if users[name] != dt_max else ''
             if remote != local:
                 pc = Es.PushChange({'system': 'villanet',
-                    'action': 'changeUser', 'data': {
-                        'username': name,
-                        'till': local
-                        }})
+                                    'action': 'changeUser', 'data': {
+                                        'username': name,
+                                        'till': local
+                                    }})
                 pc.save()
         self.push_changes_event.set()
 
@@ -168,7 +169,7 @@ class Giedo(WhimDaemon):
         def _sync_action(func, *args):
             try:
                 func(*args)
-            except Exception as e:
+            except Exception:
                 logging.exception("Uncaught exception")
             with todo_lock:
                 todo[0] -= 1
@@ -222,11 +223,13 @@ class Giedo(WhimDaemon):
                 u = u.as_user()
                 if not u.check_password(d['oldpass']):
                     return {'error': 'wrong current password'}
-                pc = Es.PushChange({'system': 'villanet',
-                    'action': 'changeUser', 'data': {
-                        'username': d['user'],
-                        'password': self.villanet_encrypt_password(d['newpass'])
-                            }})
+                encrypted_pass = self.villanet_encrypt_password(d['newpass'])
+                pc = Es.PushChange(
+                    {'system': 'villanet',
+                     'action': 'changeUser', 'data': {
+                         'username': d['user'],
+                         'password': encrypted_pass
+                     }})
                 pc.save()
                 self.push_changes_event.set()
                 return {'success': True}
@@ -289,7 +292,9 @@ class Giedo(WhimDaemon):
                     if not ret[0]:
                         continue
                 else:
-                    logging.warn("Unknown PushChange system %s " % pc['system'])
+                    logging.warn(
+                        "Unknown PushChange system %s " %
+                        pc['system'])
                 Es.pcol.remove({'_id': pc['_id']})
 
     def villanet_request(self, params):

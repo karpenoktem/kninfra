@@ -1,4 +1,4 @@
-from kn.leden.mongo import  db, SONWrapper, son_property, _id
+from kn.leden.mongo import db, SONWrapper, son_property, _id
 
 import kn.leden.entities as Es
 
@@ -10,6 +10,7 @@ def ensure_indices():
 
 
 class ModerationRecord(SONWrapper):
+
     def __init__(self, data):
         super(ModerationRecord, self).__init__(data, mcol)
     list = son_property(('list',))

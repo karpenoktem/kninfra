@@ -24,20 +24,20 @@ class CreateEventForm(forms.Form):
     humanName = forms.CharField(label=_('Naam voor mensen'))
     date = forms.DateField(label=_('Datum'), initial=date.today)
     name = forms.RegexField(label=_('Naam voor computers'),
-            regex=r'^[a-z0-9-]{3,64}$')
+                            regex=r'^[a-z0-9-]{3,64}$')
     fullHumanName = forms.CharField(label=_('Volledige naam voor mensen'))
 
     date.widget.attrs['onblur'] = 'createFullHumanname();'
     humanName.widget.attrs['onblur'] = ('createTechName(); ' +
-                        'createFullHumanname();')
+                                        'createFullHumanname();')
 
 
 def getMoveFotosForm():
     class MoveFotosForm(forms.Form):
         move_src = forms.ChoiceField(label=_('Verplaats'),
-                choices=giedo.fotoadmin_scan_userdirs())
+                                     choices=giedo.fotoadmin_scan_userdirs())
         move_dst = forms.ChoiceField(label=_('naar'),
-                choices=move_fotos_list_events())
+                                     choices=move_fotos_list_events())
     return MoveFotosForm
 
 # vim: et:sta:bs=2:sw=4:

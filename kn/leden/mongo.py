@@ -26,6 +26,7 @@ def _id(obj):
 
 
 class SONWrapper(object):
+
     def __init__(self, data, collection, parent=None, detect_race=False):
         '''
             parent:      SONWrapper can be nested. This is the parent.
@@ -50,9 +51,12 @@ class SONWrapper(object):
             if '_id' in self._data:
                 if self._detect_race:
                     self._data['_version'] += 1
-                    result = self._collection.update({
-                        '_id': self._data['_id'],
-                        '_version': self._data['_version']-1}, self._data, w=1)
+                    result = self._collection.update(
+                        {'_id': self._data['_id'],
+                         '_version': self._data['_version'] - 1},
+                        self._data,
+                        w=1
+                    )
                     if result['n'] < 1:
                         raise RaceCondition('Document was not saved')
                 else:
@@ -62,7 +66,7 @@ class SONWrapper(object):
                 if self._detect_race:
                     self._data['_version'] = 1
                 self._data['_id'] = self._collection.insert(
-                        self._data)
+                    self._data)
         else:
             self._parent.save()
 

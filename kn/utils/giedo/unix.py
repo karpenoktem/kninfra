@@ -17,8 +17,8 @@ def generate_unix_map(giedo):
             continue
         ulut[u._id] = u
         ret['users'][str(u.name)] = {
-                'full_name': u.full_name,
-                'expire_date': DT_MIN.strftime('%Y-%m-%d')}
+            'full_name': u.full_name,
+            'expire_date': DT_MIN.strftime('%Y-%m-%d')}
     member_relations_grouped = dict()
     for rel in Es.query_relations(_with=Es.by_name('leden'), until=dt_now):
         if rel['who'] not in member_relations_grouped:
@@ -26,13 +26,13 @@ def generate_unix_map(giedo):
         member_relations_grouped[rel['who']].append(rel)
     for user_id, relations in member_relations_grouped.items():
         latest = max(relations, key=lambda x: x['until'])
-        ret['users'][str(ulut[user_id].name)]['expire_date'] \
-                = latest['until'].strftime('%Y-%m-%d')
+        ret['users'][str(ulut[user_id].name)]['expire_date'] = (
+            latest['until'].strftime('%Y-%m-%d'))
 
     # Get all groups and create a look-up-table for group membership
     gs = tuple(Es.groups())
     mrels = Es.query_relations(how=None, _with=gs, _from=dt_now,
-                until=dt_now)
+                               until=dt_now)
     mlut = dict()
     for g in gs:
         mlut[g._id] = []
@@ -61,7 +61,7 @@ def generate_unix_map(giedo):
         if not g.got_unix_group:
             continue
         ret['groups'][str(g.name)] = [str(ulut[c].name)
-                for c in memb_graph[g._id] if c in ulut]
+                                      for c in memb_graph[g._id] if c in ulut]
     return ret
 
 # vim: et:sta:bs=2:sw=4:

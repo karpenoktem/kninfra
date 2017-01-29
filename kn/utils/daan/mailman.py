@@ -8,7 +8,7 @@ from django.conf import settings
 
 from kn.utils.mailman import import_mailman
 import_mailman()
-from Mailman import Utils, MailList, UserDesc, Errors
+from Mailman import Utils, MailList, UserDesc, Errors  # noqa: E402
 
 
 def apply_mailman_changes(daan, changes):
@@ -57,8 +57,11 @@ def apply_mailman_changes(daan, changes):
             if not ensure_opened(l):
                 continue
             for em in changes['remove'][l]:
-                mlo[l].ApprovedDeleteMember(em,
-                    admin_notif=False, userack=False)
+                mlo[l].ApprovedDeleteMember(
+                    em,
+                    admin_notif=False,
+                    userack=False
+                )
     finally:
         for ml in mlo.values():
             ml.Save()

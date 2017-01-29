@@ -5,6 +5,7 @@ import os.path
 
 
 class Program:
+
     def check_py(self, path):
         with open(path) as f:
             contents = f.read()
@@ -21,7 +22,7 @@ class Program:
 
     def main(self):
         self.repo_path = os.path.join(os.path.dirname(
-                os.path.abspath(__file__)), '..', '..')
+            os.path.abspath(__file__)), '..', '..')
         s = [self.repo_path]
         while s:
             path = s.pop()
@@ -40,6 +41,7 @@ class Program:
                     self.check_py(c_path)
                 if c_fn.endswith('.html') or c_fn.endswith('.mail.txt'):
                     self.check_html(c_path)
+
 
 if __name__ == '__main__':
     Program().main()

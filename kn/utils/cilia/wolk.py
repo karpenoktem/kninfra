@@ -13,14 +13,14 @@ def wolk_setpass(cilia, user, passwd):
         logging.warning('wolk: no path available, skipping')
         return None
     wolk_script = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                    'wolk.php')
+                               'wolk.php')
     proc = subprocess.Popen(['sudo', '-u', settings.WOLK_USER, 'php',
-                    wolk_script], cwd=settings.WOLK_PATH,
-                    stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                             wolk_script], cwd=settings.WOLK_PATH,
+                            stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     proc.stdin.write(json.dumps({
-                        'type': 'setpass',
-                        'user': user,
-                        'passwd': passwd}))
+        'type': 'setpass',
+        'user': user,
+        'passwd': passwd}))
     proc.stdin.write('\n')
     for l in proc.stdout:
         logging.info("wolk.php: %s" % l[:-1])
@@ -30,13 +30,13 @@ def apply_wolk_changes(cilia, changes):
     if not changes:
         return
     wolk_script = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                    'wolk.php')
+                               'wolk.php')
     proc = subprocess.Popen(['sudo', '-u', settings.WOLK_USER, 'php',
-                    wolk_script], cwd=settings.WOLK_PATH,
-                    stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                             wolk_script], cwd=settings.WOLK_PATH,
+                            stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     proc.stdin.write(json.dumps({
-                        'type': 'apply_changes',
-                        'changes': changes}))
+        'type': 'apply_changes',
+        'changes': changes}))
     proc.stdin.write('\n')
     for l in proc.stdout:
         logging.info("wolk.php: %s" % l[:-1])

@@ -20,7 +20,7 @@ def forum_setpass(daan, user, password):
     h = hashlib.sha1(password).hexdigest()
     h = hashlib.sha1(salt + h).hexdigest()
     c.execute("UPDATE users SET password=%s, salt=%s WHERE username=%s;",
-            (h, salt, user))
+              (h, salt, user))
     c.execute("COMMIT;")
     c.close()
     dc.close()
@@ -31,7 +31,7 @@ def apply_forum_changes(daan, changes):
         return
     creds = settings.FORUM_MYSQL_SECRET
     dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
-                db=creds[3])
+                         db=creds[3])
     c = dc.cursor()
     for user, realname, email in changes['add']:
         q = """INSERT INTO users (`username`,
@@ -43,7 +43,7 @@ def apply_forum_changes(daan, changes):
         c.execute(q, (user, '37', email, realname, int(time.time())))
     for user, realname in changes['update-realname']:
         c.execute("UPDATE users SET realname=%s WHERE username=%s", (
-                realname, user))
+            realname, user))
     for user in changes['remove']:
         c.execute("DELETE FROM `users` WHERE `username`=%s", user)
     c.execute("COMMIT;")

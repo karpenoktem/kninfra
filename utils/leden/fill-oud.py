@@ -13,10 +13,11 @@ def main():
         print m.name
 
         Es.rcol.insert({'who': Es._id(m),
-                       'with': Es._id(oud),
-                       'how': None,
-                       'from': Es.now(),
-                       'until': None})
+                        'with': Es._id(oud),
+                        'how': None,
+                        'from': Es.now(),
+                        'until': None})
+
 
 if __name__ == '__main__':
     main()

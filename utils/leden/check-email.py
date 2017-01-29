@@ -5,7 +5,6 @@ from common import args_to_users
 
 from kn.leden.mongo import _id
 import kn.leden.entities as Es
-from kn.leden.date import now
 
 from django.core.mail import send_mail
 from django.template import Context, Template
@@ -17,7 +16,6 @@ DAYS_IN_YEAR = 365.242199
 
 
 def check_email():
-    dt_now = now()
     comm_ids = map(_id, Es.by_name('comms').get_bearers())
     list_ids = map(_id, Es.by_name('lists-opted').get_bearers())
     with open('check-email.template') as f:
@@ -31,7 +29,7 @@ def check_email():
     for m in args_to_users(sys.argv[1:]):
         rels = m.get_related()
         rels = sorted(rels, cmp=lambda x, y: cmp(str(x['with'].humanName),
-                            str(y['with'].humanName)))
+                                                 str(y['with'].humanName)))
         comms = []
         lists = []
         others = []
@@ -46,13 +44,14 @@ def check_email():
                 others.append(rel)
         print m.name
         em = templ.render(Context({
-                        'u': m,
-                        'comms': comms,
-                        'lists': lists,
-                        'others': others}))
+            'u': m,
+            'comms': comms,
+            'lists': lists,
+            'others': others}))
         send_mail('Controle Karpe Noktem ledenadministratie',
-                    em, 'secretaris@karpenoktem.nl',
-                    [m.primary_email])
+                  em, 'secretaris@karpenoktem.nl',
+                  [m.primary_email])
+
 
 if __name__ == '__main__':
     check_email()

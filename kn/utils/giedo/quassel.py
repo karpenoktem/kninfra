@@ -11,7 +11,9 @@ def generate_quassel_changes(giedo):
     if not settings.QUASSEL_CONFIGDIR:
         logging.warning('quassel: no config dir available, skipping')
         return None
-    db_path = os.path.join(settings.QUASSEL_CONFIGDIR, 'quassel-storage.sqlite')
+    db_path = os.path.join(
+        settings.QUASSEL_CONFIGDIR,
+        'quassel-storage.sqlite')
     if not os.path.exists(db_path):
         os.logging.warn('quassel: %s does not exist. Skipping.', db_path)
         return None

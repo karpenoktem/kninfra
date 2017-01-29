@@ -5,8 +5,8 @@ from django.conf import settings
 from kn.utils.mailman import import_mailman
 
 import_mailman()
-from Mailman.Utils import list_names
-from Mailman.MailList import MailList
+from Mailman.Utils import list_names  # noqa: E402
+from Mailman.MailList import MailList  # noqa: E402
 
 
 def main():
@@ -27,11 +27,12 @@ def main():
                 print 'Updating url_host of %s (was %s)' % (x, ml.web_page_url)
                 ml.web_page_url = url
                 changed = True
-            # if changed:
-            #    print 'Saving %s' % x
+            if changed:
+                print 'Saving %s' % x
             #    ml.Save()
         finally:
             ml.Unlock()
+
 
 if __name__ == '__main__':
     main()

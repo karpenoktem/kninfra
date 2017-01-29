@@ -24,8 +24,9 @@ def main():
         if (r['who'] not in ids or r['with'] not in ids or (
                 r['how'] is not None and r['how'] not in ids)):
             print r['_id'], id2name.get(r['who'], r['who']), \
-                    id2name.get(r['with'], r['with']), \
-                    id2name.get(r['how'], r['how'])
+                id2name.get(r['with'], r['with']), \
+                id2name.get(r['how'], r['how'])
+
 
 if __name__ == '__main__':
     main()

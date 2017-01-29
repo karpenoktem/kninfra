@@ -9,8 +9,8 @@ MONGO_HOST = 'localhost'
 DB_FILE = '/home/infra/initial-db.yaml'
 
 yaml.SafeLoader.add_constructor('!id',
-        lambda loader, node: bson.objectid.ObjectId(
-                        loader.construct_scalar(node)))
+                                lambda loader, node: bson.objectid.ObjectId(
+                                    loader.construct_scalar(node)))
 
 
 def main():
@@ -22,6 +22,7 @@ def main():
         db.drop_collection(collection)
         for d in dump[collection]:
             db[collection].insert(d)
+
 
 if __name__ == '__main__':
     main()

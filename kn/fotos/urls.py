@@ -7,26 +7,26 @@ from kn.fotos import views
 from kn.fotos import api
 
 urlpatterns = [
-        # backwards compatibility with knfotos
-        url(r'^fotos/view\.php$', views.compat_view, name='foto-comp-1'),
-        url(r'^fotos/foto\.php$', views.compat_foto, name='foto-comp-2'),
-        url(r'^fotos/index\.php$', RedirectView.as_view(
-            url=reverse_lazy('fotos', kwargs={'path': ''}),
-            query_string=True), name='foto-comp-3'),
+    # backwards compatibility with knfotos
+    url(r'^fotos/view\.php$', views.compat_view, name='foto-comp-1'),
+    url(r'^fotos/foto\.php$', views.compat_foto, name='foto-comp-2'),
+    url(r'^fotos/index\.php$', RedirectView.as_view(
+        url=reverse_lazy('fotos', kwargs={'path': ''}),
+        query_string=True), name='foto-comp-3'),
 
-        # TODO add fallback for old foto links
-        # TODO change wiki links, etc.
-        url(_(r'^foto/admin/?$'),
-            views.fotoadmin_move, name='fotoadmin-move'),
-        url(_(r'^foto/admin/create/?$'),
-            views.fotoadmin_create_event, name='fotoadmin-create-event'),
-        url(_(r'^fotos/api/?$'),
-            api.view, name='fotos-api'),
-        url(_(r'^fotos/(?P<path>.*)$'),
-            views.fotos, name='fotos'),
-        # NOTE keep up to date with media/fotos.js
-        url(_(r'^foto/(?P<cache>[^/]+)/(?P<path>.*)$'),
-            views.cache, name='fotos-cache'),
-        ]
+    # TODO add fallback for old foto links
+    # TODO change wiki links, etc.
+    url(_(r'^foto/admin/?$'),
+        views.fotoadmin_move, name='fotoadmin-move'),
+    url(_(r'^foto/admin/create/?$'),
+        views.fotoadmin_create_event, name='fotoadmin-create-event'),
+    url(_(r'^fotos/api/?$'),
+        api.view, name='fotos-api'),
+    url(_(r'^fotos/(?P<path>.*)$'),
+        views.fotos, name='fotos'),
+    # NOTE keep up to date with media/fotos.js
+    url(_(r'^foto/(?P<cache>[^/]+)/(?P<path>.*)$'),
+        views.cache, name='fotos-cache'),
+]
 
 # vim: et:sta:bs=2:sw=4:

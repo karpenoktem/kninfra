@@ -16,6 +16,7 @@ def main():
     pool = multiprocessing.Pool(7)
     pool.map(cache, [e._id for e in fEs.all()])
 
+
 if __name__ == '__main__':
     main()
 

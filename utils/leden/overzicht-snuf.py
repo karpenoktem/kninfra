@@ -28,12 +28,12 @@ def main():
                         or (study['until'] and study['until'] < now)):
                     continue
                 writer.writerow(
-                        [str(m.name),
-                         m.first_name.encode('utf-8'),
-                         m.last_name.encode('utf-8'),
-                         unicode(study['institute'].humanName).encode('utf-8'),
-                         unicode(study['study'].humanName).encode('utf-8'),
-                         study['number']])
+                    [str(m.name),
+                     m.first_name.encode('utf-8'),
+                     m.last_name.encode('utf-8'),
+                     unicode(study['institute'].humanName).encode('utf-8'),
+                     unicode(study['study'].humanName).encode('utf-8'),
+                     study['number']])
                 ok = True
                 break
         if not ok:
@@ -41,6 +41,7 @@ def main():
                              m.first_name.encode('utf-8'),
                              m.last_name.encode('utf-8')])
             continue
+
 
 if __name__ == '__main__':
     main()

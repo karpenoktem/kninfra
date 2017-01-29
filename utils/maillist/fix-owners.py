@@ -5,7 +5,7 @@ from Mailman.Utils import list_names
 from Mailman.MailList import MailList
 
 ALLOWED_OWNERS = ['wortel@karpenoktem.nl',
-          'secretaris@karpenoktem.nl']
+                  'secretaris@karpenoktem.nl']
 
 
 def main():
@@ -25,6 +25,7 @@ def main():
                 ml.Save()
         finally:
             ml.Unlock()
+
 
 if __name__ == '__main__':
     main()
