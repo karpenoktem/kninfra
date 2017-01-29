@@ -8,9 +8,9 @@ import kn.leden.entities as Es
 
 from django.core.mail import send_mail
 from django.template import Context, Template
+from django.utils.six.moves import cStringIO
 
 import sys
-from cStringIO import StringIO
 
 DAYS_IN_YEAR = 365.242199
 
@@ -19,7 +19,7 @@ def check_email():
     comm_ids = [_id(x) for x in Es.by_name('comms').get_bearers()]
     list_ids = [_id(x) for x in Es.by_name('lists-opted').get_bearers()]
     with open('check-email.template') as f:
-        template_text = StringIO()
+        template_text = cStringIO()
         for line in f:
             if line.endswith("\\\n"):
                 template_text.write(line[:-2])

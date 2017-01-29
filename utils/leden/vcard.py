@@ -7,7 +7,7 @@ import sys
 
 from common import args_to_users
 
-from cStringIO import StringIO
+from six.moves import cStringIO
 
 
 def vcard(u):
@@ -43,12 +43,12 @@ def vcard(u):
 
 
 if __name__ == '__main__':
-    tb = StringIO()
+    tb = cStringIO()
     tf = tarfile.open(mode='w', fileobj=tb)
     for u in args_to_users(sys.argv[1:]):
         ti = tarfile.TarInfo(u.username + ".vcf")
         td = vcard(u)
         ti.size = len(td)
-        tf.addfile(ti, StringIO(td))
+        tf.addfile(ti, cStringIO(td))
     tf.close()
     print(tb.getvalue())

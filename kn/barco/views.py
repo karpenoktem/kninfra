@@ -1,4 +1,3 @@
-from cStringIO import StringIO
 import subprocess
 import os.path
 import json
@@ -11,6 +10,7 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.utils import six
+from django.utils.six.moves import cStringIO
 
 from koert.drank.rikf import open_rikf_ar
 
@@ -173,7 +173,7 @@ def barco_enterform(request, repos, formname):
         if form.is_valid():
             # Dump the entered data to a file ...
             fd = form.cleaned_data
-            csv = StringIO()
+            csv = cStringIO()
 
             def write(x):
                 csv.write(x.encode("utf-8"))
