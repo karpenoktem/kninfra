@@ -13,7 +13,8 @@ from django.views.decorators.http import require_POST
 
 from kn.base.http import JsonHttpResponse
 from kn.leden.date import date_to_dt, now, date_to_midnight
-from kn.leden.mongo import _id, DT_MIN
+from kn.leden import DT_MIN
+from kn.leden.mongo import _id
 
 from kn.planning.entities import Pool, Event, Vacancy, may_manage_planning
 from kn.planning.score import planning_vacancy_worker_score
