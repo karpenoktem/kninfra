@@ -1,4 +1,3 @@
-import os.path
 import logging
 
 from django.conf import settings
@@ -27,8 +26,8 @@ class Moniek(WhimDaemon):
     def gcf(self):
         # TODO: add caching
         return open_gcf_in_git_repo(
-                settings.FIN_REPO_PATH,
-                settings.FIN_FILENAME,
-                cachepath=settings.FIN_CACHE_PATH)
+            settings.FIN_REPO_PATH,
+            settings.FIN_FILENAME,
+            cachepath=settings.FIN_CACHE_PATH)
 
 # vim: et:sta:bs=2:sw=4:

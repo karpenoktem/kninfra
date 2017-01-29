@@ -9,7 +9,6 @@ import logging
 import Image
 import json
 import re
-import smtplib
 
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -683,14 +682,15 @@ def secr_add_group(request):
     return render_to_response('leden/secr_add_group.html', {'form': form},
                               context_instance=RequestContext(request))
 
+
 @login_required
 def fiscus_debtmail(request):
 
     if 'fiscus' not in request.user.cached_groups_names:
         raise PermissionDenied
 
-    data = dict([(n,{'debt': Decimal(debt)}) for (n,debt) in \
-            giedo.fin_get_debitors()])
+    data = dict([(n, {'debt': Decimal(debt)}) for (n, debt) in
+                 giedo.fin_get_debitors()])
 
     for user in Es.users():
         name = user.full_name
@@ -708,21 +708,23 @@ def fiscus_debtmail(request):
         users_to_email = request.POST.getlist('debitor')
         for user_name in users_to_email:
             user = Es.by_name(user_name)
-            
+
             ctx['first_name'] = user.first_name,
             ctx['debt'] = data[user.full_name]['debt']
-                
+
             try:
                 render_then_email("leden/debitor.mail.txt",
-                        to=user, ctx=ctx,
-                        cc=[], # ADD penningmeester
-                        from_email=ctx['quaestor']['email'],
-                        reply_to=ctx['quaestor']['email'])
-                messages.info(request, _("Email gestuurd naar %s.") % user_name)
+                                  to=user, ctx=ctx,
+                                  cc=[],  # ADD penningmeester
+                                  from_email=ctx['quaestor']['email'],
+                                  reply_to=ctx['quaestor']['email'])
+                messages.info(
+                    request,
+                    _("Email gestuurd naar %s.") %
+                    user_name)
             except Exception as e:
-                messages.error(request, _("Email naar %s faalde: %s.") % \
-                        (user_name,repr(e)))
-
+                messages.error(request, _("Email naar %s faalde: %s.") %
+                               (user_name, repr(e)))
 
     # get a sample of the email that will be sent for the quaestor's review.
     email = ""
@@ -732,13 +734,14 @@ def fiscus_debtmail(request):
     ctx['debt'] = '< Debet >'
     context = Context(ctx)
     for node in email_template:
-        if isinstance(node, BlockNode) and node.name=="plain":
+        if isinstance(node, BlockNode) and node.name == "plain":
             email = node.render(context)
             break
 
-    return render_to_response('leden/fiscus_debtmail.html', 
-            {'data': data, 'email':email },
-            context_instance=RequestContext(request))
+    return render_to_response('leden/fiscus_debtmail.html',
+                              {'data': data, 'email': email},
+                              context_instance=RequestContext(request))
+
 
 @login_required
 def relation_end(request, _id):
@@ -934,10 +937,9 @@ def ik_openvpn_download(request, filename):
 def ik_balans(request):
     balans = giedo.fin_get_account(request.user)
     return render_to_response('leden/ik_balans.html',
-            {'balans': BalansInfo(balans),
-                'quaestor': quaestor()},
-            context_instance=RequestContext(request))
-
+                              {'balans': BalansInfo(balans),
+                               'quaestor': quaestor()},
+                              context_instance=RequestContext(request))
 
 
 def language(request):

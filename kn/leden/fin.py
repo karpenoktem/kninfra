@@ -1,15 +1,17 @@
 from decimal import Decimal
 from django.conf import settings
-from time import strftime,gmtime
-import entities as Es
+from time import strftime, gmtime
+
 
 def quaestor():
     return {
-            "email": "%s@%s" %(settings.QUAESTOR_USERNAME, settings.MAILDOMAIN),
-            "name": "de penningmeester"
-            }
+        "email": "%s@%s" % (settings.QUAESTOR_USERNAME, settings.MAILDOMAIN),
+        "name": "de penningmeester"
+    }
+
 
 class MutInfo:
+
     def __init__(self, data):
         self.data = data
 
@@ -19,6 +21,7 @@ class MutInfo:
 
 
 class BalansInfo:
+
     def __init__(self, data):
         self.data = data
         self.total = Decimal(data['total'])
@@ -39,7 +42,7 @@ class BalansInfo:
     @property
     def in_books(self):
         return "debitor" in self.data['accounts'] \
-                or "creditor" in self.data['accounts']
+            or "creditor" in self.data['accounts']
 
     @property
     def mtime(self):
