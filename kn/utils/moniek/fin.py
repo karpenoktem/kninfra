@@ -1,4 +1,3 @@
-from django.conf import settings
 from koert.gnucash.export import get_user_balance, get_debitors
 
 
