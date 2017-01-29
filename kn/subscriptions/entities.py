@@ -88,6 +88,7 @@ def may_set_owner(user, owner):
     return owner.has_tag(comms) or owner.has_tag(allowTag)
 
 
+@six.python_2_unicode_compatible
 class Event(SONWrapper):
 
     def __init__(self, data):
@@ -160,7 +161,6 @@ class Event(SONWrapper):
     has_public_subscriptions = son_property(('has_public_subscriptions',),
                                             False)
 
-    @six.python_2_unicode_compatible
     def __str__(self):
         return six.u('%s (%s)') % (self.humanName, self.owner)
 
@@ -273,6 +273,7 @@ class HistoryEvent(SONWrapper):
 # unsubscription) a Subscription is created or updated. That means a
 # subscription can also be 'unsubscribed' (see _state).
 # You could also call this an RSVP.
+@six.python_2_unicode_compatible
 class Subscription(SONWrapper):
 
     def __init__(self, data, event):
@@ -284,7 +285,6 @@ class Subscription(SONWrapper):
     date = son_property(('date',))
     history = son_property(('history',),)
 
-    @six.python_2_unicode_compatible
     def __str__(self):
         return six.u("<Subscription(%s for %s)>") % (self.user.humanName,
                                                      self.event.humanName)

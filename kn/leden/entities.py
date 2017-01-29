@@ -757,6 +757,7 @@ class EntityName(object):
         return "<EntityName %s of %s>" % (self._name, self._entity)
 
 
+@six.python_2_unicode_compatible
 class EntityHumanName(object):
     """ Wrapper object for a humanName of an entity """
 
@@ -787,7 +788,6 @@ class EntityHumanName(object):
                 'van': '',
                 }.get(self.genitive_prefix, 'de')
 
-    @six.python_2_unicode_compatible
     def __str__(self):
         return self.humanName
 

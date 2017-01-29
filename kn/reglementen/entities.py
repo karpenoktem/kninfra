@@ -42,6 +42,7 @@ def reglement_by_id(the_id):
     return None if tmp is None else Reglement(tmp)
 
 
+@six.python_2_unicode_compatible
 class Reglement(SONWrapper):
 
     def __init__(self, data):
@@ -58,7 +59,6 @@ class Reglement(SONWrapper):
         for v in vcol.find({'reglement': self._id}).sort('until'):
             yield ReglementVersion(v)
 
-    @six.python_2_unicode_compatible
     def __str__(self):
         return self.humanName
 
@@ -67,6 +67,7 @@ class Reglement(SONWrapper):
         return ('reglement-detail', (), {'name': self.name})
 
 
+@six.python_2_unicode_compatible
 class ReglementVersion(SONWrapper):
 
     def __init__(self, data):
@@ -93,7 +94,6 @@ class ReglementVersion(SONWrapper):
     valid_from = son_property(('from',))
     valid_until = son_property(('until',))
 
-    @six.python_2_unicode_compatible
     def __str__(self):
         return self.humanName
 

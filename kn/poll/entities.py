@@ -67,6 +67,7 @@ def filling_by_poll(poll):
 # ######################################################################
 
 
+@six.python_2_unicode_compatible
 class Poll(SONWrapper):
 
     def __init__(self, data):
@@ -93,7 +94,6 @@ class Poll(SONWrapper):
     def fillings(self):
         return filling_by_poll(self)
 
-    @six.python_2_unicode_compatible
     def __str__(self):
         return self.humanName
 
@@ -102,6 +102,7 @@ class Poll(SONWrapper):
         return ('poll', (), {'name': self.name})
 
 
+@six.python_2_unicode_compatible
 class Filling(SONWrapper):
 
     def __init__(self, data):
@@ -122,7 +123,6 @@ class Filling(SONWrapper):
     answers = son_property(('answers',))
     date = son_property(('date',))
 
-    @six.python_2_unicode_compatible
     def __str__(self):
         return six.u("answers of %s for %s") % (
             self.user.humanName, self.poll.humanName)

@@ -39,6 +39,7 @@ def update(agendas):
                          'end': end}).save()
 
 
+@six.python_2_unicode_compatible
 class AgendaEvent(SONWrapper):
 
     def __init__(self, data):
@@ -81,7 +82,6 @@ class AgendaEvent(SONWrapper):
             self.start.date().strftime('%a %e %b'),
             self.end.date().strftime('%a %e %b')))
 
-    @six.python_2_unicode_compatible
     def __str__(self):
         return self.title
 
