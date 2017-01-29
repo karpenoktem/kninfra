@@ -1,6 +1,26 @@
 kninfra packages:
     pkg.installed:
         - pkgs:
+            {% if pillar['python3'] %}
+            - python3-django
+            - python3-msgpack
+            - python3-setuptools
+            - python3-pyparsing
+            - python3-markdown
+            - python3-pymongo
+            #- python3-mysqldb
+            - python3-pil
+            - python3-pip
+            - python3-html2text
+            - python3-httplib2
+            - python3-googleapi
+            #- python3-ldap
+            #- python3-smbpasswd
+            #- python3-m2crypto
+            - python3-pyx
+            - python3-six
+            - python3-unidecode
+            {% else %}
             - python-django
             - msgpack-python
             - python-setuptools
@@ -20,16 +40,21 @@ kninfra packages:
             - python-pyx
             - python-unidecode
             - python-six
+            {% endif %}
             - gettext
             - imagemagick
-mirte:
+
+# pip packages
+{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved'] %}
+{{ pkg }}:
+{% if pillar['python3'] %}
+    pip.installed:
+        - bin_env: /usr/bin/pip3
+{% else %}
     pip.installed
-sarah:
-    pip.installed
-tarjan:
-    pip.installed
-reserved:
-    pip.installed
+{% endif %}
+{% endfor %}
+
 infra:
     group.present:
         - gid: 2000
