@@ -1,0 +1,30 @@
+
+table.balans {
+	border-collapse: collapse;
+}
+
+table.balans th {
+	text-align: left;
+}
+
+table.balans th,
+table.balans td {
+	vertical-align: top;
+	padding: 0px 4px;
+}
+
+@media screen and (min-width: 500px) {
+	table.balans th {
+		white-space: nowrap;
+	}
+}
+
+table.balans td {
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+table.balans .date {
+	white-space: nowrap;
+}
+table.balans .value {
+	text-align: right;
+}
