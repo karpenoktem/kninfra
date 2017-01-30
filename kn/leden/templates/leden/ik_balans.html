@@ -71,7 +71,7 @@ ten name van {{ rekeninghouder }}.
 <p>
 {% blocktrans with name=quaestor.name email=quaestor.email %}
 Heb je vragen?  Neem dan contact
-op met {{ name }} via {{ email }}!
+op met {{ name }} via <a href="mailto:{{email}}">{{ email }}</a>!
 {% endblocktrans %}
 </p>
 <p>
