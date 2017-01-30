@@ -1,0 +1,10 @@
+#!/bin/sh -e
+
+# Links /var/run/infra/S-moniek on sankhara and phassa.
+
+cd /var/run/infra
+
+rm -f S-moniek
+socat UNIX-LISTEN:S-moniek,fork,mode=660,group=infra \
+            EXEC:"ssh root@phassa \
+                'socat STDIO UNIX-CONNECT:/var/run/infra/S-moniek'"

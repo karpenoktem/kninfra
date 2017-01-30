@@ -1,0 +1,7 @@
+repo: fin
+path: fin.gnucash
+cache: .fin.cached
+meta:
+        creditors account: :Passiva:Crediteuren
+        debitors account: :Activa:Vlottende activa:Debiteuren:Leden
+
