@@ -1,6 +1,7 @@
 from decimal import Decimal
+from time import gmtime, strftime
+
 from django.conf import settings
-from time import strftime, gmtime
 
 
 def quaestor():

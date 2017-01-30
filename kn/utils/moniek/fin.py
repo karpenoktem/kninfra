@@ -1,4 +1,4 @@
-from koert.gnucash.export import get_user_balance, get_debitors
+from koert.gnucash.export import get_debitors, get_user_balance
 
 
 def fin_get_account(moniek, name, full_name):
