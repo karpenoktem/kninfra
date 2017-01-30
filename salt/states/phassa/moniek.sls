@@ -1,17 +1,33 @@
 moniek packages:
     pkg.installed:
         - pkgs:
-            - python-git
+            {% if pillar['python3'] %}
+            - python3-django
+            - python3-msgpack
+            - python3-setuptools
+            - python3-pyparsing
+            - python3-markdown
+            - python3-pip
+            {% else %}
             - python-django
             - msgpack-python
             - python-setuptools
             - python-pyparsing
             - python-markdown
             - python-pip
-mirte:
+            {% endif %}
+
+# pip packages
+{% for pkg in ['mirte', 'sarah', 'GitPython'] %}
+{{ pkg }}:
+{% if pillar['python3'] %}
+    pip.installed:
+        - bin_env: /usr/bin/pip3
+{% else %}
     pip.installed
-sarah:
-    pip.installed
+{% endif %}
+{% endfor %}
+
 /var/run/infra:
     file.directory:
         - user: root
