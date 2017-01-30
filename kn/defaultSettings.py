@@ -89,6 +89,7 @@ def defaultSettings(glbls):
     d.GIEDO_SOCKET = '/var/run/infra/S-giedo'
     d.DAAN_SOCKET = '/var/run/infra/S-daan'
     d.CILIA_SOCKET = '/var/run/infra/S-cilia'
+    d.MONIEK_SOCKET = '/var/run/infra/S-moniek'
 
     d.GOOGLE_CALENDAR_IDS = {
         'kn': 'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com',
@@ -213,6 +214,13 @@ def defaultSettings(glbls):
 
     # http://daniel.hepper.net/blog/2014/04/fixing-1_6-w001-when-upgrading
     d.TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+    d.FIN_YAML_PATH = "/groups/boekenlezers/fin.yaml"
+
+    d.BANK_ACCOUNT_NUMBER = "NL81 RABO 0145 9278 22"
+    d.BANK_ACCOUNT_HOLDER = "A.S.V. Karpe Noktem"
+
+    d.QUAESTOR_USERNAME = "penningmeester"
 
     try:
         locale.setlocale(locale.LC_ALL, d.LOCALE)

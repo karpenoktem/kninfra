@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cd /groups/boekenlezers
+
+# create fin repository
+mkdir fin
+cd fin
+git init --bare
+cd ..
+
+# add fin.gnucash
+git clone fin fin.tmp
+cd fin.tmp
+cp ../fin.gnucash .
+git add fin.gnucash
+git commit -m 'initial'
+git push
+cd ..
+rm -rf fin.tmp
+
+# set permissions
+chown -R root:kn-boekenlezers fin

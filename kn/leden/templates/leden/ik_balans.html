@@ -1,0 +1,79 @@
+{% extends "leden/base.html" %}
+
+{% load i18n %}
+
+{% block body %}
+<h1>{% trans "Balans" %}</h1>
+{% if balans.in_books %}
+<p>
+{% if balans.total < 0 %}
+{% blocktrans with bedrag=balans.abstotal %}
+Volgens de boekhouding krijg je
+nog <strong>€ {{ bedrag }}</strong> van ons.
+{% endblocktrans %}
+{% elif balans.total == 0 %}
+{% blocktrans %}
+Volgens de boekhouding zijn we elkaar op het moment
+niets verschuldigd (in financiële zin).
+{% endblocktrans %}
+{% elif balans.total > 0 %}
+{% blocktrans with bedrag=balans.abstotal %} 
+Volgens de boekhouding ben je 
+ons nog  <strong>€ {{ bedrag }}</strong> veschuldigd.
+{% endblocktrans %}
+{% endif %}
+</p>
+
+<table>
+	<tr>
+		<th>{% trans "nummer" %}</th>
+		<th>{% trans "datum" %}</th>
+		<th>{% trans "omschrijving" %}</th>
+		<th>{% trans "bedrag (€)" %}</th>
+	</tr>
+	{% for mut in balans.mutations %}
+	<tr>
+		<td>{{ mut.data.tr }}</td>
+		<td>{{ mut.data.date.text }}</td>
+		<td>{{ mut.trdescription }}</td>
+		<td>{{ mut.data.value }}</td>
+	</tr>
+	{% if mut.data.description %}
+	<tr>
+		<td></td>
+		<td></td>
+		<td>{{ mut.data.description }}</td>
+		<td></td>
+	</tr>
+	{% endif %}
+	{% endfor %}
+</table>
+
+{% else %} 
+<p>
+{% blocktrans %}
+Je hebt op het moment nog geen debiteuren- en crediteurenrekening
+in onze boekhouding.  
+{% endblocktrans %}
+</p>
+{% endif %}
+<p>
+{% blocktrans with rekeningnummer=balans.our_account_number rekeninghouder=balans.our_account_holder %}
+Betalingen kunnen gericht worden aan {{ rekeningnummer }}
+ten name van {{ rekeninghouder }}.
+{% endblocktrans %}
+</p>
+<p>
+{% blocktrans with name=quaestor.name email=quaestor.email %}
+Heb je vragen?  Neem dan contact
+op met {{ name }} via {{ email }}!
+{% endblocktrans %}
+</p>
+<p>
+{% blocktrans with datum=balans.mtime %}
+( Het bovenstaande overzicht is gebaseerd op de 
+boekhouding van {{ datum }}. Betalingen, declaraties en andere gebeurtenissen
+van een latere datum zullen hier binnenkort verschijnen. )
+{% endblocktrans %}
+</p>
+{% endblock %}

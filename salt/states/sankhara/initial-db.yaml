@@ -604,6 +604,13 @@ entities:
   names: [secretariaat]
   tags: [!id '4e6fcc85e60edf3dc000007e']
   types: [group, tag]
+- description: Fiscus
+  _id: &fiscus_id !id 'aaaaaaaaaaaaaaaaaaa00001'
+  humanNames:
+  - {genitive_prefix: van de, human: Fiscus, name: fiscus}
+  names: [fiscus]
+  tags: [!id '4e6fcc85e60edf3dc000007e']
+  types: [group, tag]
 - description: De lezers van de ledenadministratie
   humanNames:
   - {genitive_prefix: van de, human: Administratielezers, name: admlezers}
@@ -778,6 +785,11 @@ relations:
   until: *dt_max
 - who: *admin_id
   with: *secretariaat_id
+  how: null
+  from: *dt_min
+  until: *dt_max
+- who: *admin_id
+  with: *fiscus_id
   how: null
   from: *dt_min
   until: *dt_max
