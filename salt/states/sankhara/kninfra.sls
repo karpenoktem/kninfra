@@ -219,6 +219,9 @@ https://github.com/karpenoktem/regl:
 /etc/systemd/system/cilia-tunnel.service:
     file.managed:
         - source: salt://sankhara/cilia-tunnel.service
+/etc/systemd/system/moniek-tunnel.service:
+    file.managed:
+        - source: salt://sankhara/moniek-tunnel.service
 /etc/systemd/system/giedo.service:
     file.managed:
         - source: salt://sankhara/giedo.service

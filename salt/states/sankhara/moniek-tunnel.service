@@ -1,0 +1,5 @@
+[Unit]
+Description=Links Moniek socket on phassa and sankhara
+
+[Service]
+ExecStart=/root/bin/moniek-tunnel

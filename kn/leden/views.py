@@ -2,6 +2,7 @@ from itertools import chain
 from hashlib import sha256
 from datetime import date
 from os import path
+from decimal import Decimal
 
 import mimetypes
 import logging
@@ -21,7 +22,9 @@ from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
-from django.template import RequestContext
+from django.template import RequestContext, Context
+from django.template.loader import get_template
+from django.template.loader_tags import BlockNode
 from django.contrib import messages
 
 from kn.leden.forms import (ChangePasswordForm, AddUserForm,
@@ -30,6 +33,7 @@ from kn.leden.auth import login_or_basicauth_required
 from kn.leden.date import now, date_to_dt
 from kn.leden.mongo import _id
 from kn.leden import giedo
+from kn.leden.fin import BalansInfo, quaestor
 
 from kn.base._random import pseudo_randstr
 from kn.base.http import redirect_to_referer, JsonHttpResponse
@@ -639,6 +643,66 @@ def secr_add_group(request):
 
 
 @login_required
+def fiscus_debtmail(request):
+
+    if 'fiscus' not in request.user.cached_groups_names:
+        raise PermissionDenied
+
+    data = dict([(n, {'debt': Decimal(debt)}) for (n, debt) in
+                 giedo.fin_get_debitors()])
+
+    for user in Es.users():
+        name = user.full_name
+        if name in data:
+            data[name]['user'] = user
+
+    ctx = {
+        'BASE_URL': settings.BASE_URL,
+        'quaestor': quaestor(),
+        'account_number': settings.BANK_ACCOUNT_NUMBER,
+        'account_holder': settings.BANK_ACCOUNT_HOLDER,
+    }
+
+    if request.method == 'POST' and 'debitor' in request.POST:
+        users_to_email = request.POST.getlist('debitor')
+        for user_name in users_to_email:
+            user = Es.by_name(user_name)
+
+            ctx['first_name'] = user.first_name,
+            ctx['debt'] = data[user.full_name]['debt']
+
+            try:
+                render_then_email("leden/debitor.mail.txt",
+                                  to=user, ctx=ctx,
+                                  cc=[],  # ADD penningmeester
+                                  from_email=ctx['quaestor']['email'],
+                                  reply_to=ctx['quaestor']['email'])
+                messages.info(
+                    request,
+                    _("Email gestuurd naar %s.") %
+                    user_name)
+            except Exception as e:
+                messages.error(request, _("Email naar %s faalde: %s.") %
+                               (user_name, repr(e)))
+
+    # get a sample of the email that will be sent for the quaestor's review.
+    email = ""
+    email_template = get_template('leden/debitor.mail.txt')
+
+    ctx['first_name'] = '< Naam >'
+    ctx['debt'] = '< Debet >'
+    context = Context(ctx)
+    for node in email_template:
+        if isinstance(node, BlockNode) and node.name == "plain":
+            email = node.render(context)
+            break
+
+    return render_to_response('leden/fiscus_debtmail.html',
+                              {'data': data, 'email': email},
+                              context_instance=RequestContext(request))
+
+
+@login_required
 def relation_end(request, _id):
     rel = Es.relation_by_id(_id)
     if rel is None:
@@ -826,6 +890,15 @@ def ik_openvpn_download(request, filename):
     response['Content-Length'] = default_storage.size(p)
     # XXX use ETags and returns 304's
     return response
+
+
+@login_required
+def ik_balans(request):
+    balans = giedo.fin_get_account(request.user)
+    return render_to_response('leden/ik_balans.html',
+                              {'balans': BalansInfo(balans),
+                               'quaestor': quaestor()},
+                              context_instance=RequestContext(request))
 
 
 def language(request):
