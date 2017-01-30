@@ -1,6 +1,7 @@
 
 table.balans {
 	border-collapse: collapse;
+	width: 100%;
 }
 
 table.balans th {
