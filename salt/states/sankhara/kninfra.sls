@@ -213,6 +213,7 @@ https://github.com/karpenoktem/regl:
 /etc/default/giedo:
     file.managed:
         - source: salt://sankhara/giedo.default
+        - template: jinja
 /etc/systemd/system/daan.service:
     file.managed:
         - source: salt://sankhara/daan.service
