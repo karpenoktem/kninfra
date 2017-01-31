@@ -1,10 +1,11 @@
 from __future__ import absolute_import
 
-""" KN markdown parser
-This module depends on Markdown: http://pypi.python.org/pypi/Markdown """
-
 from markdown import Extension, Markdown
 from markdown.treeprocessors import Treeprocessor
+
+
+""" KN markdown parser
+This module depends on Markdown: http://pypi.python.org/pypi/Markdown """
 
 
 class FixHeadingsExtension(Extension):

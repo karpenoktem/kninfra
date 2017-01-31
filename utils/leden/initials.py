@@ -2,6 +2,7 @@
 import _import  # noqa: F401
 
 from common import MEMBER_GROUP
+
 import kn.leden.entities as Es
 
 for m in Es.by_name(MEMBER_GROUP).get_members():

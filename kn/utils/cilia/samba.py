@@ -1,7 +1,7 @@
-import pwd
 import grp
-import string
 import logging
+import pwd
+import string
 import subprocess
 
 from kn.base._random import pseudo_randstr

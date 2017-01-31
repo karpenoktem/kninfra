@@ -3,11 +3,10 @@ import logging
 import MySQLdb
 from tarjan.tc import tc
 
-import kn.leden.entities as Es
-
-from kn.leden.date import now
-
 from django.conf import settings
+
+import kn.leden.entities as Es
+from kn.leden.date import now
 
 
 def generate_wolk_changes(giedo):

@@ -1,9 +1,9 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import TemplateView
 
-from kn.leden import views, api, graphs
+from kn.leden import api, graphs, views
 
 urlpatterns = [
     url(r'^$',

@@ -1,15 +1,15 @@
+import logging
 import os
 import string
-import logging
 import subprocess
 from glob import glob
-from tempfile import mkdtemp
 from shutil import copy2, copytree, rmtree
+from tempfile import mkdtemp
 
+from django.conf import settings
 from django.core.mail import EmailMessage
 
 import kn.leden.entities as Es
-from django.conf import settings
 
 
 class CreateCertificateException(Exception):

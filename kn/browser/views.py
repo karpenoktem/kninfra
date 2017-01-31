@@ -1,13 +1,13 @@
 import mimetypes
-import os.path
 import os
+import os.path
 
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.conf import settings
 from django.core.servers.basehttp import FileWrapper
-from django.utils.translation import ugettext as _
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.conf import settings
+from django.utils.translation import ugettext as _
 
 
 def _lines_of_file_as_set(path):

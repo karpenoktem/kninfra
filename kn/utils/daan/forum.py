@@ -1,11 +1,12 @@
 # vim: et:sta:bs=2:sw=4:
-import logging
 import hashlib
+import logging
 import time
 
 import MySQLdb
 
 from django.conf import settings
+
 from kn.base._random import pseudo_randstr
 
 

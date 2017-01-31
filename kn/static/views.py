@@ -1,8 +1,8 @@
-from django.conf import settings
-from django.template import RequestContext
-from django.shortcuts import render_to_response, redirect
-
 import os
+
+from django.conf import settings
+from django.shortcuts import redirect, render_to_response
+from django.template import RequestContext
 
 _slideshow_images = None
 

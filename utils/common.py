@@ -4,6 +4,7 @@ from __future__ import with_statement
 import _import  # noqa: F401
 import random
 import unicodedata
+
 import kn.settings
 
 ALPHA = 'qwertyuiopasdfghjklzxcvbnm'

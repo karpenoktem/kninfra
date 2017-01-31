@@ -1,8 +1,8 @@
-from django.db.models import permalink
-
 from regl.model import Document
 
-from kn.leden.mongo import db, SONWrapper, _id, son_property
+from django.db.models import permalink
+
+from kn.leden.mongo import SONWrapper, _id, db, son_property
 
 rcol = db['reglement']
 vcol = db['reglement_versions']

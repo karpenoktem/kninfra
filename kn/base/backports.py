@@ -3,17 +3,16 @@
 
 import re
 
+from django.conf import settings
 from django.core.urlresolvers import (RegexURLResolver, get_resolver,
                                       get_script_prefix, is_valid_path)
-
-from django.utils.six.moves.urllib.parse import quote
-from django.utils.translation import get_language
+from django.http import HttpResponseRedirect
+from django.utils import lru_cache, translation
 from django.utils.cache import patch_vary_headers
 from django.utils.encoding import force_bytes, iri_to_uri
-from django.http import HttpResponseRedirect
-from django.utils import translation
-from django.utils import lru_cache
-from django.conf import settings
+from django.utils.six.moves.urllib.parse import quote
+from django.utils.translation import get_language
+
 
 # i18n_patterns with prefix_default_language (backport from Django 1.10)
 #

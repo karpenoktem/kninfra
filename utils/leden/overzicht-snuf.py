@@ -1,8 +1,7 @@
 import _import  # noqa: F401
-
-import sys
 import csv
 import datetime
+import sys
 
 import kn.leden.entities as Es
 

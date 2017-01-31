@@ -1,12 +1,13 @@
 #!/usr/bin/python
 
-from django.conf import settings
-
-import json
 import datetime
-import httplib2
+import json
 
+import httplib2
 from iso8601 import parse_date
+from oauth2client.client import SignedJwtAssertionCredentials
+
+from django.conf import settings
 
 try:
     # Debian package python-googleapi
@@ -14,7 +15,6 @@ try:
 except ImportError:
     # pip package google-api-python-client
     from googleapiclient.discovery import build
-from oauth2client.client import SignedJwtAssertionCredentials
 
 # How to configure the agenda:
 #

@@ -1,14 +1,16 @@
 from __future__ import absolute_import
 
-from subprocess import call
 import logging
 import os
+from subprocess import call
 
 from django.conf import settings
 
 from kn.utils.mailman import import_mailman
+
 import_mailman()
-from Mailman import Utils, MailList, UserDesc, Errors  # noqa: E402
+
+from Mailman import Utils, MailList, UserDesc, Errors  # noqa: E402 isort:skip
 
 
 def apply_mailman_changes(daan, changes):

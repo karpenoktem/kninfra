@@ -1,5 +1,5 @@
-from kn.agenda.fetch import fetch
 from kn.agenda.entities import update
+from kn.agenda.fetch import fetch
 
 
 def update_site_agenda(giedo):

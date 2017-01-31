@@ -1,10 +1,10 @@
-import sqlite3
-import os.path
 import logging
-
-import kn.leden.entities as Es
+import os.path
+import sqlite3
 
 from django.conf import settings
+
+import kn.leden.entities as Es
 
 
 def generate_quassel_changes(giedo):

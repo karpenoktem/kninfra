@@ -1,5 +1,6 @@
-from datetime import datetime
 from collections import Iterable
+from datetime import datetime
+
 
 # Returns the amount of seconds in the given amount of hours and minutes
 

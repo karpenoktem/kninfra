@@ -1,4 +1,8 @@
 import _import  # noqa: F401
+import datetime
+
+import kn.leden.entities as Es
+
 
 # In the old administration, we only registered membership of `leden' rounded
 # to years.  However, we kept the registration date separately.  In the
@@ -9,10 +13,6 @@ import _import  # noqa: F401
 # This is, for instance, to prevent someone who joined in 2007-08-20 to
 # be added to leden3.
 #                       2012-04-27       bas@kn.cx
-
-import datetime
-
-import kn.leden.entities as Es
 
 
 def main():

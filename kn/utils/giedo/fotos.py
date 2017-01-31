@@ -1,8 +1,9 @@
-from django.conf import settings
-import kn.fotos.entities as fEs
-
 import os
 import random
+
+from django.conf import settings
+
+import kn.fotos.entities as fEs
 
 extensions = {
     'gif': 'gif',
