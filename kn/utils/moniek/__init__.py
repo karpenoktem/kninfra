@@ -1,12 +1,11 @@
 import logging
 
-from django.conf import settings
-
 from koert.gnucash.tools import open_yaml
 
-from kn.utils.whim import WhimDaemon
+from django.conf import settings
 
 from kn.utils.moniek.fin import fin_get_account, fin_get_debitors
+from kn.utils.whim import WhimDaemon
 
 
 class Moniek(WhimDaemon):
