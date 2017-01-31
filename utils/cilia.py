@@ -1,6 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
-
 import logging
 
 from kn.utils.cilia import Cilia

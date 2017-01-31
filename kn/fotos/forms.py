@@ -1,11 +1,10 @@
 from datetime import date
 
-from django.utils.translation import ugettext as _
 from django import forms
-
-from kn.leden import giedo
+from django.utils.translation import ugettext as _
 
 import kn.fotos.entities as fEs
+from kn.leden import giedo
 
 
 def list_events():

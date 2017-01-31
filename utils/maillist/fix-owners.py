@@ -1,8 +1,8 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
 
-from Mailman.Utils import list_names
 from Mailman.MailList import MailList
+from Mailman.Utils import list_names
 
 ALLOWED_OWNERS = ['wortel@karpenoktem.nl',
                   'secretaris@karpenoktem.nl']

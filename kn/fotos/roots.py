@@ -1,6 +1,7 @@
+from collections import namedtuple
+
 from django.conf import settings
 
-from collections import namedtuple
 foto_root = namedtuple('foto_root', ('base', 'between'))
 
 FOTO_ROOTS = {

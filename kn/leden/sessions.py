@@ -1,6 +1,6 @@
 import datetime
 
-from django.contrib.sessions.backends.base import SessionBase, CreateError
+from django.contrib.sessions.backends.base import CreateError, SessionBase
 from django.utils.encoding import force_text
 
 from kn.leden.mongo import db

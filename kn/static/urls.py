@@ -1,12 +1,12 @@
 import os.path
 
-from django.conf.urls import url
 from django.conf import settings
-from django.views.generic import TemplateView, RedirectView
-from kn.base.views import direct_to_folder
+from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy  # noqa: F401
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import RedirectView, TemplateView
 
+from kn.base.views import direct_to_folder
 from kn.static import views
 
 urlpatterns = [

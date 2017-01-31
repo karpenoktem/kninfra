@@ -1,12 +1,11 @@
 import _import  # noqa: F401
-
-import sys
 import csv
 import datetime
-
-import kn.leden.entities as Es
+import sys
 
 from django.utils.six import text_type
+
+import kn.leden.entities as Es
 
 
 def main():

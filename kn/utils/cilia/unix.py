@@ -1,10 +1,11 @@
-import pwd
-import grp
-import spwd
-import string
-import logging
 import datetime
+import grp
+import logging
+import pwd
+import string
 import subprocess
+
+import spwd
 
 
 def unix_setpass(cilia, user, password):

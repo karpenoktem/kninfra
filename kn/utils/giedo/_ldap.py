@@ -2,10 +2,10 @@ import logging
 
 import ldap
 
-import kn.leden.entities as Es
-
 from django.conf import settings
 from django.utils import six
+
+import kn.leden.entities as Es
 
 
 def generate_ldap_changes(giedo):

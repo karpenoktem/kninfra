@@ -1,4 +1,5 @@
 from django import template
+
 import kn.agenda.entities as Es_a
 
 register = template.Library()

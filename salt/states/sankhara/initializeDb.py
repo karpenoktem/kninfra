@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import yaml
 import bson
 import pymongo
+import yaml
 
 MONGO_DATABASE = 'kn'
 MONGO_HOST = 'localhost'

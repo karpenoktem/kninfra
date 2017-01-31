@@ -3,8 +3,9 @@
 import _import  # noqa: F401
 import datetime
 
-import kn.leden.entities as Es
 from django.core.mail import EmailMessage
+
+import kn.leden.entities as Es
 
 
 def birthday_email():

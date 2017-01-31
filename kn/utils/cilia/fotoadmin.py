@@ -1,6 +1,6 @@
-import subprocess
 import os.path
 import re
+import subprocess
 
 import six
 

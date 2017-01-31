@@ -8,6 +8,7 @@ from django.utils import six
 import kn.leden.entities as Es
 from kn.leden.date import now
 
+
 # TODO (issue #7) handle cycles properly.
 
 

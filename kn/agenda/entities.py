@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from kn.leden.mongo import db, SONWrapper, son_property
-
 from django.core.urlresolvers import reverse
-from django.utils.safestring import mark_safe
 from django.utils import six
+from django.utils.safestring import mark_safe
+
+from kn.leden.mongo import SONWrapper, db, son_property
 
 acol = db['agenda']
 

@@ -2,9 +2,9 @@
 
 # Initializes the LDAP database
 
+import subprocess
 import sys
 import textwrap
-import subprocess
 
 
 def main():

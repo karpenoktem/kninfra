@@ -1,27 +1,26 @@
 import os.path
 from time import gmtime, strftime
 
-from django.utils.six.moves.urllib.parse import unquote
-from django.template import RequestContext
-from django.shortcuts import render_to_response, redirect
-from django.utils.translation import ugettext as _
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse
-from django.contrib.auth.views import redirect_to_login
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.http import (Http404, HttpResponse,
-                         HttpResponseNotModified, QueryDict)
-from django.utils.encoding import filepath_to_uri
+from django.http import (Http404, HttpResponse, HttpResponseNotModified,
+                         QueryDict)
+from django.shortcuts import redirect, render_to_response
+from django.template import RequestContext
 from django.utils import six
-
-from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
-from kn.leden import giedo
+from django.utils.encoding import filepath_to_uri
+from django.utils.six.moves.urllib.parse import unquote
+from django.utils.translation import ugettext as _
 
 import kn.fotos.entities as fEs
 import kn.leden.entities as Es
 from kn.fotos.api import album_json, album_parents_json
+from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
+from kn.leden import giedo
 
 
 def fotos(request, path=''):

@@ -1,6 +1,6 @@
-import sys
 import imp
 import os.path
+import sys
 
 
 def setup_virtual_package(name, path=os.curdir):

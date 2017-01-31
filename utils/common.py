@@ -3,10 +3,11 @@
 import _import  # noqa: F401
 import random
 import unicodedata
-import kn.settings
 
-from django.utils.six.moves import range
 from django.utils import six
+from django.utils.six.moves import range
+
+import kn.settings
 
 ALPHA = 'qwertyuiopasdfghjklzxcvbnm'
 NUM = '1234567890'

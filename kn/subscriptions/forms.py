@@ -1,10 +1,10 @@
 from django import forms
-from django.utils.translation import ugettext as _
 from django.utils import six
+from django.utils.translation import ugettext as _
 
+import kn.subscriptions.entities as subscr_Es
 from kn.leden.forms import EntityChoiceField
 from kn.leden.mongo import _id
-import kn.subscriptions.entities as subscr_Es
 
 
 def get_allowed_owners(user):

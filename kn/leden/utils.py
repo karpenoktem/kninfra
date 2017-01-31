@@ -1,11 +1,12 @@
-import kn.leden.entities as Es
+import datetime
+
+import unidecode
 
 from django.conf import settings
 from django.utils import dateparse
 from django.utils.six.moves import range
 
-import unidecode
-import datetime
+import kn.leden.entities as Es
 
 
 def find_name_for_user(first_name, last_name):

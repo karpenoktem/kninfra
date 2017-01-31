@@ -2,9 +2,10 @@ from __future__ import absolute_import
 
 import os.path
 
-from kn.base.runtime import setup_virtual_package
-from django.utils import six
 from django.conf import settings
+from django.utils import six
+
+from kn.base.runtime import setup_virtual_package
 
 __mailman_imported = False
 

@@ -1,16 +1,16 @@
-from django.template.defaultfilters import stringfilter
-from django.utils.safestring import mark_safe
-from django.core.urlresolvers import resolve, reverse, Resolver404
-from django.utils.translation import ugettext as _
-from django.utils.html import conditional_escape
-from django.utils import translation
-from django.conf import settings
-from django import template
-
-import os
-import random
-import os.path
 import json
+import os
+import os.path
+import random
+
+from django import template
+from django.conf import settings
+from django.core.urlresolvers import Resolver404, resolve, reverse
+from django.template.defaultfilters import stringfilter
+from django.utils import translation
+from django.utils.html import conditional_escape
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext as _
 
 register = template.Library()
 

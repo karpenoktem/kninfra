@@ -1,8 +1,8 @@
 from django.db.models import permalink
 from django.utils import six
 
-from kn.leden.mongo import db, SONWrapper, _id, son_property
 import kn.leden.entities as Es
+from kn.leden.mongo import SONWrapper, _id, db, son_property
 
 # Polls:
 # {'name': 'examplePoll',

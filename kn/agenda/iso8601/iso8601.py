@@ -8,9 +8,10 @@ datetime.datetime(2007, 1, 25, 12, 0, tzinfo=<iso8601.iso8601.Utc ...>)
 
 """
 
-from datetime import datetime, timedelta, tzinfo
-import six
 import re
+from datetime import datetime, timedelta, tzinfo
+
+import six
 
 __all__ = ["parse_date", "ParseError"]
 

@@ -2,9 +2,10 @@
 import _import  # noqa: F401
 
 import pyx
-import kn.leden.entities as Es
 
 from django.utils.six.moves import range
+
+import kn.leden.entities as Es
 
 
 def main():

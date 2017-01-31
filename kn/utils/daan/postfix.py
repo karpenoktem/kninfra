@@ -1,7 +1,8 @@
-from django.conf import settings
 from subprocess import call
 
 import six
+
+from django.conf import settings
 
 
 def set_postfix_slm_map(daan, tbl):

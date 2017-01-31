@@ -1,15 +1,15 @@
 from html2text import HTML2Text
 
+import django.core.mail
 import django.template
 import django.template.loader
-from django.template.loader_tags import BlockNode
-from django.utils.translation import ugettext as _
-from django.utils import translation
-import django.core.mail
-
 from django.conf import settings
+from django.template.loader_tags import BlockNode
+from django.utils import translation
+from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
+
 
 # TODO translate e-mail to the language preferred by the recipient
 

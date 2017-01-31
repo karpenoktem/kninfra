@@ -1,12 +1,13 @@
 import pymongo
 
+from django.conf import settings
+from django.utils import six
+
 try:
     from pymongo.objectid import ObjectId
 except ImportError:
     from bson import ObjectId
 
-from django.conf import settings
-from django.utils import six
 
 conn = pymongo.Connection(settings.MONGO_HOST)
 db = conn[settings.MONGO_DB]

@@ -1,9 +1,10 @@
 import _import  # noqa: F401
+
 from common import now
 
-import kn.leden.entities as Es
-
 from django.utils import six
+
+import kn.leden.entities as Es
 
 
 def main():

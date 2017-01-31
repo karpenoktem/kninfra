@@ -1,9 +1,10 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
-import kn.leden.entities as Es
 from functools import reduce
 
 from django.utils.six.moves import range
+
+import kn.leden.entities as Es
 
 
 def main():

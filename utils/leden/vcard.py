@@ -1,12 +1,10 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
+import sys
+import tarfile
 
 import vobject
-import tarfile
-import sys
-
 from common import args_to_users
-
 from six.moves import cStringIO
 
 

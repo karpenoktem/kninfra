@@ -1,9 +1,11 @@
 import _import  # noqa: F401
+
 from kn.utils.mailman import import_mailman
 
 import_mailman()
-import Mailman.MailList  # noqa: E402
-import Mailman.Utils  # noqa: E402
+
+import Mailman.MailList  # noqa: E402 isort:skip
+import Mailman.Utils     # noqa: E402 isort:skip
 
 
 def main():

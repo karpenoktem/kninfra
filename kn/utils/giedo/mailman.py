@@ -2,16 +2,17 @@ from __future__ import absolute_import
 
 import logging
 
-from kn.utils.mailman import import_mailman
+from django.utils import six
+
 import kn.leden.entities as Es
 from kn.leden.date import now
-from django.utils import six
+from kn.utils.mailman import import_mailman
 
 if six.PY2:  # HACK see #438
     import_mailman()
-    import Mailman  # noqa: E402
-    import Mailman.Utils  # noqa: E402
-    import Mailman.MailList  # noqa: E402
+    import Mailman           # noqa: E402 isort:skip
+    import Mailman.Utils     # noqa: E402 isort:skip
+    import Mailman.MailList  # noqa: E402 isort:skip
 
 
 def generate_mailman_changes(giedo):

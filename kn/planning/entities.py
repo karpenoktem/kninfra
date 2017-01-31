@@ -1,10 +1,10 @@
 import datetime
 
-from kn.leden.date import now
-from kn.leden.mongo import db, SONWrapper, son_property, _id
-import kn.leden.entities as Es
-
 from pymongo import DESCENDING
+
+import kn.leden.entities as Es
+from kn.leden.date import now
+from kn.leden.mongo import SONWrapper, _id, db, son_property
 
 pcol = db['planning_pools']
 ecol = db['planning_events']

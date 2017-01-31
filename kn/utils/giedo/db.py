@@ -1,10 +1,10 @@
 import logging
 
-import kn.leden.entities as Es
-from kn.leden.date import now
-from kn.base.conf import DT_MIN, DT_MAX
-
 from django.utils import six
+
+import kn.leden.entities as Es
+from kn.base.conf import DT_MAX, DT_MIN
+from kn.leden.date import now
 
 
 def update_db(giedo):

@@ -1,9 +1,10 @@
+import re
+
 from django.core.exceptions import ImproperlyConfigured
 from django.template import TemplateDoesNotExist
 from django.template.loader import (BaseLoader, find_template_loader,
-                                    make_origin, get_template_from_string)
+                                    get_template_from_string, make_origin)
 
-import re
 
 # Based on django.template.loader.cached.Loader.  A lot is boilerplate:
 # the magic happens in SlashNewlineStrippingTemplateLoader._process

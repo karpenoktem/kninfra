@@ -1,6 +1,5 @@
-from kn.leden.mongo import db, SONWrapper, son_property, _id
-
 import kn.leden.entities as Es
+from kn.leden.mongo import SONWrapper, _id, db, son_property
 
 mcol = db['moderation_records']
 

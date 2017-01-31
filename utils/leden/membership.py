@@ -2,12 +2,13 @@
 from __future__ import print_function
 
 import _import  # noqa: F401
+import sys
+
+from common import args_to_users
 
 from django.utils import six
 from django.utils.six.moves import range
 
-import sys
-from common import args_to_users
 import kn.leden.entities as Es
 
 users = dict()

@@ -1,15 +1,14 @@
 import _import  # noqa: F401
-
-# Prepare for the coming change of "verenigingsjaar".
-
 import argparse
-
 import datetime
+
+from django.utils import six
+from django.utils.six.moves import range
 
 import kn.leden.entities as Es
 
-from django.utils.six.moves import range
-from django.utils import six
+
+# Prepare for the coming change of "verenigingsjaar".
 
 
 def load_year_overrides():

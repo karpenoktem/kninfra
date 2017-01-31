@@ -1,22 +1,22 @@
-from kn.leden.mongo import db, SONWrapper, _id, son_property
-import kn.leden.entities as Es
-from kn.fotos.utils import resize_proportional
+import datetime
+import mimetypes
+import os
+import os.path
+import random
+import re
+import subprocess
+from collections import namedtuple
+
+import PIL.Image
+from PIL.ExifTags import TAGS
 
 from django.conf import settings
 from django.db.models import permalink
 from django.utils import six
 
-import os
-import re
-import PIL.Image
-from PIL.ExifTags import TAGS
-import random
-import datetime
-import os.path
-import mimetypes
-import subprocess
-from collections import namedtuple
-
+import kn.leden.entities as Es
+from kn.fotos.utils import resize_proportional
+from kn.leden.mongo import SONWrapper, _id, db, son_property
 
 cache_tuple = namedtuple(
     'cache_tuple',

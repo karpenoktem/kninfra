@@ -4,10 +4,10 @@
 #
 
 
-import os
-import sys
 import imp
+import os
 import os.path
+import sys
 
 import django
 

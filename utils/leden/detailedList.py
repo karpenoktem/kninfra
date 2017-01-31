@@ -1,10 +1,11 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
-
 import sys
 from optparse import OptionParser
-from django.utils import six
+
 from common import args_to_users, print_table
+
+from django.utils import six
 
 op = OptionParser()
 op.add_option('-s', '--separator', dest='separator', default=' ',
