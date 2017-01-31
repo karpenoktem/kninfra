@@ -5,6 +5,8 @@ python:
 install:
     - pip install flake8
     - pip install isort
+    - pip install autopep8
 script:
     - flake8
+    - autopep8 -d -aar . --exclude settings.py
     - isort -c -df -rc .
