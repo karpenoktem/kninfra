@@ -6,6 +6,5 @@ install:
     - pip install flake8
     - pip install isort
 script:
-    - pwd
     - flake8
-    - isort -c -rc .
+    - isort -c -df -rc .
