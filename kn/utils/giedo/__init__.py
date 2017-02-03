@@ -127,7 +127,6 @@ class Giedo(WhimDaemon):
             elapsed = time.time() - start
             logging.info("send %s %s" % (name, elapsed))
 
-        todo[0] += 1
         for act in self.ss_actions:
             self.threadPool.execute(_sync_action, _entry, *act)
         self.threadPool.execute(self._sync_openvpn)
