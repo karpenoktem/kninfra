@@ -113,3 +113,19 @@ def create_brand(suffix, name):
                     'sofa_suffix': suffix,
                     'tags': [Es.id_by_name('!sofa-brand')],
                     'types': ['brand']})
+
+
+def create_extern(humanName, email, name=None):
+    Es.ecol.insert({
+        'names': [name] if name else [],
+        'humanNames': [{'human': humanName}],
+        'types': ['user'],
+        'tags': [Es.id_by_name('externen')],
+        'is_active': False,
+        'has_unix_user': False,
+        'emailAddresses': [{
+            'email': email,
+            'from': DT_MIN,
+            'until': DT_MAX
+        }],
+    })
