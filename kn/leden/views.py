@@ -445,32 +445,6 @@ def ik_chpasswd(request):
                               context_instance=RequestContext(request))
 
 
-@login_required
-def ik_chpasswd_villanet(request):
-    errl = []
-    if request.method == 'POST':
-        form = ChangePasswordForm(request.POST)
-        if form.is_valid():
-            try:
-                oldpw = form.cleaned_data['old_password']
-                newpw = form.cleaned_data['new_password']
-                giedo.change_villanet_password(str(request.user.name), oldpw,
-                                               newpw)
-                t = _("Lieve %s, maar natuurlijk, jouw wachtwoord voor het " +
-                      "villa-netwerk is veranderd.")
-                messages.info(request, t % request.user.first_name)
-                return HttpResponseRedirect(reverse('smoelen-home'))
-            except giedo.ChangePasswordError as e:
-                errl.extend(e.args)
-    else:
-        form = ChangePasswordForm()
-    errl.extend(form.non_field_errors())
-    errstr = humanized_enum(errl)
-    return render_to_response('leden/ik_chpasswd_villanet.html',
-                              {'form': form, 'errors': errstr},
-                              context_instance=RequestContext(request))
-
-
 def rauth(request):
     """
         An implementation of Jille Timmermans' rauth scheme

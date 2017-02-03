@@ -35,8 +35,6 @@ op deze website en daar buiten:{% endblocktrans %}</p>
                           >e-maillijsten</a>.{% endblocktrans %}</li>
 		</ul>
 	</li>
-    <li>{% blocktrans %}Wifi op de villa, zie <a href="{{ url_wiki }}/Wifi">
-            het wiki-artikel</a>.{% endblocktrans %}</li>
     <li>{% blocktrans %}Het <a href="{{ url_fotos }}">fotoboek</a>.
         Je kunt hier ook <a href="{{ url_wiki }}/Handleiding:FotosUploaden">
             foto's naar uploaden</a>!{% endblocktrans %}</li>
@@ -60,8 +58,6 @@ op deze website en daar buiten:{% endblocktrans %}</p>
     <li><a href="{{ user.get_absolute_url }}">{% blocktrans %}Verander je profiel
             (profielfoto, zichbaarheid telefoonnummer){% endblocktrans %}</a></li>
     <li><a href="{% url "chpasswd" %}">{% trans "Verander je wachtwoord" %}</a></li>
-	<li><a href="{% url "chpasswd-villanet" %}"
-        >{% trans "Stel een wachtwoord in voor wifi op de villa" %}</a></li>
 </ul>
 
 {% endblock %}

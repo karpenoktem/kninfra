@@ -54,8 +54,6 @@ urlpatterns = [
     url(_(r'^ik/?$'), views.ik, name='ik'),
     url(_(r'^ik/balans/?$'), views.ik_balans, name='ik-balans'),
     url(_(r'^ik/wachtwoord$'), views.ik_chpasswd, name="chpasswd"),
-    url(_(r'^ik/wachtwoord/villanet/$'), views.ik_chpasswd_villanet,
-        name="chpasswd-villanet"),
     url(_(r'^ik/smoel$'), views.ik_chsmoel, name="ik-chsmoel"),
     url(_(r'^api/users$'), views.api_users),
     url(_(r'^api/?$'), api.view, name='leden-api'),
