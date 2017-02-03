@@ -121,11 +121,12 @@ class Giedo(WhimDaemon):
             start = time.time()
             msg = action()
             elapsed = time.time() - start
-            logging.info("generate %s %s" % (name, elapsed))
+            logging.info("generate %s %.4f" % (name, elapsed))
             start = time.time()
             daemon.send(msg)
             elapsed = time.time() - start
-            logging.info("send %s %s" % (name, elapsed))
+            logging.info("send %s %.4f (%s to go)" %
+                         (name, elapsed, todo[0] - 1))
 
         for act in self.ss_actions:
             self.threadPool.execute(_sync_action, _entry, *act)
