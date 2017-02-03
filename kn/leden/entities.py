@@ -139,9 +139,6 @@ ncol = db['notes']      # notes on entities by the secretaris
 #   "by" : ObjectId("4e6fcc85e60edf3dc0000410")
 # }
 
-pcol = db['push_changes']  # Changes to be pushed to remote systems
-# TODO add example
-
 # human readable list of notifications for informacie group
 incol = db['informacie_notifications']
 # TODO add example
@@ -1566,24 +1563,6 @@ class InformacieNotification(SONWrapper):
 
     event = son_property(('event', ))
     when = son_property(('when', ))
-
-
-class PushChange(SONWrapper):
-
-    def __init__(self, data):
-        super(PushChange, self).__init__(data, pcol)
-
-    @property
-    def system(self):
-        return self._data['system']
-
-    @property
-    def action(self):
-        return self._data['action']
-
-    @property
-    def data(self):
-        return self._data['data']
 
 
 # List of type of entities

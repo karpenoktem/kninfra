@@ -1,19 +1,12 @@
-import json
 import logging
 import threading
 import time
 
 import mirte  # github.com/bwesterb/mirte
-from M2Crypto import RSA
 
 from django.conf import settings
-from django.core.files.storage import default_storage
-from django.utils.six.moves import urllib
-from django.utils.six.moves.urllib.parse import urlencode
 
 import kn.leden.entities as Es
-from kn.base._random import pseudo_randstr
-from kn.leden.date import now
 from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.db import update_db
 from kn.utils.giedo.forum import generate_forum_changes
@@ -53,12 +46,7 @@ class Giedo(WhimDaemon):
         self.mirte = mirte.get_a_manager()
         self.threadPool = self.mirte.get_a('threadPool')
         self.operation_lock = threading.Lock()
-        self.push_changes_event = threading.Event()
         self.openvpn_lock = threading.Lock()
-        self.threadPool.execute(self.run_change_pusher)
-        if default_storage.exists("villanet.pem"):
-            self.villanet_key = RSA.load_pub_key(default_storage.path(
-                "villanet.pem"))
         self.ss_actions = (
             ('postfix', self.daan, self._gen_postfix),
             ('postfix-slm', self.daan, self._gen_postfix_slm),
@@ -69,7 +57,6 @@ class Giedo(WhimDaemon):
             ('ldap', self.daan, self._gen_ldap),
             ('wolk', self.cilia, self._gen_wolk),
             ('quassel', self.daan, self._gen_quassel))
-        self.push_changes_event.set()
 
     def _gen_quassel(self):
         return {'type': 'quassel',
@@ -112,55 +99,6 @@ class Giedo(WhimDaemon):
         with self.openvpn_lock:
             generate_openvpn_zips(self)
 
-    def _sync_villanet(self):
-        if not settings.VILLANET_SECRET_API_KEY:
-            logging.warn("VILLANET_SECRET_API_KEY not set")
-            return
-        ret = self.villanet_request({'action': 'listUsers'})
-        if not ret[0]:
-            return
-        ret = json.loads(ret[1])
-        users = dict()
-        ulut = dict()
-        for u in Es.users():
-            ulut[u._id] = str(u.name)
-        member_relations_grouped = dict()
-        for rel in Es.query_relations(_with=Es.by_name('leden'), until=now()):
-            if rel['who'] not in member_relations_grouped:
-                member_relations_grouped[rel['who']] = []
-            member_relations_grouped[rel['who']].append(rel)
-        for user_id, relations in member_relations_grouped.items():
-            latest = max(relations, key=lambda x: x['until'])
-            users[ulut[user_id]] = latest['until'].strftime('%Y-%m-%d')
-        vn = set(ret.keys())
-        kn = set(users.keys())
-        dt_max = settings.DT_MAX.strftime('%Y-%m-%d')
-        for name in kn - vn:
-            data = {
-                'username': name,
-                'password': self.villanet_encrypt_password(
-                    pseudo_randstr(16)),
-            }
-            if users[name] != dt_max:
-                data['till'] = users[name]
-            pc = Es.PushChange({'system': 'villanet', 'action': 'addUser',
-                                'data': data})
-            pc.save()
-        for name in vn - kn:
-            logging.info("Stray user %s" % name)
-        for name in vn & kn:
-            remote = (ret[name]['till'][:10] if ret[name]['till'] is not None
-                      else '')
-            local = users[name] if users[name] != dt_max else ''
-            if remote != local:
-                pc = Es.PushChange({'system': 'villanet',
-                                    'action': 'changeUser', 'data': {
-                                        'username': name,
-                                        'till': local
-                                    }})
-                pc.save()
-        self.push_changes_event.set()
-
     def sync(self):
         update_db_start = time.time()
         update_db(self)
@@ -183,14 +121,13 @@ class Giedo(WhimDaemon):
             start = time.time()
             msg = action()
             elapsed = time.time() - start
-            logging.info("generate %s %s" % (name, elapsed))
+            logging.info("generate %s %.4f" % (name, elapsed))
             start = time.time()
             daemon.send(msg)
             elapsed = time.time() - start
-            logging.info("send %s %s" % (name, elapsed))
+            logging.info("send %s %.4f (%s to go)" %
+                         (name, elapsed, todo[0] - 1))
 
-        todo[0] += 1
-        self.threadPool.execute(_sync_action, self._sync_villanet)
         for act in self.ss_actions:
             self.threadPool.execute(_sync_action, _entry, *act)
         self.threadPool.execute(self._sync_openvpn)
@@ -218,24 +155,6 @@ class Giedo(WhimDaemon):
                 return {'success': True}
         elif d['type'] == 'ping':
             return {'pong': True}
-        elif d['type'] == 'set-villanet-password':
-            with self.operation_lock:
-                u = Es.by_name(d['user'])
-                if u is None:
-                    return {'error': 'no such user'}
-                u = u.as_user()
-                if not u.check_password(d['oldpass']):
-                    return {'error': 'wrong current password'}
-                encrypted_pass = self.villanet_encrypt_password(d['newpass'])
-                pc = Es.PushChange(
-                    {'system': 'villanet',
-                     'action': 'changeUser', 'data': {
-                         'username': d['user'],
-                         'password': encrypted_pass
-                     }})
-                pc.save()
-                self.push_changes_event.set()
-                return {'success': True}
         elif d['type'] == 'fotoadmin-scan-userdirs':
             return self.cilia.send(d)
         elif d['type'] == 'fotoadmin-move-fotos':
@@ -277,39 +196,5 @@ class Giedo(WhimDaemon):
             return self.moniek.send(d)
         else:
             logging.warn("Unknown command: %s" % d['type'])
-
-    def villanet_encrypt_password(self, password):
-        ctx = self.villanet_key.public_encrypt(password, RSA.pkcs1_padding)
-        return ctx.encode('base64').replace("\n", '')
-
-    def run_change_pusher(self):
-        while True:
-            self.push_changes_event.wait()
-            self.push_changes_event.clear()
-            for pc in Es.pcol.find():
-                if pc['system'] == 'villanet':
-                    if not settings.VILLANET_SECRET_API_KEY:
-                        logging.warn("VILLANET_SECRET_API_KEY not set")
-                        continue
-                    params = pc['data']
-                    params['action'] = pc['action']
-                    ret = self.villanet_request(params)
-                    if not ret[0]:
-                        continue
-                else:
-                    logging.warn(
-                        "Unknown PushChange system %s " %
-                        pc['system'])
-                Es.pcol.remove({'_id': pc['_id']})
-
-    def villanet_request(self, params):
-        params['apikey'] = settings.VILLANET_SECRET_API_KEY
-        url = "http://www.vvs-nijmegen.nl/knapi.php?" + urlencode(params)
-        ret = urllib.request.urlopen(url, timeout=1).read()
-        ret = ret.strip()
-        if ret[:4] == 'OK: ':
-            return (True, ret[4:])
-        logging.warning("villanet_request: %s", repr(ret))
-        return (False, ret)
 
 # vim: et:sta:bs=2:sw=4:
