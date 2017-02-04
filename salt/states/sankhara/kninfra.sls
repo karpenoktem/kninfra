@@ -46,7 +46,7 @@ kninfra packages:
             - imagemagick
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved', 'pymysql'] %}
+{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved', 'pymysql', 'iso8601'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
