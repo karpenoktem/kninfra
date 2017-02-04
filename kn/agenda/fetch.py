@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import datetime
-import json
 
 import httplib2
 from iso8601 import parse_date
