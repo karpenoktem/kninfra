@@ -15,6 +15,7 @@ class MutInfo:
 
     def __init__(self, data):
         self.data = data
+        self.value = Decimal(data['value'])
 
     @property
     def trdescription(self):
@@ -27,6 +28,11 @@ class BalansInfo:
         self.data = data
         self.total = Decimal(data['total'])
         self.mutations = [MutInfo(mut) for mut in data['mutations']]
+
+        s = 0
+        for i in range(len(self.mutations)):
+            s += self.mutations[i].value
+            self.mutations[i].sum = s
 
     @property
     def abstotal(self):

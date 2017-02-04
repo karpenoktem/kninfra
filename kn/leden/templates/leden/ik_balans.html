@@ -35,19 +35,22 @@ ons nog  <strong>€ {{ bedrag }}</strong> veschuldigd.
 		<th>{% trans "datum" %}</th>
 		<th>{% trans "omschrijving" %}</th>
 		<th>{% trans "bedrag (€)" %}</th>
+		<th>{% trans "som (€)" %}</th>
 	</tr>
 	{% for mut in balans.mutations %}
 	<tr>
 		<td>{{ mut.data.tr }}</td>
 		<td class="date">{{ mut.data.date.text }}</td>
 		<td>{{ mut.trdescription }}</td>
-		<td class="value">{{ mut.data.value }}</td>
+		<td class="value">{{ mut.value }}</td>
+		<td class="value">{{ mut.sum }}</td>
 	</tr>
 	{% if mut.data.description %}
 	<tr>
 		<td></td>
 		<td></td>
 		<td>{{ mut.data.description }}</td>
+		<td></td>
 		<td></td>
 	</tr>
 	{% endif %}
