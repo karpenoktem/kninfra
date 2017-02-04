@@ -1,10 +1,14 @@
+import hashlib
 import logging
 
 import ldap
 import ldap.modlist
-import smbpasswd
 
 from django.conf import settings
+
+
+def nthash(password):
+    return hashlib.new('md4', password.encode('utf-16le')).hexdigest().upper()
 
 
 def ldap_setpass(daan, user, password):
@@ -29,7 +33,7 @@ def ldap_setpass(daan, user, password):
         if 'sambaNTPassword' in _o:
             l.modify_s(udn, ldap.modlist.modifyModlist(
                 {'sambaNTPassword': _o['sambaNTPassword'][0]},
-                {'sambaNTPassword': [smbpasswd.nthash(password)]}))
+                {'sambaNTPassword': [nthash(password)]}))
         else:
             # NOTE See /doc/ldap/scheme.ldif
             #      We added the scheme *after* the creation of the database.
@@ -37,7 +41,7 @@ def ldap_setpass(daan, user, password):
             l.modify_s(udn, ldap.modlist.modifyModlist(
                 {'objectClass': _o['objectClass']},
                 {'objectClass': _o['objectClass'] + ['knAccount'],
-                 'sambaNTPassword': [smbpasswd.nthash(password)]}))
+                 'sambaNTPassword': [nthash(password)]}))
     finally:
         l.unbind_s()
 

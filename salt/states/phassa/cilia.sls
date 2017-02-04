@@ -1,7 +1,6 @@
 cilia packages:
     pkg.installed:
         - pkgs:
-            - python-smbpasswd
             - python-six
 /root/.profile:
     file.managed:
