@@ -20,7 +20,8 @@ def apply_wiki_changes(daan, changes):
         host=creds[0],
         user=creds[1],
         password=creds[2],
-        db=creds[3]
+        db=creds[3],
+        charset='utf-8'
     )
     try:
         for user, realname, email in changes['add']:

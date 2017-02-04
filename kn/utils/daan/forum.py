@@ -19,7 +19,8 @@ def forum_setpass(daan, user, password):
         host=creds[0],
         user=creds[1],
         password=creds[2],
-        db=creds[3]
+        db=creds[3],
+        charset='utf-8'
     )
     try:
         with dc.cursor() as c:
@@ -44,7 +45,8 @@ def apply_forum_changes(daan, changes):
         host=creds[0],
         user=creds[1],
         password=creds[2],
-        db=creds[3]
+        db=creds[3],
+        charset='utf-8'
     )
     try:
         with dc.cursor() as c:

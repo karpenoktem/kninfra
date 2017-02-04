@@ -70,7 +70,8 @@ def generate_wolk_changes(giedo):
         host=creds[0],
         user=creds[1],
         password=creds[2],
-        db=creds[3]
+        db=creds[3],
+        charset='utf-8'
     )
     try:
         with dc.cursor() as c:
