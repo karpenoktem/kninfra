@@ -13,7 +13,6 @@ kninfra packages:
             - python-pip  # saltstack (python 2) needs pip
             - python3-html2text
             - python3-httplib2
-            - python3-googleapi
             #- python3-smbpasswd
             - python3-pyx
             - python3-six
@@ -35,7 +34,6 @@ kninfra packages:
             - python-pip
             - python-html2text
             - python-httplib2
-            - python-googleapi
             - python-ldap
             - python-smbpasswd
             - python-pyx
@@ -46,7 +44,7 @@ kninfra packages:
             - imagemagick
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved', 'pymysql', 'iso8601'] %}
+{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved', 'pymysql', 'iso8601', 'google-api-python-client'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
