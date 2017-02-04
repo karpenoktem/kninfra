@@ -165,7 +165,6 @@ def defaultSettings(glbls):
         'kn.moderation',
         'kn.planning',
         'kn.fotos',
-        'kn.barco',
         'kn.static',
         'kn.agenda',
     )

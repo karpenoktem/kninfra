@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-31 16:02+0100\n"
+"POT-Creation-Date: 2017-02-04 14:50+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -76,69 +76,6 @@ msgstr "^calendar/zeus/?$"
 #: kn/agenda/urls.py:9
 msgid "^ledenmail-template/?$"
 msgstr "^ledenmail-template/?$"
-
-#: kn/barco/forms.py:8
-msgid "Formuliernaam"
-msgstr "Name of form"
-
-#: kn/barco/forms.py:14
-msgid "Prijsbasis"
-msgstr "Pricebase"
-
-#: kn/barco/forms.py:16 kn/barco/forms.py:26 kn/fotos/forms.py:25
-#: kn/subscriptions/forms.py:47
-#: kn/subscriptions/templates/subscriptions/event_detail.html:26
-msgid "Datum"
-msgstr "Date"
-
-#: kn/barco/forms.py:17
-msgid "Tapper"
-msgstr "Bartender"
-
-#: kn/barco/forms.py:18
-msgid "Dienst"
-msgstr "Shift"
-
-#: kn/barco/forms.py:19
-msgid "Beginkas"
-msgstr "Initial balance"
-
-#: kn/barco/forms.py:20
-msgid "Eindkas"
-msgstr "Final balance"
-
-#: kn/barco/forms.py:21 kn/barco/forms.py:28
-#: kn/subscriptions/templates/subscriptions/event_detail.html:83
-#: kn/subscriptions/templates/subscriptions/event_detail.html:126
-msgid "Opmerkingen"
-msgstr "Notes"
-
-#: kn/barco/forms.py:27
-msgid "Tellers"
-msgstr "Counters"
-
-#: kn/barco/templates/barco/form.html:162
-msgid "Opslaan"
-msgstr "Save"
-
-#: kn/barco/urls.py:8
-msgid "^(?P<repos>[^/]+)/enter/(?P<formname>[^/]+)/$"
-msgstr "^(?P<repos>[^/]+)/enter/(?P<formname>[^/]+)/$"
-
-#: kn/barco/views.py:191
-#, python-format
-msgid ""
-"Barform %s ingevoerd via kninfra\n"
-"\n"
-"Signed-off-by: kninfra <root@karpenoktem.nl>"
-msgstr ""
-"Barform %s entered via kninfra\n"
-"\n"
-"Signed-off-by: kninfra <root@karpenoktem.nl>"
-
-#: kn/barco/views.py:203
-msgid "Opgeslagen!"
-msgstr ""
 
 #: kn/base/http.py:10
 msgid "referer header mist"
@@ -229,7 +166,7 @@ msgstr ""
 "'smoelenboek', as well as the wiki and the forums. If you've forgotten your "
 "password, you can contact the %(webcie)s."
 
-#: kn/base/templates/base/base.html:57 kn/leden/forms.py:73
+#: kn/base/templates/base/base.html:57 kn/leden/forms.py:74
 msgid "Gebruikersnaam"
 msgstr "Username"
 
@@ -263,31 +200,36 @@ msgstr "%s is a folder --- not a file"
 msgid "Going outside of the root"
 msgstr "Going outside of the root"
 
-#: kn/defaultSettings.py:120
+#: kn/defaultSettings.py:121
 msgid "Nederlands"
 msgstr "Dutch"
 
-#: kn/defaultSettings.py:121
+#: kn/defaultSettings.py:122
 msgid "Engels"
 msgstr "English"
 
-#: kn/fotos/forms.py:24 kn/leden/forms.py:104
+#: kn/fotos/forms.py:23 kn/leden/forms.py:105
 msgid "Naam voor mensen"
 msgstr "Human name"
 
-#: kn/fotos/forms.py:26 kn/subscriptions/forms.py:32
+#: kn/fotos/forms.py:24 kn/subscriptions/forms.py:47
+#: kn/subscriptions/templates/subscriptions/event_detail.html:26
+msgid "Datum"
+msgstr "Date"
+
+#: kn/fotos/forms.py:25 kn/subscriptions/forms.py:32
 msgid "Naam voor computers"
 msgstr "Computer name"
 
-#: kn/fotos/forms.py:28
+#: kn/fotos/forms.py:27
 msgid "Volledige naam voor mensen"
 msgstr "Full human name"
 
-#: kn/fotos/forms.py:37 kn/fotos/templates/fotos/admin/move.html.py:30
+#: kn/fotos/forms.py:36 kn/fotos/templates/fotos/admin/move.html:30
 msgid "Verplaats"
 msgstr "Move"
 
-#: kn/fotos/forms.py:39
+#: kn/fotos/forms.py:38
 msgid "naar"
 msgstr "to"
 
@@ -409,196 +351,196 @@ msgstr "Tags:"
 msgid "origineel"
 msgstr "original"
 
-#: kn/fotos/urls.py:19
+#: kn/fotos/urls.py:18
 msgid "^foto/admin/?$"
 msgstr "^photo/admin/?$"
 
-#: kn/fotos/urls.py:21
+#: kn/fotos/urls.py:20
 msgid "^foto/admin/create/?$"
 msgstr "^photo/admin/create/?$"
 
-#: kn/fotos/urls.py:23
+#: kn/fotos/urls.py:22
 msgid "^fotos/api/?$"
 msgstr "^photo/api/?$"
 
-#: kn/fotos/urls.py:25
+#: kn/fotos/urls.py:24
 msgid "^fotos/(?P<path>.*)$"
 msgstr "^photos/(?P<path>.*)$"
 
-#: kn/fotos/urls.py:28
+#: kn/fotos/urls.py:27
 msgid "^foto/(?P<cache>[^/]+)/(?P<path>.*)$"
 msgstr "^photo/(?P<cache>[^/]+)/(?P<path>.*)$"
 
-#: kn/fotos/views.py:168
+#: kn/fotos/views.py:167
 msgid "Fotoalbum aangemaakt!"
 msgstr "Gallery created!"
 
-#: kn/fotos/views.py:170
+#: kn/fotos/views.py:169
 #, python-format
 msgid "Er is een fout opgetreden: %s"
 msgstr "An error has occured: %s"
 
-#: kn/fotos/views.py:171
+#: kn/fotos/views.py:170
 msgid "geen foutmelding"
 msgstr "no error"
 
-#: kn/leden/entities.py:869
+#: kn/leden/entities.py:867
 msgid "Entiteit heeft al deze stempel"
 msgstr "Entity already has this tag"
 
-#: kn/leden/entities.py:878
+#: kn/leden/entities.py:876
 msgid "Eniteit heeft deze stempel nog niet"
 msgstr "Entity does not contain this tag"
 
-#: kn/leden/entities.py:1044
+#: kn/leden/entities.py:1042
 msgid "Entiteit heeft nog geen humanName"
 msgstr "Entity does not have a humanName"
 
-#: kn/leden/entities.py:1363
+#: kn/leden/entities.py:1361
 msgid "studie index bestaat niet"
 msgstr "index of study does not exist"
 
-#: kn/leden/entities.py:1366
+#: kn/leden/entities.py:1364
 msgid "studie is al beeindigt"
 msgstr "study already ended"
 
-#: kn/leden/entities.py:1368
+#: kn/leden/entities.py:1366
 msgid "einddatum voor begindatum"
 msgstr "enddate lies before startdate"
 
-#: kn/leden/forms.py:58
+#: kn/leden/forms.py:59
 msgid "Gebruikersnaam is al in gebruik"
 msgstr "Username already taken"
 
-#: kn/leden/forms.py:61
+#: kn/leden/forms.py:62
 msgid "Gebruikersnaam bevat een niet-toegestane letter"
 msgstr "Username contains a letter that is not allowed"
 
-#: kn/leden/forms.py:63
+#: kn/leden/forms.py:64
 msgid "Gebruikersnaam is niet toegestaan"
 msgstr "Username not allowed"
 
-#: kn/leden/forms.py:67
+#: kn/leden/forms.py:68
 msgid "Voornaam"
 msgstr "First name"
 
-#: kn/leden/forms.py:69
+#: kn/leden/forms.py:70
 msgid "Achternaam"
 msgstr "Surname"
 
-#: kn/leden/forms.py:72
+#: kn/leden/forms.py:73
 msgid "bijv.: Vaart, van der"
 msgstr "e.g.: Vaart, van der"
 
-#: kn/leden/forms.py:75
+#: kn/leden/forms.py:76
 msgid "E-Mail adres"
 msgstr "E-mail address"
 
-#: kn/leden/forms.py:76 kn/leden/templates/leden/user_detail.html.py:217
+#: kn/leden/forms.py:77 kn/leden/templates/leden/user_detail.html:217
 msgid "Geboortedatum"
 msgstr "Date of birth"
 
-#: kn/leden/forms.py:77
+#: kn/leden/forms.py:78
 msgid "Straatnaam"
 msgstr "Street name"
 
-#: kn/leden/forms.py:78
+#: kn/leden/forms.py:79
 msgid "Huisnummer"
 msgstr "House number"
 
-#: kn/leden/forms.py:79
+#: kn/leden/forms.py:80
 msgid "Postcode"
 msgstr "Postal code"
 
-#: kn/leden/forms.py:80
+#: kn/leden/forms.py:81
 msgid "Woonplaats"
 msgstr "City"
 
-#: kn/leden/forms.py:81 kn/leden/templates/leden/user_detail.html.py:100
+#: kn/leden/forms.py:82 kn/leden/templates/leden/user_detail.html:100
 #: kn/leden/templates/leden/user_detail.html:156
 msgid "Telefoonnummer"
 msgstr "Phone number"
 
-#: kn/leden/forms.py:83
+#: kn/leden/forms.py:84
 msgid "bijv.: +31612345678"
 msgstr "E.g.: +31612345678"
 
-#: kn/leden/forms.py:84 kn/leden/forms.py:118
+#: kn/leden/forms.py:85 kn/leden/forms.py:119
 msgid "Studentnummer"
 msgstr "Student number"
 
-#: kn/leden/forms.py:85 kn/leden/forms.py:116
+#: kn/leden/forms.py:86 kn/leden/forms.py:117
 msgid "Onderwijs instelling"
 msgstr "Educational institution"
 
-#: kn/leden/forms.py:87 kn/leden/forms.py:115
+#: kn/leden/forms.py:88 kn/leden/forms.py:116
 #: kn/leden/templates/leden/user_detail.html:46
 msgid "Studie"
 msgstr "Study"
 
-#: kn/leden/forms.py:89
+#: kn/leden/forms.py:90
 msgid "Datum van inschrijving"
 msgstr "Date of enrollment"
 
-#: kn/leden/forms.py:91
+#: kn/leden/forms.py:92
 msgid "Incasso"
 msgstr "Incasso"
 
-#: kn/leden/forms.py:93
+#: kn/leden/forms.py:94
 msgid "Voeg toe aan groepen"
 msgstr "Add to groups"
 
-#: kn/leden/forms.py:94
+#: kn/leden/forms.py:95
 msgid "Eerstejaars"
 msgstr "First years"
 
-#: kn/leden/forms.py:94
+#: kn/leden/forms.py:95
 msgid "Aan"
 msgstr "Aam"
 
-#: kn/leden/forms.py:95
+#: kn/leden/forms.py:96
 msgid "Uit"
 msgstr "Uit"
 
-#: kn/leden/forms.py:95
+#: kn/leden/forms.py:96
 msgid "Zooi"
 msgstr "Zooi"
 
-#: kn/leden/forms.py:103 kn/leden/templates/leden/fiscus_debtmail.html.py:25
+#: kn/leden/forms.py:104 kn/leden/templates/leden/fiscus_debtmail.html:25
 #: kn/moderation/templates/moderation/overview.html:9
 #: kn/planning/templates/planning/event_edit.html:11
 msgid "Naam"
 msgstr "Name"
 
-#: kn/leden/forms.py:105
+#: kn/leden/forms.py:106
 msgid "Genitivus"
 msgstr "Genitive"
 
-#: kn/leden/forms.py:106
+#: kn/leden/forms.py:107
 msgid "Korte beschrijving"
 msgstr "Short description"
 
-#: kn/leden/forms.py:107
+#: kn/leden/forms.py:108
 msgid "Oudergroep"
 msgstr "Parent group"
 
-#: kn/leden/forms.py:110
+#: kn/leden/forms.py:111
 msgid "Volwaardige groep"
 msgstr "Full group"
 
-#: kn/leden/forms.py:119
+#: kn/leden/forms.py:120
 msgid "Start op"
 msgstr "Starts at"
 
-#: kn/leden/forms.py:137
+#: kn/leden/forms.py:138
 msgid "Geen oud wachtwoord opgegeven"
 msgstr "No old password given"
 
-#: kn/leden/forms.py:139
+#: kn/leden/forms.py:140
 msgid "Geen nieuw wachtwoord opgegeven"
 msgstr "No new password given"
 
-#: kn/leden/forms.py:141
+#: kn/leden/forms.py:142
 msgid "Niet hetzelfde nieuwe wachtwoord opnieuw gegeven"
 msgstr "The new passwords do not match"
 
@@ -1838,71 +1780,71 @@ msgstr "^styles/leden/$"
 msgid "^taal$"
 msgstr "^language$"
 
-#: kn/leden/views.py:77
+#: kn/leden/views.py:72
 #, python-format
 msgid "Entiteit is niet een %s"
 msgstr "Entity is not a %s"
 
-#: kn/leden/views.py:81
+#: kn/leden/views.py:76
 msgid "Onbekende entiteit type"
 msgstr "Unknown entity type"
 
-#: kn/leden/views.py:374
+#: kn/leden/views.py:369
 msgid "Missende `smoel' in FILES"
 msgstr "Missing `smoel' in FILES"
 
-#: kn/leden/views.py:376
+#: kn/leden/views.py:371
 msgid "Missende `id' in POST"
 msgstr "Missing `id' in POST"
 
-#: kn/leden/views.py:379
+#: kn/leden/views.py:374
 msgid "Entiteit heeft geen naam"
 msgstr "Entity does not have a name"
 
-#: kn/leden/views.py:428
+#: kn/leden/views.py:423
 #, python-format
 msgid "Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."
 msgstr "Dear %s, but off course: your password has been changed."
 
-#: kn/leden/views.py:697
+#: kn/leden/views.py:692
 #, python-format
 msgid "Email gestuurd naar %s."
 msgstr ""
 
-#: kn/leden/views.py:700
+#: kn/leden/views.py:695
 #, python-format
 msgid "Email naar %s faalde: %s."
 msgstr ""
 
-#: kn/leden/views.py:762
+#: kn/leden/views.py:757
 msgid "Deze relatie bestaat al"
 msgstr "This relation already exists"
 
-#: kn/leden/views.py:786
+#: kn/leden/views.py:781
 msgid "'group' is niet een groep"
 msgstr "'group' is not a group"
 
-#: kn/leden/views.py:794
+#: kn/leden/views.py:789
 msgid "'tag' is niet een stempel"
 msgstr "'tag' is not a tag"
 
-#: kn/leden/views.py:829
+#: kn/leden/views.py:824
 msgid "Gebruiker is niet geactiveerd"
 msgstr "User is not active"
 
-#: kn/leden/views.py:836
+#: kn/leden/views.py:831
 msgid "Wachtwoord gereset!"
 msgstr "Password reset!"
 
-#: kn/leden/views.py:845
+#: kn/leden/views.py:840
 msgid "missende `on' of `note'"
 msgstr "Missing `on' or `note'"
 
-#: kn/leden/views.py:863
+#: kn/leden/views.py:858
 msgid "Agenda geupdate!"
 msgstr "Agenda has been updated"
 
-#: kn/leden/views.py:878
+#: kn/leden/views.py:873
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
 msgstr "Your request is being processed.  Expect an e-mail within 5 minutes."
 
@@ -2154,77 +2096,77 @@ msgstr ""
 msgid "^manage/(?P<poolname>[^/]+)/template/?$"
 msgstr ""
 
-#: kn/planning/views.py:33 kn/planning/views.py:45 kn/planning/views.py:78
+#: kn/planning/views.py:31 kn/planning/views.py:43 kn/planning/views.py:76
 msgid "eerste dienst"
 msgstr ""
 
-#: kn/planning/views.py:34 kn/planning/views.py:46 kn/planning/views.py:79
+#: kn/planning/views.py:32 kn/planning/views.py:44 kn/planning/views.py:77
 msgid "tweede dienst"
 msgstr ""
 
-#: kn/planning/views.py:35 kn/planning/views.py:47 kn/planning/views.py:80
+#: kn/planning/views.py:33 kn/planning/views.py:45 kn/planning/views.py:78
 msgid "derde dienst"
 msgstr ""
 
-#: kn/planning/views.py:37 kn/planning/views.py:40 kn/planning/views.py:49
-#: kn/planning/views.py:66 kn/planning/views.py:82 kn/planning/views.py:89
+#: kn/planning/views.py:35 kn/planning/views.py:38 kn/planning/views.py:47
+#: kn/planning/views.py:64 kn/planning/views.py:80 kn/planning/views.py:87
 msgid "openen"
 msgstr ""
 
-#: kn/planning/views.py:38 kn/planning/views.py:42 kn/planning/views.py:50
-#: kn/planning/views.py:67 kn/planning/views.py:83 kn/planning/views.py:90
+#: kn/planning/views.py:36 kn/planning/views.py:40 kn/planning/views.py:48
+#: kn/planning/views.py:65 kn/planning/views.py:81 kn/planning/views.py:88
 msgid "sluiten"
 msgstr ""
 
-#: kn/planning/views.py:41
+#: kn/planning/views.py:39
 msgid "prime-time"
 msgstr ""
 
-#: kn/planning/views.py:54
+#: kn/planning/views.py:52
 msgid "eerste dienst, tapper 1"
 msgstr ""
 
-#: kn/planning/views.py:56
+#: kn/planning/views.py:54
 msgid "eerste dienst, tapper 2"
 msgstr ""
 
-#: kn/planning/views.py:58
+#: kn/planning/views.py:56
 msgid "tweede dienst, tapper 1"
 msgstr ""
 
-#: kn/planning/views.py:60
+#: kn/planning/views.py:58
 msgid "tweede dienst, tapper 2"
 msgstr ""
 
-#: kn/planning/views.py:62
+#: kn/planning/views.py:60
 msgid "derde dienst, tapper 1"
 msgstr ""
 
-#: kn/planning/views.py:64
+#: kn/planning/views.py:62
 msgid "derde dienst, tapper 2"
 msgstr ""
 
-#: kn/planning/views.py:70
+#: kn/planning/views.py:68
 msgid "Teller 1"
 msgstr ""
 
-#: kn/planning/views.py:71
+#: kn/planning/views.py:69
 msgid "Teller 2"
 msgstr ""
 
-#: kn/planning/views.py:74
+#: kn/planning/views.py:72
 msgid "Persoon 1"
 msgstr ""
 
-#: kn/planning/views.py:75
+#: kn/planning/views.py:73
 msgid "Persoon 2"
 msgstr ""
 
-#: kn/planning/views.py:85 kn/planning/views.py:92 kn/planning/views.py:96
+#: kn/planning/views.py:83 kn/planning/views.py:90 kn/planning/views.py:94
 msgid "Kok 1"
 msgstr ""
 
-#: kn/planning/views.py:86 kn/planning/views.py:93 kn/planning/views.py:97
+#: kn/planning/views.py:84 kn/planning/views.py:91 kn/planning/views.py:95
 msgid "Kok 2"
 msgstr ""
 
@@ -3600,14 +3542,6 @@ msgstr ""
 msgid "Akta Nokturna"
 msgstr ""
 
-#: kn/static/templates/static/overbase.html:14
-msgid "Zusjes"
-msgstr ""
-
-#: kn/static/templates/static/overbase.html:15
-msgid "Sponsoren"
-msgstr ""
-
 #: kn/static/templates/static/route.html:6
 msgid ""
 "Meestal zitten we in de Villa van Schaeck. Op\n"
@@ -3960,6 +3894,11 @@ msgstr "Invite"
 msgid "Opmerkingen:"
 msgstr "Notes:"
 
+#: kn/subscriptions/templates/subscriptions/event_detail.html:83
+#: kn/subscriptions/templates/subscriptions/event_detail.html:126
+msgid "Opmerkingen"
+msgstr "Notes"
+
 #: kn/subscriptions/templates/subscriptions/event_detail.html:86
 msgid "Je bent door"
 msgstr "By"
@@ -4236,9 +4175,44 @@ msgstr "^censor/"
 msgid "^planning/"
 msgstr "^planning/"
 
-#: kn/urls.py:31
-msgid "^barco/"
-msgstr "^barco/"
+#~ msgid "Formuliernaam"
+#~ msgstr "Name of form"
+
+#~ msgid "Prijsbasis"
+#~ msgstr "Pricebase"
+
+#~ msgid "Tapper"
+#~ msgstr "Bartender"
+
+#~ msgid "Dienst"
+#~ msgstr "Shift"
+
+#~ msgid "Beginkas"
+#~ msgstr "Initial balance"
+
+#~ msgid "Eindkas"
+#~ msgstr "Final balance"
+
+#~ msgid "Tellers"
+#~ msgstr "Counters"
+
+#~ msgid "Opslaan"
+#~ msgstr "Save"
+
+#~ msgid "^(?P<repos>[^/]+)/enter/(?P<formname>[^/]+)/$"
+#~ msgstr "^(?P<repos>[^/]+)/enter/(?P<formname>[^/]+)/$"
+
+#~ msgid ""
+#~ "Barform %s ingevoerd via kninfra\n"
+#~ "\n"
+#~ "Signed-off-by: kninfra <root@karpenoktem.nl>"
+#~ msgstr ""
+#~ "Barform %s entered via kninfra\n"
+#~ "\n"
+#~ "Signed-off-by: kninfra <root@karpenoktem.nl>"
+
+#~ msgid "^barco/"
+#~ msgstr "^barco/"
 
 #~ msgid "Geslacht"
 #~ msgstr "Gender"
