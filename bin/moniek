@@ -1,3 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+
+PYTHON="${PYTHON:-python}"
 
 $PYTHON /home/sys-moniek/kninfra/utils/moniek.py

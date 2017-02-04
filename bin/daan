@@ -1,3 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+
+PYTHON="${PYTHON:-python}"
 
 $PYTHON /root/kninfra/utils/daan.py
