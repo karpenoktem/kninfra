@@ -79,9 +79,12 @@ def close_note(data, request):
     if not note.open:
         return {'ok': False, 'error': 'Note already closed'}
     note.close(_id(request.user))
-    render_then_email('leden/note-closed.mail.txt',
+    render_then_email('leden/note-closed.mail.html',
                       Es.by_name('secretariaat').canonical_full_email, {
-                          'note': note})
+                          'note': note}, headers={
+                              'In-Reply-To': note.messageId,
+                              'References': note.messageId,
+                          })
     return {'ok': True}
 
 
