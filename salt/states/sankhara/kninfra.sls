@@ -53,9 +53,11 @@ kninfra packages:
 {% endfor %}
 
 {% if pillar['python3'] %}
-pyldap:
+{% for pkg in ['flup6', 'pyldap'] %}
+{{ pkg }}:
     pip.installed:
-        - bin_env: /usr/sbin/pip3
+        - bin_env: /usr/bin/pip3
+{% endfor %}
 {% endif %}
 
 infra:
@@ -235,6 +237,7 @@ giedo:
 /home/infra/repo/bin/run-fcgi:
     cmd.run:
         - user: infra
+        - timeout: 2
 /etc/nginx/sankhara.d/90-kninfra.conf:
     file.managed:
         - source: salt://sankhara/kninfra.nginx.conf

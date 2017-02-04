@@ -4,7 +4,7 @@
         - source: salt://sankhara/initial-db.yaml
 Initialize database:
     cmd.script:
-        - source: salt://sankhara/initializeDb.py
+        - source: salt://sankhara/initializeDb
         - onchanges:
             - file: /home/infra/initial-db.yaml
 initial giedo-sync:
