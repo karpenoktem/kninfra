@@ -24,7 +24,7 @@ def _id(obj):
         return ObjectId(obj)
     if hasattr(obj, '_id'):
         return obj._id
-    raise ValueError
+    raise ValueError("Don't know how to turn {!r} into an _id".format(obj))
 
 
 class SONWrapper(object):
