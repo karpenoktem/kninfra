@@ -11,6 +11,7 @@ kninfra packages:
             #- python3-mysqldb
             - python3-pil
             - python3-pip
+            - python-pip  # saltstack (python 2) needs pip
             - python3-html2text
             - python3-httplib2
             - python3-googleapi
