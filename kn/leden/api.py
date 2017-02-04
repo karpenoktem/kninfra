@@ -81,7 +81,10 @@ def close_note(data, request):
     note.close(_id(request.user))
     render_then_email('leden/note-closed.mail.html',
                       Es.by_name('secretariaat').canonical_full_email, {
-                          'note': note})
+                          'note': note}, headers={
+                              'In-Reply-To': note.messageId,
+                              'References': note.messageId,
+                          })
     return {'ok': True}
 
 

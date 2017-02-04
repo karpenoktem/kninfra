@@ -1097,13 +1097,15 @@ class Entity(SONWrapper):
 
     def add_note(self, what, by=None):
         dt = now()
-        Note({'note': what,
-              'on': self._id,
-              'open': True,
-              'by': None if by is None else _id(by),
-              'at': dt,
-              'closed_by': None,
-              'closed_at': None}).save()
+        note = Note({'note': what,
+                     'on': self._id,
+                     'open': True,
+                     'by': None if by is None else _id(by),
+                     'at': dt,
+                     'closed_by': None,
+                     'closed_at': None})
+        note.save()
+        return note
 
     def get_notes(self):
         # Prefetch the entities referenced in the by and closed_by fields
@@ -1519,6 +1521,10 @@ class Note(SONWrapper):
         if self._data['by'] is None:
             return None
         return by_id(self._data['by'])
+
+    @property
+    def messageId(self):
+        return '<note/%s@%s>' % (self.id, settings.MAILDOMAIN)
 
     @property
     def closed_by(self):
