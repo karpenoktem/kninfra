@@ -1,2 +1,5 @@
 #!/bin/sh
-$HOME/repo/manage.py runserver 0:8001
+
+PYTHON="${PYTHON:-python}"
+
+$PYTHON $HOME/repo/manage.py runserver 0:8001

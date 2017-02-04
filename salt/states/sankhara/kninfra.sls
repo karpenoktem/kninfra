@@ -82,6 +82,7 @@ fotos:
 /home/infra/.profile:
     file.managed:
         - source: salt://sankhara/infra.profile
+        - template: jinja
 /root/.profile:
     file.managed:
         - source: salt://sankhara/root.profile
