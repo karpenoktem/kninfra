@@ -16,7 +16,6 @@ kninfra packages:
             - python3-googleapi
             #- python3-ldap
             #- python3-smbpasswd
-            #- python3-m2crypto
             - python3-pyx
             - python3-six
             - python3-unidecode
@@ -36,7 +35,6 @@ kninfra packages:
             - python-googleapi
             - python-ldap
             - python-smbpasswd
-            - python-m2crypto
             - python-pyx
             - python-unidecode
             - python-six
