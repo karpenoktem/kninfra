@@ -7,11 +7,12 @@ import re
 import subprocess
 from collections import namedtuple
 
-import Image
+import PIL.Image
 from PIL.ExifTags import TAGS
 
 from django.conf import settings
 from django.db.models import permalink
+from django.utils import six
 
 import kn.leden.entities as Es
 from kn.fotos.utils import resize_proportional
@@ -413,16 +414,16 @@ class FotoAlbum(FotoEntity):
 
     def list(self, user):
         required_visibility = self.required_visibility(user)
-        albums = map(entity, fcol.find(
+        albums = [entity(x) for x in fcol.find(
             {'path': self.full_path,
              'type': 'album',
              'effectiveVisibility': {'$in': tuple(required_visibility)}}
-        ).sort([('date', -1), ('name', 1)]))
-        fotos = map(entity, fcol.find(
+        ).sort([('date', -1), ('name', 1)])]
+        fotos = [entity(x) for x in fcol.find(
             {'path': self.full_path,
-             'type': {'$ne': 'album'},
-             'effectiveVisibility': {'$in': tuple(required_visibility)}},
-        ).sort([('date', 1), ('name', 1)]))
+                 'type': {'$ne': 'album'},
+                 'effectiveVisibility': {'$in': tuple(required_visibility)}},
+        ).sort([('date', 1), ('name', 1)])]
 
         return albums + fotos
 
@@ -430,7 +431,9 @@ class FotoAlbum(FotoEntity):
         '''
         Return all children regardless of visibility.
         '''
-        return map(entity, fcol.find({'path': self.full_path}).sort('name', 1))
+        return [entity(x) for x in fcol.find(
+            {'path': self.full_path}
+        ).sort('name', 1)]
 
     def get_random_foto_for(self, user):
         r = random.random()
@@ -554,7 +557,7 @@ class Foto(FotoEntity):
                 self.save()
             return updated
 
-        img = Image.open(self.original_path)
+        img = PIL.Image.open(self.original_path)
         exif = {}
         if hasattr(img, '_getexif'):
             exifData = img._getexif()
@@ -612,7 +615,7 @@ class Foto(FotoEntity):
         super(Foto, self).update_search_text(save=False)
         if 'tags' in self._data:
             tags = []
-            for user_id, user in Es.by_ids(self._data['tags']).iteritems():
+            for user_id, user in six.iteritems(Es.by_ids(self._data['tags'])):
                 tags.extend((user.first_name, user.last_name))
             self._search_text += ' '.join(filter(bool, tags))
 

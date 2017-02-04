@@ -1,4 +1,5 @@
 from django.db.models import permalink
+from django.utils import six
 
 import kn.leden.entities as Es
 from kn.leden.mongo import SONWrapper, _id, db, son_property
@@ -66,6 +67,7 @@ def filling_by_poll(poll):
 # ######################################################################
 
 
+@six.python_2_unicode_compatible
 class Poll(SONWrapper):
 
     def __init__(self, data):
@@ -92,7 +94,7 @@ class Poll(SONWrapper):
     def fillings(self):
         return filling_by_poll(self)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.humanName
 
     @permalink
@@ -100,6 +102,7 @@ class Poll(SONWrapper):
         return ('poll', (), {'name': self.name})
 
 
+@six.python_2_unicode_compatible
 class Filling(SONWrapper):
 
     def __init__(self, data):
@@ -120,8 +123,8 @@ class Filling(SONWrapper):
     answers = son_property(('answers',))
     date = son_property(('date',))
 
-    def __unicode__(self):
-        return unicode(u"answers of %s for %s" % (
-            self.user.humanName, self.poll.humanName))
+    def __str__(self):
+        return six.u("answers of %s for %s") % (
+            self.user.humanName, self.poll.humanName)
 
 # vim: et:sta:bs=2:sw=4:

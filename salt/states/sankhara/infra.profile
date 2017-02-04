@@ -7,3 +7,7 @@ if [ -d "$HOME/py" ] ; then
 fi
 
 export DJANGO_SETTINGS_MODULE=kn.settings
+
+{% if pillar['python3'] %}
+export PYTHON=python3
+{% endif %}

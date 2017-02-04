@@ -29,5 +29,5 @@ for p in [1, 2]:
         'end': begin + datetime.timedelta(seconds=1800),
         'pool': _id(pool),
         'assignee': None})
-    print v._data
+    print(v._data)
     v.save()

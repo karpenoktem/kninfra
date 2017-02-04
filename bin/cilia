@@ -1,3 +1,5 @@
-#!/bin/sh
+#!/bin/bash
 
-python /root/kninfra/utils/cilia.py
+PYTHON="${PYTHON:-python}"
+
+$PYTHON /root/kninfra/utils/cilia.py

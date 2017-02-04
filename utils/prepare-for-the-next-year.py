@@ -2,6 +2,9 @@ import _import  # noqa: F401
 import argparse
 import datetime
 
+from django.utils import six
+from django.utils.six.moves import range
+
 import kn.leden.entities as Es
 
 
@@ -9,7 +12,7 @@ import kn.leden.entities as Es
 
 
 def load_year_overrides():
-    print 'loading year-overrides ...'
+    print('loading year-overrides ...')
     year_overrides = {}
     for t in Es.bearers_by_tag_id(
             Es.id_by_name('!year-overrides'),
@@ -26,12 +29,12 @@ def create_year_overrides_for(year):
     """ Creates the year overrides for a certain year """
     parent_tag = Es.id_by_name('!year-overrides')
     Es.ecol.insert({
-        'humanNames': [{u'human': u'Wel jaar {}'.format(year)}],
+        'humanNames': [{six.u('human'): six.u('Wel jaar {}').format(year)}],
         'tags': [parent_tag],
         'types': ['tag'],
         'year-override': {'type': True, 'year': year}})
     Es.ecol.insert({
-        'humanNames': [{u'human': u'Niet jaar {}'.format(year)}],
+        'humanNames': [{six.u('human'): six.u('Niet jaar {}').format(year)}],
         'tags': [parent_tag],
         'types': ['tag'],
         'year-override': {'type': False, 'year': year}})
@@ -50,7 +53,7 @@ def main():
         assert len(years) == max_year - min_year + 1  # year-override missing?
         current_year = Es.date_to_year(datetime.datetime.now())
         if current_year == max_year:
-            print ' adding year-overrides for year', current_year + 1
+            print(' adding year-overrides for year', current_year + 1)
             if args.apply:
                 create_year_overrides_for(current_year + 1)
             continue
@@ -61,7 +64,7 @@ def main():
 
     print ('If you became a member after june,'
            ' you should be in the next year ...')
-    for year in xrange(min_year + 1, max_year + 1):
+    for year in range(min_year + 1, max_year + 1):
         start_of_year = Es.year_to_range(year)[0]
         informal_start = start_of_year - datetime.timedelta(3 * 365 / 12)
         for rel in Es.rcol.find({'with': leden_id,
@@ -72,13 +75,13 @@ def main():
             if 'tags' not in rel:
                 rel['tags'] = []
             rel['tags'].append(year_overrides[(False, year - 1)])
-            print ' ', Es.by_id(rel['who']).name, '-' + str(year - 1)
+            print(' ', Es.by_id(rel['who']).name, '-' + str(year - 1))
             if args.apply:
                 Es.rcol.save(rel)
 
-    print 'Any relation that starts near the change of year, should start'
-    print 'exactly on the change of year ...'
-    for year in xrange(min_year + 1, max_year + 1):
+    print('Any relation that starts near the change of year, should start')
+    print('exactly on the change of year ...')
+    for year in range(min_year + 1, max_year + 1):
         start_of_year = Es.year_to_range(year)[0]
         window = datetime.timedelta(1, 12 * 60 * 60)
         for rel in Es.rcol.find({'from': {'$gt': start_of_year - window,
@@ -86,19 +89,19 @@ def main():
             if rel['from'] == start_of_year:
                 continue
             how = Es.by_id(rel['how'])
-            print ' {} {} (as {}): {} -> {}'.format(
-                unicode(Es.by_id(rel['who'])),
+            print(' {} {} (as {}): {} -> {}'.format(
+                six.text_type(Es.by_id(rel['who'])),
                 str(Es.by_id(rel['with'])),
                 how._data['sofa_suffix'] if how else 'member',
                 rel['from'], start_of_year
-            )
+            ))
             if args.apply:
                 rel['from'] = start_of_year
                 Es.rcol.save(rel)
 
-    print 'Any relation that ends near the change of year, should end'
-    print 'exactly on the change of year ...'
-    for year in xrange(min_year + 1, max_year + 1):
+    print('Any relation that ends near the change of year, should end')
+    print('exactly on the change of year ...')
+    for year in range(min_year + 1, max_year + 1):
         start_of_year = Es.year_to_range(year)[0]
         end_of_year = Es.year_to_range(year)[0] - datetime.timedelta(0, 1)
         window = datetime.timedelta(1, 12 * 60 * 60)
@@ -107,12 +110,12 @@ def main():
             if rel['until'] == end_of_year:
                 continue
             how = Es.by_id(rel['how'])
-            print ' {} {} (as {}): {} -> {}'.format(
-                unicode(Es.by_id(rel['who'])),
+            print(' {} {} (as {}): {} -> {}'.format(
+                six.text_type(Es.by_id(rel['who'])),
                 str(Es.by_id(rel['with'])),
                 how._data['sofa_suffix'] if how else 'member',
                 rel['until'], end_of_year
-            )
+            ))
             if args.apply:
                 rel['until'] = end_of_year
                 Es.rcol.save(rel)

@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib.sessions.backends.base import CreateError, SessionBase
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 
 from kn.leden.mongo import db
 
@@ -20,7 +20,7 @@ class SessionStore(SessionBase):
         if s is None:
             self.create()
             return {}
-        return self.decode(force_unicode(s['data']))
+        return self.decode(force_text(s['data']))
 
     def exists(self, session_key):
         return scol.find_one({'_id': session_key}) is not None

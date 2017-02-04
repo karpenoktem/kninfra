@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
+from django.utils import six
 from django.utils.safestring import mark_safe
 
 from kn.leden.mongo import SONWrapper, db, son_property
@@ -38,6 +39,7 @@ def update(agendas):
                          'end': end}).save()
 
 
+@six.python_2_unicode_compatible
 class AgendaEvent(SONWrapper):
 
     def __init__(self, data):
@@ -80,7 +82,7 @@ class AgendaEvent(SONWrapper):
             self.start.date().strftime('%a %e %b'),
             self.end.date().strftime('%a %e %b')))
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 # vim: et:sta:bs=2:sw=4:

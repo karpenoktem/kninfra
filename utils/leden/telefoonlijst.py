@@ -16,10 +16,10 @@ def fmt_date(d):
 
 
 fmt = "%35s%12s%12s%15s"
-print fmt % ("NAME  ", "FROM  ", "UNTIL  ", "NUMBER  ")
+print(fmt % ("NAME  ", "FROM  ", "UNTIL  ", "NUMBER  "))
 for m in args_to_users(sys.argv[1:]):
     for nr in m.telephones:
-        print fmt % (m.full_name,
+        print(fmt % (m.full_name,
                      fmt_date(nr['from']),
                      fmt_date(nr['until']),
-                     nr['number'])
+                     nr['number']))

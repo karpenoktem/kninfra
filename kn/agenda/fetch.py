@@ -1,11 +1,10 @@
 #!/usr/bin/python
 
 import datetime
-import json
 
 import httplib2
 from iso8601 import parse_date
-from oauth2client.client import SignedJwtAssertionCredentials
+from oauth2client.service_account import ServiceAccountCredentials
 
 from django.conf import settings
 
@@ -38,12 +37,9 @@ except ImportError:
 
 
 def get_credentials():
-    key = json.loads(open(settings.GOOGLE_OAUTH2_KEY, 'r').read())
-    return SignedJwtAssertionCredentials(
-        service_account_name=key['client_email'],
-        private_key=key['private_key'],
-        scope='https://www.googleapis.com/auth/calendar.readonly',
-        user_agent='Karpe Noktem agenda fetcher')
+    return ServiceAccountCredentials.from_json_keyfile_name(
+            settings.GOOGLE_OAUTH2_KEY,
+            ['https://www.googleapis.com/auth/calendar.readonly'])
 
 
 def parse_item_date(date):

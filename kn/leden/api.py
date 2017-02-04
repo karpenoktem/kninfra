@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth.decorators import login_required
+from django.utils import six
 from django.views.decorators.http import require_POST
 
 import kn.leden.entities as Es
@@ -27,7 +28,7 @@ def _humanName_of_entity(e):
     """ Returns the human name of an entity, as used in the API. """
     if e.name:
         return "%s (%s)" % (e.humanName, e.name)
-    return unicode(e.humanName)
+    return six.text_type(e.humanName)
 
 
 def entities_by_keyword(data, request):
@@ -40,7 +41,7 @@ def entities_by_keyword(data, request):
         The return format is optimized for size and compatibility with
         jquery-ui.autocomplete """
     _type = data.get('type', None)
-    if _type and not isinstance(_type, basestring):
+    if _type and not isinstance(_type, six.string_types):
         _type = None
     return [[e.id, _humanName_of_entity(e)]
             for e in Es.by_keyword(data.get('keyword', ''),
@@ -90,9 +91,9 @@ def entity_update_primary(data, request):
 
             << {ok: true}
           ( << {ok: false, error: "Permission denied"} ) """
-    if 'id' not in data or not isinstance(data['id'], basestring):
+    if 'id' not in data or not isinstance(data['id'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if 'type' not in data or not isinstance(data['type'], basestring):
+    if 'type' not in data or not isinstance(data['type'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "type"'}
     if 'new' not in data:
         return {'ok': False, 'error': 'Missing argument "new"'}
@@ -102,13 +103,13 @@ def entity_update_primary(data, request):
     if not is_secretariaat:
         return {'ok': False, 'error': 'Permission denied'}
     if typ in ('email', 'telephone'):
-        if not isinstance(new, basestring):
+        if not isinstance(new, six.string_types):
             return {'ok': False, 'error': '"new" should be a string'}
     elif typ == 'address':
         if not isinstance(new, dict):
             return {'ok': False, 'error': '"new" should be a dict'}
         for attr in ('street', 'number', 'zip', 'city'):
-            if attr not in new or not isinstance(new[attr], basestring):
+            if attr not in new or not isinstance(new[attr], six.string_types):
                 return {
                     'ok': False,
                     'error': 'Missing argument "new.%s"' % attr}
@@ -154,9 +155,10 @@ def entity_update_visibility(data, request):
         or: << {ok: false, error: "Permission denied"}
     """
 
-    if 'id' not in data or not isinstance(data['id'], basestring):
+    if 'id' not in data or not isinstance(data['id'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if 'property' not in data or not isinstance(data['property'], basestring):
+    if 'property' not in data or not isinstance(data['property'],
+                                                six.string_types):
         return {'ok': False, 'error': 'Missing argument "property"'}
     if 'visible' not in data or not isinstance(data['visible'], bool):
         return {'ok': False, 'error': 'Missing argument "visible"'}
@@ -186,11 +188,12 @@ def entity_end_study(data, request):
     '''
     End a study at the specified date.
     '''
-    if 'id' not in data or not isinstance(data['id'], basestring):
+    if 'id' not in data or not isinstance(data['id'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "id"'}
     if 'study' not in data or not isinstance(data['study'], int):
         return {'ok': False, 'error': 'Missing argument "study"'}
-    if 'end_date' not in data or not isinstance(data['end_date'], basestring):
+    if 'end_date' not in data or not isinstance(data['end_date'],
+                                                six.string_types):
         return {'ok': False, 'error': 'Missing argument "end_date"'}
 
     if 'secretariaat' not in request.user.cached_groups_names:
@@ -214,11 +217,12 @@ def entity_end_study(data, request):
 
 
 def entity_set_property(data, request):
-    if 'id' not in data or not isinstance(data['id'], basestring):
+    if 'id' not in data or not isinstance(data['id'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if 'property' not in data or not isinstance(data['property'], basestring):
+    if 'property' not in data or not isinstance(data['property'],
+                                                six.string_types):
         return {'ok': False, 'error': 'Missing argument "property"'}
-    if 'value' not in data or not isinstance(data['value'], basestring):
+    if 'value' not in data or not isinstance(data['value'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "value"'}
 
     if 'secretariaat' not in request.user.cached_groups_names:
@@ -243,10 +247,10 @@ def entity_set_property(data, request):
 
 def adduser_suggest_username(data, request):
     if 'first_name' not in data or not isinstance(
-            data['first_name'], basestring):
+            data['first_name'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "first_name"'}
     if 'last_name' not in data or not isinstance(
-            data['last_name'], basestring):
+            data['last_name'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "last_name"'}
 
     if 'secretariaat' not in request.user.cached_groups_names:

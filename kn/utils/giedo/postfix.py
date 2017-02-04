@@ -3,6 +3,7 @@ import logging
 from tarjan.tc import tc
 
 from django.conf import settings
+from django.utils import six
 
 import kn.leden.entities as Es
 from kn.leden.date import now
@@ -101,7 +102,7 @@ def generate_postfix_slm_map(giedo):
                     tbl[str(name)].add(str(ulut[u_id].name))
     # Clean up tbl to return.
     ret = {}
-    for name, users in tbl.iteritems():
+    for name, users in six.iteritems(tbl):
         if not users:
             continue
         ret["%s@%s" % (name, settings.MAILDOMAIN)] = tuple(users)

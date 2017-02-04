@@ -1,6 +1,7 @@
 import pymongo
 
 from django.conf import settings
+from django.utils import six
 
 try:
     from pymongo.objectid import ObjectId
@@ -19,11 +20,11 @@ class RaceCondition(Exception):
 def _id(obj):
     if isinstance(obj, ObjectId):
         return obj
-    if isinstance(obj, basestring):
+    if isinstance(obj, six.string_types):
         return ObjectId(obj)
     if hasattr(obj, '_id'):
         return obj._id
-    raise ValueError
+    raise ValueError("Don't know how to turn {!r} into an _id".format(obj))
 
 
 class SONWrapper(object):

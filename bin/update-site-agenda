@@ -1,3 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-echo '{"type":"update-site-agenda"}' | $HOME/repo/bin/whim-client /var/run/infra/S-giedo
+PYTHON="${PYTHON:-python}"
+
+echo '{"type":"update-site-agenda"}' \
+    | $PYTHON $HOME/repo/bin/whim-client /var/run/infra/S-giedo

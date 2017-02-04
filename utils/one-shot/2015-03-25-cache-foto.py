@@ -6,9 +6,9 @@ import kn.fotos.entities as fEs
 
 def cache(the_id):
     e = fEs.by_id(the_id)
-    print the_id
+    print(the_id)
     for c in e.CACHES:
-        print c
+        print(c)
         e.ensure_cached(c)
 
 

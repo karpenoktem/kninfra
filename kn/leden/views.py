@@ -8,7 +8,7 @@ from hashlib import sha256
 from itertools import chain
 from os import path
 
-import Image
+import PIL.Image
 
 from django.conf import settings
 from django.contrib import messages
@@ -81,35 +81,14 @@ def entity_detail(request, name=None, _id=None, type=None):
 
 
 def _entity_detail(request, e):
-    def _cmp(x, y):
-        r = Es.relation_cmp_until(y, x)
-        if r:
-            return r
-        r = cmp(unicode(x['with'].humanName),
-                unicode(y['with'].humanName))
-        if r:
-            return r
-        r = cmp(unicode(x['how'].humanName) if x['how'] else None,
-                unicode(y['how'].humanName) if y['how'] else None)
-        if r:
-            return r
-        return Es.relation_cmp_from(x, y)
-
-    def _rcmp(x, y):
-        r = Es.relation_cmp_until(y, x)
-        if r:
-            return r
-        r = cmp(unicode(x['how'].humanName) if x['how'] else None,
-                unicode(y['how'].humanName) if y['how'] else None)
-        if r:
-            return r
-        r = cmp(unicode(x['who'].humanName),
-                unicode(y['who'].humanName))
-        if r:
-            return r
-        return Es.relation_cmp_from(x, y)
-    related = sorted(e.get_related(), cmp=_cmp)
-    rrelated = sorted(e.get_rrelated(), cmp=_rcmp)
+    related = sorted(e.get_related(),
+                     key=lambda x: (Es.DT_MIN - Es.relation_until(x),
+                                    Es.entity_humanName(x['with']),
+                                    Es.entity_humanName(x['how'])))
+    rrelated = sorted(e.get_rrelated(),
+                      key=lambda x: (Es.DT_MIN - Es.relation_until(x),
+                                     Es.entity_humanName(x['how']),
+                                     Es.entity_humanName(x['who'])))
     for r in chain(related, rrelated):
         r['may_end'] = Es.user_may_end_relation(request.user, r)
         r['id'] = r['_id']
@@ -138,7 +117,7 @@ def _entity_detail(request, e):
            'rrelated': rrelated,
            'year_counts': year_counts,
            'now': now(),
-           'tags': sorted(tags, Es.entity_cmp_humanName),
+           'tags': sorted(tags, key=Es.entity_humanName),
            'object': e,
            'chiefs': [],
            'pipos': [],
@@ -158,10 +137,9 @@ def _entity_detail(request, e):
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):
         groups = [g for g in Es.groups() if not g.is_virtual]
-        groups.sort(cmp=lambda x, y: cmp(unicode(x.humanName),
-                                         unicode(y.humanName)))
-        users = sorted(Es.users(), cmp=Es.entity_cmp_humanName)
-        brands = sorted(Es.brands(), cmp=Es.entity_cmp_humanName)
+        groups.sort(key=Es.entity_humanName)
+        users = sorted(Es.users(), key=Es.entity_humanName)
+        brands = sorted(Es.brands(), key=Es.entity_humanName)
         ctx.update({'users': users,
                     'brands': brands,
                     'groups': groups,
@@ -172,13 +150,13 @@ def _entity_detail(request, e):
     ctx['may_upload_smoel'] = e.name and request.user.may_upload_smoel_for(e)
     if e.is_tag:
         ctx.update({'tag_bearers': sorted(e.as_tag().get_bearers(),
-                                          cmp=Es.entity_cmp_humanName)})
+                                          key=Es.entity_humanName)})
 
     # Check whether entity has a photo
     photos_path = (path.join(settings.SMOELEN_PHOTOS_PATH, str(e.name))
                    if e.name else None)
     if photos_path and default_storage.exists(photos_path + '.jpg'):
-        img = Image.open(default_storage.open(photos_path + '.jpg'))
+        img = PIL.Image.open(default_storage.open(photos_path + '.jpg'))
         width, height = img.size
         if default_storage.exists(photos_path + '.orig'):
             # smoel was created using newer strategy. Shrink until it fits the
@@ -251,22 +229,11 @@ def _tag_detail(request, tag):
 
 def _brand_detail(request, brand):
     ctx = _entity_detail(request, brand)
-
-    def _cmp(x, y):
-        r = Es.relation_cmp_until(y, x)
-        if r:
-            return r
-        r = cmp(unicode(x['with'].humanName),
-                unicode(y['with'].humanName))
-        if r:
-            return r
-        r = cmp(unicode(x['who'].humanName),
-                unicode(y['who'].humanName))
-        if r:
-            return r
-        return Es.relation_cmp_from(x, y)
     ctx['rels'] = sorted(Es.query_relations(how=brand, deref_who=True,
-                                            deref_with=True), cmp=_cmp)
+                                            deref_with=True),
+                         key=lambda x: (Es.DT_MIN - Es.relation_until(x),
+                                        Es.entity_humanName(x['with']),
+                                        Es.entity_humanName(x['who'])))
     for r in ctx['rels']:
         r['id'] = r['_id']
         r['until_year'] = (None if r['until'] is None else
@@ -280,11 +247,6 @@ def _study_detail(request, study):
     ctx = _entity_detail(request, study)
     ctx['students'] = students = []
 
-    def _cmp(s1, s2):
-        r = Es.dt_cmp_until(s2['until'], s1['until'])
-        if r:
-            return r
-        return cmp(s1['student'].humanName, s2['student'].humanName)
     for student in Es.by_study(study):
         for _study in student.studies:
             if _study['study'] != study:
@@ -293,7 +255,8 @@ def _study_detail(request, study):
                              'from': _study['from'],
                              'until': _study['until'],
                              'institute': _study['institute']})
-    ctx['students'].sort(cmp=_cmp)
+    ctx['students'].sort(key=lambda s: (Es.dt_until(s['until']),
+                                        s['student'].humanName))
     return render_to_response('leden/study_detail.html', ctx,
                               context_instance=RequestContext(request))
 
@@ -302,11 +265,6 @@ def _institute_detail(request, institute):
     ctx = _entity_detail(request, institute)
     ctx['students'] = students = []
 
-    def _cmp(s1, s2):
-        r = Es.dt_cmp_until(s2['until'], s1['until'])
-        if r:
-            return r
-        return cmp(s1['student'].humanName, s2['student'].humanName)
     for student in Es.by_institute(institute):
         for _study in student.studies:
             if _study['institute'] != institute:
@@ -315,7 +273,8 @@ def _institute_detail(request, institute):
                              'from': _study['from'],
                              'until': _study['until'],
                              'study': _study['study']})
-    ctx['students'].sort(cmp=_cmp)
+    ctx['students'].sort(key=lambda s: (Es.dt_until(s['until']),
+                                        s['student'].humanName))
     return render_to_response('leden/institute_detail.html', ctx,
                               context_instance=RequestContext(request))
 
@@ -381,19 +340,19 @@ def ik_chsmoel(request):
     for chunk in request.FILES['smoel'].chunks():
         original.write(chunk)
     original.seek(0)
-    img = Image.open(original)
+    img = PIL.Image.open(original)
     if hasattr(img, '_getexif') and img._getexif() is not None:
         orientation = int(img._getexif().get(274, '1'))  # Orientation
         if orientation == 3:
-            img = img.transpose(Image.ROTATE_180)
+            img = img.transpose(PIL.Image.ROTATE_180)
         elif orientation == 6:
-            img = img.transpose(Image.ROTATE_270)
+            img = img.transpose(PIL.Image.ROTATE_270)
         elif orientation == 8:
-            img = img.transpose(Image.ROTATE_90)
+            img = img.transpose(PIL.Image.ROTATE_90)
     width, height = resize_proportional(img.size[0], img.size[1],
                                         settings.SMOELEN_WIDTH * 2,
                                         settings.SMOELEN_HEIGHT * 2)
-    img = img.resize((width, height), Image.ANTIALIAS)
+    img = img.resize((width, height), PIL.Image.ANTIALIAS)
     img.save(default_storage.open(
         path.join(settings.SMOELEN_PHOTOS_PATH,
                   str(user.name)) + ".jpg", 'w'

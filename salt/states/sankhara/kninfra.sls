@@ -1,6 +1,27 @@
 kninfra packages:
     pkg.installed:
         - pkgs:
+            {% if pillar['python3'] %}
+            - python3-django
+            - python3-msgpack
+            - python3-setuptools
+            - python3-pyparsing
+            - python3-markdown
+            - python3-pymongo
+            - python3-pil
+            - python3-pip
+            - python-pip  # saltstack (python 2) needs pip
+            - python3-html2text
+            - python3-httplib2
+            - python3-pyx
+            - python3-six
+            - python3-unidecode
+
+            # prerquisites for pyldap
+            - libsasl2-dev
+            - libldap2-dev
+            - libssl-dev
+            {% else %}
             - python-django
             - msgpack-python
             - python-setuptools
@@ -8,27 +29,35 @@ kninfra packages:
             - python-markdown
             - python-flup
             - python-pymongo
-            - python-mysqldb
             - python-imaging
             - python-pip
             - python-html2text
             - python-httplib2
-            - python-googleapi
             - python-ldap
-            - python-smbpasswd
-            - python-m2crypto
             - python-pyx
             - python-unidecode
+            - python-six
+            {% endif %}
             - gettext
             - imagemagick
-mirte:
+
+# pip packages
+{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved', 'pymysql', 'iso8601', 'google-api-python-client'] %}
+{{ pkg }}:
+{% if pillar['python3'] %}
+    pip.installed:
+        - bin_env: /usr/bin/pip3
+{% else %}
     pip.installed
-sarah:
-    pip.installed
-tarjan:
-    pip.installed
-reserved:
-    pip.installed
+{% endif %}
+{% endfor %}
+
+{% if pillar['python3'] %}
+pyldap:
+    pip.installed:
+        - bin_env: /usr/sbin/pip3
+{% endif %}
+
 infra:
     group.present:
         - gid: 2000
@@ -57,6 +86,7 @@ fotos:
 /home/infra/.profile:
     file.managed:
         - source: salt://sankhara/infra.profile
+        - template: jinja
 /root/.profile:
     file.managed:
         - source: salt://sankhara/root.profile
@@ -187,6 +217,7 @@ https://github.com/karpenoktem/regl:
 /etc/default/giedo:
     file.managed:
         - source: salt://sankhara/giedo.default
+        - template: jinja
 /etc/systemd/system/daan.service:
     file.managed:
         - source: salt://sankhara/daan.service

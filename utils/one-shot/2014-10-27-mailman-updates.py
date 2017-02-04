@@ -17,19 +17,20 @@ def main():
         try:
             changed = False
             if ml.host_name != settings.LISTS_MAILDOMAIN:
-                print 'Updating host_name of %s (was %s)' % (x, ml.host_name)
+                print('Updating host_name of %s (was %s)' % (x, ml.host_name))
                 ml.host_name = settings.LISTS_MAILDOMAIN
                 changed = True
             if ml.from_is_list != 1:
-                print 'Updating from_is_list of %s' % x
+                print('Updating from_is_list of %s' % x)
                 ml.from_is_list = 1
                 changed = True
             if ml.web_page_url != url:
-                print 'Updating url_host of %s (was %s)' % (x, ml.web_page_url)
+                print('Updating url_host of %s (was %s)' % (
+                    x, ml.web_page_url))
                 ml.web_page_url = url
                 changed = True
             if changed:
-                print 'Saving %s' % x
+                print('Saving %s' % x)
             #    ml.Save()
         finally:
             ml.Unlock()
