@@ -166,9 +166,9 @@ def barco_enterform(request, repos, formname):
     if request.method == 'POST':
         form = (formspec.django_form)(request.POST)
         raw_prefill = json.loads(request.POST['jsondata'])
-        # The keys are unicode and that gives trouble when passing it to
-        # the template and |safe'ing it. This line maps all keys and values to
-        # non-unicode.
+        # In Python2, the keys are unicode and that gives trouble when passing
+        # it to the template and |safe'ing it. This line maps all keys and
+        # values to non-unicode.
         prefill = {str(x): str(y) for x, y in six.iteritems(raw_prefill)}
         if form.is_valid():
             # Dump the entered data to a file ...
