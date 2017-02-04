@@ -218,6 +218,10 @@ https://github.com/karpenoktem/regl:
     file.managed:
         - source: salt://sankhara/giedo.default
         - template: jinja
+/etc/default/hans:
+    file.managed:
+        - source: salt://sankhara/hans.default
+        - template: jinja
 /etc/systemd/system/daan.service:
     file.managed:
         - source: salt://sankhara/daan.service
@@ -230,6 +234,9 @@ https://github.com/karpenoktem/regl:
 /etc/systemd/system/giedo.service:
     file.managed:
         - source: salt://sankhara/giedo.service
+/etc/systemd/system/hans.service:
+    file.managed:
+        - source: salt://sankhara/hans.service
 giedo:
     service.running
 /home/infra/repo/bin/run-fcgi:

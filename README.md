@@ -139,7 +139,7 @@ gesynchroniseerd blijven met de ledenadministratie: als iemand in een
 commissie gaat moet zij ook automatisch in de goede e-maillijsten en
 wolk-groepen komen.  Bij elke verandering van de ledenadmnistratie wordt
 er gecontroleerd of alle instellingen nog ok zijn en zo nodig veranderingen
-aangebracht.  Dit wordt gedaan door vier verschillende *daemons*
+aangebracht.  Dit wordt gedaan door vijf verschillende *daemons*
 (programma's die in de achtergrond draaien).
 
  * **giedo** draait als de `infra`-gebruiker op *sankhara*.  Dat is dezelfde
@@ -158,6 +158,8 @@ aangebracht.  Dit wordt gedaan door vier verschillende *daemons*
    toegang tot de financiële boekhouding die op *phassa* staat.  Via *moniek*
    (via *giedo*) kan de website bij de boekhouding.  Code: `kn/utils/moniek`.
    (Moniek was de eerste penningmeester.)
+ * **hans** draait als de `list`-gebruiker op *sankhara* en laat giedo
+   de mailman e-maillijsten inkijken en aanpassen.  Code: `kn/utils/hans`.
    
 Vagrant
 -------
