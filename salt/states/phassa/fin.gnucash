@@ -44,8 +44,8 @@
   </slot>
 </book:slots>
 <gnc:count-data cd:type="commodity">1</gnc:count-data>
-<gnc:count-data cd:type="account">21</gnc:count-data>
-<gnc:count-data cd:type="transaction">4</gnc:count-data>
+<gnc:count-data cd:type="account">23</gnc:count-data>
+<gnc:count-data cd:type="transaction">6</gnc:count-data>
 <gnc:commodity version="2.0.0">
   <cmdty:space>ISO4217</cmdty:space>
   <cmdty:id>EUR</cmdty:id>
@@ -151,6 +151,10 @@
     <slot>
       <slot:key>color</slot:key>
       <slot:value type="string">Not Set</slot:value>
+    </slot>
+    <slot>
+      <slot:key>last-num</slot:key>
+      <slot:value type="string">123</slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">62516ceb5c1acd46f9d2ee9466cee408</act:parent>
@@ -321,6 +325,23 @@
   <act:parent type="guid">7b8c995482b4d4e3384f602d8a44081d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
+  <act:name>Reglcie</act:name>
+  <act:id type="guid">35fa5f9267817cc21f3757a1b3e0da31</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>color</slot:key>
+      <slot:value type="string">Not Set</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">7b8c995482b4d4e3384f602d8a44081d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Imbalance-EUR</act:name>
   <act:id type="guid">65204a42428fc56cabd019d2c163717d</act:id>
   <act:type>BANK</act:type>
@@ -368,6 +389,23 @@
 <gnc:account version="2.0.0">
   <act:name>Breicie</act:name>
   <act:id type="guid">d24af27bc180a37f170ab922dc8f9cd2</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>color</slot:key>
+      <slot:value type="string">Not Set</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">a6d62e2f3be556964d342554ff4c4eb1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Reglcie</act:name>
+  <act:id type="guid">d104f89eeb0ae47ba0adc5dc0a4bc6a1</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -446,6 +484,100 @@
       <split:value>-1300/100</split:value>
       <split:quantity>-1300/100</split:quantity>
       <split:account type="guid">74f8784f8a3a89b8eba0ad59b89c3d90</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">562043c1fd183d33e84ffb3d4f74574f</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:date-posted>
+    <ts:date>2017-02-04 00:00:00 +0100</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2017-02-04 16:58:48 +0100</ts:date>
+  </trn:date-entered>
+  <trn:description>Oprichtingskosten admin-dispuut</trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>date-posted</slot:key>
+      <slot:value type="gdate">
+        <gdate>2017-02-04</gdate>
+      </slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">8a24ffe23f43555f158db20dc6724729</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>50000/100</split:value>
+      <split:quantity>50000/100</split:quantity>
+      <split:account type="guid">e1cc1a46a301d0d27639a52a48a85469</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">aa44d0233c3cdd2da0310ddb81776ae2</split:id>
+      <split:memo>winst!1</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-30000/100</split:value>
+      <split:quantity>-30000/100</split:quantity>
+      <split:account type="guid">35fa5f9267817cc21f3757a1b3e0da31</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">3e545b64ef3e80aeecce3bd966953dbd</split:id>
+      <split:memo>griffiekosten</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-10000/100</split:value>
+      <split:quantity>-10000/100</split:quantity>
+      <split:account type="guid">d104f89eeb0ae47ba0adc5dc0a4bc6a1</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">a9e98822c9b9f94c67c9f605975df0b5</split:id>
+      <split:memo>20% korting</split:memo>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-10000/100</split:value>
+      <split:quantity>-10000/100</split:quantity>
+      <split:account type="guid">945d5834a29dee7ceb7b49ee2a0d2172</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">4816a250853cd0c85063c0e2aea08c24</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:num>321</trn:num>
+  <trn:date-posted>
+    <ts:date>2017-02-04 00:00:00 +0100</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2017-02-04 16:56:30 +0100</ts:date>
+  </trn:date-entered>
+  <trn:description>debiteur/crediteur</trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>date-posted</slot:key>
+      <slot:value type="gdate">
+        <gdate>2017-02-04</gdate>
+      </slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">865ab26ef4076658001eb59500451c05</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>987/100</split:value>
+      <split:quantity>987/100</split:quantity>
+      <split:account type="guid">945d5834a29dee7ceb7b49ee2a0d2172</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">3d0e83e8f8d49047038ea6235d8ee518</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-987/100</split:value>
+      <split:quantity>-987/100</split:quantity>
+      <split:account type="guid">e1cc1a46a301d0d27639a52a48a85469</split:account>
     </trn:split>
   </trn:splits>
 </gnc:transaction>

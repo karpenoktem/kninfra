@@ -33,27 +33,31 @@ ons nog  <strong>€ {{ bedrag }}</strong> veschuldigd.
 	<tr>
 		<th>{% trans "nummer" %}</th>
 		<th>{% trans "datum" %}</th>
-		<th>{% trans "omschrijving" %}</th>
+		<th>{% trans "omschrijving / post" %}</th>
 		<th>{% trans "bedrag (€)" %}</th>
 		<th>{% trans "som (€)" %}</th>
 	</tr>
-	{% for mut in balans.mutations %}
+	{% for tr in balans.transactions %}
 	<tr>
-		<td>{{ mut.data.tr }}</td>
-		<td class="date">{{ mut.data.date.text }}</td>
-		<td>{{ mut.trdescription }}</td>
+		<td>{{ tr.data.num }}</td>
+		<td class="date">{{ tr.data.date.text }}</td>
+		<td>{{ tr.data.description }}</td>
+		<td class="value">{{ tr.value }}</td>
+		<td class="value">{{ tr.sum }}</td>
+	</tr>
+	{% for mut in tr.mutations %}
+	<tr>
+		<td></td>
+		<td class="date"></td>
+		<td>{{ mut.data.account }} {% if mut.data.memo %}({{ mut.data.memo }}){% endif %}</td>
 		<td class="value">{{ mut.value }}</td>
+		{% if mut.data.counts %}
 		<td class="value">{{ mut.sum }}</td>
+		{% else %}
+		<td class="value"></td>
+		{% endif %}
 	</tr>
-	{% if mut.data.description %}
-	<tr>
-		<td></td>
-		<td></td>
-		<td>{{ mut.data.description }}</td>
-		<td></td>
-		<td></td>
-	</tr>
-	{% endif %}
+	{% endfor %}
 	{% endfor %}
 </table>
 
