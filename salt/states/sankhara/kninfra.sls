@@ -15,11 +15,15 @@ kninfra packages:
             - python3-html2text
             - python3-httplib2
             - python3-googleapi
-            #- python3-ldap
             #- python3-smbpasswd
             - python3-pyx
             - python3-six
             - python3-unidecode
+
+            # prerquisites for pyldap
+            - libsasl2-dev
+            - libldap2-dev
+            - libssl-dev
             {% else %}
             - python-django
             - msgpack-python
@@ -53,6 +57,12 @@ kninfra packages:
     pip.installed
 {% endif %}
 {% endfor %}
+
+{% if pillar['python3'] %}
+pyldap:
+    pip.installed:
+        - bin_env: /usr/sbin/pip3
+{% endif %}
 
 infra:
     group.present:
