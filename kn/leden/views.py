@@ -807,7 +807,7 @@ def note_add(request):
     if on is None:
         raise Http404
     on.add_note(request.POST['note'], request.user)
-    render_then_email("leden/new-note.mail.txt",
+    render_then_email("leden/new-note.mail.html",
                       Es.by_name('secretariaat').canonical_full_email, {
                           'user': request.user,
                           'note': request.POST['note'],
