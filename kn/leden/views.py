@@ -109,6 +109,8 @@ def _entity_detail(request, e):
             return r
         return Es.relation_cmp_from(x, y)
     related = sorted(e.get_related(), cmp=_cmp)
+    if e != request.user and 'secretariaat' not in request.user.cached_groups_names:
+        related = filter(lambda r: '!hide-members' not in r['with'].cached_tags_names, related)
     rrelated = sorted(e.get_rrelated(), cmp=_rcmp)
     for r in chain(related, rrelated):
         r['may_end'] = Es.user_may_end_relation(request.user, r)
@@ -721,9 +723,10 @@ def relation_end(request, _id):
         raise PermissionDenied
     Es.end_relation(_id)
 
-    # Notify informacie
-    # TODO (rik) leave out 'als lid'
-    Es.notify_informacie('relation_end', request.user, relation=_id)
+    if '!hide-members' not in rel['with'].cached_tags_names:
+        # Notify informacie
+        # TODO (rik) leave out 'als lid'
+        Es.notify_informacie('relation_end', request.user, relation=_id)
 
     giedo.sync_async(request)
     return redirect_to_referer(request)
@@ -761,7 +764,9 @@ def relation_begin(request):
 
     # Notify informacie
     # TODO (rik) leave out 'als lid'
-    Es.notify_informacie('relation_begin', request.user, relation=relation_id)
+    print 'relation begin', Es.by_id(d['with']).cached_tags_names
+    if '!hide-members' not in Es.by_id(d['with']).cached_tags_names:
+        Es.notify_informacie('relation_begin', request.user, relation=relation_id)
 
     giedo.sync_async(request)
     return redirect_to_referer(request)

@@ -825,6 +825,21 @@ class Entity(SONWrapper):
                     str(n) for n in g.names])
         return self._groups_names_cache
 
+    @property
+    def cached_tags(self):
+        if not hasattr(self, '_tags_cache'):
+            self._tags_cache = set(self.get_tags())
+        return self._tags_cache
+
+    @property
+    def cached_tags_names(self):
+        if not hasattr(self, '_tags_names_cache'):
+            self._tags_names_cache = set()
+            for t in self.cached_tags:
+                self._tags_names_cache.update([
+                    str(n) for n in t.names])
+        return self._tags_names_cache
+
     # get reverse-related
     def get_rrelated(self, how=-1, _from=None, until=None, deref_who=True,
                      deref_with=True, deref_how=True):
