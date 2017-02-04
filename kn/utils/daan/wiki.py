@@ -1,6 +1,6 @@
 import subprocess
 
-import MySQLdb
+import pymysql
 
 from django.conf import settings
 
@@ -16,11 +16,16 @@ def apply_wiki_changes(daan, changes):
     if not changes:
         return
     creds = settings.WIKI_MYSQL_SECRET
-    dc = MySQLdb.connect(creds[0], user=creds[1], passwd=creds[2],
-                         db=creds[3])
-    for user, realname, email in changes['add']:
-        c = dc.cursor()
-        q = """
+    dc = pymysql.connect(
+        host=creds[0],
+        user=creds[1],
+        password=creds[2],
+        db=creds[3]
+    )
+    try:
+        for user, realname, email in changes['add']:
+            with dc.cursor() as c:
+                q = """
         INSERT INTO `user` (`user_name`,
                             `user_real_name`,
                             `user_password`,
@@ -48,31 +53,25 @@ def apply_wiki_changes(daan, changes):
             NULL,
             '20081102154303',
             0);"""
-        c.execute(q, (user.capitalize(), realname, email))
-        c.execute("COMMIT;")
-        c.close()
-    for user in changes['remove']:
-        c = dc.cursor()
-        c.execute("DELETE FROM `user` WHERE `user_name`=%s",
-                  user.capitalize())
-        c.execute("COMMIT;")
-        c.close()
-    for user in changes['activate']:
-        c = dc.cursor()
-        # Issue #11: .capitalize() is required due to binary-charset
-        c.execute("""INSERT INTO `user_groups` (ug_user, ug_group)
-            SELECT user_id, %s FROM `user` WHERE user_name=%s""",
-                  ('leden', user.capitalize()))
-        c.execute("COMMIT;")
-        c.close()
-    for user in changes['deactivate']:
-        c = dc.cursor()
-        # Issue #11: .capitalize() is required due to binary-charset
-        c.execute("""DELETE FROM `user_groups` WHERE ug_group=%s AND
-            ug_user = (SELECT user_id FROM `user` WHERE
-            user_name=%s)""", ('leden', user.capitalize()))
-        c.execute("COMMIT;")
-        c.close()
-    dc.close()
+                c.execute(q, (user.capitalize(), realname, email))
+        for user in changes['remove']:
+            with dc.cursor() as c:
+                c.execute("DELETE FROM `user` WHERE `user_name`=%s",
+                          user.capitalize())
+        for user in changes['activate']:
+            with dc.cursor() as c:
+                # Issue #11: .capitalize() is required due to binary-charset
+                c.execute("""INSERT INTO `user_groups` (ug_user, ug_group)
+                    SELECT user_id, %s FROM `user` WHERE user_name=%s""",
+                          ('leden', user.capitalize()))
+        for user in changes['deactivate']:
+            with dc.cusor() as c:
+                # Issue #11: .capitalize() is required due to binary-charset
+                c.execute("""DELETE FROM `user_groups` WHERE ug_group=%s AND
+                    ug_user = (SELECT user_id FROM `user` WHERE
+                    user_name=%s)""", ('leden', user.capitalize()))
+        dc.commit()
+    finally:
+        dc.close()
 
 # vim: et:sta:bs=2:sw=4:

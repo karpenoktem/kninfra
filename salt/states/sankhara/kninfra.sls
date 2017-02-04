@@ -8,7 +8,6 @@ kninfra packages:
             - python3-pyparsing
             - python3-markdown
             - python3-pymongo
-            #- python3-mysqldb
             - python3-pil
             - python3-pip
             - python-pip  # saltstack (python 2) needs pip
@@ -32,7 +31,6 @@ kninfra packages:
             - python-markdown
             - python-flup
             - python-pymongo
-            - python-mysqldb
             - python-imaging
             - python-pip
             - python-html2text
@@ -48,7 +46,7 @@ kninfra packages:
             - imagemagick
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved'] %}
+{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved', 'pymysql'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
