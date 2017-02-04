@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import json
 import logging
 import mimetypes
@@ -676,6 +678,9 @@ def relation_end(request, _id):
     rel = Es.relation_by_id(_id)
     if rel is None:
         raise Http404
+    if not Es.relation_is_active(rel):
+        messages.info(request, _("Relatie was al beëindigd."))
+        return redirect_to_referer(request)
     if not Es.user_may_end_relation(request.user, rel):
         raise PermissionDenied
     Es.end_relation(_id)
@@ -713,7 +718,8 @@ def relation_begin(request):
     except StopIteration:
         ok = True
     if not ok:
-        raise ValueError(_("Deze relatie bestaat al"))
+        messages.info(request, _("Deze relatie bestaat al"))
+        return redirect_to_referer(request)
 
     # Add the relation!
     relation_id = Es.add_relation(d['who'], d['with'], d['how'], dt, DT_MAX)
