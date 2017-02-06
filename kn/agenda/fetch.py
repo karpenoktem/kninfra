@@ -38,8 +38,8 @@ except ImportError:
 
 def get_credentials():
     return ServiceAccountCredentials.from_json_keyfile_name(
-            settings.GOOGLE_OAUTH2_KEY,
-            ['https://www.googleapis.com/auth/calendar.readonly'])
+        settings.GOOGLE_OAUTH2_KEY,
+        ['https://www.googleapis.com/auth/calendar.readonly'])
 
 
 def parse_item_date(date):
