@@ -88,6 +88,7 @@ def defaultSettings(glbls):
     )
 
     d.GIEDO_SOCKET = '/var/run/infra/S-giedo'
+    d.HANS_SOCKET = '/var/run/infra/S-hans'
     d.DAAN_SOCKET = '/var/run/infra/S-daan'
     d.CILIA_SOCKET = '/var/run/infra/S-cilia'
     d.MONIEK_SOCKET = '/var/run/infra/S-moniek'

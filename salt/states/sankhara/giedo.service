@@ -1,6 +1,6 @@
 [Unit]
 Description=Giedo figures out what to change
-Requires=daan.service cilia-tunnel.service moniek-tunnel.service
+Requires=daan.service cilia-tunnel.service moniek-tunnel.service hans.service
 
 [Service]
 ExecStart=/home/infra/bin/giedo

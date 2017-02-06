@@ -15,7 +15,7 @@ def generate_quassel_changes(giedo):
         settings.QUASSEL_CONFIGDIR,
         'quassel-storage.sqlite')
     if not os.path.exists(db_path):
-        os.logging.warn('quassel: %s does not exist. Skipping.', db_path)
+        logging.warn('quassel: %s does not exist. Skipping.', db_path)
         return None
 
     # Check which users are currently on the core

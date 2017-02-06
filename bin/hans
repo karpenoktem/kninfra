@@ -1,0 +1,5 @@
+#!/bin/bash
+
+PYTHON="${PYTHON:-python}"
+
+$PYTHON /home/infra/repo/utils/hans.py

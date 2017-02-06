@@ -17,6 +17,11 @@ kninfra packages:
             - python3-six
             - python3-unidecode
 
+            # python2 packages for hans
+            - python-six
+            - python-django
+            - python-pymongo
+
             # prerquisites for pyldap
             - libsasl2-dev
             - libldap2-dev
@@ -57,6 +62,13 @@ kninfra packages:
 {{ pkg }}:
     pip.installed:
         - bin_env: /usr/bin/pip3
+{% endfor %}
+
+# python2 packages for hans
+{% for pkg in ['mirte', 'sarah', 'msgpack-python'] %}
+{{ pkg }} python2:
+    pip.installed:
+        - name: {{ pkg }}
 {% endfor %}
 {% endif %}
 
@@ -220,6 +232,10 @@ https://github.com/karpenoktem/regl:
     file.managed:
         - source: salt://sankhara/giedo.default
         - template: jinja
+/etc/default/hans:
+    file.managed:
+        - source: salt://sankhara/hans.default
+        - template: jinja
 /etc/systemd/system/daan.service:
     file.managed:
         - source: salt://sankhara/daan.service
@@ -232,6 +248,9 @@ https://github.com/karpenoktem/regl:
 /etc/systemd/system/giedo.service:
     file.managed:
         - source: salt://sankhara/giedo.service
+/etc/systemd/system/hans.service:
+    file.managed:
+        - source: salt://sankhara/hans.service
 giedo:
     service.running
 /home/infra/repo/bin/run-fcgi:
