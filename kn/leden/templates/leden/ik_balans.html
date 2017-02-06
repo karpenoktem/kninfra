@@ -19,7 +19,7 @@
 {% if balans.total < 0 %}
 {% blocktrans with bedrag=balans.abstotal %}
 Volgens de boekhouding krijg je
-nog <strong>€ {{ bedrag }}</strong> van ons.
+nog <strong>€&nbsp;{{ bedrag }}</strong> van ons.
 {% endblocktrans %}
 {% elif balans.total == 0 %}
 {% blocktrans %}
@@ -29,7 +29,7 @@ niets verschuldigd (in financiële zin).
 {% elif balans.total > 0 %}
 {% blocktrans with bedrag=balans.abstotal %} 
 Volgens de boekhouding ben je 
-ons nog  <strong>€ {{ bedrag }}</strong> veschuldigd.
+ons nog  <strong>€&nbsp;{{ bedrag }}</strong> veschuldigd.
 {% endblocktrans %}
 {% endif %}
 </p>
