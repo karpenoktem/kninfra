@@ -27,16 +27,17 @@ def generate_mailman_changes(giedo):
     # Find the current members of the mailing lists and find which
     # mailing lists are missing.
     for g in mm_groups:
-        gid2name[g._id] = str(g.name)
-        if str(g.name) in ml_membership:
-            membership_to_check[str(g.name)] = set(ml_membership[str(g.name)])
+        name = str(g.name).encode()
+        gid2name[g._id] = name
+        if name in ml_membership:
+            membership_to_check[name] = set(ml_membership[name])
         else:
-            todo['create'].append((str(g.name), six.text_type(g.humanName)))
-            membership_to_check[str(g.name)] = set()
+            todo['create'].append((name, six.text_type(g.humanName)))
+            membership_to_check[name] = set()
 
     # Check which memberships are missing in the current mailing lists
     for rel in mm_rels:
-        em = rel['who'].canonical_email
+        em = rel['who'].canonical_email.encode()
         gname = gid2name[rel['with']]
         if em not in membership_to_check[gname]:
             if gname not in todo['add']:
