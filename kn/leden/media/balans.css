@@ -20,9 +20,29 @@ table.balans td {
 	}
 }
 
-table.balans td {
-	border-top: 1px solid rgba(0, 0, 0, 0.1);
+table.balans tbody {
+	cursor: pointer;
 }
+table.balans tbody:hover {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+table.balans tr:first-child td {
+	border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+table.balans tr:not(:first-child) td {
+	border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+table.balans tr:not(:first-child) {
+	color: rgba(0, 0, 0, 0.6);
+}
+table.balans :not(.expand) tr:not(:first-child) {
+	display: none;
+}
+table.balans .expand .sum {
+	display: none;
+}
+
 table.balans .date {
 	white-space: nowrap;
 }
