@@ -2,4 +2,4 @@
 
 PYTHON="${PYTHON:-python}"
 
-$PYTHON $HOME/repo/salt/sankhara/initializeDb.py
+$PYTHON /home/infra/repo/salt/states/sankhara/initializeDb.py
