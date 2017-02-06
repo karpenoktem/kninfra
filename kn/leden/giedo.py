@@ -89,11 +89,12 @@ def openvpn_create(user, want):
                                  'want': want})
 
 
-def fin_get_account(user):
+def fin_get_account(ent):
     return get_giedo_connection().send({
         'type': 'fin-get-account',
-        'name': str(user.name),
-        'full_name': user.full_name
+        'name': str(ent.name),
+        'full_name': str(ent.humanName),
+        'account_type': "user" if ent.is_user else "group"
     })
 
 

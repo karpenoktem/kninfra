@@ -40,7 +40,7 @@ from kn.fotos.utils import resize_proportional
 from kn.leden import giedo
 from kn.leden.auth import login_or_basicauth_required
 from kn.leden.date import date_to_dt, now
-from kn.leden.fin import BalansInfo, quaestor
+import kn.leden.fin as fin
 from kn.leden.forms import (AddGroupForm, AddStudyForm, AddUserForm,
                             ChangePasswordForm)
 from kn.leden.mongo import _id
@@ -629,7 +629,7 @@ def fiscus_debtmail(request):
 
     ctx = {
         'BASE_URL': settings.BASE_URL,
-        'quaestor': quaestor(),
+        'quaestor': fin.quaestor(),
         'account_number': settings.BANK_ACCOUNT_NUMBER,
         'account_holder': settings.BANK_ACCOUNT_HOLDER,
     }
@@ -872,10 +872,20 @@ def ik_openvpn_download(request, filename):
 
 @login_required
 def ik_balans(request):
-    balans = giedo.fin_get_account(request.user)
+    accounts = fin.get_accounts_of(request.user)
+
+    account = request.user
+    if 'account' in request.GET:
+        account = Es.by_name(request.GET['account'])
+
+    accounts = [(a, a.id == account.id) for a in accounts]
+
+    balans = giedo.fin_get_account(account)
     return render_to_response('leden/ik_balans.html',
-                              {'balans': BalansInfo(balans),
-                               'quaestor': quaestor()},
+                              {'balans': fin.BalansInfo(balans),
+                               'quaestor': fin.quaestor(),
+                               'accounts': accounts,
+                               'account': account},
                               context_instance=RequestContext(request))
 
 

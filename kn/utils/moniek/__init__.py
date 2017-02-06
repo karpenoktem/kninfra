@@ -15,7 +15,7 @@ class Moniek(WhimDaemon):
 
     def handle(self, d):
         if d['type'] == 'fin-get-account':
-            return fin_get_account(self, d['name'], d['full_name'])
+            return fin_get_account(self, d['name'], d['full_name'], d['account_type'])
         elif d['type'] == 'fin-get-debitors':
             return fin_get_debitors(self)
         else:

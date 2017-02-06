@@ -14,8 +14,17 @@
 
 {% block body %}
 <h1>{% trans "Balans" %}</h1>
+<form action="" method="get">
+<select name="account" onchange="this.form.submit()">
+{% for account,current in accounts %}
+<option value="{{ account.name }}" {% if current %}selected{% endif %}>{{ account.humanName }}</option>
+{% endfor %}
+</select>
+</form>
 {% if balans.in_books %}
 <p>
+{% if account.id == user.id %}
+
 {% if balans.total < 0 %}
 {% blocktrans with bedrag=balans.abstotal %}
 Volgens de boekhouding krijg je
@@ -32,6 +41,8 @@ Volgens de boekhouding ben je
 ons nog  <strong>€&nbsp;{{ bedrag }}</strong> veschuldigd.
 {% endblocktrans %}
 {% endif %}
+
+{% endif %} 
 </p>
 
 <table class="balans">
@@ -72,18 +83,26 @@ ons nog  <strong>€&nbsp;{{ bedrag }}</strong> veschuldigd.
 
 {% else %} 
 <p>
+{% if user.id == account.id %}
 {% blocktrans %}
 Je hebt op het moment nog geen debiteuren- en crediteurenrekening
 in onze boekhouding.  
 {% endblocktrans %}
+{% else %}
+{% blocktrans with name=account.humanName %}
+De {{name}} heeft op het moment geen inkomsten- en uitgavenrekening in onze boekhouding.
+{% endblocktrans %}
+{% endif %}
 </p>
 {% endif %}
+{% if user.id == account.id %}
 <p>
 {% blocktrans with rekeningnummer=balans.our_account_number rekeninghouder=balans.our_account_holder %}
 Betalingen kunnen gericht worden aan {{ rekeningnummer }}
 ten name van {{ rekeninghouder }}.
 {% endblocktrans %}
 </p>
+{% endif %}
 <p>
 {% blocktrans with name=quaestor.name email=quaestor.email %}
 Heb je vragen?  Neem dan contact
