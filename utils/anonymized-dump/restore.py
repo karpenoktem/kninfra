@@ -12,31 +12,31 @@ from kn.leden.mongo import db
 
 
 def main():
-    print 'Are you sure you want to run this?'
+    print('Are you sure you want to run this?')
     return
     db.command('dropDatabase')
-    print 'Creating indices'
-    print ' leden'
+    print('Creating indices')
+    print(' leden')
     Es.ensure_indices()
-    print ' moderation'
+    print(' moderation')
     Es_mod.ensure_indices()
-    print ' planning'
+    print(' planning')
     Es_plan.ensure_indices()
-    print ' poll'
+    print(' poll')
     Es_poll.ensure_indices()
-    print ' regl'
+    print(' regl')
     Es_regl.ensure_indices()
-    print ' subscriptions'
+    print(' subscriptions')
     Es_subscr.ensure_indices()
-    print
-    print 'Restoring data'
-    print ' entities'
+    print()
+    print('Restoring data')
+    print(' entities')
     for e in bson.decode_all(open('entities.bsons').read()):
         db['entities'].save(e)
-    print ' relations'
+    print(' relations')
     for e in bson.decode_all(open('relations.bsons').read()):
         db['relations'].save(e)
-    print ' events'
+    print(' events')
     for e in bson.decode_all(open('events.bsons').read()):
         db['events'].save(e)
 

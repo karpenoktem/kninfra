@@ -1,6 +1,8 @@
 """ Use crude heuristics to check which files are still not ready
     for translation. """
 
+from __future__ import print_function
+
 import os.path
 
 
@@ -10,15 +12,15 @@ class Program:
         with open(path) as f:
             contents = f.read()
         ok = 'import ugettext from' in contents
-        print '- [x]' if ok else '- [ ]',
-        print os.path.relpath(path, self.repo_path)
+        print('- [x]' if ok else '- [ ]', end=' ')
+        print(os.path.relpath(path, self.repo_path))
 
     def check_html(self, path):
         with open(path) as f:
             contents = f.read()
         ok = '{% load i18n %}' in contents
-        print '- [x]' if ok else '- [ ]',
-        print os.path.relpath(path, self.repo_path)
+        print('- [x]' if ok else '- [ ]', end=' ')
+        print(os.path.relpath(path, self.repo_path))
 
     def main(self):
         self.repo_path = os.path.join(os.path.dirname(

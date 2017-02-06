@@ -5,6 +5,7 @@ import reserved
 
 from django import forms
 from django.conf import settings
+from django.utils import six
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 
@@ -30,12 +31,12 @@ class EntityChoiceFieldWidget(forms.TextInput):
                 % {'id': json.dumps(final_attrs['id']),
                    'value': json.dumps(str(value))})
         return mark_safe(
-            u'''<input type='hidden' id=%(id)s name=%(name)s />
+            six.u('''<input type='hidden' id=%(id)s name=%(name)s />
                 <script type='text/javascript'>//<!--
                 $(function(){
                     create_entityChoiceField(%(id)s, %(params)s);
                     %(code_set_value)s
-                });//--></script>'''
+                });//--></script>''')
             % {'name': json.dumps(name),
                'id': json.dumps(final_attrs['id']),
                'params': json.dumps({'type': self.type}),
@@ -57,7 +58,7 @@ class EntityChoiceField(forms.CharField):
 def validate_username(username):
     if username in Es.names():
         raise forms.ValidationError(_('Gebruikersnaam is al in gebruik'))
-    if any(map(lambda c: c not in settings.USERNAME_CHARS, username)):
+    if any([c not in settings.USERNAME_CHARS for c in username]):
         raise forms.ValidationError(
             _('Gebruikersnaam bevat een niet-toegestane letter'))
     if not reserved.allowed(username):

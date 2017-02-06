@@ -1,2 +1,5 @@
-#!/bin/sh
-$HOME/repo/utils/cron/send-informacie-digest.py
+#!/bin/bash
+
+PYTHON="${PYTHON:-python}"
+
+$PYTHON $HOME/repo/utils/cron/send-informacie-digest.py

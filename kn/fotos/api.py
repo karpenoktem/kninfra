@@ -1,6 +1,7 @@
 import json
 
 from django.core.exceptions import PermissionDenied
+from django.utils import six
 from django.views.decorators.http import require_POST
 
 import kn.fotos.entities as fEs
@@ -75,7 +76,7 @@ def entities_json(children, user):
             if tagged:
                 for tag in tagged:
                     tags.append(str(tag.name))
-                    people[str(tag.name)] = unicode(tag.humanName)
+                    people[str(tag.name)] = six.text_type(tag.humanName)
                 entry['tags'] = tags
 
         entries.append(entry)
@@ -86,7 +87,7 @@ def entities_json(children, user):
 def entity_from_request(data):
     if 'path' not in data:
         return 'Missing path attribute'
-    if not isinstance(data['path'], basestring):
+    if not isinstance(data['path'], six.string_types):
         return 'path should be string'
     entity = fEs.by_path(data['path'])
     if entity is None:
@@ -96,7 +97,7 @@ def entity_from_request(data):
 
 def _list(data, request):
     album = entity_from_request(data)
-    if isinstance(album, basestring):
+    if isinstance(album, six.string_types):
         return {'error': album}
     user = request.user if request.user.is_authenticated() else None
     return album_json(album, user)
@@ -109,7 +110,7 @@ def _set_metadata(data, request):
 
     if 'title' not in data:
         return {'error': 'missing title attribute'}
-    if not isinstance(data['title'], basestring):
+    if not isinstance(data['title'], six.string_types):
         return {'error': 'title should be string'}
     title = data['title'].strip()
     if not title:
@@ -122,7 +123,7 @@ def _set_metadata(data, request):
     visibility = data['visibility']
 
     entity = entity_from_request(data)
-    if isinstance(entity, basestring):
+    if isinstance(entity, six.string_types):
         return {'error': entity}
 
     result = {'Ok': True}
@@ -142,7 +143,7 @@ def _set_metadata(data, request):
     if entity._type in ['foto', 'video']:
         if 'description' not in data:
             return {'error': 'missing description attribute'}
-        if not isinstance(data['description'], basestring):
+        if not isinstance(data['description'], six.string_types):
             return {'error': 'description should be a string'}
         description = data['description'].strip()
         if not description:
@@ -153,7 +154,7 @@ def _set_metadata(data, request):
             return {'error': 'missing tags attribute'}
         if not isinstance(data['tags'], list):
             return {'error': 'tags should be a list'}
-        if not all(isinstance(n, basestring) for n in data['tags']):
+        if not all(isinstance(n, six.string_types) for n in data['tags']):
             return {'error': 'tags may only contain strings'}
         tags = data['tags']
         entity.set_tags(tags, save=True)
@@ -204,7 +205,7 @@ def _remove(data, request):
         raise PermissionDenied
 
     foto = entity_from_request(data)
-    if isinstance(foto, basestring):
+    if isinstance(foto, six.string_types):
         return {'error': foto}
 
     # No visibility equals removal.
@@ -215,7 +216,7 @@ def _remove(data, request):
 
 def _search(data, request):
     album = entity_from_request(data)
-    if isinstance(album, basestring):
+    if isinstance(album, six.string_types):
         return {'error': album}
 
     user = request.user if request.user.is_authenticated() else None
@@ -224,7 +225,7 @@ def _search(data, request):
 
     if 'q' not in data:
         return {'error': 'missing q attribute'}
-    if not isinstance(data['q'], basestring):
+    if not isinstance(data['q'], six.string_types):
         return {'error': 'q should be string'}
     q = data['q'].strip()
     if not q:

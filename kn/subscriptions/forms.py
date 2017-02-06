@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import six
 from django.utils.translation import ugettext as _
 
 import kn.subscriptions.entities as subscr_Es
@@ -57,7 +58,7 @@ def get_add_event_form(user, superuser=False, editing=False):
         else:
             owner = forms.ChoiceField(
                 label=_('Eigenaar'),
-                choices=[(_id(e), unicode(e.humanName))
+                choices=[(_id(e), six.text_type(e.humanName))
                          for e in get_allowed_owners(user)]
             )
         has_public_subscriptions = forms.BooleanField(

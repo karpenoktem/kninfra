@@ -1,3 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-echo '{"type":"fotoadmin-scan-fotos"}' | $HOME/repo/bin/whim-client /var/run/infra/S-giedo
+PYTHON="${PYTHON:-python}"
+
+echo '{"type":"fotoadmin-scan-fotos"}' \
+    | $PYTHON $HOME/repo/bin/whim-client /var/run/infra/S-giedo

@@ -1,0 +1,17 @@
+{% load i18n %}
+
+{% block subject %}
+{% trans "Notitie op " %}{{ on.humanName }}
+{% endblock %}
+
+{% block html %}\
+<p>{% blocktrans with noter_name=user.humanName \
+                      noter_url=user.get_absolute_url \
+                      on_name=on.humanName \
+                      on_url=on.get_absolute_url %}
+Door <a href="{{ BASE_URL }}{{ noter_url }}">{{ noter_name }}</a> is de volgende
+notitie geplaatst op <a href="{{ BASE_URL }}{{ on_url }}">{{ on_name }}</a>:
+{% endblocktrans %}</p>
+
+<blockquote>{{ note }}</blockquote>
+{% endblock %}

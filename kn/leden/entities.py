@@ -8,7 +8,9 @@ from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.signals import user_logged_in
 from django.db.models import permalink
+from django.utils import six
 from django.utils.crypto import constant_time_compare
+from django.utils.six.moves import range
 from django.utils.translation import ugettext as _
 
 from kn.base.conf import DT_MAX, DT_MIN
@@ -318,7 +320,7 @@ def get_years_of_birth():
                         {'person.dateOfBirth': 1},
                         sort=[('person.dateOfBirth', -1)]
                         )['person']['dateOfBirth'].year
-    return xrange(start, end + 1)
+    return range(start, end + 1)
 
 
 def by_year_of_birth(year):
@@ -400,7 +402,7 @@ def by_keyword(keyword, limit=20, _type=None):
         query_dict['types'] = _type
     cursor = ecol.find(query_dict, limit=(0 if limit is None else limit),
                        sort=[('humanNames.human', 1)])
-    return map(entity, cursor)
+    return [entity(x) for x in cursor]
 
 # Specialized functions to work with entities.
 # ######################################################################
@@ -408,7 +410,7 @@ def by_keyword(keyword, limit=20, _type=None):
 
 def bearers_by_tag_id(tag_id, _as=entity):
     """ Find the bearers of the tag with @tag_id """
-    return map(_as, ecol.find({'tags': tag_id}))
+    return [_as(x) for x in ecol.find({'tags': tag_id})]
 
 
 def year_to_range(year):
@@ -528,7 +530,7 @@ def disj_query_relations(queries, deref_who=False, deref_with=False,
             if attr not in query:
                 continue
             elif isinstance(query[attr], (list, tuple)):
-                query[attr] = {'$in': map(_id, query[attr])}
+                query[attr] = {'$in': [_id(x) for x in query[attr]]}
             elif query[attr] is not None:
                 query[attr] = _id(query[attr])
             else:
@@ -646,26 +648,34 @@ def relation_by_id(__id, deref_who=True, deref_with=True, deref_how=True):
         return None
 
 
-def entity_cmp_humanName(x, y):
-    return cmp(unicode(x.humanName), unicode(y.humanName))
+def entity_humanName(x):
+    """ Returns the human name of an entity or None if None is given.
+        Useful for the key argument in a sort function. """
+    return None if x is None else six.text_type(x.humanName)
 
 
-def dt_cmp_until(x, y):
-    return cmp(DT_MAX if x is None else x,
-               DT_MAX if y is None else y)
+def dt_until(x):
+    """ Treat a datetime from the db as one which is used as an until-date:
+        None is interpreted as DT_MAX. Useful for sorting. """
+    return x if x else DT_MAX
 
 
-def dt_cmp_from(x, y):
-    return cmp(DT_MIN if x is None else x,
-               DT_MIN if y is None else y)
+def dt_from(x):
+    """ Treat a datetime from the db as one which is used as an from-date:
+        None is interpreted as DT_MIN. Useful for sorting. """
+    return x if x else DT_MIN
 
 
-def relation_cmp_until(x, y):
-    return dt_cmp_until(x['until'], y['until'])
+def relation_until(x):
+    """ Returns the datetime until the given relations holds.
+        Useful as `key' argument for sort functions. """
+    return dt_until(x['until'])
 
 
-def relation_cmp_from(x, y):
-    return dt_cmp_from(x['from'], y['from'])
+def relation_from(x):
+    """ Returns the datetime from which the given relations holds.
+        Useful as `key' argument for sort functions. """
+    return dt_from(x['from'])
 
 
 def remove_relation(who, _with, how, _from, until):
@@ -750,6 +760,7 @@ class EntityName(object):
         return "<EntityName %s of %s>" % (self._name, self._entity)
 
 
+@six.python_2_unicode_compatible
 class EntityHumanName(object):
     """ Wrapper object for a humanName of an entity """
 
@@ -771,7 +782,7 @@ class EntityHumanName(object):
 
     @property
     def genitive(self):
-        return self.genitive_prefix + ' ' + unicode(self)
+        return self.genitive_prefix + ' ' + six.text_type(self)
 
     @property
     def definite_article(self):
@@ -780,7 +791,7 @@ class EntityHumanName(object):
                 'van': '',
                 }.get(self.genitive_prefix, 'de')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.humanName
 
     def __repr__(self):
@@ -1058,7 +1069,7 @@ class Entity(SONWrapper):
         addr = self.canonical_email
         if not addr:
             return None
-        return email.utils.formataddr((unicode(self.humanName), addr))
+        return email.utils.formataddr((six.text_type(self.humanName), addr))
 
     @property
     def canonical_email(self):
@@ -1086,13 +1097,15 @@ class Entity(SONWrapper):
 
     def add_note(self, what, by=None):
         dt = now()
-        Note({'note': what,
-              'on': self._id,
-              'open': True,
-              'by': None if by is None else _id(by),
-              'at': dt,
-              'closed_by': None,
-              'closed_at': None}).save()
+        note = Note({'note': what,
+                     'on': self._id,
+                     'open': True,
+                     'by': None if by is None else _id(by),
+                     'at': dt,
+                     'closed_by': None,
+                     'closed_at': None})
+        note.save()
+        return note
 
     def get_notes(self):
         # Prefetch the entities referenced in the by and closed_by fields
@@ -1250,7 +1263,7 @@ class User(Entity):
         if ('person' not in self._data or
                 'family' not in self._data['person'] or
                 'nick' not in self._data['person']):
-            return unicode(super(User, self).humanName)
+            return six.text_type(super(User, self).humanName)
         bits = self._data['person']['family'].split(',', 1)
         if len(bits) == 1:
             return self._data['person']['nick'] + ' ' \
@@ -1334,8 +1347,8 @@ class User(Entity):
 
     @property
     def last_study_end_date(self):
-        return max([DT_MIN] + map(lambda s: s['until'],
-                                  self._data.get('studies', ())))
+        return max([DT_MIN] +
+                   [s['until'] for s in self._data.get('studies', ())])
 
     def study_start(self, study, institute, number, start_date, save=True):
         start_date = datetime.datetime(start_date.year, start_date.month,
@@ -1508,6 +1521,10 @@ class Note(SONWrapper):
         if self._data['by'] is None:
             return None
         return by_id(self._data['by'])
+
+    @property
+    def messageId(self):
+        return '<note/%s@%s>' % (self.id, settings.MAILDOMAIN)
 
     @property
     def closed_by(self):

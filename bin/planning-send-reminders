@@ -1,3 +1,5 @@
 #!/bin/sh
 
-python $HOME/repo/utils/planning/send-reminders.py
+PYTHON="${PYTHON:-python}"
+
+$PYTHON $HOME/repo/utils/planning/send-reminders.py

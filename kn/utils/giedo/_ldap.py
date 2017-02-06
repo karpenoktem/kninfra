@@ -3,6 +3,7 @@ import logging
 import ldap
 
 from django.conf import settings
+from django.utils import six
 
 import kn.leden.entities as Es
 
@@ -29,7 +30,7 @@ def generate_ldap_changes(giedo):
             should_have = (uid,
                            u.canonical_email,
                            u.last_name.encode('utf-8'),
-                           unicode(u.humanName).encode('utf-8'))
+                           six.text_type(u.humanName).encode('utf-8'))
             if uid in unaccounted_for:
                 unaccounted_for.remove(uid)
                 if in_ldap[uid] == should_have:

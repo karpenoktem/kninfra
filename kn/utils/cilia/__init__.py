@@ -1,16 +1,16 @@
-import threading
-import os.path
 import logging
 import os
+import os.path
+import threading
 
 from django.conf import settings
 
-from kn.utils.whim import WhimDaemon
-from kn.utils.cilia.unix import set_unix_map, unix_setpass
-from kn.utils.cilia.samba import set_samba_map, samba_setpass
 from kn.utils.cilia.fotoadmin import (fotoadmin_remove_moved_fotos,
                                       fotoadmin_scan_userdirs)
+from kn.utils.cilia.samba import samba_setpass, set_samba_map
+from kn.utils.cilia.unix import set_unix_map, unix_setpass
 from kn.utils.cilia.wolk import apply_wolk_changes, wolk_setpass
+from kn.utils.whim import WhimDaemon
 
 
 class Cilia(WhimDaemon):

@@ -16,7 +16,7 @@ def list_events():
 
 
 def move_fotos_list_events():
-    return map(lambda x: (x, x), list_events())
+    return [(x, x) for x in list_events()]
 
 
 class CreateEventForm(forms.Form):

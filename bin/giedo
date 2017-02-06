@@ -1,3 +1,5 @@
-#!/bin/sh
+#!/bin/bash
 
-python /home/infra/repo/utils/giedo.py
+PYTHON="${PYTHON:-python}"
+
+$PYTHON /home/infra/repo/utils/giedo.py

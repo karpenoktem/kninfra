@@ -34,8 +34,8 @@ ons nog  <strong>€ {{ bedrag }}</strong> veschuldigd.
 		<th>{% trans "nummer" %}</th>
 		<th>{% trans "datum" %}</th>
 		<th>{% trans "omschrijving / post" %}</th>
-		<th>{% trans "bedrag (€)" %}</th>
-		<th>{% trans "som (€)" %}</th>
+		<th class="th-value">{% trans "bedrag (€)" %}</th>
+		<th class="th-value">{% trans "som (€)" %}</th>
 	</tr>
 	{% for tr in balans.transactions %}
 	<tr>

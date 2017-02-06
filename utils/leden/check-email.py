@@ -2,12 +2,12 @@
 
 import _import  # noqa: F401
 import sys
-from cStringIO import StringIO
 
 from common import args_to_users
 
 from django.core.mail import send_mail
 from django.template import Context, Template
+from django.utils.six.moves import cStringIO
 
 import kn.leden.entities as Es
 from kn.leden.mongo import _id
@@ -16,10 +16,10 @@ DAYS_IN_YEAR = 365.242199
 
 
 def check_email():
-    comm_ids = map(_id, Es.by_name('comms').get_bearers())
-    list_ids = map(_id, Es.by_name('lists-opted').get_bearers())
+    comm_ids = [_id(x) for x in Es.by_name('comms').get_bearers()]
+    list_ids = [_id(x) for x in Es.by_name('lists-opted').get_bearers()]
     with open('check-email.template') as f:
-        template_text = StringIO()
+        template_text = cStringIO()
         for line in f:
             if line.endswith("\\\n"):
                 template_text.write(line[:-2])
@@ -28,8 +28,7 @@ def check_email():
         templ = Template(template_text.getvalue())
     for m in args_to_users(sys.argv[1:]):
         rels = m.get_related()
-        rels = sorted(rels, cmp=lambda x, y: cmp(str(x['with'].humanName),
-                                                 str(y['with'].humanName)))
+        rels = sorted(rels, key=lambda x: Es.entity_humanName(x['with']))
         comms = []
         lists = []
         others = []
@@ -42,7 +41,7 @@ def check_email():
                 lists.append(rel)
             else:
                 others.append(rel)
-        print m.name
+        print(m.name)
         em = templ.render(Context({
             'u': m,
             'comms': comms,

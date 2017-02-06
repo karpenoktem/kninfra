@@ -1,5 +1,7 @@
 import logging
 
+from django.utils import six
+
 import kn.leden.entities as Es
 from kn.base.conf import DT_MAX, DT_MIN
 from kn.leden.date import now
@@ -20,7 +22,7 @@ def update_db(giedo):
     id2name = Es.names_by_ids()
     # Load groups and brands
     groups = Es.of_type_by_name('group')
-    groups_set = frozenset(groups.values())
+    groups_set = frozenset(six.itervalues(groups))
     # Find groups that have a virtual group for each year
     year_groups = [g for g in groups_set
                    if tags['!year-group'] in g.tag_ids]
@@ -28,7 +30,8 @@ def update_db(giedo):
     # relations hold.
 
     def add_years_to_relations(rels):
-        years_of_year_overrides = [yo[1] for yo in year_overrides.values()]
+        years_of_year_overrides = [yo[1] for yo
+                                   in six.itervalues(year_overrides)]
         until_years = [Es.date_to_year(r['until']) for r in rels
                        if r['until'] != DT_MAX]
         max_until = max(
@@ -60,11 +63,10 @@ def update_db(giedo):
                         continue
                     years.remove(yr)
             rel['years'] = years
-    year_group_mrels = tuple(Es.query_relations(
-        _with=year_groups))
+    year_group_mrels = tuple(Es.query_relations(_with=year_groups))
     # Check whether all year groups are created
     for g in year_groups:
-        mrels = filter(lambda x: x['with'] == g._id, year_group_mrels)
+        mrels = [rel for rel in year_group_mrels if rel['with'] == g._id]
         add_years_to_relations(mrels)
         years = set()
         for rel in mrels:
@@ -73,8 +75,7 @@ def update_db(giedo):
             n = str(g.name) + str(year)
             if n not in groups:
                 logging.info("Creating yeargroup %s" % n)
-                _create_yeargroup(g, year, n, tags, groups,
-                                  id2name)
+                _create_yeargroup(g, year, n, tags, groups, id2name)
     # Find all virtual groups
     virtual_groups = [g for g in groups_set
                       if tags['!virtual-group'] in g.tag_ids]
@@ -136,7 +137,7 @@ def update_db(giedo):
         if tags['!sofa-brand'] not in b._data['tags']:
             continue
         sofa_brands[b._id] = b
-    for rel in Es.query_relations(how=sofa_brands.values()):
+    for rel in Es.query_relations(how=tuple(sofa_brands.values())):
         if (rel['how'], rel['with']) in sofa_lut:
             continue
         if not id2name[rel['with']]:
@@ -153,8 +154,8 @@ def update_db(giedo):
                  'how': rel['how']},
              'humanNames': [{
                  'name': nm,
-                 'human': unicode(g.humanName) + ' ' +
-                 unicode(sofa_brands[rel['how']].humanName)}]}
+                 'human': six.text_type(g.humanName) + ' ' +
+                 six.text_type(sofa_brands[rel['how']].humanName)}]}
         n['_id'] = Es.ecol.insert(n)
         groups[nm] = Es.Group(n)
         id2name[n['_id']] = nm
@@ -212,7 +213,7 @@ def _create_yeargroup(g, year, name, tags, groups, id2name):
          'names': [name],
          'humanNames': [{
              'name': name,
-             'human': unicode(g.humanName) + ' jaar ' + str(year)}]}
+             'human': six.text_type(g.humanName) + ' jaar ' + str(year)}]}
     n['_id'] = Es.ecol.insert(n)
     groups[name] = Es.entity(n)
     id2name[n['_id']] = name

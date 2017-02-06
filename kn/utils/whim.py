@@ -28,8 +28,8 @@ class WhimClient(object):
         self.n_send_lock = threading.Lock()
         self.n_send = 0
         self.lock = threading.Lock()
-        self.packer = msgpack.Packer()
-        self.unpacker = msgpack.Unpacker()
+        self.packer = msgpack.Packer(use_bin_type=True)
+        self.unpacker = msgpack.Unpacker(encoding='utf-8')
         self.event_lut = {}
         self.msg_lut = {}
         self.got_reader = False
@@ -44,7 +44,7 @@ class WhimClient(object):
             raise ValueError('unknown family')
         self.s = socket.socket(sf, socket.SOCK_STREAM)
         self.s.connect(self._address)
-        self.f = self.s.makefile()
+        self.f = self.s.makefile(mode='wb')
 
     def _send(self, bs):
         """ Tries to send some bytes over the socket.  If the socket has been
@@ -138,7 +138,7 @@ class WhimDaemon(object):
         self.family = family
         self.sock_state = dict()
         self.ls = None
-        self.packer = msgpack.Packer()
+        self.packer = msgpack.Packer(use_bin_type=True)
 
     def pre_mainloop(self):
         pass
@@ -165,8 +165,8 @@ class WhimDaemon(object):
             if ls in rs:
                 s, addr = ls.accept()
                 self.sockets.add(s)
-                self.sock_state[s] = (s.makefile(),
-                                      msgpack.Unpacker(),
+                self.sock_state[s] = (s.makefile(mode='wb'),
+                                      msgpack.Unpacker(encoding='utf-8'),
                                       threading.Lock())
                 rs.remove(ls)
             for s in rs:

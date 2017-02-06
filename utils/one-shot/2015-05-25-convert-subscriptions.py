@@ -17,7 +17,7 @@ def main():
     scount = 0
     for event in events:
         ecount += 1
-        print 'Event:', event.get('name')
+        print('Event:', event.get('name'))
         if 'subscriptions' not in event:
             event['subscriptions'] = []
         if '_version' not in event:
@@ -27,8 +27,8 @@ def main():
         for subscription in scol.find({'event': event['_id']}).sort('date'):
             scount += 1
             if subscription['user'] in users:
-                print ('WARNING: duplicate subscription for user:',
-                       subscription['user'])
+                print(('WARNING: duplicate subscription for user:',
+                       subscription['user']))
                 continue
             users.add(subscription['user'])
             subscription2 = {
@@ -63,7 +63,7 @@ def main():
             del event['subscribedByOtherMailBody']
         ecol.update({'_id': event['_id']}, event)
         scol.remove({'event': event['_id']})
-    print 'Moved %d subscriptions into %d events.' % (scount, ecount)
+    print('Moved %d subscriptions into %d events.' % (scount, ecount))
 
 
 if __name__ == '__main__':

@@ -34,8 +34,8 @@ def render_then_email(
     for what in ('to', 'cc', 'bcc'):
         if not isinstance(addrs[what], (tuple, list)):
             addrs[what] = [addrs[what]]
-        addrs[what] = map(lambda x: x.canonical_full_email
-                          if isinstance(x, Es.User) else x, addrs[what])
+        addrs[what] = [x.canonical_full_email if isinstance(x, Es.User) else x
+                       for x in addrs[what]]
     if headers is None:
         headers = {}
 

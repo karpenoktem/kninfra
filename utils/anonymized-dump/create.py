@@ -10,7 +10,7 @@ from kn.leden.mongo import db
 # to leak private data entrusted to us.
 
 
-print 'entities'
+print('entities')
 with open('entities.bsons', 'w') as f:
     for e in db.entities.find():
         if 'telephones' in e:
@@ -39,12 +39,12 @@ with open('entities.bsons', 'w') as f:
             del e['temp']
         f.write(bson.BSON.encode(e))
 
-print 'relations'
+print('relations')
 with open('relations.bsons', 'w') as f:
     for r in db.relations.find():
         f.write(bson.BSON.encode(r))
 
-print 'events'
+print('events')
 with open('events.bsons', 'w') as f:
     for r in db.events.find():
         f.write(bson.BSON.encode(r))

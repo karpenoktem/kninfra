@@ -3,6 +3,8 @@ import _import  # noqa: F401
 
 import pyx
 
+from django.utils.six.moves import range
+
 import kn.leden.entities as Es
 
 
@@ -31,23 +33,23 @@ def main():
         ages.remove(None)
     with open('age-per-year.txt', 'w') as f:
         f.write('#  ?')
-        for age in xrange(min(*ages), max(*ages)):
+        for age in range(min(*ages), max(*ages)):
             f.write(' ' + str(age))
         f.write('\n')
         for _year, d in enumerate(data):
             year = _year + 1
             f.write('%s %s ' % (year, d.get(None, 0)))
-            for age in xrange(min(*ages), max(*ages)):
+            for age in range(min(*ages), max(*ages)):
                 f.write('%2d ' % d.get(age, 0))
             f.write('\n')
     g = pyx.graph.graphxy(width=14, x=pyx.graph.axis.bar())
     colass = {}
-    for i, age in enumerate(xrange(min(*ages) + 1, max(*ages))):
+    for i, age in enumerate(range(min(*ages) + 1, max(*ages))):
         colass['y%s' % age] = i + 2
     styles = [pyx.graph.style.bar([
         pyx.color.gradient.ReverseHue.select(
             0, max(*ages) - min(*ages))])]
-    for i, age in enumerate(xrange(min(*ages) + 1, max(*ages))):
+    for i, age in enumerate(range(min(*ages) + 1, max(*ages))):
         styles.extend([pyx.graph.style.stackedbarpos('y%s' % age),
                        pyx.graph.style.bar([
                            pyx.color.gradient.ReverseHue.select(
@@ -56,13 +58,13 @@ def main():
     for d in data:
         cum = 0
         d2 = {}
-        for age in xrange(min(*ages), max(*ages)):
+        for age in range(min(*ages), max(*ages)):
             cum += d.get(age, 0)
             d2[age] = cum
         cdata.append(d2)
     g.plot(pyx.graph.data.points(
         [[_year + 1] + [d.get(age, 0)
-                        for age in xrange(min(*ages), max(*ages))]
+                        for age in range(min(*ages), max(*ages))]
          for _year, d in enumerate(cdata)],
         xname=0, y=1, **colass), styles)
     g.writePDFfile('age-per-year')

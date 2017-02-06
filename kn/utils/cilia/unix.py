@@ -2,10 +2,9 @@ import datetime
 import grp
 import logging
 import pwd
+import spwd
 import string
 import subprocess
-
-import spwd
 
 
 def unix_setpass(cilia, user, password):

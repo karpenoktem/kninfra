@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils import six
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
@@ -93,7 +94,7 @@ def event_detail(request, name):
         lambda u: event.get_subscription(u) is None and u != request.user,
         Es.by_name('leden').get_members()
     )
-    users.sort(key=lambda u: unicode(u.humanName))
+    users.sort(key=lambda u: six.text_type(u.humanName))
     listSubscribed = sorted(event.listSubscribed, key=lambda s: s.date)
     listUnsubscribed = sorted(event.listUnsubscribed, key=lambda s: s.date)
     listInvited = sorted(event.listInvited, key=lambda s: s.date)
@@ -113,7 +114,7 @@ def event_detail(request, name):
 
 def _api_event_set_opened(request):
     if ('id' not in request.REQUEST
-            or not isinstance(request.REQUEST['id'], basestring)):
+            or not isinstance(request.REQUEST['id'], six.string_types)):
         return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
     e = subscr_Es.event_by_id(request.REQUEST['id'])
     if not e:

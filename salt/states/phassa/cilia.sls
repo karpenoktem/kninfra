@@ -1,8 +1,7 @@
 cilia packages:
     pkg.installed:
         - pkgs:
-            - python-smbpasswd
-            - python-mysqldb
+            - python-six
 /root/.profile:
     file.managed:
         - source: salt://phassa/root.profile

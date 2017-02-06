@@ -19,7 +19,7 @@ def main():
         vacancy._data['assignee'] = _id(user)
         vacancy.save()
         count += 1
-    print 'Converted %d vacancies.' % count
+    print('Converted %d vacancies.' % count)
 
 
 if __name__ == '__main__':

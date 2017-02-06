@@ -3,6 +3,8 @@ import csv
 import datetime
 import sys
 
+from django.utils.six import text_type
+
 import kn.leden.entities as Es
 
 
@@ -15,7 +17,7 @@ def main():
                      'studierichting',
                      'studentnummer'])
     leden = Es.by_name('leden').get_members()
-    leden.sort(cmp=lambda x, y: cmp(str(x.name), str(y.name)))
+    leden.sort(key=lambda x: str(x.name))
     now = datetime.datetime.now()
     for m in leden:
         if not m.is_user:
@@ -30,8 +32,8 @@ def main():
                     [str(m.name),
                      m.first_name.encode('utf-8'),
                      m.last_name.encode('utf-8'),
-                     unicode(study['institute'].humanName).encode('utf-8'),
-                     unicode(study['study'].humanName).encode('utf-8'),
+                     text_type(study['institute'].humanName).encode('utf-8'),
+                     text_type(study['study'].humanName).encode('utf-8'),
                      study['number']])
                 ok = True
                 break
