@@ -26,6 +26,7 @@ table.balans td {
 table.balans .date {
 	white-space: nowrap;
 }
-table.balans .value {
+table.balans .value,
+table.balans .th-value {
 	text-align: right;
 }

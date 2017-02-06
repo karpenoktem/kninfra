@@ -1,9 +1,10 @@
 import logging
 
-import MySQLdb
+import pymysql
 from tarjan.tc import tc
 
 from django.conf import settings
+from django.utils import six
 
 import kn.leden.entities as Es
 from kn.leden.date import now
@@ -65,36 +66,47 @@ def generate_wolk_changes(giedo):
     # Now, check which users and groups actually exist in owncloud
     missing_users = set(users.keys())
     missing_groups = set(groups.keys())
-    dc = MySQLdb.connect(creds[0], user=creds[1],
-                         passwd=creds[2], db=creds[3])
-    c = dc.cursor()
-    c.execute("SELECT gid, uid FROM oc_group_user")
-    for group, user in c.fetchall():
-        if group not in groups:
-            continue
-        if user not in users or user not in groups[group]:
-            todo['removeUserFromGroup'].append((user, group))
-            continue
-        if user in groups[group]:
-            groups[group].remove(user)
-    c.execute("SELECT uid FROM oc_users")
-    for user, in c.fetchall():
-        if user not in users:
-            logging.info("wolk: stray user %s", user)
-            continue
-        missing_users.remove(user)
-    c.execute("SELECT gid FROM oc_groups")
-    for group, in c.fetchall():
-        if group not in groups:
-            logging.info("wolk: stray group %s", user)
-            continue
-        missing_groups.remove(group)
-    for user in missing_users:
-        todo['addUser'].append((user, unicode(users[user].humanName)))
-    todo['addGroup'] = list(missing_groups)
-    for group, missing_members in groups.iteritems():
-        for user in missing_members:
-            todo['addUserToGroup'].append((user, group))
+    dc = pymysql.connect(
+        host=creds[0],
+        user=creds[1],
+        password=creds[2],
+        db=creds[3],
+        charset='utf-8'
+    )
+    try:
+        with dc.cursor() as c:
+            c.execute("SELECT gid, uid FROM oc_group_user")
+            for group, user in c.fetchall():
+                if group not in groups:
+                    continue
+                if user not in users or user not in groups[group]:
+                    todo['removeUserFromGroup'].append((user, group))
+                    continue
+                if user in groups[group]:
+                    groups[group].remove(user)
+            c.execute("SELECT uid FROM oc_users")
+            for user, in c.fetchall():
+                if user not in users:
+                    logging.info("wolk: stray user %s", user)
+                    continue
+                missing_users.remove(user)
+            c.execute("SELECT gid FROM oc_groups")
+            for group, in c.fetchall():
+                if group not in groups:
+                    logging.info("wolk: stray group %s", user)
+                    continue
+                missing_groups.remove(group)
+            for user in missing_users:
+                todo['addUser'].append((
+                    user,
+                    six.text_type(users[user].humanName)
+                ))
+            todo['addGroup'] = list(missing_groups)
+            for group, missing_members in six.iteritems(groups):
+                for user in missing_members:
+                    todo['addUserToGroup'].append((user, group))
+    finally:
+        dc.close()
     return todo
 
 # vim: et:sta:bs=2:sw=4:

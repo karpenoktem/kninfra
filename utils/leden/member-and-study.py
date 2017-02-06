@@ -2,6 +2,8 @@ import _import  # noqa: F401
 import csv
 import sys
 
+from django.utils import six
+
 import kn.leden.entities as Es
 
 
@@ -16,7 +18,7 @@ def main():
                      'studierichting',
                      'studentnummer'])
     leden = Es.by_name('leden').get_members()
-    leden.sort(cmp=lambda x, y: cmp(str(x.name), str(y.name)))
+    leden.sort(key=lambda x: str(x.name))
     for m in leden:
         if not m.is_user:
             continue
@@ -30,8 +32,8 @@ def main():
                  m.last_name.encode('utf-8'),
                  study['from'].date() if study['from'] else '',
                  study['until'].date() if study['until'] else '',
-                 unicode(study['institute'].humanName),
-                 unicode(study['study'].humanName),
+                 six.text_type(study['institute'].humanName),
+                 six.text_type(study['study'].humanName),
                  study['number']])
 
 

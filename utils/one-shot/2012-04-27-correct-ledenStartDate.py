@@ -25,7 +25,7 @@ def main():
                         t._data['year-override']['year'])] = t._data['_id']
     for rel in sorted(Es.query_relations(-1, Es.id_by_name('leden'), None,
                                          None, None, True, False, False),
-                      cmp=lambda x, y: cmp(x['from'], y['from'])):
+                      key=lambda x: x['from']):
         name = str(rel['who'].name)
         if name in had:
             continue
@@ -41,16 +41,16 @@ def main():
         joined_yr = Es.date_to_year(joined)
         from_yr = Es.date_to_year(rel['from'])
         if joined_yr == from_yr or joined_yr == 0:
-            print name, rel['from'].date(), ' -> ', \
-                joined.date()
+            print(name, rel['from'].date(), ' -> ',
+                  joined.date())
             rrel = Es.rcol.find({'_id': rel['_id']})[0]
             rrel['from'] = joined
             Es.rcol.save(rrel)
             had.add(name)
             continue
         if joined_yr == from_yr - 1:
-            print name, rel['from'].date(), ' -> ', \
-                joined.date()
+            print(name, rel['from'].date(), ' -> ',
+                  joined.date())
             rrel = Es.rcol.find({'_id': rel['_id']})[0]
             rrel['from'] = joined
             if 'tags' not in rrel:
@@ -60,7 +60,7 @@ def main():
             Es.rcol.save(rrel)
             had.add(name)
             continue
-        print 'MANUAL REVIEW: ', name, joined.date(), rel['from'].date()
+        print('MANUAL REVIEW: ', name, joined.date(), rel['from'].date())
 
 
 if __name__ == '__main__':

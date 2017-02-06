@@ -1,27 +1,27 @@
-import time
 import logging
 import threading
+import time
 
 import mirte  # github.com/bwesterb/mirte
 
 from django.conf import settings
-from kn.utils.whim import WhimDaemon, WhimClient
-import kn.leden.entities as Es
 
+import kn.leden.entities as Es
+from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.db import update_db
-from kn.utils.giedo.postfix import (generate_postfix_map,
-                                    generate_postfix_slm_map)
-from kn.utils.giedo.mailman import generate_mailman_changes
-from kn.utils.giedo.wiki import generate_wiki_changes
 from kn.utils.giedo.forum import generate_forum_changes
-from kn.utils.giedo.unix import generate_unix_map
+from kn.utils.giedo.fotos import scan_fotos
+from kn.utils.giedo.mailman import generate_mailman_changes
 from kn.utils.giedo.openvpn import (create_openvpn_installer,
                                     create_openvpn_zip, generate_openvpn_zips)
-from kn.utils.giedo.siteagenda import update_site_agenda
-from kn.utils.giedo._ldap import generate_ldap_changes
-from kn.utils.giedo.wolk import generate_wolk_changes
+from kn.utils.giedo.postfix import (generate_postfix_map,
+                                    generate_postfix_slm_map)
 from kn.utils.giedo.quassel import generate_quassel_changes
-from kn.utils.giedo.fotos import scan_fotos
+from kn.utils.giedo.siteagenda import update_site_agenda
+from kn.utils.giedo.unix import generate_unix_map
+from kn.utils.giedo.wiki import generate_wiki_changes
+from kn.utils.giedo.wolk import generate_wolk_changes
+from kn.utils.whim import WhimClient, WhimDaemon
 
 
 class Giedo(WhimDaemon):

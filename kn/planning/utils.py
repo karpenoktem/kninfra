@@ -15,7 +15,7 @@ def send_reminder(vacancy, update=True):
         'time': vacancy.begin_time,
         'vacancyName': vacancy.name,
         'eventName': e.name}
-    ccs = map(lambda x: Es.by_name(x).canonical_full_email, p.reminder_cc)
+    ccs = [Es.by_name(x).canonical_full_email for x in p.reminder_cc]
     subj = '%s, %s' % (vacancy.name.capitalize(), edate)
     em = EmailMessage(subj, msg, to=[to.canonical_full_email], headers={
         'Reply-To': Es.by_name(p.administrator).canonical_full_email},

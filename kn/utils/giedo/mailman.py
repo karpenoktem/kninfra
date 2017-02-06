@@ -2,15 +2,17 @@ from __future__ import absolute_import
 
 import logging
 
+from django.utils import six
+
 import kn.leden.entities as Es
 from kn.leden.date import now
 from kn.utils.mailman import import_mailman
 
-import_mailman()
-
-import Mailman           # noqa: E402 isort:skip
-import Mailman.Utils     # noqa: E402 isort:skip
-import Mailman.MailList  # noqa: E402 isort:skip
+if six.PY2:  # HACK see #438
+    import_mailman()
+    import Mailman           # noqa: E402 isort:skip
+    import Mailman.Utils     # noqa: E402 isort:skip
+    import Mailman.MailList  # noqa: E402 isort:skip
 
 
 def generate_mailman_changes(giedo):
@@ -33,14 +35,13 @@ def generate_mailman_changes(giedo):
         gid2name[g._id] = str(g.name)
         if not str(g.name) in ml_names:
             todo['create'].append((str(g.name),
-                                   unicode(g.humanName)))
+                                   six.text_type(g.humanName)))
             c_ms = set([])
         else:
-            c_ms = set([x[0] for x in
-                        Mailman.MailList.MailList(
-                            str(g.name),
-                            lock=False
-            ).members.iteritems()])
+            c_ms = set([x[0] for x in six.iteritems(Mailman.MailList.MailList(
+                str(g.name),
+                lock=False
+            ).members)])
         ml_members[str(g.name)] = c_ms
     # Check which memberships are missing in the current mailing lists
     for rel in mm_rels:

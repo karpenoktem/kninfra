@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import bson
 import pymongo
 import yaml

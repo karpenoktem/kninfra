@@ -261,7 +261,7 @@ class Vacancy(SONWrapper):
     @classmethod
     def all_needing_reminder(cls):
         dt = now() + datetime.timedelta(days=7)
-        events = map(lambda e: e['_id'], ecol.find({'date': {'$lte': dt}}))
+        events = [e['_id'] for e in ecol.find({'date': {'$lte': dt}})]
         for v in vcol.find({'reminder_needed': True,
                             'event': {'$in': events}}):
             yield cls.from_data(v)

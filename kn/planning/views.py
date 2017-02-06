@@ -12,6 +12,7 @@ from django.views.decorators.http import require_POST
 
 from kn.base.http import JsonHttpResponse
 from kn.leden.date import date_to_dt, date_to_midnight, now
+from kn.leden.entities import DT_MIN
 from kn.leden.mongo import _id
 from kn.planning.entities import Event, Pool, Vacancy, may_manage_planning
 from kn.planning.forms import (AddVacancyForm, EventCreateForm,
@@ -147,16 +148,6 @@ def planning_view(request):
                                'pools': pools_tpl},
                               context_instance=RequestContext(request))
 
-# extends cmp with None as bottom
-
-
-def cmp_None(x, y, cmp=cmp):
-    if x is None:
-        return -1
-    if y is None:
-        return 1
-    return cmp(x, y)
-
 
 @login_required
 def planning_manage(request, poolname):
@@ -221,7 +212,8 @@ def planning_manage(request, poolname):
             for score in found_scores:
                 scorers = workers_by_score[score]
                 shuffle(scorers)
-                scorers.sort(key=lambda x: shifts[_id(x)], cmp=cmp_None)
+                scorers.sort(key=lambda x: shifts[_id(x)]
+                             if shifts[_id(x)] else DT_MIN)
                 for scorer in scorers:
                     vacancy.suggestions.append({
                         'scorer': scorer,
@@ -389,8 +381,8 @@ def planning_template(request, poolname):
                     'end_time': v.end_time,
                     'assignees': list()}
             shifts[v.begin]['assignees'].append(v.assignee)
-        ei['vacancies'] = map(lambda x: x[1], sorted(shifts.items(),
-                                                     key=lambda x: x[0]))
+        ei['vacancies'] = [x[1] for x
+                           in sorted(shifts.items(), key=lambda x: x[0])]
         events.append(ei)
     events.sort(key=lambda x: x['date'])
     return render_to_response('planning/template.html', {'events': events},

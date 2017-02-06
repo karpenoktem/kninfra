@@ -3,7 +3,6 @@ mysql packages:
         - pkgs:
             - mysql-server
             - mysql-client
-            - python-mysqldb
 mysql:
     service:
         - running

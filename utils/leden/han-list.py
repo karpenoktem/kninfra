@@ -1,6 +1,8 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
 
+from django.utils import six
+
 import kn.leden.entities as Es
 
 
@@ -18,8 +20,8 @@ def main():
                 ok = True
         if not ok:
             continue
-        print "%-30s %-10s %s" % (m.full_name, study['number'],
-                                  unicode(study['study'].humanName))
+        print("%-30s %-10s %s" % (m.full_name, study['number'],
+                                  six.text_type(study['study'].humanName)))
 
 
 if __name__ == '__main__':

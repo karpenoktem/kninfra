@@ -4,6 +4,7 @@ import unidecode
 
 from django.conf import settings
 from django.utils import dateparse
+from django.utils.six.moves import range
 
 import kn.leden.entities as Es
 
@@ -36,7 +37,7 @@ def find_name_for_user(first_name, last_name):
     users_with_same_fn = [u for u in Es.users() if u.first_name
                                 and clean(u.first_name) == fn]
     # Try first_name or first_name with a few letters of the last_name appended
-    for i in xrange(len(ln) + 1):
+    for i in range(len(ln) + 1):
         n = fn + ln[:i]
         # Don't try giedov, but directly giedovdm if the name is derived
         # from `Giedo van der Meer'.

@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils import six
 from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
@@ -16,11 +17,11 @@ import kn.moderation.entities as mod_Es
 from kn.base.mail import render_then_email
 from kn.utils.mailman import import_mailman
 
-import_mailman()
-
-import Mailman.MailList     # noqa: E402 isort:skip
-import Mailman.Utils        # noqa: E402 isort:skip
-from Mailman import mm_cfg  # noqa: E402 isort:skip
+if six.PY2:  # HACK see #438
+    import_mailman()
+    import Mailman.MailList     # noqa: E402 isort:skip
+    import Mailman.Utils        # noqa: E402 isort:skip
+    from Mailman import mm_cfg  # noqa: E402 isort:skip
 
 
 @login_required

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+PYTHON="${PYTHON:-python}"
+
+$PYTHON $HOME/repo/salt/sankhara/initializeDb.py

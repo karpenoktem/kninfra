@@ -5,6 +5,8 @@ from optparse import OptionParser
 
 from common import args_to_users, print_table
 
+from django.utils import six
+
 op = OptionParser()
 op.add_option('-s', '--separator', dest='separator', default=' ',
               metavar='CHAR', type=str,
@@ -30,5 +32,5 @@ for u in args_to_users(args):
         u.addr_zipCode,
         u.addr_city,
         u.telephone))
-data = map(lambda r: map(lambda x: unicode(x), r), data)
+data = [[six.text_type(x) for x in r] for r in data]
 print_table(data, separator=options.separator)

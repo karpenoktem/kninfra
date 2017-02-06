@@ -2,6 +2,8 @@ import _import  # noqa: F401
 
 from common import now
 
+from django.utils import six
+
 import kn.leden.entities as Es
 
 
@@ -15,17 +17,17 @@ def main():
             member_age[rel['who']] = Es.DT_MAX
         member_age[rel['who']] = rel['from']
     l = []
-    for m, age in member_age.iteritems():
+    for m, age in six.iteritems(member_age):
         if not m.dateOfBirth:
             continue
-        print (age - m.dateOfBirth).days / 365.242, unicode(m.name)
+        print((age - m.dateOfBirth).days / 365.242, six.text_type(m.name))
         l.append((age - m.dateOfBirth).days / 365.242)
-    print 'avg', sum(l) / len(l)
-    print 'med', sorted(l)[len(l) / 2]
-    print '1st', sorted(l)[len(l) / 4 * 2]
-    print '3rd', sorted(l)[len(l) / 4 * 3]
-    print 'min', min(l)
-    print 'max', max(l)
+    print('avg', sum(l) / len(l))
+    print('med', sorted(l)[len(l) / 2])
+    print('1st', sorted(l)[len(l) / 4 * 2])
+    print('3rd', sorted(l)[len(l) / 4 * 3])
+    print('min', min(l))
+    print('max', max(l))
 
 
 def main3():
@@ -39,12 +41,12 @@ def main3():
 
     # for comm in Es.by_name('comms').get_bearers():
     for comm in [Es.by_name('draai')]:
-        print unicode(comm.humanName)
+        print(six.text_type(comm.humanName))
         members = [(m, member_age.get(m)) for m in comm.get_members()]
         members.sort(key=lambda x: x[1])
         for member in members:
-            print " %-20s%.2f" % (unicode(member[0].name),
-                                  member[1] if member[1] else -1)
+            print(" %-20s%.2f" % (six.text_type(member[0].name),
+                                  member[1] if member[1] else -1))
 
 
 def main2():
@@ -67,11 +69,11 @@ def main2():
 
     pairs = lut.items()
     for comm, members in pairs:
-        print unicode(comm.humanName)
+        print(six.text_type(comm.humanName))
         mpairs = members.items()
         mpairs.sort(key=lambda x: x[1])
         for member, time in mpairs:
-            print ' %-20s%.2f' % (member.name, time)
+            print(' %-20s%.2f' % (member.name, time))
 
 
 if __name__ == '__main__':

@@ -10,7 +10,7 @@ def main():
     cur_leden, old_leden = Es.by_name('leden').get_current_and_old_members()
     cur_oud, old_oud = oud.get_current_and_old_members()
     for m in old_leden - old_oud - cur_oud:
-        print m.name
+        print(m.name)
 
         Es.rcol.insert({'who': Es._id(m),
                         'with': Es._id(oud),

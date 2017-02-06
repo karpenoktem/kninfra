@@ -1,9 +1,11 @@
 # vim: et:sta:bs=2:sw=4:
-from __future__ import with_statement
 
 import _import  # noqa: F401
 import random
 import unicodedata
+
+from django.utils import six
+from django.utils.six.moves import range
 
 import kn.settings
 
@@ -24,7 +26,7 @@ def sesc(t):
 
 def pseudo_randstr(l=12, cs=ALPHANUMUL):
     ret = ''
-    for i in xrange(l):
+    for i in range(l):
         ret += cs[random.randint(0, len(cs) - 1)]
     return ret
 
@@ -49,7 +51,7 @@ def args_to_users(args):
     ret = set()  # set of Entities found
     had = set()  # set of Entities dealt with
     todo = set()  # set of Entities to be dealt with
-    todo.update(Es.by_names(args).itervalues())
+    todo.update(six.itervalues(Es.by_names(args)))
     while len(todo) > 0:
         e = todo.pop()
         if e in had:
@@ -67,14 +69,14 @@ def args_to_users(args):
 def print_table(data, separator=' '):
     if len(data) == 0:
         return
-    ls = map(lambda x: max(map(lambda y: len(data[y][x]),
-                               xrange(len(data)))),
-             xrange(len(data[0])))
+    ls = [max([len(data[y][x])
+               for y in range(len(data))])
+          for x in range(len(data[0]))]
     for d in data:
         l = ''
         for i, b in enumerate(d):
             l += b + (' ' * (ls[i] - len(b))) + separator
-        print l
+        print(l)
 
 
 def emailfy_name(first, last):
@@ -98,9 +100,9 @@ MAILDOMAIN = kn.settings.MAILDOMAIN
 LISTDOMAIN = 'lists.' + MAILDOMAIN
 
 EMAIL_ALLOWED = frozenset(
-    map(lambda x: chr(ord('a') + x), xrange(26)) +
-    map(lambda x: chr(ord('A') + x), xrange(26)) +
-    map(lambda x: chr(ord('0') + x), xrange(10)) +
+    [chr(ord('a') + x) for x in range(26)] +
+    [chr(ord('A') + x) for x in range(26)] +
+    [chr(ord('0') + x) for x in range(10)] +
     ['.', '-'])
 
 GALLERY_PATH = '/var/galleries/kn/'
