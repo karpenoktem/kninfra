@@ -10,15 +10,21 @@ def quaestor():
         "name": "de penningmeester"
     }
 
+class TrInfo:
+
+    def __init__(self, data):
+        self.data = data
+        self.mutations = [ MutInfo(mut) for mut in data['muts'] ]
+        self.value = Decimal(data['value'])
+        self.sum = Decimal(data['sum'])
+
 
 class MutInfo:
 
     def __init__(self, data):
         self.data = data
-
-    @property
-    def trdescription(self):
-        return self.data['tr-description']
+        self.value = Decimal(data['value'])
+        self.sum = Decimal(data['sum'])
 
 
 class BalansInfo:
@@ -26,7 +32,7 @@ class BalansInfo:
     def __init__(self, data):
         self.data = data
         self.total = Decimal(data['total'])
-        self.mutations = [MutInfo(mut) for mut in data['mutations']]
+        self.transactions = [ TrInfo(tr) for tr in data['trs'] ]
 
     @property
     def abstotal(self):
@@ -42,8 +48,7 @@ class BalansInfo:
 
     @property
     def in_books(self):
-        return "debitor" in self.data['accounts'] \
-            or "creditor" in self.data['accounts']
+        return len(self.data['accounts'])>0
 
     @property
     def mtime(self):
