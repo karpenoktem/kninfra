@@ -14,13 +14,6 @@
 
 {% block body %}
 <h1>{% trans "Balans" %}</h1>
-<form action="" method="get">
-<select name="account" onchange="this.form.submit()">
-{% for account,current in accounts %}
-<option value="{{ account.name }}" {% if current %}selected{% endif %}>{{ account.humanName }}</option>
-{% endfor %}
-</select>
-</form>
 {% if balans.in_books %}
 <p>
 
@@ -138,4 +131,19 @@ boekhouding van {{ datum }}. Betalingen, declaraties en andere gebeurtenissen
 van een latere datum zullen hier binnenkort verschijnen.)
 {% endblocktrans %}
 </p>
+{% if accounts|length > 1 %}
+<form action="" method="get">
+<p>
+{% blocktrans %}
+Bekijk ook de balans van
+{% endblocktrans %}
+<select name="account" onchange="this.form.submit()">
+{% for account,current in accounts %}
+<option value="{{ account.name }}" {% if current %}selected{% endif %}>
+{{ account.humanName.definite_article }} {{ account.humanName }}</option>
+{% endfor %}
+</select>.
+</p>
+</form>
+{% endif %}
 {% endblock %}
