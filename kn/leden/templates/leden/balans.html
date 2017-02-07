@@ -23,26 +23,48 @@
 </form>
 {% if balans.in_books %}
 <p>
-{% if account == user %}
 
 {% if balans.total < 0 %}
+{% if account == user %}
 {% blocktrans with bedrag=balans.abstotal %}
 Volgens de boekhouding krijg je
 nog <strong>€&nbsp;{{ bedrag }}</strong> van ons.
 {% endblocktrans %}
+{% else %}
+{% blocktrans with bedrag=balans.abstotal naam=account.humanName lidwoord=account.humanName.definite_article.title %}
+{{ lidwoord }} {{ naam }} heeft ons
+dit jaar al <strong>€&nbsp;{{ bedrag }}</strong>
+opgebracht.
+{% endblocktrans %}
+{% endif %}
 {% elif balans.total == 0 %}
+{% if account == user %}
 {% blocktrans %}
 Volgens de boekhouding zijn we elkaar op het moment
 niets verschuldigd (in financiële zin).
 {% endblocktrans %}
+{% else %}
+{% blocktrans with naam=account.humanName lidwoord=account.humanName.definite_article %}
+We hebben dit jaar in totaal nog niets uitgegeven
+voor
+{{ lidwoord }} {{ naam }}.
+{% endblocktrans %}
+{% endif %}
 {% elif balans.total > 0 %}
+{% if account == user %}
 {% blocktrans with bedrag=balans.abstotal %} 
 Volgens de boekhouding ben je 
 ons nog  <strong>€&nbsp;{{ bedrag }}</strong> veschuldigd.
 {% endblocktrans %}
+{% else %}
+{% blocktrans with bedrag=balans.abstotal naam=account.humanName lidwoord=account.humanName.definite_article %}
+We hebben dit jaar al <strong>€&nbsp;{{ bedrag }}</strong>
+uitgegeven voor
+{{ lidwoord }} {{ naam }}.
+{% endblocktrans %}
+{% endif %}
 {% endif %}
 
-{% endif %} 
 </p>
 
 <table class="balans">
