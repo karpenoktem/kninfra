@@ -62,8 +62,8 @@ def main():
     # Fetch ids of all current members
     leden_id = Es.id_by_name('leden')
 
-    print ('If you became a member after june,'
-           ' you should be in the next year ...')
+    print('If you became a member after june,'
+          ' you should be in the next year ...')
     for year in range(min_year + 1, max_year + 1):
         start_of_year = Es.year_to_range(year)[0]
         informal_start = start_of_year - datetime.timedelta(3 * 365 / 12)
