@@ -12,7 +12,9 @@ def quaestor():
     }
 
 
-def get_accounts_of(user):
+def get_account_entities_of(user):
+    """returns the entities whose accounts the user may inspect:
+    for the moment the user itself and all the committees it belongs to"""
     comms_id = Es.id_by_name("comms")
     result = [user]
     for group in user.cached_groups:

@@ -871,17 +871,19 @@ def ik_openvpn_download(request, filename):
 
 
 @login_required
-def ik_balans(request):
-    accounts = fin.get_accounts_of(request.user)
+def balans(request):
+    accounts = fin.get_account_entities_of(request.user)
 
     account = request.user
     if 'account' in request.GET:
         account = Es.by_name(request.GET['account'])
+        if account is None:
+            raise Http404
 
-    accounts = [(a, a.id == account.id) for a in accounts]
+    accounts = [(a, a == account) for a in accounts]
 
     balans = giedo.fin_get_account(account)
-    return render_to_response('leden/ik_balans.html',
+    return render_to_response('leden/balans.html',
                               {'balans': fin.BalansInfo(balans),
                                'quaestor': fin.quaestor(),
                                'accounts': accounts,

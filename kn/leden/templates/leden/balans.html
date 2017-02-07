@@ -23,7 +23,7 @@
 </form>
 {% if balans.in_books %}
 <p>
-{% if account.id == user.id %}
+{% if account == user %}
 
 {% if balans.total < 0 %}
 {% blocktrans with bedrag=balans.abstotal %}
@@ -83,19 +83,19 @@ ons nog  <strong>€&nbsp;{{ bedrag }}</strong> veschuldigd.
 
 {% else %} 
 <p>
-{% if user.id == account.id %}
+{% if user == account %}
 {% blocktrans %}
 Je hebt op het moment nog geen debiteuren- en crediteurenrekening
 in onze boekhouding.  
 {% endblocktrans %}
 {% else %}
-{% blocktrans with name=account.humanName %}
-De {{name}} heeft op het moment geen inkomsten- en uitgavenrekening in onze boekhouding.
+{% blocktrans with name=account.humanName da=account.humanName.definite_article.title %}
+{{ da }} {{ name }} heeft nog geen inkomsten- en uitgavenrekening in onze boekhouding.
 {% endblocktrans %}
 {% endif %}
 </p>
 {% endif %}
-{% if user.id == account.id %}
+{% if user == account %}
 <p>
 {% blocktrans with rekeningnummer=balans.our_account_number rekeninghouder=balans.our_account_holder %}
 Betalingen kunnen gericht worden aan {{ rekeningnummer }}
