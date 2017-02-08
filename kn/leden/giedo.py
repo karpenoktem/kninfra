@@ -4,6 +4,8 @@ from django.conf import settings
 
 from kn.utils.whim import WhimClient
 
+import kn.leden.entities as Es
+
 __GIEDO = None
 
 
@@ -101,6 +103,19 @@ def fin_get_account(ent):
 def fin_get_debitors():
     return get_giedo_connection().send({
         'type': 'fin-get-debitors'
+    })
+
+
+def fin_check_names():
+    users = Es.by_name('leden').as_group().get_members()
+    comms = Es.by_name('comms').as_tag().get_bearers()
+
+    return get_giedo_connection().send({
+        'type': 'fin-check-names',
+        'names': {
+            'user': [str(user.humanName) for user in users],
+            'group': [str(com.humanName) for com in comms]
+        }
     })
 
 # vim: et:sta:bs=2:sw=4:

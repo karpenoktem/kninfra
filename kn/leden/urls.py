@@ -71,6 +71,8 @@ urlpatterns = [
         views.secr_notes, name='secr-notes'),
     url(_(r'^fiscus/email-debitors$'),
         views.fiscus_debtmail, name='fiscus-debtmail'),
+    url(_(r'^boekenlezers/presentielijst$'),
+        views.boekenlezers_name_check, name='bl-namecheck'),
     url(_(r'^relaties/(?P<_id>[^/]+)/beindig$'),
         views.relation_end, name='relation-end'),
     url(_(r'^relaties/begin$'),

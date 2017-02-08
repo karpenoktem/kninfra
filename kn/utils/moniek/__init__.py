@@ -4,7 +4,7 @@ from koert.gnucash.tools import open_yaml
 
 from django.conf import settings
 
-from kn.utils.moniek.fin import fin_get_account, fin_get_debitors
+import fin
 from kn.utils.whim import WhimDaemon
 
 
@@ -15,10 +15,12 @@ class Moniek(WhimDaemon):
 
     def handle(self, d):
         if d['type'] == 'fin-get-account':
-            return fin_get_account(
+            return fin.get_account(
                 self, d['name'], d['full_name'], d['account_type'])
         elif d['type'] == 'fin-get-debitors':
-            return fin_get_debitors(self)
+            return fin.get_debitors(self)
+        elif d['type'] == 'fin-check-names':
+            return fin.check_names(self, d['names'])
         else:
             logging.info('unknown command type: %s', repr(d['type']))
 

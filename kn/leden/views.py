@@ -891,6 +891,18 @@ def balans(request):
                               context_instance=RequestContext(request))
 
 
+@login_required
+def boekenlezers_name_check(request):
+    if 'boekenlezers' not in request.user.cached_groups_names:
+        raise PermissionDenied
+
+    results = giedo.fin_check_names()
+
+    return render_to_response('leden/bl-namecheck.html',
+                              {'results': results},
+                              context_instance=RequestContext(request))
+
+
 def language(request):
     return HttpResponse(str(request.LANGUAGE_CODE))
 
