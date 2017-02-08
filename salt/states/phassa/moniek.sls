@@ -29,6 +29,14 @@ moniek packages:
 {% endif %}
 {% endfor %}
 
+six:
+    pip.installed:
+        # for six.python_2_unicode_compatible
+        - name: six >= 1.10
+{% if pillar['python3'] %}
+        - bin_env: /usr/bin/pip3
+{% endif %}
+
 /var/run/infra:
     file.directory:
         - user: root

@@ -1,7 +1,3 @@
-cilia packages:
-    pkg.installed:
-        - pkgs:
-            - python-six
 /root/.profile:
     file.managed:
         - source: salt://phassa/root.profile
