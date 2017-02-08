@@ -84,7 +84,7 @@ def close_note(data, request):
                           'note': note}, headers={
                               'In-Reply-To': note.messageId,
                               'References': note.messageId,
-                          })
+                      })
     return {'ok': True}
 
 
