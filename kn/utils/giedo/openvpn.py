@@ -50,7 +50,8 @@ def create_certificate(user):
     env.update({
         'KEY_DIR': settings.VPN_KEYSTORE,
         # This filters accents
-        'KEY_NAME': filter(lambda x: x in string.printable, user.humanName),
+        'KEY_NAME': ''.join(x for x in user.humanName
+                            if x in string.printable),
         'KEY_CN': commonName})
 
     if not os.path.isfile(settings.VPN_OPENSSL_CONFIG):

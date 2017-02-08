@@ -13,7 +13,8 @@ def unix_setpass(cilia, user, password):
     if pwent.pw_gid != kn_gid:
         return {'error': "Permission denied. Gid is not kn"}
     ph = subprocess.Popen(['chpasswd'], stdin=subprocess.PIPE)
-    ph.communicate("%s:%s\n" % (user, password))
+    cmd_input = "%s:%s\n" % (user, password)
+    ph.communicate(cmd_input.encode())
     if ph.returncode == 0:
         return {'success': True}
     return {'success': False}
@@ -27,8 +28,8 @@ def set_unix_map(cilia, _map):
     # Determine which are missing
     for user in _map['users']:
         # This filters accents
-        fn = filter(lambda x: x in string.printable,
-                    _map['users'][user]['full_name'])
+        fn = ''.join(x for x in _map['users'][user]['full_name']
+                     if x in string.printable)
         expire_date = _map['users'][user]['expire_date']
         if user not in c_users:
             home = '/home/%s' % user
