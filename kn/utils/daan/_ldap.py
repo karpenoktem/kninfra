@@ -56,9 +56,15 @@ def apply_ldap_changes(daan, changes):
     l.bind_s(settings.LDAP_USER, settings.LDAP_PASS)
     try:
         for uid in changes['remove']:
+            if six.PY3:
+                # pyldap is a bit inconsistent with unicode/bytes API between
+                # python 2 and python 3.
+                uid = uid.decode()
             dn = 'uid=' + uid + ',' + settings.LDAP_BASE
             l.delete_s(dn)
         for uid, mail, sn, cn in changes['upsert']:
+            if six.PY3:
+                uid = uid.decode()
             dn = 'uid=' + uid + ',' + settings.LDAP_BASE
             res = l.search_s(settings.LDAP_BASE, ldap.SCOPE_ONELEVEL,
                              'uid=' + uid)

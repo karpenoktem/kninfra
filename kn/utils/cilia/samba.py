@@ -4,6 +4,8 @@ import pwd
 import string
 import subprocess
 
+import six
+
 from kn.base._random import pseudo_randstr
 
 
@@ -12,7 +14,8 @@ def pdbedit_list():
     ph = subprocess.Popen(['pdbedit', '-L'],
                           stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                           stderr=subprocess.STDOUT, close_fds=True)
-    for line in ph.communicate()[0].splitlines():
+    for raw_line in ph.communicate()[0].splitlines():
+        line = raw_line if six.PY2 else raw_line.decode()
         (username, uid, realname) = line.split(':', 2)
         users[username] = {'username': username,
                            'uid': uid,
@@ -20,7 +23,8 @@ def pdbedit_list():
     ph = subprocess.Popen(['pdbedit', '-Lw'],
                           stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                           stderr=subprocess.STDOUT, close_fds=True)
-    for line in ph.communicate()[0].splitlines():
+    for raw_line in ph.communicate()[0].splitlines():
+        line = raw_line if six.PY2 else raw_line.decode()
         (username, uid, lanmanhash, nthash, flags,
          lastchange, empty) = line.split(':')
         users[username].update({
@@ -43,7 +47,7 @@ def samba_setpass(cilia, user, password):
     ph = subprocess.Popen(['smbpasswd', '-as', user],
                           stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                           stderr=subprocess.STDOUT, close_fds=True)
-    return ph.communicate("%s\n" % password)[0]
+    return ph.communicate(password.encode() + "\n")[0]
 
 
 def set_samba_map(cilia, _map):
@@ -54,8 +58,8 @@ def set_samba_map(cilia, _map):
     # Determine which are missing
     for user in _map['users']:
         # This filters accents
-        fn = filter(lambda x: x in string.printable,
-                    _map['users'][user]['full_name'])
+        fn = ''.join(x for x in _map['users'][user]['full_name']
+                     if x in string.printable)
         if user not in smbusers:
             l.info("Added %s", user)
             bogus_password = pseudo_randstr(16)
@@ -66,8 +70,8 @@ def set_samba_map(cilia, _map):
                 stderr=subprocess.STDOUT,
                 close_fds=True
             )
-            ph.communicate("%s\n%s\n" % (bogus_password,
-                                         bogus_password))
+            cmd_input = "%s\n%s\n" % (bogus_password, bogus_password)
+            ph.communicate(cmd_input.encode())
             added_users = True
             continue
         smbusers_surplus.remove(user)

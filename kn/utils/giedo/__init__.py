@@ -199,6 +199,10 @@ class Giedo(WhimDaemon):
                            'fin-get-debitors',
                            'fin-check-names'):
             return self.moniek.send(d)
+        elif d['type'] in ('maillist-get-moderated-lists',
+                           'maillist-activate-moderation',
+                           'maillist-deactivate-moderation'):
+            return self.hans.send(d)
         else:
             logging.warn("Unknown command: %s" % d['type'])
 

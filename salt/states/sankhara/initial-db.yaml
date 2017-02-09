@@ -432,6 +432,12 @@ entities:
   names: [uit, sex, bier, parijs]
   tags: [!id '4e6fcc85e60edf3dc00000bc', !id '4ea9ce060032a04a41000001']
   types: [group, tag]
+- description: De zich inspannende lijst.
+  humanNames:
+  - {genitive_prefix: van de, human: In, name: in}
+  names: [in]
+  tags: [!id '4e6fcc85e60edf3dc00000bc', !id '4ea9ce060032a04a41000001']
+  types: [group, tag]
 - _id: !id '4e6fcc85e60edf3dc000007d'
   description: Alle commissies van Karpe Noktem.
   humanNames:

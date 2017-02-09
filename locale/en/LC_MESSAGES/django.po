@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-04 14:50+0100\n"
+"POT-Creation-Date: 2017-02-06 19:16+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -166,7 +166,7 @@ msgstr ""
 "'smoelenboek', as well as the wiki and the forums. If you've forgotten your "
 "password, you can contact the %(webcie)s."
 
-#: kn/base/templates/base/base.html:57 kn/leden/forms.py:74
+#: kn/base/templates/base/base.html:57 kn/leden/forms.py:75
 msgid "Gebruikersnaam"
 msgstr "Username"
 
@@ -208,16 +208,16 @@ msgstr "Dutch"
 msgid "Engels"
 msgstr "English"
 
-#: kn/fotos/forms.py:23 kn/leden/forms.py:105
+#: kn/fotos/forms.py:23 kn/leden/forms.py:106
 msgid "Naam voor mensen"
 msgstr "Human name"
 
-#: kn/fotos/forms.py:24 kn/subscriptions/forms.py:47
+#: kn/fotos/forms.py:24 kn/subscriptions/forms.py:48
 #: kn/subscriptions/templates/subscriptions/event_detail.html:26
 msgid "Datum"
 msgstr "Date"
 
-#: kn/fotos/forms.py:25 kn/subscriptions/forms.py:32
+#: kn/fotos/forms.py:25 kn/subscriptions/forms.py:33
 msgid "Naam voor computers"
 msgstr "Computer name"
 
@@ -225,7 +225,7 @@ msgstr "Computer name"
 msgid "Volledige naam voor mensen"
 msgstr "Full human name"
 
-#: kn/fotos/forms.py:36 kn/fotos/templates/fotos/admin/move.html:30
+#: kn/fotos/forms.py:36 kn/fotos/templates/fotos/admin/move.html.py:30
 msgid "Verplaats"
 msgstr "Move"
 
@@ -331,7 +331,7 @@ msgstr "Title"
 msgid "Beschrijving..."
 msgstr "Description..."
 
-#: kn/fotos/templates/fotos/fotos.html:105 kn/subscriptions/forms.py:39
+#: kn/fotos/templates/fotos/fotos.html:105 kn/subscriptions/forms.py:40
 msgid "Beschrijving"
 msgstr "Description"
 
@@ -371,176 +371,176 @@ msgstr "^photos/(?P<path>.*)$"
 msgid "^foto/(?P<cache>[^/]+)/(?P<path>.*)$"
 msgstr "^photo/(?P<cache>[^/]+)/(?P<path>.*)$"
 
-#: kn/fotos/views.py:167
+#: kn/fotos/views.py:168
 msgid "Fotoalbum aangemaakt!"
 msgstr "Gallery created!"
 
-#: kn/fotos/views.py:169
+#: kn/fotos/views.py:170
 #, python-format
 msgid "Er is een fout opgetreden: %s"
 msgstr "An error has occured: %s"
 
-#: kn/fotos/views.py:170
+#: kn/fotos/views.py:171
 msgid "geen foutmelding"
 msgstr "no error"
 
-#: kn/leden/entities.py:867
+#: kn/leden/entities.py:878
 msgid "Entiteit heeft al deze stempel"
 msgstr "Entity already has this tag"
 
-#: kn/leden/entities.py:876
+#: kn/leden/entities.py:887
 msgid "Eniteit heeft deze stempel nog niet"
 msgstr "Entity does not contain this tag"
 
-#: kn/leden/entities.py:1042
+#: kn/leden/entities.py:1053
 msgid "Entiteit heeft nog geen humanName"
 msgstr "Entity does not have a humanName"
 
-#: kn/leden/entities.py:1361
+#: kn/leden/entities.py:1374
 msgid "studie index bestaat niet"
 msgstr "index of study does not exist"
 
-#: kn/leden/entities.py:1364
+#: kn/leden/entities.py:1377
 msgid "studie is al beeindigt"
 msgstr "study already ended"
 
-#: kn/leden/entities.py:1366
+#: kn/leden/entities.py:1379
 msgid "einddatum voor begindatum"
 msgstr "enddate lies before startdate"
 
-#: kn/leden/forms.py:59
+#: kn/leden/forms.py:60
 msgid "Gebruikersnaam is al in gebruik"
 msgstr "Username already taken"
 
-#: kn/leden/forms.py:62
+#: kn/leden/forms.py:63
 msgid "Gebruikersnaam bevat een niet-toegestane letter"
 msgstr "Username contains a letter that is not allowed"
 
-#: kn/leden/forms.py:64
+#: kn/leden/forms.py:65
 msgid "Gebruikersnaam is niet toegestaan"
 msgstr "Username not allowed"
 
-#: kn/leden/forms.py:68
+#: kn/leden/forms.py:69
 msgid "Voornaam"
 msgstr "First name"
 
-#: kn/leden/forms.py:70
+#: kn/leden/forms.py:71
 msgid "Achternaam"
 msgstr "Surname"
 
-#: kn/leden/forms.py:73
+#: kn/leden/forms.py:74
 msgid "bijv.: Vaart, van der"
 msgstr "e.g.: Vaart, van der"
 
-#: kn/leden/forms.py:76
+#: kn/leden/forms.py:77
 msgid "E-Mail adres"
 msgstr "E-mail address"
 
-#: kn/leden/forms.py:77 kn/leden/templates/leden/user_detail.html:217
+#: kn/leden/forms.py:78 kn/leden/templates/leden/user_detail.html.py:217
 msgid "Geboortedatum"
 msgstr "Date of birth"
 
-#: kn/leden/forms.py:78
+#: kn/leden/forms.py:79
 msgid "Straatnaam"
 msgstr "Street name"
 
-#: kn/leden/forms.py:79
+#: kn/leden/forms.py:80
 msgid "Huisnummer"
 msgstr "House number"
 
-#: kn/leden/forms.py:80
+#: kn/leden/forms.py:81
 msgid "Postcode"
 msgstr "Postal code"
 
-#: kn/leden/forms.py:81
+#: kn/leden/forms.py:82
 msgid "Woonplaats"
 msgstr "City"
 
-#: kn/leden/forms.py:82 kn/leden/templates/leden/user_detail.html:100
+#: kn/leden/forms.py:83 kn/leden/templates/leden/user_detail.html.py:100
 #: kn/leden/templates/leden/user_detail.html:156
 msgid "Telefoonnummer"
 msgstr "Phone number"
 
-#: kn/leden/forms.py:84
+#: kn/leden/forms.py:85
 msgid "bijv.: +31612345678"
 msgstr "E.g.: +31612345678"
 
-#: kn/leden/forms.py:85 kn/leden/forms.py:119
+#: kn/leden/forms.py:86 kn/leden/forms.py:120
 msgid "Studentnummer"
 msgstr "Student number"
 
-#: kn/leden/forms.py:86 kn/leden/forms.py:117
+#: kn/leden/forms.py:87 kn/leden/forms.py:118
 msgid "Onderwijs instelling"
 msgstr "Educational institution"
 
-#: kn/leden/forms.py:88 kn/leden/forms.py:116
+#: kn/leden/forms.py:89 kn/leden/forms.py:117
 #: kn/leden/templates/leden/user_detail.html:46
 msgid "Studie"
 msgstr "Study"
 
-#: kn/leden/forms.py:90
+#: kn/leden/forms.py:91
 msgid "Datum van inschrijving"
 msgstr "Date of enrollment"
 
-#: kn/leden/forms.py:92
+#: kn/leden/forms.py:93
 msgid "Incasso"
 msgstr "Incasso"
 
-#: kn/leden/forms.py:94
+#: kn/leden/forms.py:95
 msgid "Voeg toe aan groepen"
 msgstr "Add to groups"
 
-#: kn/leden/forms.py:95
+#: kn/leden/forms.py:96
 msgid "Eerstejaars"
 msgstr "First years"
 
-#: kn/leden/forms.py:95
+#: kn/leden/forms.py:96
 msgid "Aan"
 msgstr "Aam"
 
-#: kn/leden/forms.py:96
+#: kn/leden/forms.py:97
 msgid "Uit"
 msgstr "Uit"
 
-#: kn/leden/forms.py:96
+#: kn/leden/forms.py:97
 msgid "Zooi"
 msgstr "Zooi"
 
-#: kn/leden/forms.py:104 kn/leden/templates/leden/fiscus_debtmail.html:25
+#: kn/leden/forms.py:105 kn/leden/templates/leden/fiscus_debtmail.html.py:25
 #: kn/moderation/templates/moderation/overview.html:9
 #: kn/planning/templates/planning/event_edit.html:11
 msgid "Naam"
 msgstr "Name"
 
-#: kn/leden/forms.py:106
+#: kn/leden/forms.py:107
 msgid "Genitivus"
 msgstr "Genitive"
 
-#: kn/leden/forms.py:107
+#: kn/leden/forms.py:108
 msgid "Korte beschrijving"
 msgstr "Short description"
 
-#: kn/leden/forms.py:108
+#: kn/leden/forms.py:109
 msgid "Oudergroep"
 msgstr "Parent group"
 
-#: kn/leden/forms.py:111
+#: kn/leden/forms.py:112
 msgid "Volwaardige groep"
 msgstr "Full group"
 
-#: kn/leden/forms.py:120
+#: kn/leden/forms.py:121
 msgid "Start op"
 msgstr "Starts at"
 
-#: kn/leden/forms.py:138
+#: kn/leden/forms.py:139
 msgid "Geen oud wachtwoord opgegeven"
 msgstr "No old password given"
 
-#: kn/leden/forms.py:140
+#: kn/leden/forms.py:141
 msgid "Geen nieuw wachtwoord opgegeven"
 msgstr "No new password given"
 
-#: kn/leden/forms.py:142
+#: kn/leden/forms.py:143
 msgid "Niet hetzelfde nieuwe wachtwoord opnieuw gegeven"
 msgstr "The new passwords do not match"
 
@@ -574,7 +574,7 @@ msgid "Statistieken"
 msgstr "Statistics"
 
 #: kn/leden/templates/leden/base.html:38
-#: kn/static/templates/static/overbase.html:11
+#: kn/static/templates/static/overbase.html:10
 #: kn/subscriptions/templates/subscriptions/event_list.html:6
 msgid "Activiteiten"
 msgstr "Activities"
@@ -926,7 +926,7 @@ msgid ""
 "op deze website en daar buiten:"
 msgstr "karpe noktem has several digital services:"
 
-#: kn/leden/templates/leden/home.html:23
+#: kn/leden/templates/leden/home.html:24
 #, python-format
 msgid ""
 "De ledenadministratie aka het\n"
@@ -939,26 +939,26 @@ msgstr ""
 "        (this!). Here we keep track of various things,\n"
 "\t    including:"
 
-#: kn/leden/templates/leden/home.html:29
+#: kn/leden/templates/leden/home.html:30
 msgid "alle leden en oud-leden"
 msgstr "all old and current members"
 
-#: kn/leden/templates/leden/home.html:31
+#: kn/leden/templates/leden/home.html:32
 msgid "alle commissies"
 msgstr "all committees"
 
-#: kn/leden/templates/leden/home.html:33
+#: kn/leden/templates/leden/home.html:34
 msgid "alle groepen"
 msgstr "all groups"
 
-#: kn/leden/templates/leden/home.html:33
+#: kn/leden/templates/leden/home.html:34
 #: kn/static/templates/static/bestuur11.html:41
 #: kn/static/templates/static/bestuur7.html:18
 #: kn/static/templates/static/links.html:27
 msgid "en"
 msgstr "and"
 
-#: kn/leden/templates/leden/home.html:34
+#: kn/leden/templates/leden/home.html:35
 #, python-format
 msgid ""
 "de <a href=\"%(url_lists)s\"\n"
@@ -967,7 +967,7 @@ msgstr ""
 "the <a href=\"%(url_lists)s\"\n"
 "                          >mailinglists</a>."
 
-#: kn/leden/templates/leden/home.html:38
+#: kn/leden/templates/leden/home.html:39
 #, python-format
 msgid ""
 "Het <a href=\"%(url_fotos)s\">fotoboek</a>.\n"
@@ -979,7 +979,14 @@ msgstr ""
 "        You can also <a href=\"%(url_wiki)s/Handleiding:FotosUploaden\">\n"
 "            upload photos to it</a>!"
 
-#: kn/leden/templates/leden/home.html:41
+#: kn/leden/templates/leden/home.html:42
+#, python-format
+msgid ""
+"De <a href=\"%(url_akta)s\">Akta Nokturna</a>, het \n"
+"\t\tverenigingblad van Karpe."
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:44
 #, python-format
 msgid ""
 "Een <a href=\"%(url_wiki_home)s\">wiki</a> waar iedereen\n"
@@ -989,7 +996,7 @@ msgstr ""
 "A <a href=\"%(url_wiki_home)s\">wiki</a> where everyone\n"
 "        can leave useful information.</a>"
 
-#: kn/leden/templates/leden/home.html:44
+#: kn/leden/templates/leden/home.html:47
 #, python-format
 msgid ""
 "Het <a href=\"%(url_forum)s\">forum</a>, dat helaas\n"
@@ -998,7 +1005,7 @@ msgstr ""
 "The <a href=\"%(url_forum)s\">forum</a>, which\n"
 "        unfortunately is barely used anymore."
 
-#: kn/leden/templates/leden/home.html:46
+#: kn/leden/templates/leden/home.html:49
 #, python-format
 msgid ""
 "Een <a href=\"%(url_irc)s\">chatkanaal</a> (IRC),\n"
@@ -1009,7 +1016,7 @@ msgstr ""
 "        see <a href=\"%(url_wiki)s/IRC\"\n"
 "            >the wiki-article</a>."
 
-#: kn/leden/templates/leden/home.html:49
+#: kn/leden/templates/leden/home.html:52
 msgid ""
 "Een <a href=\"https://www.facebook.com/groups/170930412922856/\">\n"
 "            Karpe Noktem groep op Facebook</a>."
@@ -1017,7 +1024,7 @@ msgstr ""
 "A <a href=\"https://www.facebook.com/groups/170930412922856/\">\n"
 "            Karpe Noktem Facebook-group</a>."
 
-#: kn/leden/templates/leden/home.html:51
+#: kn/leden/templates/leden/home.html:54
 msgid ""
 "Het <a href=\"https://www.facebook.com/groups/279385195413570/\">\n"
 "            zusjesgroepje op Facebook</a>."
@@ -1025,11 +1032,11 @@ msgstr ""
 "The <a href=\"https://www.facebook.com/groups/279385195413570/\">\n"
 "            sistergroup on Facebook</a>."
 
-#: kn/leden/templates/leden/home.html:55
+#: kn/leden/templates/leden/home.html:58
 msgid "Instellingen"
 msgstr "Preferences"
 
-#: kn/leden/templates/leden/home.html:58
+#: kn/leden/templates/leden/home.html:61
 msgid ""
 "Verander je profiel\n"
 "            (profielfoto, zichbaarheid telefoonnummer)"
@@ -1037,67 +1044,71 @@ msgstr ""
 "Change your profile\n"
 "            (photo, visibility telephonenumber)"
 
-#: kn/leden/templates/leden/home.html:60
+#: kn/leden/templates/leden/home.html:63
 msgid "Verander je wachtwoord"
 msgstr "Change your password"
 
-#: kn/leden/templates/leden/ik_balans.html:11
+#: kn/leden/templates/leden/ik_balans.html:16
 msgid "Balans"
 msgstr ""
 
-#: kn/leden/templates/leden/ik_balans.html:15
+#: kn/leden/templates/leden/ik_balans.html:20
 #, python-format
 msgid ""
 "\n"
 "Volgens de boekhouding krijg je\n"
-"nog <strong>€ %(bedrag)s</strong> van ons.\n"
+"nog <strong>€&nbsp;%(bedrag)s</strong> van ons.\n"
 msgstr ""
 
-#: kn/leden/templates/leden/ik_balans.html:20
+#: kn/leden/templates/leden/ik_balans.html:25
 msgid ""
 "\n"
 "Volgens de boekhouding zijn we elkaar op het moment\n"
 "niets verschuldigd (in financiële zin).\n"
 msgstr ""
 
-#: kn/leden/templates/leden/ik_balans.html:25
+#: kn/leden/templates/leden/ik_balans.html:30
 #, python-format
 msgid ""
 " \n"
 "Volgens de boekhouding ben je \n"
-"ons nog  <strong>€ %(bedrag)s</strong> veschuldigd.\n"
+"ons nog  <strong>€&nbsp;%(bedrag)s</strong> veschuldigd.\n"
 msgstr ""
 
-#: kn/leden/templates/leden/ik_balans.html:34
+#: kn/leden/templates/leden/ik_balans.html:40
 #, fuzzy
 #| msgid "Huisnummer"
 msgid "nummer"
 msgstr "House number"
 
-#: kn/leden/templates/leden/ik_balans.html:35
+#: kn/leden/templates/leden/ik_balans.html:41
 #, fuzzy
 #| msgid "Datum"
 msgid "datum"
 msgstr "Date"
 
-#: kn/leden/templates/leden/ik_balans.html:36
+#: kn/leden/templates/leden/ik_balans.html:42
 #, fuzzy
 #| msgid "Beschrijving"
-msgid "omschrijving"
+msgid "omschrijving / post"
 msgstr "Description"
 
-#: kn/leden/templates/leden/ik_balans.html:37
+#: kn/leden/templates/leden/ik_balans.html:43
 msgid "bedrag (€)"
 msgstr ""
 
-#: kn/leden/templates/leden/ik_balans.html:59
+#: kn/leden/templates/leden/ik_balans.html:44
+msgid "som (€)"
+msgstr ""
+
+#: kn/leden/templates/leden/ik_balans.html:75
 msgid ""
 "\n"
 "Je hebt op het moment nog geen debiteuren- en crediteurenrekening\n"
 "in onze boekhouding.  \n"
 msgstr ""
 
-#: kn/leden/templates/leden/ik_balans.html:66
+#: kn/leden/templates/leden/ik_balans.html:82
 #, python-format
 msgid ""
 "\n"
@@ -1105,7 +1116,7 @@ msgid ""
 "ten name van %(rekeninghouder)s.\n"
 msgstr ""
 
-#: kn/leden/templates/leden/ik_balans.html:72
+#: kn/leden/templates/leden/ik_balans.html:88
 #, python-format
 msgid ""
 "\n"
@@ -1113,7 +1124,7 @@ msgid ""
 "op met %(name)s via <a href=\"mailto:%(email)s\">%(email)s</a>!\n"
 msgstr ""
 
-#: kn/leden/templates/leden/ik_balans.html:78
+#: kn/leden/templates/leden/ik_balans.html:94
 #, python-format
 msgid ""
 "\n"
@@ -1301,26 +1312,12 @@ msgstr "Smoelenboek"
 msgid "Studenten"
 msgstr "Student number"
 
-#: kn/leden/templates/leden/new-note.mail.txt:4
-msgid "Nieuwe notitie"
-msgstr "New note"
-
-#: kn/leden/templates/leden/new-note.mail.txt:8
-#, python-format
-msgid ""
-"\\\n"
-"Door %(noter)s is de volgende notitie geplaatst op %(on_name)s:\n"
-"\n"
-"     %(note)s\n"
-msgstr ""
-"\\\n"
-"%(noter)s has created the following note on %(on_name)s:\n"
-"\n"
-"     %(note)s\n"
-
-#: kn/leden/templates/leden/note-closed.mail.txt:4
-msgid "Notitie gesloten"
-msgstr "Note closed"
+#: kn/leden/templates/leden/new-note.mail.html:4
+#: kn/leden/templates/leden/note-closed.mail.html:4
+#, fuzzy
+#| msgid "Notities"
+msgid "Notitie op "
+msgstr "Notes"
 
 #: kn/leden/templates/leden/reset-password.mail.txt:4
 msgid ""
@@ -1780,71 +1777,77 @@ msgstr "^styles/leden/$"
 msgid "^taal$"
 msgstr "^language$"
 
-#: kn/leden/views.py:72
+#: kn/leden/views.py:74
 #, python-format
 msgid "Entiteit is niet een %s"
 msgstr "Entity is not a %s"
 
-#: kn/leden/views.py:76
+#: kn/leden/views.py:78
 msgid "Onbekende entiteit type"
 msgstr "Unknown entity type"
 
-#: kn/leden/views.py:369
+#: kn/leden/views.py:330
 msgid "Missende `smoel' in FILES"
 msgstr "Missing `smoel' in FILES"
 
-#: kn/leden/views.py:371
+#: kn/leden/views.py:332
 msgid "Missende `id' in POST"
 msgstr "Missing `id' in POST"
 
-#: kn/leden/views.py:374
+#: kn/leden/views.py:335
 msgid "Entiteit heeft geen naam"
 msgstr "Entity does not have a name"
 
-#: kn/leden/views.py:423
+#: kn/leden/views.py:384
 #, python-format
 msgid "Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."
 msgstr "Dear %s, but off course: your password has been changed."
 
-#: kn/leden/views.py:692
+#: kn/leden/views.py:653
 #, python-format
 msgid "Email gestuurd naar %s."
 msgstr ""
 
-#: kn/leden/views.py:695
+#: kn/leden/views.py:657
 #, python-format
-msgid "Email naar %s faalde: %s."
+msgid "Email naar %(user)s faalde: %(e)s."
 msgstr ""
 
-#: kn/leden/views.py:757
+#: kn/leden/views.py:683
+#, fuzzy
+#| msgid "studie is al beeindigt"
+msgid "Relatie was al beëindigd."
+msgstr "study already ended"
+
+#: kn/leden/views.py:722
 msgid "Deze relatie bestaat al"
 msgstr "This relation already exists"
 
-#: kn/leden/views.py:781
+#: kn/leden/views.py:747
 msgid "'group' is niet een groep"
 msgstr "'group' is not a group"
 
-#: kn/leden/views.py:789
+#: kn/leden/views.py:755
 msgid "'tag' is niet een stempel"
 msgstr "'tag' is not a tag"
 
-#: kn/leden/views.py:824
+#: kn/leden/views.py:790
 msgid "Gebruiker is niet geactiveerd"
 msgstr "User is not active"
 
-#: kn/leden/views.py:831
+#: kn/leden/views.py:797
 msgid "Wachtwoord gereset!"
 msgstr "Password reset!"
 
-#: kn/leden/views.py:840
+#: kn/leden/views.py:806
 msgid "missende `on' of `note'"
 msgstr "Missing `on' or `note'"
 
-#: kn/leden/views.py:858
+#: kn/leden/views.py:827
 msgid "Agenda geupdate!"
 msgstr "Agenda has been updated"
 
-#: kn/leden/views.py:873
+#: kn/leden/views.py:842
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
 msgstr "Your request is being processed.  Expect an e-mail within 5 minutes."
 
@@ -1934,69 +1937,69 @@ msgid ""
 "De moderatiemodus op %(name)s is verlopen.\n"
 msgstr ""
 
-#: kn/moderation/views.py:35
+#: kn/moderation/views.py:36
 msgid "Toegang geweigerd"
 msgstr "Permission denied"
 
-#: kn/planning/forms.py:18
+#: kn/planning/forms.py:19
 msgid "Selecteer"
 msgstr "Select"
 
-#: kn/planning/forms.py:46
+#: kn/planning/forms.py:47
 msgid "Geen"
 msgstr "None"
 
-#: kn/planning/forms.py:47
+#: kn/planning/forms.py:48
 msgid "Borrel"
 msgstr ""
 
-#: kn/planning/forms.py:48
+#: kn/planning/forms.py:49
 msgid "Klein feest"
 msgstr ""
 
-#: kn/planning/forms.py:49
+#: kn/planning/forms.py:50
 msgid "Groot feest"
 msgstr ""
 
-#: kn/planning/forms.py:50
+#: kn/planning/forms.py:51
 msgid "Dranktelling"
 msgstr ""
 
-#: kn/planning/forms.py:51
+#: kn/planning/forms.py:52
 msgid "Dranklevering"
 msgstr ""
 
-#: kn/planning/forms.py:52
+#: kn/planning/forms.py:53
 msgid "Vrijdag"
 msgstr ""
 
-#: kn/planning/forms.py:53
+#: kn/planning/forms.py:54
 msgid "Vrijdag (met tappers)"
 msgstr ""
 
-#: kn/planning/forms.py:59
+#: kn/planning/forms.py:60
 #, fuzzy
 #| msgid "Straatnaam"
 msgid "Shiftnaam"
 msgstr "Street name"
 
-#: kn/planning/forms.py:61
+#: kn/planning/forms.py:62
 msgid "Begintijd"
 msgstr ""
 
-#: kn/planning/forms.py:66 kn/planning/forms.py:72
+#: kn/planning/forms.py:67 kn/planning/forms.py:73
 msgid "bij benadering"
 msgstr ""
 
-#: kn/planning/forms.py:66 kn/planning/forms.py:72
+#: kn/planning/forms.py:67 kn/planning/forms.py:73
 msgid "exact"
 msgstr ""
 
-#: kn/planning/forms.py:68
+#: kn/planning/forms.py:69
 msgid "Eindtijd"
 msgstr ""
 
-#: kn/planning/forms.py:75
+#: kn/planning/forms.py:76
 msgid "Type"
 msgstr ""
 
@@ -2096,77 +2099,77 @@ msgstr ""
 msgid "^manage/(?P<poolname>[^/]+)/template/?$"
 msgstr ""
 
-#: kn/planning/views.py:31 kn/planning/views.py:43 kn/planning/views.py:76
+#: kn/planning/views.py:32 kn/planning/views.py:44 kn/planning/views.py:77
 msgid "eerste dienst"
 msgstr ""
 
-#: kn/planning/views.py:32 kn/planning/views.py:44 kn/planning/views.py:77
+#: kn/planning/views.py:33 kn/planning/views.py:45 kn/planning/views.py:78
 msgid "tweede dienst"
 msgstr ""
 
-#: kn/planning/views.py:33 kn/planning/views.py:45 kn/planning/views.py:78
+#: kn/planning/views.py:34 kn/planning/views.py:46 kn/planning/views.py:79
 msgid "derde dienst"
 msgstr ""
 
-#: kn/planning/views.py:35 kn/planning/views.py:38 kn/planning/views.py:47
-#: kn/planning/views.py:64 kn/planning/views.py:80 kn/planning/views.py:87
+#: kn/planning/views.py:36 kn/planning/views.py:39 kn/planning/views.py:48
+#: kn/planning/views.py:65 kn/planning/views.py:81 kn/planning/views.py:88
 msgid "openen"
 msgstr ""
 
-#: kn/planning/views.py:36 kn/planning/views.py:40 kn/planning/views.py:48
-#: kn/planning/views.py:65 kn/planning/views.py:81 kn/planning/views.py:88
+#: kn/planning/views.py:37 kn/planning/views.py:41 kn/planning/views.py:49
+#: kn/planning/views.py:66 kn/planning/views.py:82 kn/planning/views.py:89
 msgid "sluiten"
 msgstr ""
 
-#: kn/planning/views.py:39
+#: kn/planning/views.py:40
 msgid "prime-time"
 msgstr ""
 
-#: kn/planning/views.py:52
+#: kn/planning/views.py:53
 msgid "eerste dienst, tapper 1"
 msgstr ""
 
-#: kn/planning/views.py:54
+#: kn/planning/views.py:55
 msgid "eerste dienst, tapper 2"
 msgstr ""
 
-#: kn/planning/views.py:56
+#: kn/planning/views.py:57
 msgid "tweede dienst, tapper 1"
 msgstr ""
 
-#: kn/planning/views.py:58
+#: kn/planning/views.py:59
 msgid "tweede dienst, tapper 2"
 msgstr ""
 
-#: kn/planning/views.py:60
+#: kn/planning/views.py:61
 msgid "derde dienst, tapper 1"
 msgstr ""
 
-#: kn/planning/views.py:62
+#: kn/planning/views.py:63
 msgid "derde dienst, tapper 2"
 msgstr ""
 
-#: kn/planning/views.py:68
+#: kn/planning/views.py:69
 msgid "Teller 1"
 msgstr ""
 
-#: kn/planning/views.py:69
+#: kn/planning/views.py:70
 msgid "Teller 2"
 msgstr ""
 
-#: kn/planning/views.py:72
+#: kn/planning/views.py:73
 msgid "Persoon 1"
 msgstr ""
 
-#: kn/planning/views.py:73
+#: kn/planning/views.py:74
 msgid "Persoon 2"
 msgstr ""
 
-#: kn/planning/views.py:83 kn/planning/views.py:90 kn/planning/views.py:94
+#: kn/planning/views.py:84 kn/planning/views.py:91 kn/planning/views.py:95
 msgid "Kok 1"
 msgstr ""
 
-#: kn/planning/views.py:84 kn/planning/views.py:91 kn/planning/views.py:95
+#: kn/planning/views.py:85 kn/planning/views.py:92 kn/planning/views.py:96
 msgid "Kok 2"
 msgstr ""
 
@@ -2223,17 +2226,29 @@ msgid ""
 msgstr ""
 
 #: kn/static/templates/static/activiteiten.html:6
+#, fuzzy
+#| msgid ""
+#| "Karpe Noktem staat bekend om zijn live-acts, zoals\n"
+#| "Karpe Rockt'em en de\n"
+#| "bandjesavonden. Daarnaast programmeren we voor leden tal van andere\n"
+#| "activiteiten. Een kleine greep uit voorgaande hoogtepunten: Karpe "
+#| "Rockt'em, De\n"
+#| "nacht van de po&euml;zie, Het jaarlijkse gemaskerd bal &amp; Karpe "
+#| "Noktem\n"
+#| "weekend.\n"
+#| "Ook verzeil je regelmatig in een vreemde stad tijdens onze Roadtrips en "
+#| "feesten\n"
+#| "bij onze zusterverenigingen van het ZEUS-verband."
 msgid ""
-"Karpe Noktem staat bekend om zijn live-acts, zoals\n"
-"Karpe Rockt'em en de\n"
-"bandjesavonden. Daarnaast programmeren we voor leden tal van andere\n"
-"activiteiten. Een kleine greep uit voorgaande hoogtepunten: Karpe Rockt'em, "
-"De\n"
-"nacht van de po&euml;zie, Het jaarlijkse gemaskerd bal &amp; Karpe Noktem\n"
-"weekend.\n"
-"Ook verzeil je regelmatig in een vreemde stad tijdens onze Roadtrips en "
-"feesten\n"
-"bij onze zusterverenigingen van het ZEUS-verband."
+"Karpe Noktem staat ondere andere bekend om zijn live-acts,\n"
+"zoals Karpe Rockt'em en de bandjesavonden. Daarnaast organiseren\n"
+"we voor leden tal van andere activiteiten. Een kleine greep uit\n"
+"voorgaande hoogtepunten: Karpe Rockt'em, De nacht van de po&euml;zie,\n"
+"Het tweejaarlijkse gala &amp; Karpe Noktem zomer en lente weekenden.\n"
+"We organiseren op regelmatige basis spelletjesdagen, leuke themafeesten,\n"
+"nachtpicknicks en creatieve of culturele avonden. Ook verzeil je\n"
+"regelmatig in een vreemde stad tijdens onze feesten bij onze\n"
+"zusterverenigingen van het ZEUS-verband."
 msgstr ""
 "Karpe Noktem is well known for its live-acts, like\n"
 " Karpe Rockt'em and the live music evenings. Apart from those, we organise "
@@ -2243,7 +2258,7 @@ msgstr ""
 "weird unknown city during our Roadtrips and parties of our sister "
 "associations of the ZEUS-sisterhood."
 
-#: kn/static/templates/static/activiteiten.html:16
+#: kn/static/templates/static/activiteiten.html:17
 #, python-format
 msgid ""
 "Natuurlijk is er elke\n"
@@ -3245,19 +3260,23 @@ msgstr ""
 msgid "Intro Poster 2016"
 msgstr ""
 
-#: kn/static/templates/static/lidworden.html:8
+#: kn/static/templates/static/lidworden.html:9
 #, python-format
 msgid ""
 "\n"
+"  Lijkt het je leuk om lid te worden?\n"
 "  Kom eens een keer langs bij een van onze\n"
-"  <a href=\"%(url_activiteiten)s\">activiteiten</a>,\n"
-"    bijvoorbeeld de maandagavond\n"
-"  borrels in de <a href=\"%(url_route)s\">Villa van Schaeck</a>, of stuur "
-"een\n"
-"  e-mailtje naar %(secretaris)s en dan is het zo geregeld!"
+"  <a href=\"%(url_activiteiten)s\">activiteiten</a>!\n"
+"Bijvoorbeeld op onze maandagavond borrels, of de activiteit of het\n"
+"avondeten op de vrijdag, allemaal in de\n"
+"<a href=\"%(url_route)s\">Villa van Schaeck</a>.\n"
+"Er is natuurlijk nog veel meer te doen, kijk daarom vooral in de\n"
+"<a href=\"%(url_agenda)s\">agenda</a> en kom een keer langs!\n"
+"Vragen? Stuur een e-mail naar %(secretaris)s en dan is het zo\n"
+"geregeld!"
 msgstr ""
 
-#: kn/static/templates/static/lidworden.html:16
+#: kn/static/templates/static/lidworden.html:22
 #, python-format
 msgid ""
 "\n"
@@ -3499,14 +3518,15 @@ msgstr ""
 #: kn/static/templates/static/over.html:6
 msgid ""
 "Karpe Noktem is een dynamisch alternatief voor\n"
-"iedereen die zich niet tot traditionele verenigingen aangetrokken\n"
+"iedereen die zich niet tot traditionele studentenverenigingen aangetrokken\n"
 "voelt. Wij brengen HBO- en WO-studenten op een ongedwongen manier\n"
 "samen. De meeste  verenigingen eisen van nieuwe leden een ontgroening\n"
-"en jarenlange aanwezigheidsplicht. Karpe Noktem wil vooral veel\n"
-"bieden: concerten voor de muziekfreaks, roadtrips voor de avonturiers,\n"
-"ledenblad Akta Nokturna voor fotografen en literair talent, poker\n"
-"voor de gokkers en een wekelijkse borrel voor de\n"
-"stamgasten."
+"en jarenlange aanwezigheidsplicht. Bij Karpe Noktem zijn er geen\n"
+"introductieperiode of ontgroening. Karpe Noktem wil vooral iedereen\n"
+"wat bieden: concerten voor de muziekfreaks, Spelletjesdagen voor "
+"bordspelfanaten,\n"
+"ledenblad Akta Nokturna voor literair talent, LAN-parties voor gamers \n"
+"en een wekelijkse borrel voor de stamgasten."
 msgstr ""
 
 #: kn/static/templates/static/over.html:16
@@ -3514,8 +3534,8 @@ msgid ""
 "Bij Karpe Noktem maken de leden de vereniging.\n"
 "We bieden vrijwel constant activiteiten aan die door actieve leden\n"
 "zijn georganiseerd. Daardoor blijft iedereen bij elkaar betrokken\n"
-"en is er voor ieder wat wils. Zo leer je ook heel snel je nieuwe\n"
-"stad kennen."
+"en is er voor ieder wat wils. Zo leer je snel je Nijmegen en andere\n"
+"studenten kennen."
 msgstr ""
 
 #: kn/static/templates/static/over.html:22
@@ -3530,16 +3550,16 @@ msgstr ""
 msgid "Over Karpe Noktem"
 msgstr ""
 
-#: kn/static/templates/static/overbase.html:10
-msgid "Geschiedenis"
-msgstr ""
-
-#: kn/static/templates/static/overbase.html:12
+#: kn/static/templates/static/overbase.html:11
 msgid "Bestuur"
 msgstr ""
 
-#: kn/static/templates/static/overbase.html:13
+#: kn/static/templates/static/overbase.html:12
 msgid "Akta Nokturna"
+msgstr ""
+
+#: kn/static/templates/static/overbase.html:13
+msgid "Oprichting"
 msgstr ""
 
 #: kn/static/templates/static/route.html:6
@@ -3797,32 +3817,32 @@ msgstr ""
 msgid "^styles/static/$"
 msgstr ""
 
-#: kn/subscriptions/forms.py:22
+#: kn/subscriptions/forms.py:23
 msgid "Naam voor computers bestaat al"
 msgstr "Name for computers already exists"
 
-#: kn/subscriptions/forms.py:42
+#: kn/subscriptions/forms.py:43
 #: kn/subscriptions/templates/subscriptions/event_detail.html:44
 msgid "Kosten"
 msgstr "Cost"
 
-#: kn/subscriptions/forms.py:53
+#: kn/subscriptions/forms.py:54
 msgid "Maximum aantal deelnemers (optioneel)"
 msgstr "Maximum number of participants"
 
-#: kn/subscriptions/forms.py:54
+#: kn/subscriptions/forms.py:55
 msgid "geen maximum"
 msgstr "no maximum"
 
-#: kn/subscriptions/forms.py:56 kn/subscriptions/forms.py:59
+#: kn/subscriptions/forms.py:57 kn/subscriptions/forms.py:60
 msgid "Eigenaar"
 msgstr "Owner"
 
-#: kn/subscriptions/forms.py:65
+#: kn/subscriptions/forms.py:66
 msgid "Inschrijvingen openbaar"
 msgstr "Public attendance"
 
-#: kn/subscriptions/forms.py:70
+#: kn/subscriptions/forms.py:71
 msgid "Leden mogen zichzelf afmelden"
 msgstr "Members can cancel"
 
@@ -4104,24 +4124,24 @@ msgstr ""
 msgid "^(?P<edit>[a-zA-Z0-9\\-.]+)/edit/?$"
 msgstr ""
 
-#: kn/subscriptions/views.py:60
+#: kn/subscriptions/views.py:61
 msgid "Je bent al aangemeld"
 msgstr ""
 
-#: kn/subscriptions/views.py:70
+#: kn/subscriptions/views.py:71
 msgid "Je bent al afgemeld"
 msgstr ""
 
-#: kn/subscriptions/views.py:85
+#: kn/subscriptions/views.py:86
 #, python-format
 msgid "%s is al aangemeld"
 msgstr ""
 
-#: kn/subscriptions/views.py:187
+#: kn/subscriptions/views.py:188
 msgid "Gebruiker niet verwant met eigenaar"
 msgstr "User is not related to owner"
 
-#: kn/subscriptions/views.py:190
+#: kn/subscriptions/views.py:191
 msgid "Mag deze eigenaar niet kiezen"
 msgstr "Can't choose this owner"
 
@@ -4174,6 +4194,23 @@ msgstr "^censor/"
 #| msgid "Planning"
 msgid "^planning/"
 msgstr "^planning/"
+
+#~ msgid "Nieuwe notitie"
+#~ msgstr "New note"
+
+#~ msgid ""
+#~ "\\\n"
+#~ "Door %(noter)s is de volgende notitie geplaatst op %(on_name)s:\n"
+#~ "\n"
+#~ "     %(note)s\n"
+#~ msgstr ""
+#~ "\\\n"
+#~ "%(noter)s has created the following note on %(on_name)s:\n"
+#~ "\n"
+#~ "     %(note)s\n"
+
+#~ msgid "Notitie gesloten"
+#~ msgstr "Note closed"
 
 #~ msgid "Formuliernaam"
 #~ msgstr "Name of form"

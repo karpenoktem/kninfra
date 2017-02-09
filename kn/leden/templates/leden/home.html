@@ -17,6 +17,7 @@ op deze website en daar buiten:{% endblocktrans %}</p>
 {% store_external_url "wiki" as url_wiki %}
 {% store_external_url "wiki-home" as url_wiki_home %}
 {% url "fotos" "" as url_fotos %}
+{% url "aktanokturna" as url_akta %}
 {% store_external_url "forum" as url_forum %}
 {% store_external_url "irc" as url_irc %}
 <ul>
@@ -38,6 +39,8 @@ op deze website en daar buiten:{% endblocktrans %}</p>
     <li>{% blocktrans %}Het <a href="{{ url_fotos }}">fotoboek</a>.
         Je kunt hier ook <a href="{{ url_wiki }}/Handleiding:FotosUploaden">
             foto's naar uploaden</a>!{% endblocktrans %}</li>
+    <li>{% blocktrans %}De <a href="{{ url_akta }}">Akta Nokturna</a>, het 
+		verenigingblad van Karpe.{% endblocktrans %}</li>
     <li>{% blocktrans %}Een <a href="{{ url_wiki_home }}">wiki</a> waar iedereen
         voor de vereniging nuttige informatie op kan
         plempen.</a>{% endblocktrans %}</li>

@@ -653,8 +653,9 @@ def fiscus_debtmail(request):
                     _("Email gestuurd naar %s.") %
                     user_name)
             except Exception as e:
-                messages.error(request, _("Email naar %s faalde: %s.") %
-                               (user_name, repr(e)))
+                messages.error(request,
+                               _("Email naar %(user)s faalde: %(e)s.") %
+                               {'user': user_name, 'e': repr(e)})
 
     # get a sample of the email that will be sent for the quaestor's review.
     email = ""
