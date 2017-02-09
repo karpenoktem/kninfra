@@ -40,7 +40,7 @@ from kn.fotos.utils import resize_proportional
 from kn.leden import giedo
 from kn.leden.auth import login_or_basicauth_required
 from kn.leden.date import date_to_dt, now
-import kn.leden.fin as fin
+from kn.leden import fin
 from kn.leden.forms import (AddGroupForm, AddStudyForm, AddUserForm,
                             ChangePasswordForm)
 from kn.leden.mongo import _id
@@ -878,7 +878,7 @@ def balans(request):
     account = request.user
     if 'account' in request.GET:
         account = Es.by_name(request.GET['account'])
-        if account is None:
+        if not account:
             raise Http404
 
     accounts = [(a, a == account) for a in accounts]

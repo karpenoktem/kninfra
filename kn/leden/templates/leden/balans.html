@@ -24,7 +24,8 @@ Volgens de boekhouding krijg je
 nog <strong>€&nbsp;{{ bedrag }}</strong> van ons.
 {% endblocktrans %}
 {% else %}
-{% blocktrans with bedrag=balans.abstotal naam=account.humanName lidwoord=account.humanName.definite_article.title %}
+{% blocktrans with bedrag=balans.abstotal naam=account.humanName \
+lidwoord=account.humanName.definite_article.title %}
 {{ lidwoord }} {{ naam }} heeft ons
 dit jaar al <strong>€&nbsp;{{ bedrag }}</strong>
 opgebracht.
@@ -37,7 +38,8 @@ Volgens de boekhouding zijn we elkaar op het moment
 niets verschuldigd (in financiële zin).
 {% endblocktrans %}
 {% else %}
-{% blocktrans with naam=account.humanName lidwoord=account.humanName.definite_article %}
+{% blocktrans with naam=account.humanName \
+lidwoord=account.humanName.definite_article %}
 We hebben dit jaar in totaal nog niets uitgegeven
 voor
 {{ lidwoord }} {{ naam }}.
@@ -50,7 +52,8 @@ Volgens de boekhouding ben je
 ons nog  <strong>€&nbsp;{{ bedrag }}</strong> veschuldigd.
 {% endblocktrans %}
 {% else %}
-{% blocktrans with bedrag=balans.abstotal naam=account.humanName lidwoord=account.humanName.definite_article %}
+{% blocktrans with bedrag=balans.abstotal naam=account.humanName \
+lidwoord=account.humanName.definite_article %}
 We hebben dit jaar al <strong>€&nbsp;{{ bedrag }}</strong>
 uitgegeven voor
 {{ lidwoord }} {{ naam }}.
@@ -104,7 +107,8 @@ Je hebt op het moment nog geen debiteuren- en crediteurenrekening
 in onze boekhouding.  
 {% endblocktrans %}
 {% else %}
-{% blocktrans with name=account.humanName da=account.humanName.definite_article.title %}
+{% blocktrans with name=account.humanName \
+da=account.humanName.definite_article.title %}
 {{ da }} {{ name }} heeft nog geen inkomsten- en uitgavenrekening in onze boekhouding.
 {% endblocktrans %}
 {% endif %}
@@ -112,7 +116,8 @@ in onze boekhouding.
 {% endif %}
 {% if user == account %}
 <p>
-{% blocktrans with rekeningnummer=balans.our_account_number rekeninghouder=balans.our_account_holder %}
+{% blocktrans with rekeningnummer=balans.our_account_number \
+rekeninghouder=balans.our_account_holder %}
 Betalingen kunnen gericht worden aan {{ rekeningnummer }}
 ten name van {{ rekeninghouder }}.
 {% endblocktrans %}

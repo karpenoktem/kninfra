@@ -4,7 +4,7 @@ from koert.gnucash.tools import open_yaml
 
 from django.conf import settings
 
-import fin
+from kn.utils.moniek import fin
 from kn.utils.whim import WhimDaemon
 
 
