@@ -21,14 +21,14 @@ def check_names(moniek, names):
     gcf = moniek.gcf
     book = gcf.book
 
-    absent_in_gnucash = {}
-    absent_on_website = {}
+    absent_from_gnucash = {}
+    absent_from_website = {}
 
     for t, tnames in six.iteritems(names):
         paths = gcf.meta['accounts'][t]
         found_one = False
 
-        absent_in_gnucash[t] = set()
+        absent_from_gnucash[t] = set()
 
         for name in tnames:
             for path in paths:
@@ -36,21 +36,21 @@ def check_names(moniek, names):
                     found_one = True
                     break
             if not found_one:
-                absent_in_gnucash[t].add(name)
+                absent_from_gnucash[t].add(name)
 
-        absent_in_gnucash[t] = list(absent_in_gnucash[t])
+        absent_from_gnucash[t] = list(absent_from_gnucash[t])
 
     for t, paths in six.iteritems(gcf.meta['accounts']):
-        absent_on_website[t] = set()
-        tnames = set(names[t])
+        absent_from_website[t] = set()
+        tnames = frozenset(names[t])
 
         for path in paths:
             for name in book.ac_by_path(path).children:
                 if name not in tnames:
-                    absent_on_website[t].add(name)
+                    absent_from_website[t].add(name)
 
-        absent_on_website[t] = list(absent_on_website[t])
+        absent_from_website[t] = list(absent_from_website[t])
 
-    return {'gnucash': absent_in_gnucash, 'website': absent_on_website}
+    return {'gnucash': absent_from_gnucash, 'website': absent_from_website}
 
 # vim: et:sta:bs=2:sw=4:
