@@ -1,4 +1,5 @@
 import time
+import six
 
 from django.conf import settings
 
@@ -94,8 +95,8 @@ def openvpn_create(user, want):
 def fin_get_account(ent):
     return get_giedo_connection().send({
         'type': 'fin-get-account',
-        'name': str(ent.name),
-        'full_name': str(ent.humanName),
+        'name': six.text_type(ent.name),
+        'full_name': six.text_type(ent.humanName),
         'account_type': "user" if ent.is_user else "group"
     })
 
@@ -113,8 +114,8 @@ def fin_check_names():
     return get_giedo_connection().send({
         'type': 'fin-check-names',
         'names': {
-            'user': [str(user.humanName) for user in users],
-            'group': [str(com.humanName) for com in comms]
+            'user': [six.text_type(user.humanName) for user in users],
+            'group': [six.text_type(com.humanName) for com in comms]
         }
 
 
