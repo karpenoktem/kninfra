@@ -116,7 +116,7 @@ def fin_check_names():
         'names': {
             'user': [six.text_type(user.humanName) for user in users],
             'group': [six.text_type(com.humanName) for com in comms]
-        }
+        }})
 
 
 def maillist_get_moderated_lists():
