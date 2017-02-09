@@ -77,7 +77,7 @@ def defaultSettings(glbls):
     d.MODERATORS_GROUP = 'moderators'
     d.MOD_UI_URI = '/mailman/admindb/%s'
     d.MOD_RENEW_INTERVAL = datetime.timedelta(0, 15 * 60)
-    d.MOD_DESIRED_URI_PREFIX = d.SCHEME + '://www.' + d.DOMAINNAME
+    d.MOD_DESIRED_URI_PREFIX = d.SCHEME + '://' + d.DOMAINNAME
 
     d.MEDIAWIKI_PATH = '/srv/' + d.DOMAINNAME + '/htdocs/mediawiki'
 

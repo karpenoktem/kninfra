@@ -1,8 +1,6 @@
 from __future__ import absolute_import
 
 import datetime
-import os
-import os.path
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -20,28 +18,17 @@ from kn.leden import giedo
 
 @login_required
 def redirect(request, name):
-    if not request.build_absolute_uri().startswith(
-            settings.MOD_DESIRED_URI_PREFIX):
-        return HttpResponseRedirect(settings.MOD_DESIRED_URI_PREFIX +
-                                    request.get_full_path())
-    name = str(name)
-    if (request.user.groups.filter(
-            name=settings.MODERATORS_GROUP).count() == 0):
+    # if not request.build_absolute_uri().startswith(
+    #         settings.MOD_DESIRED_URI_PREFIX):
+    #     return HttpResponseRedirect(settings.MOD_DESIRED_URI_PREFIX +
+    #                                 request.get_full_path())
+    if not request.user.is_related_with(Es.by_name(settings.MODERATORS_GROUP)):
         return HttpResponse(_("Toegang geweigerd"))
     if name not in settings.MODED_MAILINGLISTS:
         raise Http404
-    ml = Mailman.MailList.MailList(name, True)
-    try:
-        if ml.mod_password is None:
-            ml.mod_password = Mailman.Utils.sha_new(
-                os.urandom(10)).hexdigest()
-            ml.Save()
-        c = ml.MakeCookie(mm_cfg.AuthListModerator)
-    finally:
-        ml.Unlock()
-    bits = str(c).split(': ')
+    cookie = giedo.maillist_get_moderator_cookie(name)
     r = HttpResponseRedirect(settings.MOD_UI_URI % name)
-    r[str(bits[0])] = str(bits[1])
+    r[cookie[0]] = cookie[1]
     return r
 
 
@@ -103,7 +90,7 @@ def overview(request):
     moderators = Es.by_name(settings.MODERATORS_GROUP)
 
     # Check for renew/toggle in POST
-    if (request.user.is_related_with(Es.by_name(settings.MODERATORS_GROUP))):
+    if request.user.is_related_with(Es.by_name(settings.MODERATORS_GROUP)):
         is_moderator = True
         if request.method == 'POST':
             if 'toggle' in request.POST:
