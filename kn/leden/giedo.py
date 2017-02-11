@@ -138,4 +138,11 @@ def maillist_deactivate_moderation(name):
         'name': name
     })
 
+
+def maillist_get_moderator_cookie(name):
+    return get_giedo_connection().send({
+        'type': 'maillist-get-moderator-cookie',
+        'name': name
+    })
+
 # vim: et:sta:bs=2:sw=4:

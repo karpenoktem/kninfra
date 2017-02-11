@@ -256,7 +256,7 @@ giedo:
 /home/infra/repo/bin/run-fcgi:
     cmd.run:
         - user: infra
-        - timeout: 2
+        - timeout: 4
 /etc/nginx/sankhara.d/90-kninfra.conf:
     file.managed:
         - source: salt://sankhara/kninfra.nginx.conf

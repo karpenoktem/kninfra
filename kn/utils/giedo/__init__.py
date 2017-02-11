@@ -201,6 +201,7 @@ class Giedo(WhimDaemon):
             return self.moniek.send(d)
         elif d['type'] in ('maillist-get-moderated-lists',
                            'maillist-activate-moderation',
+                           'maillist-get-moderator-cookie',
                            'maillist-deactivate-moderation'):
             return self.hans.send(d)
         else:
