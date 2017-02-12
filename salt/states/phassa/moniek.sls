@@ -7,15 +7,12 @@ moniek packages:
             - python3-setuptools
             - python3-pyparsing
             - python3-markdown
-            - python3-pip
-            - python-pip  # saltstack (python 2) needs pip
             {% else %}
             - python-django
             - msgpack-python
             - python-setuptools
             - python-pyparsing
             - python-markdown
-            - python-pip
             {% endif %}
 
 # pip packages
@@ -29,7 +26,7 @@ moniek packages:
 {% endif %}
 {% endfor %}
 
-six:
+right version of six:
     pip.installed:
         # for six.python_2_unicode_compatible
         - name: six >= 1.10
