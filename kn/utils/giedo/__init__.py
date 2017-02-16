@@ -197,7 +197,8 @@ class Giedo(WhimDaemon):
             return self.last_sync_ts
         elif d['type'] in ('fin-get-account',
                            'fin-get-debitors',
-                           'fin-check-names'):
+                           'fin-check-names',
+                           'fin-get-gnucash-object'):
             return self.moniek.send(d)
         elif d['type'] in ('maillist-get-moderated-lists',
                            'maillist-activate-moderation',

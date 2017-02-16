@@ -1,0 +1,25 @@
+{% extends "leden/base.html" %}
+
+{% load i18n %}
+
+{% block styles %}
+{{ block.super }}
+<link href="{{ MEDIA_URL }}leden/balans.css" rel="stylesheet" />
+{% endblock styles %}
+
+{% block head %}
+{{ block.super }}
+<script src="{{ MEDIA_URL }}leden/balans.js" defer></script>
+{% endblock head %}
+
+{% block body %}
+
+<h1>Test</h1>
+
+{{ year }}
+
+{{ handle }}
+
+{{ obj }}
+
+{% endblock %}

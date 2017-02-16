@@ -1,6 +1,6 @@
 repo: fin
 path: fin.gnucash
-cache: .fin.cached
+cache: .fin37.cached
 meta:
     accounts:
         user:

@@ -53,4 +53,18 @@ def check_names(moniek, names):
 
     return {'gnucash': absent_from_gnucash, 'website': absent_from_website}
 
+
+def get_gnucash_object(moniek, year, handle):
+    gcf = moniek.gcf_by_year(year)
+    if gcf==None:
+        return { 'type': 'error', 'message': 'no such year' }
+    book = gcf.book
+
+    try:
+        obj = book.obj_by_handle(handle)
+    except KeyError:
+        return { 'type': 'error', 'message': 'no object with this handle' }
+
+    return koertexport.export(book.obj_by_handle(handle))
+
 # vim: et:sta:bs=2:sw=4:

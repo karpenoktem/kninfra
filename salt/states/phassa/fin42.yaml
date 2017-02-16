@@ -1,0 +1,11 @@
+repo: fin
+path: fin.gnucash
+cache: .fin42.cached
+meta:
+    accounts:
+        user:
+            - :Passiva:Crediteuren
+            - :Activa:Vlottende activa:Debiteuren:Leden
+        group:
+            - :Inkomsten:Commissies
+            - :Uitgaven:Commissies

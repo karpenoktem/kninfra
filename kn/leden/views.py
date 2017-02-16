@@ -904,6 +904,21 @@ def boekenlezers_name_check(request):
                               context_instance=RequestContext(request))
 
 
+@login_required
+def fin(request, year, handle):
+    year = int(year)
+
+    if 'boekenlezers' not in request.user.cached_groups_names:
+        raise PermissionDenied
+
+    obj = giedo.fin_get_gnucash_object(year, handle)
+
+    return render_to_response('leden/fin.html',
+            {'year': year,
+                'obj': obj,
+                'handle': handle},
+                              context_instance=RequestContext(request))
+
 def language(request):
     return HttpResponse(str(request.LANGUAGE_CODE))
 
