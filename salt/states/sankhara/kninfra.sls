@@ -9,12 +9,9 @@ kninfra packages:
             - python3-markdown
             - python3-pymongo
             - python3-pil
-            - python3-pip
-            - python-pip  # saltstack (python 2) needs pip
             - python3-html2text
             - python3-httplib2
             - python3-pyx
-            - python3-six
             - python3-unidecode
 
             # python2 packages for hans
@@ -35,7 +32,6 @@ kninfra packages:
             - python-flup
             - python-pymongo
             - python-imaging
-            - python-pip
             - python-html2text
             - python-httplib2
             - python-ldap
