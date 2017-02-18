@@ -1,18 +1,9 @@
-from __future__ import absolute_import
-
 import logging
 
 from django.utils import six
 
 import kn.leden.entities as Es
 from kn.leden.date import now
-from kn.utils.mailman import import_mailman
-
-if six.PY2:  # HACK see #438
-    import_mailman()
-    import Mailman           # noqa: E402 isort:skip
-    import Mailman.Utils     # noqa: E402 isort:skip
-    import Mailman.MailList  # noqa: E402 isort:skip
 
 
 def generate_mailman_changes(giedo):
@@ -24,41 +15,43 @@ def generate_mailman_changes(giedo):
     mm_groups = [g for g in Es.groups() if g.got_mailman_list and g.name]
     mm_rels = Es.query_relations(_with=mm_groups, how=None, _from=dt_now,
                                  until=dt_now, deref_who=True)
-    # TODO do we want to cache these?
-    # Get the current mailing lists
-    ml_names = frozenset(Mailman.Utils.list_names())
-    ml_members = dict()
+    # Get the current mailing list membersip
+    ml_membership = giedo.hans.send({'type': 'maillist-get-membership'})
+
+    # membership_to_check will contain the current membership of the
+    # mailinglists for which there are groups.  We will remove users
+    # from membership_to_check if we see these users are in the groups.
+    # In the end membership_to_check contains the stray users.
+    membership_to_check = {}
     gid2name = dict()
     # Find the current members of the mailing lists and find which
     # mailing lists are missing.
     for g in mm_groups:
-        gid2name[g._id] = str(g.name)
-        if not str(g.name) in ml_names:
-            todo['create'].append((str(g.name),
-                                   six.text_type(g.humanName)))
-            c_ms = set([])
+        name = str(g.name).encode()
+        gid2name[g._id] = name
+        if name in ml_membership:
+            membership_to_check[name] = set(ml_membership[name])
         else:
-            c_ms = set([x[0] for x in six.iteritems(Mailman.MailList.MailList(
-                str(g.name),
-                lock=False
-            ).members)])
-        ml_members[str(g.name)] = c_ms
+            todo['create'].append((name, six.text_type(g.humanName)))
+            membership_to_check[name] = set()
+
     # Check which memberships are missing in the current mailing lists
     for rel in mm_rels:
-        em = rel['who'].canonical_email
+        em = rel['who'].canonical_email.encode()
         gname = gid2name[rel['with']]
-        if em not in ml_members[gname]:
+        if em not in membership_to_check[gname]:
             if gname not in todo['add']:
                 todo['add'][gname] = []
             todo['add'][gname].append(em)
         else:
-            ml_members[gname].remove(em)
+            membership_to_check[gname].remove(em)
+
     # Check which memberships are superfluous in the current mailing lists
-    for n in ml_names:
-        if n not in ml_members:
+    for n in ml_membership:
+        if n not in membership_to_check:
             logging.warning("Unaccounted e-maillist %s" % n)
             continue
-        for em in ml_members[n]:
+        for em in membership_to_check[n]:
             if n not in todo['remove']:
                 todo['remove'][n] = []
             todo['remove'][n].append(em)

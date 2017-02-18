@@ -16,12 +16,6 @@ from kn.base.conf import DT_MAX, DT_MIN
 from kn.leden import giedo  # noqa: F401
 from kn.leden.date import now
 from kn.leden.mongo import ObjectId, _id  # noqa: F401
-from kn.utils.mailman import import_mailman  # noqa: F401
-
-try:
-    import Mailman.MailList  # noqa: F401 isort:skip
-except ImportError:
-    pass
 
 
 def qrel(who=-1, _with=-1, how=-1, _from=None, until=None):

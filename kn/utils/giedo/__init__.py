@@ -43,6 +43,10 @@ class Giedo(WhimDaemon):
             self.moniek = WhimClient(settings.MONIEK_SOCKET)
         except:
             self.l.exception("Couldn't connect to moniek")
+        try:
+            self.hans = WhimClient(settings.HANS_SOCKET)
+        except:
+            self.l.exception("Couldn't connect to hans")
         self.mirte = mirte.get_a_manager()
         self.threadPool = self.mirte.get_a('threadPool')
         self.operation_lock = threading.Lock()
@@ -50,7 +54,7 @@ class Giedo(WhimDaemon):
         self.ss_actions = (
             ('postfix', self.daan, self._gen_postfix),
             ('postfix-slm', self.daan, self._gen_postfix_slm),
-            ('mailman', self.daan, self._gen_mailman),
+            ('mailman', self.hans, self._gen_mailman),
             ('forum', self.daan, self._gen_forum),
             ('unix', self.cilia, self._gen_unix),
             ('wiki', self.daan, self._gen_wiki),
@@ -79,9 +83,8 @@ class Giedo(WhimDaemon):
                 'map': generate_postfix_map(self)}
 
     def _gen_mailman(self):
-        return {'type': 'mailman',
-                'changes': generate_mailman_changes(
-                        self)}
+        return {'type': 'maillist-apply-changes',
+                'changes': generate_mailman_changes(self)}
 
     def _gen_wiki(self):
         return {'type': 'wiki',
@@ -194,6 +197,11 @@ class Giedo(WhimDaemon):
             return self.last_sync_ts
         elif d['type'] in ('fin-get-account', 'fin-get-debitors'):
             return self.moniek.send(d)
+        elif d['type'] in ('maillist-get-moderated-lists',
+                           'maillist-activate-moderation',
+                           'maillist-get-moderator-cookie',
+                           'maillist-deactivate-moderation'):
+            return self.hans.send(d)
         else:
             logging.warn("Unknown command: %s" % d['type'])
 

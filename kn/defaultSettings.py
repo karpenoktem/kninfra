@@ -77,7 +77,7 @@ def defaultSettings(glbls):
     d.MODERATORS_GROUP = 'moderators'
     d.MOD_UI_URI = '/mailman/admindb/%s'
     d.MOD_RENEW_INTERVAL = datetime.timedelta(0, 15 * 60)
-    d.MOD_DESIRED_URI_PREFIX = d.SCHEME + '://www.' + d.DOMAINNAME
+    d.MOD_DESIRED_URI_PREFIX = d.SCHEME + '://' + d.DOMAINNAME
 
     d.MEDIAWIKI_PATH = '/srv/' + d.DOMAINNAME + '/htdocs/mediawiki'
 
@@ -88,6 +88,7 @@ def defaultSettings(glbls):
     )
 
     d.GIEDO_SOCKET = '/var/run/infra/S-giedo'
+    d.HANS_SOCKET = '/var/run/infra/S-hans'
     d.DAAN_SOCKET = '/var/run/infra/S-daan'
     d.CILIA_SOCKET = '/var/run/infra/S-cilia'
     d.MONIEK_SOCKET = '/var/run/infra/S-moniek'

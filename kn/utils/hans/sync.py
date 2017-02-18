@@ -1,36 +1,40 @@
-from __future__ import absolute_import
-
 import logging
-import os
-from subprocess import call
+import os.path
+import subprocess
 
 from django.conf import settings
-from django.utils import six
 
-from kn.utils.mailman import import_mailman
-
-if six.PY2:  # HACK see #438
-    import_mailman()
-    from Mailman import (Utils, MailList,  # noqa: E402 isort:skip
-                         UserDesc, Errors)
+from kn.utils.hans import mailman
 
 
-def apply_mailman_changes(daan, changes):
+def maillist_get_membership(hans):
+    ret = {}
+    for list_name in mailman.Utils.list_names():
+        lst = mailman.MailList.MailList(list_name, lock=False)
+        ret[list_name] = tuple(lst.members)
+    return ret
+
+
+def maillist_apply_changes(hans, changes):
     mlo = {}
 
     def ensure_opened(l):
         if l in mlo:
             return True
         try:
-            mlo[l] = MailList.MailList(l)
+            mlo[l] = mailman.MailList.MailList(l)
             return True
-        except Errors.MMUnknownListError:
+        except mailman.Errors.MMUnknownListError:
             logging.warn("mailman: could not open %s" % l)
         return False
     for name, humanName in changes['create']:
         newlist = os.path.join(settings.MAILMAN_PATH, 'bin/newlist')
-        ret = call([newlist, '-q', name, settings.MAILMAN_DEFAULT_OWNER,
-                    settings.MAILMAN_DEFAULT_PASSWORD])
+        ret = subprocess.call([
+            newlist,
+            '-q',
+            name,
+            settings.MAILMAN_DEFAULT_OWNER,
+            settings.MAILMAN_DEFAULT_PASSWORD])
         if ret != 0:
             logging.error("bin/newlist failed")
             continue
@@ -54,8 +58,8 @@ def apply_mailman_changes(daan, changes):
             if not ensure_opened(l):
                 continue
             for em in changes['add'][l]:
-                pw = Utils.MakeRandomPassword()
-                desc = UserDesc.UserDesc(em, '', pw, False)
+                pw = mailman.Utils.MakeRandomPassword()
+                desc = mailman.UserDesc.UserDesc(em, '', pw, False)
                 mlo[l].ApprovedAddMember(desc, False, False)
         for l in changes['remove']:
             if not ensure_opened(l):
@@ -70,5 +74,3 @@ def apply_mailman_changes(daan, changes):
         for ml in mlo.values():
             ml.Save()
             ml.Unlock()
-
-# vim: et:sta:bs=2:sw=4:
