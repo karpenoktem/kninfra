@@ -49,6 +49,7 @@ $wgLanguageCode = "nl";
 $wgSecretKey = "{{ pillar['secrets']['wiki_key'] }}";
 $wgUpgradeKey = "{{ pillar['secrets']['wiki_upgrade_key'] }}";
 
+wfLoadSkin('Vector');
 $wgDefaultSkin = "vector";
 
 $wgRightsPage = "";
