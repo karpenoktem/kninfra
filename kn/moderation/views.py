@@ -26,9 +26,9 @@ def redirect(request, name):
         return HttpResponse(_("Toegang geweigerd"))
     if name not in settings.MODED_MAILINGLISTS:
         raise Http404
-    cookie = giedo.maillist_get_moderator_cookie(name)
+    cookie_name, cookie_value = giedo.maillist_get_moderator_cookie(name)
     r = HttpResponseRedirect(settings.MOD_UI_URI % name)
-    r[cookie[0]] = cookie[1]
+    r[cookie_name] = cookie_value
     return r
 
 
