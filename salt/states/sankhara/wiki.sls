@@ -1,10 +1,18 @@
+jessie backports apt source:
+    pkgrepo.managed:
+        - name: deb http://http.debian.net/debian jessie-backports main
+        - file: /etc/apt/sources.list.d/backports.list
+mediawiki from backports:
+    pkg.installed:
+        - pkgs:
+            - mediawiki
+        - fromrepo: jessie-backports
 wiki packages:
     pkg.installed:
         - pkgs:
             - php5-intl
             - memcached
             - imagemagick
-            - mediawiki
 /etc/nginx/sankhara.d/10-wiki.conf:
     file.managed:
         - source: salt://sankhara/wiki.nginx.conf
