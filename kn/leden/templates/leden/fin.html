@@ -14,12 +14,67 @@
 
 {% block body %}
 
-<h1>Test</h1>
 
-{{ year }}
 
-{{ handle }}
+{% if obj.type == 'account' %}
+<h1>{% for anc in obj.ancestors %}<a href="{{ anc.prefix }}{{ anc.name }}:">{{ anc.name }}:</a>
+	{% endfor %}</h1>
+<p>(id: {{ obj.id }} )</p>
+<ul>
+	{% if obj.children %}
+	{% for child in obj.children %}
+	<li>
+		<a href="{{ handle }}:{{ child }}">{{ child }}</a>
+	</li>
+	{% endfor %}
+	{% endif %}
+</ul>
 
-{{ obj }}
+
+{% if obj.has_transactions %}
+<table class="balans">
+	<thead>
+		<tr>
+			<th>{% trans "nummer" %}</th>
+			<th>{% trans "datum " %}</th>
+			<th>{% trans "omschrijving / post" %}</th>
+			<th class="th-value">{% trans "bedrag (€)" %}</th>
+			<th class="th-value">{% trans "som (€)" %}</th>
+		</tr>
+	</thead>
+	{% for day in obj.days %}
+		{% for tr in day.transactions %}
+		<tbody>
+			<tr>
+				<td>{{ tr.num }}</td>
+				<td>{{ tr.day }}</td>
+				<td>{{ tr.description }}</td>
+				<td class="value"><span class="sum">{{ tr.value }}</span></td>
+				<td class="value"><span class="sum">{{ tr.sum }}</span></td>
+			</tr>
+			{% for sp in tr.splits %}
+			<tr>
+				<td></td>
+				<td></td>
+				<td>{{ sp.account }} {% if mut.memo %}({{ mut.memo }}){% endif %}</td>
+				<td class="value">{{ sp.value }}</td>
+				{% if sp.counts %}
+				<td class="value">{{ sp.sum }}</td>
+				{% else %}
+				<td class="value"></td>
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</tbody>
+		{% endfor %}
+	{% endfor %}
+</table>
+{% endif %}
+{% endif %}
+
+obj: {{ obj }}
+
+
+handle: {{ handle }}
 
 {% endblock %}
