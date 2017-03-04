@@ -74,7 +74,7 @@ urlpatterns = [
     url(_(r'^boekenlezers/presentielijst$'),
         views.boekenlezers_name_check, name='bl-namecheck'),
     url(_(r'^fin(?P<year>\d+)/(?P<handle>.*)$'),
-        views.fin, name="fin"),
+        views.fin_, name="fin"),
     url(_(r'^relaties/(?P<_id>[^/]+)/beindig$'),
         views.relation_end, name='relation-end'),
     url(_(r'^relaties/begin$'),

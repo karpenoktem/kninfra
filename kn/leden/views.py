@@ -905,7 +905,7 @@ def boekenlezers_name_check(request):
 
 
 @login_required
-def fin(request, year, handle):
+def fin_(request, year, handle):
     year = int(year)
 
     if 'boekenlezers' not in request.user.cached_groups_names:
