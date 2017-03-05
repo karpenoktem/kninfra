@@ -1,11 +1,11 @@
 import time
+
 import six
 
 from django.conf import settings
 
-from kn.utils.whim import WhimClient
-
 import kn.leden.entities as Es
+from kn.utils.whim import WhimClient
 
 __GIEDO = None
 

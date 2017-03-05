@@ -2,6 +2,8 @@ from __future__ import absolute_import
 
 import datetime
 
+import six
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect
