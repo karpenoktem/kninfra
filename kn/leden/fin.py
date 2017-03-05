@@ -1,8 +1,9 @@
 from decimal import Decimal
 from time import gmtime, strftime
-import kn.leden.entities as Es
 
 from django.conf import settings
+
+import kn.leden.entities as Es
 
 
 def quaestor():

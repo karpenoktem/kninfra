@@ -3,9 +3,10 @@ import _import  # noqa: F401
 import sys
 
 from common import args_to_users
+from six.moves import reload_module
 
 if sys.stdout.encoding is None:
-    reload(sys)
+    reload_module(sys)
     sys.setdefaultencoding('utf-8')
 
 

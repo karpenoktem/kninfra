@@ -37,10 +37,9 @@ from kn.base.http import JsonHttpResponse, redirect_to_referer
 from kn.base.mail import render_then_email
 from kn.base.text import humanized_enum
 from kn.fotos.utils import resize_proportional
-from kn.leden import giedo
+from kn.leden import fin, giedo
 from kn.leden.auth import login_or_basicauth_required
 from kn.leden.date import date_to_dt, now
-from kn.leden import fin
 from kn.leden.forms import (AddGroupForm, AddStudyForm, AddUserForm,
                             ChangePasswordForm)
 from kn.leden.mongo import _id

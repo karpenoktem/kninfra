@@ -1,6 +1,8 @@
 import _import  # noqa: F401
 import sys
 
+from six.moves import reload_module
+
 import kn.leden.entities as Es
 
 
@@ -15,7 +17,7 @@ def main():
 
 if __name__ == '__main__':
     if sys.stdout.encoding is None:
-        reload(sys)
+        reload_module(sys)
         sys.setdefaultencoding('utf-8')
     main()
 

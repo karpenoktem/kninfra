@@ -4,6 +4,7 @@ import sys
 from optparse import OptionParser
 
 from common import args_to_users, print_table
+from six.moves import reload_module
 
 from django.utils import six
 
@@ -14,7 +15,7 @@ op.add_option('-s', '--separator', dest='separator', default=' ',
 options, args = op.parse_args()
 
 if sys.stdout.encoding is None:
-    reload(sys)
+    reload_module(sys)
     sys.setdefaultencoding('utf-8')
 data = []
 for u in args_to_users(args):
