@@ -44,8 +44,8 @@
   </slot>
 </book:slots>
 <gnc:count-data cd:type="commodity">1</gnc:count-data>
-<gnc:count-data cd:type="account">23</gnc:count-data>
-<gnc:count-data cd:type="transaction">6</gnc:count-data>
+<gnc:count-data cd:type="account">25</gnc:count-data>
+<gnc:count-data cd:type="transaction">9</gnc:count-data>
 <gnc:commodity version="2.0.0">
   <cmdty:space>ISO4217</cmdty:space>
   <cmdty:id>EUR</cmdty:id>
@@ -154,7 +154,7 @@
     </slot>
     <slot>
       <slot:key>last-num</slot:key>
-      <slot:value type="string">123</slot:value>
+      <slot:value type="string">987</slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">62516ceb5c1acd46f9d2ee9466cee408</act:parent>
@@ -230,7 +230,7 @@
     </slot>
     <slot>
       <slot:key>last-num</slot:key>
-      <slot:value type="string">123</slot:value>
+      <slot:value type="string">987</slot:value>
     </slot>
   </act:slots>
   <act:parent type="guid">438ae15afdd24d1af6b6b942071108ce</act:parent>
@@ -342,6 +342,23 @@
   <act:parent type="guid">7b8c995482b4d4e3384f602d8a44081d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
+  <act:name>LoCo</act:name>
+  <act:id type="guid">106ce342dba6f9c45842762f93671d1c</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>color</slot:key>
+      <slot:value type="string">Not Set</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">7b8c995482b4d4e3384f602d8a44081d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
   <act:name>Imbalance-EUR</act:name>
   <act:id type="guid">65204a42428fc56cabd019d2c163717d</act:id>
   <act:type>BANK</act:type>
@@ -406,6 +423,23 @@
 <gnc:account version="2.0.0">
   <act:name>Reglcie</act:name>
   <act:id type="guid">d104f89eeb0ae47ba0adc5dc0a4bc6a1</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>color</slot:key>
+      <slot:value type="string">Not Set</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">a6d62e2f3be556964d342554ff4c4eb1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>LoCo</act:name>
+  <act:id type="guid">a7bee66a8e3a7d43e01eae8455af433f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -582,6 +616,45 @@
   </trn:splits>
 </gnc:transaction>
 <gnc:transaction version="2.0.0">
+  <trn:id type="guid">06d6ca6798926be8b263914f593fc1d9</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:num>987</trn:num>
+  <trn:date-posted>
+    <ts:date>2017-02-06 00:00:00 +0100</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2017-02-06 19:11:11 +0100</ts:date>
+  </trn:date-entered>
+  <trn:description>terugkoop stembolts</trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>date-posted</slot:key>
+      <slot:value type="gdate">
+        <gdate>2017-02-06</gdate>
+      </slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">8c95f36bbf73dc60b7011e8ae42d60d4</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>50000/100</split:value>
+      <split:quantity>50000/100</split:quantity>
+      <split:account type="guid">e1cc1a46a301d0d27639a52a48a85469</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">a6641a6e8d24a24d7a04db190a7e5fcc</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-50000/100</split:value>
+      <split:quantity>-50000/100</split:quantity>
+      <split:account type="guid">106ce342dba6f9c45842762f93671d1c</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
   <trn:id type="guid">db0c62bb546753eb1f529cfdb3c16dd3</trn:id>
   <trn:currency>
     <cmdty:space>ISO4217</cmdty:space>
@@ -656,6 +729,76 @@
       <split:reconciled-state>n</split:reconciled-state>
       <split:value>-987/100</split:value>
       <split:quantity>-987/100</split:quantity>
+      <split:account type="guid">945d5834a29dee7ceb7b49ee2a0d2172</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">22049cee31d4a4ffa20b006297dbead7</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:date-posted>
+    <ts:date>2017-02-06 00:00:00 +0100</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2017-02-06 19:10:55 +0100</ts:date>
+  </trn:date-entered>
+  <trn:description></trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>date-posted</slot:key>
+      <slot:value type="gdate">
+        <gdate>2017-02-06</gdate>
+      </slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">eba9fcb0d1d3866dc1e9abd71b89333c</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>0/100</split:value>
+      <split:quantity>0/100</split:quantity>
+      <split:account type="guid">945d5834a29dee7ceb7b49ee2a0d2172</split:account>
+    </trn:split>
+  </trn:splits>
+</gnc:transaction>
+<gnc:transaction version="2.0.0">
+  <trn:id type="guid">15784250edbc4d8ac4fdb5d4e6bdfdaf</trn:id>
+  <trn:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </trn:currency>
+  <trn:num>546</trn:num>
+  <trn:date-posted>
+    <ts:date>2017-02-06 00:00:00 +0100</ts:date>
+  </trn:date-posted>
+  <trn:date-entered>
+    <ts:date>2017-02-06 19:10:06 +0100</ts:date>
+  </trn:date-entered>
+  <trn:description>Stembolts</trn:description>
+  <trn:slots>
+    <slot>
+      <slot:key>date-posted</slot:key>
+      <slot:value type="gdate">
+        <gdate>2017-02-06</gdate>
+      </slot:value>
+    </slot>
+  </trn:slots>
+  <trn:splits>
+    <trn:split>
+      <split:id type="guid">60a24de5762adef1ffc85ca697d6c680</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>12300/100</split:value>
+      <split:quantity>12300/100</split:quantity>
+      <split:account type="guid">a7bee66a8e3a7d43e01eae8455af433f</split:account>
+    </trn:split>
+    <trn:split>
+      <split:id type="guid">94feb01b02c22029ac2f95a98ee05461</split:id>
+      <split:reconciled-state>n</split:reconciled-state>
+      <split:value>-12300/100</split:value>
+      <split:quantity>-12300/100</split:quantity>
       <split:account type="guid">945d5834a29dee7ceb7b49ee2a0d2172</split:account>
     </trn:split>
   </trn:splits>

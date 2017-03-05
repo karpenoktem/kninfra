@@ -16,22 +16,51 @@
 <h1>{% trans "Balans" %}</h1>
 {% if balans.in_books %}
 <p>
+
 {% if balans.total < 0 %}
+{% if account == user %}
 {% blocktrans with bedrag=balans.abstotal %}
 Volgens de boekhouding krijg je
 nog <strong>€&nbsp;{{ bedrag }}</strong> van ons.
 {% endblocktrans %}
+{% else %}
+{% blocktrans with bedrag=balans.abstotal naam=account.humanName \
+lidwoord=account.humanName.definite_article.title %}
+{{ lidwoord }} {{ naam }} heeft ons
+dit jaar al <strong>€&nbsp;{{ bedrag }}</strong>
+opgebracht.
+{% endblocktrans %}
+{% endif %}
 {% elif balans.total == 0 %}
+{% if account == user %}
 {% blocktrans %}
 Volgens de boekhouding zijn we elkaar op het moment
 niets verschuldigd (in financiële zin).
 {% endblocktrans %}
+{% else %}
+{% blocktrans with naam=account.humanName \
+lidwoord=account.humanName.definite_article %}
+We hebben dit jaar in totaal nog niets uitgegeven
+voor
+{{ lidwoord }} {{ naam }}.
+{% endblocktrans %}
+{% endif %}
 {% elif balans.total > 0 %}
+{% if account == user %}
 {% blocktrans with bedrag=balans.abstotal %} 
 Volgens de boekhouding ben je 
 ons nog  <strong>€&nbsp;{{ bedrag }}</strong> veschuldigd.
 {% endblocktrans %}
+{% else %}
+{% blocktrans with bedrag=balans.abstotal naam=account.humanName \
+lidwoord=account.humanName.definite_article %}
+We hebben dit jaar al <strong>€&nbsp;{{ bedrag }}</strong>
+uitgegeven voor
+{{ lidwoord }} {{ naam }}.
+{% endblocktrans %}
 {% endif %}
+{% endif %}
+
 </p>
 
 <table class="balans">
@@ -72,18 +101,28 @@ ons nog  <strong>€&nbsp;{{ bedrag }}</strong> veschuldigd.
 
 {% else %} 
 <p>
+{% if user == account %}
 {% blocktrans %}
 Je hebt op het moment nog geen debiteuren- en crediteurenrekening
 in onze boekhouding.  
 {% endblocktrans %}
+{% else %}
+{% blocktrans with name=account.humanName \
+da=account.humanName.definite_article.title %}
+{{ da }} {{ name }} heeft nog geen inkomsten- en uitgavenrekening in onze boekhouding.
+{% endblocktrans %}
+{% endif %}
 </p>
 {% endif %}
+{% if user == account %}
 <p>
-{% blocktrans with rekeningnummer=balans.our_account_number rekeninghouder=balans.our_account_holder %}
+{% blocktrans with rekeningnummer=balans.our_account_number \
+rekeninghouder=balans.our_account_holder %}
 Betalingen kunnen gericht worden aan {{ rekeningnummer }}
 ten name van {{ rekeninghouder }}.
 {% endblocktrans %}
 </p>
+{% endif %}
 <p>
 {% blocktrans with name=quaestor.name email=quaestor.email %}
 Heb je vragen?  Neem dan contact
@@ -97,4 +136,19 @@ boekhouding van {{ datum }}. Betalingen, declaraties en andere gebeurtenissen
 van een latere datum zullen hier binnenkort verschijnen.)
 {% endblocktrans %}
 </p>
+{% if accounts|length > 1 %}
+<form action="" method="get">
+<p>
+{% blocktrans %}
+Bekijk ook de balans van
+{% endblocktrans %}
+<select name="account" onchange="this.form.submit()">
+{% for account,current in accounts %}
+<option value="{{ account.name }}" {% if current %}selected{% endif %}>
+{{ account.humanName.definite_article }} {{ account.humanName }}</option>
+{% endfor %}
+</select>.
+</p>
+</form>
+{% endif %}
 {% endblock %}

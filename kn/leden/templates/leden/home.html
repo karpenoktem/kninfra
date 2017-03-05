@@ -55,12 +55,13 @@ op deze website en daar buiten:{% endblocktrans %}</p>
             zusjesgroepje op Facebook</a>.{% endblocktrans %}</li>
 </ul>
 
-<h2>{% trans "Instellingen" %}</h2>
+<h2>{% trans "Gegevens en instellingen" %}</h2>
 
 <ul>
     <li><a href="{{ user.get_absolute_url }}">{% blocktrans %}Verander je profiel
             (profielfoto, zichbaarheid telefoonnummer){% endblocktrans %}</a></li>
     <li><a href="{% url "chpasswd" %}">{% trans "Verander je wachtwoord" %}</a></li>
+    <li><a href="{% url "balans" %}">{% trans "Bekijk je balans." %}</a></li>
 </ul>
 
 {% endblock %}

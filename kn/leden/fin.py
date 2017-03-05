@@ -3,12 +3,25 @@ from time import gmtime, strftime
 
 from django.conf import settings
 
+import kn.leden.entities as Es
+
 
 def quaestor():
     return {
         "email": "%s@%s" % (settings.QUAESTOR_USERNAME, settings.MAILDOMAIN),
         "name": "de penningmeester"
     }
+
+
+def get_account_entities_of(user):
+    """returns the entities whose accounts the user may inspect:
+    for the moment the user itself and all the committees it belongs to"""
+    comms_id = Es.id_by_name("comms")
+    result = [user]
+    for group in user.cached_groups:
+        if group.has_tag(comms_id):
+            result.append(group)
+    return result
 
 
 class TrInfo:
