@@ -912,36 +912,37 @@ def fin_(request, year, handle):
     if 'boekenlezers' not in request.user.cached_groups_names:
         raise PermissionDenied
 
-    obj = giedo.fin_get_gnucash_object(year, handle)
+    objs = giedo.fin_get_gnucash_object(year, handle)
 
     # compute some values used in the template
-    if obj['type'] == "account":
-        obj['ancestors'] = []
-        prefix = ""
-        for bit in obj['path'].split(":"):
-            obj['ancestors'].append({'prefix': prefix, 'name': bit})
-            prefix +=  bit + ":"
+    for obj in objs:
+        if obj['type'] == "account":
+            obj['ancestors'] = []
+            prefix = ""
+            for bit in obj['path'].split(":"):
+                obj['ancestors'].append({'prefix': prefix, 'name': bit})
+                prefix +=  bit + ":"
 
-        obj['has_transactions'] = False
-        s = Decimal(0)
-        for day in obj['days']:
-            for tr in day['transactions']:
-                obj['has_transactions'] = True
-                old_s = s
-                for sp in tr['splits']:
-                    if sp['account'] == obj['path']:
-                        sp['counts'] = True
-                        s += Decimal(sp['value'])
-                        sp['sum'] = s
-                    else:
-                        sp['counts'] = False
-                tr['sum'] = s
-                tr['value'] = s - old_s
+            obj['has_transactions'] = False
+            s = Decimal(0)
+            for day in obj['days']:
+                for tr in day['transactions']:
+                    obj['has_transactions'] = True
+                    old_s = s
+                    for sp in tr['splits']:
+                        if sp['account'] == obj['path']:
+                            sp['counts'] = True
+                            s += Decimal(sp['value'])
+                            sp['sum'] = s
+                        else:
+                            sp['counts'] = False
+                    tr['sum'] = s
+                    tr['value'] = s - old_s
 
 
     return render_to_response('leden/fin.html',
             {'year': year,
-                'obj': obj,
+                'objs': objs,
                 'handle': handle},
                               context_instance=RequestContext(request))
 

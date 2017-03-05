@@ -60,11 +60,6 @@ def get_gnucash_object(moniek, year, handle):
         return { 'type': 'error', 'message': 'no such year' }
     book = gcf.book
 
-    try:
-        obj = book.obj_by_handle(handle)
-    except KeyError:
-        return { 'type': 'error', 'message': 'no object with this handle' }
-
-    return koertexport.export(book.obj_by_handle(handle))
+    return [ koertexport.export(obj) for obj in book.obj_by_handle(handle) ] 
 
 # vim: et:sta:bs=2:sw=4:

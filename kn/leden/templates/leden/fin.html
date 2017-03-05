@@ -15,16 +15,31 @@
 {% block body %}
 
 
-
+{% if objs|length == 0 %}
+<p>
+{% blocktrans  %}
+Er is geen object in de boekhouding van jaar {{ year }}
+met de code &ldquo;{{ handle }}&rdquo;.
+{% endblocktrans %}
+</p>
+{% else %}
+{% if objs|length > 1 %}
+<p>
+{% blocktrans with aantal=objs|length %}
+Er zijn {{ aantal }} objecten in de boekhouding
+met code &ldquo;{{ handle }}&rdquo;:
+{% endblocktrans %}
+</p>
+{% endif %}
+{% for obj in objs %}
 {% if obj.type == 'account' %}
-<h1>{% for anc in obj.ancestors %}<a href="{{ anc.prefix }}{{ anc.name }}:">{{ anc.name }}:</a>
-	{% endfor %}</h1>
-<p>(id: {{ obj.id }} )</p>
+<h2>Rekening {% for anc in obj.ancestors %}<a href="{{ anc.prefix }}{{ anc.name }}:">{{ anc.name }}:</a>
+	{% endfor %}</h2>
 <ul>
 	{% if obj.children %}
 	{% for child in obj.children %}
 	<li>
-		<a href="{{ handle }}:{{ child }}">{{ child }}</a>
+		<a href="{{ obj.path }}:{{ child }}">{{ child }}</a>
 	</li>
 	{% endfor %}
 	{% endif %}
@@ -37,7 +52,7 @@
 		<tr>
 			<th>{% trans "nummer" %}</th>
 			<th>{% trans "datum " %}</th>
-			<th>{% trans "omschrijving / post" %}</th>
+			<th>{% trans "omschrijving / rekening" %}</th>
 			<th class="th-value">{% trans "bedrag (€)" %}</th>
 			<th class="th-value">{% trans "som (€)" %}</th>
 		</tr>
@@ -46,7 +61,12 @@
 		{% for tr in day.transactions %}
 		<tbody>
 			<tr>
-				<td>{{ tr.num }}</td>
+				<td>
+				{% if tr.num %}
+				<a href="tr{{ tr.num }}">{{ tr.num }}</a>
+				{% else %}
+				<a href="id{{ tr.id }}">id{{ tr.id|truncatechars:9 }}</td>
+				{% endif %}
 				<td>{{ tr.day }}</td>
 				<td>{{ tr.description }}</td>
 				<td class="value"><span class="sum">{{ tr.value }}</span></td>
@@ -56,7 +76,10 @@
 			<tr>
 				<td></td>
 				<td></td>
-				<td>{{ sp.account }} {% if mut.memo %}({{ mut.memo }}){% endif %}</td>
+				<td><a href="{{ sp.account }}">{{ sp.account }}</a>
+				{% if mut.memo %}
+					&mdash; {{ mut.memo }}
+				{% endif %}</td>
 				<td class="value">{{ sp.value }}</td>
 				{% if sp.counts %}
 				<td class="value">{{ sp.sum }}</td>
@@ -70,9 +93,41 @@
 	{% endfor %}
 </table>
 {% endif %}
+{% elif obj.type == "transaction" %}
+<h2>{% trans "Transactie" %} {% if obj.num %}{{ obj.num }}{% else %}<em>{% trans "zonder nummer" %}</em>{% endif %}</h2>
+<p>{{ obj.day }} &mdash; &ldquo;{{ obj.description }}&rdquo;</p>
+<table>
+	<thead>
+		<tr>
+			<th>{% trans "rekening" %}</th>
+			<th>{% trans "noot" %}</th>
+			<th>{% trans "bedrag (€)" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for sp in obj.splits %}
+		<tr>
+			<td><a href="{{ sp.account }}">{{ sp.account }}</a></td>
+			<td>{% if sp.memo %}{{ sp.memo }}{% endif %}</td>
+			<td class="value">{{ sp.value }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
 {% endif %}
-
-obj: {{ obj }}
+<table>
+	<tr>
+		<td>{% trans "jaar" %}:</td>
+		<td><a href=":">{{ year }}</a></td>
+		<td>{% trans "id" %}:</td>
+		<td><a href="id{{ obj.id }}">{{ obj.id }}</a></td>
+		<td>{% trans "type" %}:</td>
+		<td>{{ obj.type }}</td>
+	</tr>
+<table>
+{{ obj }}
+{% endfor %}
+{% endif %} {# objs|length == 0 #}
 
 
 handle: {{ handle }}
