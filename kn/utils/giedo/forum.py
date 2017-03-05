@@ -32,7 +32,7 @@ def generate_forum_changes(self):
                 users[str(m.name)] = m
             for user, realname in c.fetchall():
                 user = user.lower()
-                if realname is not None:
+                if realname and six.PY2:
                     realname = realname.decode('latin1')
                 if user not in users:
                     if user == 'guest':
@@ -41,11 +41,13 @@ def generate_forum_changes(self):
                     logging.info("forum: removing user %s", user)
                 else:
                     if users[user].humanName != realname:
+                        logging.info("forum: updating realname of %s", user)
                         todo['update-realname'].append(
                             (user, six.text_type(users[user].humanName))
                         )
                     del users[user]
             for name, user in six.iteritems(users):
+                logging.info("forum: adding %s", user)
                 todo['add'].append((name, six.text_type(user.humanName),
                                     user.canonical_email))
     finally:

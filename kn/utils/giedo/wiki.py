@@ -30,11 +30,16 @@ def generate_wiki_changes(self):
 
             cur, old = Es.by_name('leden').get_current_and_old_members()
             for m in itertools.chain(cur, old):
+                if str(m.name) == 'admin':
+                    logging.warning("wiki can't handle an admin user")
+                    continue
                 users[str(m.name)] = m
             ausers = set([u for u in users if users[u].is_active])
 
             for uid, user in c.fetchall():
                 user = user.lower()
+                if six.PY3:
+                    user = user.decode()
                 if user not in users:
                     if user == 'admin':
                         continue

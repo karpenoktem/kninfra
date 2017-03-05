@@ -7,3 +7,4 @@ include:
     - .git
     - .logcheck
     - .motd
+    - .python
