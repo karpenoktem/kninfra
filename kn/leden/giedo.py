@@ -1,7 +1,10 @@
 import time
 
+import six
+
 from django.conf import settings
 
+import kn.leden.entities as Es
 from kn.utils.whim import WhimClient
 
 __GIEDO = None
@@ -89,11 +92,12 @@ def openvpn_create(user, want):
                                  'want': want})
 
 
-def fin_get_account(user):
+def fin_get_account(ent):
     return get_giedo_connection().send({
         'type': 'fin-get-account',
-        'name': str(user.name),
-        'full_name': user.full_name
+        'name': six.text_type(ent.name),
+        'full_name': six.text_type(ent.humanName),
+        'account_type': "user" if ent.is_user else "group"
     })
 
 
@@ -101,6 +105,18 @@ def fin_get_debitors():
     return get_giedo_connection().send({
         'type': 'fin-get-debitors'
     })
+
+
+def fin_check_names():
+    users = Es.by_name('leden').as_group().get_members()
+    comms = Es.by_name('comms').as_tag().get_bearers()
+
+    return get_giedo_connection().send({
+        'type': 'fin-check-names',
+        'names': {
+            'user': [six.text_type(user.humanName) for user in users],
+            'group': [six.text_type(com.humanName) for com in comms]
+        }})
 
 
 def maillist_get_moderated_lists():
