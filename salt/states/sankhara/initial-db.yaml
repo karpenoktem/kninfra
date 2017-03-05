@@ -598,6 +598,7 @@ entities:
   tags: [!id '4e6fcc85e60edf3dc0000069']
   types: [group, tag]
 - description: De financiele boeken lezende groep
+  _id: &boekenlezers_id !id 'aaaaaaaaaaadaaaaaaa00009'
   humanNames:
   - {genitive_prefix: van de, human: Boekenlezers, name: boekenlezers}
   names: [boekenlezers]
@@ -806,6 +807,11 @@ relations:
   until: *dt_max
 - who: *admin_id
   with: *loco_id
+  how: null
+  from: *dt_min
+  until: *dt_max
+- who: *admin_id
+  with: *boekenlezers_id
   how: null
   from: *dt_min
   until: *dt_max
