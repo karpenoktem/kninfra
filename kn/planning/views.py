@@ -213,7 +213,7 @@ def planning_manage(request, poolname):
                 scorers = workers_by_score[score]
                 shuffle(scorers)
                 scorers.sort(key=lambda x: shifts[_id(x)]
-                             if shifts[_id(x)] else DT_MIN)
+                             if shifts[_id(x)] else DT_MIN.date())
                 for scorer in scorers:
                     vacancy.suggestions.append({
                         'scorer': scorer,
