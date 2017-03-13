@@ -9,13 +9,13 @@
 {% endblock %}
 
 {% block plain %}\
-{% url "ik-balans" as url_ik_balans %}\
+{% url "balans" as url_balans %}\
 {% blocktrans with quaestor_name=quaestor.name %}\
 Beste {{ first_name }},
 
 Volgens onze boekhouding ben je ons nog € {{ debt }} verschuldigd, zie:
 
-   {{ BASE_URL }}{{ url_ik_balans }}
+   {{ BASE_URL }}{{ url_balans }}
 
 Zou je dit bedrag over kunnen boeken naar {{ account_number }}
 ten name van {{ account_holder }} ?

@@ -26,11 +26,11 @@ def generate_ldap_changes(giedo):
                                           entry['sn'][0],
                                           entry['cn'][0])
         for u in users:
-            uid = str(u.name).encode()
+            uid = str(u.name).encode('utf-8')
             should_have = (uid,
-                           u.canonical_email.encode(),
-                           u.last_name.encode(),
-                           six.text_type(u.humanName).encode())
+                           u.canonical_email.encode('utf-8'),
+                           u.last_name.encode('utf-8'),
+                           six.text_type(u.humanName).encode('utf-8'))
             if uid in unaccounted_for:
                 unaccounted_for.remove(uid)
                 if in_ldap[uid] == should_have:

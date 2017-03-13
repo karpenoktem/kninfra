@@ -37,10 +37,9 @@ from kn.base.http import JsonHttpResponse, redirect_to_referer
 from kn.base.mail import render_then_email
 from kn.base.text import humanized_enum
 from kn.fotos.utils import resize_proportional
-from kn.leden import giedo
+from kn.leden import fin, giedo
 from kn.leden.auth import login_or_basicauth_required
 from kn.leden.date import date_to_dt, now
-from kn.leden.fin import BalansInfo, quaestor
 from kn.leden.forms import (AddGroupForm, AddStudyForm, AddUserForm,
                             ChangePasswordForm)
 from kn.leden.mongo import _id
@@ -629,7 +628,7 @@ def fiscus_debtmail(request):
 
     ctx = {
         'BASE_URL': settings.BASE_URL,
-        'quaestor': quaestor(),
+        'quaestor': fin.quaestor(),
         'account_number': settings.BANK_ACCOUNT_NUMBER,
         'account_holder': settings.BANK_ACCOUNT_HOLDER,
     }
@@ -872,11 +871,35 @@ def ik_openvpn_download(request, filename):
 
 
 @login_required
-def ik_balans(request):
-    balans = giedo.fin_get_account(request.user)
-    return render_to_response('leden/ik_balans.html',
-                              {'balans': BalansInfo(balans),
-                               'quaestor': quaestor()},
+def balans(request):
+    accounts = fin.get_account_entities_of(request.user)
+
+    account = request.user
+    if 'account' in request.GET:
+        account = Es.by_name(request.GET['account'])
+        if not account:
+            raise Http404
+
+    accounts = [(a, a == account) for a in accounts]
+
+    balans = giedo.fin_get_account(account)
+    return render_to_response('leden/balans.html',
+                              {'balans': fin.BalansInfo(balans),
+                               'quaestor': fin.quaestor(),
+                               'accounts': accounts,
+                               'account': account},
+                              context_instance=RequestContext(request))
+
+
+@login_required
+def boekenlezers_name_check(request):
+    if 'boekenlezers' not in request.user.cached_groups_names:
+        raise PermissionDenied
+
+    results = giedo.fin_check_names()
+
+    return render_to_response('leden/bl-namecheck.html',
+                              {'results': results},
                               context_instance=RequestContext(request))
 
 
