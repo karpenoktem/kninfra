@@ -80,6 +80,7 @@ def defaultSettings(glbls):
     d.MOD_DESIRED_URI_PREFIX = d.SCHEME + '://' + d.DOMAINNAME
 
     d.MEDIAWIKI_PATH = '/srv/' + d.DOMAINNAME + '/htdocs/mediawiki'
+    d.MEDIAWIKI_USER = 'www-data'
 
     d.ADMINS = (
         ('Bas Westerbaan', 'bas@karpenoktem.nl'),
