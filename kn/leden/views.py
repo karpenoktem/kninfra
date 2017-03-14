@@ -927,9 +927,14 @@ def fin_(request, year, handle):
             s = Decimal(0)
             for day in obj['days']:
                 for tr in day['transactions']:
+                    checktypes = set()
+                    for check in tr['checks']:
+                        checktypes.add(check['type'])
                     obj['has_transactions'] = True
                     old_s = s
                     for sp in tr['splits']:
+                        for check in sp['checks']:
+                            checktypes.add(check['type'])
                         if sp['account'] == obj['path']:
                             sp['counts'] = True
                             s += Decimal(sp['value'])
@@ -938,7 +943,12 @@ def fin_(request, year, handle):
                             sp['counts'] = False
                     tr['sum'] = s
                     tr['value'] = s - old_s
-
+                    if 'error' in checktypes:
+                        tr['checktype']='error'
+                    elif 'warning' in checktypes:
+                        tr['checktype'] = 'warning'
+                    else:
+                        tr['checktype'] = 'none'
 
     return render_to_response('leden/fin.html',
             {'year': year,

@@ -33,17 +33,37 @@ met code &ldquo;{{ handle }}&rdquo;:
 {% endif %}
 {% for obj in objs %}
 {% if obj.type == 'account' %}
-<h2>Rekening {% for anc in obj.ancestors %}<a href="{{ anc.prefix }}{{ anc.name }}:">{{ anc.name }}:</a>
+<h2>{% trans "Rekening" %} {% for anc in obj.ancestors %}<a href="{{ anc.prefix }}{{ anc.name }}:">{{ anc.name }}:</a>
 	{% endfor %}</h2>
-<ul>
 	{% if obj.children %}
-	{% for child in obj.children %}
-	<li>
-		<a href="{{ obj.path }}:{{ child }}">{{ child }}</a>
-	</li>
+	<table>
+	<thead>
+		<tr>
+			<th>{% trans "naam" %}</th>
+			<th>{% trans "begin" %}</th>
+			<th>{% trans "eind" %}</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<th>{% trans "totaal" %}</th>
+			<th>{{ obj.opening_balance }}</th>
+			<th>{{ obj.balance }}</th>
+		</tr>
+	</tfoot>
+	<tbody>
+	{% for name, child in obj.children.items %}
+	<tr>
+		<td>
+		<a href="{{ obj.path }}:{{ name }}">{{ name }}</a>
+		</td>
+		<td>{{ child.opening_balance }}</td>
+		<td>{{ child.balance }}</td>
+	</tr>
 	{% endfor %}
+	</tbody>
+	</table>
 	{% endif %}
-</ul>
 
 
 {% if obj.has_transactions %}
@@ -63,11 +83,21 @@ met code &ldquo;{{ handle }}&rdquo;:
 			<tr>
 				<td>
 				{% if tr.num %}
-				<a href="tr{{ tr.num }}">{{ tr.num }}</a>
+				<a href="tr{{ tr.num }}"><span class="check-{{ tr.checktype }}">{{ tr.num }}</span></a>
 				{% else %}
 				<a href="id{{ tr.id }}">id{{ tr.id|truncatechars:9 }}</td>
 				{% endif %}
-				<td>{{ tr.day }}</td>
+				<td>
+				{% if forloop.first %}
+				{% if tr.day %}
+					{{ tr.day }}
+				{% else %}
+				&lowast;
+				{% endif %}
+				{% else %}
+				&mdash;
+				{% endif %}
+				</td>
 				<td>{{ tr.description }}</td>
 				<td class="value"><span class="sum">{{ tr.value }}</span></td>
 				<td class="value"><span class="sum">{{ tr.sum }}</span></td>
@@ -96,12 +126,16 @@ met code &ldquo;{{ handle }}&rdquo;:
 {% elif obj.type == "transaction" %}
 <h2>{% trans "Transactie" %} {% if obj.num %}{{ obj.num }}{% else %}<em>{% trans "zonder nummer" %}</em>{% endif %}</h2>
 <p>{{ obj.day }} &mdash; &ldquo;{{ obj.description }}&rdquo;</p>
+{% for check in obj.checks %}
+<p><span class="check-{{ check.type }}">{{ check.name }}: {{ check.description }}</span></p>
+{% endfor %}
 <table>
 	<thead>
 		<tr>
 			<th>{% trans "rekening" %}</th>
 			<th>{% trans "noot" %}</th>
 			<th>{% trans "bedrag (€)" %}</th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -110,6 +144,11 @@ met code &ldquo;{{ handle }}&rdquo;:
 			<td><a href="{{ sp.account }}">{{ sp.account }}</a></td>
 			<td>{% if sp.memo %}{{ sp.memo }}{% endif %}</td>
 			<td class="value">{{ sp.value }}</td>
+			<td>
+			{% for check in sp.checks %} 
+			<span class="check-{{ check.type }}">{{ check.name }}: {{ check.description }}</span>
+			{% endfor %}
+			</td>
 		</tr>
 		{% endfor %}
 	</tbody>
