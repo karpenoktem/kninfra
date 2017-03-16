@@ -132,6 +132,7 @@ met code &ldquo;{{ handle }}&rdquo;:
 <table>
 	<thead>
 		<tr>
+			<th>{% trans "id" %}</th>
 			<th>{% trans "rekening" %}</th>
 			<th>{% trans "noot" %}</th>
 			<th>{% trans "bedrag (€)" %}</th>
@@ -141,8 +142,13 @@ met code &ldquo;{{ handle }}&rdquo;:
 	<tbody>
 		{% for sp in obj.splits %}
 		<tr>
+			<td><a href="./id{{ sp.id }}">{{ sp.id }}</a></td>
 			<td><a href="{{ sp.account }}">{{ sp.account }}</a></td>
-			<td>{% if sp.memo %}{{ sp.memo }}{% endif %}</td>
+			<td>{% if sp.memo %}
+				{{ sp.memo }}
+			{% else %}
+			<em>{% trans "geen" %}</em>
+			{% endif %}</td>
 			<td class="value">{{ sp.value }}</td>
 			<td>
 			{% for check in sp.checks %} 
@@ -152,6 +158,35 @@ met code &ldquo;{{ handle }}&rdquo;:
 		</tr>
 		{% endfor %}
 	</tbody>
+</table>
+{% elif obj.type == "split" %}
+<h2>{% trans "Split" %} {{ obj.id }}</h2>
+{% for check in obj.checks %}
+<p><span class="check-{{ check.type }}">{{ check.name }}: {{ check.description }}</span></p>
+{% endfor %}
+<table>
+	<tbody>
+		<tr>
+			<th>{% trans "id" %}</th>
+			<td><a href="./id{{ obj.id }}">{{ obj.id }}</a></td>
+		</tr>
+		<tr>
+			<th>{% trans "transactie" %}</th>
+			<td><a href="./tr{{ obj.tr }}">{{ obj.tr }}</a></td>
+		</tr>
+		<tr>
+			<th>{% trans "rekening" %}</th>
+			<td><a href="./{{ obj.account }}">{{ obj.account }}</a></td>
+		</tr>
+		<tr>
+			<th>{% trans "bedrag (€)" %}</th>
+			<td class="value">{{ obj.value }}</td>
+		</tr>
+		<tr>
+			<th>{% trans "noot" %}</th>
+			<td>{{ obj.memo }}</td>
+		</tr>
+	<tbody>
 </table>
 {% endif %}
 <table>
