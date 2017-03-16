@@ -905,7 +905,7 @@ def boekenlezers_name_check(request):
 
 
 @login_required
-def fin_(request, year, handle):
+def fin_show(request, year, handle):
     year = int(year)
     handle = urllib.unquote(handle)
 
@@ -921,7 +921,7 @@ def fin_(request, year, handle):
             prefix = ""
             for bit in obj['path'].split(":"):
                 obj['ancestors'].append({'prefix': prefix, 'name': bit})
-                prefix +=  bit + ":"
+                prefix += bit + ":"
 
             obj['has_transactions'] = False
             s = Decimal(0)
@@ -944,17 +944,33 @@ def fin_(request, year, handle):
                     tr['sum'] = s
                     tr['value'] = s - old_s
                     if 'error' in checktypes:
-                        tr['checktype']='error'
+                        tr['checktype'] = 'error'
                     elif 'warning' in checktypes:
                         tr['checktype'] = 'warning'
                     else:
                         tr['checktype'] = 'none'
 
-    return render_to_response('leden/fin.html',
-            {'year': year,
-                'objs': objs,
-                'handle': handle},
+    return render_to_response('leden/fin-show.html',
+                              {'year': year,
+                               'objs': objs,
+                               'handle': handle},
                               context_instance=RequestContext(request))
+
+
+@login_required
+def fin_errors(request, year):
+    year = int(year)
+
+    if 'boekenlezers' not in request.user.cached_groups_names:
+        raise PermissionDenied
+
+    errors = giedo.fin_get_errors(year)
+
+    return render_to_response('leden/fin-errors.html',
+                              {'year': year,
+                               'errors': errors},
+                              context_instance=RequestContext(request))
+
 
 def language(request):
     return HttpResponse(str(request.LANGUAGE_CODE))

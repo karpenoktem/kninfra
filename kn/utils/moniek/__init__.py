@@ -34,6 +34,8 @@ class Moniek(WhimDaemon):
             return fin.check_names(self, d['names'])
         elif d['type'] == 'fin-get-gnucash-object':
             return fin.get_gnucash_object(self, d['year'], d['handle'])
+        elif d['type'] == 'fin-get-errors':
+            return fin.get_errors(self, d['year'])
         else:
             logging.info('unknown command type: %s', repr(d['type']))
 
@@ -53,6 +55,7 @@ class Moniek(WhimDaemon):
         updated_gcf = koerttools.open_yaml(path, onlyafter=onlyafter)
         if updated_gcf is not None:
             self._gcf_by_year[year] = updated_gcf
+            logging.info('loaded new version of fin%s' % (year,))
         return self._gcf_by_year[year]
 
 # vim: et:sta:bs=2:sw=4:
