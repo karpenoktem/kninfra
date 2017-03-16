@@ -18,6 +18,12 @@ class Moniek(WhimDaemon):
         with open(settings.FIN_YAML_PATH) as f:
             self.settings = yaml.load(f)
 
+        self._gcf_by_year = {}
+
+        # populate cache
+        for year in self.settings['years']:
+            self.gcf_by_year(year)
+
     def handle(self, d):
         if d['type'] == 'fin-get-account':
             return fin.get_account(
@@ -38,9 +44,15 @@ class Moniek(WhimDaemon):
     def gcf_by_year(self, year):
         if year not in self.settings['years']:
             return None
-        # TODO: add more caching?
+        onlyafter = None
+        if year in self._gcf_by_year:
+            cached_gcf = self._gcf_by_year[year]
+            onlyafter = max(cached_gcf.mtime, cached_gcf.yamltime)
         relpath = self.settings['years'][year]
-        path = os.path.join(os.path.dirname(settings.FIN_YAML_PATH),relpath)
-        return koerttools.open_yaml(path)
+        path = os.path.join(os.path.dirname(settings.FIN_YAML_PATH), relpath)
+        updated_gcf = koerttools.open_yaml(path, onlyafter=onlyafter)
+        if updated_gcf is not None:
+            self._gcf_by_year[year] = updated_gcf
+        return self._gcf_by_year[year]
 
 # vim: et:sta:bs=2:sw=4:
