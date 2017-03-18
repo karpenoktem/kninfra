@@ -73,6 +73,8 @@ urlpatterns = [
         views.fiscus_debtmail, name='fiscus-debtmail'),
     url(_(r'^boekenlezers/presentielijst$'),
         views.boekenlezers_name_check, name='bl-namecheck'),
+    url(_(r'^fin$'), views.fins, name="fins"),
+    url(_(r'^fin(?P<year>\d+)$'), views.fin_overview, name="fin"),
     url(_(r'^fin(?P<year>\d+)/errors$'),
         views.fin_errors, name="fin-errors"),
     url(_(r'^fin(?P<year>\d+)/show/(?P<handle>.*)$'),

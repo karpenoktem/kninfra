@@ -71,4 +71,8 @@ def get_errors(moniek, year):
     return koertexport.export_checks_of_book(gcf.book)
 
 
+def get_years(moniek):
+    return moniek.years
+
+
 # vim: et:sta:bs=2:sw=4:

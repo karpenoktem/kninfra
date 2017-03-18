@@ -926,6 +926,15 @@ def fin_show(request, year, handle):
             obj['has_transactions'] = False
             s = Decimal(0)
             for day in obj['days']:
+                checktypes = set()
+                for check in day['checks']:
+                    checktypes.add(check['type'])
+                if 'error' in checktypes:
+                    day['checktype'] = 'error'
+                elif 'warning' in checktypes:
+                    day['checktype'] = 'warning'
+                else:
+                    day['checktype'] = 'none'
                 for tr in day['transactions']:
                     checktypes = set()
                     for check in tr['checks']:
@@ -969,6 +978,30 @@ def fin_errors(request, year):
     return render_to_response('leden/fin-errors.html',
                               {'year': year,
                                'errors': errors},
+                              context_instance=RequestContext(request))
+
+
+@login_required
+def fins(request):
+    if 'boekenlezers' not in request.user.cached_groups_names:
+        raise PermissionDenied
+
+    years = giedo.fin_get_years()
+
+    return render_to_response('leden/fins.html',
+                              {'years': years},
+                              context_instance=RequestContext(request))
+
+
+@login_required
+def fin_overview(request, year):
+    year = int(year)
+
+    if 'boekenlezers' not in request.user.cached_groups_names:
+        raise PermissionDenied
+
+    return render_to_response('leden/fin-overview.html',
+                              {'year': year},
                               context_instance=RequestContext(request))
 
 

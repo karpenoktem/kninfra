@@ -36,12 +36,18 @@ class Moniek(WhimDaemon):
             return fin.get_gnucash_object(self, d['year'], d['handle'])
         elif d['type'] == 'fin-get-errors':
             return fin.get_errors(self, d['year'])
+        elif d['type'] == 'fin-get-years':
+            return fin.get_years(self)
         else:
             logging.info('unknown command type: %s', repr(d['type']))
 
     @property
     def gcf(self):
         return self.gcf_by_year(self.settings['current year'])
+
+    @property
+    def years(self):
+        return self.settings['years']
 
     def gcf_by_year(self, year):
         if year not in self.settings['years']:

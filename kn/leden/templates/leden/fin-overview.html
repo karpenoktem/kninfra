@@ -1,0 +1,14 @@
+{% extends "leden/base.html" %}
+
+{% load i18n %}
+
+{% block body %}
+
+<h1>{% trans "Boekhouding jaar " %}{{ year }}</h1>
+
+<ul>
+	<li><a href="./fin{{ year }}/show/:">Bekijk de hoofdrekening.</a></li>
+	<li><a href="./fin{{ year }}/errors">Bekijk de punten van de autokasco.</a></li>
+</ul>
+
+{% endblock %}

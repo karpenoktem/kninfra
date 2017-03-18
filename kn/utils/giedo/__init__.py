@@ -199,6 +199,7 @@ class Giedo(WhimDaemon):
                            'fin-get-debitors',
                            'fin-check-names',
                            'fin-get-gnucash-object',
+                           'fin-get-years',
                            'fin-get-errors'):
             return self.moniek.send(d)
         elif d['type'] in ('maillist-get-moderated-lists',

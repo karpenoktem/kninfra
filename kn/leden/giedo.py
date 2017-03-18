@@ -134,6 +134,12 @@ def fin_get_errors(year):
     })
 
 
+def fin_get_years():
+    return get_giedo_connection().send({
+        'type': 'fin-get-years',
+    })
+
+
 def maillist_get_moderated_lists():
     return get_giedo_connection().send({
         'type': 'maillist-get-moderated-lists'
