@@ -87,10 +87,10 @@ met code &ldquo;{{ handle }}&rdquo;:
 		</tr>
 	</tfoot>
 	<tbody>
-	{% for name, child in obj.children.items %}
+	{% for child in obj.children|dictsort:"name" %}
 	<tr>
 		<td>
-		<a href="{{ obj.path }}:{{ name }}">{{ name }}</a>
+		<a href="{{ obj.path }}:{{ child.name }}">{{ child.name }}</a>
 		</td>
 		<td>{{ child.opening_balance }}</td>
 		<td>{{ child.balance }}</td>
