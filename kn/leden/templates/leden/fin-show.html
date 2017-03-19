@@ -32,9 +32,44 @@ met code &ldquo;{{ handle }}&rdquo;:
 </p>
 {% endif %}
 {% for obj in objs %}
+
+<table>
+	<tr>
+		<th>{% trans "jaar" %}:</th>
+		<td><a href="../../fin{{ year }}">{{ year }}</a></td>
+		<th>{% trans "id" %}:</th>
+		<td>
+		{% if obj.id == None %}
+		<em>{% trans "geen" %}</em>
+		{% else %}
+		<a href="id{{ obj.id }}">{{ obj.id }}</a>
+		{% endif %}
+		</td>
+		<th>{% trans "type" %}:</th>
+		<td>{{ obj.type }}</td>
+	</tr>
+<table>
+<h2>
+	{% if obj.type == "account" %}
+	{% trans "Rekening" %}
+	{% for anc in obj.ancestors %}
+		<a href="{{ anc.prefix }}{{ anc.name }}:">{{ anc.name }}:</a>
+	{% endfor %}
+	{% elif obj.type == "transaction" %}
+	{% trans "Transactie" %}
+	{% if obj.num %}{{ obj.num }}{% else %}
+	<em>{% trans "zonder nummer" %}</em>{% endif %}
+	{% elif obj.type == "split" %}
+	{% trans "Split" %} {{ obj.id|truncatechars:9 }}
+	{% elif obj.type == "accountday" %}
+	{% trans "Dag " %}{{ obj.date }}{% trans " van "%} 
+	<a href="{{ obj.account }}">{{ obj.account }}</a>
+	{% endif %}
+</h2>
+{% for check in obj.checks %}
+<p><span class="check-{{ check.type }}">{{ check.name }}: {{ check.description }}</span></p>
+{% endfor %}
 {% if obj.type == 'account' %}
-<h2>{% trans "Rekening" %} {% for anc in obj.ancestors %}<a href="{{ anc.prefix }}{{ anc.name }}:">{{ anc.name }}:</a>
-	{% endfor %}</h2>
 	{% if obj.children %}
 	<table>
 	<thead>
@@ -128,11 +163,7 @@ met code &ldquo;{{ handle }}&rdquo;:
 </table>
 {% endif %}
 {% elif obj.type == "transaction" %}
-<h2>{% trans "Transactie" %} {% if obj.num %}{{ obj.num }}{% else %}<em>{% trans "zonder nummer" %}</em>{% endif %}</h2>
 <p>{{ obj.day }} &mdash; &ldquo;{{ obj.description }}&rdquo;</p>
-{% for check in obj.checks %}
-<p><span class="check-{{ check.type }}">{{ check.name }}: {{ check.description }}</span></p>
-{% endfor %}
 <table>
 	<thead>
 		<tr>
@@ -146,7 +177,7 @@ met code &ldquo;{{ handle }}&rdquo;:
 	<tbody>
 		{% for sp in obj.splits %}
 		<tr>
-			<td><a href="./id{{ sp.id }}">{{ sp.id }}</a></td>
+			<td><a href="./id{{ sp.id }}">{{ sp.id|truncatechars:9 }}</a></td>
 			<td><a href="{{ sp.account }}">{{ sp.account }}</a></td>
 			<td>{% if sp.memo %}
 				{{ sp.memo }}
@@ -164,16 +195,8 @@ met code &ldquo;{{ handle }}&rdquo;:
 	</tbody>
 </table>
 {% elif obj.type == "split" %}
-<h2>{% trans "Split" %} {{ obj.id }}</h2>
-{% for check in obj.checks %}
-<p><span class="check-{{ check.type }}">{{ check.name }}: {{ check.description }}</span></p>
-{% endfor %}
 <table>
 	<tbody>
-		<tr>
-			<th>{% trans "id" %}</th>
-			<td><a href="./id{{ obj.id }}">{{ obj.id }}</a></td>
-		</tr>
 		<tr>
 			<th>{% trans "transactie" %}</th>
 			<td><a href="./{{ obj.tr }}">{{ obj.tr }}</a></td>
@@ -193,24 +216,47 @@ met code &ldquo;{{ handle }}&rdquo;:
 	<tbody>
 </table>
 {% elif obj.type == 'accountday' %}
-<h2>{% trans "Dag " %}{{ obj.date }}{% trans " van "%} 
-<a href="{{ obj.account }}">{{ obj.account }}</a></h2>
-{% for check in obj.checks %}
-<p><span class="check-{{ check.type }}">{{ check.name }}: {{ check.description }}</span></p>
-{% endfor %}
 <table>
 	<thead>
 		<tr>
-			<th>{% trans "start" %}</th>
+			<th>{% trans "vorige dag" %}</th>
+			<th>{% trans "startbalans" %}</th>
 			<th>{% trans "omzet" %}</th>
-			<th>{% trans "eind" %}</th>
+			<th>{% trans "eindbalans" %}</th>
+			<th>{% trans "volgende dag" %}</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
+			<td>
+			{% if obj.previous == None %}
+			<em>{% trans "geen" %}</em>
+			{% else %}
+			<a href="./day{{ obj.previous }}{{ obj.account }}">
+			{% if obj.previous == "" %}
+			&lowast;
+			{% else %}
+			{{ obj.previous }}
+			{% endif %}
+			</a>
+			{% endif %}
+			</td>
 			<td>{{ obj.starting_balance }}</td>
 			<td>{{ obj.value }}</td>
 			<td>{{ obj.ending_balance }}</td>
+			<td>
+			{% if obj.next == None %}
+			<em>{% trans "geen" %}</em>
+			{% else %}
+			<a href="./day{{ obj.next }}{{ obj.account }}">
+			{% if obj.next == "" %}
+			&lowast;
+			{% else %}
+			{{ obj.next }}
+			{% endif %}
+			</a>
+			{% endif %}
+			</td>
 		</tr>
 	</tbody>
 </table>
@@ -249,17 +295,6 @@ met code &ldquo;{{ handle }}&rdquo;:
 </table>
 
 {% endif %}
-<table>
-	<tr>
-		<td>{% trans "jaar" %}:</td>
-		<td><a href=":">{{ year }}</a></td>
-		<td>{% trans "id" %}:</td>
-		<td><a href="id{{ obj.id }}">{{ obj.id }}</a></td>
-		<td>{% trans "type" %}:</td>
-		<td>{{ obj.type }}</td>
-	</tr>
-<table>
-{{ obj }}
 {% endfor %}
 {% endif %} {# objs|length == 0 #}
 
