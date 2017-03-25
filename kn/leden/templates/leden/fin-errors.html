@@ -24,7 +24,7 @@
 	{% if data.objects %}
 	<p>
 	{% for obj in data.objects %}
-	<a href="../fin{{ year }}/show/{{ obj }}">{{ obj }}</a>
+	<a href="{% url 'fin-show' year obj %}">{{ obj }}</a>
 	{% endfor %}
 	</p>
 	{% endif %}

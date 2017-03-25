@@ -1,6 +1,7 @@
 {% extends "leden/base.html" %}
 
 {% load i18n %}
+{% load leden %}
 
 {% block styles %}
 {{ block.super }}
@@ -36,13 +37,13 @@ met code &ldquo;{{ handle }}&rdquo;:
 <table>
 	<tr>
 		<th>{% trans "jaar" %}:</th>
-		<td><a href="../../fin{{ year }}">{{ year }}</a></td>
+		<td><a href="{% url 'fin' year %}">{{ year }}</a></td>
 		<th>{% trans "id" %}:</th>
 		<td>
 		{% if obj.id == None %}
 		<em>{% trans "geen" %}</em>
 		{% else %}
-		<a href="id{{ obj.id }}">{{ obj.id }}</a>
+		<a href="{% url 'fin-show' year obj.id|id_handle %}">{{ obj.id }}</a>
 		{% endif %}
 		</td>
 		<th>{% trans "type" %}:</th>
@@ -53,7 +54,9 @@ met code &ldquo;{{ handle }}&rdquo;:
 	{% if obj.type == "account" %}
 	{% trans "Rekening" %}
 	{% for anc in obj.ancestors %}
-		<a href="{{ anc.prefix }}{{ anc.name }}:">{{ anc.name }}:</a>
+	<a href="{% url 'fin-show' year anc.prefix|concat:anc.name %}">
+		{{ anc.name }}:
+	</a>
 	{% endfor %}
 	{% elif obj.type == "transaction" %}
 	{% trans "Transactie" %}
@@ -63,7 +66,7 @@ met code &ldquo;{{ handle }}&rdquo;:
 	{% trans "Split" %} {{ obj.id|truncatechars:9 }}
 	{% elif obj.type == "accountday" %}
 	{% trans "Dag " %}{{ obj.date }}{% trans " van "%} 
-	<a href="{{ obj.account }}">{{ obj.account }}</a>
+	<a href="{% url 'fin-show' year obj.account %}">{{ obj.account }}</a>
 	{% endif %}
 </h2>
 {% for check in obj.checks %}
@@ -90,7 +93,10 @@ met code &ldquo;{{ handle }}&rdquo;:
 	{% for child in obj.children|dictsort:"name" %}
 	<tr>
 		<td>
-		<a href="{{ obj.path }}:{{ child.name }}">{{ child.name }}</a>
+		<a href="{% url 'fin-show' year \
+			obj.path|concat:":"|concat:child.name %}">
+			{{ child.name }}
+		</a>
 		</td>
 		<td>{{ child.opening_balance }}</td>
 		<td>{{ child.balance }}</td>
@@ -118,13 +124,14 @@ met code &ldquo;{{ handle }}&rdquo;:
 			<tr>
 				<td>
 				{% if tr.num %}
-				<a href="tr{{ tr.num }}"><span class="check-{{ tr.checktype }}">{{ tr.num }}</span></a>
+				<a href="{% url 'fin-show' year tr.num|tr_handle %}">
+				<span class="check-{{ tr.checktype }}">{{ tr.num }}</span></a>
 				{% else %}
-				<a href="id{{ tr.id }}">id{{ tr.id|truncatechars:9 }}</td>
+				<a href="{% url 'fin-show' year tr.id|id_handle %}">id{{ tr.id|truncatechars:9 }}</td>
 				{% endif %}
 				<td>
 				{% if forloop.first %}
-				<a href="./day{{ tr.day }}{{ obj.path }}">
+				<a href="{% url 'fin-show' year tr.day|day_handle:obj.path %}">
 				<span class="check-{{ day.checktype }}">
 				{% if tr.day %}
 				{{ tr.day }}
@@ -145,7 +152,7 @@ met code &ldquo;{{ handle }}&rdquo;:
 			<tr>
 				<td></td>
 				<td></td>
-				<td><a href="{{ sp.account }}">{{ sp.account }}</a>
+				<td><a href="{% url 'fin-show' year sp.account %}">{{ sp.account }}</a>
 				{% if mut.memo %}
 					&mdash; {{ mut.memo }}
 				{% endif %}</td>
@@ -177,8 +184,8 @@ met code &ldquo;{{ handle }}&rdquo;:
 	<tbody>
 		{% for sp in obj.splits %}
 		<tr>
-			<td><a href="./id{{ sp.id }}">{{ sp.id|truncatechars:9 }}</a></td>
-			<td><a href="{{ sp.account }}">{{ sp.account }}</a></td>
+			<td><a href="{% url 'fin-show' year sp.id|id_handle %}">{{ sp.id|truncatechars:9 }}</a></td>
+			<td><a href="{% url 'fin-show' year sp.account %}">{{ sp.account }}</a></td>
 			<td>{% if sp.memo %}
 				{{ sp.memo }}
 			{% else %}
@@ -199,11 +206,11 @@ met code &ldquo;{{ handle }}&rdquo;:
 	<tbody>
 		<tr>
 			<th>{% trans "transactie" %}</th>
-			<td><a href="./{{ obj.tr }}">{{ obj.tr }}</a></td>
+			<td><a href="{% url 'fin-show' year obj.tr %}">{{ obj.tr }}</a></td>
 		</tr>
 		<tr>
 			<th>{% trans "rekening" %}</th>
-			<td><a href="./{{ obj.account }}">{{ obj.account }}</a></td>
+			<td><a href="{% url 'fin-show' year obj.account %}">{{ obj.account }}</a></td>
 		</tr>
 		<tr>
 			<th>{% trans "bedrag (€)" %}</th>
@@ -232,7 +239,7 @@ met code &ldquo;{{ handle }}&rdquo;:
 			{% if obj.previous == None %}
 			<em>{% trans "geen" %}</em>
 			{% else %}
-			<a href="./day{{ obj.previous }}{{ obj.account }}">
+			<a href="{% url 'fin-show' year obj.previous|day_handle:obj.account %}">
 			{% if obj.previous == "" %}
 			&lowast;
 			{% else %}
@@ -248,7 +255,7 @@ met code &ldquo;{{ handle }}&rdquo;:
 			{% if obj.next == None %}
 			<em>{% trans "geen" %}</em>
 			{% else %}
-			<a href="./day{{ obj.next }}{{ obj.account }}">
+			<a href="{% url 'fin-show' year obj.next|day_handle:obj.account %}">
 			{% if obj.next == "" %}
 			&lowast;
 			{% else %}
@@ -273,9 +280,9 @@ met code &ldquo;{{ handle }}&rdquo;:
 			<tr>
 				<td>
 				{% if tr.num %}
-				<a href="tr{{ tr.num }}"><span class="check-{{ tr.checktype }}">{{ tr.num }}</span></a>
+				<a href="{% url 'fin-show' year tr.num|tr_handle %}"><span class="check-{{ tr.checktype }}">{{ tr.num }}</span></a>
 				{% else %}
-				<a href="id{{ tr.id }}">id{{ tr.id|truncatechars:9 }}</td>
+				<a href="{% url 'fin-show' year  tr.id|id_handle %}">id{{ tr.id|truncatechars:9 }}</td>
 				{% endif %}
 				<td>{{ tr.description }}</td>
 				<td class="value"><span class="sum">{{ tr.value }}</span></td>
@@ -283,7 +290,7 @@ met code &ldquo;{{ handle }}&rdquo;:
 			{% for sp in tr.splits %}
 			<tr>
 				<td></td>
-				<td><a href="{{ sp.account }}">{{ sp.account }}</a>
+				<td><a href="{% url 'fin-show' year sp.account %}">{{ sp.account }}</a>
 				{% if mut.memo %}
 					&mdash; {{ mut.memo }}
 				{% endif %}</td>

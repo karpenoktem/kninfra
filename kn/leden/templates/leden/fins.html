@@ -9,7 +9,7 @@
 <ul>
 {% for year in years %}
 <li>
-	<a href="./fin{{ year }}">{{ year }}</a>
+	<a href="{% url 'fin' year %}">{{ year }}</a>
 </li>
 {% endfor %}
 </ul>
