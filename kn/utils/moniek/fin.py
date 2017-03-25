@@ -55,6 +55,8 @@ def check_names(moniek, names):
 
 
 def get_gnucash_object(moniek, year, handle):
+    """Returns a list of objects with this handle,
+    which should (but does not always) contain one object."""
     gcf = moniek.gcf_by_year(year)
     if gcf is None:
         return {'type': 'error', 'message': 'no such year'}

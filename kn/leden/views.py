@@ -918,48 +918,49 @@ def fin_show(request, year, handle):
 
     # compute some values used in the template
     for obj in objs:
-        if obj['type'] == "account":
-            obj['ancestors'] = []
-            prefix = ""
-            for bit in obj['path'].split(":"):
-                obj['ancestors'].append({'prefix': prefix, 'name': bit})
-                prefix += bit + ":"
+        if obj['type'] != "account":
+            continue
+        obj['ancestors'] = []
+        prefix = ""
+        for bit in obj['path'].split(":"):
+            obj['ancestors'].append({'prefix': prefix, 'name': bit})
+            prefix += bit + ":"
 
-            obj['has_transactions'] = False
-            s = Decimal(0)
-            for day in obj['days']:
+        obj['has_transactions'] = False
+        s = Decimal(0)
+        for day in obj['days']:
+            checktypes = set()
+            for check in day['checks']:
+                checktypes.add(check['type'])
+            if 'error' in checktypes:
+                day['checktype'] = 'error'
+            elif 'warning' in checktypes:
+                day['checktype'] = 'warning'
+            else:
+                day['checktype'] = 'none'
+            for tr in day['transactions']:
                 checktypes = set()
-                for check in day['checks']:
+                for check in tr['checks']:
                     checktypes.add(check['type'])
-                if 'error' in checktypes:
-                    day['checktype'] = 'error'
-                elif 'warning' in checktypes:
-                    day['checktype'] = 'warning'
-                else:
-                    day['checktype'] = 'none'
-                for tr in day['transactions']:
-                    checktypes = set()
-                    for check in tr['checks']:
+                obj['has_transactions'] = True
+                old_s = s
+                for sp in tr['splits']:
+                    for check in sp['checks']:
                         checktypes.add(check['type'])
-                    obj['has_transactions'] = True
-                    old_s = s
-                    for sp in tr['splits']:
-                        for check in sp['checks']:
-                            checktypes.add(check['type'])
-                        if sp['account'] == obj['path']:
-                            sp['counts'] = True
-                            s += Decimal(sp['value'])
-                            sp['sum'] = s
-                        else:
-                            sp['counts'] = False
-                    tr['sum'] = s
-                    tr['value'] = s - old_s
-                    if 'error' in checktypes:
-                        tr['checktype'] = 'error'
-                    elif 'warning' in checktypes:
-                        tr['checktype'] = 'warning'
+                    if sp['account'] == obj['path']:
+                        sp['counts'] = True
+                        s += Decimal(sp['value'])
+                        sp['sum'] = s
                     else:
-                        tr['checktype'] = 'none'
+                        sp['counts'] = False
+                tr['sum'] = s
+                tr['value'] = s - old_s
+                if 'error' in checktypes:
+                    tr['checktype'] = 'error'
+                elif 'warning' in checktypes:
+                    tr['checktype'] = 'warning'
+                else:
+                    tr['checktype'] = 'none'
 
     return render_to_response('leden/fin-show.html',
                               {'year': year,
