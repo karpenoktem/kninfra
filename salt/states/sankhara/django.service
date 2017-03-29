@@ -1,0 +1,12 @@
+[Unit]
+Description=Django uWSGI app for kninfra
+Requires=giedo.service
+
+[Service]
+ExecStart=/usr/local/bin/uwsgi --ini /home/infra/uwsgi.ini --socket /var/run/infra/S-django
+User=infra
+Group=www-data
+Restart=on-failure
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all

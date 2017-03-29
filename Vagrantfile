@@ -9,7 +9,7 @@ The virtual machines sankhara and phassa should be running:
 
 To get a shell on sankhara, run `vagrant ssh'.  On the VM, run
 
-    `run-fcgi'                        after changing the site and
+    `sudo systemctl restart django' after changing the site and
     `sudo salt-call state.highstate'  after changing salt config
 
 See `salt/pillar/vagrant.sls' for other auto-generated passwords.

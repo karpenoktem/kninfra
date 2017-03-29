@@ -20,4 +20,4 @@ fi
 $PYTHON /home/infra/repo/salt/states/sankhara/initializeDb.py
 
 # For some reason, this may be necessary.
-run-fcgi
+# run-fcgi

@@ -29,7 +29,6 @@ kninfra packages:
             - python-setuptools
             - python-pyparsing
             - python-markdown
-            - python-flup
             - python-pymongo
             - python-imaging
             - python-html2text
@@ -43,7 +42,7 @@ kninfra packages:
             - imagemagick
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved', 'pymysql', 'iso8601', 'google-api-python-client'] %}
+{% for pkg in ['mirte', 'sarah', 'uwsgi', 'tarjan', 'reserved', 'pymysql', 'iso8601', 'google-api-python-client'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
@@ -54,7 +53,7 @@ kninfra packages:
 {% endfor %}
 
 {% if pillar['python3'] %}
-{% for pkg in ['flup6', 'pyldap'] %}
+{% for pkg in ['pyldap'] %}
 {{ pkg }}:
     pip.installed:
         - bin_env: /usr/bin/pip3
@@ -244,19 +243,22 @@ https://github.com/karpenoktem/regl:
 /etc/systemd/system/giedo.service:
     file.managed:
         - source: salt://sankhara/giedo.service
+/etc/systemd/system/django.service:
+    file.managed:
+        - source: salt://sankhara/django.service
+/etc/systemd/system/django.socket:
+    file.managed:
+        - source: salt://sankhara/django.socket
 /etc/systemd/system/hans.service:
     file.managed:
         - source: salt://sankhara/hans.service
-giedo:
-    service.running
-/home/infra/repo/bin/run-fcgi:
-    cmd.run:
-        - user: infra
-        - timeout: 4
 /etc/nginx/sankhara.d/90-kninfra.conf:
     file.managed:
         - source: salt://sankhara/kninfra.nginx.conf
         - template: jinja
+/home/infra/uwsgi.ini:
+    file.managed:
+        - source: salt://sankhara/uwsgi.ini
 {% if grains['vagrant'] %}
 # If using vagrant, redirect the login to `vagrant' to the `infra' user.
 /home/vagrant/.bash_login:
