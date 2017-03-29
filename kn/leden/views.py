@@ -3,8 +3,8 @@
 import json
 import logging
 import mimetypes
-import urllib
 import re
+import urllib
 from datetime import date
 from decimal import Decimal
 from hashlib import sha256

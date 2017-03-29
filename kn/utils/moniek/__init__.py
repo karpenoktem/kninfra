@@ -1,7 +1,7 @@
 import logging
-import yaml
 import os.path
 
+import yaml
 from koert.gnucash import tools as koerttools
 
 from django.conf import settings

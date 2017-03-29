@@ -21,17 +21,21 @@ def rel_when_filter(r):
         ret += _('tot %s') % until.date()
     return '(%s)' % ret
 
+
 @register.filter(name='id_handle')
 def id_handle_filter(_id):
     return "id" + _id
+
 
 @register.filter(name='tr_handle')
 def tr_handle_filter(_num):
     return "tr" + _num
 
+
 @register.filter(name='day_handle')
 def day_handle_filter(date, account):
     return "day" + date + account
+
 
 @register.filter(name="concat")
 def concat_filter(a, b):
