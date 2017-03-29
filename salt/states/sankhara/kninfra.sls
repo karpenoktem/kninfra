@@ -259,6 +259,10 @@ https://github.com/karpenoktem/regl:
 /home/infra/uwsgi.ini:
     file.managed:
         - source: salt://sankhara/uwsgi.ini
+giedo:
+    service.running
+django.socket:
+    service.running
 {% if grains['vagrant'] %}
 # If using vagrant, redirect the login to `vagrant' to the `infra' user.
 /home/vagrant/.bash_login:
