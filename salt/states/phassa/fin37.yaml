@@ -9,7 +9,7 @@ meta:
         group:
             - :Inkomsten:Commissies
             - :Uitgaven:Commissies
-    pediod:
+    period:
         from: 2016-09-01
         to: 2017-08-31
 opening balance: :Vermogen:Beginsaldi
