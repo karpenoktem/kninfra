@@ -381,7 +381,7 @@ entities:
   names: [galagroep]
   tags: [!id '4e6fcc85e60edf3dc000007e', !id 56af677edef5152cf39aa2bc]
   types: [group, tag]
-- _id: !id '4e6fcc85e60edf3dc000006f'
+- _id: &loco_id !id '4e6fcc85e60edf3dc000006f'
   description: De loze activiteitencommissie.
   humanNames:
   - {genitive_prefix: van de, human: LoCo, name: loco}
@@ -598,6 +598,7 @@ entities:
   tags: [!id '4e6fcc85e60edf3dc0000069']
   types: [group, tag]
 - description: De financiele boeken lezende groep
+  _id: &boekenlezers_id !id 'aaaaaaaaaaadaaaaaaa00009'
   humanNames:
   - {genitive_prefix: van de, human: Boekenlezers, name: boekenlezers}
   names: [boekenlezers]
@@ -801,6 +802,16 @@ relations:
   until: *dt_max
 - who: *admin_id
   with: *fotocie_id
+  how: null
+  from: *dt_min
+  until: *dt_max
+- who: *admin_id
+  with: *loco_id
+  how: null
+  from: *dt_min
+  until: *dt_max
+- who: *admin_id
+  with: *boekenlezers_id
   how: null
   from: *dt_min
   until: *dt_max

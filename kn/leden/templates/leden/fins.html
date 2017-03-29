@@ -1,0 +1,17 @@
+{% extends "leden/base.html" %}
+
+{% load i18n %}
+
+{% block body %}
+
+<h1>{% trans "Boekhoudingen" %}</h1>
+
+<ul>
+{% for year in years %}
+<li>
+	<a href="{% url 'fin' year %}">{{ year }}</a>
+</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

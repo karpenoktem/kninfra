@@ -903,6 +903,107 @@ def boekenlezers_name_check(request):
                               context_instance=RequestContext(request))
 
 
+@login_required
+def fin_show(request, year, handle):
+    year = int(year)
+
+    if 'boekenlezers' not in request.user.cached_groups_names:
+        raise PermissionDenied
+
+    objs = giedo.fin_get_gnucash_object(year, handle)
+
+    # compute some values used in the template
+    for obj in objs:
+        if obj['type'] != "account":
+            continue
+        obj['ancestors'] = []
+        prefix = ""
+        for bit in obj['path'].split(":"):
+            obj['ancestors'].append({'prefix': prefix, 'name': bit})
+            prefix += bit + ":"
+
+        obj['has_transactions'] = False
+        s = Decimal(0)
+        for day in obj['days']:
+            checktypes = set()
+            for check in day['checks']:
+                checktypes.add(check['type'])
+            if 'error' in checktypes:
+                day['checktype'] = 'error'
+            elif 'warning' in checktypes:
+                day['checktype'] = 'warning'
+            else:
+                day['checktype'] = 'none'
+            for tr in day['transactions']:
+                checktypes = set()
+                for check in tr['checks']:
+                    checktypes.add(check['type'])
+                obj['has_transactions'] = True
+                old_s = s
+                for sp in tr['splits']:
+                    for check in sp['checks']:
+                        checktypes.add(check['type'])
+                    if sp['account'] == obj['path']:
+                        sp['counts'] = True
+                        s += Decimal(sp['value'])
+                        sp['sum'] = s
+                    else:
+                        sp['counts'] = False
+                tr['sum'] = s
+                tr['value'] = s - old_s
+                if 'error' in checktypes:
+                    tr['checktype'] = 'error'
+                elif 'warning' in checktypes:
+                    tr['checktype'] = 'warning'
+                else:
+                    tr['checktype'] = 'none'
+
+    return render_to_response('leden/fin-show.html',
+                              {'year': year,
+                               'objs': objs,
+                               'handle': handle},
+                              context_instance=RequestContext(request))
+
+
+@login_required
+def fin_errors(request, year):
+    year = int(year)
+
+    if 'boekenlezers' not in request.user.cached_groups_names:
+        raise PermissionDenied
+
+    errors = giedo.fin_get_errors(year)
+
+    return render_to_response('leden/fin-errors.html',
+                              {'year': year,
+                               'errors': errors},
+                              context_instance=RequestContext(request))
+
+
+@login_required
+def fins(request):
+    if 'boekenlezers' not in request.user.cached_groups_names:
+        raise PermissionDenied
+
+    years = giedo.fin_get_years()
+
+    return render_to_response('leden/fins.html',
+                              {'years': years},
+                              context_instance=RequestContext(request))
+
+
+@login_required
+def fin_overview(request, year):
+    year = int(year)
+
+    if 'boekenlezers' not in request.user.cached_groups_names:
+        raise PermissionDenied
+
+    return render_to_response('leden/fin-overview.html',
+                              {'year': year},
+                              context_instance=RequestContext(request))
+
+
 def language(request):
     return HttpResponse(str(request.LANGUAGE_CODE))
 

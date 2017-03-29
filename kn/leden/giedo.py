@@ -119,6 +119,27 @@ def fin_check_names():
         }})
 
 
+def fin_get_gnucash_object(year, handle):
+    return get_giedo_connection().send({
+        'type': 'fin-get-gnucash-object',
+        'handle': handle,
+        'year': year
+    })
+
+
+def fin_get_errors(year):
+    return get_giedo_connection().send({
+        'type': 'fin-get-errors',
+        'year': year
+    })
+
+
+def fin_get_years():
+    return get_giedo_connection().send({
+        'type': 'fin-get-years',
+    })
+
+
 def maillist_get_moderated_lists():
     return get_giedo_connection().send({
         'type': 'maillist-get-moderated-lists'

@@ -1,0 +1,308 @@
+{% extends "leden/base.html" %}
+
+{% load i18n %}
+{% load fin %}
+
+{% block styles %}
+{{ block.super }}
+<link href="{{ MEDIA_URL }}leden/balans.css" rel="stylesheet" />
+{% endblock styles %}
+
+{% block head %}
+{{ block.super }}
+<script src="{{ MEDIA_URL }}leden/balans.js" defer></script>
+{% endblock head %}
+
+{% block body %}
+
+
+{% if objs|length == 0 %}
+<p>
+{% blocktrans  %}
+Er is geen object in de boekhouding van jaar {{ year }}
+met de code &ldquo;{{ handle }}&rdquo;.
+{% endblocktrans %}
+</p>
+{% else %}
+{% if objs|length > 1 %}
+<p>
+{% blocktrans with aantal=objs|length %}
+Er zijn {{ aantal }} objecten in de boekhouding
+met code &ldquo;{{ handle }}&rdquo;:
+{% endblocktrans %}
+</p>
+{% endif %}
+{% for obj in objs %}
+
+<table>
+	<tr>
+		<th>{% trans "jaar" %}:</th>
+		<td><a href="{% url 'fin' year %}">{{ year }}</a></td>
+		<th>{% trans "id" %}:</th>
+		<td>
+		{% if obj.id == None %}
+		<em>{% trans "geen" %}</em>
+		{% else %}
+		<a href="{% url 'fin-show' year obj.id|id_handle %}">{{ obj.id }}</a>
+		{% endif %}
+		</td>
+		<th>{% trans "type" %}:</th>
+		<td>{{ obj.type }}</td>
+	</tr>
+<table>
+<h2>
+	{% if obj.type == "account" %}
+	{% trans "Rekening" %}
+	{% for anc in obj.ancestors %}
+	<a href="{% url 'fin-show' year anc.prefix|concat:anc.name %}">
+		{{ anc.name }}:
+	</a>
+	{% endfor %}
+	{% elif obj.type == "transaction" %}
+	{% trans "Transactie" %}
+	{% if obj.num %}{{ obj.num }}{% else %}
+	<em>{% trans "zonder nummer" %}</em>{% endif %}
+	{% elif obj.type == "split" %}
+	{% trans "Split" %} {{ obj.id|truncatechars:9 }}
+	{% elif obj.type == "accountday" %}
+	{% trans "Dag " %}{{ obj.date }}{% trans " van "%} 
+	<a href="{% url 'fin-show' year obj.account %}">{{ obj.account }}</a>
+	{% endif %}
+</h2>
+{% for check in obj.checks %}
+<p><span class="check-{{ check.type }}">{{ check.name }}: {{ check.description }}</span></p>
+{% endfor %}
+{% if obj.type == 'account' %}
+	{% if obj.children %}
+	<table>
+	<thead>
+		<tr>
+			<th>{% trans "naam" %}</th>
+			<th>{% trans "begin" %}</th>
+			<th>{% trans "eind" %}</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<th>{% trans "totaal" %}</th>
+			<th>{{ obj.opening_balance }}</th>
+			<th>{{ obj.balance }}</th>
+		</tr>
+	</tfoot>
+	<tbody>
+	{% for child in obj.children|dictsort:"name" %}
+	<tr>
+		<td>
+		<a href="{% url 'fin-show' year \
+			obj.path|concat:":"|concat:child.name %}">
+			{{ child.name }}
+		</a>
+		</td>
+		<td>{{ child.opening_balance }}</td>
+		<td>{{ child.balance }}</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+	</table>
+	{% endif %}
+
+
+{% if obj.has_transactions %}
+<table class="balans">
+	<thead>
+		<tr>
+			<th>{% trans "nummer" %}</th>
+			<th>{% trans "datum " %}</th>
+			<th>{% trans "omschrijving / rekening" %}</th>
+			<th class="th-value">{% trans "bedrag (€)" %}</th>
+			<th class="th-value">{% trans "som (€)" %}</th>
+		</tr>
+	</thead>
+	{% for day in obj.days %}
+		{% for tr in day.transactions %}
+		<tbody>
+			<tr>
+				<td>
+				{% if tr.num %}
+				<a href="{% url 'fin-show' year tr.num|tr_handle %}">
+				<span class="check-{{ tr.checktype }}">{{ tr.num }}</span></a>
+				{% else %}
+				<a href="{% url 'fin-show' year tr.id|id_handle %}">id{{ tr.id|truncatechars:9 }}</td>
+				{% endif %}
+				<td>
+				{% if forloop.first %}
+				<a href="{% url 'fin-show' year tr.day|day_handle:obj.path %}">
+				<span class="check-{{ day.checktype }}">
+				{% if tr.day %}
+				{{ tr.day }}
+				{% else %}
+				&lowast;
+				{% endif %}
+				</span>
+				</a>
+				{% else %}
+				&mdash;
+				{% endif %}
+				</td>
+				<td>{{ tr.description }}</td>
+				<td class="value"><span class="sum">{{ tr.value }}</span></td>
+				<td class="value"><span class="sum">{{ tr.sum }}</span></td>
+			</tr>
+			{% for sp in tr.splits %}
+			<tr>
+				<td></td>
+				<td></td>
+				<td><a href="{% url 'fin-show' year sp.account %}">{{ sp.account }}</a>
+				{% if mut.memo %}
+					&mdash; {{ mut.memo }}
+				{% endif %}</td>
+				<td class="value">{{ sp.value }}</td>
+				{% if sp.counts %}
+				<td class="value">{{ sp.sum }}</td>
+				{% else %}
+				<td class="value"></td>
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</tbody>
+		{% endfor %}
+	{% endfor %}
+</table>
+{% endif %}
+{% elif obj.type == "transaction" %}
+<p>{{ obj.day }} &mdash; &ldquo;{{ obj.description }}&rdquo;</p>
+<table>
+	<thead>
+		<tr>
+			<th>{% trans "id" %}</th>
+			<th>{% trans "rekening" %}</th>
+			<th>{% trans "noot" %}</th>
+			<th>{% trans "bedrag (€)" %}</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for sp in obj.splits %}
+		<tr>
+			<td><a href="{% url 'fin-show' year sp.id|id_handle %}">{{ sp.id|truncatechars:9 }}</a></td>
+			<td><a href="{% url 'fin-show' year sp.account %}">{{ sp.account }}</a></td>
+			<td>{% if sp.memo %}
+				{{ sp.memo }}
+			{% else %}
+			<em>{% trans "geen" %}</em>
+			{% endif %}</td>
+			<td class="value">{{ sp.value }}</td>
+			<td>
+			{% for check in sp.checks %} 
+			<span class="check-{{ check.type }}">{{ check.name }}: {{ check.description }}</span>
+			{% endfor %}
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% elif obj.type == "split" %}
+<table>
+	<tbody>
+		<tr>
+			<th>{% trans "transactie" %}</th>
+			<td><a href="{% url 'fin-show' year obj.tr %}">{{ obj.tr }}</a></td>
+		</tr>
+		<tr>
+			<th>{% trans "rekening" %}</th>
+			<td><a href="{% url 'fin-show' year obj.account %}">{{ obj.account }}</a></td>
+		</tr>
+		<tr>
+			<th>{% trans "bedrag (€)" %}</th>
+			<td class="value">{{ obj.value }}</td>
+		</tr>
+		<tr>
+			<th>{% trans "noot" %}</th>
+			<td>{{ obj.memo }}</td>
+		</tr>
+	<tbody>
+</table>
+{% elif obj.type == 'accountday' %}
+<table>
+	<thead>
+		<tr>
+			<th>{% trans "vorige dag" %}</th>
+			<th>{% trans "startbalans" %}</th>
+			<th>{% trans "omzet" %}</th>
+			<th>{% trans "eindbalans" %}</th>
+			<th>{% trans "volgende dag" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+			{% if obj.previous == None %}
+			<em>{% trans "geen" %}</em>
+			{% else %}
+			<a href="{% url 'fin-show' year obj.previous|day_handle:obj.account %}">
+			{% if obj.previous == "" %}
+			&lowast;
+			{% else %}
+			{{ obj.previous }}
+			{% endif %}
+			</a>
+			{% endif %}
+			</td>
+			<td>{{ obj.starting_balance }}</td>
+			<td>{{ obj.value }}</td>
+			<td>{{ obj.ending_balance }}</td>
+			<td>
+			{% if obj.next == None %}
+			<em>{% trans "geen" %}</em>
+			{% else %}
+			<a href="{% url 'fin-show' year obj.next|day_handle:obj.account %}">
+			{% if obj.next == "" %}
+			&lowast;
+			{% else %}
+			{{ obj.next }}
+			{% endif %}
+			</a>
+			{% endif %}
+			</td>
+		</tr>
+	</tbody>
+</table>
+<table class="balans">
+	<thead>
+		<tr>
+			<th>{% trans "nummer" %}</th>
+			<th>{% trans "omschrijving / rekening" %}</th>
+			<th class="th-value">{% trans "bedrag (€)" %}</th>
+		</tr>
+	</thead>
+	{% for tr in obj.transactions %}
+		<tbody>
+			<tr>
+				<td>
+				{% if tr.num %}
+				<a href="{% url 'fin-show' year tr.num|tr_handle %}"><span class="check-{{ tr.checktype }}">{{ tr.num }}</span></a>
+				{% else %}
+				<a href="{% url 'fin-show' year  tr.id|id_handle %}">id{{ tr.id|truncatechars:9 }}</td>
+				{% endif %}
+				<td>{{ tr.description }}</td>
+				<td class="value"><span class="sum">{{ tr.value }}</span></td>
+			</tr>
+			{% for sp in tr.splits %}
+			<tr>
+				<td></td>
+				<td><a href="{% url 'fin-show' year sp.account %}">{{ sp.account }}</a>
+				{% if mut.memo %}
+					&mdash; {{ mut.memo }}
+				{% endif %}</td>
+				<td class="value">{{ sp.value }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	{% endfor %}
+</table>
+
+{% endif %}
+{% endfor %}
+{% endif %} {# objs|length == 0 #}
+
+{% endblock %}

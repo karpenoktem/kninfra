@@ -50,3 +50,15 @@ table.balans .value,
 table.balans .th-value {
 	text-align: right;
 }
+
+span.check-error {
+	color: red;
+}
+
+span.check-ok {
+	color: green;
+}
+
+span.check-warning {
+	color: orange;
+}
