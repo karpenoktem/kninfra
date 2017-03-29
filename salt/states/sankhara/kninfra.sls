@@ -3,6 +3,7 @@ kninfra packages:
         - pkgs:
             {% if pillar['python3'] %}
             - python3-django
+            - python3-dev
             - python3-msgpack
             - python3-setuptools
             - python3-pyparsing
@@ -25,6 +26,7 @@ kninfra packages:
             - libssl-dev
             {% else %}
             - python-django
+            - python-dev
             - msgpack-python
             - python-setuptools
             - python-pyparsing
