@@ -4,7 +4,6 @@ import json
 import logging
 import mimetypes
 import re
-import urllib
 from datetime import date
 from decimal import Decimal
 from hashlib import sha256
@@ -907,9 +906,6 @@ def boekenlezers_name_check(request):
 @login_required
 def fin_show(request, year, handle):
     year = int(year)
-
-    # don't ask me why
-    handle = urllib.unquote(handle).encode('latin1').decode('utf-8')
 
     if 'boekenlezers' not in request.user.cached_groups_names:
         raise PermissionDenied
