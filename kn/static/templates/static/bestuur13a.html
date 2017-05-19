@@ -6,7 +6,7 @@
 {% block body %}
 <p class="imageDisplay">
 <img width="800"
-     src="{{ MEDIA_URL }}static/img/bestuur13.jpg" /><br/>
+     src="{{ MEDIA_URL }}static/img/bestuur13a.jpg" /><br/>
      <table align="center" style="text-align: center">
        <tr><td>Willanka Kapelle ({% trans "penningmeester" %})</td>
          <td rowspan="2">Eva Prins ({% trans "vice-voorzitter" %})</td>
@@ -15,7 +15,7 @@
          <td>Sophie Fennema ({% trans "secretaris" %})</td></tr>
      </table>
 
-<p>{% blocktrans %}Het <strong>dertiende bestuur</strong> der A.S.V Karpe Noktem
+<p>{% blocktrans %}Het <strong>dertiende bestuur</strong> (oude samenstelling) der A.S.V Karpe Noktem
 bestaat uit een groep met een hoge variatie in capaciteiten,
 studies en zelfs lengte.  Aan het roer staat voorzitter <em>Roel Bouman</em>,
 student Data Science en Scheikunde, die zijn brede kennis op veel vlakken in
@@ -24,10 +24,8 @@ kan zetten.  Bijgestaan wordt hij door Artificial Intelligence student
 met zusjes.  Als Geneeskunde  student draagt <em>Willanka Kappelle</em>
 niet alleen de verantwoordelijkheid voor haar toekomstige
 pati&euml;nten, maar ook voor de financi&euml;n.
-<em>Lenno Ruijters</em>, student Engels, maakt gebruik van zijn grote mond
-in overleggen als pandcommissaris.
-<em>Max de Grauw</em> is naast zijn drukke studie Artificial
-Intelligence bezig als commissaris extern en onderhoudt het contact met koepels.
+Wiskunde genie <em>Koos van der Vegt</em> zal als pandcommissaris het imago
+van Karpe Noktem vertegenwoordigen in zijn contacten met andere Villa bewoners.
 <em>Eva Prins</em> heeft haar communicatie vaardigheden geperfectioneerd in
 haar studie Engels en maakt hier als vice-voorzitter gretig gebruik
 van.{% endblocktrans %}</p>
@@ -44,6 +42,8 @@ functie@karpenoktem.nl of op de volgende adressen:{% endblocktrans %}</p>
 </ul>
 
 <p>&lArr; {% trans "Het vorige" %},
-<a href="{% url "bestuur12" %}">{% trans "twaalfde bestuur." %}</a>
+<a href="{% url "bestuur12" %}">{% trans "twaalfde bestuur." %}</a>;
+{% trans "het volgende" %},
+<a href="{% url "bestuur13b" %}">{% trans "dertiende bestuur (huidige samenstelling)" %}</a> &rArr;</p>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

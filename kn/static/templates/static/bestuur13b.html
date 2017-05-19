@@ -1,0 +1,67 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block body %}
+<p class="imageDisplay">
+<img width="800"
+     src="{{ MEDIA_URL }}static/img/bestuur13b.jpg" /><br/>
+     <table align="center" style="text-align: center">
+      <col width="130">
+      <col width="130">
+      <col width="130">
+      <col width="130">
+      <col width="130">
+      <col width="130">
+      <tr style="border: 10px">
+        <td>Willanka Kapelle</td>
+        <td>Max de Grauw</td>
+        <td>Roel Bouman</td>
+        <td>Lenno Ruijters</td>
+        <td>Sophie Fennema</td>
+        <td>Eva Prins</td>
+      </tr>
+      <tr style="font-size:smaller"">
+        <td>({% trans "penningmeester" %})</td>
+        <td>({% trans "commissaris extern" %})</td>
+        <td>({% trans "voorzitter" %})</td>
+        <td>({% trans "pandcommissaris" %})</td>
+        <td>({% trans "secretaris" %})</td>
+        <td>({% trans "vice-voorzitter" %})</td>
+      </tr>
+     </table>
+
+<p>{% blocktrans %}Het <strong>dertiende bestuur</strong> (huidige samenstelling) der A.S.V Karpe Noktem
+bestaat uit een groep met een hoge variatie in capaciteiten,
+studies en zelfs lengte.  Aan het roer staat voorzitter <em>Roel Bouman</em>,
+student Data Science en Scheikunde, die zijn brede kennis op veel vlakken in
+kan zetten.  Bijgestaan wordt hij door Artificial Intelligence student
+<em>Sophie Fennema</em>, die naast de administratie het contact zal onderhouden
+met zusjes.  Als Geneeskunde  student draagt <em>Willanka Kappelle</em>
+niet alleen de verantwoordelijkheid voor haar toekomstige
+pati&euml;nten, maar ook voor de financi&euml;n.
+<em>Lenno Ruijters</em>, student Engels, maakt gebruik van zijn grote mond
+in overleggen als pandcommissaris.
+<em>Max de Grauw</em> is naast zijn drukke studie Artificial
+Intelligence bezig als commissaris extern en onderhoudt het contact met koepels.
+<em>Eva Prins</em> heeft haar communicatie vaardigheden geperfectioneerd in
+haar studie Engels en maakt hier als vice-voorzitter gretig gebruik
+van.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Alle bestuursleden zijn bereikbaar op hun
+functie@karpenoktem.nl of op de volgende adressen:{% endblocktrans %}</p>
+<ul>
+  <li>{% filter email %}roel@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}sophief@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}willanka@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}lenno@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}eva@karpenoktem.nl{% endfilter %}
+    ({% trans "of" %} {% filter email %}satan@karpenoktem.nl{% endfilter %})</li>
+  <li>{% filter email %}maxd@karpenoktem.nl{% endfilter %}</li>
+</ul>
+
+<p>&lArr; {% trans "Het vorige" %},
+<a href="{% url "bestuur13a" %}">{% trans "dertiende bestuur (oude samenstelling)." %}</a>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}
