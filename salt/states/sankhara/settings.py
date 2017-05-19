@@ -1,5 +1,9 @@
 # flake8: noqa
 
+{% if grains['vagrant'] %}
+ALLOWED_HOSTS = ['*']
+{% endif %}
+
 CHUCK_NORRIS_HIS_SECRET = '{{ pillar['secrets']['chucknorris'] }}'
 SECRET_KEY = '{{ pillar['secrets']['django_secret_key'] }}'
 ALLOWED_API_KEYS = ('{{ pillar['secrets']['apikey'] }}',)
