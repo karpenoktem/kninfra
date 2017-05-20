@@ -27,7 +27,7 @@ def view(request):
 def _humanName_of_entity(e):
     """ Returns the human name of an entity, as used in the API. """
     if e.name:
-        return "%s (%s)" % (e.humanName, e.name)
+        return six.text_type("%s (%s)") % (e.humanName, e.name)
     return six.text_type(e.humanName)
 
 
