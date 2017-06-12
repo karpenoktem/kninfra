@@ -1,4 +1,8 @@
 
+.balans-wrapper {
+	overflow-x: auto;
+}
+
 table.balans {
 	border-collapse: collapse;
 	width: 100%;
