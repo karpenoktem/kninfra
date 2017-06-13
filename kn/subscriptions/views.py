@@ -90,10 +90,10 @@ def event_detail(request, name):
         return HttpResponseRedirect(reverse('event-detail',
                                             args=(event.name,)))
 
-    users = filter(
+    users = list(filter(
         lambda u: event.get_subscription(u) is None and u != request.user,
         Es.by_name('leden').get_members()
-    )
+    ))
     users.sort(key=lambda u: six.text_type(u.humanName))
     listSubscribed = sorted(event.listSubscribed, key=lambda s: s.date)
     listUnsubscribed = sorted(event.listUnsubscribed, key=lambda s: s.date)
