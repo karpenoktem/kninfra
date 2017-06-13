@@ -370,7 +370,7 @@ def user_smoel(request, name):
     try:
         img = default_storage.open(path.join(
             settings.SMOELEN_PHOTOS_PATH,
-            str(user.name)) + ".jpg")
+            str(user.name)) + ".jpg", 'rb')
     except IOError:
         raise Http404
     return HttpResponse(FileWrapper(img), content_type="image/jpeg")
@@ -862,7 +862,7 @@ def ik_openvpn_download(request, filename):
     if not default_storage.exists(p):
         raise Http404
     response = HttpResponse(
-        FileWrapper(default_storage.open(p)),
+        FileWrapper(default_storage.open(p, 'rb')),
         content_type=mimetypes.guess_type(default_storage.path(p))[0]
     )
     response['Content-Length'] = default_storage.size(p)

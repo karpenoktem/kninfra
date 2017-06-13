@@ -21,7 +21,7 @@ def direct_to_folder(request, root, subdir):
         raise ValueError(_("%s is een map --- geen bestand") % p)
     if os.stat(p).st_mode & 4 != 4:
         raise Http404
-    return HttpResponse(FileWrapper(open(p)),
+    return HttpResponse(FileWrapper(open(p, 'rb')),
                         content_type=mimetypes.guess_type(p)[0])
 
 

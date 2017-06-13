@@ -31,7 +31,7 @@ def view(request, graph, ext):
             > datetime.timedelta(seconds=timeout)):
         update(default_storage.path(
             os.path.join(settings.GRAPHS_PATH, graph)))
-    return HttpResponse(FileWrapper(default_storage.open(path)),
+    return HttpResponse(FileWrapper(default_storage.open(path, 'rb')),
                         content_type=mimetypes.guess_type(path)[0])
 
 
