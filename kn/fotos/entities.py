@@ -1,4 +1,5 @@
 import datetime
+import errno
 import mimetypes
 import os
 import os.path
@@ -638,7 +639,16 @@ class Foto(FotoEntity):
         target = self.get_cache_path(cache)
         target_dir = os.path.dirname(target)
         if not os.path.exists(target_dir):
-            os.makedirs(target_dir)
+            try:
+                os.makedirs(target_dir)
+            except OSError as e:
+                if e.errno == errno.EEXIST and os.path.exists(target_dir):
+                    # We're probably trying to create the same directory from
+                    # two processes at the same time.
+                    pass
+                else:
+                    # Some other problem. Re-raise the exception.
+                    raise
 
         size = '%dx%d' % self.get_cache_size(cache)
         subprocess.check_call([
