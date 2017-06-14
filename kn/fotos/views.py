@@ -133,7 +133,7 @@ def cache(request, cache, path):
     if not entity.may_view(None):
         # not publicly cacheable
         cc = 'private, ' + cc
-    resp = HttpResponse(FileWrapper(open(entity.get_cache_path(cache))),
+    resp = HttpResponse(FileWrapper(open(entity.get_cache_path(cache), 'rb')),
                         content_type=entity.get_cache_mimetype(cache))
     resp['Content-Length'] = str(st.st_size)
     resp['Last-Modified'] = lm
