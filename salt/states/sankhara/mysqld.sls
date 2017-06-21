@@ -1,9 +1,9 @@
 mysql packages:
     pkg.installed:
         - pkgs:
-            - mysql-server
-            - mysql-client
-mysql:
+            - mariadb-server
+            - mariadb-client
+mariadb:
     service:
         - running
 # Note that salt uses the root mysql user to execute its states.
