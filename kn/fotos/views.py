@@ -1,11 +1,11 @@
 import os.path
 from time import gmtime, strftime
+from wsgiref.util import FileWrapper
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
-from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse
 from django.http import (Http404, HttpResponse, HttpResponseNotModified,
                          QueryDict)

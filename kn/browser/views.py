@@ -1,9 +1,9 @@
 import mimetypes
 import os
 import os.path
+from wsgiref.util import FileWrapper
 
 from django.conf import settings
-from django.core.servers.basehttp import FileWrapper
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext

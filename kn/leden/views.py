@@ -9,6 +9,7 @@ from decimal import Decimal
 from hashlib import sha256
 from itertools import chain
 from os import path
+from wsgiref.util import FileWrapper
 
 import PIL.Image
 
@@ -19,7 +20,6 @@ from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage import default_storage
 from django.core.paginator import EmptyPage, Paginator
-from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
