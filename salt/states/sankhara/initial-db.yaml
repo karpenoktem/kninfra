@@ -445,13 +445,6 @@ entities:
   names: [comms]
   tags: [!id '4e6fcc85e60edf3dc0000086']
   types: [tag]
-- _id: !id '4e6fcc85e60edf3dc000007e'
-  description: Alle overige mailinglists.
-  humanNames:
-  - {genitive_prefix: van de, human: Groepen, name: groepen}
-  names: [groepen]
-  tags: [!id '4e6fcc85e60edf3dc0000086']
-  types: [tag]
 - _id: !id '4e6fcc85e60edf3dc0000086'
   description: Categorieen van onderverdelingen der leden.
   humanNames:
