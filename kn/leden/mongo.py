@@ -9,7 +9,7 @@ except ImportError:
     from bson import ObjectId
 
 
-conn = pymongo.Connection(settings.MONGO_HOST)
+conn = pymongo.MongoClient(settings.MONGO_HOST)
 db = conn[settings.MONGO_DB]
 
 

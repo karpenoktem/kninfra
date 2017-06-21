@@ -12,7 +12,7 @@ yaml.SafeLoader.add_constructor('!id',
 
 
 def main():
-    conn = pymongo.Connection(MONGO_HOST)
+    conn = pymongo.MongoClient(MONGO_HOST)
     db = conn[MONGO_DATABASE]
     with open(DB_FILE) as f:
         dump = yaml.safe_load(f)
