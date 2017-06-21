@@ -1,17 +1,9 @@
-jessie backports apt source:
-    pkgrepo.managed:
-        - name: deb http://http.debian.net/debian jessie-backports main
-        - file: /etc/apt/sources.list.d/backports.list
-mediawiki from backports:
-    pkg.installed:
-        - pkgs:
-            - mediawiki
-        - fromrepo: jessie-backports
 wiki packages:
     pkg.installed:
         - pkgs:
-            - php5-intl
+            - php-intl
             - memcached
+            - mediawiki
             - imagemagick
 /etc/nginx/sankhara.d/10-wiki.conf:
     file.managed:
@@ -37,6 +29,8 @@ install wiki:
                 --dbname wiki --dbpass {{ pillar['secrets']['mysql_wiki'] }} \
                 --pass {{ pillar['secrets']['wiki_admin'] }} \
                 --installdbuser wiki --lang nl \
+                --dbuser wiki \
+                --dbpass {{ pillar['secrets']['mysql_wiki'] }} \
                 --installdbpass {{ pillar['secrets']['mysql_wiki'] }}
             touch /etc/mediawiki/.is-installed
 /etc/mediawiki/LocalSettings.php:
