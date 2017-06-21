@@ -2,16 +2,17 @@ ldap packages:
     pkg.installed:
         - pkgs:
             - slapd
-            - phpldapadmin
+            # FIXME "stretch" https://unix.stackexchange.com/questions/321271/
+            # - phpldapadmin
             - ldap-utils
-/etc/phpldapadmin/config.php:
-    file.managed:
-        - source: salt://sankhara/phpldapadmin-config.php
-        - template: jinja
-/etc/nginx/sankhara.d/10-phpldapadmin.conf:
-    file.managed:
-        - source: salt://sankhara/phpldapadmin.nginx.conf
-        - template: jinja
+# /etc/phpldapadmin/config.php:
+#     file.managed:
+#         - source: salt://sankhara/phpldapadmin-config.php
+#         - template: jinja
+# /etc/nginx/sankhara.d/10-phpldapadmin.conf:
+#     file.managed:
+#         - source: salt://sankhara/phpldapadmin.nginx.conf
+#         - template: jinja
 salt://sankhara/initialize-ldap.py:
     cmd.script:
         - creates: /root/.ldap-initialized
