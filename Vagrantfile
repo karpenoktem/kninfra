@@ -22,7 +22,8 @@ def configure_vagrant
     Vagrant.configure(2) do |config|
         # See https://docs.vagrantup.com/v2/multi-machine/
         def common(config, hostname)
-            config.vm.box = "debian/contrib-jessie64"
+            # Temporary box until there is an official debian/contrib-stretch64.
+            config.vm.box = "bas/contrib-stretch64"
             config.vm.hostname = "vagrant-" + hostname + ".lan"
             config.vm.synced_folder "salt/states", "/srv/salt", \
                                     type: "virtualbox"
