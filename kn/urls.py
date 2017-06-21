@@ -5,6 +5,7 @@ from django.contrib import auth
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView
 
+import kn.browser.views
 from kn.base.backports import i18n_patterns
 from kn.leden import views
 
@@ -17,7 +18,7 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
     url(_(r'^groups/(?P<subdir>[^/]+)/(?P<path>.*)'),
-        views.homedir, {'root': '/mnt/phassa/groups/'},
+        kn.browser.views.homedir, {'root': '/mnt/phassa/groups/'},
         name='groupfolder'),
     url(_(r'^smoelen/'), include('kn.leden.urls')),
     url(_(r'^activiteit/'), include('kn.subscriptions.urls')),
