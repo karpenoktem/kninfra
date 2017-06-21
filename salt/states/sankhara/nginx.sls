@@ -3,8 +3,8 @@ nginx packages:
         - pkgs:
             - nginx
             - fcgiwrap
-            - php5-fpm
-            - php-apc
+            - php-fpm
+            - php-apcu
 /etc/nginx/sites-enabled/default:
     file.absent
 /etc/nginx/sankhara.d:
@@ -24,7 +24,7 @@ nginx packages:
     file.managed:
         - source: salt://sankhara/site.nginx.conf
         - template: jinja
-/etc/php5/fpm/php.ini:
+/etc/php/7.0/fpm/php.ini:
     file.managed:
         - source: salt://sankhara/php.ini
 nginx running:
@@ -35,6 +35,6 @@ nginx running:
             - file: /etc/nginx/sankhara.d/*.conf
 php running:
     service.running:
-        - name: php5-fpm
+        - name: php7.0-fpm
         - watch:
-            - file: /etc/php5/fpm/php.ini
+            - file: /etc/php/7.0/fpm/php.ini
