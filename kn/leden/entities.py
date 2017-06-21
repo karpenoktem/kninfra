@@ -183,6 +183,7 @@ def ensure_indices():
 # ######################################################################
 
 class EntityException(Exception):
+
     '''
     Exception that is raised when invalid input is entered (e.g. overlapping
     dates).
@@ -734,6 +735,7 @@ def pop_all_informacie_notifications():
 
 
 class EntityName(object):
+
     """ Wrapper object for a name of an entity """
 
     def __init__(self, entity, name):
@@ -762,6 +764,7 @@ class EntityName(object):
 
 @six.python_2_unicode_compatible
 class EntityHumanName(object):
+
     """ Wrapper object for a humanName of an entity """
 
     def __init__(self, entity, data):
@@ -800,6 +803,7 @@ class EntityHumanName(object):
 
 
 class Entity(SONWrapper):
+
     """ Base object for every Entity """
 
     def __init__(self, data):
