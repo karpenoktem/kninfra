@@ -4,7 +4,7 @@ from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
@@ -63,7 +63,8 @@ def vote(request, name):
             filling.answers[q_id] = int(form.cleaned_data['answer'])
         filling.date = datetime.datetime.now()
         filling.save()
-    return render_to_response(
+    return render(
+        request,
         'poll/vote.html',
         {'forms': forms, 'poll': poll, 'initial': initial},
         context_instance=RequestContext(request)

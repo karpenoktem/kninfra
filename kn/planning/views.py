@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
@@ -143,10 +143,9 @@ def planning_view(request):
             ei['vacancies'][index].sort(key=lambda x: x['begin'])
         events.append(ei)
     events.sort(key=lambda x: x['datetime'])
-    return render_to_response('planning/overview.html',
-                              {'events': events,
-                               'pools': pools_tpl},
-                              context_instance=RequestContext(request))
+    return render(request, 'planning/overview.html',
+                  {'events': events,
+                   'pools': pools_tpl})
 
 
 @login_required
@@ -222,9 +221,8 @@ def planning_manage(request, poolname):
 
     events = list(events.values())
     events.sort(key=lambda e: e['date'])
-    return render_to_response('planning/manage.html',
-                              {'events': events, 'pool': pool},
-                              context_instance=RequestContext(request))
+    return render(request, 'planning/manage.html',
+                  {'events': events, 'pool': pool})
 
 
 @login_required
@@ -234,9 +232,8 @@ def planning_poollist(request):
         # here?
         raise PermissionDenied
     pools = list(Pool.all())
-    return render_to_response('planning/pools.html',
-                              {'pools': pools},
-                              context_instance=RequestContext(request))
+    return render(request, 'planning/pools.html',
+                  {'pools': pools})
 
 
 @login_required
@@ -272,8 +269,7 @@ def event_create(request):
                                                 args=(e._id,)))
     else:
         form = EventCreateForm()
-    return render_to_response('planning/event_create.html', {'form': form},
-                              context_instance=RequestContext(request))
+    return render(request, 'planning/event_create.html', {'form': form})
 
 
 @login_required
@@ -329,11 +325,11 @@ def event_edit(request, eventid):
         v.vid = str(v._id)
         vacancies.append(v)
     vacancies.sort(key=lambda x: str(x.pool_id) + str(x.begin))
-    return render_to_response(
+    return render(
+        request,
         'planning/event_edit.html',
         {'name': e.name, 'kind': e.kind, 'date': e.date.date(),
          'avform': avform, 'vacancies': vacancies},
-        context_instance=RequestContext(request)
     )
 
 
@@ -385,7 +381,6 @@ def planning_template(request, poolname):
                            in sorted(shifts.items(), key=lambda x: x[0])]
         events.append(ei)
     events.sort(key=lambda x: x['date'])
-    return render_to_response('planning/template.html', {'events': events},
-                              context_instance=RequestContext(request))
+    return render(request, 'planning/template.html', {'events': events})
 
 # vim: et:sta:bs=2:sw=4:

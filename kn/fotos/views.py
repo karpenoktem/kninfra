@@ -9,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import (Http404, HttpResponse, HttpResponseNotModified,
                          QueryDict)
-from django.shortcuts import redirect, render_to_response
+from django.shortcuts import redirect, render
 from django.template import RequestContext
 from django.utils import six
 from django.utils.encoding import filepath_to_uri
@@ -74,11 +74,11 @@ def fotos(request, path=''):
         if not title:
             title = album.name
         # respond with a nice error message
-        response = render_to_response(
+        response = render(
+            request,
             'fotos/fotos.html',
             {'fotos': {'parents': album_parents_json(album)},
              'error': 'permission-denied'},
-            context_instance=RequestContext(request)
         )
         response.status_code = 403
         return response
@@ -104,11 +104,10 @@ def fotos(request, path=''):
             people.append((name, humanNames[name]))
 
     fotos = album_json(album, user)
-    return render_to_response('fotos/fotos.html',
-                              {'fotos': fotos,
-                               'fotos_admin': fEs.is_admin(user),
-                               'people': people},
-                              context_instance=RequestContext(request))
+    return render(request, 'fotos/fotos.html',
+                  {'fotos': fotos,
+                   'fotos_admin': fEs.is_admin(user),
+                   'people': people})
 
 
 def cache(request, cache, path):
@@ -172,9 +171,8 @@ def fotoadmin_create_event(request):
             return redirect('fotoadmin-move')
     else:
         form = CreateEventForm()
-    return render_to_response('fotos/admin/create.html',
-                              {'form': form, 'events': list_events()},
-                              context_instance=RequestContext(request))
+    return render(request, 'fotos/admin/create.html',
+                  {'form': form, 'events': list_events()})
 
 
 @login_required
@@ -191,8 +189,7 @@ def fotoadmin_move(request):
             return redirect('fotos', path=cd['move_dst'])
     else:
         form = MoveFotosForm()
-    return render_to_response('fotos/admin/move.html',
-                              {'form': form},
-                              context_instance=RequestContext(request))
+    return render(request, 'fotos/admin/move.html',
+                  {'form': form})
 
 # vim: et:sta:bs=2:sw=4:

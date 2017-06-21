@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from django.utils import six
 from django.utils.translation import ugettext as _
@@ -35,12 +35,11 @@ def event_list(request):
                 closed_events.append(e)
             else:
                 closed_leden_events.append(e)
-    return render_to_response('subscriptions/event_list.html',
-                              {'open_events': open_events,
-                               'closed_events': closed_events,
-                               'open_leden_events': open_leden_events,
-                               'closed_leden_events': closed_leden_events},
-                              context_instance=RequestContext(request))
+    return render(request, 'subscriptions/event_list.html',
+                  {'open_events': open_events,
+                   'closed_events': closed_events,
+                   'open_leden_events': open_leden_events,
+                   'closed_leden_events': closed_leden_events})
 
 
 @login_required
@@ -108,8 +107,7 @@ def event_detail(request, name):
            'listInvited': listInvited,
            'has_read_access': has_read_access,
            'has_write_access': has_write_access}
-    return render_to_response('subscriptions/event_detail.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'subscriptions/event_detail.html', ctx)
 
 
 def _api_event_set_opened(request):
@@ -239,7 +237,6 @@ def event_new_or_edit(request, edit=None):
         form = AddEventForm(d)
     ctx = {'form': form,
            'edit': edit}
-    return render_to_response('subscriptions/event_new_or_edit.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'subscriptions/event_new_or_edit.html', ctx)
 
 # vim: et:sta:bs=2:sw=4:

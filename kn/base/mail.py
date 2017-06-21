@@ -18,7 +18,6 @@ except ImportError:
     unescape = HTMLParser().unescape
 
 
-
 # TODO translate e-mail to the language preferred by the recipient
 
 
