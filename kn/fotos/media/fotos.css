@@ -420,4 +420,12 @@ img.lazy {
     display: none;
 }
 
+#fotos-footer {
+    text-align: right;
+}
+
+.isroot #fotos-footer {
+    display: none;
+}
+
 /* vim: set et bs=2 sw=4 sta: */
