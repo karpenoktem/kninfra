@@ -93,11 +93,12 @@ def fotos(request, path=''):
         download = ZipSeeker()
         add_download_files(download, album, album.full_path, user)
         response = StreamingHttpResponse(download.blocks(),
-                content_type='application/zip')
+                                         content_type='application/zip')
         response['Content-Length'] = download.size()
         response['Last-Modified'] = http_date(download.lastModified())
         # TODO: human-readable download name?
-        response['Content-Disposition'] = 'attachment; filename=' + album.name + '.zip'
+        response['Content-Disposition'] = 'attachment; filename=' + \
+            album.name + '.zip'
         return response
 
     people = None
@@ -126,6 +127,7 @@ def fotos(request, path=''):
                                'fotos_admin': fEs.is_admin(user),
                                'people': people},
                               context_instance=RequestContext(request))
+
 
 def add_download_files(download, album, rootpath, user):
     for entity in album.list(user):
