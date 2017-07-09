@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^fotos/foto\.php$', views.compat_foto, name='foto-comp-2'),
     url(r'^fotos/index\.php$', RedirectView.as_view(
         url=reverse_lazy('fotos', kwargs={'path': ''}),
-        query_string=True), name='foto-comp-3'),
+        query_string=True, permanent=True), name='foto-comp-3'),
 
     # TODO add fallback for old foto links
     # TODO change wiki links, etc.

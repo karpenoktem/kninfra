@@ -35,7 +35,7 @@ urlpatterns = [
     url(_(r'^akta/?$'), TemplateView.as_view(
         template_name='static/aktanokturna.html'), name='aktanokturna'),
     url(_(r'^(?:an|aktanokturna)/?$'), RedirectView.as_view(
-        url='/akta')),
+        url='/akta', permanent=True)),
 
     url(_(r'^zusjes/?$'), TemplateView.as_view(
         template_name='static/zusjes.html'), name='zusjes'),
@@ -78,11 +78,11 @@ urlpatterns = [
     url(_(r'^bestuur13b/?$'), TemplateView.as_view(
         template_name='static/bestuur13b.html'), name='bestuur13b'),
     url(_(r'^bestuur13/?$'), RedirectView.as_view(
-        url='/bestuur13b'), name='bestuur13'),
+        url='/bestuur13b', permanent=True), name='bestuur13'),
     # TODO we want to use reverse, but it is not initialized properly
     #      at this moment in the request handler.
     url(_(r'^bestuur/?$'), RedirectView.as_view(
-        url='/bestuur13'), name='bestuur'),
+        url='/bestuur13', permanent=False), name='bestuur'),
 
     url(_(r'^introPoster2016/?$'), TemplateView.as_view(
         template_name='static/introPoster2016.html'),
@@ -151,7 +151,7 @@ urlpatterns = [
     url(r'^img/(?P<subdir>.*)', direct_to_folder,
         {'root': os.path.join(settings.MEDIA_ROOT, 'static/img')}),
     url(r'^baragenda/?$', RedirectView.as_view(
-        url='/planning')),  # TODO use reverse_url
+        url='/planning', permanent=True)),  # TODO use reverse_url
 
     # style
     url(_(r'^styles/static/$'),

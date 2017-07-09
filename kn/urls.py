@@ -11,7 +11,7 @@ from kn.leden import views
 
 urlpatterns = [
     url(r'^favicon.ico$', RedirectView.as_view(
-        url=settings.MEDIA_URL + 'base/favicon.ico')),
+        url=settings.MEDIA_URL + 'base/favicon.ico', permanent=True)),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
