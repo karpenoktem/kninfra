@@ -389,23 +389,25 @@
     if (foto && foto.type != 'foto') {
       foto = null;
     }
+
+    // there is a photo frame - close it
+    if (this.saving_status >= 2 && !confirmed) {
+      console.warn('waiting until changes are saved');
+      // Usually changes are saved within 100ms, so wait that time and try
+      // again.
+      setTimeout(function() {
+        if (this.saving_status < 2) {
+          this.change_foto(foto);
+        } else if (confirm('Wijzigingen zijn niet opgeslagen.\nDoorgaan?')) {
+          this.change_foto(foto, true);
+        }
+      }.bind(this), 100);
+      return;
+    }
+
     if (!foto) {
       // close photo frame if there is one
       if (this.foto) {
-        // there is a photo frame - close it
-        if (this.saving_status >= 2 && !confirmed) {
-          console.warn('waiting until changes are saved');
-          // Usually changes are saved within 100ms, so wait that time and try
-          // again.
-          setTimeout(function() {
-            if (this.saving_status < 2) {
-              this.change_foto(foto);
-            } else if (confirm('Wijzigingen zijn niet opgeslagen.\nDoorgaan?')) {
-              this.change_foto(foto, true);
-            }
-          }.bind(this), 100);
-          return;
-        }
         $('#foto').hide();
         $('html').removeClass('noscroll');
         delete this.foto.newTags;
@@ -746,13 +748,15 @@
         }.bind(this), 1000);
 
         foto.thumbnailSize = data.thumbnailSize;
+        foto.thumbnail2xSize = data.thumbnail2xSize;
         foto.largeSize = data.largeSize;
+        foto.large2xSize = data.large2xSize;
 
         foto.description = description;
         foto.visibility = visibility;
 
         foto.calculate_cache_urls();
-        if (foto == this.foto) {
+        if (foto === this.foto) {
           this.update_foto_src(foto);
         }
 
