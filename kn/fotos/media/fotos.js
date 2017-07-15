@@ -68,6 +68,7 @@
     this.allpeople = [];
     this.read_fotos(this.get_url_path(), data);
     this.nav_timeout = null;
+    this.init_foto_frame();
   };
 
   KNF.prototype.change_path = function(path, query, keep_url) {
@@ -384,49 +385,97 @@
   };
 
   KNF.prototype.change_foto = function(foto, confirmed) {
-    if (this.foto) {
-      if (this.saving_status >= 2 && !confirmed) {
-        // Usually changes are saved within 100ms, so wait that time and try
-        // again.
-        setTimeout(function() {
-          if (this.saving_status < 2) {
-            this.change_foto(foto);
-          } else if (confirm('Wijzigingen zijn niet opgeslagen.\nDoorgaan?')) {
-            this.change_foto(foto, true);
-          }
-        }.bind(this), 100);
-        return;
-      }
-      $('#foto').hide();
-      $('#foto .foto-frame').remove();
-      $('html').removeClass('noscroll');
-      delete this.foto.newTags;
-    }
     foto = foto || null;
     if (foto && foto.type != 'foto') {
       foto = null;
     }
-    this.foto = foto;
     if (!foto) {
+      // close photo frame if there is one
+      if (this.foto) {
+        // there is a photo frame - close it
+        if (this.saving_status >= 2 && !confirmed) {
+          console.warn('waiting until changes are saved');
+          // Usually changes are saved within 100ms, so wait that time and try
+          // again.
+          setTimeout(function() {
+            if (this.saving_status < 2) {
+              this.change_foto(foto);
+            } else if (confirm('Wijzigingen zijn niet opgeslagen.\nDoorgaan?')) {
+              this.change_foto(foto, true);
+            }
+          }.bind(this), 100);
+          return;
+        }
+        $('#foto').hide();
+        $('html').removeClass('noscroll');
+        delete this.foto.newTags;
+        this.foto = null;
+      }
       this.apply_url(false);
       return;
     }
+
+    // Remove old images
+    $('.image-wrapper', frame).remove();
+
+    // Show the new photo
+    this.foto = foto;
     if (this.get_hash() != foto.anchor()) {
       this.apply_url(false);
     }
     $('html').addClass('noscroll');
-    var frame = $('.foto-frame.template').clone().removeClass('template');
-    frame.appendTo('#foto');
+    var frame = $('#foto');
     $('.title', frame)
         .text(foto.title ? foto.title : foto.name);
     if (foto.prev)
       $('.prev', frame)
           .attr('href', '#'+encodePath(foto.prev.anchor()));
+    else
+      $('.prev', frame)
+          .removeAttr('href');
     if (foto.next)
       $('.next', frame)
           .attr('href', '#'+encodePath(foto.next.anchor()));
+    else
+      $('.next', frame)
+          .removeAttr('href');
     $('.orig', frame)
         .attr('href', foto.full);
+    $('.description', frame).text(foto.description || '');
+
+    var img = $('<img class="img">');
+    img.on('load', this.onresize.bind(this));
+    var wrapper = $('<div class="image-wrapper">');
+    wrapper.append(img);
+    $('.images', frame).append(wrapper);
+    wrapper.addClass('fadein');
+    this.update_foto_src(foto);
+    if (foto.next) {
+      $('.prefetch-image', frame)
+        .attr('href', this.chooseFoto(foto.next).src);
+    }
+
+    $('#foto').show();
+
+    var sidebar = $('#foto .sidebar');
+    $('input.title', sidebar)
+        .val(this.foto.title)
+        .attr('placeholder', this.foto.name);
+    $('h2.title', sidebar)
+        .text(this.foto.title || this.foto.name);
+    $('.description', sidebar)
+        .val(this.foto.description);
+    $('select.visibility', sidebar)
+        .val(this.foto.visibility);
+
+    this.update_foto_tags(sidebar);
+
+    this.onresize();
+    $('#foto').show();
+  };
+
+  KNF.prototype.init_foto_frame = function() {
+    var frame = $('#foto');
     $('.close', frame)
         .click(function() {
           this.change_foto(null);
@@ -441,17 +490,7 @@
           }
           return false;
         }.bind(this));
-    if (foto.description)
-      $('.description', frame).text(foto.description);
 
-    $('.img', frame).on('load', this.onresize.bind(this));
-    this.update_foto_src(foto);
-    if (foto.next) {
-      $('.prefetch-image', frame)
-        .attr('href', this.chooseFoto(foto.next).src);
-    }
-
-    // Define these events here, not in show_sidebar, otherwise they fire twice.
     var sidebar = $('#foto .sidebar');
     $('form', sidebar)
         .submit(function() {
@@ -492,22 +531,6 @@
           return false;
         }.bind(this));
 
-    $('#foto').show();
-
-    var sidebar = $('#foto .sidebar');
-    $('input.title', sidebar)
-        .val(this.foto.title)
-        .attr('placeholder', this.foto.name);
-    $('h2.title', sidebar)
-        .text(this.foto.title || this.foto.name);
-    if (this.foto.description)
-      $('.description', sidebar)
-          .val(this.foto.description);
-    $('select.visibility', sidebar)
-        .val(this.foto.visibility);
-
-    this.update_foto_tags(sidebar);
-
     function showhide() {
       if (this.nav_timeout === null) {
         $('#foto').addClass('show-nav');
@@ -521,15 +544,12 @@
     }
     frame.mousemove(showhide.bind(this));
     frame.on('touchstart', showhide.bind(this));
-
-    this.onresize();
-    $('#foto').show();
   };
 
   KNF.prototype.update_foto_src = function (foto) {
     var props = this.chooseFoto(this.foto);
-    $('#foto .img')
-        .attr('src', props.src);
+    $('#foto .image-wrapper:last-child .img')
+      .attr('src', props.src);
   };
 
   KNF.prototype.update_foto_tags = function(sidebar) {
@@ -747,7 +767,7 @@
         }
 
         if (foto === this.foto) {
-          var frame = $('#foto .foto-frame');
+          var frame = $('#foto');
           $('.title', frame)
               .text(foto.title ? foto.title : foto.name);
           $('.description', frame)
@@ -757,7 +777,7 @@
   };
 
   KNF.prototype.updateMaxSize = function() {
-    var wrapper = $('#foto .image-wrapper');
+    var wrapper = $('#foto .images');
     // The maxWidth/maxHeight property may be 0 when the frame isn't yet
     // visible.
     // window.outer* vars are a fallback (and the width is wrong when the
@@ -811,7 +831,7 @@
 
     var props = this.chooseFoto(this.foto);
 
-    var img = $('#foto .img');
+    var img = $('#foto .images .image-wrapper:last-child img');
     img.css({'width': props.width,
              'height': props.height});
     if (props.src == this.foto.large2x &&

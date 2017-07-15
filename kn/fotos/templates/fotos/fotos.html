@@ -87,13 +87,10 @@ dit album zien.{% endblocktrans %}</p>
 {% else %}
 <ul id="fotos"></ul>
 {% endif %}
-<div id="foto"></div>
-<div class="template foto-frame">
-  <div class="image-wrapper">
-    <img class="img"/>
-    <a class="nav prev"><img src="{{ MEDIA_URL }}fotos/prev.svg" alt="{% trans "Vorige" %}" title="{% trans "Vorige" %}"/></a>
-    <a class="nav next"><img src="{{ MEDIA_URL }}fotos/next.svg" alt="{% trans "Volgende" %}" title="{% trans "Volgende" %}"/></a>
-  </div>
+<div id="foto">
+  <div class="images"></div>
+  <a class="nav prev"><img src="{{ MEDIA_URL }}fotos/prev.svg" alt="{% trans "Vorige" %}" title="{% trans "Vorige" %}"/></a>
+  <a class="nav next"><img src="{{ MEDIA_URL }}fotos/next.svg" alt="{% trans "Volgende" %}" title="{% trans "Volgende" %}"/></a>
   <a class="nav close" href><img src="{{ MEDIA_URL }}fotos/close.svg" alt="{% trans "Sluiten" %}" title="{% trans "Sluiten" %}"/></a>
   <a class="nav open-sidebar" href><img src="{{ MEDIA_URL }}fotos/sidebar.svg" alt="{% trans "Tags" %}" title="{% trans "Tags" %}"/></a>
   <div class="sidebar">
