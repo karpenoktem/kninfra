@@ -142,7 +142,6 @@ img.lazy {
     font-family: sans-serif;
     font-size: 15px;
     color: white;
-    background-color: black; /* IE8 */
     background-color: rgba(0,0,0,0.95);
 }
 #foto > .foto-frame {
@@ -202,7 +201,6 @@ img.lazy {
 #foto .prev img,
 #foto .next img {
     position: absolute;
-    top: 45%; /* IE8 */
     top: calc(50% - 16px);
     padding: 7px 0;
 }
