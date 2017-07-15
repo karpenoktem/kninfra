@@ -252,6 +252,19 @@ img.lazy {
     display: flex;
     justify-content: center;
     align-items: center;
+    opacity: 1;
+    left: 0;
+    transition: all 200ms linear;
+}
+
+#foto .image-wrapper.right { /* a bit to the right */
+    opacity: 0;
+    left: 20px;
+}
+
+#foto .image-wrapper.left { /* a bit to the left */
+    opacity: 0;
+    left: -20px;
 }
 
 #foto .img {

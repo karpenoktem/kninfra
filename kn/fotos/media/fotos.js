@@ -413,12 +413,30 @@
         delete this.foto.newTags;
         this.foto = null;
       }
+      $('.image-wrapper', frame).remove();
       this.apply_url(false);
       return;
     }
 
+    var direction = '';
+    var reverseDirection= '';
+    if (this.foto === foto.prev) {
+      direction = 'right';
+      reverseDirection = 'left';
+    } else if (this.foto === foto.next) {
+      direction = 'left';
+      reverseDirection = 'right';
+    }
+
     // Remove old images
-    $('.image-wrapper', frame).remove();
+    $('.image-wrapper', frame).each(function(i, wrapper) {
+      wrapper = $(wrapper);
+      if (wrapper.hasClass('left') || wrapper.hasClass('right')) return;
+      wrapper.addClass(reverseDirection);
+      setTimeout(function() {
+        wrapper.remove();
+      }.bind(this), 1000);
+    }.bind(this));
 
     // Show the new photo
     this.foto = foto;
@@ -446,13 +464,22 @@
     $('.description', frame).text(foto.description || '');
 
     var img = $('<img class="img">');
-    img.on('load', this.onresize.bind(this));
-    var wrapper = $('<div class="image-wrapper">');
+    var wrapper = $('<div class="image-wrapper ' + direction + '">');
     wrapper.append(img);
     $('.images', frame).append(wrapper);
-    wrapper.addClass('fadein');
+    setTimeout(function() {
+      // Start the animation immediately (after 1ms)
+      // Preferably this should be done in the 'loadstart' event, but that sadly
+      // hasn't been implemented in browsers yet.
+      wrapper.removeClass(direction);
+    }.bind(this), 1);
     this.update_foto_src(foto);
-    if (foto.next) {
+
+    if (direction == 'left' && foto.prev) {
+      // user will likely move to the left again
+      $('.prefetch-image', frame)
+        .attr('href', this.chooseFoto(foto.prev).src);
+    } else { // right or undefined - user will likely move to the right
       $('.prefetch-image', frame)
         .attr('href', this.chooseFoto(foto.next).src);
     }
@@ -758,6 +785,7 @@
         foto.calculate_cache_urls();
         if (foto === this.foto) {
           this.update_foto_src(foto);
+          this.onresize();
         }
 
         foto.tags = tags;
@@ -838,6 +866,7 @@
     var img = $('#foto .images .image-wrapper:last-child img');
     img.css({'width': props.width,
              'height': props.height});
+    // switch to 2x if needed (but don't switch back for this photo)
     if (props.src == this.foto.large2x &&
         img.attr('src') != this.foto.large2x) {
       img.attr('src', props.src);
