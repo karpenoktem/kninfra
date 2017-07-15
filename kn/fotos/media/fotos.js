@@ -475,13 +475,22 @@
     }.bind(this), 1);
     this.update_foto_src(foto);
 
-    if (direction == 'left' && foto.prev) {
+    $('.preload-image', frame).remove(); // remove old preloaders
+    var preloadHref = null;
+    if (direction == 'left' && foto.prev && foto.prev.type === 'foto') {
       // user will likely move to the left again
-      $('.prefetch-image', frame)
-        .attr('href', this.chooseFoto(foto.prev).src);
-    } else { // right or undefined - user will likely move to the right
-      $('.prefetch-image', frame)
-        .attr('href', this.chooseFoto(foto.next).src);
+      preloadHref = this.chooseFoto(foto.prev).src;
+    } else if (foto.next && foto.next.type === 'foto') {
+      // user will likely move to the right again
+      preloadHref = this.chooseFoto(foto.next).src;
+    }
+    if (preloadHref) {
+      var preload = $('<link rel="preload" as="image" class="preload-image"/>');
+      preload.attr('href', preloadHref);
+      preload.on('load', function(e) {
+        console.log('preload loaded:', e.target.href);
+      });
+      frame.append(preload);
     }
 
     $('#foto').show();
