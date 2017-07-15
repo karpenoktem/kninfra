@@ -385,12 +385,7 @@
   };
 
   KNF.prototype.change_foto = function(foto, confirmed) {
-    foto = foto || null;
-    if (foto && foto.type != 'foto') {
-      foto = null;
-    }
-
-    // there is a photo frame - close it
+    // check for unsaved changes
     if (this.saving_status >= 2 && !confirmed) {
       console.warn('waiting until changes are saved');
       // Usually changes are saved within 100ms, so wait that time and try
@@ -403,6 +398,11 @@
         }
       }.bind(this), 100);
       return;
+    }
+
+    foto = foto || null;
+    if (foto && foto.type != 'foto') {
+      foto = null;
     }
 
     if (!foto) {
