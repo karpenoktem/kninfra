@@ -1,3 +1,6 @@
+
+var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
+
 'use strict';
 (function(){
   // Same as encodeURIComponent, but does not escape '/'.  Looks prettier.
@@ -66,6 +69,8 @@
     this.parents = {};
     this.people = {};
     this.allpeople = [];
+    this.swype_start = null;
+    this.swype_moved = null;
     this.read_fotos(this.get_url_path(), data);
     this.nav_timeout = null;
     this.init_foto_frame();
@@ -405,15 +410,17 @@
       foto = null;
     }
 
+    var frame = $('#foto');
+
     if (!foto) {
       // close photo frame if there is one
       if (this.foto) {
-        $('#foto').hide();
+        frame.hide();
         $('html').removeClass('noscroll');
         delete this.foto.newTags;
         this.foto = null;
       }
-      $('.image-wrapper', frame).remove();
+      $('.images', frame).empty();
       this.apply_url(false);
       return;
     }
@@ -433,47 +440,45 @@
       wrapper = $(wrapper);
       if (wrapper.hasClass('left') || wrapper.hasClass('right')) return;
       wrapper.addClass(reverseDirection);
+      wrapper.attr('state', 'gone'); // don't use this image anymore
       setTimeout(function() {
         wrapper.remove();
-      }.bind(this), 1000);
+      }.bind(this), SWITCH_DURATION);
     }.bind(this));
 
-    // Show the new photo
-    this.foto = foto;
-    if (this.get_hash() != foto.anchor()) {
-      this.apply_url(false);
-    }
-    $('html').addClass('noscroll');
-    var frame = $('#foto');
-    $('.title', frame)
-        .text(foto.title ? foto.title : foto.name);
-    if (foto.prev)
-      $('.prev', frame)
-          .attr('href', '#'+encodePath(foto.prev.anchor()));
-    else
-      $('.prev', frame)
-          .removeAttr('href');
-    if (foto.next)
-      $('.next', frame)
-          .attr('href', '#'+encodePath(foto.next.anchor()));
-    else
-      $('.next', frame)
-          .removeAttr('href');
-    $('.orig', frame)
-        .attr('href', foto.full);
-    $('.description', frame).text(foto.description || '');
-
+    // Create the new photo
     var img = $('<img class="img">');
-    var wrapper = $('<div class="image-wrapper ' + direction + '">');
+    var wrapper = $('<div class="image-wrapper">');
+    wrapper.attr('data-name', foto.name);
+    wrapper.addClass(direction);
+    wrapper.attr('state', 'current');
+    img.attr('src', this.chooseFoto(foto).src);
     wrapper.append(img);
     $('.images', frame).append(wrapper);
     setTimeout(function() {
       // Start the animation immediately (after 1ms)
       // Preferably this should be done in the 'loadstart' event, but that sadly
       // hasn't been implemented in browsers yet.
+      wrapper.addClass('settle');
       wrapper.removeClass(direction);
     }.bind(this), 1);
-    this.update_foto_src(foto);
+    setTimeout(function() {
+      // don't disturb dragging of the photo
+      wrapper.removeClass('settle');
+    }.bind(this), SWITCH_DURATION);
+
+    this.update_foto_frame(foto, direction);
+
+    this.onresize();
+    $('html').addClass('noscroll');
+    frame.show();
+  };
+
+  KNF.prototype.update_foto_frame = function(foto, direction) {
+    console.log('updating to', foto.name);
+    this.foto = foto;
+
+    var frame = $('#foto');
 
     $('.preload-image', frame).remove(); // remove old preloaders
     var preloadHref = null;
@@ -493,9 +498,29 @@
       frame.append(preload);
     }
 
-    $('#foto').show();
+    // Update buttons, URL, title, etc.
+    if (this.get_hash() != foto.anchor()) {
+      this.apply_url(false);
+    }
+    $('.title', frame)
+        .text(foto.title ? foto.title : foto.name);
+    if (foto.prev && foto.prev.type != 'album')
+      $('.prev', frame)
+          .attr('href', '#'+encodePath(foto.prev.anchor()));
+    else
+      $('.prev', frame)
+          .removeAttr('href');
+    if (foto.next && foto.next.type != 'album')
+      $('.next', frame)
+          .attr('href', '#'+encodePath(foto.next.anchor()));
+    else
+      $('.next', frame)
+          .removeAttr('href');
+    $('.orig', frame)
+        .attr('href', foto.full);
+    $('.description', frame).text(foto.description || '');
 
-    var sidebar = $('#foto .sidebar');
+    var sidebar = $('.sidebar', frame);
     $('input.title', sidebar)
         .val(this.foto.title)
         .attr('placeholder', this.foto.name);
@@ -507,9 +532,6 @@
         .val(this.foto.visibility);
 
     this.update_foto_tags(sidebar);
-
-    this.onresize();
-    $('#foto').show();
   };
 
   KNF.prototype.init_foto_frame = function() {
@@ -529,7 +551,7 @@
           return false;
         }.bind(this));
 
-    var sidebar = $('#foto .sidebar');
+    var sidebar = $('.sidebar', frame);
     $('form', sidebar)
         .submit(function() {
           this.save_metadata();
@@ -571,23 +593,186 @@
 
     function showhide() {
       if (this.nav_timeout === null) {
-        $('#foto').addClass('show-nav');
+        frame.addClass('show-nav');
       } else {
         clearTimeout(this.nav_timeout);
       }
       this.nav_timeout = setTimeout(function() {
         this.nav_timeout = null;
-        $('#foto').removeClass('show-nav');
+        frame.removeClass('show-nav');
       }.bind(this), 1500);
     }
     frame.mousemove(showhide.bind(this));
     frame.on('touchstart', showhide.bind(this));
-  };
 
-  KNF.prototype.update_foto_src = function (foto) {
-    var props = this.chooseFoto(this.foto);
-    $('#foto .image-wrapper:last-child .img')
-      .attr('src', props.src);
+    frame.on('touchstart', function(e) {
+      this.swype_start = e.originalEvent.touches[0].clientX;
+      console.log('start', this.swype_start);
+    }.bind(this));
+
+    frame.on('touchmove', function(e) {
+      var moved = (e.originalEvent.touches[0].clientX - this.swype_start);
+      if (moved > 0 && (!this.foto.prev || this.foto.prev.type === 'album')) {
+        // first photo
+        moved = 0;
+      }
+      if (moved < 0 && (!this.foto.next || this.foto.next.type === 'album')) {
+        // last photo
+        moved = 0;
+      }
+
+      this.swype_moved = moved;
+
+      var current = $('.image-wrapper[state=current]', frame);
+      var prev = $('.image-wrapper[state=prev]', frame); // possibly 0
+      var next = $('.image-wrapper[state=next]', frame); // possibly 0
+
+      if (moved < 0) {
+        // Preview next image
+        if ($('.image-wrapper[state=next]', frame).length == 0) {
+          next = $('<div class="image-wrapper"><img class="img"></div>');
+          next.attr('data-name', this.foto.next.name);
+          next.attr('state', 'next');
+          $('img', next)
+            .attr('src', this.chooseFoto(this.foto.next).src);
+          $('.images', frame).prepend(next);
+          this.onresize();
+        }
+        next.removeClass('settle'); // just in case
+        next.css({
+          'opacity':   Math.min(1, 1 - (this.maxWidth - -moved) / this.maxWidth),
+          'transform': 'scale(' +Math.min(1, 1 - (this.maxWidth - -moved) / this.maxWidth / 2) + ')',
+        });
+        current.css({
+          'left':      moved + 'px',
+          'transform': 'scale(1)',
+          'opacity':   1,
+        });
+      } else {
+        next.css('opacity', 0);
+      }
+
+      if (moved > 0) {
+        // Preview previous image
+        if ($('.image-wrapper[state=prev]', frame).length == 0) {
+          prev = $('<div class="image-wrapper"><img class="img"></div>');
+          prev.attr('data-name', this.foto.prev.name);
+          prev.attr('state', 'prev');
+          $('img', prev)
+            .attr('src', this.chooseFoto(this.foto.prev).src);
+          $('.images', frame).append(prev);
+          this.onresize();
+        }
+        prev.removeClass('settle'); // just in case
+        prev.css({
+          'left':      Math.min(0, moved - this.maxWidth) + 'px',
+        });
+        current.css({
+          'left':      0,
+          'transform': 'scale('+Math.min(1, 1 - moved / this.maxWidth / 2)+')',
+          'opacity':   Math.min(1, 1 - moved / this.maxWidth),
+        });
+      } else {
+        prev.css('opacity', 0);
+      }
+
+      if (moved == 0) {
+        current.css({
+          'left':      0,
+          'transform': 'scale(1)',
+          'opacity':   1,
+        });
+      }
+    }.bind(this));
+
+    frame.on('touchend', function(e) {
+      if (this.swype_moved === null) return;
+
+      var moved = this.swype_moved;
+      this.swype_start = null;
+      this.swype_moved = null;
+
+      var current = $('.image-wrapper[state=current]', frame).last();
+      var next = $('.image-wrapper[state=next]', frame); // possibly 0
+      var prev = $('.image-wrapper[state=prev]', frame); // possibly 0
+
+      if (moved < this.maxWidth / -6 && this.foto.next && this.foto.next.type != 'album') {
+        console.log('end: next');
+        // next image
+        next.addClass('settle');
+        next.css({
+          'transform': 'scale(1)',
+          'opacity':   1,
+        });
+
+        current.css({
+          'left':      -this.maxWidth + 'px',
+          'transform': 'scale(1)',
+          'opacity':   1,
+        });
+        current.addClass('settle');
+
+        prev.remove();
+        current.attr('state', 'prev');
+        next.attr('state', 'current');
+        setTimeout(function() {
+          next.removeClass('settle');
+        }.bind(this), SWITCH_DURATION);
+
+        this.update_foto_frame(this.foto.next, 'right');
+
+      } else if (moved > this.maxWidth / 6 && this.foto.prev && this.foto.prev.type != 'album') {
+        // previous image
+        console.log('end: prev');
+        prev.css({
+          'left': 0,
+        });
+        prev.addClass('settle');
+
+        current.css({
+          'left':      0,
+          'transform': 'scale(0.5)',
+          'opacity':   0,
+        });
+        current.addClass('settle');
+
+        next.remove();
+        current.attr('state', 'next');
+        prev.attr('state', 'current');
+        setTimeout(function() {
+          prev.removeClass('settle');
+        }.bind(this), SWITCH_DURATION);
+
+        this.update_foto_frame(this.foto.prev, 'left');
+
+      } else {
+        console.log('end: current');
+        // current image
+        current.css({
+          'left':      0,
+          'transform': 'scale(1)',
+          'opacity':   1,
+        });
+        current.addClass('settle');
+
+        next.css({
+          'transform': 'scale(0.5)',
+          'opacity':   0,
+        });
+        next.addClass('settle');
+
+        prev.css({
+          'left': -this.maxWidth-8,
+        });
+        prev.addClass('settle');
+
+        setTimeout(function() {
+          current.removeClass('settle');
+          next.removeClass('settle');
+          prev.removeClass('settle');
+        }.bind(this), SWITCH_DURATION);
+      }
+    }.bind(this));
   };
 
   KNF.prototype.update_foto_tags = function(sidebar) {
@@ -793,7 +978,7 @@
 
         foto.calculate_cache_urls();
         if (foto === this.foto) {
-          this.update_foto_src(foto);
+          img.attr('src', this.chooseFoto(foto).src);
           this.onresize();
         }
 
@@ -868,18 +1053,20 @@
   };
 
   KNF.prototype.onresize = function() {
-    if (this.foto === null) return;
-
-    var props = this.chooseFoto(this.foto);
-
-    var img = $('#foto .images .image-wrapper:last-child img');
-    img.css({'width': props.width,
-             'height': props.height});
-    // switch to 2x if needed (but don't switch back for this photo)
-    if (props.src == this.foto.large2x &&
-        img.attr('src') != this.foto.large2x) {
-      img.attr('src', props.src);
-    }
+    $('#foto .image-wrapper:not([state=gone])').each(function(i, wrapper) {
+      wrapper = $(wrapper);
+      console.log('updating', wrapper.attr('data-name'));
+      var img = $('img', wrapper);
+      var foto = this.fotos[this.path].children[wrapper.attr('data-name')];
+      var props = this.chooseFoto(foto);
+      img.css({'width': props.width,
+               'height': props.height});
+      // switch to 2x if needed (but don't switch back for this photo)
+      if (props.src == this.foto.large2x &&
+          img.attr('src') != this.foto.large2x) {
+        img.attr('src', props.src);
+      }
+    }.bind(this));
   };
 
   KNF.prototype.onedit = function(e) {
