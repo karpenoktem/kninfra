@@ -629,7 +629,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
       if (moved < 0) {
         // Preview next image
-        if ($('.image-wrapper[state=next]', frame).length == 0) {
+        if (next.length == 0) {
           next = $('<div class="image-wrapper"><img class="img"></div>');
           next.attr('data-name', this.foto.next.name);
           next.attr('state', 'next');
@@ -644,8 +644,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
           'transform': 'scale(' +Math.min(1, 1 - (this.maxWidth - -moved) / this.maxWidth / 2) + ')',
         });
         current.css({
-          'left':      moved + 'px',
-          'transform': 'scale(1)',
+          'transform': 'scale(1) translateX(' + moved + 'px)',
           'opacity':   1,
         });
       } else {
@@ -654,7 +653,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
       if (moved > 0) {
         // Preview previous image
-        if ($('.image-wrapper[state=prev]', frame).length == 0) {
+        if (prev.length == 0) {
           prev = $('<div class="image-wrapper"><img class="img"></div>');
           prev.attr('data-name', this.foto.prev.name);
           prev.attr('state', 'prev');
@@ -665,10 +664,9 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         }
         prev.removeClass('settle'); // just in case
         prev.css({
-          'left':      Math.min(0, moved - this.maxWidth) + 'px',
+          'transform': 'translateX('+Math.min(0, moved - this.maxWidth) + 'px)',
         });
         current.css({
-          'left':      0,
           'transform': 'scale('+Math.min(1, 1 - moved / this.maxWidth / 2)+')',
           'opacity':   Math.min(1, 1 - moved / this.maxWidth),
         });
@@ -678,8 +676,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
       if (moved == 0) {
         current.css({
-          'left':      0,
-          'transform': 'scale(1)',
+          'transform': '',
           'opacity':   1,
         });
       }
@@ -706,8 +703,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         });
 
         current.css({
-          'left':      -this.maxWidth + 'px',
-          'transform': 'scale(1)',
+          'transform': 'scale(1) translateX(' + (-this.maxWidth) + 'px)',
           'opacity':   1,
         });
         current.addClass('settle');
@@ -716,21 +712,38 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         current.attr('state', 'prev');
         next.attr('state', 'current');
         setTimeout(function() {
-          next.removeClass('settle');
+          $('.image-wrapper[state=prev]', frame)
+            .removeClass('settle');
+          $('.image-wrapper[state=current]', frame)
+            .removeClass('settle');
+          // Create the next image (to cache)
+          // not sure whether it actually helps...
+          // TODO: code duplication
+          if (this.foto.next && this.foto.next.type != 'album' &&
+              $('.image-wrapper[state=next]', frame).length == 0) {
+            var next = $('<div class="image-wrapper"><img class="img"></div>');
+            next.attr('data-name', this.foto.next.name);
+            next.attr('state', 'next');
+            next.css('transform', 'translateX(9999px)'); // off-screen
+            $('img', next)
+              .attr('src', this.chooseFoto(this.foto.next).src);
+            $('.images', frame).prepend(next);
+            this.onresize();
+          }
         }.bind(this), SWITCH_DURATION);
 
         this.update_foto_frame(this.foto.next, 'right');
 
       } else if (moved > this.maxWidth / 6 && this.foto.prev && this.foto.prev.type != 'album') {
+        console.log('prev', prev);
         // previous image
         console.log('end: prev');
         prev.css({
-          'left': 0,
+          'transform': '',
         });
         prev.addClass('settle');
 
         current.css({
-          'left':      0,
           'transform': 'scale(0.5)',
           'opacity':   0,
         });
@@ -740,7 +753,23 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         current.attr('state', 'next');
         prev.attr('state', 'current');
         setTimeout(function() {
-          prev.removeClass('settle');
+          $('.image-wrapper[state=current]', frame)
+            .removeClass('settle');
+          $('.image-wrapper[state=next]', frame)
+            .removeClass('settle');
+          // cache the previous image in case the user goes back one more
+          // TODO: code duplication
+          if (this.foto.prev && this.foto.prev.type != 'album' &&
+              $('.image-wrapper[state=prev]', frame).length == 0) {
+            var prev = $('<div class="image-wrapper"><img class="img"></div>');
+            prev.attr('data-name', this.foto.prev.name);
+            prev.attr('state', 'prev');
+            prev.css('transform', 'translateX(9999px)'); // off-screen
+            $('img', prev)
+              .attr('src', this.chooseFoto(this.foto.prev).src);
+            $('.images', frame).append(prev);
+            this.onresize();
+          }
         }.bind(this), SWITCH_DURATION);
 
         this.update_foto_frame(this.foto.prev, 'left');
@@ -749,7 +778,6 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         console.log('end: current');
         // current image
         current.css({
-          'left':      0,
           'transform': 'scale(1)',
           'opacity':   1,
         });
@@ -762,7 +790,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         next.addClass('settle');
 
         prev.css({
-          'left': -this.maxWidth-8,
+          'transform': 'translateX('+(-this.maxWidth-8)+'px)',
         });
         prev.addClass('settle');
 
