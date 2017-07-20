@@ -537,12 +537,12 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
   KNF.prototype.init_foto_frame = function() {
     var frame = $('#foto');
     $('.close', frame)
-        .click(function() {
+        .on('touchstart', function() {
           this.change_foto(null);
           return false;
         }.bind(this));
     $('.open-sidebar', frame)
-        .click(function() {
+        .on('touchstart', function(e) {
           if (this.sidebar) {
             this.close_sidebar();
           } else {
@@ -605,12 +605,24 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     frame.mousemove(showhide.bind(this));
     frame.on('touchstart', showhide.bind(this));
 
-    frame.on('touchstart', function(e) {
+    frame.on('touchstart', touchstart.bind(this));
+    function touchstart(e) {
+      if (this.sidebar) return;
       this.swype_start = e.originalEvent.touches[0].clientX;
       console.log('start', this.swype_start);
-    }.bind(this));
+    }
 
-    frame.on('touchmove', function(e) {
+    frame.on('touchmove', touchmove.bind(this));
+    function touchmove(e) {
+      if (this.sidebar) return;
+      if (this.swype_start === null) return;
+      if (e.originalEvent.touches.length > 1) {
+        // pinch-zoom
+        touchend();
+        return;
+      }
+      e.preventDefault();
+
       var moved = (e.originalEvent.touches[0].clientX - this.swype_start);
       if (moved > 0 && (!this.foto.prev || this.foto.prev.type === 'album')) {
         // first photo
@@ -681,9 +693,10 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
           'opacity':   1,
         });
       }
-    }.bind(this));
+    }
 
-    frame.on('touchend', function(e) {
+    frame.on('touchend', touchend.bind(this));
+    function touchend(e) {
       if (this.swype_moved === null) return;
 
       var moved = this.swype_moved;
@@ -801,7 +814,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
           prev.removeClass('settle');
         }.bind(this), SWITCH_DURATION);
       }
-    }.bind(this));
+    }
   };
 
   KNF.prototype.update_foto_tags = function(sidebar) {
