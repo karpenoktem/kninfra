@@ -665,6 +665,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         prev.removeClass('settle'); // just in case
         prev.css({
           'transform': 'translateX('+Math.min(0, moved - this.maxWidth) + 'px)',
+          'opacity':   1,
         });
         current.css({
           'transform': 'scale('+Math.min(1, 1 - moved / this.maxWidth / 2)+')',
