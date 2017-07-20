@@ -707,7 +707,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       var next = $('.image-wrapper[state=next]', frame); // possibly 0
       var prev = $('.image-wrapper[state=prev]', frame); // possibly 0
 
-      if (moved < this.maxWidth / -6 && this.foto.next && this.foto.next.type != 'album') {
+      if (moved < this.maxWidth / -16 && this.foto.next && this.foto.next.type != 'album') {
         console.log('end: next');
         // next image
         next.addClass('settle');
@@ -748,7 +748,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
         this.update_foto_frame(this.foto.next, 'right');
 
-      } else if (moved > this.maxWidth / 6 && this.foto.prev && this.foto.prev.type != 'album') {
+      } else if (moved > this.maxWidth / 16 && this.foto.prev && this.foto.prev.type != 'album') {
         console.log('prev', prev);
         // previous image
         console.log('end: prev');
