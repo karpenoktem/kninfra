@@ -722,7 +722,8 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         next.attr('state', 'current');
         setTimeout(function() {
           $('.images img[state=prev]', frame)
-            .removeClass('settle');
+            .removeClass('settle')
+            .css('transform', 'translateX(-9999px)');
           $('.images img[state=current]', frame)
             .removeClass('settle');
           // Create the next image (to cache)
