@@ -415,7 +415,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     if (!foto) {
       // close photo frame if there is one
       if (this.foto) {
-        frame.hide();
+        frame.css('display', 'none'); // hide
         $('html').removeClass('noscroll');
         delete this.foto.newTags;
         this.foto = null;
@@ -471,7 +471,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
     this.onresize();
     $('html').addClass('noscroll');
-    frame.show();
+    frame.css('display', 'flex'); // show
   };
 
   KNF.prototype.update_foto_frame = function(foto, direction) {
