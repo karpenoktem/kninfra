@@ -615,428 +615,429 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     frame.mousemove(showhide.bind(this));
     frame.on('touchstart', showhide.bind(this));
 
-    frame.on('touchstart', touchstart.bind(this));
-    function touchstart(e) {
-      if (this.sidebar) return;
+    frame.on('touchstart', this.touchstart.bind(this));
+    frame.on('touchmove', this.touchmove.bind(this));
+    frame.on('touchend', this.touchend.bind(this));
+  };
 
-      // Ignore the third (or more) finger
-      if (e.originalEvent.touches.length > 2) return;
+  KNF.prototype.touchstart = function (e) {
+    if (this.sidebar) return;
 
-      // A second finger was placed on the surface
-      if (e.originalEvent.touches.length == 2) {
-        var prev = $('.images img[state=prev]', frame);
-        if (prev) {
-          // Possibly within a swype to the right. Let this image disappear to the left.
-          var propsPrev = this.chooseFoto(this.foto.prev);
-          prev.css('transform', 'translateX('+Math.min(0, -(this.maxWidth+propsPrev.width)/2) + 'px)')
-          prev.addClass('settle');
-          setTimeout(function() {
-            prev.removeClass('settle');
-            prev.css('transform', 'translateX(-9999px)');
-          }, SWITCH_DURATION);
-        }
+    // Ignore the third (or more) finger
+    if (e.originalEvent.touches.length > 2) return;
 
-        var next = $('.images img[state=next]', frame);
-        if (next) {
-          // Possibly within a swype to the left. Fade the next image.
-          next.css({
-            'transform': 'scale(0.5)',
-            'opacity':   0,
-          });
-          next.addClass('settle');
-          setTimeout(function() {
-            next.removeClass('settle');
-            next.css('transform', 'translateX(9999px)');
-          }, SWITCH_DURATION);
-        }
-
-        if (this.zoom_pan !== null) {
-          // We were panning, but now placing a 2nd finger on the surface.
-          this.zoom_pan = null;
-          if (this.zoom_current !== null) {
-            this.zoom_previous = this.zoom_current;
-            this.zoom_current = null;
-          }
-        }
-
-        // TODO: code duplication
-        var points = [{
-          x: e.originalEvent.touches[0].clientX,
-          y: e.originalEvent.touches[0].clientY,
-        }, {
-          x: e.originalEvent.touches[1].clientX,
-          y: e.originalEvent.touches[1].clientY,
-        }];
-        var width = Math.abs(points[0].x - points[1].x);
-        var height = Math.abs(points[0].y - points[1].y);
-        // Distance between the two fingers (Pythagorean theorem)
-        // Use the changed distance to calculate the scale (zoom) and the center
-        // to calculate the movement.
-        this.zoom_distance = Math.sqrt(width*width + height*height);
-        this.zoom_center = {
-          x: (points[0].x+points[1].x)/2,
-          y: (points[0].y+points[1].y)/2,
-        };
-
-        if (this.zoom_previous === null) {
-          // Start a pinch-zoom session: this is the first time two are together
-          // on a surface since a switch/unzoom
-          this.zoom_previous = {
-            translateX: 0,
-            translateY: 0,
-            scale: 1,
-          };
-          // assume the first finger is points[0]
-          var moved = points[0].x - this.swype_start;
-          this.swype_start = null;
-          if (moved < 0) {
-            this.zoom_previous.translateX = moved;
-            console.log('extra translateX', this.zoom_previous.translateX);
-          }
-          console.log('created zoom session', this.zoom_previous);
-        }
-      } else {
-        // The first finger was placed on the surface
-        if (this.zoom_previous === null) {
-          this.swype_start = e.originalEvent.touches[0].clientX;
-          console.log('swype start', this.swype_start);
-        }
-      }
-    }
-
-    frame.on('touchmove', touchmove.bind(this));
-    function touchmove(e) {
-      if (this.sidebar) return;
-      if (this.swype_start === null && this.zoom_previous === null) return;
-
-      e.preventDefault();
-
-      // Inside a pinch-zoom operation
-      if (e.originalEvent.touches.length > 1) {
-        // TODO: code duplication
-        var points = [{
-          x: e.originalEvent.touches[0].clientX,
-          y: e.originalEvent.touches[0].clientY,
-        }, {
-          x: e.originalEvent.touches[1].clientX,
-          y: e.originalEvent.touches[1].clientY,
-        }];
-        var width = Math.abs(points[0].x - points[1].x);
-        var height = Math.abs(points[0].y - points[1].y);
-        // Distance between the two fingers (Pythagorean theorem)
-        // Use the changed distance to calculate the scale (zoom) and the center
-        // to calculate the movement.
-        var distance = Math.sqrt(width*width + height*height);
-        var center = {
-          x: (points[0].x+points[1].x)/2,
-          y: (points[0].y+points[1].y)/2,
-        };
-        var translateX = center.x-this.zoom_center.x;
-        var translateY = center.y-this.zoom_center.y;
-        var scale = distance / this.zoom_distance;
-        this.zoom_current = {
-          translateX: this.zoom_previous.translateX + translateX,
-          translateY: this.zoom_previous.translateY + translateY,
-          scale: this.zoom_previous.scale * scale,
-        };
-        // Add the fact that we're not zooming in the middle but possibly
-        // somewhere on the edge, so the position should be adjusted.
-        // TODO: it doesn't work very well when the image is zoomed in a lot.
-        this.zoom_current.translateX += (this.zoom_center.x - this.maxWidth/2)*this.zoom_previous.scale - (this.zoom_center.x - this.maxWidth/2)*this.zoom_current.scale;
-        this.zoom_current.translateY += (this.zoom_center.y - this.maxHeight/2)*this.zoom_previous.scale - (this.zoom_center.y - this.maxHeight/2)*this.zoom_current.scale;
-        var current = $('.images img[state=current]', frame);
-        current.css({
-          'transform': 'translate(' + this.zoom_current.translateX + 'px, ' + this.zoom_current.translateY + 'px) scale(' + this.zoom_current.scale + ')',
-          'opacity': 1,
-        });
-        return;
+    // A second finger was placed on the surface
+    if (e.originalEvent.touches.length == 2) {
+      var prev = $('#foto .images img[state=prev]');
+      if (prev) {
+        // Possibly within a swype to the right. Let this image disappear to the left.
+        var propsPrev = this.chooseFoto(this.foto.prev);
+        prev.css('transform', 'translateX('+Math.min(0, -(this.maxWidth+propsPrev.width)/2) + 'px)')
+        prev.addClass('settle');
+        setTimeout(function() {
+          prev.removeClass('settle');
+          prev.css('transform', 'translateX(-9999px)');
+        }, SWITCH_DURATION);
       }
 
-      // Move photo while zoomed - only a single finger is used now
-      if (this.zoom_previous !== null) {
-        var point = {
-          x: e.originalEvent.touches[0].clientX,
-          y: e.originalEvent.touches[0].clientY,
-        };
-        if (this.zoom_pan === null) {
-          this.zoom_pan = point;
-        } else {
-          var translateX = point.x - this.zoom_pan.x;
-          var translateY = point.y - this.zoom_pan.y;
-          this.zoom_current = {
-            translateX: this.zoom_previous.translateX + translateX,
-            translateY: this.zoom_previous.translateY + translateY,
-            scale: this.zoom_previous.scale,
-          };
-          var current = $('.images img[state=current]', frame);
-          current.css('transform', 'translate(' + this.zoom_current.translateX + 'px, ' + this.zoom_current.translateY + 'px) scale(' + this.zoom_current.scale + ')');
-        }
-        return;
-      }
-
-      // We're within a swype action (to the left or right).
-
-      var moved = (e.originalEvent.touches[0].clientX - this.swype_start);
-      if (moved > 0 && (!this.foto.prev || this.foto.prev.type === 'album')) {
-        // first photo
-        moved = 0;
-      }
-      if (moved < 0 && (!this.foto.next || this.foto.next.type === 'album')) {
-        // last photo
-        moved = 0;
-      }
-
-      this.swype_moved = moved;
-
-      var current = $('.images img[state=current]', frame);
-      var prev = $('.images img[state=prev]', frame); // possibly 0
-      var next = $('.images img[state=next]', frame); // possibly 0
-
-      if (moved < 0) {
-        // Preview next image
-        if (next.length == 0) {
-          next = $('<img class="img" state="next"/>');
-          next.attr('data-name', this.foto.next.name);
-          next.attr('src', this.chooseFoto(this.foto.next).src);
-          $('.images', frame).prepend(next);
-          this.resize();
-        }
-        next.removeClass('settle'); // just in case
+      var next = $('#foto .images img[state=next]');
+      if (next) {
+        // Possibly within a swype to the left. Fade the next image.
         next.css({
-          'opacity':   Math.min(1, 1 - (this.maxWidth - -moved) / this.maxWidth),
-          'transform': 'scale(' +Math.min(1, 1 - (this.maxWidth - -moved) / this.maxWidth / 2) + ')',
+          'transform': 'scale(0.5)',
+          'opacity':   0,
         });
-        current.css({
-          'transform': 'scale(1) translateX(' + moved + 'px)',
-          'opacity':   1,
-        });
-      } else {
-        next.css('opacity', 0);
+        next.addClass('settle');
+        setTimeout(function() {
+          next.removeClass('settle');
+          next.css('transform', 'translateX(9999px)');
+        }, SWITCH_DURATION);
       }
 
-      if (moved > 0) {
-        // Preview previous image
-        var props = this.chooseFoto(this.foto.prev);
-        if (prev.length == 0) {
-          prev = $('<img class="img" state="prev"/>');
-          prev.attr('data-name', this.foto.prev.name);
-          prev.attr('src', props.src);
-          $('.images', frame).append(prev);
-          this.resize();
-        }
-        prev.removeClass('settle'); // just in case
-        prev.css({
-          'transform': 'translateX('+Math.min(0, moved - (this.maxWidth+props.width)/2) + 'px)',
-          'opacity':   1,
-        });
-        current.css({
-          'transform': 'scale('+Math.min(1, 1 - moved / this.maxWidth / 2)+')',
-          'opacity':   Math.min(1, 1 - moved / this.maxWidth),
-        });
-      } else {
-        prev.css('opacity', 0);
-      }
-
-      if (moved == 0) {
-        current.css({
-          'transform': '',
-          'opacity':   1,
-        });
-      }
-    }
-
-    frame.on('touchend', touchend.bind(this));
-    function touchend(e) {
-      if (this.sidebar) return;
-
-      // ignore lifting the third (or more) finger
-      if (e.originalEvent.touches.length > 1) return;
-
-      // Lifting the 2nd finger
-      if (e.originalEvent.touches.length == 1) {
-        console.log('end of zoom - panning now', e.originalEvent.touches[0]);
+      if (this.zoom_pan !== null) {
+        // We were panning, but now placing a 2nd finger on the surface.
+        this.zoom_pan = null;
         if (this.zoom_current !== null) {
           this.zoom_previous = this.zoom_current;
           this.zoom_current = null;
         }
-        return;
       }
 
-      if (this.zoom_previous !== null) {
-        if (this.zoom_pan !== null) {
-          // End of panning
-          this.zoom_pan = null;
-          if (this.zoom_current !== null) {
-            this.zoom_previous = this.zoom_current;
-            this.zoom_current = null;
-          }
+      // TODO: code duplication
+      var points = [{
+        x: e.originalEvent.touches[0].clientX,
+        y: e.originalEvent.touches[0].clientY,
+      }, {
+        x: e.originalEvent.touches[1].clientX,
+        y: e.originalEvent.touches[1].clientY,
+      }];
+      var width = Math.abs(points[0].x - points[1].x);
+      var height = Math.abs(points[0].y - points[1].y);
+      // Distance between the two fingers (Pythagorean theorem)
+      // Use the changed distance to calculate the scale (zoom) and the center
+      // to calculate the movement.
+      this.zoom_distance = Math.sqrt(width*width + height*height);
+      this.zoom_center = {
+        x: (points[0].x+points[1].x)/2,
+        y: (points[0].y+points[1].y)/2,
+      };
+
+      if (this.zoom_previous === null) {
+        // Start a pinch-zoom session: this is the first time two are together
+        // on a surface since a switch/unzoom
+        this.zoom_previous = {
+          translateX: 0,
+          translateY: 0,
+          scale: 1,
+        };
+        // assume the first finger is points[0]
+        var moved = points[0].x - this.swype_start;
+        this.swype_start = null;
+        if (moved < 0) {
+          this.zoom_previous.translateX = moved;
+          console.log('extra translateX', this.zoom_previous.translateX);
         }
-        // Check for needed 'jump' at end of pinch zoom to center and zoom back
-        // to 100% if needed
-        var current = $('.images img[state=current]', frame);
-        if (this.zoom_previous.scale <= 1) {
-          // Zoomed out - exit zoom/pan session (to enable back/forward swype)
-          this.zoom_previous = null;
-          console.log('end of zoom/pan gesture');
-          current.css('transform', '');
+        console.log('created zoom session', this.zoom_previous);
+      }
+    } else {
+      // The first finger was placed on the surface
+      if (this.zoom_previous === null) {
+        this.swype_start = e.originalEvent.touches[0].clientX;
+        console.log('swype start', this.swype_start);
+      }
+    }
+  };
+
+  KNF.prototype.touchmove = function(e) {
+    if (this.sidebar) return;
+    if (this.swype_start === null && this.zoom_previous === null) return;
+
+    e.preventDefault();
+
+    // Inside a pinch-zoom operation
+    if (e.originalEvent.touches.length > 1) {
+      // TODO: code duplication
+      var points = [{
+        x: e.originalEvent.touches[0].clientX,
+        y: e.originalEvent.touches[0].clientY,
+      }, {
+        x: e.originalEvent.touches[1].clientX,
+        y: e.originalEvent.touches[1].clientY,
+      }];
+      var width = Math.abs(points[0].x - points[1].x);
+      var height = Math.abs(points[0].y - points[1].y);
+      // Distance between the two fingers (Pythagorean theorem)
+      // Use the changed distance to calculate the scale (zoom) and the center
+      // to calculate the movement.
+      var distance = Math.sqrt(width*width + height*height);
+      var center = {
+        x: (points[0].x+points[1].x)/2,
+        y: (points[0].y+points[1].y)/2,
+      };
+      var translateX = center.x-this.zoom_center.x;
+      var translateY = center.y-this.zoom_center.y;
+      var scale = distance / this.zoom_distance;
+      this.zoom_current = {
+        translateX: this.zoom_previous.translateX + translateX,
+        translateY: this.zoom_previous.translateY + translateY,
+        scale: this.zoom_previous.scale * scale,
+      };
+      // Add the fact that we're not zooming in the middle but possibly
+      // somewhere on the edge, so the position should be adjusted.
+      // TODO: it doesn't work very well when the image is zoomed in a lot.
+      this.zoom_current.translateX += (this.zoom_center.x - this.maxWidth/2)*this.zoom_previous.scale - (this.zoom_center.x - this.maxWidth/2)*this.zoom_current.scale;
+      this.zoom_current.translateY += (this.zoom_center.y - this.maxHeight/2)*this.zoom_previous.scale - (this.zoom_center.y - this.maxHeight/2)*this.zoom_current.scale;
+      var current = $('#foto .images img[state=current]');
+      current.css({
+        'transform': 'translate(' + this.zoom_current.translateX + 'px, ' + this.zoom_current.translateY + 'px) scale(' + this.zoom_current.scale + ')',
+        'opacity': 1,
+      });
+      return;
+    }
+
+    // Move photo while zoomed - only a single finger is used now
+    if (this.zoom_previous !== null) {
+      var point = {
+        x: e.originalEvent.touches[0].clientX,
+        y: e.originalEvent.touches[0].clientY,
+      };
+      if (this.zoom_pan === null) {
+        this.zoom_pan = point;
+      } else {
+        var translateX = point.x - this.zoom_pan.x;
+        var translateY = point.y - this.zoom_pan.y;
+        this.zoom_current = {
+          translateX: this.zoom_previous.translateX + translateX,
+          translateY: this.zoom_previous.translateY + translateY,
+          scale: this.zoom_previous.scale,
+        };
+        var current = $('#foto .images img[state=current]');
+        current.css('transform', 'translate(' + this.zoom_current.translateX + 'px, ' + this.zoom_current.translateY + 'px) scale(' + this.zoom_current.scale + ')');
+      }
+      return;
+    }
+
+    // We're within a swype action (to the left or right).
+
+    var moved = (e.originalEvent.touches[0].clientX - this.swype_start);
+    if (moved > 0 && (!this.foto.prev || this.foto.prev.type === 'album')) {
+      // first photo
+      moved = 0;
+    }
+    if (moved < 0 && (!this.foto.next || this.foto.next.type === 'album')) {
+      // last photo
+      moved = 0;
+    }
+
+    this.swype_moved = moved;
+
+    var current = $('#foto .images img[state=current]');
+    var prev = $('#foto .images img[state=prev]'); // possibly 0
+    var next = $('#foto .images img[state=next]'); // possibly 0
+
+    if (moved < 0) {
+      // Preview next image
+      if (next.length == 0) {
+        next = $('<img class="img" state="next"/>');
+        next.attr('data-name', this.foto.next.name);
+        next.attr('src', this.chooseFoto(this.foto.next).src);
+        $('#foto .images').prepend(next);
+        this.resize();
+      }
+      next.removeClass('settle'); // just in case
+      next.css({
+        'opacity':   Math.min(1, 1 - (this.maxWidth - -moved) / this.maxWidth),
+        'transform': 'scale(' +Math.min(1, 1 - (this.maxWidth - -moved) / this.maxWidth / 2) + ')',
+      });
+      current.css({
+        'transform': 'scale(1) translateX(' + moved + 'px)',
+        'opacity':   1,
+      });
+    } else {
+      next.css('opacity', 0);
+    }
+
+    if (moved > 0) {
+      // Preview previous image
+      var props = this.chooseFoto(this.foto.prev);
+      if (prev.length == 0) {
+        prev = $('<img class="img" state="prev"/>');
+        prev.attr('data-name', this.foto.prev.name);
+        prev.attr('src', props.src);
+        $('#foto .images').append(prev);
+        this.resize();
+      }
+      prev.removeClass('settle'); // just in case
+      prev.css({
+        'transform': 'translateX('+Math.min(0, moved - (this.maxWidth+props.width)/2) + 'px)',
+        'opacity':   1,
+      });
+      current.css({
+        'transform': 'scale('+Math.min(1, 1 - moved / this.maxWidth / 2)+')',
+        'opacity':   Math.min(1, 1 - moved / this.maxWidth),
+      });
+    } else {
+      prev.css('opacity', 0);
+    }
+
+    if (moved == 0) {
+      current.css({
+        'transform': '',
+        'opacity':   1,
+      });
+    }
+  };
+
+  KNF.prototype.touchend = function(e) {
+    if (this.sidebar) return;
+
+    // ignore lifting the third (or more) finger
+    if (e.originalEvent.touches.length > 1) return;
+
+    // Lifting the 2nd finger
+    if (e.originalEvent.touches.length == 1) {
+      console.log('end of zoom - panning now', e.originalEvent.touches[0]);
+      if (this.zoom_current !== null) {
+        this.zoom_previous = this.zoom_current;
+        this.zoom_current = null;
+      }
+      return;
+    }
+
+    if (this.zoom_previous !== null) {
+      if (this.zoom_pan !== null) {
+        // End of panning
+        this.zoom_pan = null;
+        if (this.zoom_current !== null) {
+          this.zoom_previous = this.zoom_current;
+          this.zoom_current = null;
+        }
+      }
+      // Check for needed 'jump' at end of pinch zoom to center and zoom back
+      // to 100% if needed
+      var current = $('#foto .images img[state=current]');
+      if (this.zoom_previous.scale <= 1) {
+        // Zoomed out - exit zoom/pan session (to enable back/forward swype)
+        this.zoom_previous = null;
+        console.log('end of zoom/pan gesture');
+        current.css('transform', '');
+        current.addClass('settle');
+        setTimeout(function() {
+          current.removeClass('settle');
+        }, SWITCH_DURATION);
+      } else {
+        // Still zoomed in - jump back to center if needed
+        console.log('end pan gesture - still zoomed');
+        var props = this.chooseFoto(this.foto);
+        var scale = Math.min(6, this.zoom_previous.scale);
+        // Remove black borders - don't let the image move past the border of
+        // the frame.
+        var borderX = props.width/2*scale - this.maxWidth/2;
+        var borderY = props.height/2*scale - this.maxHeight/2;
+        var jump = {
+          scale: scale,
+          translateX: Math.max(-borderX, Math.min(borderX, this.zoom_previous.translateX)),
+          translateY: Math.max(-borderY, Math.min(borderY, this.zoom_previous.translateY)),
+        };
+        // Jump to the center if the image is smaller than the frame.
+        if (props.width * scale <= this.maxWidth) {
+          jump.translateX = 0;
+        }
+        if (props.height* scale <= this.maxHeight) {
+          jump.translateY = 0;
+        }
+        if (jump.scale != this.zoom_previous.scale ||
+            jump.translateX != this.zoom_previous.translateX ||
+            jump.translateY != this.zoom_previous.translateY) {
+          // A jump is necessary.
+          this.zoom_previous = jump;
+          current.css('transform', 'translate(' + this.zoom_previous.translateX + 'px, ' + this.zoom_previous.translateY + 'px) scale(' + this.zoom_previous.scale + ')');
           current.addClass('settle');
           setTimeout(function() {
             current.removeClass('settle');
           }, SWITCH_DURATION);
-        } else {
-          // Still zoomed in - jump back to center if needed
-          console.log('end pan gesture - still zoomed');
-          var props = this.chooseFoto(this.foto);
-          var scale = Math.min(6, this.zoom_previous.scale);
-          // Remove black borders - don't let the image move past the border of
-          // the frame.
-          var borderX = props.width/2*scale - this.maxWidth/2;
-          var borderY = props.height/2*scale - this.maxHeight/2;
-          var jump = {
-            scale: scale,
-            translateX: Math.max(-borderX, Math.min(borderX, this.zoom_previous.translateX)),
-            translateY: Math.max(-borderY, Math.min(borderY, this.zoom_previous.translateY)),
-          };
-          // Jump to the center if the image is smaller than the frame.
-          if (props.width * scale <= this.maxWidth) {
-            jump.translateX = 0;
-          }
-          if (props.height* scale <= this.maxHeight) {
-            jump.translateY = 0;
-          }
-          if (jump.scale != this.zoom_previous.scale ||
-              jump.translateX != this.zoom_previous.translateX ||
-              jump.translateY != this.zoom_previous.translateY) {
-            // A jump is necessary.
-            this.zoom_previous = jump;
-            current.css('transform', 'translate(' + this.zoom_previous.translateX + 'px, ' + this.zoom_previous.translateY + 'px) scale(' + this.zoom_previous.scale + ')');
-            current.addClass('settle');
-            setTimeout(function() {
-              current.removeClass('settle');
-            }, SWITCH_DURATION);
-          }
         }
-        return;
       }
+      return;
+    }
 
-      // We haven't moved yet - it's just a tap?
-      if (this.swype_moved === null) return;
+    // We haven't moved yet - it's just a tap?
+    if (this.swype_moved === null) return;
 
-      // The swype action has ended. See whether we should switch the image or
-      // just jump back to the current.
+    // The swype action has ended. See whether we should switch the image or
+    // just jump back to the current.
 
-      var moved = this.swype_moved;
-      this.swype_start = null;
-      this.swype_moved = null;
+    var moved = this.swype_moved;
+    this.swype_start = null;
+    this.swype_moved = null;
 
-      var current = $('.images img[state=current]', frame).last();
-      var next = $('.images img[state=next]', frame); // possibly 0
-      var prev = $('.images img[state=prev]', frame); // possibly 0
+    var current = $('#foto .images img[state=current]').last();
+    var next = $('#foto .images img[state=next]'); // possibly 0
+    var prev = $('#foto .images img[state=prev]'); // possibly 0
 
-      if (moved < this.maxWidth / -16 && this.foto.next && this.foto.next.type != 'album') {
-        // next image
-        console.log('end of swype: next image');
-        next.addClass('settle');
-        next.css({
-          'transform': '',
-          'opacity':   1,
-        });
+    if (moved < this.maxWidth / -16 && this.foto.next && this.foto.next.type != 'album') {
+      // next image
+      console.log('end of swype: next image');
+      next.addClass('settle');
+      next.css({
+        'transform': '',
+        'opacity':   1,
+      });
 
-        var props = this.chooseFoto(this.foto);
-        current.css({
-          'transform': 'translateX('+Math.min(0, -(this.maxWidth+props.width)/2) + 'px)',
-          'opacity':   1,
-        });
-        current.addClass('settle');
+      var props = this.chooseFoto(this.foto);
+      current.css({
+        'transform': 'translateX('+Math.min(0, -(this.maxWidth+props.width)/2) + 'px)',
+        'opacity':   1,
+      });
+      current.addClass('settle');
 
-        prev.remove();
-        current.attr('state', 'prev');
-        next.attr('state', 'current');
-        setTimeout(function() {
-          $('.images img[state=prev]', frame)
-            .removeClass('settle')
-            .css('transform', 'translateX(-9999px)');
-          $('.images img[state=current]', frame)
-            .removeClass('settle');
-          // Create the next image (to cache)
-          // not sure whether it actually helps...
-          // TODO: code duplication
-          if (this.foto.next && this.foto.next.type != 'album' &&
-              $('.images img[state=next]', frame).length == 0) {
-            var next = $('<img class="img" state="next">');
-            next.attr('data-name', this.foto.next.name);
-            next.css('transform', 'translateX(9999px)'); // off-screen
-            next.attr('src', this.chooseFoto(this.foto.next).src);
-            $('.images', frame).prepend(next);
-            this.resize();
-          }
-        }.bind(this), SWITCH_DURATION);
+      prev.remove();
+      current.attr('state', 'prev');
+      next.attr('state', 'current');
+      setTimeout(function() {
+        $('#foto .images img[state=prev]')
+          .removeClass('settle')
+          .css('transform', 'translateX(-9999px)');
+        $('#foto .images img[state=current]')
+          .removeClass('settle');
+        // Create the next image (to cache)
+        // not sure whether it actually helps...
+        // TODO: code duplication
+        if (this.foto.next && this.foto.next.type != 'album' &&
+            $('#foto .images img[state=next]').length == 0) {
+          var next = $('<img class="img" state="next">');
+          next.attr('data-name', this.foto.next.name);
+          next.css('transform', 'translateX(9999px)'); // off-screen
+          next.attr('src', this.chooseFoto(this.foto.next).src);
+          $('#foto .images').prepend(next);
+          this.resize();
+        }
+      }.bind(this), SWITCH_DURATION);
 
-        this.update_foto_frame(this.foto.next, 'right');
+      this.update_foto_frame(this.foto.next, 'right');
 
-      } else if (moved > this.maxWidth / 16 && this.foto.prev && this.foto.prev.type != 'album') {
-        // previous image
-        console.log('end of swype: previous image');
-        prev.css({
-          'transform': '',
-        });
-        prev.addClass('settle');
+    } else if (moved > this.maxWidth / 16 && this.foto.prev && this.foto.prev.type != 'album') {
+      // previous image
+      console.log('end of swype: previous image');
+      prev.css({
+        'transform': '',
+      });
+      prev.addClass('settle');
 
-        current.css({
-          'transform': 'scale(0.5)',
-          'opacity':   0,
-        });
-        current.addClass('settle');
+      current.css({
+        'transform': 'scale(0.5)',
+        'opacity':   0,
+      });
+      current.addClass('settle');
 
-        next.remove();
-        current.attr('state', 'next');
-        prev.attr('state', 'current');
-        setTimeout(function() {
-          $('.images img[state=current]', frame)
-            .removeClass('settle');
-          $('.images img[state=next]', frame)
-            .removeClass('settle');
-          // cache the previous image in case the user goes back one more
-          // TODO: code duplication
-          if (this.foto.prev && this.foto.prev.type != 'album' &&
-              $('.images img[state=prev]', frame).length == 0) {
-            var prev = $('<img class="img" state="prev">');
-            prev.attr('data-name', this.foto.prev.name);
-            prev.css('transform', 'translateX(-9999px)'); // off-screen
-            prev.attr('src', this.chooseFoto(this.foto.prev).src);
-            $('.images', frame).append(prev);
-            this.resize();
-          }
-        }.bind(this), SWITCH_DURATION);
+      next.remove();
+      current.attr('state', 'next');
+      prev.attr('state', 'current');
+      setTimeout(function() {
+        $('#foto .images img[state=current]')
+          .removeClass('settle');
+        $('#foto .images img[state=next]')
+          .removeClass('settle');
+        // cache the previous image in case the user goes back one more
+        // TODO: code duplication
+        if (this.foto.prev && this.foto.prev.type != 'album' &&
+            $('#foto .images img[state=prev]').length == 0) {
+          var prev = $('<img class="img" state="prev">');
+          prev.attr('data-name', this.foto.prev.name);
+          prev.css('transform', 'translateX(-9999px)'); // off-screen
+          prev.attr('src', this.chooseFoto(this.foto.prev).src);
+          $('#foto .images').append(prev);
+          this.resize();
+        }
+      }.bind(this), SWITCH_DURATION);
 
-        this.update_foto_frame(this.foto.prev, 'left');
+      this.update_foto_frame(this.foto.prev, 'left');
 
-      } else {
-        // current image
-        console.log('end of swype: current image');
-        current.css({
-          'transform': '',
-          'opacity':   1,
-        });
-        current.addClass('settle');
+    } else {
+      // current image
+      console.log('end of swype: current image');
+      current.css({
+        'transform': '',
+        'opacity':   1,
+      });
+      current.addClass('settle');
 
-        next.css({
-          'transform': 'scale(0.5)',
-          'opacity':   0,
-        });
-        next.addClass('settle');
+      next.css({
+        'transform': 'scale(0.5)',
+        'opacity':   0,
+      });
+      next.addClass('settle');
 
-        prev.css({
-          'transform': 'translateX('+(-this.maxWidth-8)+'px)',
-        });
-        prev.addClass('settle');
+      prev.css({
+        'transform': 'translateX('+(-this.maxWidth-8)+'px)',
+      });
+      prev.addClass('settle');
 
-        setTimeout(function() {
-          current.removeClass('settle');
-          next.removeClass('settle');
-          prev.removeClass('settle');
-        }.bind(this), SWITCH_DURATION);
-      }
+      setTimeout(function() {
+        current.removeClass('settle');
+        next.removeClass('settle');
+        prev.removeClass('settle');
+      }.bind(this), SWITCH_DURATION);
     }
   };
 
