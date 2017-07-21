@@ -239,30 +239,24 @@ img.lazy {
     touch-action: pan-y pinch-zoom; /* not sure whether this actually does anything */
 }
 
-#foto .image-wrapper {
+#foto .images img {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 1;
-    will-change: transform;
+    will-change: transform, opacity;
 }
 
-#foto .image-wrapper.right,
-#foto .image-wrapper.left,
-#foto .image-wrapper.settle {
+#foto .images img.right,
+#foto .images img.left,
+#foto .images img.settle {
     /* keep time up to date with fotos.js */
     transition: opacity 200ms linear, transform 200ms linear;
 }
 
-#foto .image-wrapper.right { /* a bit to the right */
+#foto .images img.right { /* a bit to the right */
     opacity: 0;
     transform: translateX(20px);
 }
 
-#foto .image-wrapper.left { /* a bit to the left */
+#foto .images img.left { /* a bit to the left */
     opacity: 0;
     transform: translateX(-20px);
 }

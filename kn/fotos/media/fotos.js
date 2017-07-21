@@ -436,35 +436,33 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     }
 
     // Remove old images
-    $('.image-wrapper', frame).each(function(i, wrapper) {
-      wrapper = $(wrapper);
-      if (wrapper.hasClass('left') || wrapper.hasClass('right')) return;
-      wrapper.addClass(reverseDirection);
-      wrapper.attr('state', 'gone'); // don't use this image anymore
+    $('.images img', frame).each(function(i, img) {
+      img = $(img);
+      if (img.hasClass('left') || img.hasClass('right')) return;
+      img.addClass(reverseDirection);
+      img.attr('state', 'gone'); // don't use this image anymore
       setTimeout(function() {
-        wrapper.remove();
+        img.remove();
       }.bind(this), SWITCH_DURATION);
     }.bind(this));
 
     // Create the new photo
     var img = $('<img class="img">');
-    var wrapper = $('<div class="image-wrapper">');
-    wrapper.attr('data-name', foto.name);
-    wrapper.addClass(direction);
-    wrapper.attr('state', 'current');
+    img.attr('data-name', foto.name);
+    img.addClass(direction);
+    img.attr('state', 'current');
     img.attr('src', this.chooseFoto(foto).src);
-    wrapper.append(img);
-    $('.images', frame).append(wrapper);
+    $('.images', frame).append(img);
     setTimeout(function() {
       // Start the animation immediately (after 1ms)
       // Preferably this should be done in the 'loadstart' event, but that sadly
       // hasn't been implemented in browsers yet.
-      wrapper.addClass('settle');
-      wrapper.removeClass(direction);
+      img.addClass('settle');
+      img.removeClass(direction);
     }.bind(this), 1);
     setTimeout(function() {
       // don't disturb dragging of the photo
-      wrapper.removeClass('settle');
+      img.removeClass('settle');
     }.bind(this), SWITCH_DURATION);
 
     this.update_foto_frame(foto, direction);
@@ -635,18 +633,16 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
       this.swype_moved = moved;
 
-      var current = $('.image-wrapper[state=current]', frame);
-      var prev = $('.image-wrapper[state=prev]', frame); // possibly 0
-      var next = $('.image-wrapper[state=next]', frame); // possibly 0
+      var current = $('.images img[state=current]', frame);
+      var prev = $('.images img[state=prev]', frame); // possibly 0
+      var next = $('.images img[state=next]', frame); // possibly 0
 
       if (moved < 0) {
         // Preview next image
         if (next.length == 0) {
-          next = $('<div class="image-wrapper"><img class="img"></div>');
+          next = $('<img class="img" state="next"/>');
           next.attr('data-name', this.foto.next.name);
-          next.attr('state', 'next');
-          $('img', next)
-            .attr('src', this.chooseFoto(this.foto.next).src);
+          next.attr('src', this.chooseFoto(this.foto.next).src);
           $('.images', frame).prepend(next);
           this.onresize();
         }
@@ -666,11 +662,9 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       if (moved > 0) {
         // Preview previous image
         if (prev.length == 0) {
-          prev = $('<div class="image-wrapper"><img class="img"></div>');
+          prev = $('<img class="img" state="prev"/>');
           prev.attr('data-name', this.foto.prev.name);
-          prev.attr('state', 'prev');
-          $('img', prev)
-            .attr('src', this.chooseFoto(this.foto.prev).src);
+          prev.attr('src', this.chooseFoto(this.foto.prev).src);
           $('.images', frame).append(prev);
           this.onresize();
         }
@@ -703,9 +697,9 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       this.swype_start = null;
       this.swype_moved = null;
 
-      var current = $('.image-wrapper[state=current]', frame).last();
-      var next = $('.image-wrapper[state=next]', frame); // possibly 0
-      var prev = $('.image-wrapper[state=prev]', frame); // possibly 0
+      var current = $('.images img[state=current]', frame).last();
+      var next = $('.images img[state=next]', frame); // possibly 0
+      var prev = $('.images img[state=prev]', frame); // possibly 0
 
       if (moved < this.maxWidth / -16 && this.foto.next && this.foto.next.type != 'album') {
         console.log('end: next');
@@ -726,21 +720,19 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         current.attr('state', 'prev');
         next.attr('state', 'current');
         setTimeout(function() {
-          $('.image-wrapper[state=prev]', frame)
+          $('.images img[state=prev]', frame)
             .removeClass('settle');
-          $('.image-wrapper[state=current]', frame)
+          $('.images img[state=current]', frame)
             .removeClass('settle');
           // Create the next image (to cache)
           // not sure whether it actually helps...
           // TODO: code duplication
           if (this.foto.next && this.foto.next.type != 'album' &&
-              $('.image-wrapper[state=next]', frame).length == 0) {
-            var next = $('<div class="image-wrapper"><img class="img"></div>');
+              $('.images img[state=next]', frame).length == 0) {
+            var next = $('<img class="img" state="next">');
             next.attr('data-name', this.foto.next.name);
-            next.attr('state', 'next');
             next.css('transform', 'translateX(9999px)'); // off-screen
-            $('img', next)
-              .attr('src', this.chooseFoto(this.foto.next).src);
+            next.attr('src', this.chooseFoto(this.foto.next).src);
             $('.images', frame).prepend(next);
             this.onresize();
           }
@@ -767,20 +759,18 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         current.attr('state', 'next');
         prev.attr('state', 'current');
         setTimeout(function() {
-          $('.image-wrapper[state=current]', frame)
+          $('.images img[state=current]', frame)
             .removeClass('settle');
-          $('.image-wrapper[state=next]', frame)
+          $('.images img[state=next]', frame)
             .removeClass('settle');
           // cache the previous image in case the user goes back one more
           // TODO: code duplication
           if (this.foto.prev && this.foto.prev.type != 'album' &&
-              $('.image-wrapper[state=prev]', frame).length == 0) {
-            var prev = $('<div class="image-wrapper"><img class="img"></div>');
+              $('.images img[state=prev]', frame).length == 0) {
+            var prev = $('<img class="img" state="prev">');
             prev.attr('data-name', this.foto.prev.name);
-            prev.attr('state', 'prev');
             prev.css('transform', 'translateX(9999px)'); // off-screen
-            $('img', prev)
-              .attr('src', this.chooseFoto(this.foto.prev).src);
+            prev.attr('src', this.chooseFoto(this.foto.prev).src);
             $('.images', frame).append(prev);
             this.onresize();
           }
@@ -1095,14 +1085,15 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
   };
 
   KNF.prototype.onresize = function() {
-    $('#foto .image-wrapper:not([state=gone])').each(function(i, wrapper) {
-      wrapper = $(wrapper);
-      console.log('updating', wrapper.attr('data-name'));
-      var img = $('img', wrapper);
-      var foto = this.fotos[this.path].children[wrapper.attr('data-name')];
+    $('#foto .images img:not([state=gone])').each(function(i, img) {
+      img = $(img);
+      console.log('updating', img.attr('data-name'));
+      var foto = this.fotos[this.path].children[img.attr('data-name')];
       var props = this.chooseFoto(foto);
       img.css({'width': props.width,
-               'height': props.height});
+               'height': props.height,
+               'left': (this.maxWidth-props.width)/2,
+               'top': (this.maxHeight-props.height)/2});
       // switch to 2x if needed (but don't switch back for this photo)
       if (props.src == this.foto.large2x &&
           img.attr('src') != this.foto.large2x) {
