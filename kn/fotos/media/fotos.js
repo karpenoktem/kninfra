@@ -71,6 +71,11 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     this.allpeople = [];
     this.swype_start = null;
     this.swype_moved = null;
+    this.zoom_distance = null; // pinch-zoom action
+    this.zoom_center = null;   // pinch-zoom action
+    this.zoom_current = null;  // pinch-zoom action
+    this.zoom_previous = null; // zoom session
+    this.zoom_pan = null;      // pan action
     this.read_fotos(this.get_url_path(), data);
     this.nav_timeout = null;
     this.init_foto_frame();
@@ -476,6 +481,13 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     console.log('updating to', foto.name);
     this.foto = foto;
 
+    // Reset (clear) zoom action
+    this.zoom_previous = null;
+    this.zoom_current = null;
+    this.zoom_distance = null;
+    this.zoom_center = null;
+    this.zoom_pan = null;
+
     var frame = $('#foto');
 
     $('.preload-image', frame).remove(); // remove old preloaders
@@ -606,20 +618,163 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     frame.on('touchstart', touchstart.bind(this));
     function touchstart(e) {
       if (this.sidebar) return;
-      this.swype_start = e.originalEvent.touches[0].clientX;
-      console.log('start', this.swype_start);
+
+      // Ignore the third (or more) finger
+      if (e.originalEvent.touches.length > 2) return;
+
+      // A second finger was placed on the surface
+      if (e.originalEvent.touches.length == 2) {
+        var prev = $('.images img[state=prev]', frame);
+        if (prev) {
+          // Possibly within a swype to the right. Let this image disappear to the left.
+          var propsPrev = this.chooseFoto(this.foto.prev);
+          prev.css('transform', 'translateX('+Math.min(0, -(this.maxWidth+propsPrev.width)/2) + 'px)')
+          prev.addClass('settle');
+          setTimeout(function() {
+            prev.removeClass('settle');
+            prev.css('transform', 'translateX(-9999px)');
+          }, SWITCH_DURATION);
+        }
+
+        var next = $('.images img[state=next]', frame);
+        if (next) {
+          // Possibly within a swype to the left. Fade the next image.
+          next.css({
+            'transform': 'scale(0.5)',
+            'opacity':   0,
+          });
+          next.addClass('settle');
+          setTimeout(function() {
+            next.removeClass('settle');
+            next.css('transform', 'translateX(9999px)');
+          }, SWITCH_DURATION);
+        }
+
+        if (this.zoom_pan !== null) {
+          // We were panning, but now placing a 2nd finger on the surface.
+          this.zoom_pan = null;
+          if (this.zoom_current !== null) {
+            this.zoom_previous = this.zoom_current;
+            this.zoom_current = null;
+          }
+        }
+
+        // TODO: code duplication
+        var points = [{
+          x: e.originalEvent.touches[0].clientX,
+          y: e.originalEvent.touches[0].clientY,
+        }, {
+          x: e.originalEvent.touches[1].clientX,
+          y: e.originalEvent.touches[1].clientY,
+        }];
+        var width = Math.abs(points[0].x - points[1].x);
+        var height = Math.abs(points[0].y - points[1].y);
+        // Distance between the two fingers (Pythagorean theorem)
+        // Use the changed distance to calculate the scale (zoom) and the center
+        // to calculate the movement.
+        this.zoom_distance = Math.sqrt(width*width + height*height);
+        this.zoom_center = {
+          x: (points[0].x+points[1].x)/2,
+          y: (points[0].y+points[1].y)/2,
+        };
+
+        if (this.zoom_previous === null) {
+          // Start a pinch-zoom session: this is the first time two are together
+          // on a surface since a switch/unzoom
+          this.zoom_previous = {
+            translateX: 0,
+            translateY: 0,
+            scale: 1,
+          };
+          // assume the first finger is points[0]
+          var moved = points[0].x - this.swype_start;
+          this.swype_start = null;
+          if (moved < 0) {
+            this.zoom_previous.translateX = moved;
+            console.log('extra translateX', this.zoom_previous.translateX);
+          }
+          console.log('created zoom session', this.zoom_previous);
+        }
+      } else {
+        // The first finger was placed on the surface
+        if (this.zoom_previous === null) {
+          this.swype_start = e.originalEvent.touches[0].clientX;
+          console.log('swype start', this.swype_start);
+        }
+      }
     }
 
     frame.on('touchmove', touchmove.bind(this));
     function touchmove(e) {
       if (this.sidebar) return;
-      if (this.swype_start === null) return;
+      if (this.swype_start === null && this.zoom_previous === null) return;
+
+      e.preventDefault();
+
+      // Inside a pinch-zoom operation
       if (e.originalEvent.touches.length > 1) {
-        // pinch-zoom
-        touchend();
+        // TODO: code duplication
+        var points = [{
+          x: e.originalEvent.touches[0].clientX,
+          y: e.originalEvent.touches[0].clientY,
+        }, {
+          x: e.originalEvent.touches[1].clientX,
+          y: e.originalEvent.touches[1].clientY,
+        }];
+        var width = Math.abs(points[0].x - points[1].x);
+        var height = Math.abs(points[0].y - points[1].y);
+        // Distance between the two fingers (Pythagorean theorem)
+        // Use the changed distance to calculate the scale (zoom) and the center
+        // to calculate the movement.
+        var distance = Math.sqrt(width*width + height*height);
+        var center = {
+          x: (points[0].x+points[1].x)/2,
+          y: (points[0].y+points[1].y)/2,
+        };
+        var translateX = center.x-this.zoom_center.x;
+        var translateY = center.y-this.zoom_center.y;
+        var scale = distance / this.zoom_distance;
+        this.zoom_current = {
+          translateX: this.zoom_previous.translateX + translateX,
+          translateY: this.zoom_previous.translateY + translateY,
+          scale: this.zoom_previous.scale * scale,
+        };
+        // Add the fact that we're not zooming in the middle but possibly
+        // somewhere on the edge, so the position should be adjusted.
+        // TODO: it doesn't work very well when the image is zoomed in a lot.
+        this.zoom_current.translateX += (this.zoom_center.x - this.maxWidth/2)*this.zoom_previous.scale - (this.zoom_center.x - this.maxWidth/2)*this.zoom_current.scale;
+        this.zoom_current.translateY += (this.zoom_center.y - this.maxHeight/2)*this.zoom_previous.scale - (this.zoom_center.y - this.maxHeight/2)*this.zoom_current.scale;
+        var current = $('.images img[state=current]', frame);
+        current.css({
+          'transform': 'translate(' + this.zoom_current.translateX + 'px, ' + this.zoom_current.translateY + 'px) scale(' + this.zoom_current.scale + ')',
+          'opacity': 1,
+        });
         return;
       }
-      e.preventDefault();
+
+      // Move photo while zoomed - only a single finger is used now
+      if (this.zoom_previous !== null) {
+        var point = {
+          x: e.originalEvent.touches[0].clientX,
+          y: e.originalEvent.touches[0].clientY,
+        };
+        if (this.zoom_pan === null) {
+          this.zoom_pan = point;
+        } else {
+          var translateX = point.x - this.zoom_pan.x;
+          var translateY = point.y - this.zoom_pan.y;
+          this.zoom_current = {
+            translateX: this.zoom_previous.translateX + translateX,
+            translateY: this.zoom_previous.translateY + translateY,
+            scale: this.zoom_previous.scale,
+          };
+          var current = $('.images img[state=current]', frame);
+          current.css('transform', 'translate(' + this.zoom_current.translateX + 'px, ' + this.zoom_current.translateY + 'px) scale(' + this.zoom_current.scale + ')');
+        }
+        return;
+      }
+
+      // We're within a swype action (to the left or right).
 
       var moved = (e.originalEvent.touches[0].clientX - this.swype_start);
       if (moved > 0 && (!this.foto.prev || this.foto.prev.type === 'album')) {
@@ -692,7 +847,83 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
     frame.on('touchend', touchend.bind(this));
     function touchend(e) {
+      if (this.sidebar) return;
+
+      // ignore lifting the third (or more) finger
+      if (e.originalEvent.touches.length > 1) return;
+
+      // Lifting the 2nd finger
+      if (e.originalEvent.touches.length == 1) {
+        console.log('end of zoom - panning now', e.originalEvent.touches[0]);
+        if (this.zoom_current !== null) {
+          this.zoom_previous = this.zoom_current;
+          this.zoom_current = null;
+        }
+        return;
+      }
+
+      if (this.zoom_previous !== null) {
+        if (this.zoom_pan !== null) {
+          // End of panning
+          this.zoom_pan = null;
+          if (this.zoom_current !== null) {
+            this.zoom_previous = this.zoom_current;
+            this.zoom_current = null;
+          }
+        }
+        // Check for needed 'jump' at end of pinch zoom to center and zoom back
+        // to 100% if needed
+        var current = $('.images img[state=current]', frame);
+        if (this.zoom_previous.scale <= 1) {
+          // Zoomed out - exit zoom/pan session (to enable back/forward swype)
+          this.zoom_previous = null;
+          console.log('end of zoom/pan gesture');
+          current.css('transform', '');
+          current.addClass('settle');
+          setTimeout(function() {
+            current.removeClass('settle');
+          }, SWITCH_DURATION);
+        } else {
+          // Still zoomed in - jump back to center if needed
+          console.log('end pan gesture - still zoomed');
+          var props = this.chooseFoto(this.foto);
+          var scale = Math.min(6, this.zoom_previous.scale);
+          // Remove black borders - don't let the image move past the border of
+          // the frame.
+          var borderX = props.width/2*scale - this.maxWidth/2;
+          var borderY = props.height/2*scale - this.maxHeight/2;
+          var jump = {
+            scale: scale,
+            translateX: Math.max(-borderX, Math.min(borderX, this.zoom_previous.translateX)),
+            translateY: Math.max(-borderY, Math.min(borderY, this.zoom_previous.translateY)),
+          };
+          // Jump to the center if the image is smaller than the frame.
+          if (props.width * scale <= this.maxWidth) {
+            jump.translateX = 0;
+          }
+          if (props.height* scale <= this.maxHeight) {
+            jump.translateY = 0;
+          }
+          if (jump.scale != this.zoom_previous.scale ||
+              jump.translateX != this.zoom_previous.translateX ||
+              jump.translateY != this.zoom_previous.translateY) {
+            // A jump is necessary.
+            this.zoom_previous = jump;
+            current.css('transform', 'translate(' + this.zoom_previous.translateX + 'px, ' + this.zoom_previous.translateY + 'px) scale(' + this.zoom_previous.scale + ')');
+            current.addClass('settle');
+            setTimeout(function() {
+              current.removeClass('settle');
+            }, SWITCH_DURATION);
+          }
+        }
+        return;
+      }
+
+      // We haven't moved yet - it's just a tap?
       if (this.swype_moved === null) return;
+
+      // The swype action has ended. See whether we should switch the image or
+      // just jump back to the current.
 
       var moved = this.swype_moved;
       this.swype_start = null;
@@ -703,16 +934,17 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       var prev = $('.images img[state=prev]', frame); // possibly 0
 
       if (moved < this.maxWidth / -16 && this.foto.next && this.foto.next.type != 'album') {
-        console.log('end: next');
         // next image
+        console.log('end of swype: next image');
         next.addClass('settle');
         next.css({
-          'transform': 'scale(1)',
+          'transform': '',
           'opacity':   1,
         });
 
+        var props = this.chooseFoto(this.foto);
         current.css({
-          'transform': 'scale(1) translateX(' + (-this.maxWidth) + 'px)',
+          'transform': 'translateX('+Math.min(0, -(this.maxWidth+props.width)/2) + 'px)',
           'opacity':   1,
         });
         current.addClass('settle');
@@ -743,9 +975,8 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         this.update_foto_frame(this.foto.next, 'right');
 
       } else if (moved > this.maxWidth / 16 && this.foto.prev && this.foto.prev.type != 'album') {
-        console.log('prev', prev);
         // previous image
-        console.log('end: prev');
+        console.log('end of swype: previous image');
         prev.css({
           'transform': '',
         });
@@ -771,7 +1002,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
               $('.images img[state=prev]', frame).length == 0) {
             var prev = $('<img class="img" state="prev">');
             prev.attr('data-name', this.foto.prev.name);
-            prev.css('transform', 'translateX(9999px)'); // off-screen
+            prev.css('transform', 'translateX(-9999px)'); // off-screen
             prev.attr('src', this.chooseFoto(this.foto.prev).src);
             $('.images', frame).append(prev);
             this.resize();
@@ -781,10 +1012,10 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         this.update_foto_frame(this.foto.prev, 'left');
 
       } else {
-        console.log('end: current');
         // current image
+        console.log('end of swype: current image');
         current.css({
-          'transform': 'scale(1)',
+          'transform': '',
           'opacity':   1,
         });
         current.addClass('settle');
