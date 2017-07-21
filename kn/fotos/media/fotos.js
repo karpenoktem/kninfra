@@ -661,16 +661,17 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
       if (moved > 0) {
         // Preview previous image
+        var props = this.chooseFoto(this.foto.prev);
         if (prev.length == 0) {
           prev = $('<img class="img" state="prev"/>');
           prev.attr('data-name', this.foto.prev.name);
-          prev.attr('src', this.chooseFoto(this.foto.prev).src);
+          prev.attr('src', props.src);
           $('.images', frame).append(prev);
           this.onresize();
         }
         prev.removeClass('settle'); // just in case
         prev.css({
-          'transform': 'translateX('+Math.min(0, moved - this.maxWidth) + 'px)',
+          'transform': 'translateX('+Math.min(0, moved - (this.maxWidth+props.width)/2) + 'px)',
           'opacity':   1,
         });
         current.css({
