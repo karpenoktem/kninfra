@@ -537,12 +537,12 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
   KNF.prototype.init_foto_frame = function() {
     var frame = $('#foto');
     $('.close', frame)
-        .on('touchstart', function() {
+        .on('click', function() {
           this.change_foto(null);
           return false;
         }.bind(this));
     $('.open-sidebar', frame)
-        .on('touchstart', function(e) {
+        .on('click', function(e) {
           if (this.sidebar) {
             this.close_sidebar();
           } else {
