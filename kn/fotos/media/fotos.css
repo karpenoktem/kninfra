@@ -248,13 +248,13 @@ img.lazy {
     align-items: center;
     opacity: 1;
     will-change: transform;
-    transform: scale(1) translateX(0);
 }
 
 #foto .image-wrapper.right,
 #foto .image-wrapper.left,
 #foto .image-wrapper.settle {
-    transition: all 200ms linear; /* keep up to date with fotos.js */
+    /* keep time up to date with fotos.js */
+    transition: opacity 200ms linear, transform 200ms linear;
 }
 
 #foto .image-wrapper.right { /* a bit to the right */
