@@ -147,6 +147,9 @@ $(function(){
 <a href="{{ r.who.get_absolute_url }}">{{ r.who.humanName }}</a>, 
 {% if r.how %}
 <a href="{{ r.how.get_absolute_url }}">{{ r.how.humanName }}</a>
+{% if r.no_regular %}
+<span class="symbol" title="{% trans "Geen normaal lid (dus kan geen mail ontvangen)" %}">⚠️</span>
+{% endif %}{# r.no_regular #}
 {% else %}{# r.how is None #}
 {% trans "lid" %}
 {% endif %}{# r.how #}

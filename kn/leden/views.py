@@ -128,10 +128,22 @@ def _entity_detail(request, e):
     related_group_counts = {group: len({r['who'] for r in members})
             for group, members in related_groups.items()}
 
+    # Mark relations that only have special relations - no regular relations.
+    # Only having a special relation means that the user won't get any email
+    # which may be unintended, so warn about this situation in the UI.
+    rrelated_regular_members = {r['who'] for r in rrelated
+                                if r['how'] is None and Es.relation_is_active(r)}
+    for r in rrelated:
+        if r['who'] not in rrelated_regular_members:
+            r['no_regular'] = True
+
     rrelated_groups = OrderedDict()
     for r in rrelated:
         if r.get('hidden'):
-            continue # don't display in the list
+            # don't display in list: already displayed at the top
+            if not (r.get('no_regular') and r['may_end']):
+                # but not when it wouldn't be possible to end otherwise
+                continue
         if r['until_year'] not in rrelated_groups:
             rrelated_groups[r['until_year']] = []
         rrelated_groups[r['until_year']].append(r)
