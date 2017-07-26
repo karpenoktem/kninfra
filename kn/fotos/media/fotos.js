@@ -629,7 +629,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     // A second finger was placed on the surface
     if (e.originalEvent.touches.length == 2) {
       var prev = $('#foto .images img[state=prev]');
-      if (prev) {
+      if (prev.length) {
         // Possibly within a swype to the right. Let this image disappear to the left.
         var propsPrev = this.chooseFoto(this.foto.prev);
         prev.css('transform', 'translateX('+Math.min(0, -(this.maxWidth+propsPrev.width)/2) + 'px)')
@@ -641,7 +641,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       }
 
       var next = $('#foto .images img[state=next]');
-      if (next) {
+      if (next.length) {
         // Possibly within a swype to the left. Fade the next image.
         next.css({
           'transform': 'scale(0.5)',
