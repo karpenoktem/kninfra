@@ -677,10 +677,14 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       // Use the changed distance to calculate the scale (zoom) and the center
       // to calculate the movement.
       this.zoom_distance = Math.sqrt(width*width + height*height);
+      // center between the fingers
       this.zoom_center = {
-        x: (points[0].x+points[1].x)/2,
-        y: (points[0].y+points[1].y)/2,
+        x1: (points[0].x+points[1].x)/2,
+        y1: (points[0].y+points[1].y)/2,
       };
+      // center between the fingers after move - currently the same.
+      this.zoom_center.x2 = this.zoom_center.x1;
+      this.zoom_center.y2 = this.zoom_center.y1;
 
       if (this.zoom_previous === null) {
         // Start a pinch-zoom session: this is the first time two are together
@@ -730,12 +734,10 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       // Use the changed distance to calculate the scale (zoom) and the center
       // to calculate the movement.
       var distance = Math.sqrt(width*width + height*height);
-      var center = {
-        x: (points[0].x+points[1].x)/2,
-        y: (points[0].y+points[1].y)/2,
-      };
-      var translateX = center.x-this.zoom_center.x;
-      var translateY = center.y-this.zoom_center.y;
+      this.zoom_center.x2 = (points[0].x+points[1].x)/2;
+      this.zoom_center.y2 = (points[0].y+points[1].y)/2;
+      var translateX = this.zoom_center.x2-this.zoom_center.x1;
+      var translateY = this.zoom_center.y2-this.zoom_center.y1;
       var scale = distance / this.zoom_distance;
       this.zoom_current = {
         translateX: this.zoom_previous.translateX + translateX,
@@ -744,9 +746,20 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       };
       // Add the fact that we're not zooming in the middle but possibly
       // somewhere on the edge, so the position should be adjusted.
-      // TODO: it doesn't work very well when the image is zoomed in a lot.
-      this.zoom_current.translateX += (this.zoom_center.x - this.maxWidth/2)*this.zoom_previous.scale - (this.zoom_center.x - this.maxWidth/2)*this.zoom_current.scale;
-      this.zoom_current.translateY += (this.zoom_center.y - this.maxHeight/2)*this.zoom_previous.scale - (this.zoom_center.y - this.maxHeight/2)*this.zoom_current.scale;
+      // If we didn't do anything, the center of the zoom would always be the
+      // middle of the image.
+      // So what are we doing here?
+      // 1. Calculate the distance between the zoom_previous image center
+      //    (screen center + translation) and the previous touch center.
+      // 2. Scale this distance to what would be the current zoom center.
+      // 3. Subtract the distance of (1) so we get the distance between the
+      //    centers of zoom_previous and zoom_current.
+      // 4. Add this distance to the zoom_current translation.
+      var middlePointDistanceX = (this.zoom_previous.translateX + this.maxWidth/2 - this.zoom_center.x1);
+      this.zoom_current.translateX +=  middlePointDistanceX * scale - middlePointDistanceX;
+      var middlePointDistanceY = (this.zoom_previous.translateY + this.maxHeight/2 - this.zoom_center.y1);
+      this.zoom_current.translateY +=  middlePointDistanceY * scale - middlePointDistanceY;
+
       var current = $('#foto .images img[state=current]');
       current.css({
         'transform': 'translate(' + this.zoom_current.translateX + 'px, ' + this.zoom_current.translateY + 'px) scale(' + this.zoom_current.scale + ')',
@@ -889,21 +902,30 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         // Still zoomed in - jump back to center if needed
         console.log('end pan gesture - still zoomed');
         var props = this.chooseFoto(this.foto);
-        var scale = Math.min(6, this.zoom_previous.scale);
+        var jump = {
+          scale: Math.min(6, this.zoom_previous.scale),
+          translateX: this.zoom_previous.translateX,
+          translateY: this.zoom_previous.translateY,
+        };
+
+        // Adjust the zoom center, just like in touchmove.
+        var middlePointDistanceX = (jump.translateX + this.maxWidth/2 - this.zoom_center.x2);
+        jump.translateX +=  middlePointDistanceX * (jump.scale/this.zoom_previous.scale) - middlePointDistanceX;
+        var middlePointDistanceY = (jump.translateY + this.maxHeight/2 - this.zoom_center.y2);
+        jump.translateY +=  middlePointDistanceY * (jump.scale/this.zoom_previous.scale) - middlePointDistanceY;
+
         // Remove black borders - don't let the image move past the border of
         // the frame.
-        var borderX = props.width/2*scale - this.maxWidth/2;
-        var borderY = props.height/2*scale - this.maxHeight/2;
-        var jump = {
-          scale: scale,
-          translateX: Math.max(-borderX, Math.min(borderX, this.zoom_previous.translateX)),
-          translateY: Math.max(-borderY, Math.min(borderY, this.zoom_previous.translateY)),
-        };
+        var borderX = props.width/2*jump.scale - this.maxWidth/2;
+        var borderY = props.height/2*jump.scale - this.maxHeight/2;
+        jump.translateX = Math.max(-borderX, Math.min(borderX, jump.translateX));
+        jump.translateY = Math.max(-borderY, Math.min(borderY, jump.translateY));
+
         // Jump to the center if the image is smaller than the frame.
-        if (props.width * scale <= this.maxWidth) {
+        if (props.width * jump.scale <= this.maxWidth) {
           jump.translateX = 0;
         }
-        if (props.height* scale <= this.maxHeight) {
+        if (props.height* jump.scale <= this.maxHeight) {
           jump.translateY = 0;
         }
         if (jump.scale != this.zoom_previous.scale ||
