@@ -120,13 +120,13 @@ def _entity_detail(request, e):
     related_groups = OrderedDict()
     for r in related:
         if r['virtual']:
-            continue # don't show virtual relationships
+            continue  # don't show virtual relationships
         if r['until_year'] not in related_groups:
             related_groups[r['until_year']] = []
         related_groups[r['until_year']].append(r)
 
     related_group_counts = {group: len({r['who'] for r in members})
-            for group, members in related_groups.items()}
+                            for group, members in related_groups.items()}
 
     # Mark relations that only have special relations - no regular relations.
     # Only having a special relation means that the user won't get any email
@@ -149,7 +149,7 @@ def _entity_detail(request, e):
         rrelated_groups[r['until_year']].append(r)
 
     rrelated_group_counts = {group: len({r['who'] for r in members})
-            for group, members in rrelated_groups.items()}
+                             for group, members in rrelated_groups.items()}
 
     ctx = {'related_groups': related_groups,
            'related_group_counts': related_group_counts,
