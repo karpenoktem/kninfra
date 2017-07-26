@@ -4,6 +4,7 @@ import json
 import logging
 import mimetypes
 import re
+from collections import OrderedDict
 from datetime import date
 from decimal import Decimal
 from hashlib import sha256
@@ -83,57 +84,69 @@ def entity_detail(request, name=None, _id=None, type=None):
 
 def _entity_detail(request, e):
     related = sorted(e.get_related(),
-                     key=lambda x: (Es.DT_MIN - Es.relation_until(x),
+                     key=lambda x: (not Es.relation_in_future(x),
+                                    Es.DT_MIN - Es.relation_until(x),
                                     Es.entity_humanName(x['with']),
                                     Es.entity_humanName(x['how'])))
     rrelated = sorted(e.get_rrelated(),
-                      key=lambda x: (Es.DT_MIN - Es.relation_until(x),
+                      key=lambda x: (Es.relation_in_future(x),
+                                     Es.DT_MIN - Es.relation_until(x),
                                      Es.entity_humanName(x['how']),
                                      Es.entity_humanName(x['who'])))
     for r in chain(related, rrelated):
         r['may_end'] = Es.user_may_end_relation(request.user, r)
         r['id'] = r['_id']
-        r['until_year'] = (None if r['until'] is None
-                           or r['until'] >= now()
+        r['until_year'] = ('future' if Es.relation_in_future(r)
+                           else 'now' if r['until'] is None
                            else Es.date_to_year(r['until']))
         r['virtual'] = Es.relation_is_virtual(r)
     tags = [t.as_primary_type() for t in e.get_tags()]
 
-    # mapping of year => set of members
-    year_sets = {}
-    for r in rrelated:
-        year = r['until_year']
-        if year is None:
-            year = 'this'
-
-        if year not in year_sets:
-            year_sets[year] = set()
-        year_sets[year].add(r['who'])
-
-    year_counts = {}
-    for year in year_sets:
-        year_counts[year] = len(year_sets[year])
-
-    ctx = {'related': related,
-           'rrelated': rrelated,
-           'year_counts': year_counts,
-           'now': now(),
-           'tags': sorted(tags, key=Es.entity_humanName),
-           'object': e,
-           'chiefs': [],
-           'pipos': [],
-           'reps': []}
+    chiefs = []
+    pipos = []
+    reps = []
     for r in rrelated:
         if r['how'] and Es.relation_is_active(r):
             if str(r['how'].name) == '!brand-hoofd':
                 r['hidden'] = True
-                ctx['chiefs'].append(r)
+                chiefs.append(r)
             if str(r['how'].name) == '!brand-bestuurspipo':
                 r['hidden'] = True
-                ctx['pipos'].append(r)
+                pipos.append(r)
             if str(r['how'].name) == '!brand-vertegenwoordiger':
                 r['hidden'] = True
-                ctx['reps'].append(r)
+                reps.append(r)
+
+    related_groups = OrderedDict()
+    for r in related:
+        if r['until_year'] not in related_groups:
+            related_groups[r['until_year']] = []
+        related_groups[r['until_year']].append(r)
+
+    related_group_counts = {group: len({r['who'] for r in members})
+            for group, members in related_groups.items()}
+
+    rrelated_groups = OrderedDict()
+    for r in rrelated:
+        if r.get('hidden'):
+            continue # don't display in the list
+        if r['until_year'] not in rrelated_groups:
+            rrelated_groups[r['until_year']] = []
+        rrelated_groups[r['until_year']].append(r)
+
+    rrelated_group_counts = {group: len({r['who'] for r in members})
+            for group, members in rrelated_groups.items()}
+
+    ctx = {'related_groups': related_groups,
+           'related_group_counts': related_group_counts,
+           'rrelated_groups': rrelated_groups,
+           'rrelated_group_counts': rrelated_group_counts,
+           'now': now(),
+           'tags': sorted(tags, key=Es.entity_humanName),
+           'object': e,
+           'chiefs': chiefs,
+           'pipos': pipos,
+           'reps': reps}
     # Is request.user allowed to add (r)relations?
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):

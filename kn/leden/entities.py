@@ -462,6 +462,9 @@ def relation_is_virtual(rel):
         Requires rel['with'] to be deref'd """
     return rel['with'].is_group and rel['with'].as_group().is_virtual
 
+def relation_in_future(rel):
+    return rel['from'] is not None and rel['from'] > now()
+
 
 def user_may_end_relation(user, rel):
     """ Returns whether @user may end @rel """
@@ -469,6 +472,8 @@ def user_may_end_relation(user, rel):
         return False
     if not relation_is_active(rel):
         return False
+    if rel['until'] is not None:
+        return False # already has an end time
     if 'secretariaat' in user.cached_groups_names:
         return True
     if _id(rel['who']) == _id(user) and \

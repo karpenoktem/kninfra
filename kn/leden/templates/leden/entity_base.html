@@ -76,16 +76,17 @@ $(function(){
 {% block entity_body %}{% endblock entity_body %}
 
 {% block entity_related %}
-{% if related %}
-<h3>{% trans "Lidmaatschap" %}</h3>
+{% for group, related in related_groups.items %}
+{% if group == "future" %}
+<h3>{% trans "Toekomstig lidmaatschap" %} ({{ related_group_counts|lookup:group }})</h3>
+{% elif group == "now" %}
+<h3>{% trans "Lidmaatschap" %} ({{ related_group_counts|lookup:group }})</h3>
+{% else %}{# group select #}
+<h4>{% trans "Tot in jaar" %} {{ group }}</h4>
+{% endif %}{# group select #}
 <ul>
 {% for r in related %}
 {% if not r.virtual %}
-{% ifchanged r.until_year %}
-{% if r.until_year %}
-</ul><h4>{% trans "Tot in jaar" %} {{ r.until_year }}</h4><ul>
-{% endif %}
-{% endifchanged %}
 <li>
 {% if r.how %}
 <a href="{{ r.how.get_absolute_url }}">{{ r.how.humanName }}</a>
@@ -112,7 +113,8 @@ $(function(){
 {% endif %}{# not r.virtual #}
 {% endfor %}{# r.related #}
 </ul>
-{% endif %}
+{% endfor %}{# related_groups #}
+
 {% if may_add_related %}
 {% if related or object.is_user %}
 <form action="{% url "relation-begin" %}" method="post"
@@ -133,22 +135,23 @@ $(function(){
 {% endif %}{# related or object.is_user #}
 {% endif %}{# may_add_related #}
 
-{% if rrelated %}
-<h3>{% trans "Leden" %} ({{ year_counts.this }})</h3>
+{% for group, rrelated in rrelated_groups.items %}
+{% if group == "now" %}
+<h3>{% trans "Leden" %} ({{ rrelated_group_counts|lookup:group }})</h3>
+{% elif group == "future" %}
+<h3>{% trans "Toekomstige leden" %} ({{ rrelated_group_counts|lookup:group }})</h3>
+{% else %}
+<h4>{% trans "Tot jaar" %} {{ group }}</h4>
+{% endif %}{# group header #}
 <ul>
 {% for r in rrelated %}
-{% ifchanged r.until_year %}
-{% if r.until_year %}
-</ul><h4>{% trans "Tot jaar" %} {{ r.until_year }} ({{ year_counts|lookup:r.until_year }})</h4><ul>
-{% endif %}
-{% endifchanged %} {% if not r.hidden %}
 <li>
 <a href="{{ r.who.get_absolute_url }}">{{ r.who.humanName }}</a>, 
 {% if r.how %}
 <a href="{{ r.how.get_absolute_url }}">{{ r.how.humanName }}</a>
-{% else %}
+{% else %}{# r.how is None #}
 {% trans "lid" %}
-{% endif %}
+{% endif %}{# r.how #}
 {{ r|rel_when }}
 {% if r.may_end %}
 <form action="{% url "relation-end" _id=r.id %}"
@@ -162,11 +165,11 @@ $(function(){
 <input type="submit" value="{% trans "be&euml;indig" %}" />
 </form>
 {% endif %}{# r.may_end #}
-{% endif %}{# r.hidden #}
-{% endfor %}
 </li>
+{% endfor %}{# rrelated #}
 </ul>
-{% endif %}
+{% endfor %}{# rrelated_groups #}
+
 {% if may_add_rrelated %}
 {% if rrelated or object.is_group %}
 <form action="{% url "relation-begin" %}" method="post"
