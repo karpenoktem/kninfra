@@ -86,7 +86,6 @@ $(function(){
 {% endif %}{# group select #}
 <ul>
 {% for r in related %}
-{% if not r.virtual %}
 <li>
 {% if r.how %}
 <a href="{{ r.how.get_absolute_url }}">{{ r.how.humanName }}</a>
@@ -110,7 +109,6 @@ $(function(){
 </form>
 {% endif %}{# r.may_end #}
 </li>
-{% endif %}{# not r.virtual #}
 {% endfor %}{# r.related #}
 </ul>
 {% endfor %}{# related_groups #}

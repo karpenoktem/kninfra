@@ -119,6 +119,8 @@ def _entity_detail(request, e):
 
     related_groups = OrderedDict()
     for r in related:
+        if r['virtual']:
+            continue # don't show virtual relationships
         if r['until_year'] not in related_groups:
             related_groups[r['until_year']] = []
         related_groups[r['until_year']].append(r)
