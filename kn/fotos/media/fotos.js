@@ -789,8 +789,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
           translateY: this.zoom_previous.translateY + translateY,
           scale: this.zoom_previous.scale,
         };
-        var current = $('#foto .images img[state=current]');
-        current.css('transform', 'translate(' + this.zoom_current.translateX + 'px, ' + this.zoom_current.translateY + 'px) scale(' + this.zoom_current.scale + ')');
+        this.apply_transform(this.zoom_current, false);
       }
       return;
     }
