@@ -2,17 +2,20 @@ import os.path
 from time import gmtime, strftime
 from wsgiref.util import FileWrapper
 
+from zipseeker import ZipSeeker
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import (Http404, HttpResponse, HttpResponseNotModified,
-                         QueryDict)
+                         QueryDict, StreamingHttpResponse)
 from django.shortcuts import redirect, render
 from django.template import RequestContext
 from django.utils import six
 from django.utils.encoding import filepath_to_uri
+from django.utils.http import http_date
 from django.utils.six.moves.urllib.parse import unquote
 from django.utils.translation import ugettext as _
 
@@ -83,6 +86,21 @@ def fotos(request, path=''):
         response.status_code = 403
         return response
 
+    if 'download' in request.GET:
+        if album.is_root:
+            # Downloading ALL photos would be way too much
+            raise PermissionDenied
+        download = ZipSeeker()
+        add_download_files(download, album, album.full_path, user)
+        response = StreamingHttpResponse(download.blocks(),
+                                         content_type='application/zip')
+        response['Content-Length'] = download.size()
+        response['Last-Modified'] = http_date(download.lastModified())
+        # TODO: human-readable download name?
+        response['Content-Disposition'] = 'attachment; filename=' + \
+            album.name + '.zip'
+        return response
+
     people = None
     if fEs.is_admin(user):
         # Get all members (now or in the past), and sort them first
@@ -108,6 +126,15 @@ def fotos(request, path=''):
                   {'fotos': fotos,
                    'fotos_admin': fEs.is_admin(user),
                    'people': people})
+
+
+def add_download_files(download, album, rootpath, user):
+    for entity in album.list(user):
+        if entity._type == 'album':
+            add_download_files(download, entity, rootpath, user)
+        else:
+            zippath = os.path.relpath(entity.full_path, rootpath)
+            download.add(entity.get_cache_path('full'), zippath)
 
 
 def cache(request, cache, path):
