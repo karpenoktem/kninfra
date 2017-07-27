@@ -618,6 +618,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     frame.on('touchstart', this.touchstart.bind(this));
     frame.on('touchmove', this.touchmove.bind(this));
     frame.on('touchend', this.touchend.bind(this));
+    frame.on('wheel', this.framewheel.bind(this));
   };
 
   KNF.prototype.touchstart = function (e) {
@@ -760,11 +761,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       var middlePointDistanceY = (this.zoom_previous.translateY + this.maxHeight/2 - this.zoom_center.y1);
       this.zoom_current.translateY +=  middlePointDistanceY * scale - middlePointDistanceY;
 
-      var current = $('#foto .images img[state=current]');
-      current.css({
-        'transform': 'translate(' + this.zoom_current.translateX + 'px, ' + this.zoom_current.translateY + 'px) scale(' + this.zoom_current.scale + ')',
-        'opacity': 1,
-      });
+      this.apply_transform(this.zoom_current, false);
       return;
     }
 
@@ -889,57 +886,11 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       // Check for needed 'jump' at end of pinch zoom to center and zoom back
       // to 100% if needed
       var current = $('#foto .images img[state=current]');
-      if (this.zoom_previous.scale <= 1) {
-        // Zoomed out - exit zoom/pan session (to enable back/forward swype)
-        this.zoom_previous = null;
+      if (this.fix_zoom_end(this.zoom_center.x2, this.zoom_center.y2)) {
         console.log('end of zoom/pan gesture');
-        current.css('transform', '');
-        current.addClass('settle');
-        setTimeout(function() {
-          current.removeClass('settle');
-        }, SWITCH_DURATION);
-      } else {
-        // Still zoomed in - jump back to center if needed
-        console.log('end pan gesture - still zoomed');
-        var props = this.chooseFoto(this.foto);
-        var jump = {
-          scale: Math.min(6, this.zoom_previous.scale),
-          translateX: this.zoom_previous.translateX,
-          translateY: this.zoom_previous.translateY,
-        };
-
-        // Adjust the zoom center, just like in touchmove.
-        var middlePointDistanceX = (jump.translateX + this.maxWidth/2 - this.zoom_center.x2);
-        jump.translateX +=  middlePointDistanceX * (jump.scale/this.zoom_previous.scale) - middlePointDistanceX;
-        var middlePointDistanceY = (jump.translateY + this.maxHeight/2 - this.zoom_center.y2);
-        jump.translateY +=  middlePointDistanceY * (jump.scale/this.zoom_previous.scale) - middlePointDistanceY;
-
-        // Remove black borders - don't let the image move past the border of
-        // the frame.
-        var borderX = props.width/2*jump.scale - this.maxWidth/2;
-        var borderY = props.height/2*jump.scale - this.maxHeight/2;
-        jump.translateX = Math.max(-borderX, Math.min(borderX, jump.translateX));
-        jump.translateY = Math.max(-borderY, Math.min(borderY, jump.translateY));
-
-        // Jump to the center if the image is smaller than the frame.
-        if (props.width * jump.scale <= this.maxWidth) {
-          jump.translateX = 0;
-        }
-        if (props.height* jump.scale <= this.maxHeight) {
-          jump.translateY = 0;
-        }
-        if (jump.scale != this.zoom_previous.scale ||
-            jump.translateX != this.zoom_previous.translateX ||
-            jump.translateY != this.zoom_previous.translateY) {
-          // A jump is necessary.
-          this.zoom_previous = jump;
-          current.css('transform', 'translate(' + this.zoom_previous.translateX + 'px, ' + this.zoom_previous.translateY + 'px) scale(' + this.zoom_previous.scale + ')');
-          current.addClass('settle');
-          setTimeout(function() {
-            current.removeClass('settle');
-          }, SWITCH_DURATION);
-        }
+        this.apply_transform(this.zoom_previous, true);
       }
+
       return;
     }
 
@@ -1060,6 +1011,104 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         next.removeClass('settle');
         prev.removeClass('settle');
       }.bind(this), SWITCH_DURATION);
+    }
+  };
+
+  KNF.prototype.framewheel = function(e) {
+    var delta = e.originalEvent.deltaY;
+    if (delta === 0) return;
+
+    if (this.zoom_previous === null) {
+      this.zoom_previous = {
+        translateX: 0,
+        translateY: 0,
+        scale: 1,
+      };
+    }
+
+    // There should be a better formula for this... but I can't think of one.
+    var scale = 1.1;
+    if (delta > 0) {
+      var scale = Math.pow(scale, -1);
+    }
+    this.zoom_previous.scale *= scale;
+
+    // Adjust the zoom center, just like in touchmove.
+    var middlePointDistanceX = (this.zoom_previous.translateX + this.maxWidth/2 - e.originalEvent.clientX);
+    this.zoom_previous.translateX +=  middlePointDistanceX * scale - middlePointDistanceX;
+    var middlePointDistanceY = (this.zoom_previous.translateY + this.maxHeight/2 - e.originalEvent.clientY);
+    this.zoom_previous.translateY +=  middlePointDistanceY * scale - middlePointDistanceY;
+
+    this.fix_zoom_end(e.originalEvent.clientX, e.originalEvent.clientY);
+    this.apply_transform(this.zoom_previous, false);
+  };
+
+  // Fixes things like the image shooting off the side or zooming with scale < 0
+  KNF.prototype.fix_zoom_end = function(centerX, centerY) {
+    if (this.zoom_previous.scale <= 1) {
+      // Zoomed out - exit zoom/pan session (to enable back/forward swype)
+      this.zoom_previous = null;
+      return true;
+    }
+
+    // Still zoomed in - jump back to center if needed
+    var props = this.chooseFoto(this.foto);
+    var jump = {
+      scale: Math.min(6, this.zoom_previous.scale),
+      translateX: this.zoom_previous.translateX,
+      translateY: this.zoom_previous.translateY,
+    };
+
+    // Adjust the zoom center, just like in touchmove.
+    var middlePointDistanceX = (jump.translateX + this.maxWidth/2 - centerX);
+    jump.translateX +=  middlePointDistanceX * (jump.scale/this.zoom_previous.scale) - middlePointDistanceX;
+    var middlePointDistanceY = (jump.translateY + this.maxHeight/2 - centerY);
+    jump.translateY +=  middlePointDistanceY * (jump.scale/this.zoom_previous.scale) - middlePointDistanceY;
+
+    // Remove black borders - don't let the image move past the border of
+    // the frame.
+    var borderX = props.width/2*jump.scale - this.maxWidth/2;
+    var borderY = props.height/2*jump.scale - this.maxHeight/2;
+    jump.translateX = Math.max(-borderX, Math.min(borderX, jump.translateX));
+    jump.translateY = Math.max(-borderY, Math.min(borderY, jump.translateY));
+
+    // Jump to the center if the image is smaller than the frame.
+    if (props.width * jump.scale <= this.maxWidth) {
+      jump.translateX = 0;
+    }
+    if (props.height* jump.scale <= this.maxHeight) {
+      jump.translateY = 0;
+    }
+    if (jump.scale != this.zoom_previous.scale ||
+        jump.translateX != this.zoom_previous.translateX ||
+        jump.translateY != this.zoom_previous.translateY) {
+      // A jump is necessary.
+      this.zoom_previous = jump;
+      return true;
+    }
+
+    // No change
+    return false;
+  };
+
+  KNF.prototype.apply_transform = function(zoom, animate) {
+    var current = $('#foto .images img[state=current]');
+    if (zoom === null) {
+      current.css({
+        transform: '',
+        opacity:   1,
+      });
+    } else {
+      current.css({
+        transform: 'translate(' + zoom.translateX + 'px, ' + zoom.translateY + 'px) scale(' + zoom.scale + ')',
+        opacity: 1,
+      });
+    }
+    if (animate) {
+      current.addClass('settle');
+      setTimeout(function() {
+        current.removeClass('settle');
+      }, SWITCH_DURATION);
     }
   };
 
