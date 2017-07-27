@@ -440,30 +440,33 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       reverseDirection = 'right';
     }
 
-    // Remove old images
-    $('.images img', frame).each(function(i, img) {
-      img = $(img);
-      if (img.hasClass('left') || img.hasClass('right')) return;
-      img.addClass(reverseDirection);
-      img.attr('state', 'gone'); // don't use this image anymore
-      setTimeout(function() {
-        img.remove();
-      }.bind(this), SWITCH_DURATION);
-    }.bind(this));
-
-    // Create the new photo
-    var img = $('<img class="img">');
-    img.attr('data-name', foto.name);
-    img.attr('state', 'current');
-    img.attr('src', this.chooseFoto(foto).src);
-    if (direction) {
-      img.addClass(direction);
-      setTimeout(function() {
-        // don't disturb dragging of the photo
-        img.removeClass('settle');
-      }.bind(this), SWITCH_DURATION);
+    // Remove previous image
+    var prev = $('#foto .images img[state=prev]');
+    var current = $('#foto .images img[state=current]');
+    var next = $('#foto .images img[state=next]');
+    if (prev.length) {
+      prev.remove();
+      prev = null;
     }
-    $('.images', frame).append(img);
+    current.addClass(reverseDirection);
+    current.attr('state', 'prev');
+    prev = current;
+    current = next;
+
+    // Create the new photo - if swyping hasn't already created it.
+    if (!current.length) {
+      var current = $('<img class="img" state="current">');
+      current.attr('data-name', foto.name);
+      current.attr('src', this.chooseFoto(foto).src);
+      if (direction) {
+        current.addClass(direction);
+        setTimeout(function() {
+          // don't disturb dragging of the photo
+          current.removeClass('settle');
+        }.bind(this), SWITCH_DURATION);
+      }
+      $('.images', frame).append(current);
+    }
 
     this.update_foto_frame(foto, direction);
 
@@ -473,12 +476,12 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
     if (direction) {
       // Force a reflow
-      img.css('opacity');
+      current.css('opacity');
       // Start the animation immediately (after the reflow).
       // Preferably this should be done in the 'loadstart' event, but that
       // sadly hasn't been implemented in browsers yet.
-      img.addClass('settle');
-      img.removeClass(direction);
+      current.addClass('settle');
+      current.removeClass(direction);
     }
   };
 
@@ -1398,7 +1401,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
   };
 
   KNF.prototype.resize = function() {
-    $('#foto .images img:not([state=gone])').each(function(i, img) {
+    $('#foto .images img').each(function(i, img) {
       img = $(img);
       console.log('updating', img.attr('data-name'));
       var foto = this.fotos[this.path].children[img.attr('data-name')];
