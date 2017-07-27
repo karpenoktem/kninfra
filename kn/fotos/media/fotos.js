@@ -465,12 +465,12 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
           current.removeClass('settle');
         }.bind(this), SWITCH_DURATION);
       }
+      this.resize(current);
       $('.images', frame).append(current);
     }
 
     this.update_foto_frame(foto, direction);
 
-    this.resize();
     $('html').addClass('noscroll');
     frame.css('display', 'flex'); // show
 
@@ -819,7 +819,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         next.attr('data-name', this.foto.next.name);
         next.attr('src', this.chooseFoto(this.foto.next).src);
         $('#foto .images').prepend(next);
-        this.resize();
+        this.resize(next);
       }
       next.removeClass('settle'); // just in case
       next.css({
@@ -842,7 +842,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         prev.attr('data-name', this.foto.prev.name);
         prev.attr('src', props.src);
         $('#foto .images').append(prev);
-        this.resize();
+        this.resize(prev);
       }
       prev.removeClass('settle'); // just in case
       prev.css({
@@ -950,7 +950,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
           next.css('transform', 'translateX(9999px)'); // off-screen
           next.attr('src', this.chooseFoto(this.foto.next).src);
           $('#foto .images').prepend(next);
-          this.resize();
+          this.resize(next);
         }
       }.bind(this), SWITCH_DURATION);
 
@@ -987,7 +987,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
           prev.css('transform', 'translateX(-9999px)'); // off-screen
           prev.attr('src', this.chooseFoto(this.foto.prev).src);
           $('#foto .images').append(prev);
-          this.resize();
+          this.resize(prev);
         }
       }.bind(this), SWITCH_DURATION);
 
@@ -1217,12 +1217,14 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
   KNF.prototype.open_sidebar = function() {
     this.sidebar = true;
     $('#foto').addClass('sidebar');
+    this.updateMaxSize();
     this.resize();
   };
 
   KNF.prototype.close_sidebar = function() {
     this.sidebar = false;
     $('#foto').removeClass('sidebar');
+    this.updateMaxSize();
     this.resize();
   };
 
@@ -1323,7 +1325,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         foto.calculate_cache_urls();
         if (foto === this.foto) {
           img.attr('src', this.chooseFoto(foto).src);
-          this.resize();
+          this.resize(img);
         }
 
         foto.tags = tags;
@@ -1400,8 +1402,12 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
   };
 
   KNF.prototype.resize = function() {
-    $('#foto .images img').each(function(i, img) {
-      img = $(img);
+    if (arguments.length == 0) {
+      arguments = $('#foto .images img');
+    }
+    for (var i=0; i<arguments.length; i++) {
+      var img = $(arguments[i]);
+      if (img === null) continue;
       console.log('updating', img.attr('data-name'));
       var foto = this.fotos[this.path].children[img.attr('data-name')];
       var props = this.chooseFoto(foto);
@@ -1410,11 +1416,11 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
                'left': (this.maxWidth-props.width)/2,
                'top': (this.maxHeight-props.height)/2});
       // switch to 2x if needed (but don't switch back for this photo)
-      if (props.src == this.foto.large2x &&
-          img.attr('src') != this.foto.large2x) {
+      if (props.src == foto.large2x &&
+          img.attr('src') != foto.large2x) {
         img.attr('src', props.src);
       }
-    }.bind(this));
+    }
   };
 
   KNF.prototype.onedit = function(e) {
