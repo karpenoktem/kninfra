@@ -454,27 +454,32 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     // Create the new photo
     var img = $('<img class="img">');
     img.attr('data-name', foto.name);
-    img.addClass(direction);
     img.attr('state', 'current');
     img.attr('src', this.chooseFoto(foto).src);
+    if (direction) {
+      img.addClass(direction);
+      setTimeout(function() {
+        // don't disturb dragging of the photo
+        img.removeClass('settle');
+      }.bind(this), SWITCH_DURATION);
+    }
     $('.images', frame).append(img);
-    setTimeout(function() {
-      // Start the animation immediately (after 1ms)
-      // Preferably this should be done in the 'loadstart' event, but that sadly
-      // hasn't been implemented in browsers yet.
-      img.addClass('settle');
-      img.removeClass(direction);
-    }.bind(this), 1);
-    setTimeout(function() {
-      // don't disturb dragging of the photo
-      img.removeClass('settle');
-    }.bind(this), SWITCH_DURATION);
 
     this.update_foto_frame(foto, direction);
 
     this.resize();
     $('html').addClass('noscroll');
     frame.css('display', 'flex'); // show
+
+    if (direction) {
+      // Force a reflow
+      img.css('opacity');
+      // Start the animation immediately (after the reflow).
+      // Preferably this should be done in the 'loadstart' event, but that
+      // sadly hasn't been implemented in browsers yet.
+      img.addClass('settle');
+      img.removeClass(direction);
+    }
   };
 
   KNF.prototype.update_foto_frame = function(foto, direction) {
