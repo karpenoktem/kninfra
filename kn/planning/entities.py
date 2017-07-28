@@ -57,11 +57,14 @@ class Event(SONWrapper):
 
     @classmethod
     def all_in_future(cls):
-        return cls.all_since_datetime(now())
+        return cls.all_in_period(now(), None)
 
     @classmethod
-    def all_since_datetime(cls, since):
-        for c in ecol.find({'date': {'$gte': since}}):
+    def all_in_period(cls, start, end):
+        query = {'$gte': start, '$lte': end}
+        if end is None:
+            query = {'$gte': start}
+        for c in ecol.find({'date': query}):
             yield cls.from_data(c)
 
     @classmethod

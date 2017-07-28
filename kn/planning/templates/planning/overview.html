@@ -17,10 +17,21 @@
     vertical-align: top;
     text-align: center;
 }
+#planning-toolbar {
+    text-align: right;
+}
+#planning-toolbar a.current {
+    font-weight: bold;
+}
 </style>
 {% endblock styles %}
 
 {% block body %}
+<div id="planning-toolbar">
+    <a href="?year=now" {% if period == "now" %} class="current"{% endif %}>huidige planning</a> |
+    <a href="?year=past1" {% if period == "past1" %} class="current"{% endif %}>afgelopen jaar</a> |
+    <a href="?year=past2" {% if period == "past2" %} class="current"{% endif %}>jaar daarvoor</a>
+</div>
 <div id="planning-overview-wrapper">
     <table id="planning-overview">
         <tr>
