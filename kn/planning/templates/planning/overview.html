@@ -6,14 +6,14 @@
 {% block styles %}
 {{ block.super }}
 <style type="text/css">
-#planningOverview-wrapper {
+#planning-overview-wrapper {
     overflow-x: auto;
 }
-#planningOverview {
+#planning-overview {
     width: 100%;
     box-sizing: border-box;
 }
-#planningOverview td {
+#planning-overview td {
     vertical-align: top;
     text-align: center;
 }
@@ -21,8 +21,8 @@
 {% endblock styles %}
 
 {% block body %}
-<div id="planningOverview-wrapper">
-    <table id="planningOverview">
+<div id="planning-overview-wrapper">
+    <table id="planning-overview">
         <tr>
 {% for pool in pools %}
             {# TODO pool niet tonen als er voor geen enkel te tonen event diensten zijn #}
@@ -33,8 +33,7 @@
         <tr>
             {# TODO move into stylesheet #}
             <td
-                colspan="{{ pools|length }}"
-                class="poolHeader">
+                colspan="{{ pools|length }}">
                 {% if may_manage_planning %}
                 <a href="{% url "planning-event-edit" eventid=event.id %}">
                     <strong>{{ event.datetime|date:"l j F Y" }}</strong>
