@@ -81,7 +81,7 @@ def apply_ldap_changes(daan, changes):
                    'sn': _o['sn'][0],
                    'cn': _o['cn'][0],
                    'mail': _o['mail'][0]}
-            new = {'uid': [uid].encode(),
+            new = {'uid': [uid.encode()],
                    'sn': [sn],
                    'cn': [cn],
                    'mail': [mail]}

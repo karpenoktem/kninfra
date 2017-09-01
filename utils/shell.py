@@ -103,10 +103,10 @@ def create_study(name):
                            'humanNames': [{'human': name}]})
 
 
-def create_brand(suffix, name):
-    Es.ecol.insert({'humanNames': [{'human': name}],
-                    'names': [],
-                    'sofa_suffix': suffix,
+def create_brand(name, humanName):
+    Es.ecol.insert({'humanNames': [{'human': humanName}],
+                    'names': ['!brand-'+name],
+                    'sofa_suffix': name,
                     'tags': [Es.id_by_name('!sofa-brand')],
                     'types': ['brand']})
 
