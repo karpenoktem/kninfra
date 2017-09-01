@@ -32,8 +32,6 @@ def generate_forum_changes(self):
                 users[str(m.name)] = m
             for user, realname in c.fetchall():
                 user = user.lower()
-                if realname and six.PY2:
-                    realname = realname.decode('latin1')
                 if user not in users:
                     if user == 'guest':
                         continue
