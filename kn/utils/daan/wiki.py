@@ -67,7 +67,7 @@ def apply_wiki_changes(daan, changes):
                     SELECT user_id, %s FROM `user` WHERE user_name=%s""",
                           ('leden', user.capitalize()))
         for user in changes['deactivate']:
-            with dc.cusor() as c:
+            with dc.cursor() as c:
                 # Issue #11: .capitalize() is required due to binary-charset
                 c.execute("""DELETE FROM `user_groups` WHERE ug_group=%s AND
                     ug_user = (SELECT user_id FROM `user` WHERE
