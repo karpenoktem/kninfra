@@ -103,6 +103,11 @@ def create_study(name):
                            'humanNames': [{'human': name}]})
 
 
+def create_institute(name):
+    return Es.ecol.insert({'types': ['institute'],
+                           'humanNames': [{'human': name}]})
+
+
 def create_brand(name, humanName):
     Es.ecol.insert({'humanNames': [{'human': humanName}],
                     'names': ['!brand-'+name],
