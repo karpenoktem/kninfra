@@ -19,7 +19,7 @@ def change_username(oldname, newname, do):
         return
 
     e = Es.by_name(newname)
-    if not oldname in e._data['names']:
+    if oldname not in e._data['names']:
         print('name %r not in entity %r' % (oldname, e))
         return
 
@@ -33,7 +33,7 @@ def change_username(oldname, newname, do):
     print('kninfra names (new):', e._data['names'])
     print('email:', e.canonical_email)
 
-    rootpassword = getpass.getpass('MySQL root password:') # for wolk
+    rootpassword = getpass.getpass('MySQL root password:')  # for wolk
     if not rootpassword:
         print('no MySQL root password entered')
         return
@@ -42,7 +42,7 @@ def change_username(oldname, newname, do):
     creds = settings.WOLK_MYSQL_SECRET
     dc = pymysql.connect(
         host=creds[0],
-        user='root', # needed for UPDATE
+        user='root',  # needed for UPDATE
         password=rootpassword,
         db=creds[3],
         charset='utf8'
