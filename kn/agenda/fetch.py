@@ -70,10 +70,13 @@ def fetch():
     credentials = get_credentials()
     credentials.authorize(h)
 
-    agendas = {}
-    for key, cal_id in settings.GOOGLE_CALENDAR_IDS.items():
-        agendas[key] = fetch_agenda(h, cal_id)
-    return agendas
+    try:
+        agendas = {}
+        for key, cal_id in settings.GOOGLE_CALENDAR_IDS.items():
+            agendas[key] = fetch_agenda(h, cal_id)
+        return agendas
+    except httplib2.ServerNotFoundError:
+        return None
 
 
 if __name__ == '__main__':
