@@ -692,8 +692,6 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
   };
 
   KNF.prototype.touchstart = function (e) {
-    if (this.sidebar) return;
-
     // Ignore the third (or more) finger
     if (e.originalEvent.touches.length > 2) return;
 
@@ -784,7 +782,6 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
   };
 
   KNF.prototype.touchmove = function(e) {
-    if (this.sidebar) return;
     if (this.swype_start === null && this.zoom_previous === null) return;
 
     e.preventDefault();
@@ -928,8 +925,6 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
   };
 
   KNF.prototype.touchend = function(e) {
-    if (this.sidebar) return;
-
     // ignore lifting the third (or more) finger
     if (e.originalEvent.touches.length > 1) return;
 
