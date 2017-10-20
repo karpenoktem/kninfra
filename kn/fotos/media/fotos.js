@@ -431,58 +431,120 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     }
 
     var direction = '';
-    var reverseDirection= '';
     if (this.foto === foto.prev) {
-      direction = 'right';
-      reverseDirection = 'left';
+      direction = 'forward';
     } else if (this.foto === foto.next) {
-      direction = 'left';
-      reverseDirection = 'right';
+      direction = 'backward';
     }
 
     // Remove previous image
     var prev = $('#foto .images img[state=prev]');
     var current = $('#foto .images img[state=current]');
     var next = $('#foto .images img[state=next]');
-    if (prev.length) {
-      prev.remove();
-      prev = null;
-    }
-    current.addClass(reverseDirection);
-    current.attr('state', 'prev');
-    prev = current;
-    current = next;
 
-    // Create the new photo - if swyping hasn't already created it.
-    if (!current.length) {
+    if (direction === 'forward') {
+      if (prev.length) {
+        prev.remove();
+      }
+      prev = current;
+      current = next;
+      next = null;
+
+      if (!current.length) { // current doesn't exist yet
+        var current = $('<img class="img" state="current">');
+        current.attr('data-name', foto.name);
+        current.attr('src', this.chooseFoto(foto).src);
+        $('.images', frame).append(current);
+        this.resize(current);
+      }
+
+      prev.attr('state', 'prev');
+      current.attr('state', 'current');
+      prev.css({
+        'opacity': 0,
+        'transform': 'translateX(-20px)',
+      });
+      prev.addClass('settle');
+
+      current.css({
+        'opacity': 0,
+        'transform': 'translateX(20px)',
+      });
+      current.css('opacity'); // Force a reflow
+      current.addClass('settle');
+      current.css({
+        'opacity': 1,
+        'transform': 'translateX(0)',
+      });
+
+      setTimeout(function() {
+        current.removeClass('settle');
+        if (prev.attr('state') === 'prev') {
+          prev.removeClass('settle');
+          prev.css({
+            'opacity': 0,
+            'transform': 'translateX(-9999px)',
+          });
+        }
+      }.bind(this), SWITCH_DURATION);
+    } else if (direction == 'backward') {
+      if (next.length) {
+        next.remove();
+      }
+      next = current;
+      current = prev;
+      prev = null;
+
+      if (!current.length) { // current doesn't exist yet
+        var current = $('<img class="img" state="current">');
+        current.attr('data-name', foto.name);
+        current.attr('src', this.chooseFoto(foto).src);
+        $('.images', frame).prepend(current);
+        this.resize(current);
+      }
+
+      next.attr('state', 'next');
+      current.attr('state', 'current');
+      next.css({
+        'opacity': 0,
+        'transform': 'translateX(20px)',
+      });
+      next.addClass('settle');
+
+      current.css({
+        'opacity': 0,
+        'transform': 'translateX(-20px)',
+      });
+      current.css('opacity'); // Force a reflow
+      current.addClass('settle');
+      current.css({
+        'opacity': 1,
+        'transform': 'translateX(0)',
+      });
+
+      setTimeout(function() {
+        current.removeClass('settle');
+        if (next.attr('state') == 'next') {
+          next.removeClass('settle');
+          next.css({
+            'opacity': 0,
+            'transform': 'translateX(9999px)',
+          });
+        }
+      }.bind(this), SWITCH_DURATION);
+    } else {
+      // Probably this is the first image (after clicking one).
+      $('.images', frame).empty();
       var current = $('<img class="img" state="current">');
       current.attr('data-name', foto.name);
       current.attr('src', this.chooseFoto(foto).src);
-      if (direction) {
-        current.addClass(direction);
-        setTimeout(function() {
-          // don't disturb dragging of the photo
-          current.removeClass('settle');
-        }.bind(this), SWITCH_DURATION);
-      }
-      this.resize(current);
       $('.images', frame).append(current);
+      this.resize(current);
     }
 
     this.update_foto_frame(foto, direction);
-
     $('html').addClass('noscroll');
     frame.css('display', 'flex'); // show
-
-    if (direction) {
-      // Force a reflow
-      current.css('opacity');
-      // Start the animation immediately (after the reflow).
-      // Preferably this should be done in the 'loadstart' event, but that
-      // sadly hasn't been implemented in browsers yet.
-      current.addClass('settle');
-      current.removeClass(direction);
-    }
   };
 
   KNF.prototype.update_foto_frame = function(foto, direction) {
@@ -500,7 +562,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
     $('.preload-image', frame).remove(); // remove old preloaders
     var preloadHref = null;
-    if (direction == 'left' && foto.prev && foto.prev.type === 'foto') {
+    if (direction == 'backward' && foto.prev && foto.prev.type === 'foto') {
       // user will likely move to the left again
       preloadHref = this.chooseFoto(foto.prev).src;
     } else if (foto.next && foto.next.type === 'foto') {

@@ -244,21 +244,9 @@ img.lazy {
     will-change: transform, opacity;
 }
 
-#foto .images img.right,
-#foto .images img.left,
 #foto .images img.settle {
     /* keep time up to date with fotos.js */
     transition: opacity 200ms linear, transform 200ms ease;
-}
-
-#foto .images img.right { /* a bit to the right */
-    opacity: 0;
-    transform: translateX(20px);
-}
-
-#foto .images img.left { /* a bit to the left */
-    opacity: 0;
-    transform: translateX(-20px);
 }
 
 #foto .img {
