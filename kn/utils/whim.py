@@ -9,6 +9,7 @@ import threading
 import mirte
 import msgpack
 
+import sdnotify
 
 """ Whim is a very simple server/client protocol.
 
@@ -139,6 +140,7 @@ class WhimDaemon(object):
         self.sock_state = dict()
         self.ls = None
         self.packer = msgpack.Packer(use_bin_type=True)
+        self.systemd_notify = sdnotify.SystemdNotifier()
 
     def pre_mainloop(self):
         pass
@@ -159,6 +161,7 @@ class WhimDaemon(object):
             os.chmod(self.address, 0o600)
         self.pre_mainloop()
         ls.listen(8)
+        self.systemd_notify.notify("READY=1")
         while True:
             rs, ws, xs = select.select(list(self.sockets) + [ls],
                                        [], [])
