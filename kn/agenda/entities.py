@@ -1,8 +1,12 @@
+import re
 from datetime import datetime
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils import six
 from django.utils.safestring import mark_safe
+from django.utils.six.moves import range
+from django.utils.translation import get_language
 
 from kn.leden.mongo import SONWrapper, db, son_property
 
@@ -56,11 +60,33 @@ class AgendaEvent(SONWrapper):
 
     @property
     def description(self):
+        lan = six.text_type(get_language()).lower()
+        lut = self._parse_description()
+        defaultLan = six.text_type(settings.LANGUAGE_CODE).lower()
+        return lut.get(lan, lut[defaultLan])
+
+    def _parse_description(self):
         text = self._data.get('description', '')
+        # First add auto-links
         text = text.replace('Villa van Schaeck',
                             '<a href="%s">Villa van Schaeck</a>' %
                             reverse('route'))
-        return text
+        # Split on language tags, i.e. [nl], [en], [de]
+        # e.g. "Dit is een agendastuk \n[en] This is an agendapiece"
+        # becomes ('Dit is een agendastuk', 'en', 'This is an agendapiece')
+        splitRegex = '(?:^|\n\\W*)\\[([a-zA-Z-]+)\\](?:\\W*\\n|$)'
+        defaultLan = six.text_type(settings.LANGUAGE_CODE).lower()
+        bits = [defaultLan] + re.split(splitRegex, text)
+        descLut = {}
+        for i in range(0, len(bits), 2):
+            code = bits[i]
+            text = bits[i+1]
+            if code not in descLut:
+                descLut[code] = ""
+            else:
+                descLut[code] += '\n'
+            descLut[code] += text
+        return descLut
 
     @property
     def month(self):
