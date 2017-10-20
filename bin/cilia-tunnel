@@ -5,6 +5,6 @@
 cd /var/run/infra
 
 rm -f S-cilia
-socat UNIX-LISTEN:S-cilia,fork,mode=660,group=infra \
+exec socat UNIX-LISTEN:S-cilia,fork,mode=660,group=infra \
             EXEC:"ssh root@phassa \
                 'socat STDIO UNIX-CONNECT:/var/run/infra/S-cilia'"

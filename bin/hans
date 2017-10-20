@@ -2,4 +2,4 @@
 
 PYTHON="${PYTHON:-python}"
 
-$PYTHON /home/infra/repo/utils/hans.py
+exec $PYTHON /home/infra/repo/utils/hans.py
