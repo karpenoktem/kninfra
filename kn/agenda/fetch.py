@@ -52,7 +52,7 @@ def parse_item_date(date):
 
 def fetch_agenda(h, cal_id):
     timeMin = datetime.datetime.utcnow().date().isoformat() + 'T00:00:00Z'
-    cal = build('calendar', 'v3', http=h)
+    cal = build('calendar', 'v3', http=h, cache_discovery=False)
     request = cal.events().list(calendarId=cal_id,
                                 timeMin=timeMin,
                                 fields='items(summary,description,start,end)')
@@ -70,10 +70,13 @@ def fetch():
     credentials = get_credentials()
     credentials.authorize(h)
 
-    agendas = {}
-    for key, cal_id in settings.GOOGLE_CALENDAR_IDS.items():
-        agendas[key] = fetch_agenda(h, cal_id)
-    return agendas
+    try:
+        agendas = {}
+        for key, cal_id in settings.GOOGLE_CALENDAR_IDS.items():
+            agendas[key] = fetch_agenda(h, cal_id)
+        return agendas
+    except httplib2.ServerNotFoundError:
+        return None
 
 
 if __name__ == '__main__':

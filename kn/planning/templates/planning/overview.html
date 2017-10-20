@@ -6,23 +6,34 @@
 {% block styles %}
 {{ block.super }}
 <style type="text/css">
-#planningOverview-wrapper {
+#planning-overview-wrapper {
     overflow-x: auto;
 }
-#planningOverview {
+#planning-overview {
     width: 100%;
     box-sizing: border-box;
 }
-#planningOverview td {
+#planning-overview td {
     vertical-align: top;
     text-align: center;
+}
+#planning-toolbar {
+    text-align: right;
+}
+#planning-toolbar a.current {
+    font-weight: bold;
 }
 </style>
 {% endblock styles %}
 
 {% block body %}
-<div id="planningOverview-wrapper">
-    <table id="planningOverview">
+<div id="planning-toolbar">
+    <a href="?year=now" {% if period == "now" %} class="current"{% endif %}>huidige planning</a> |
+    <a href="?year=past1" {% if period == "past1" %} class="current"{% endif %}>afgelopen jaar</a> |
+    <a href="?year=past2" {% if period == "past2" %} class="current"{% endif %}>jaar daarvoor</a>
+</div>
+<div id="planning-overview-wrapper">
+    <table id="planning-overview">
         <tr>
 {% for pool in pools %}
             {# TODO pool niet tonen als er voor geen enkel te tonen event diensten zijn #}
@@ -33,8 +44,7 @@
         <tr>
             {# TODO move into stylesheet #}
             <td
-                colspan="{{ pools|length }}"
-                class="poolHeader">
+                colspan="{{ pools|length }}">
                 {% if may_manage_planning %}
                 <a href="{% url "planning-event-edit" eventid=event.id %}">
                     <strong>{{ event.datetime|date:"l j F Y" }}</strong>

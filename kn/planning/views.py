@@ -99,18 +99,28 @@ templates = {
 
 @login_required
 def planning_view(request):
-    if 'lookbehind' in request.GET:
-        lookbehind = int(request.GET['lookbehind'])
-    else:
-        lookbehind = 1
+    period = 'now'
+    if request.GET.get('year') in {'past1', 'past2'}:
+        period = request.GET['year']
     pools = list(Pool.all())
     poolid2index = dict()
     poolids = set()
     for pool in pools:
         poolids.add(_id(pool))
     # TODO reduce number of queries
-    event_entities = list(Event.all_since_datetime(
-        date_to_midnight(now()) - datetime.timedelta(days=lookbehind)))
+    current = date_to_midnight(now() - datetime.timedelta(days=1))
+    past1year = date_to_midnight(now() - datetime.timedelta(days=356))
+    past2year = date_to_midnight(now() - datetime.timedelta(days=356*2))
+    if period == 'now':
+        start = current
+        end = None
+    elif period == 'past1':
+        start = past1year
+        end = current
+    elif period == 'past2':
+        start = past2year
+        end = past1year
+    event_entities = list(Event.all_in_period(start, end))
     used_pools = set()
     for e in event_entities:
         for v in e.vacancies():
@@ -145,7 +155,8 @@ def planning_view(request):
     events.sort(key=lambda x: x['datetime'])
     return render(request, 'planning/overview.html',
                   {'events': events,
-                   'pools': pools_tpl})
+                   'pools': pools_tpl,
+                   'period': period})
 
 
 @login_required
