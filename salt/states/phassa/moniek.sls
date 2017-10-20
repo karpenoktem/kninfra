@@ -16,7 +16,7 @@ moniek packages:
             {% endif %}
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'GitPython', 'pymysql'] %}
+{% for pkg in ['mirte', 'sarah', 'GitPython'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
