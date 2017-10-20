@@ -17,7 +17,10 @@ class MongoBackend(object):
         return user
 
     def get_user(self, pk):
-        return Es.by_id(pk)
+        # Due to a regression, Django expects an integer as identifier ---
+        # so we passed the integer representation of our hexstring _id
+        # to it.  Here we convert it back.  See also User._Meta.PK.
+        return Es.by_id('{0:x}'.format(pk))
 
 
 def login_or_basicauth_required(view):
