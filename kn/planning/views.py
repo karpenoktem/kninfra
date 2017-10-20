@@ -10,7 +10,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
-from kn.base.http import JsonHttpResponse
+from kn.base.http import JsonHttpResponse, get_param
 from kn.leden.date import date_to_dt, date_to_midnight, now
 from kn.leden.entities import DT_MIN
 from kn.leden.mongo import _id
@@ -345,9 +345,9 @@ def event_edit(request, eventid):
 
 
 def _api_send_reminder(request):
-    if 'vacancy_id' not in request.REQUEST:
+    if not get_param(request, 'vacancy_id'):
         return JsonHttpResponse({'error': 'missing argument'})
-    v = Vacancy.by_id(request.REQUEST['vacancy_id'])
+    v = Vacancy.by_id(get_param(request, 'vacancy_id'))
     if not v:
         raise Http404
     if not v.pool.may_manage(request.user):
@@ -359,7 +359,7 @@ def _api_send_reminder(request):
 @require_POST
 @login_required
 def planning_api(request):
-    action = request.REQUEST.get('action')
+    action = request.POST.get('action')
     if action == 'send-reminder':
         return _api_send_reminder(request)
     else:

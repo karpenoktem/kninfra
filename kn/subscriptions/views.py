@@ -111,16 +111,16 @@ def event_detail(request, name):
 
 
 def _api_event_set_opened(request):
-    if ('id' not in request.REQUEST
-            or not isinstance(request.REQUEST['id'], six.string_types)):
+    if ('id' not in request.POST
+            or not isinstance(request.POST['id'], six.string_types)):
         return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
-    e = subscr_Es.event_by_id(request.REQUEST['id'])
+    e = subscr_Es.event_by_id(request.POST['id'])
     if not e:
         raise Http404
     if not e.has_write_access(request.user):
         raise PermissionDenied
 
-    opened = {'true': True, 'false': False}.get(request.REQUEST.get('opened'))
+    opened = {'true': True, 'false': False}.get(request.POST.get('opened'))
     if opened is True:
         e.open(request.user)
     elif opened is False:
@@ -134,9 +134,9 @@ def _api_event_set_opened(request):
 
 
 def _api_get_email_addresses(request):
-    if 'id' not in request.REQUEST:
+    if 'id' not in request.POST:
         return JsonHttpResponse({'error': 'missing arguments'})
-    event = subscr_Es.event_by_id(request.REQUEST['id'])
+    event = subscr_Es.event_by_id(request.POST['id'])
     if not event:
         raise Http404
     if (not event.has_public_subscriptions and
@@ -152,7 +152,7 @@ def _api_get_email_addresses(request):
 @require_POST
 @login_required
 def api(request):
-    action = request.REQUEST.get('action')
+    action = request.POST.get('action')
     if action == 'get-email-addresses':
         return _api_get_email_addresses(request)
     elif action == 'event-set-opened':

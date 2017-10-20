@@ -4,6 +4,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.translation import ugettext as _
 
 
+def get_param(request, name, default=None):
+    """ get_param(request, name) replaces request.REQUEST.get(name) """
+    return request.POST.get(name, request.GET.get(name, default))
+
+
 def redirect_to_referer(request):
     referer = request.META.get('HTTP_REFERER', None)
     if referer is None:

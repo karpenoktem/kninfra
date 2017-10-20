@@ -33,7 +33,7 @@ from django.utils.translation import ugettext as _
 import kn.leden.entities as Es
 from kn.base._random import pseudo_randstr
 from kn.base.conf import DT_MAX, DT_MIN
-from kn.base.http import JsonHttpResponse, redirect_to_referer
+from kn.base.http import JsonHttpResponse, redirect_to_referer, get_param
 from kn.base.mail import render_then_email
 from kn.base.text import humanized_enum
 from kn.fotos.utils import resize_proportional
@@ -400,16 +400,16 @@ def rauth(request):
         The token that is given to the authenticated user is only valid until
         the end of the day.
     """
-    if request.REQUEST.get('url') is None:
+    if get_param(request, 'url') is None:
         raise Http404
-    if (request.REQUEST.get('validate') is not None and
-            request.REQUEST.get('user') is not None):
+    if (get_param(request, 'validate') is not None and
+            get_param(request, 'user') is not None):
         token = sha256('%s|%s|%s|%s' % (
-            request.REQUEST['user'],
+            get_param(request, 'user'),
             date.today(),
-            request.REQUEST['url'],
+            get_param(request, 'url'),
             settings.SECRET_KEY)).hexdigest()
-        if constant_time_compare(request.REQUEST['validate'], token):
+        if constant_time_compare(get_param(request, 'validate'), token):
             return HttpResponse("OK")
         return HttpResponse("INVALID")
 
@@ -419,15 +419,15 @@ def rauth(request):
     names seperated by commas.
     A JSON string will be returned containing the information.
     '''
-    if (request.REQUEST.get('fetch') is not None and
-            request.REQUEST.get('user') is not None):
+    if (get_param(request, 'fetch') is not None and
+            get_param(request, 'user') is not None):
         token = sha256('%s|%s|%s|%s' % (
-            request.REQUEST['user'],
+            get_param(request, 'user'),
             date.today(),
-            request.REQUEST['url'],
+            get_param(request, 'url'),
             settings.SECRET_KEY)).hexdigest()
-        if constant_time_compare(request.REQUEST['token'], token):
-            user = Es.by_name(request.REQUEST['user'])
+        if constant_time_compare(get_param(request, 'token'), token):
+            user = Es.by_name(get_param(request, 'user'))
             properties = {
                 'firstname': user.first_name,
                 'lastname': user.last_name,
@@ -436,21 +436,21 @@ def rauth(request):
             }
             return HttpResponse(json.dumps(dict([
                 (k, properties[k]) for k in
-                set(s.strip() for s in request.REQUEST.get('fetch').split(','))
+                set(s.strip() for s in get_param(request, 'fetch').split(','))
                 if k in properties
             ])))
         return HttpResponse("INVALID TOKEN")
     if not request.user.is_authenticated():
         return redirect_to_login('%s?url=%s' % (
             reverse('rauth'),
-            urlquote(request.REQUEST['url'])))
+            urlquote(get_param(request, 'url'))))
     token = sha256('%s|%s|%s|%s' % (str(request.user.name),
                                     date.today(),
-                                    request.REQUEST['url'],
+                                    get_param(request, 'url'),
                                     settings.SECRET_KEY)).hexdigest()
     return HttpResponseRedirect('%s%suser=%s&token=%s' % (
-        request.REQUEST['url'],
-        '?' if request.REQUEST['url'].find('?') == -1 else '&',
+        get_param(request, 'url'),
+        '?' if get_param(request, 'url').find('?') == -1 else '&',
         str(request.user.name), token))
 
 
@@ -467,7 +467,7 @@ def accounts_api(request):
 def api_users(request):
     verified_key = False
     for key in settings.ALLOWED_API_KEYS:
-        if constant_time_compare(request.REQUEST['key'], key):
+        if constant_time_compare(get_param(request, 'key'), key):
             verified_key = True
     if not verified_key:
         raise PermissionDenied

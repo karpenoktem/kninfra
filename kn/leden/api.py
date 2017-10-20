@@ -16,7 +16,7 @@ from kn.leden.utils import find_name_for_user, parse_date
 @login_required
 @require_POST
 def view(request):
-    data = json.loads(request.REQUEST.get('data', '{}'))
+    data = json.loads(request.POST.get('data', '{}'))
     action = data.get('action')
     handler = ACTION_HANDLER_MAP.get(action, None)
     if handler is None:
