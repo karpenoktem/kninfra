@@ -4,6 +4,9 @@ import _import
 
 import sys
 import json
+import time
+import os.path
+import logging
 
 from kn.utils.whim import WhimClient
 
@@ -16,10 +19,18 @@ def main():
         msg = sys.argv[2]
     else:
         msg = sys.stdin.read()
-    wc = WhimClient(sys.argv[1])
+    fn = sys.argv[1]
+    if not os.path.exists(fn):
+        logging.warn("%s: does not exist.  Waiting a bit.", fn)
+        time.sleep(1)
+    if not os.path.exists(fn):
+        logging.error("%s: still doesn't exist.", fn)
+        return 1
+    wc = WhimClient(fn)
     print(json.dumps(wc.send(json.loads(msg))))
     return 0
 
 
 if __name__ == '__main__':
+    logging.basicConfig()
     sys.exit(main())
