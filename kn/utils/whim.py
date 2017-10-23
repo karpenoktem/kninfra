@@ -8,8 +8,8 @@ import threading
 
 import mirte
 import msgpack
-
 import sdnotify
+
 
 """ Whim is a very simple server/client protocol.
 
@@ -140,7 +140,6 @@ class WhimDaemon(object):
         self.sock_state = dict()
         self.ls = None
         self.packer = msgpack.Packer(use_bin_type=True)
-        self.systemd_notify = sdnotify.SystemdNotifier()
 
     def pre_mainloop(self):
         pass
@@ -159,9 +158,8 @@ class WhimDaemon(object):
         ls.bind(self.address)
         if self.family == 'unix':
             os.chmod(self.address, 0o600)
-        self.pre_mainloop()
         ls.listen(8)
-        self.systemd_notify.notify("READY=1")
+        self.pre_mainloop()
         while True:
             rs, ws, xs = select.select(list(self.sockets) + [ls],
                                        [], [])
@@ -198,6 +196,11 @@ class WhimDaemon(object):
             with wl:
                 f.write(self.packer.pack([mid, ret]))
                 f.flush()
+
+    def notify_systemd(self):
+        """ Notify systemd that this process is ready.
+            Might be useful to call form overloaded `pre_mainloop'. """
+        sdnotify.SystemdNotifier().notify("READY=1")
 
     def handle(self, d):
         raise NotImplementedError
