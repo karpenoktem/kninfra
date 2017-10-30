@@ -30,6 +30,7 @@ class Daan(WhimDaemon):
     def pre_mainloop(self):
         super(Daan, self).pre_mainloop()
         os.chown(settings.DAAN_SOCKET, settings.INFRA_UID, -1)
+        self.notify_systemd()
 
     def handle(self, d):
         if d['type'] == 'postfix':

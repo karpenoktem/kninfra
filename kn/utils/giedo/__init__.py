@@ -62,6 +62,10 @@ class Giedo(WhimDaemon):
             ('wolk', self.cilia, self._gen_wolk),
             ('quassel', self.daan, self._gen_quassel))
 
+    def pre_mainloop(self):
+        super(Giedo, self).pre_mainloop()
+        self.notify_systemd()
+
     def _gen_quassel(self):
         return {'type': 'quassel',
                 'changes': generate_quassel_changes(self)}

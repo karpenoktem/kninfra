@@ -4,6 +4,7 @@ Description=Cilia applies changes on phassa thought up by Giedo
 [Service]
 ExecStart=/root/bin/cilia
 EnvironmentFile=-/etc/default/cilia
+Type=notify
 
 [Install]
 WantedBy=multi-user.target

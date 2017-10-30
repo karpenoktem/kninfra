@@ -6,3 +6,4 @@ Requires=daan.service cilia-tunnel.service moniek-tunnel.service hans.service
 ExecStart=/home/infra/bin/giedo
 EnvironmentFile=-/etc/default/giedo
 User=infra
+Type=notify

@@ -5,3 +5,4 @@ Description=Hans handles Mailman for Giedo
 ExecStart=/home/infra/bin/hans
 EnvironmentFile=-/etc/default/hans
 User=infra
+Type=notify

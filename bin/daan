@@ -2,4 +2,4 @@
 
 PYTHON="${PYTHON:-python}"
 
-$PYTHON /root/kninfra/utils/daan.py
+exec $PYTHON /root/kninfra/utils/daan.py
