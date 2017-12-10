@@ -69,8 +69,8 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     this.parents = {};
     this.people = {};
     this.allpeople = [];
-    this.swype_start = null;
-    this.swype_moved = null;
+    this.swipe_start = null;
+    this.swipe_moved = null;
     this.zoom_distance = null; // pinch-zoom action
     this.zoom_center = null;   // pinch-zoom action
     this.zoom_current = null;  // pinch-zoom action
@@ -699,7 +699,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     if (e.originalEvent.touches.length == 2) {
       var prev = $('#foto .images img[state=prev]');
       if (prev.length) {
-        // Possibly within a swype to the right. Let this image disappear to the left.
+        // Possibly within a swipe to the right. Let this image disappear to the left.
         var propsPrev = this.chooseFoto(this.foto.prev);
         prev.css('transform', 'translateX('+Math.min(0, -(this.maxWidth+propsPrev.width)/2) + 'px)')
         prev.addClass('settle');
@@ -711,7 +711,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
       var next = $('#foto .images img[state=next]');
       if (next.length) {
-        // Possibly within a swype to the left. Fade the next image.
+        // Possibly within a swipe to the left. Fade the next image.
         next.css({
           'transform': 'scale(0.5)',
           'opacity':   0,
@@ -764,8 +764,8 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
           scale: 1,
         };
         // assume the first finger is points[0]
-        var moved = points[0].x - this.swype_start;
-        this.swype_start = null;
+        var moved = points[0].x - this.swipe_start;
+        this.swipe_start = null;
         if (moved < 0) {
           this.zoom_previous.translateX = moved;
           console.log('extra translateX', this.zoom_previous.translateX);
@@ -775,14 +775,14 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     } else {
       // The first finger was placed on the surface
       if (this.zoom_previous === null) {
-        this.swype_start = e.originalEvent.touches[0].clientX;
-        console.log('swype start', this.swype_start);
+        this.swipe_start = e.originalEvent.touches[0].clientX;
+        console.log('swipe start', this.swipe_start);
       }
     }
   };
 
   KNF.prototype.touchmove = function(e) {
-    if (this.swype_start === null && this.zoom_previous === null) return;
+    if (this.swipe_start === null && this.zoom_previous === null) return;
 
     e.preventDefault();
 
@@ -853,9 +853,9 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       return;
     }
 
-    // We're within a swype action (to the left or right).
+    // We're within a swipe action (to the left or right).
 
-    var moved = (e.originalEvent.touches[0].clientX - this.swype_start);
+    var moved = (e.originalEvent.touches[0].clientX - this.swipe_start);
     if (moved > 0 && (!this.foto.prev || this.foto.prev.type === 'album')) {
       // first photo
       moved = 0;
@@ -865,7 +865,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       moved = 0;
     }
 
-    this.swype_moved = moved;
+    this.swipe_moved = moved;
 
     var current = $('#foto .images img[state=current]');
     var prev = $('#foto .images img[state=prev]'); // possibly 0
@@ -959,14 +959,14 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     }
 
     // We haven't moved yet - it's just a tap?
-    if (this.swype_moved === null) return;
+    if (this.swipe_moved === null) return;
 
-    // The swype action has ended. See whether we should switch the image or
+    // The swipe action has ended. See whether we should switch the image or
     // just jump back to the current.
 
-    var moved = this.swype_moved;
-    this.swype_start = null;
-    this.swype_moved = null;
+    var moved = this.swipe_moved;
+    this.swipe_start = null;
+    this.swipe_moved = null;
 
     var current = $('#foto .images img[state=current]').last();
     var next = $('#foto .images img[state=next]'); // possibly 0
@@ -974,7 +974,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
     if (moved < this.maxWidth / -16 && this.foto.next && this.foto.next.type != 'album') {
       // next image
-      console.log('end of swype: next image');
+      console.log('end of swipe: next image');
       next.addClass('settle');
       next.css({
         'transform': '',
@@ -1015,7 +1015,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
     } else if (moved > this.maxWidth / 16 && this.foto.prev && this.foto.prev.type != 'album') {
       // previous image
-      console.log('end of swype: previous image');
+      console.log('end of swipe: previous image');
       prev.css({
         'transform': '',
       });
@@ -1052,7 +1052,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
     } else {
       // current image
-      console.log('end of swype: current image');
+      console.log('end of swipe: current image');
       current.css({
         'transform': '',
         'opacity':   1,
@@ -1110,7 +1110,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
   // Fixes things like the image shooting off the side or zooming with scale < 0
   KNF.prototype.fix_zoom_end = function(centerX, centerY) {
     if (this.zoom_previous.scale <= 1) {
-      // Zoomed out - exit zoom/pan session (to enable back/forward swype)
+      // Zoomed out - exit zoom/pan session (to enable back/forward swipe)
       this.zoom_previous = null;
       return true;
     }
