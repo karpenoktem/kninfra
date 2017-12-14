@@ -24,6 +24,10 @@ class Moniek(WhimDaemon):
         for year in self.settings['years']:
             self.gcf_by_year(year)
 
+    def pre_mainloop(self):
+        super(Moniek, self).pre_mainloop()
+        self.notify_systemd()
+
     def handle(self, d):
         if d['type'] == 'fin-get-account':
             return fin.get_account(

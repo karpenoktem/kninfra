@@ -2,4 +2,4 @@
 
 PYTHON="${PYTHON:-python}"
 
-$PYTHON /home/sys-moniek/kninfra/utils/moniek.py
+exec $PYTHON /home/sys-moniek/kninfra/utils/moniek.py

@@ -26,6 +26,7 @@ class Cilia(WhimDaemon):
         super(Cilia, self).pre_mainloop()
         if hasattr(settings, 'INFRA_UID'):
             os.chown(settings.CILIA_SOCKET, settings.INFRA_UID, -1)
+        self.notify_systemd()
 
     def handle(self, d):
         if d['type'] == 'unix':
