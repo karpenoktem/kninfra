@@ -59,7 +59,7 @@ def fetch_agenda(h, cal_id):
     response = request.execute()
     agenda = []
     for item in response['items']:
-        agenda.append((item['summary'], item.get('description', ''),
+        agenda.append((item.get('summary','?'), item.get('description', ''),
                        parse_item_date(item['start']),
                        parse_item_date(item['end'])))
     return agenda
