@@ -28,7 +28,6 @@ function reopen_event () {
 }
 
 function copy_emailaddresses_to_clipboard () {
-    event.preventDefault();
     _api({'action': 'get-email-addresses',
           'id': event_object_id},
         function(d) {

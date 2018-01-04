@@ -154,7 +154,7 @@ var event_object_id = '{{ object.id }}';
 {% endif %}{# has_write_access #}
 
 {% if has_read_access or object.has_public_subscriptions %}
-    <button onclick="copy_emailaddresses_to_clipboard()">
+    <button onclick="copy_emailaddresses_to_clipboard(); return true;">
         {% trans "Toon e-mail adressen van de ingeschrevenen" %}
     </button>
     {% if listSubscribed %}
