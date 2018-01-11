@@ -16,7 +16,7 @@ def quassel_setpass(daan, user, password):
         settings.QUASSEL_CONFIGDIR,
         'quassel-storage.sqlite')
     conn = sqlite3.connect(db_path)
-    hashed_pw = hashlib.sha1(password).hexdigest()
+    hashed_pw = hashlib.sha1(password.encode('utf-8')).hexdigest()
     c = conn.cursor()
     try:
         c.execute("UPDATE quasseluser SET password=? where username=?",
