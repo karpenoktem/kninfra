@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from kn.subscriptions import views
 
 urlpatterns = [
-    url(r'^/?$',
+    url(r'^$',
         views.event_list, name='event-list'),
     url(r'^(?P<name>[a-zA-Z0-9\-.]+)/?$',
         views.event_detail, name='event-detail'),
