@@ -18,8 +18,7 @@
     <p>{% trans "Probeer het nog eens?" %}</p>
 	{% endif %}
 
-    <p>{% blocktrans with old=form.old_password new=form.new_password \
-                new_again=form.new_password_again %}
+    <p>{% blocktrans with old=form.old_password new=form.new_password new_again=form.new_password_again %}
     Lieve website, zou je mijn oude wachtwoord van:<br />
 	{{ old }}<br />
 	naar: <br />{{ new }},<br />
