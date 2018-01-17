@@ -44,7 +44,7 @@ kninfra packages:
             - imagemagick
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'uwsgi', 'tarjan', 'reserved', 'pymysql', 'iso8601', 'google-api-python-client', 'zipseeker', 'sdnotify'] %}
+{% for pkg in ['mirte', 'sarah', 'uwsgi', 'tarjan', 'reserved', 'pymysql', 'iso8601', 'google-api-python-client', 'zipseeker', 'sdnotify', 'pyasn1>=0.4.1'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
