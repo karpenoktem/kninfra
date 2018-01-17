@@ -41,4 +41,5 @@
     file.managed:
         - source: salt://phassa/cilia.service
 cilia:
-    service.running
+    service.running:
+        - enable: True

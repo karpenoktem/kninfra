@@ -30,11 +30,13 @@ nginx packages:
 nginx running:
     service.running:
         - name: nginx
+        - enable: True
         - watch:
             - file: /etc/nginx/sites-enabled/sankhara.conf
             - file: /etc/nginx/sankhara.d/*.conf
 php running:
     service.running:
         - name: php5-fpm
+        - enable: True
         - watch:
             - file: /etc/php5/fpm/php.ini

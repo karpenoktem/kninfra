@@ -265,9 +265,11 @@ https://github.com/karpenoktem/regl:
     file.managed:
         - source: salt://sankhara/uwsgi.ini
 giedo:
-    service.running
+    service.running:
+        - enable: True
 django.socket:
-    service.running
+    service.running:
+        - enable: True
 {% if grains['vagrant'] %}
 # If using vagrant, redirect the login to `vagrant' to the `infra' user.
 /home/vagrant/.bash_login:
