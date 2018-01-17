@@ -233,6 +233,9 @@ https://github.com/karpenoktem/regl:
     file.managed:
         - source: salt://sankhara/hans.default
         - template: jinja
+/etc/systemd/system/infra-dir.service:
+    file.managed:
+        - source: salt://sankhara/infra-dir.service
 /etc/systemd/system/daan.service:
     file.managed:
         - source: salt://sankhara/daan.service

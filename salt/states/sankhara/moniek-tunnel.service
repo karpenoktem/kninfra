@@ -1,5 +1,10 @@
 [Unit]
 Description=Links Moniek socket on phassa and sankhara
+Requires=infra-dir.service
+After=infra-dir.service
 
 [Service]
-ExecStart=/root/bin/moniek-tunnel
+ExecStart=/root/kninfra/bin/moniek-tunnel
+
+[Install]
+WantedBy=multi-user.target
