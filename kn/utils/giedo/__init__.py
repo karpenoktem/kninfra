@@ -30,7 +30,7 @@ class Giedo(WhimDaemon):
         super(Giedo, self).__init__(settings.GIEDO_SOCKET)
         self.l = logging.getLogger('giedo')
         self.last_sync_ts = 0
-        self.daan, self.cilia, self.moniek = None, None, None
+        self.daan, self.cilia, self.moniek, self.hans = None, None, None, None
         try:
             self.daan = WhimClient(settings.DAAN_SOCKET)
         except:
@@ -205,7 +205,10 @@ class Giedo(WhimDaemon):
                            'fin-get-gnucash-object',
                            'fin-get-years',
                            'fin-get-errors'):
-            return self.moniek.send(d)
+            try:
+                return self.moniek.send(d)
+            except IOError as e:
+                return {'error': 'IOError: ' + e.args[0]}
         elif d['type'] in ('maillist-get-moderated-lists',
                            'maillist-activate-moderation',
                            'maillist-get-moderator-cookie',

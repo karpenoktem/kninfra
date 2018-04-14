@@ -883,6 +883,8 @@ def balans(request):
     accounts = [(a, a == account) for a in accounts]
 
     balans = giedo.fin_get_account(account)
+    if 'error' in balans:
+        raise ValueError('error while retrieving balans: ' + balans.error)
     return render_to_response('leden/balans.html',
                               {'balans': fin.BalansInfo(balans),
                                'quaestor': fin.quaestor(),

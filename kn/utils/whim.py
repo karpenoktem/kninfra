@@ -21,9 +21,10 @@ import sdnotify
 
 class WhimClient(object):
 
-    def __init__(self, address, family='unix'):
+    def __init__(self, address, family='unix', timeout=10):
         self._address = address
         self._family = family
+        self._timeout = timeout
         self._connect()
         self.w_lock = threading.Lock()
         self.n_send_lock = threading.Lock()
@@ -45,6 +46,7 @@ class WhimClient(object):
             raise ValueError('unknown family')
         self.s = socket.socket(sf, socket.SOCK_STREAM)
         self.s.connect(self._address)
+        self.s.settimeout(self._timeout)
         self.f = self.s.makefile(mode='wb')
 
     def _send(self, bs):
