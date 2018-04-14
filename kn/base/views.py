@@ -26,6 +26,9 @@ def direct_to_folder(request, root, subdir):
 
 
 def langpicker(request):
+    if 'language-url' not in request.POST:
+        # Avoid error sometimes hit by crawlers.
+        raise Http404
     language, url = request.POST['language-url'].split(':', 2)
     if hasattr(request, 'session'):
         request.session['_language'] = language
