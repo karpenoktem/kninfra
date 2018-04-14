@@ -81,15 +81,17 @@ templates = {
             [(hm2s(17), False), (hm2s(22), False), _('openen')],
             [(hm2s(22), False), (hm2s(27), True), _('sluiten')]],
         'cocks': [
-            [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 1')],
-            [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 2')]]},
+            [(hm2s(16), True), (hm2s(19), False), _('Kok')]],
+        'wok': [
+            [(hm2s(16), True), (hm2s(19), False), _('Wokker')]]},
     'vrijdag_zonder_tappers': {
         'bestuur': [
             [(hm2s(17), False), (hm2s(22), False), _('openen')],
             [(hm2s(22), False), (hm2s(27), True), _('sluiten')]],
         'cocks': [
-            [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 1')],
-            [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 2')]]},
+            [(hm2s(16), True), (hm2s(19), False), _('Kok')]],
+        'wok': [
+            [(hm2s(16), True), (hm2s(19), False), _('Wokker')]]},
     'koken': {
         'cocks': [
             [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 1')],
