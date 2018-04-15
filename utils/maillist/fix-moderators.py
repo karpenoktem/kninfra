@@ -19,17 +19,20 @@ def main(dryrun=True):
         ml = MailList.MailList(name, True)
         try:
             changed = False
-            if ml.generic_nonmember_action == 0: # Accept
+            if ml.generic_nonmember_action == 0:  # Accept
                 pass
-            elif ml.generic_nonmember_action == 1: # Hold
+            elif ml.generic_nonmember_action == 1:  # Hold
                 if ml.moderator == []:
                     changed = True
                     ml.moderator = [SECRETARY]
-                    print('%-20s moderator set to %s' % (name, SECRETARY))
+                    print('%-20s moderator set to %s'
+                          % (name, SECRETARY))
                 elif ml.moderator != [SECRETARY]:
-                    print('%s: warning: moderator is %s' % (name, ml.moderator))
+                    print('%s: warning: moderator is %s'
+                          % (name, ml.moderator))
             else:
-                print('%s: warning: generic_nonmember_action=%d' % (name, ml.generic_nonmember_action))
+                print('%s: warning: generic_nonmember_action=%d'
+                      % (name, ml.generic_nonmember_action))
             if changed and not dryrun:
                 ml.Save()
         finally:

@@ -384,7 +384,8 @@ class Subscription(SONWrapper):
         if not template:
             template = 'subscriptions/subscription-notification.mail.html'
         cc = []
-        if self.event.owner.canonical_full_email: # may be None when <Onbekend>
+        if self.event.owner.canonical_full_email:
+            # may be None when <Onbekend>
             cc.append(self.event.owner.canonical_full_email)
         if self.invited:
             cc.append(self.inviter.canonical_full_email)

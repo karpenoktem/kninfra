@@ -16,18 +16,18 @@ def main():
         if rel['who'] not in member_age:
             member_age[rel['who']] = Es.DT_MAX
         member_age[rel['who']] = rel['from']
-    l = []
+    le = []
     for m, age in six.iteritems(member_age):
         if not m.dateOfBirth:
             continue
         print((age - m.dateOfBirth).days / 365.242, six.text_type(m.name))
-        l.append((age - m.dateOfBirth).days / 365.242)
-    print('avg', sum(l) / len(l))
-    print('med', sorted(l)[len(l) / 2])
-    print('1st', sorted(l)[len(l) / 4 * 2])
-    print('3rd', sorted(l)[len(l) / 4 * 3])
-    print('min', min(l))
-    print('max', max(l))
+        le.append((age - m.dateOfBirth).days / 365.242)
+    print('avg', sum(le) / len(le))
+    print('med', sorted(le)[len(le) / 2])
+    print('1st', sorted(le)[len(le) / 4 * 2])
+    print('3rd', sorted(le)[len(le) / 4 * 3])
+    print('min', min(le))
+    print('max', max(le))
 
 
 def main3():

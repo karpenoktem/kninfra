@@ -17,8 +17,6 @@ except ImportError:
     from HTMLParser import HTMLParser  # python 2.x
     unescape = HTMLParser().unescape
 
-
-
 # TODO translate e-mail to the language preferred by the recipient
 
 
