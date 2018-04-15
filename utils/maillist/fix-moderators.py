@@ -1,7 +1,6 @@
 # vim: et:sta:bs=2:sw=4:
-import argparse
-
 import _import  # noqa: F401
+import argparse
 
 from kn.utils.hans.mailman import MailList, Utils
 

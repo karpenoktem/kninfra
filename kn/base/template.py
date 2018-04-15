@@ -5,7 +5,6 @@ from django.template import TemplateDoesNotExist
 from django.template.loader import (BaseLoader, find_template_loader,
                                     get_template_from_string, make_origin)
 
-
 # Based on django.template.loader.cached.Loader.  A lot is boilerplate:
 # the magic happens in SlashNewlineStrippingTemplateLoader._process
 

@@ -6,7 +6,6 @@ import locale
 
 from django.utils.translation import ugettext_lazy as _
 
-
 # We want smart default. Eg: on a particular installation BASE_URL might be
 # overwritten (default: karpenoktem.nl).  However, if it is, we want other
 # defaults, which depend on BASE_URL, to use the overwritten BASE_URL.

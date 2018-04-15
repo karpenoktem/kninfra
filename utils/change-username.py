@@ -1,16 +1,18 @@
 #!/usr/bin/python
 from __future__ import print_function
+
 import _import  # noqa: F401
-import sys
-import os
 import argparse
 import getpass
+import os
 import subprocess
+import sys
 
 import pymysql
 
-import kn.leden.entities as Es
 from django.conf import settings
+
+import kn.leden.entities as Es
 
 
 def change_username(oldname, newname, do):

@@ -3,7 +3,6 @@ import _import  # noqa: F401
 
 import kn.leden.entities as Es
 
-
 # Do some too-intensive-for-Giedo sanity checks on the database
 # Currently, check for orphan relations.
 
