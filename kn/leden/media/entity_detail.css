@@ -37,3 +37,7 @@ li form {
 #block-add-study.visible {
 	display: block;
 }
+
+.symbol {
+	cursor: default;
+}

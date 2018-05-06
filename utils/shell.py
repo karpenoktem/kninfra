@@ -110,7 +110,7 @@ def create_institute(name):
 
 def create_brand(name, humanName):
     Es.ecol.insert({'humanNames': [{'human': humanName}],
-                    'names': ['!brand-'+name],
+                    'names': ['!brand-' + name],
                     'sofa_suffix': name,
                     'tags': [Es.id_by_name('!sofa-brand')],
                     'types': ['brand']})
