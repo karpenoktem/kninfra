@@ -104,13 +104,6 @@ def defaultSettings(glbls):
     d.PHOTOS_DIR = '/var/fotos'
     d.USER_DIRS = '/mnt/phassa/home/'
 
-    d.VPN_COMMONNAME_POSTFIX = '.vpn.' + d.DOMAINNAME
-    d.VPN_OPENSSL_CONFIG = 'kn-openssl.cnf'
-    d.VPN_KEYSTORE = d.INFRA_HOME + '/vpnkeys'
-    d.VPN_INSTALLER_STORAGE = d.STORAGE_ROOT + '/openvpn'
-    d.VPN_INSTALLER_PATH = 'openvpn'
-    d.VPN_INSTALLER_REPOS = d.INFRA_HOME + '/openvpn'
-
     d.QUASSEL_CONFIGDIR = '/var/lib/quassel'
 
     d.INTERNAL_IPS = ['83.162.203.144']  # bas

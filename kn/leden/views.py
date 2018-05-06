@@ -2,8 +2,6 @@
 
 import json
 import logging
-import mimetypes
-import re
 from datetime import date
 from decimal import Decimal
 from hashlib import sha256
@@ -38,7 +36,6 @@ from kn.base.mail import render_then_email
 from kn.base.text import humanized_enum
 from kn.fotos.utils import resize_proportional
 from kn.leden import fin, giedo
-from kn.leden.auth import login_or_basicauth_required
 from kn.leden.date import date_to_dt, now
 from kn.leden.forms import (AddGroupForm, AddStudyForm, AddUserForm,
                             ChangePasswordForm)
@@ -826,49 +823,6 @@ def secr_update_site_agenda(request):
     giedo.update_site_agenda()
     messages.info(request, _("Agenda geupdate!"))
     return redirect_to_referer(request)
-
-
-@login_required
-def ik_openvpn(request):
-    password_incorrect = False
-    if 'want' in request.POST and 'password' in request.POST:
-        # TODO password versions
-        if request.user.check_password(request.POST['password']):
-            giedo.change_password(str(request.user.name),
-                                  request.POST['password'],
-                                  request.POST['password'])
-            giedo.openvpn_create(str(request.user.name),
-                                 request.POST['want'])
-            messages.info(request, _("Je verzoek wordt verwerkt. "
-                                     "Verwacht binnen 5 minuten een e-mail."))
-            return HttpResponseRedirect(reverse('smoelen-home'))
-        else:
-            password_incorrect = True
-    return render_to_response('leden/ik_openvpn.html',
-                              {'password_incorrect': password_incorrect},
-                              context_instance=RequestContext(request))
-
-
-@login_or_basicauth_required
-def ik_openvpn_download(request, filename):
-    m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', filename)
-    m2 = re.match('^openvpn-config-([^.]+)\.zip$', filename)
-    if not m1 and not m2:
-        raise Http404
-    if m1 and m1.group(2) != str(request.user.name):
-        raise PermissionDenied
-    if m2 and m2.group(1) != str(request.user.name):
-        raise PermissionDenied
-    p = path.join(settings.VPN_INSTALLER_PATH, filename)
-    if not default_storage.exists(p):
-        raise Http404
-    response = HttpResponse(
-        FileWrapper(default_storage.open(p, 'rb')),
-        content_type=mimetypes.guess_type(default_storage.path(p))[0]
-    )
-    response['Content-Length'] = default_storage.size(p)
-    # XXX use ETags and returns 304's
-    return response
 
 
 @login_required
