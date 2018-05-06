@@ -1,10 +1,10 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
-
 import argparse
 
-from kn.utils.hans.mailman import MailList, Utils
 from django.conf import settings
+
+from kn.utils.hans.mailman import MailList, Utils
 
 ALLOWED_OWNERS = ['wortel@karpenoktem.nl',
                   'secretaris@karpenoktem.nl']

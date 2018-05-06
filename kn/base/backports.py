@@ -13,7 +13,6 @@ from django.utils.encoding import force_bytes, iri_to_uri
 from django.utils.six.moves.urllib.parse import quote
 from django.utils.translation import get_language
 
-
 # i18n_patterns with prefix_default_language (backport from Django 1.10)
 #
 #  NOTE This backport contains some customizations for kndjango, which

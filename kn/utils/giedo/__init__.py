@@ -28,25 +28,25 @@ class Giedo(WhimDaemon):
 
     def __init__(self):
         super(Giedo, self).__init__(settings.GIEDO_SOCKET)
-        self.l = logging.getLogger('giedo')
+        self.log = logging.getLogger('giedo')
         self.last_sync_ts = 0
         self.daan, self.cilia, self.moniek, self.hans = None, None, None, None
         try:
             self.daan = WhimClient(settings.DAAN_SOCKET)
-        except:
-            self.l.exception("Couldn't connect to daan")
+        except Exception:
+            self.log.exception("Couldn't connect to daan")
         try:
             self.cilia = WhimClient(settings.CILIA_SOCKET)
-        except:
-            self.l.exception("Couldn't connect to cilia")
+        except Exception:
+            self.log.exception("Couldn't connect to cilia")
         try:
             self.moniek = WhimClient(settings.MONIEK_SOCKET)
-        except:
-            self.l.exception("Couldn't connect to moniek")
+        except Exception:
+            self.log.exception("Couldn't connect to moniek")
         try:
             self.hans = WhimClient(settings.HANS_SOCKET)
-        except:
-            self.l.exception("Couldn't connect to hans")
+        except Exception:
+            self.log.exception("Couldn't connect to hans")
         self.mirte = mirte.get_a_manager()
         self.threadPool = self.mirte.get_a('threadPool')
         self.operation_lock = threading.Lock()

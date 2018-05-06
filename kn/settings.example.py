@@ -31,7 +31,6 @@ MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 
 from kn.defaultSettings import defaultSettings  # noqa: E402
 
-
 defaultSettings(globals())
 
 # vim: et:sta:bs=2:sw=4:

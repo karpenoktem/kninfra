@@ -11,7 +11,6 @@ from django.utils.translation import ugettext as _
 import kn.poll.entities as poll_Es
 from kn.leden.mongo import _id
 
-
 # We create for every answerSet a form
 
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
 import _import
-
-import sys
 import json
-import time
-import os.path
 import logging
+import os.path
+import sys
+import time
 
 from kn.utils.whim import WhimClient
 

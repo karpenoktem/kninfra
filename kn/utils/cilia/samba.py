@@ -51,7 +51,7 @@ def samba_setpass(cilia, user, password):
 
 
 def set_samba_map(cilia, _map):
-    l = logging.getLogger(__name__)
+    log = logging.getLogger(__name__)
     smbusers = pdbedit_list()
     smbusers_surplus = set(smbusers)
     added_users = False
@@ -61,7 +61,7 @@ def set_samba_map(cilia, _map):
         fn = ''.join(x for x in _map['users'][user]['full_name']
                      if x in string.printable)
         if user not in smbusers:
-            l.info("Added %s", user)
+            log.info("Added %s", user)
             bogus_password = pseudo_randstr(16)
             ph = subprocess.Popen(
                 ['pdbedit', '-a', '-t', '-u', user, '-f', fn],
@@ -77,20 +77,20 @@ def set_samba_map(cilia, _map):
         smbusers_surplus.remove(user)
         if fn != smbusers[user]['realname']:
             subprocess.call(['pdbedit', '-u', user, '-f', fn])
-            l.info("Updated %s' realname", user)
+            log.info("Updated %s' realname", user)
     if added_users:
         smbusers = pdbedit_list()
     for user in _map['users']:
         if (user in _map['groups']['leden']
                 and smbusers[user]['flag_disabled']):
             subprocess.call(['smbpasswd', '-e', user])
-            l.info("Enabled %s", user)
+            log.info("Enabled %s", user)
         if (user not in _map['groups']['leden']
                 and not smbusers[user]['flag_disabled']):
             subprocess.call(['smbpasswd', '-d', user])
-            l.info("Disabled %s", user)
+            log.info("Disabled %s", user)
     for user in smbusers_surplus:
-        l.info("Removing stray user %s", user)
+        log.info("Removing stray user %s", user)
         subprocess.call(['pdbedit', '-x', '-u', user])
 
 # vim: et:sta:bs=2:sw=4:

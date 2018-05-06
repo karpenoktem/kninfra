@@ -18,33 +18,33 @@ def ldap_setpass(daan, user, password):
     if not settings.LDAP_PASS:
         logging.warning('ldap: no credentials available, skipping')
         return
-    l = ldap.open(settings.LDAP_HOST)
-    l.bind_s(settings.LDAP_USER, settings.LDAP_PASS)
+    ld = ldap.open(settings.LDAP_HOST)
+    ld.bind_s(settings.LDAP_USER, settings.LDAP_PASS)
     udn = 'uid=%s,%s' % (user, settings.LDAP_BASE)
     try:
         # Set LDAP password
-        l.passwd_s(udn, None, password)
+        ld.passwd_s(udn, None, password)
         # Set SAMBA password entries (to support MSCHAPv2 authentication
         # for WiFi via FreeRADIUS via LDAP).
-        res = l.search_s(settings.LDAP_BASE, ldap.SCOPE_ONELEVEL,
-                         'uid=%s' % user)
+        res = ld.search_s(settings.LDAP_BASE, ldap.SCOPE_ONELEVEL,
+                          'uid=%s' % user)
         if not res:
             return
         _o = res[0][1]
         if 'sambaNTPassword' in _o:
-            l.modify_s(udn, ldap.modlist.modifyModlist(
+            ld.modify_s(udn, ldap.modlist.modifyModlist(
                 {'sambaNTPassword': _o['sambaNTPassword'][0]},
                 {'sambaNTPassword': [nthash(password)]}))
         else:
             # NOTE See /doc/ldap/scheme.ldif
             #      We added the scheme *after* the creation of the database.
             #      Thus, the user may still miss the objectClass knAccount.
-            l.modify_s(udn, ldap.modlist.modifyModlist(
+            ld.modify_s(udn, ldap.modlist.modifyModlist(
                 {'objectClass': _o['objectClass']},
                 {'objectClass': _o['objectClass'] + ['knAccount'],
                  'sambaNTPassword': [nthash(password)]}))
     finally:
-        l.unbind_s()
+        ld.unbind_s()
 
 # TODO exception safety
 
@@ -52,8 +52,8 @@ def ldap_setpass(daan, user, password):
 def apply_ldap_changes(daan, changes):
     if not changes:
         return
-    l = ldap.open(settings.LDAP_HOST)
-    l.bind_s(settings.LDAP_USER, settings.LDAP_PASS)
+    ld = ldap.open(settings.LDAP_HOST)
+    ld.bind_s(settings.LDAP_USER, settings.LDAP_PASS)
     try:
         for uid in changes['remove']:
             if six.PY3:
@@ -61,20 +61,20 @@ def apply_ldap_changes(daan, changes):
                 # python 2 and python 3.
                 uid = uid.decode()
             dn = 'uid=' + uid + ',' + settings.LDAP_BASE
-            l.delete_s(dn)
+            ld.delete_s(dn)
         for uid, mail, sn, cn in changes['upsert']:
             if six.PY3:
                 uid = uid.decode()
             dn = 'uid=' + uid + ',' + settings.LDAP_BASE
-            res = l.search_s(settings.LDAP_BASE, ldap.SCOPE_ONELEVEL,
-                             'uid=' + uid)
+            res = ld.search_s(settings.LDAP_BASE, ldap.SCOPE_ONELEVEL,
+                              'uid=' + uid)
             if not res:
                 entry = {'objectClass': [b'inetOrgPerson'],
                          'uid': [uid.encode()],
                          'sn': [sn],
                          'cn': [cn],
                          'mail': [mail]}
-                l.add_s(dn, ldap.modlist.addModlist(entry))
+                ld.add_s(dn, ldap.modlist.addModlist(entry))
                 continue
             _o = res[0][1]
             old = {'uid': _o['uid'][0],
@@ -85,8 +85,8 @@ def apply_ldap_changes(daan, changes):
                    'sn': [sn],
                    'cn': [cn],
                    'mail': [mail]}
-            l.modify_s(dn, ldap.modlist.modifyModlist(old, new))
+            ld.modify_s(dn, ldap.modlist.modifyModlist(old, new))
     finally:
-        l.unbind_s()
+        ld.unbind_s()
 
 # vim: et:sta:bs=2:sw=4:

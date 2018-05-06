@@ -8,15 +8,14 @@ from django.template.loader_tags import BlockNode
 from django.utils import translation
 from django.utils.translation import ugettext as _
 
+import kn.leden.entities as Es
+
 # https://stackoverflow.com/a/7088472
 try:
     from html import unescape  # python 3.4+
 except ImportError:
     from HTMLParser import HTMLParser  # python 2.x
     unescape = HTMLParser().unescape
-
-import kn.leden.entities as Es
-
 
 # TODO translate e-mail to the language preferred by the recipient
 
