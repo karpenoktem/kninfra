@@ -168,7 +168,7 @@ def change_username(oldname, newname, do):
     print('TODO:')
     print(' * change name in the wiki: ' +
           'https://karpenoktem.nl/wiki/Speciaal:GebruikerHernoemen')
-    print(' * unimplemented: wiki, LDAP, Quassel, Samba, OpenVPN')
+    print(' * unimplemented: wiki, LDAP, Quassel, Samba')
     print(' * start giedo again (if stopped)')
     print(' * run giedo-sync while watching the log')
 

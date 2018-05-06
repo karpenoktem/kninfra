@@ -12,8 +12,6 @@ from kn.utils.giedo.db import update_db
 from kn.utils.giedo.forum import generate_forum_changes
 from kn.utils.giedo.fotos import scan_fotos
 from kn.utils.giedo.mailman import generate_mailman_changes
-from kn.utils.giedo.openvpn import (create_openvpn_installer,
-                                    create_openvpn_zip, generate_openvpn_zips)
 from kn.utils.giedo.postfix import (generate_postfix_map,
                                     generate_postfix_slm_map)
 from kn.utils.giedo.quassel import generate_quassel_changes
@@ -50,7 +48,6 @@ class Giedo(WhimDaemon):
         self.mirte = mirte.get_a_manager()
         self.threadPool = self.mirte.get_a('threadPool')
         self.operation_lock = threading.Lock()
-        self.openvpn_lock = threading.Lock()
         self.ss_actions = (
             ('postfix', self.daan, self._gen_postfix),
             ('postfix-slm', self.daan, self._gen_postfix_slm),
@@ -102,10 +99,6 @@ class Giedo(WhimDaemon):
         return {'type': 'unix',
                 'map': generate_unix_map(self)}
 
-    def _sync_openvpn(self):
-        with self.openvpn_lock:
-            generate_openvpn_zips(self)
-
     def sync(self):
         update_db_start = time.time()
         update_db(self)
@@ -138,7 +131,6 @@ class Giedo(WhimDaemon):
 
         for action in self.ss_actions:
             self.threadPool.execute(_sync_action, _entry, *action)
-        self.threadPool.execute(self._sync_openvpn)
         todo_event.wait()
         self.last_sync_ts = time.time()
 
@@ -181,17 +173,6 @@ class Giedo(WhimDaemon):
         elif d['type'] == 'fotoadmin-scan-fotos':
             with self.operation_lock:
                 return scan_fotos()
-        elif d['type'] == 'openvpn_create':
-            with self.operation_lock:
-                # XXX hoeft niet onder de operation_lock?
-                u = Es.by_name(d['user'])
-                if u is None:
-                    return {'error': 'no such user'}
-                u = u.as_user()
-                if d['want'] == 'exe':
-                    create_openvpn_installer(self, u)
-                else:
-                    create_openvpn_zip(self, u)
         elif d['type'] == 'update-site-agenda':
             with self.operation_lock:
                 return update_site_agenda(self)
