@@ -128,4 +128,5 @@ https://github.com/awesterb/koert:
     file.managed:
         - source: salt://phassa/moniek.service
 moniek:
-    service.running
+    service.running:
+        - enable: True

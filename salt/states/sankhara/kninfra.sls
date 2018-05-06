@@ -44,7 +44,7 @@ kninfra packages:
             - imagemagick
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'uwsgi', 'tarjan', 'reserved', 'pymysql', 'iso8601', 'google-api-python-client', 'zipseeker', 'sdnotify'] %}
+{% for pkg in ['mirte', 'sarah', 'uwsgi', 'tarjan', 'reserved', 'pymysql', 'iso8601', 'google-api-python-client', 'zipseeker', 'sdnotify', 'pyasn1>=0.4.1'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
@@ -233,6 +233,9 @@ https://github.com/karpenoktem/regl:
     file.managed:
         - source: salt://sankhara/hans.default
         - template: jinja
+/etc/systemd/system/infra-dir.service:
+    file.managed:
+        - source: salt://sankhara/infra-dir.service
 /etc/systemd/system/daan.service:
     file.managed:
         - source: salt://sankhara/daan.service
@@ -262,9 +265,11 @@ https://github.com/karpenoktem/regl:
     file.managed:
         - source: salt://sankhara/uwsgi.ini
 giedo:
-    service.running
+    service.running:
+        - enable: True
 django.socket:
-    service.running
+    service.running:
+        - enable: True
 {% if grains['vagrant'] %}
 # If using vagrant, redirect the login to `vagrant' to the `infra' user.
 /home/vagrant/.bash_login:

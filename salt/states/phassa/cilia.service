@@ -1,5 +1,7 @@
 [Unit]
 Description=Cilia applies changes on phassa thought up by Giedo
+Requires=infra-dir.service
+After=infra-dir.service
 
 [Service]
 ExecStart=/root/bin/cilia
@@ -8,4 +10,3 @@ Type=notify
 
 [Install]
 WantedBy=multi-user.target
-

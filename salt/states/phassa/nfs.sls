@@ -27,5 +27,6 @@ nfs packages:
 nfs running:
     service.running:
         - name: nfs-kernel-server
+        - enable: True
         - watch:
             - file: /etc/exports
