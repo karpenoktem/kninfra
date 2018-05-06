@@ -80,7 +80,7 @@ class AgendaEvent(SONWrapper):
         descLut = {}
         for i in range(0, len(bits), 2):
             code = bits[i]
-            text = bits[i+1]
+            text = bits[i + 1]
             if code not in descLut:
                 descLut[code] = ""
             else:

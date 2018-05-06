@@ -31,7 +31,7 @@ def vcard(u):
             u.addr_zipCode is not None):
         le = c.add('adr', 'kn')
         le.value = vobject.vcard.Address(' '.join((u.addr_street,
-                                                  u.addr_number)),
+                                                   u.addr_number)),
                                          u.addr_city,
                                          '',
                                          u.addr_zipCode,
