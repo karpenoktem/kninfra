@@ -112,7 +112,7 @@ def planning_view(request):
     # TODO reduce number of queries
     current = date_to_midnight(now() - datetime.timedelta(days=1))
     past1year = date_to_midnight(now() - datetime.timedelta(days=356))
-    past2year = date_to_midnight(now() - datetime.timedelta(days=356*2))
+    past2year = date_to_midnight(now() - datetime.timedelta(days=356 * 2))
     if period == 'now':
         start = current
         end = None

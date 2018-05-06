@@ -88,7 +88,7 @@ def change_username(oldname, newname, do):
                         (newname, oldname)))
         print('wolk: updated oc_storages.id:',
               c.execute("UPDATE oc_storages SET id=%s WHERE id=%s;",
-                        ('home::'+newname, 'home::'+oldname)))
+                        ('home::' + newname, 'home::' + oldname)))
         # TODO: oc_jobs (uses JSON!) and maybe other tables
         # (check a MySQL dump before running this script!)
         if not do:
