@@ -86,7 +86,7 @@
         </dd>
         {% endif %}{# object.primary_study or "secretariaat" in user.cached_groups_names and addStudyForm #}
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
-        {% if object.telephones %}
+        {% if object.telephones or "secretariaat" in user.cached_groups_names %}
         <dt>{% trans "Telefoonnummer" %}
         {% if "secretariaat" in user.cached_groups_names or user == object %}
         &nbsp; <i><label>
@@ -193,12 +193,26 @@
         </dd>
         {% endif %}{# object.addresses #}
         {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
+    {% if object.dateOfBirth or "secretariaat" in user.cached_groups_names %}
+    <dt>
+        {% if object.visibility.dateOfBirth or "secretariaat" in user.cached_groups_names %}
+        {% trans "Geboortedatum" %}
+        {% if "secretariaat" in user.cached_groups_names %}
         {% if object.dateOfBirth %}
-    <dt>{% trans "Geboortedatum" %}</dt>
-	<dd>
-        <a href="{% url "entities-by-year-of-birth" year=object.dateOfBirth.year %}"
-                >{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth|date:"m-d" }}
-	</dd>
-        {% endif %}
+        <button data-action="entity_remove_property:dateOfBirth:!{% trans "Weet je zeker dat je de geboortedatum wilt verwijderen?" %}">{% trans "Verwijder" %}</button>
+        {% else %}
+        <button data-action="entity_set_property:dateOfBirth:?Nieuwe geboortedatum (yyyy-mm-dd):" title="{% trans "verander zichtbaarheid van het telefoonnummer" %}">{% trans "Stel in" %}</button>
+        {% endif %}{# object.dateOfBirth #}
+        {% endif %}{# "secretariaat" in user.cached_groups_names #}
+        </dt>
+        <dd>
+            {% if object.dateOfBirth %}
+            <a href="{% url "entities-by-year-of-birth" year=object.dateOfBirth.year %}">{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth|date:"m-d" }}
+            {% else %}
+            {% trans "Geen geboortedatum geregistreerd." %}
+            {% endif %}{# object.dateOfBirth #}
+        </dd>
+        {% endif %}{# object.visibility.dateOfBirth #}
+    {% endif %}
 </dl>
 {% endblock entity_body %}

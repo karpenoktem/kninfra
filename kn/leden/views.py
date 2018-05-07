@@ -402,6 +402,11 @@ def ik_chpasswd(request):
                               {'form': form, 'errors': errstr},
                               context_instance=RequestContext(request))
 
+@login_required
+def ik_settings(request):
+    return render_to_response('leden/settings.html',
+                              {'object': request.user},
+                              context_instance=RequestContext(request))
 
 def rauth(request):
     """

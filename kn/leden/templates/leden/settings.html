@@ -1,0 +1,63 @@
+{% extends "leden/base.html" %}
+
+{% load i18n %}
+
+{% block head %}
+<script>
+var object_id = '{{ object.id }}';
+</script>
+{{ block.super }}
+<script src="{{ MEDIA_URL }}leden/entity_detail.js" defer></script>
+{% endblock head %}
+
+{% block body %}
+
+<style>
+</style>
+<h1>{% trans "Instellingen" %}</h1>
+
+<p>{% blocktrans %}Hier kun je je eigen gegevens beheren die in het systeem van Karpe Noktem staan.{% endblocktrans %}</p>
+
+<dl>
+  <dt>{% trans "Studie" %}</dt>
+  <dd>
+    {% if object.studies %}
+    <ul>
+      {% for s in object.studies %}
+      <li><a href="{{ s.study.get_absolute_url }}">{{ s.study.humanName }}</a>
+      {% trans "op" %} <a href="{{ s.institute.get_absolute_url }}">{{ s.institute.humanName}}</a>
+      {% endfor %}
+    </li>
+    {% else %}
+    {% trans "Geen studies geregistreerd." %}
+    {% endif %}
+  </dd>
+  <dt>{% trans "Telefoonnummer" %}</dt>
+  <dd>
+    {{ object.primary_telephone }}
+    {% if object.visibility.telephone %}
+    <i title="{% trans "Zichtbaar voor alle leden" %}">{% trans "zichtbaar" %}</i> <button data-action="entity_update_visibility:telephone:false" title="{% trans "verander zichtbaarheid van het telefoonnummer" %}">{% trans "Verander" %}</button>
+    {% else %}
+    <i title="{% trans "Alleen zichtbaar voor secretariaat en admlezers" %}">{% trans "niet zichtbaar" %}</i> <button data-action="entity_update_visibility:telephone:true" title="{% trans "verander zichtbaarheid van het telefoonnummer" %}">{% trans "Verander" %}</button>
+    {% endif %}
+  </dd>
+  <dt>{% trans "Geboortedatum" %}</dt>
+  <dd>
+    {% if object.dateOfBirth %}
+      {{ object.dateOfBirth|date:"Y-m-d" }}
+      {% if object.age < 18 %}
+        {% if object.visibility.dateOfBirth %}
+          <i title="{% trans "Zichtbaar voor alle leden" %}">{% trans "zichtbaar" %}</i> <button data-action="entity_update_visibility:dateOfBirth:false" title="{% trans "verander zichtbaarheid van geboortedatum" %}">{% trans "Verander" %}</button>
+        {% else %}
+          <i title="{% trans "Alleen zichtbaar voor secretariaat en admlezers" %}">{% trans "niet zichtbaar" %}</i> <button data-action="entity_update_visibility:dateOfBirth:true" title="{% trans "verander zichtbaarheid van geboortedatum" %}">{% trans "Verander" %}</button>
+        {% endif %}
+      {% else %}
+        <button data-action="entity_remove_property:dateOfBirth:!{% trans "Weet je zeker dat je je geboortedatum wilt verwijderen? Dit kan alleen hersteld worden door de secretaris." %}">{% trans "Verwijder" %}</button>
+      {% endif %}
+    {% else %}
+      {% trans "Geen geboortedatum geregistreerd." %}
+    {% endif %}
+  </dd>
+</dl>
+
+{% endblock body %}
