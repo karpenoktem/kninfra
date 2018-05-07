@@ -22,7 +22,7 @@ from django.core.paginator import EmptyPage, Paginator
 from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import Context, RequestContext
 from django.template.loader import get_template
 from django.template.loader_tags import BlockNode
@@ -70,7 +70,8 @@ def entity_detail(request, name=None, _id=None, type=None):
     if e is None:
         raise Http404
     if type and type not in e.types:
-        raise ValueError(_("Entiteit is niet een %s") % type)
+        # Different type than expected based on the URL.
+        return redirect(e)
     if not type:
         type = e.type
     if type not in Es.TYPE_MAP:
