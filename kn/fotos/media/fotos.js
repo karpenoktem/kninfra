@@ -14,13 +14,15 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     return ((m % n) + n) % n;
   }
 
-  function Foto(data) {
+  function Foto(data, parentPath) {
     for (var k in data) {
       this[k] = data[k];
     }
     if (!this.tags) {
       this.tags = [];
     }
+
+    this.relpath = data.path.substr(parentPath.length + 1);
 
     this.calculate_cache_urls();
   };
@@ -130,7 +132,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
           this.search_results = {};
           var prev = null;
           for (var i=0; i<data.results.length; i++) {
-            var foto = new Foto(data.results[i]);
+            var foto = new Foto(data.results[i], this.path);
             if (foto.type != 'album') {
               if (prev !== null) {
                 prev.next = foto;
@@ -294,7 +296,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     if (!data.children) return;
     var prev = null;
     $.each(data.children, function(i, c) {
-      c = new Foto(c);
+      c = new Foto(c, path);
       album.children[c.name] = c;
 
       if (prev !== null) {
@@ -452,7 +454,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
       if (!current.length) { // current doesn't exist yet
         var current = $('<img class="img" state="current">');
-        current.attr('data-name', foto.name);
+        current.attr('data-relpath', foto.relpath);
         current.attr('src', this.chooseFoto(foto).src);
         $('.images', frame).append(current);
         this.resize(current);
@@ -497,7 +499,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
       if (!current.length) { // current doesn't exist yet
         var current = $('<img class="img" state="current">');
-        current.attr('data-name', foto.name);
+        current.attr('data-relpath', foto.relpath);
         current.attr('src', this.chooseFoto(foto).src);
         $('.images', frame).prepend(current);
         this.resize(current);
@@ -536,7 +538,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       // Probably this is the first image (after clicking one).
       $('.images', frame).empty();
       var current = $('<img class="img" state="current">');
-      current.attr('data-name', foto.name);
+      current.attr('data-relpath', foto.relpath);
       current.attr('src', this.chooseFoto(foto).src);
       $('.images', frame).append(current);
       this.resize(current);
@@ -875,7 +877,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       // Preview next image
       if (next.length == 0) {
         next = $('<img class="img" state="next"/>');
-        next.attr('data-name', this.foto.next.name);
+        next.attr('data-relpath', this.foto.next.relpath);
         next.attr('src', this.chooseFoto(this.foto.next).src);
         $('#foto .images').prepend(next);
         this.resize(next);
@@ -898,7 +900,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
       var props = this.chooseFoto(this.foto.prev);
       if (prev.length == 0) {
         prev = $('<img class="img" state="prev"/>');
-        prev.attr('data-name', this.foto.prev.name);
+        prev.attr('data-relpath', this.foto.prev.relpath);
         prev.attr('src', props.src);
         $('#foto .images').append(prev);
         this.resize(prev);
@@ -1003,7 +1005,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         if (this.foto.next && this.foto.next.type != 'album' &&
             $('#foto .images img[state=next]').length == 0) {
           var next = $('<img class="img" state="next">');
-          next.attr('data-name', this.foto.next.name);
+          next.attr('data-relpath', this.foto.next.relpath);
           next.css('transform', 'translateX(9999px)'); // off-screen
           next.attr('src', this.chooseFoto(this.foto.next).src);
           $('#foto .images').prepend(next);
@@ -1040,7 +1042,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
         if (this.foto.prev && this.foto.prev.type != 'album' &&
             $('#foto .images img[state=prev]').length == 0) {
           var prev = $('<img class="img" state="prev">');
-          prev.attr('data-name', this.foto.prev.name);
+          prev.attr('data-relpath', this.foto.prev.relpath);
           prev.css('transform', 'translateX(-9999px)'); // off-screen
           prev.attr('src', this.chooseFoto(this.foto.prev).src);
           $('#foto .images').append(prev);
@@ -1465,8 +1467,12 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     for (var i=0; i<arguments.length; i++) {
       var img = $(arguments[i]);
       if (img === null) continue;
-      console.log('updating', img.attr('data-name'));
-      var foto = this.fotos[this.path].children[img.attr('data-name')];
+      console.log('updating', img.attr('data-relpath'));
+      if (this.search_query) {
+        var foto = this.search_results[img.attr('data-relpath')];
+      } else {
+        var foto = this.fotos[this.path].children[img.attr('data-relpath')];
+      }
       var props = this.chooseFoto(foto);
       img.css({'width': props.width,
                'height': props.height,
