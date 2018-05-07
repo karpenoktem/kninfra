@@ -217,7 +217,7 @@
     <dt>{% trans "Geboortedatum" %}</dt>
 	<dd>
         <a href="{% url "entities-by-year-of-birth" year=object.dateOfBirth.year %}"
-                >{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth.month }}-{{ object.dateOfBirth.day }}
+                >{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth|date:"m-d" }}
 	</dd>
         {% endif %}
 	{% if object.dateJoined %}
