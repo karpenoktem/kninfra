@@ -220,12 +220,5 @@
                 >{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth|date:"m-d" }}
 	</dd>
         {% endif %}
-	{% if object.dateJoined %}
-    <dt>{% trans "Lid sinds" %}</dt>
-	<dd>
-	<a href="{% url "jaar" year=object.dateJoined.year %}"
-		>{{ object.dateJoined.year }}</a>-{{ object.dateJoined.month }}-{{ object.dateJoined.day }}
-	</dd>
-	{% endif %}
 </dl>
 {% endblock entity_body %}
