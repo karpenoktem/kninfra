@@ -172,7 +172,7 @@ def entity_update_visibility(data, request):
     property = data['key']
     value = data['value']
 
-    if property not in ['telephone']:
+    if property not in ['telephone', 'dateOfBirth']:
         return {'ok': False, 'error': 'Unknown property "%s"' % property}
 
     e = Es.by_id(data['id'])
@@ -180,6 +180,40 @@ def entity_update_visibility(data, request):
         return {'ok': False, 'error': 'Entity not found'}
 
     e.update_visibility_preference(property, value)
+
+    return {'ok': True}
+
+def entity_remove_property(data, request):
+    """ Removes a property of an entity (e.g. date of birth).
+            Example:
+            >> {action:"entity_remove_property",
+                id:"4e6fcc85e60edf3dc0000270",
+                key: "dateOfBirth"}
+            << {ok: true}
+        or: << {ok: false, error: "Permission denied"}
+    """
+
+    if 'id' not in data or not isinstance(data['id'], six.string_types):
+        return {'ok': False, 'error': 'Missing argument "id"'}
+    if 'key' not in data or not isinstance(data['key'], six.string_types):
+        return {'ok': False, 'error': 'Missing argument "key"'}
+
+    is_secretariaat = 'secretariaat' in request.user.cached_groups_names
+    is_user = data['id'] == request.user.id
+    if not (is_secretariaat or is_user):
+        return {'ok': False, 'error': 'Permission denied'}
+
+    e = Es.by_id(data['id'])
+    if e is None:
+        return {'ok': False, 'error': 'Entity not found'}
+
+    property = data['key']
+    if property == 'dateOfBirth':
+        if e.age < 18 and not 'secretariaat' in request.user.cached_groups_names:
+            return {'ok': False, 'error': 'Can\'t remove date of birth below 18'}
+        e.remove_dateOfBirth()
+    else:
+        return {'ok': False, 'error': 'Unknown property "%s"' % property}
 
     return {'ok': True}
 
@@ -243,6 +277,15 @@ def entity_set_property(data, request):
         e.set_description(value)
     elif property == 'humanName':
         e.set_humanName(value)
+    elif property == 'dateOfBirth':
+        try:
+            dateOfBirth = parse_date(value)
+            if dateOfBirth is None:
+                raise ValueError('cannot parse date')
+            dateOfBirth = datetime.datetime.combine(dateOfBirth, datetime.datetime.min.time())
+        except ValueError as e:
+            return {'ok': False, 'error': str(e)}
+        e.set_dateOfBirth(dateOfBirth)
     else:
         return {'ok': False, 'error': 'Unknown property "%s"' % property}
 
@@ -274,6 +317,7 @@ ACTION_HANDLER_MAP = {
     'entity_set_property': entity_set_property,
     'entity_update_primary': entity_update_primary,
     'entity_update_visibility': entity_update_visibility,
+    'entity_remove_property': entity_remove_property,
     'entity_end_study': entity_end_study,
     'get_last_synced': get_last_synced,
     'adduser_suggest_username': adduser_suggest_username,

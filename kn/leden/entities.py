@@ -1360,6 +1360,22 @@ class User(Entity):
     def dateOfBirth(self):
         return self._data.get('person', {}).get('dateOfBirth')
 
+    def set_dateOfBirth(self, dateOfBirth,save=True):
+        if 'person' not in self._data:
+            self._data['person'] = {}
+        self._data['person']['dateOfBirth'] = dateOfBirth
+        if save:
+            self.save()
+
+    def remove_dateOfBirth(self, save=True):
+        """ Remove date of birth property """
+
+        person = self._data.get('person', {})
+        if 'dateOfBirth' in person:
+            person['dateOfBirth'] = None
+            if save:
+                self.save()
+
     @property
     def age(self):
         # age is a little difficult to calculate because of leap years
