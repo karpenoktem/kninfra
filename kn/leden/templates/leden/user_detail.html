@@ -77,18 +77,8 @@
         {% endif %})
         {% endif %}
         {% if "secretariaat" in user.cached_groups_names and not s.until %}
-        <button onclick="var end_date = prompt('{% trans "Beëindig studie" %}',
-                                    (new Date().toISOString().substr(0, 10)));
-                         if (!end_date) return false;
-                         leden_api({
-                            action: 'entity_end_study',
-                            study: {{ forloop.counter0 }},
-                            end_date: end_date,
-                            id: '{{ object.id }}'
-                         }, function(data) {
-                            if(data.ok) window.location.reload();
-                            else alert(data.error);
-                        }); return false;">{% trans "Beëindig" %}</button>
+        <button data-action="entity_end_study:{{ forloop.counter0 }}:?{% trans "Beëindig studie" %}"
+            data-default="{{ now|date:"Y-m-d" }}">{% trans "Beëindig" %}</button>
         {% endif %}{# "secretariaat" in user.cached_groups_names and not s.until #}
         </li>
         {% endfor %}{# s in object.studies #}
@@ -105,17 +95,7 @@
                 {% else %}
                 <span title="{% trans "Alleen zichtbaar voor secretariaat en admlezers" %}">{% trans "niet zichtbaar" %}</span>
                 {% endif %}
-                <button onclick="$.post('{% url "leden-api" %}', {
-                                        'csrfmiddlewaretoken': csrf_token,
-                                        data: JSON.stringify({
-                                                action: 'entity_update_visibility',
-                                                property: 'telephone',
-                                                visible: {% if object.visibility.telephone %}false{% else %}true{% endif %},
-                                                id: '{{ object.id }}'})
-                                        }, function(data) {
-                                                if(data.ok) window.location.reload();
-                                                else alert(data.error);
-                                                }); return false;" title="{% trans "verander zichtbaarheid van het telefoonnummer" %}">{% trans "Verander" %}</button>
+                <button data-action="entity_update_visibility:telephone:{% if object.visibility.telephone %}false{% else %}true{% endif %}" title="{% trans "verander zichtbaarheid van het telefoonnummer" %}">{% trans "Verander" %}</button>
         </label></i>
         {% endif %}
         {% if "secretariaat" in user.cached_groups_names %}

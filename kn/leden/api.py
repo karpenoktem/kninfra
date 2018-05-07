@@ -1,4 +1,5 @@
 import json
+import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.utils import six
@@ -151,26 +152,25 @@ def entity_update_visibility(data, request):
             >> {action:"entity_update_visibility",
                 id:"4e6fcc85e60edf3dc0000270",
                 property: "telephone",
-                visible: False}
+                value: False}
             << {ok: true}
         or: << {ok: false, error: "Permission denied"}
     """
 
     if 'id' not in data or not isinstance(data['id'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if 'property' not in data or not isinstance(data['property'],
-                                                six.string_types):
-        return {'ok': False, 'error': 'Missing argument "property"'}
-    if 'visible' not in data or not isinstance(data['visible'], bool):
-        return {'ok': False, 'error': 'Missing argument "visible"'}
+    if 'key' not in data or not isinstance(data['key'], six.string_types):
+        return {'ok': False, 'error': 'Missing argument "key"'}
+    if 'value' not in data or not isinstance(data['value'], bool):
+        return {'ok': False, 'error': 'Missing argument "value"'}
 
     is_secretariaat = 'secretariaat' in request.user.cached_groups_names
     is_user = data['id'] == request.user.id
     if not (is_secretariaat or is_user):
         return {'ok': False, 'error': 'Permission denied'}
 
-    property = data['property']
-    visible = data['visible']
+    property = data['key']
+    value = data['value']
 
     if property not in ['telephone']:
         return {'ok': False, 'error': 'Unknown property "%s"' % property}
@@ -179,9 +179,8 @@ def entity_update_visibility(data, request):
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
 
-    e.update_visibility_preference(property, visible)
+    e.update_visibility_preference(property, value)
 
-    giedo.sync_async(request)
     return {'ok': True}
 
 
@@ -191,11 +190,11 @@ def entity_end_study(data, request):
     '''
     if 'id' not in data or not isinstance(data['id'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if 'study' not in data or not isinstance(data['study'], int):
-        return {'ok': False, 'error': 'Missing argument "study"'}
-    if 'end_date' not in data or not isinstance(data['end_date'],
+    if 'property' not in data or not isinstance(data['property'], six.string_types):
+        return {'ok': False, 'error': 'Missing argument "property"'}
+    if 'value' not in data or not isinstance(data['value'],
                                                 six.string_types):
-        return {'ok': False, 'error': 'Missing argument "end_date"'}
+        return {'ok': False, 'error': 'Missing argument "value"'}
 
     if 'secretariaat' not in request.user.cached_groups_names:
         return {'ok': False, 'error': 'Permission denied'}
@@ -204,13 +203,17 @@ def entity_end_study(data, request):
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
     try:
-        end_date = parse_date(data['end_date'])
+        end_date = parse_date(data['value'])
     except ValueError:
         return {'ok': False, 'error': 'Invalid date'}
     if not end_date:
         return {'ok': False, 'error': 'No valid end date given'}
     try:
-        e.study_end(data['study'], end_date)
+        study = int(data['property'])
+    except ValueError:
+        return {'ok': False, 'error': 'Invalid study'}
+    try:
+        e.study_end(study, end_date)
     except Es.EntityException as why:
         return {'ok': False, 'error': why.message}
 
@@ -220,16 +223,16 @@ def entity_end_study(data, request):
 def entity_set_property(data, request):
     if 'id' not in data or not isinstance(data['id'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if 'property' not in data or not isinstance(data['property'],
+    if 'key' not in data or not isinstance(data['key'],
                                                 six.string_types):
-        return {'ok': False, 'error': 'Missing argument "property"'}
+        return {'ok': False, 'error': 'Missing argument "key"'}
     if 'value' not in data or not isinstance(data['value'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "value"'}
 
     if 'secretariaat' not in request.user.cached_groups_names:
         return {'ok': False, 'error': 'Permission denied'}
 
-    property = data['property']
+    property = data['key']
     value = data['value']
 
     e = Es.by_id(data['id'])
