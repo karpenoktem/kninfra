@@ -22,7 +22,7 @@ from django.core.paginator import EmptyPage, Paginator
 from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import redirect, render_to_response
 from django.template import Context, RequestContext
 from django.template.loader import get_template
 from django.template.loader_tags import BlockNode
