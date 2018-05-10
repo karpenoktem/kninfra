@@ -1,3 +1,7 @@
+import binascii
+import os
+import subprocess
+
 import pymysql
 
 from django.conf import settings
@@ -16,36 +20,28 @@ def apply_wiki_changes(daan, changes):
     )
     try:
         for user, realname, email in changes['add']:
+            password = binascii.hexlify(os.urandom(12))
+            # Create the user with a random password.
+            # WARNING: this password will appear in the logs.
+            subprocess.call(['sudo', '-u', settings.MEDIAWIKI_USER,
+                             'php', 'maintenance/createAndPromote.php',
+                             '--custom-groups=leden',
+                             '--quiet',
+                             user, password],
+                            cwd=settings.MEDIAWIKI_PATH)
+            # Set the user email, and reset their password.
+            subprocess.call(['sudo', '-u', settings.MEDIAWIKI_USER,
+                             'php', 'maintenance/resetUserEmail.php',
+                             '--user', user.capitalize(),
+                             '--email', email],
+                            cwd=settings.MEDIAWIKI_PATH)
+            # Set the user real name.
             with dc.cursor() as c:
-                q = """
-        INSERT INTO `user` (`user_name`,
-                            `user_real_name`,
-                            `user_password`,
-                            `user_newpassword`,
-                            `user_newpass_time`,
-                            `user_email`,
-                            `user_touched`,
-                            `user_token`,
-                            `user_email_authenticated`,
-                            `user_email_token`,
-                            `user_email_token_expires`,
-                            `user_registration`,
-                            `user_editcount`)
-        VALUES (
-            %s,
-            %s,
-            0x3437303131623637663034643135386635656232333965626361383933656130,
-            '',
-            NULL,
-            %s,
-            '20081102154308',
-            '0882a253d72376fb8a1b5c579acba82c',
-            NULL,
-            NULL,
-            NULL,
-            '20081102154303',
-            0);"""
-                c.execute(q, (user.capitalize(), realname, email))
+                c.execute('''
+                          UPDATE user
+                          SET user_real_name=%s
+                          WHERE user_name=%s''',
+                          (realname, user.capitalize()))
         for user in changes['remove']:
             with dc.cursor() as c:
                 c.execute("DELETE FROM `user` WHERE `user_name`=%s",
