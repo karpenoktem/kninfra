@@ -114,11 +114,12 @@ class Giedo(WhimDaemon):
         todo_lock = threading.Lock()
         todo_event = threading.Event()
 
-        def _sync_action(func, *args):
+        def _sync_action(func, name, daemon, action):
             try:
-                func(*args)
+                func(name, daemon, action)
             except Exception:
-                logging.exception("Uncaught exception")
+                logging.exception('uncaught exception in %s (daemon %s)' %
+                                  (name, daemon))
             with todo_lock:
                 todo[0] -= 1
                 if todo[0] == 0:
@@ -135,8 +136,8 @@ class Giedo(WhimDaemon):
             logging.info("send %s %.4f (%s to go)" %
                          (name, elapsed, todo[0] - 1))
 
-        for act in self.ss_actions:
-            self.threadPool.execute(_sync_action, _entry, *act)
+        for action in self.ss_actions:
+            self.threadPool.execute(_sync_action, _entry, *action)
         self.threadPool.execute(self._sync_openvpn)
         todo_event.wait()
         self.last_sync_ts = time.time()

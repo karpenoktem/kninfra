@@ -36,6 +36,9 @@ class WhimClient(object):
         self.msg_lut = {}
         self.got_reader = False
 
+    def __str__(self):
+        return '<WhimClient %s>' % self._address
+
     def _connect(self):
         """ (Re)connects to socket. """
         if self._family == 'tcp':
