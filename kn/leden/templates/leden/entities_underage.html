@@ -11,11 +11,11 @@
     {{ user.age }}:
     <a href="{{ user.get_absolute_url }}">{{ user.full_name }}</a>
     (<a href="{% url "entities-by-year-of-birth" year=user.dateOfBirth.year %}"
-                >{{ user.dateOfBirth.year }}</a>-{{ user.dateOfBirth.month }}-{{ user.dateOfBirth.day }})
+                >{{ user.dateOfBirth.year }}</a>-{{ user.dateOfBirth|date:"m-d" }})
   </li>
 {% endfor %}
 </ul>
-<p>{% trans "Vanaf {{ final_date.date }} is ieder lid boven de 18 jaar." %}</p>
+<p>{% blocktrans with date=final_date.date|date:"Y-m-d" %}Vanaf {{ date }} is ieder lid boven de 18 jaar.{% endblocktrans %}</p>
 {% else %}
 <p>{% trans "Er zijn geen leden onder de 18 jaar." %}</p>
 {% endif %}
