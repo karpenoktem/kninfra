@@ -1,5 +1,5 @@
-import json
 import datetime
+import json
 
 from django.contrib.auth.decorators import login_required
 from django.utils import six
@@ -183,6 +183,7 @@ def entity_update_visibility(data, request):
 
     return {'ok': True}
 
+
 def entity_remove_property(data, request):
     """ Removes a property of an entity (e.g. date of birth).
             Example:
@@ -222,10 +223,10 @@ def entity_end_study(data, request):
     '''
     if 'id' not in data or not isinstance(data['id'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if 'property' not in data or not isinstance(data['property'], six.string_types):
-        return {'ok': False, 'error': 'Missing argument "property"'}
-    if 'value' not in data or not isinstance(data['value'],
+    if 'property' not in data or not isinstance(data['property'],
                                                 six.string_types):
+        return {'ok': False, 'error': 'Missing argument "property"'}
+    if 'value' not in data or not isinstance(data['value'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "value"'}
 
     if 'secretariaat' not in request.user.cached_groups_names:
@@ -255,8 +256,7 @@ def entity_end_study(data, request):
 def entity_set_property(data, request):
     if 'id' not in data or not isinstance(data['id'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if 'key' not in data or not isinstance(data['key'],
-                                                six.string_types):
+    if 'key' not in data or not isinstance(data['key'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "key"'}
     if 'value' not in data or not isinstance(data['value'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "value"'}
@@ -280,7 +280,8 @@ def entity_set_property(data, request):
             dateOfBirth = parse_date(value)
             if dateOfBirth is None:
                 raise ValueError('cannot parse date')
-            dateOfBirth = datetime.datetime.combine(dateOfBirth, datetime.datetime.min.time())
+            dateOfBirth = datetime.datetime.combine(
+                dateOfBirth, datetime.datetime.min.time())
         except ValueError as e:
             return {'ok': False, 'error': str(e)}
         e.set_dateOfBirth(dateOfBirth)

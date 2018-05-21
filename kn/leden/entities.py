@@ -1379,7 +1379,7 @@ class User(Entity):
     def dateOfBirth(self):
         return self._data.get('person', {}).get('dateOfBirth')
 
-    def set_dateOfBirth(self, dateOfBirth,save=True):
+    def set_dateOfBirth(self, dateOfBirth, save=True):
         if 'person' not in self._data:
             self._data['person'] = {}
         self._data['person']['dateOfBirth'] = dateOfBirth

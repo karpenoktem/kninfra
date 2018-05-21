@@ -313,7 +313,7 @@ def ik_chsmoel(request):
         raise PermissionDenied
     original = default_storage.open(
         os.path.join(settings.SMOELEN_PHOTOS_PATH,
-                  str(user.name)) + ".orig", 'wb+'
+                     str(user.name)) + ".orig", 'wb+'
     )
     for chunk in request.FILES['smoel'].chunks():
         original.write(chunk)
@@ -333,7 +333,7 @@ def ik_chsmoel(request):
     img = img.resize((width, height), PIL.Image.ANTIALIAS)
     img.save(default_storage.open(
         os.path.join(settings.SMOELEN_PHOTOS_PATH,
-                  str(user.name)) + ".jpg", 'w'
+                     str(user.name)) + ".jpg", 'w'
     ), "JPEG")
     Es.notify_informacie('set_smoel', request.user, entity=user)
     return redirect_to_referer(request)
@@ -381,6 +381,7 @@ def ik_chpasswd(request):
                               {'form': form, 'errors': errstr},
                               context_instance=RequestContext(request))
 
+
 @login_required
 def ik_settings(request):
     e = request.user
@@ -394,6 +395,7 @@ def ik_settings(request):
     return render_to_response('leden/settings.html',
                               ctx,
                               context_instance=RequestContext(request))
+
 
 def rauth(request):
     """
