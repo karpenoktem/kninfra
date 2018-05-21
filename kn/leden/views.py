@@ -2,11 +2,11 @@
 
 import json
 import logging
+import os
 from datetime import date
 from decimal import Decimal
 from hashlib import sha256
 from itertools import chain
-from os import path
 
 import PIL.Image
 
@@ -152,28 +152,12 @@ def _entity_detail(request, e):
                                           key=Es.entity_humanName)})
 
     # Check whether entity has a photo
-    photos_path = (path.join(settings.SMOELEN_PHOTOS_PATH, str(e.name))
-                   if e.name else None)
-    if photos_path and default_storage.exists(photos_path + '.jpg'):
-        img = PIL.Image.open(default_storage.open(photos_path + '.jpg'))
-        width, height = img.size
-        if default_storage.exists(photos_path + '.orig'):
-            # smoel was created using newer strategy. Shrink until it fits the
-            # requirements.
-            width, height = resize_proportional(img.size[0], img.size[1],
-                                                settings.SMOELEN_WIDTH,
-                                                settings.SMOELEN_HEIGHT)
-        elif width > settings.SMOELEN_WIDTH:
-            # smoel was created as high-resolution image, probably 600px wide
-            width /= 2
-            height /= 2
-        else:
-            # smoel was created as normal image, probably 300px wide
-            pass
+    photo_size = e.photo_size
+    if e.photo_size is not None:
         ctx.update({
             'hasPhoto': True,
-            'photoWidth': width,
-            'photoHeight': height})
+            'photoWidth': photo_size[0],
+            'photoHeight': photo_size[1]})
     return ctx
 
 
@@ -328,7 +312,7 @@ def ik_chsmoel(request):
     if not request.user.may_upload_smoel_for(request.user):
         raise PermissionDenied
     original = default_storage.open(
-        path.join(settings.SMOELEN_PHOTOS_PATH,
+        os.path.join(settings.SMOELEN_PHOTOS_PATH,
                   str(user.name)) + ".orig", 'wb+'
     )
     for chunk in request.FILES['smoel'].chunks():
@@ -348,7 +332,7 @@ def ik_chsmoel(request):
                                         settings.SMOELEN_HEIGHT * 2)
     img = img.resize((width, height), PIL.Image.ANTIALIAS)
     img.save(default_storage.open(
-        path.join(settings.SMOELEN_PHOTOS_PATH,
+        os.path.join(settings.SMOELEN_PHOTOS_PATH,
                   str(user.name)) + ".jpg", 'w'
     ), "JPEG")
     Es.notify_informacie('set_smoel', request.user, entity=user)
@@ -361,7 +345,7 @@ def user_smoel(request, name):
     if not user:
         raise Http404
     try:
-        img = default_storage.open(path.join(
+        img = default_storage.open(os.path.join(
             settings.SMOELEN_PHOTOS_PATH,
             str(user.name)) + ".jpg", 'rb')
     except IOError:
@@ -399,8 +383,16 @@ def ik_chpasswd(request):
 
 @login_required
 def ik_settings(request):
+    e = request.user
+    ctx = {'object': e}
+    photo_size = e.photo_size
+    if e.photo_size is not None:
+        ctx.update({
+            'hasPhoto': True,
+            'photoWidth': photo_size[0],
+            'photoHeight': photo_size[1]})
     return render_to_response('leden/settings.html',
-                              {'object': request.user},
+                              ctx,
                               context_instance=RequestContext(request))
 
 def rauth(request):
