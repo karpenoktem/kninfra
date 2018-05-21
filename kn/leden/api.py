@@ -209,8 +209,6 @@ def entity_remove_property(data, request):
 
     property = data['key']
     if property == 'dateOfBirth':
-        if e.age < 18 and not 'secretariaat' in request.user.cached_groups_names:
-            return {'ok': False, 'error': 'Can\'t remove date of birth below 18'}
         e.remove_dateOfBirth()
     else:
         return {'ok': False, 'error': 'Unknown property "%s"' % property}
