@@ -87,16 +87,13 @@
         {% endif %}{# object.primary_study or "secretariaat" in user.cached_groups_names and addStudyForm #}
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
         {% if object.telephones or "secretariaat" in user.cached_groups_names %}
-        <dt>{% trans "Telefoonnummer" %}
+        <dt>
+        {% trans "Telefoonnummer" %}
         {% if "secretariaat" in user.cached_groups_names or user == object %}
-        &nbsp; <i><label>
-                {% if object.visibility.telephone %}
-                <span title="{% trans "Zichtbaar voor alle leden" %}">{% trans "zichtbaar" %}</span>
-                {% else %}
-                <span title="{% trans "Alleen zichtbaar voor secretariaat en admlezers" %}">{% trans "niet zichtbaar" %}</span>
-                {% endif %}
-                <button data-action="entity_update_visibility:telephone:{% if object.visibility.telephone %}false{% else %}true{% endif %}" title="{% trans "verander zichtbaarheid van het telefoonnummer" %}">{% trans "Verander" %}</button>
-        </label></i>
+          &nbsp;
+          <label title="{% trans "Of het telefoonnummer voor alle leden zichtbaar is" %}">
+            <input type="checkbox" {% if object.visibility.telephone %}checked{% endif %} data-action="entity_update_visibility:telephone"> {% trans "zichtbaar" %} <span class="progress"></span>
+          </label>
         {% endif %}
         {% if "secretariaat" in user.cached_groups_names %}
         <button onclick="var new_phone = prompt('{% trans "Nieuw telefoonnummer" %}');
@@ -207,9 +204,14 @@
         </dt>
         <dd>
             {% if object.dateOfBirth %}
-            <a href="{% url "entities-by-year-of-birth" year=object.dateOfBirth.year %}">{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth|date:"m-d" }}
+              <a href="{% url "entities-by-year-of-birth" year=object.dateOfBirth.year %}">{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth|date:"m-d" }}
             {% else %}
-            {% trans "Geen geboortedatum geregistreerd." %}
+              {% trans "Geen geboortedatum geregistreerd." %}
+              {% if object.is_underage %}
+                {% trans "Wel dat je minderjarig bent." %}
+              {% else %}{# object.is_underage #}
+                {% trans "Wel dat je 18+ bent." %}
+              {% endif %}{# object.is_underage #}
             {% endif %}{# object.dateOfBirth #}
         </dd>
         {% endif %}{# object.visibility.dateOfBirth #}

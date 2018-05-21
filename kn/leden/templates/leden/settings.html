@@ -35,27 +35,22 @@ var object_id = '{{ object.id }}';
   <dt>{% trans "Telefoonnummer" %}</dt>
   <dd>
     {{ object.primary_telephone }}
-    {% if object.visibility.telephone %}
-    <i title="{% trans "Zichtbaar voor alle leden" %}">{% trans "zichtbaar" %}</i> <button data-action="entity_update_visibility:telephone:false" title="{% trans "verander zichtbaarheid van het telefoonnummer" %}">{% trans "Verander" %}</button>
-    {% else %}
-    <i title="{% trans "Alleen zichtbaar voor secretariaat en admlezers" %}">{% trans "niet zichtbaar" %}</i> <button data-action="entity_update_visibility:telephone:true" title="{% trans "verander zichtbaarheid van het telefoonnummer" %}">{% trans "Verander" %}</button>
-    {% endif %}
+    <label title="{% trans "Of het telefoonnummer voor alle leden zichtbaar is" %}"><input type="checkbox" {% if object.visibility.telephone %}checked{% endif %} data-action="entity_update_visibility:telephone"> {% trans "zichtbaar" %} <span class="progress"></span></label>
   </dd>
   <dt>{% trans "Geboortedatum" %}</dt>
   <dd>
     {% if object.dateOfBirth %}
       {{ object.dateOfBirth|date:"Y-m-d" }}
-      {% if object.age < 18 %}
-        {% if object.visibility.dateOfBirth %}
-          <i title="{% trans "Zichtbaar voor alle leden" %}">{% trans "zichtbaar" %}</i> <button data-action="entity_update_visibility:dateOfBirth:false" title="{% trans "verander zichtbaarheid van geboortedatum" %}">{% trans "Verander" %}</button>
-        {% else %}
-          <i title="{% trans "Alleen zichtbaar voor secretariaat en admlezers" %}">{% trans "niet zichtbaar" %}</i> <button data-action="entity_update_visibility:dateOfBirth:true" title="{% trans "verander zichtbaarheid van geboortedatum" %}">{% trans "Verander" %}</button>
-        {% endif %}
-      {% else %}
-        <button data-action="entity_remove_property:dateOfBirth:!{% trans "Weet je zeker dat je je geboortedatum wilt verwijderen? Dit kan alleen hersteld worden door de secretaris." %}">{% trans "Verwijder" %}</button>
-      {% endif %}
+      <button data-action="entity_remove_property:dateOfBirth:!{% trans "Weet je zeker dat je je geboortedatum wilt verwijderen? Dit kan alleen hersteld worden door de secretaris." %}">{% trans "Verwijder" %}</button>
+      <span class="progress"></span>
     {% else %}
       {% trans "Geen geboortedatum geregistreerd." %}
+      {% if object.is_underage %}
+        {% trans "Wel dat je minderjarig bent." %}
+      {% else %}{# object.is_underage #}
+        {% trans "Wel dat je 18+ bent." %}
+      {% endif %}{# object.is_underage #}
+      {% trans "Als je je geboortedatum wilt instellen, vraag dat dan aan een bestuurslid." %}
     {% endif %}
   </dd>
 </dl>

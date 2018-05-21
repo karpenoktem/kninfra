@@ -2,11 +2,16 @@
 
 
 function call_api(el) {
+  var progress = el.parentNode.querySelector('.progress');
   var actionString = el.dataset.action;
   var parts = actionString.split(':');
   var action = parts[0]; // e.g. 'entity_update_visibility'
   var key = parts[1];    // e.g. 'telephone'
-  var value = parts[2];  // e.g. false
+  if (el.type == 'checkbox') {
+    var value = el.checked;
+  } else {
+    var value = parts[2]; // The value to send with the API request.
+  }
 
   // Value can be !confirm, ?prompt, or just a JSON value.
   if (value[0] == '!') {
@@ -32,6 +37,10 @@ function call_api(el) {
     value = JSON.parse(value);
   }
 
+  if (el.type == 'checkbox') { // inline feedback
+    progress.textContent = 'Opslaan...'; // TODO: i18n
+  }
+  el.disabled = true;
   $.post(leden_api_url,
     {
       csrfmiddlewaretoken: csrf_token,
@@ -42,10 +51,22 @@ function call_api(el) {
         id:     object_id,
       }),
     }, function(data) {
-      if (data.ok) {
-        window.location.reload();
+      if (el.type == 'checkbox') {
+        // can do inline feedback
+        if (data.ok) {
+          progress.textContent = '';
+          el.disabled = false;
+        } else {
+          progress.textContent = data.error;
+          el.disabled = false;
+        }
       } else {
-        alert(data.error);
+        // must do modal/full-page feedback
+        if (data.ok) {
+          window.location.reload();
+        } else {
+          alert(data.error);
+        }
       }
     });
 }
