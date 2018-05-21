@@ -7,7 +7,6 @@ include:
     - .phpmyadmin
     - .wiki
     - .piwik
-    - .forum
     - .ldap
     - .mail
     - .mailman

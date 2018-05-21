@@ -9,7 +9,6 @@ from django.conf import settings
 import kn.leden.entities as Es
 from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.db import update_db
-from kn.utils.giedo.forum import generate_forum_changes
 from kn.utils.giedo.fotos import scan_fotos
 from kn.utils.giedo.mailman import generate_mailman_changes
 from kn.utils.giedo.postfix import (generate_postfix_map,
@@ -52,7 +51,6 @@ class Giedo(WhimDaemon):
             ('postfix', self.daan, self._gen_postfix),
             ('postfix-slm', self.daan, self._gen_postfix_slm),
             ('mailman', self.hans, self._gen_mailman),
-            ('forum', self.daan, self._gen_forum),
             ('unix', self.cilia, self._gen_unix),
             ('wiki', self.daan, self._gen_wiki),
             ('ldap', self.daan, self._gen_ldap),
@@ -90,10 +88,6 @@ class Giedo(WhimDaemon):
     def _gen_wiki(self):
         return {'type': 'wiki',
                 'changes': generate_wiki_changes(self)}
-
-    def _gen_forum(self):
-        return {'type': 'forum',
-                'changes': generate_forum_changes(self)}
 
     def _gen_unix(self):
         return {'type': 'unix',

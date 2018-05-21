@@ -105,56 +105,6 @@ def change_username(oldname, newname, do):
             dc.commit()
         dc.close()
 
-    # Update forum
-    # Originally written by Jille
-    creds = settings.FORUM_MYSQL_SECRET
-    dc = pymysql.connect(
-        host=creds[0],
-        user=creds[1],
-        password=creds[2],
-        db=creds[3],
-        charset='utf8'
-    )
-    try:
-        c = dc.cursor()
-        n = c.execute("UPDATE users SET username=%s, " +
-                      "email=%s WHERE username=%s;",
-                      (newname, e.canonical_email, oldname))
-        print('forum: updated users.username:', n)
-        if not n:
-            print('WARNING: could not find user %s in forum' % (oldname))
-        n = c.execute("UPDATE topics SET poster=%s WHERE poster=%s;",
-                      (newname, oldname))
-        print('forum: updated topics.poster:', n)
-        n = c.execute("UPDATE topics SET last_poster=%s WHERE last_poster=%s;",
-                      (newname, oldname))
-        print('forum: updated topics.last_poster:', n)
-        n = c.execute("UPDATE forums SET last_poster=%s WHERE last_poster=%s;",
-                      (newname, oldname))
-        print('forum: updated forums.last_poster:', n)
-        n = c.execute("UPDATE online SET ident=%s WHERE ident=%s;",
-                      (newname, oldname))
-        print('forum: updated online.ident:', n)
-        c.execute("UPDATE posts SET edited_by=%s WHERE edited_by=%s;",
-                  (newname, oldname))
-        print('forum: updated posts.edited_by:', n)
-        # XXX forum-moderators need extra queries to keep them moderators of
-        # specific forums and their name could be in the ban-cache. We'll just
-        # ignore them for now.
-        if not do:
-            # WARNING: this does not appear to work,
-            # the change is applied anyway
-            dc.rollback()
-    except Exception:
-        dc.rollback()
-        dc.close()
-        raise
-    else:
-        c.close()
-        if do:
-            dc.commit()
-        dc.close()
-
     newhome = '/home/%s' % newname
     cmd = ['ssh', 'root@phassa', 'usermod', '-l',
            newname, '-d', newhome, '-m', oldname]

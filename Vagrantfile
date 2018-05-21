@@ -92,7 +92,7 @@ end
 
 def ensure_pillar_is_generated
     names = ['chucknorris', 'django_secret_key', 'apikey', 'mysql_giedo',
-                'mysql_wiki', 'mysql_wolk', 'mysql_forum', 'mysql_root',
+                'mysql_wiki', 'mysql_wolk', 'mysql_root',
                 'mysql_daan', 'mailman_default', 'ldap_infra', 'mysql_piwik',
                 'ldap_daan', 'ldap_freeradius', 'ldap_admin',
                 'ldap_saslauthd', 'wiki_key', 'wiki_upgrade_key',
