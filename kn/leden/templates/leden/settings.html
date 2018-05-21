@@ -25,6 +25,23 @@ var object_id = '{{ object.id }}';
 </p>
 
 <dl>
+  <dt>{% trans "Foto" %}</dt>
+  <dd>
+    {% if hasPhoto %}
+      <img src="{% url "user-smoel" object.name %}"
+           width="{{ photoWidth }}"
+           height="{{ photoHeight }}"/>
+    {% else %}
+      Geen foto ingesteld.
+    {% endif %}
+    <form method="post" action="{% url "ik-chsmoel"  %}"
+            enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ object.id }}" />
+    <input type="file" name="smoel" accept="image/*" required />
+    <input type="submit" value="{% trans "Nieuwe foto instellen" %}" />
+    </form>
+  </dd>
   <dt>{% trans "Telefoonnummer" %}</dt>
   <dd>
     {% if object.primary_telephone %}

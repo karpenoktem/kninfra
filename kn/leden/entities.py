@@ -2,11 +2,15 @@ import datetime
 import email.utils
 import functools
 import hashlib
+import os
 import re
+
+import PIL.Image
 
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.signals import user_logged_in
+from django.core.files.storage import default_storage
 from django.db.models import permalink
 from django.utils import six
 from django.utils.crypto import constant_time_compare
@@ -14,6 +18,7 @@ from django.utils.six.moves import range
 from django.utils.translation import ugettext as _
 
 from kn.base.conf import DT_MAX, DT_MIN
+from kn.fotos.utils import resize_proportional
 from kn.leden.date import now
 from kn.leden.mongo import SONWrapper, _id, db, son_property
 
@@ -1032,6 +1037,32 @@ class Entity(SONWrapper):
         self._data['description'] = description
         if save:
             self.save()
+
+    @property
+    def photo_size(self):
+        if not self.name:
+            return None
+        path = os.path.join(settings.SMOELEN_PHOTOS_PATH, str(self.name))
+
+        if not default_storage.exists(path + '.jpg'):
+            return None
+        img = PIL.Image.open(default_storage.open(path + '.jpg'))
+        width, height = img.size
+        if default_storage.exists(path + '.orig'):
+            # smoel was created using newer strategy. Shrink until it fits the
+            # requirements.
+            width, height = resize_proportional(img.size[0], img.size[1],
+                                                settings.SMOELEN_WIDTH,
+                                                settings.SMOELEN_HEIGHT)
+        elif width > settings.SMOELEN_WIDTH:
+            # smoel was created as high-resolution image, probably 600px wide
+            width /= 2
+            height /= 2
+        else:
+            # smoel was created as normal image, probably 300px wide
+            pass
+
+        return width, height
 
     @property
     def canonical_full_email(self):
