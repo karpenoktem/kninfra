@@ -302,17 +302,12 @@ def years_of_birth(request):
 
 @login_required
 def users_underage(request):
-    users = sorted(Es.by_age(max_age=18), key=lambda x: x.dateOfBirth)
+    users = Es.users()
     users = filter(lambda u: u.is_active, users)
-    final_date = None
-    if users:
-        youngest = users[-1]
-        final_date = youngest.dateOfBirth.replace(
-            year=youngest.dateOfBirth.year + 18
-        )
+    users = filter(lambda u: u.is_underage, users)
+    users = sorted(users, key=lambda x: x.dateOfBirth)
     return render_to_response('leden/entities_underage.html', {
-        'users': users,
-        'final_date': final_date},
+        'users': users},
         context_instance=RequestContext(request))
 
 

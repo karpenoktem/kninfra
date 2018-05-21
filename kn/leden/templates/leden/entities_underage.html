@@ -8,14 +8,19 @@
 <ul>
 {% for user in users %}
   <li>
+    {% if user.age %}
     {{ user.age }}:
+    {% else %}
+    ?:
+    {% endif %}
     <a href="{{ user.get_absolute_url }}">{{ user.full_name }}</a>
+    {% if user.dateOfBirth %}
     (<a href="{% url "entities-by-year-of-birth" year=user.dateOfBirth.year %}"
                 >{{ user.dateOfBirth.year }}</a>-{{ user.dateOfBirth|date:"m-d" }})
+    {% endif %}
   </li>
 {% endfor %}
 </ul>
-<p>{% blocktrans with date=final_date.date|date:"Y-m-d" %}Vanaf {{ date }} is ieder lid boven de 18 jaar.{% endblocktrans %}</p>
 {% else %}
 <p>{% trans "Er zijn geen leden onder de 18 jaar." %}</p>
 {% endif %}

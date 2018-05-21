@@ -39,6 +39,7 @@ ecol = db['entities']   # entities: users, group, tags, studies, ...
 #                "nick" : "Giedo",
 #                "dateOfBirth" : ISODate("..."),
 #                "titles" : [ ] },
+#   "is_underage" : false,
 #   "is_active" : 0,
 #   "emailAddresses" : [ { "email" : "...",
 #                          "from" : ISODate("2004-08-31T00:00:00Z"),
@@ -324,19 +325,6 @@ def by_year_of_birth(year):
                         'person.dateOfBirth': {
                             '$lt': datetime.datetime(year + 1, 1, 1),
                             '$gte': datetime.datetime(year, 1, 1)}}):
-        yield entity(m)
-
-
-def by_age(max_age=None):
-    """ Finds entities under a certain age """
-    # This function could be extended to allow for a range of ages (e.g. adding
-    # a min_age argument)
-    date = datetime.date.today()
-    date = date.replace(year=date.year - max_age)
-    dt = datetime.datetime.combine(date, datetime.time(0, 0, 0, 0))
-    for m in ecol.find({'types': 'user',
-                        'person.dateOfBirth': {
-                            '$gt': dt}}):
         yield entity(m)
 
 
@@ -1364,6 +1352,8 @@ class User(Entity):
         if 'person' not in self._data:
             self._data['person'] = {}
         self._data['person']['dateOfBirth'] = dateOfBirth
+        if 'is_underage' in self._data:
+            del self._data['is_underage']
         if save:
             self.save()
 
@@ -1372,6 +1362,7 @@ class User(Entity):
 
         person = self._data.get('person', {})
         if 'dateOfBirth' in person:
+            self._data['is_underage'] = self.is_underage
             person['dateOfBirth'] = None
             if save:
                 self.save()
@@ -1381,9 +1372,17 @@ class User(Entity):
         # age is a little difficult to calculate because of leap years
         # see http://stackoverflow.com/a/9754466
         today = datetime.date.today()
-        born = self.dateOfBirth
-        return (today.year - born.year
-                - ((today.month, today.day) < (born.month, born.day)))
+        date = self.dateOfBirth
+        if not date:
+            return None
+        return (today.year - date.year
+                - ((today.month, today.day) < (date.month, date.day)))
+
+    @property
+    def is_underage(self):
+        if self.age is not None:
+            return self.age < 18
+        return self._data['is_underage']
 
     @property
     def got_unix_user(self):
