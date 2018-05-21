@@ -208,9 +208,9 @@
             {% else %}
               {% trans "Geen geboortedatum geregistreerd." %}
               {% if object.is_underage %}
-                {% trans "Wel dat je minderjarig bent." %}
+                {% trans "Wel dat dit lid minderjarig is." %}
               {% else %}{# object.is_underage #}
-                {% trans "Wel dat je 18+ bent." %}
+                {% trans "Wel dat dit lid 18+ is." %}
               {% endif %}{# object.is_underage #}
             {% endif %}{# object.dateOfBirth #}
         </dd>
