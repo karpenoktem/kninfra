@@ -65,21 +65,19 @@ def get_last_synced(data, request):
     return giedo.get_last_synced()
 
 
-def close_note(data, request):
-    """ Wraps Note.close()
+def delete_note(data, request):
+    """ Wraps Note.delete()
 
-          >> {action:"close_note", id: "5038b134d4080073f410fafd"}
+          >> {action:"delete_note", id: "5038b134d4080073f410fafd"}
           << {ok: true}
-        ( << {ok: false, error: "Note already closed"} ) """
+        ( << {ok: false, error: "Note not found"} ) """
     if 'secretariaat' not in request.user.cached_groups_names:
         return {'ok': False, 'error': 'Permission denied'}
     note = Es.note_by_id(_id(data.get('id')))
     if note is None:
         return {'ok': False, 'error': 'Note not found'}
-    if not note.open:
-        return {'ok': False, 'error': 'Note already closed'}
-    note.close(_id(request.user))
-    render_then_email('leden/note-closed.mail.html',
+    note.delete()
+    render_then_email('leden/note-deleted.mail.html',
                       Es.by_name('secretariaat').canonical_full_email, {
                           'note': note}, headers={
                               'In-Reply-To': note.messageId,
@@ -269,7 +267,7 @@ def adduser_suggest_username(data, request):
 ACTION_HANDLER_MAP = {
     'entity_humanName_by_id': entity_humanName_by_id,
     'entities_by_keyword': entities_by_keyword,
-    'close_note': close_note,
+    'delete_note': delete_note,
     'entity_set_property': entity_set_property,
     'entity_update_primary': entity_update_primary,
     'entity_update_visibility': entity_update_visibility,

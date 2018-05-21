@@ -17,5 +17,8 @@
 </li>
 {% endfor %}{# n in notes #}
 </ul>
+{% if not notes %}
+<p>Er zijn geen openstaande notities.</p>
+{% endif %}
 {{ block.super }}
 {% endblock %}

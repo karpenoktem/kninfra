@@ -131,11 +131,8 @@ ncol = db['notes']      # notes on entities by the secretaris
 # ----------------------------------------------------------------------
 # { "_id" : ObjectId("4e99b5460032a006e3000013"),
 #   "on" : ObjectId("4e6fcc85e60edf3dc000029d"),
-#   "closed_by" : ObjectId("4e6fcc85e60edf3dc00001d4"),
 #   "note" : "Adres veranderd. Was:  (...) Nijmegen",
 #   "at" : ISODate("2011-03-24T00:00:00Z"),
-#   "closed_at" : ISODate("2012-08-25T14:53:17.413Z"),
-#   "open" : false,
 #   "by" : ObjectId("4e6fcc85e60edf3dc0000410")
 # }
 
@@ -172,8 +169,6 @@ def ensure_indices():
                        ('from', -1)])
     # notes
     ncol.ensure_index([('on', 1),
-                       ('at', 1)])
-    ncol.ensure_index([('open', 1),
                        ('at', 1)])
     # informacie notifications
     incol.ensure_index('when')
@@ -698,19 +693,9 @@ def note_by_id(the_id):
     return None if tmp is None else Note(tmp)
 
 
-def get_open_notes():
-    # Prefetch the `by' field.  (We do not need to prefetch the `closed_by'
-    # fields, obviously.)
-    ds = ncol.find({'open': True}, ['by'])
-    ids = set()
-    for d in ds:
-        if d['by'] is not None:
-            ids.add(d['by'])
-    lut = by_ids(list(ids))
-    lut[None] = None
-    # Actually fetch the notes.
-    for d in ncol.find({'open': True}, sort=[('at', 1)]):
-        yield Note(d, lut[d['by']])
+def get_notes():
+    for d in ncol.find({}, sort=[('at', 1)]):
+        yield Note(d)
 
 # Functions to work with informacie-notifications
 # ######################################################################
@@ -1099,29 +1084,14 @@ class Entity(SONWrapper):
         dt = now()
         note = Note({'note': what,
                      'on': self._id,
-                     'open': True,
                      'by': None if by is None else _id(by),
-                     'at': dt,
-                     'closed_by': None,
-                     'closed_at': None})
+                     'at': dt})
         note.save()
         return note
 
     def get_notes(self):
-        # Prefetch the entities referenced in the by and closed_by fields
-        # of the notes.
-        ds = ncol.find({'on': self._id}, ['by', 'closed_by'])
-        ids = set()
-        for d in ds:
-            if d['by'] is not None:
-                ids.add(d['by'])
-            if d.get('closed_by') is not None:
-                ids.add(d['closed_by'])
-        lut = by_ids(list(ids))
-        lut[None] = None
-        # Actually fetch the notes.
         for d in ncol.find({'on': self._id}, sort=[('at', 1)]):
-            yield Note(d, lut[d['by']], lut[d.get('closed_by')])
+            yield Note(d)
 
     def __eq__(self, other):
         if not isinstance(other, Entity):
@@ -1493,18 +1463,13 @@ class Brand(Entity):
 
 
 class Note(SONWrapper):
-
-    def __init__(self, data, prefetched_by=None, prefetched_closed_by=None):
-        super(Note, self).__init__(data, ncol)
-        self._cached_by = prefetched_by
-        self._cached_closed_by = prefetched_closed_by
     at = son_property(('at',))
-    closed_at = son_property(('closed_at',))
     note = son_property(('note',))
     by_id = son_property(('by',))
     on_id = son_property(('on',))
-    closed_by_id = son_property(('closed_by',))
-    open = son_property(('open',), True)
+
+    def __init__(self, data):
+        super(Note, self).__init__(data, ncol)
 
     @property
     def id(self):
@@ -1516,30 +1481,11 @@ class Note(SONWrapper):
 
     @property
     def by(self):
-        if self._cached_by is not None:
-            return self._cached_by
-        if self._data['by'] is None:
-            return None
         return by_id(self._data['by'])
 
     @property
     def messageId(self):
         return '<note/%s@%s>' % (self.id, settings.MAILDOMAIN)
-
-    @property
-    def closed_by(self):
-        if self._cached_closed_by is not None:
-            return self._cached_closed_by
-        if self._data['closed_by'] is None:
-            return None
-        return by_id(self._data['closed_by'])
-
-    def close(self, closed_by_id, save_now=True):
-        self._data['closed_by'] = closed_by_id
-        self._data['closed_at'] = now()
-        self._data['open'] = False
-        if save_now:
-            self.save()
 
 
 class InformacieNotification(SONWrapper):
