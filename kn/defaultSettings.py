@@ -192,7 +192,6 @@ def defaultSettings(glbls):
         'stukken': d.BASE_URL + '/groups/leden/',
         'wiki': d.BASE_URL + '/wiki',
         'wiki-home': d.BASE_URL + '/wiki/Hoofdpagina',
-        'forum': d.BASE_URL + '/forum/',
         'irc': d.BASE_URL + '/irc',
     }
 

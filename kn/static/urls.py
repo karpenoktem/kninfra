@@ -146,7 +146,7 @@ urlpatterns = [
         name='intro2010'),
 
     # legacy redirect URLs
-    url(_(r'^hink-stap/(?P<name>wiki|forum|stukken)$'),
+    url(_(r'^hink-stap/(?P<name>wiki|stukken)$'),
         views.hink_stap, name='hinkstap'),
 
     # Backwards compatibility
