@@ -34,8 +34,12 @@ var object_id = '{{ object.id }}';
   </dd>
   <dt>{% trans "Telefoonnummer" %}</dt>
   <dd>
-    {{ object.primary_telephone }}
-    <label title="{% trans "Of het telefoonnummer voor alle leden zichtbaar is" %}"><input type="checkbox" {% if object.visibility.telephone %}checked{% endif %} data-action="entity_update_visibility:telephone"> {% trans "zichtbaar" %} <span class="progress"></span></label>
+    {% if object.primary_telephone %}
+      {{ object.primary_telephone }}
+      <label title="{% trans "Of het telefoonnummer voor alle leden zichtbaar is" %}"><input type="checkbox" {% if object.visibility.telephone %}checked{% endif %} data-action="entity_update_visibility:telephone"> {% trans "zichtbaar" %} <span class="progress"></span></label>
+    {% else %}
+      Geen telefoonnummer geregistreerd.
+    {% endif %}
   </dd>
   <dt>{% trans "Geboortedatum" %}</dt>
   <dd>
