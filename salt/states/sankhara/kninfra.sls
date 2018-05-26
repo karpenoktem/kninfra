@@ -15,6 +15,7 @@ kninfra packages:
             - python3-pyx
             - python3-unidecode
             - python3-sdnotify
+            - python3-pymysql
 
             # python2 packages for hans
             - python-six
@@ -42,12 +43,13 @@ kninfra packages:
             - python-unidecode
             - python-six
             - python-sdnotify
+            - python-pymysql
             {% endif %}
             - gettext
             - imagemagick
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'uwsgi', 'tarjan', 'reserved', 'pymysql', 'iso8601', 'google-api-python-client', 'zipseeker', 'pyasn1>=0.4.1'] %}
+{% for pkg in ['mirte', 'sarah', 'uwsgi', 'tarjan', 'reserved', 'iso8601', 'google-api-python-client', 'zipseeker', 'pyasn1>=0.4.1'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
