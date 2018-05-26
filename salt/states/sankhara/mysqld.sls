@@ -3,6 +3,7 @@ mysql packages:
         - pkgs:
             - mariadb-server
             - mariadb-client
+            - python-mysqldb # Needed for salt
 mariadb:
     service:
         - running
