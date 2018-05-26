@@ -438,7 +438,7 @@ entities:
   names: [in]
   tags: [!id '4e6fcc85e60edf3dc00000bc', !id '4ea9ce060032a04a41000001']
   types: [group, tag]
-- _id: !id '4e6fcc85e60edf3dc000007d'
+- _id: &comms_id !id '4e6fcc85e60edf3dc000007d'
   description: Alle commissies van Karpe Noktem.
   humanNames:
   - {genitive_prefix: van de, human: Commissies, name: comms}
@@ -500,6 +500,24 @@ entities:
   - {genitive_prefix: van de, human: Draai, name: draai}
   names: [draai]
   tags: [!id '4e6fcc85e60edf3dc000006d']
+  types: [group, tag]
+- description: Constructief Opererende Culinaire Koks
+  humanNames:
+  - {genitive_prefix: van de, human: COCKS, name: cocks}
+  names: [cocks]
+  tags: [*comms_id]
+  types: [group, tag]
+- description: De commissie van de soos
+  humanNames:
+  - {genitive_prefix: van de, human: SoosCie, name: sooscie}
+  names: [sooscie]
+  tags: [*comms_id]
+  types: [group, tag]
+- description: Barco
+  humanNames:
+  - {genitive_prefix: van de, human: BarCo, name: barco}
+  names: [barco]
+  tags: [*comms_id]
   types: [group, tag]
 - description: De DJ's.
   humanNames:
