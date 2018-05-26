@@ -1,7 +1,7 @@
 nfs packages:
     pkg.installed:
         - pkgs:
-            - nfs-server
+            - nfs-kernel-server
 /srv/nfs:
     file.directory
 /srv/nfs/var:

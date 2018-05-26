@@ -27,7 +27,7 @@ kninfra packages:
             {% else %}
             - python-django
             - python-dev
-            - msgpack-python
+            - python-msgpack
             - python-setuptools
             - python-pyparsing
             - python-markdown
