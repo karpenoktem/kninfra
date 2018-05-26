@@ -14,11 +14,13 @@ kninfra packages:
             - python3-httplib2
             - python3-pyx
             - python3-unidecode
+            - python3-sdnotify
 
             # python2 packages for hans
             - python-six
             - python-django
             - python-pymongo
+            - python-sdnotify
 
             # prerquisites for pyldap
             - libsasl2-dev
@@ -39,12 +41,13 @@ kninfra packages:
             - python-pyx
             - python-unidecode
             - python-six
+            - python-sdnotify
             {% endif %}
             - gettext
             - imagemagick
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'uwsgi', 'tarjan', 'reserved', 'pymysql', 'iso8601', 'google-api-python-client', 'zipseeker', 'sdnotify', 'pyasn1>=0.4.1'] %}
+{% for pkg in ['mirte', 'sarah', 'uwsgi', 'tarjan', 'reserved', 'pymysql', 'iso8601', 'google-api-python-client', 'zipseeker', 'pyasn1>=0.4.1'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
