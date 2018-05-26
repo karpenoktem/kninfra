@@ -27,6 +27,7 @@ inspircd running:
     service.running:
         - name: inspircd
         #- reload: True # ExecReload directive missing in systemd unit file
+        - enable: True
         - watch:
             - file: /etc/inspircd/inspircd.conf
             - file: /etc/inspircd/inspircd.motd
@@ -34,6 +35,7 @@ inspircd running:
 atheme services running:
     service.running:
         - name: atheme-services
+        - enable: True
         - watch:
             - file: /etc/atheme/atheme.conf
             - file: /etc/default/atheme-services

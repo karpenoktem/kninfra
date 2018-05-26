@@ -1,11 +1,13 @@
 [Unit]
-Description=moniek manages the financial accounts for giedo
+Description=Moniek reads the financial accounts for Giedo
+Requires=infra-dir.service
+After=infra-dir.service
 
 [Service]
-ExecStart=/home/sys-moniek/bin/moniek
+ExecStart=/home/sys-moniek/kninfra/bin/moniek
 EnvironmentFile=-/etc/default/moniek
 User=sys-moniek
+Type=notify
 
 [Install]
 WantedBy=multi-user.target
-

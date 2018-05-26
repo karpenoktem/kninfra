@@ -7,7 +7,6 @@ from django.utils.six.moves import range
 
 import kn.leden.entities as Es
 
-
 # Prepare for the coming change of "verenigingsjaar".
 
 

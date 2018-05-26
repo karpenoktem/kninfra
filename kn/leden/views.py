@@ -2,14 +2,11 @@
 
 import json
 import logging
-import mimetypes
-import re
+import os
 from datetime import date
 from decimal import Decimal
 from hashlib import sha256
 from itertools import chain
-from os import path
-from wsgiref.util import FileWrapper
 
 import PIL.Image
 
@@ -38,7 +35,6 @@ from kn.base.mail import render_then_email
 from kn.base.text import humanized_enum
 from kn.fotos.utils import resize_proportional
 from kn.leden import fin, giedo
-from kn.leden.auth import login_or_basicauth_required
 from kn.leden.date import date_to_dt, now
 from kn.leden.forms import (AddGroupForm, AddStudyForm, AddUserForm,
                             ChangePasswordForm)
@@ -69,7 +65,8 @@ def entity_detail(request, name=None, _id=None, type=None):
     if e is None:
         raise Http404
     if type and type not in e.types:
-        raise ValueError(_("Entiteit is niet een %s") % type)
+        # Different type than expected based on the URL.
+        return redirect(e)
     if not type:
         type = e.type
     if type not in Es.TYPE_MAP:
@@ -153,28 +150,12 @@ def _entity_detail(request, e):
                                           key=Es.entity_humanName)})
 
     # Check whether entity has a photo
-    photos_path = (path.join(settings.SMOELEN_PHOTOS_PATH, str(e.name))
-                   if e.name else None)
-    if photos_path and default_storage.exists(photos_path + '.jpg'):
-        img = PIL.Image.open(default_storage.open(photos_path + '.jpg'))
-        width, height = img.size
-        if default_storage.exists(photos_path + '.orig'):
-            # smoel was created using newer strategy. Shrink until it fits the
-            # requirements.
-            width, height = resize_proportional(img.size[0], img.size[1],
-                                                settings.SMOELEN_WIDTH,
-                                                settings.SMOELEN_HEIGHT)
-        elif width > settings.SMOELEN_WIDTH:
-            # smoel was created as high-resolution image, probably 600px wide
-            width /= 2
-            height /= 2
-        else:
-            # smoel was created as normal image, probably 300px wide
-            pass
+    photo_size = e.photo_size
+    if e.photo_size is not None:
         ctx.update({
             'hasPhoto': True,
-            'photoWidth': width,
-            'photoHeight': height})
+            'photoWidth': photo_size[0],
+            'photoHeight': photo_size[1]})
     return ctx
 
 
@@ -295,17 +276,13 @@ def years_of_birth(request):
 
 @login_required
 def users_underage(request):
-    users = sorted(Es.by_age(max_age=18), key=lambda x: x.dateOfBirth)
+    users = Es.users()
     users = filter(lambda u: u.is_active, users)
-    final_date = None
-    if users:
-        youngest = users[-1]
-        final_date = youngest.dateOfBirth.replace(
-            year=youngest.dateOfBirth.year + 18
-        )
-    return render(request, 'leden/entities_underage.html', {
-        'users': users,
-        'final_date': final_date})
+    users = filter(lambda u: u.is_underage, users)
+    users = sorted(users, key=lambda x: x.dateOfBirth)
+    return render('leden/entities_underage.html', {
+        'users': users},
+        context_instance=RequestContext(request))
 
 
 @login_required
@@ -325,8 +302,8 @@ def ik_chsmoel(request):
     if not request.user.may_upload_smoel_for(request.user):
         raise PermissionDenied
     original = default_storage.open(
-        path.join(settings.SMOELEN_PHOTOS_PATH,
-                  str(user.name)) + ".orig", 'wb+'
+        os.path.join(settings.SMOELEN_PHOTOS_PATH,
+                     str(user.name)) + ".orig", 'wb+'
     )
     for chunk in request.FILES['smoel'].chunks():
         original.write(chunk)
@@ -345,8 +322,8 @@ def ik_chsmoel(request):
                                         settings.SMOELEN_HEIGHT * 2)
     img = img.resize((width, height), PIL.Image.ANTIALIAS)
     img.save(default_storage.open(
-        path.join(settings.SMOELEN_PHOTOS_PATH,
-                  str(user.name)) + ".jpg", 'w'
+        os.path.join(settings.SMOELEN_PHOTOS_PATH,
+                     str(user.name)) + ".jpg", 'w'
     ), "JPEG")
     Es.notify_informacie('set_smoel', request.user, entity=user)
     return redirect_to_referer(request)
@@ -358,7 +335,7 @@ def user_smoel(request, name):
     if not user:
         raise Http404
     try:
-        img = default_storage.open(path.join(
+        img = default_storage.open(os.path.join(
             settings.SMOELEN_PHOTOS_PATH,
             str(user.name)) + ".jpg", 'rb')
     except IOError:
@@ -392,6 +369,21 @@ def ik_chpasswd(request):
     errstr = humanized_enum(errl)
     return render(request, 'leden/ik_chpasswd.html',
                   {'form': form, 'errors': errstr})
+
+
+@login_required
+def ik_settings(request):
+    e = request.user
+    ctx = {'object': e}
+    photo_size = e.photo_size
+    if e.photo_size is not None:
+        ctx.update({
+            'hasPhoto': True,
+            'photoWidth': photo_size[0],
+            'photoHeight': photo_size[1]})
+    return render_to_response('leden/settings.html',
+                              ctx,
+                              context_instance=RequestContext(request))
 
 
 def rauth(request):
@@ -565,7 +557,7 @@ def secr_notes(request):
     if 'secretariaat' not in request.user.cached_groups_names:
         raise PermissionDenied
     return render(request, 'leden/secr_notes.html',
-                  {'notes': Es.get_open_notes()})
+                  {'notes': Es.get_notes()})
 
 
 @login_required
@@ -813,48 +805,6 @@ def secr_update_site_agenda(request):
 
 
 @login_required
-def ik_openvpn(request):
-    password_incorrect = False
-    if 'want' in request.POST and 'password' in request.POST:
-        # TODO password versions
-        if request.user.check_password(request.POST['password']):
-            giedo.change_password(str(request.user.name),
-                                  request.POST['password'],
-                                  request.POST['password'])
-            giedo.openvpn_create(str(request.user.name),
-                                 request.POST['want'])
-            messages.info(request, _("Je verzoek wordt verwerkt. "
-                                     "Verwacht binnen 5 minuten een e-mail."))
-            return HttpResponseRedirect(reverse('smoelen-home'))
-        else:
-            password_incorrect = True
-    return render(request, 'leden/ik_openvpn.html',
-                  {'password_incorrect': password_incorrect})
-
-
-@login_or_basicauth_required
-def ik_openvpn_download(request, filename):
-    m1 = re.match('^openvpn-install-([0-9a-f]+)-([^.]+)\.exe$', filename)
-    m2 = re.match('^openvpn-config-([^.]+)\.zip$', filename)
-    if not m1 and not m2:
-        raise Http404
-    if m1 and m1.group(2) != str(request.user.name):
-        raise PermissionDenied
-    if m2 and m2.group(1) != str(request.user.name):
-        raise PermissionDenied
-    p = path.join(settings.VPN_INSTALLER_PATH, filename)
-    if not default_storage.exists(p):
-        raise Http404
-    response = HttpResponse(
-        FileWrapper(default_storage.open(p, 'rb')),
-        content_type=mimetypes.guess_type(default_storage.path(p))[0]
-    )
-    response['Content-Length'] = default_storage.size(p)
-    # XXX use ETags and returns 304's
-    return response
-
-
-@login_required
 def balans(request):
     accounts = fin.get_account_entities_of(request.user)
 
@@ -867,6 +817,8 @@ def balans(request):
     accounts = [(a, a == account) for a in accounts]
 
     balans = giedo.fin_get_account(account)
+    if 'error' in balans:
+        raise ValueError('error while retrieving balans: ' + balans['error'])
     return render(request, 'leden/balans.html',
                   {'balans': fin.BalansInfo(balans),
                    'quaestor': fin.quaestor(),

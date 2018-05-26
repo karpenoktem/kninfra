@@ -37,3 +37,8 @@ li form {
 #block-add-study.visible {
 	display: block;
 }
+
+input + .progress {
+	color: #888;
+	font-style: italic;
+}

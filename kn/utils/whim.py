@@ -8,6 +8,7 @@ import threading
 
 import mirte
 import msgpack
+import sdnotify
 
 
 """ Whim is a very simple server/client protocol.
@@ -20,9 +21,10 @@ import msgpack
 
 class WhimClient(object):
 
-    def __init__(self, address, family='unix'):
+    def __init__(self, address, family='unix', timeout=10):
         self._address = address
         self._family = family
+        self._timeout = timeout
         self._connect()
         self.w_lock = threading.Lock()
         self.n_send_lock = threading.Lock()
@@ -34,6 +36,9 @@ class WhimClient(object):
         self.msg_lut = {}
         self.got_reader = False
 
+    def __str__(self):
+        return '<WhimClient %s>' % self._address
+
     def _connect(self):
         """ (Re)connects to socket. """
         if self._family == 'tcp':
@@ -44,6 +49,7 @@ class WhimClient(object):
             raise ValueError('unknown family')
         self.s = socket.socket(sf, socket.SOCK_STREAM)
         self.s.connect(self._address)
+        self.s.settimeout(self._timeout)
         self.f = self.s.makefile(mode='wb')
 
     def _send(self, bs):
@@ -157,8 +163,8 @@ class WhimDaemon(object):
         ls.bind(self.address)
         if self.family == 'unix':
             os.chmod(self.address, 0o600)
-        self.pre_mainloop()
         ls.listen(8)
+        self.pre_mainloop()
         while True:
             rs, ws, xs = select.select(list(self.sockets) + [ls],
                                        [], [])
@@ -195,6 +201,11 @@ class WhimDaemon(object):
             with wl:
                 f.write(self.packer.pack([mid, ret]))
                 f.flush()
+
+    def notify_systemd(self):
+        """ Notify systemd that this process is ready.
+            Might be useful to call form overloaded `pre_mainloop'. """
+        sdnotify.SystemdNotifier().notify("READY=1")
 
     def handle(self, d):
         raise NotImplementedError

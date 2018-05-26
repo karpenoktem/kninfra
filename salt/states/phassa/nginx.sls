@@ -16,6 +16,7 @@ nginx packages:
 nginx running:
     service.running:
         - name: nginx
+        - enable: True
         - watch:
             - file: /etc/nginx/sites-enabled/phassa.conf
             - file: /etc/nginx/phassa.d/*.conf

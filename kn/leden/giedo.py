@@ -84,15 +84,6 @@ def fotoadmin_move_fotos(event, store, user, dir):
                                         'dir': dir})
 
 
-def openvpn_create(user, want):
-    """ Requests giedo to create an OpenVPN installer.
-        @user   the user for whom to create the installer
-        @want   either 'zip' or 'exe' """
-    get_giedo_connection().send({'type': 'openvpn_create',
-                                 'user': user,
-                                 'want': want})
-
-
 def fin_get_account(ent):
     return get_giedo_connection().send({
         'type': 'fin-get-account',

@@ -46,9 +46,9 @@
                 <div id="loginWindow" class="toggle-window">
                     <h2>{% trans "Inloggen voor leden" %}</h2>
                     <p>{% blocktrans with webcie="webcie@karpenoktem.nl"|email %}
-                        Leden kunnen hier inloggen om o.a. het smoelenboek, de wiki en
-                        het forum te bekijken. Weet je je wachtwoord niet meer, mail
-                        dan naar {{ webcie }}.{% endblocktrans %}
+                        Leden kunnen hier inloggen om o.a. het smoelenboek en
+                        de wiki te bekijken. Weet je je wachtwoord niet meer,
+                        mail dan naar {{ webcie }}.{% endblocktrans %}
                     </p>
                     <form method="POST" action="/accounts/login/">
                         {% csrf_token %}

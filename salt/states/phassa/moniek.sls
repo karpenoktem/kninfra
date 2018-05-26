@@ -16,7 +16,7 @@ moniek packages:
             {% endif %}
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'GitPython', 'pymysql'] %}
+{% for pkg in ['mirte', 'sarah', 'GitPython', 'sdnotify'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
@@ -128,4 +128,5 @@ https://github.com/awesterb/koert:
     file.managed:
         - source: salt://phassa/moniek.service
 moniek:
-    service.running
+    service.running:
+        - enable: True

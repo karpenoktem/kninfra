@@ -1,5 +1,10 @@
 [Unit]
 Description=Links Cilia socket on phassa and sankhara
+Requires=infra-dir.service
+After=infra-dir.service
 
 [Service]
-ExecStart=/root/bin/cilia-tunnel
+ExecStart=/root/kninfra/bin/cilia-tunnel
+
+[Install]
+WantedBy=multi-user.target

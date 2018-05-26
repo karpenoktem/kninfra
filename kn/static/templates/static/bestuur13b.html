@@ -61,7 +61,12 @@ functie@karpenoktem.nl of op de volgende adressen:{% endblocktrans %}</p>
   <li>{% filter email %}maxd@karpenoktem.nl{% endfilter %}</li>
 </ul>
 
-<p>&lArr; {% trans "Het vorige" %},
-<a href="{% url "bestuur13a" %}">{% trans "dertiende bestuur (oude samenstelling)." %}</a>
+<div style="float: left;">⇐ {% trans "Het vorige" %},
+<a href="{% url "bestuur13a" %}">{% trans "dertiende bestuur (oude samenstelling)" %}</a>
+</div>
+
+<div style="float: right;">{% trans "Het volgende" %},
+<a href="{% url "bestuur14" %}">{% trans "veertiende bestuur" %}</a> ⇒
+</div>
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

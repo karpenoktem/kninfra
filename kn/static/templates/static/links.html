@@ -23,8 +23,6 @@
 <p>{% trans "Maar vergeet niet" %}</p>
 <ul>
   <li><a href="{% external_url "wiki-home" %}">{% trans "onze wiki" %}</a>,</li>
-  <li><a href="{% external_url "forum" %}">{% trans "ons forum" %}</a>
-          {% trans "en" %}</li>
   {% url "zusjes" as url_zusjes %}
   <li>{% blocktrans %}de <a href="{{ url_zusjes }}">zusjes</a>.{% endblocktrans %}</li>
 </ul>

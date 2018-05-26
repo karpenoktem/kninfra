@@ -3,7 +3,8 @@ mailman packages:
         - pkgs:
             - mailman
 fcgiwrap:
-    service.running
+    service.running:
+        - enable: True
 /etc/nginx/sankhara.d/10-mailman.conf:
     file.managed:
         - source: salt://sankhara/mailman.nginx.conf

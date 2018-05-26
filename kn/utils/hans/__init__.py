@@ -19,6 +19,10 @@ class Hans(WhimDaemon):
         super(Hans, self).__init__(settings.HANS_SOCKET)
         self.mailman_lock = threading.Lock()
 
+    def pre_mainloop(self):
+        super(Hans, self).pre_mainloop()
+        self.notify_systemd()
+
     def handle(self, d):
         if d['type'] == 'maillist-get-membership':
             return maillist_get_membership(self)

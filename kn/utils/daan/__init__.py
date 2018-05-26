@@ -6,7 +6,6 @@ import threading
 from django.conf import settings
 
 from kn.utils.daan._ldap import apply_ldap_changes, ldap_setpass
-from kn.utils.daan.forum import apply_forum_changes, forum_setpass
 from kn.utils.daan.fotoadmin import (fotoadmin_create_event,
                                      fotoadmin_move_fotos)
 from kn.utils.daan.postfix import set_postfix_map, set_postfix_slm_map
@@ -23,13 +22,13 @@ class Daan(WhimDaemon):
         self.postfix_slm_lock = threading.Lock()
         self.wiki_lock = threading.Lock()
         self.quassel_lock = threading.Lock()
-        self.forum_lock = threading.Lock()
         self.ldap_lock = threading.Lock()
         self.fotoadmin_lock = threading.Lock()
 
     def pre_mainloop(self):
         super(Daan, self).pre_mainloop()
         os.chown(settings.DAAN_SOCKET, settings.INFRA_UID, -1)
+        self.notify_systemd()
 
     def handle(self, d):
         if d['type'] == 'postfix':
@@ -47,9 +46,6 @@ class Daan(WhimDaemon):
         elif d['type'] == 'ldap':
             with self.ldap_lock:
                 return apply_ldap_changes(self, d['changes'])
-        elif d['type'] == 'forum':
-            with self.forum_lock:
-                return apply_forum_changes(self, d['changes'])
         elif d['type'] == 'setpass':
             with self.ldap_lock:
                 ldap_setpass(self, d['user'], d['pass'])
@@ -57,8 +53,6 @@ class Daan(WhimDaemon):
                 wiki_setpass(self, d['user'], d['pass'])
             with self.quassel_lock:
                 quassel_setpass(self, d['user'], d['pass'])
-            with self.forum_lock:
-                forum_setpass(self, d['user'], d['pass'])
         elif d['type'] == 'fotoadmin-create-event':
             with self.fotoadmin_lock:
                 return fotoadmin_create_event(self, d['date'],

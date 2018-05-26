@@ -39,6 +39,13 @@ install wiki:
         - template: jinja
         - user: www-data
         - mode: 600
+"wiki knauth":
+    git.latest:
+        - name: https://github.com/karpenoktem/knauth
+        - target: /etc/mediawiki/knauth
+        - user: root
+    require:
+        - pkg: git
 wiki mysql grant 2:
     mysql_grants.present:
         - grant: select

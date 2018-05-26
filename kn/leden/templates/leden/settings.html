@@ -1,0 +1,77 @@
+{% extends "leden/base.html" %}
+
+{% load i18n %}
+
+{% block styles %}
+{{ block.super }}
+<link href="{{ MEDIA_URL }}leden/entity_detail.css" rel="stylesheet" />
+{% endblock styles %}
+
+{% block head %}
+<script>
+var object_id = '{{ object.id }}';
+</script>
+{{ block.super }}
+<script src="{{ MEDIA_URL }}leden/entity_detail.js" defer></script>
+{% endblock head %}
+
+{% block body %}
+
+<style>
+</style>
+<h1>{% trans "Instellingen" %}</h1>
+
+<p>
+  {% blocktrans %}
+    Hier kun je je eigen gegevens beheren die in het systeem van Karpe Noktem
+    staan. Dit overzicht is nog niet compleet. Binnenkort komen hier meer items
+    bij te staan.
+  {% endblocktrans %}
+</p>
+
+<dl>
+  <dt>{% trans "Foto" %}</dt>
+  <dd>
+    {% if hasPhoto %}
+      <img src="{% url "user-smoel" object.name %}"
+           width="{{ photoWidth }}"
+           height="{{ photoHeight }}"/>
+    {% else %}
+      Geen foto ingesteld.
+    {% endif %}
+    <form method="post" action="{% url "ik-chsmoel"  %}"
+            enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ object.id }}" />
+    <input type="file" name="smoel" accept="image/*" required />
+    <input type="submit" value="{% trans "Nieuwe foto instellen" %}" />
+    </form>
+  </dd>
+  <dt>{% trans "Telefoonnummer" %}</dt>
+  <dd>
+    {% if object.primary_telephone %}
+      {{ object.primary_telephone }}
+      <label title="{% trans "Of het telefoonnummer voor alle leden zichtbaar is" %}"><input type="checkbox" {% if object.visibility.telephone %}checked{% endif %} data-action="entity_update_visibility:telephone"> {% trans "zichtbaar" %} <span class="progress"></span></label>
+    {% else %}
+      Geen telefoonnummer geregistreerd.
+    {% endif %}
+  </dd>
+  <dt>{% trans "Geboortedatum" %}</dt>
+  <dd>
+    {% if object.dateOfBirth %}
+      {{ object.dateOfBirth|date:"Y-m-d" }}
+      <button data-action="entity_remove_property:dateOfBirth:!{% trans "Weet je zeker dat je je geboortedatum wilt verwijderen? Dit kan alleen hersteld worden door de secretaris." %}">{% trans "Verwijder" %}</button>
+      <span class="progress"></span>
+    {% else %}
+      {% trans "Geen geboortedatum geregistreerd." %}
+      {% if object.is_underage %}
+        {% trans "Wel dat je minderjarig bent." %}
+      {% else %}{# object.is_underage #}
+        {% trans "Wel dat je 18+ bent." %}
+      {% endif %}{# object.is_underage #}
+      {% trans "Als je je geboortedatum wilt instellen, vraag dat dan aan een bestuurslid." %}
+    {% endif %}
+  </dd>
+</dl>
+
+{% endblock body %}

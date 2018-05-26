@@ -79,11 +79,12 @@ urlpatterns = [
         template_name='static/bestuur13b.html'), name='bestuur13b'),
     url(_(r'^bestuur13/?$'), RedirectView.as_view(
         url='/bestuur13b', permanent=True), name='bestuur13'),
+    url(_(r'^bestuur14/?$'), TemplateView.as_view(
+        template_name='static/bestuur14.html'), name='bestuur14'),
     # TODO we want to use reverse, but it is not initialized properly
     #      at this moment in the request handler.
     url(_(r'^bestuur/?$'), RedirectView.as_view(
-        url='/bestuur13', permanent=False), name='bestuur'),
-
+        url='/bestuur14', permanent=False), name='bestuur'),
     url(_(r'^introPoster2016/?$'), TemplateView.as_view(
         template_name='static/introPoster2016.html'),
         name='introPoster2016'),
@@ -144,7 +145,7 @@ urlpatterns = [
         name='intro2010'),
 
     # legacy redirect URLs
-    url(_(r'^hink-stap/(?P<name>wiki|forum|stukken)$'),
+    url(_(r'^hink-stap/(?P<name>wiki|stukken)$'),
         views.hink_stap, name='hinkstap'),
 
     # Backwards compatibility

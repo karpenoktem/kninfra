@@ -24,9 +24,9 @@ def sesc(t):
     return t.replace('\\', '\\\\').replace(' ', '\\ ')
 
 
-def pseudo_randstr(l=12, cs=ALPHANUMUL):
+def pseudo_randstr(length=12, cs=ALPHANUMUL):
     ret = ''
-    for i in range(l):
+    for i in range(length):
         ret += cs[random.randint(0, len(cs) - 1)]
     return ret
 
@@ -73,10 +73,10 @@ def print_table(data, separator=' '):
                for y in range(len(data))])
           for x in range(len(data[0]))]
     for d in data:
-        l = ''
+        line = ''
         for i, b in enumerate(d):
-            l += b + (' ' * (ls[i] - len(b))) + separator
-        print(l)
+            line += b + (' ' * (ls[i] - len(b))) + separator
+        print(line)
 
 
 def emailfy_name(first, last):

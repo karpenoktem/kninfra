@@ -1,0 +1,84 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block styles %}
+{{ block.super }}
+<style>
+.bestuur-members {
+  display: flex;
+  justify-content: space-between;
+}
+.bestuur-members .member {
+  padding: 0 4px;
+}
+.bestuur-members .role {
+  font-size: smaller;
+}
+</style>
+{% endblock styles %}
+
+{% block body %}
+<img width="800"
+     src="{{ MEDIA_URL }}static/img/bestuur14.jpg" alt="Bestuursfoto bestuur 14"/>
+
+<div class="bestuur-members">
+  <div class="member">
+    Marieke van Ooyen
+    <div class="role">(vice-voorzitter)</div>
+  </div>
+
+  <div class="member">
+    Randy Smits
+    <div class="role">(pandcommissaris)</div>
+  </div>
+
+  <div class="member">
+    Jessie Rijniers
+    <div class="role">(voorzitter)</div>
+  </div>
+
+
+  <div class="member">
+    Niels Boer
+    <div class="role">(secretaris)</div>
+  </div>
+
+  <div class="member">
+    Cansel Sert
+    <div class="role">(penningmeester)</div>
+  </div>
+</div>
+
+<p>{% blocktrans %}Het <strong>veertiende bestuur</strong> der A.S.V. Karpe
+Noktem is een jong, maar enthousiast team van charismatische en ambitieuze
+studenten met een groot aanbod aan gevarieerde kennis.  Aan het hoofd staat als
+voorzitter <em>Jessie Rijniers</em>, die als studente International Business
+Administation veel geleerd heeft over organisaties en hier haar team mee zal
+ondersteunen. Aan haar rechterhand staat <em>Niels Boer</em>, die naast zijn
+studie Artificial Intelligence zijn thuis zal vinden in de administratie en de
+communicatie binnen en buiten de vereniging als secretaris. <em>Cansel Sert</em>
+zal als penningmeester haar kennis over 18<sup>e</sup>-eeuwse kooplieden
+gebruiken uit haar studie Nederlandse taal en cultuur om voor de financiën te
+zorgen.  <em>Randy Smits</em>, student Filosofie, zal zijn kennis over retorica
+gebruiken binnen Villa-overleggen als pandcommissaris. <em>Marieke van
+	Ooyen</em> zal haar kennis over Commerciële Economie goed gebruiken bij de PR,
+het bijhouden van de drankvoorraad en het inplannen van sociëteitsdiensten als
+vice-voorzitter.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Alle bestuursleden zijn bereikbaar op hun
+functie@karpenoktem.nl of op de volgende adressen:{% endblocktrans %}</p>
+<ul>
+  <li>{% filter email %}jessie@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}nielsb@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}cansel@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}randy@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}marieke@karpenoktem.nl{% endfilter %}</li>
+</ul>
+
+<div style="float: left;">⇐ {% trans "Het vorige" %},
+<a href="{% url "bestuur13b" %}">{% trans "dertiende bestuur (nieuwe samenstelling)" %}</a>
+</div>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}

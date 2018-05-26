@@ -383,7 +383,10 @@ class Subscription(SONWrapper):
     def send_notification(self, mutation, template=None):
         if not template:
             template = 'subscriptions/subscription-notification.mail.html'
-        cc = [self.event.owner.canonical_full_email]
+        cc = []
+        if self.event.owner.canonical_full_email:
+            # may be None when <Onbekend>
+            cc.append(self.event.owner.canonical_full_email)
         if self.invited:
             cc.append(self.inviter.canonical_full_email)
         # See RFC5322 for a description of the References and In-Reply-To

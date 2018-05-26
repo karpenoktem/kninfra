@@ -17,9 +17,9 @@ def vcard(u):
                                    given=u.first_name)
     c.add('fn')
     c.fn.value = u.full_name()
-    l = c.add('email', 'kn')
-    l.value = u.primary_email
-    l.type_paramlist = ['INTERNET']
+    le = c.add('email', 'kn')
+    le.value = u.primary_email
+    le.type_paramlist = ['INTERNET']
     c.add('X-ABLabel', 'kn').value = 'kn'
     if u.telephone is not None:
         c.add('tel', 'kn')
@@ -29,13 +29,13 @@ def vcard(u):
             u.addr_city is not None and
             u.addr_number is not None and
             u.addr_zipCode is not None):
-        l = c.add('adr', 'kn')
-        l.value = vobject.vcard.Address(' '.join((u.addr_street,
-                                                  u.addr_number)),
-                                        u.addr_city,
-                                        '',
-                                        u.addr_zipCode,
-                                        'Nederland')
+        le = c.add('adr', 'kn')
+        le.value = vobject.vcard.Address(' '.join((u.addr_street,
+                                                   u.addr_number)),
+                                         u.addr_city,
+                                         '',
+                                         u.addr_zipCode,
+                                         'Nederland')
         c.add('x-abadr', 'kn').value = 'nl'
     return c.serialize()
 

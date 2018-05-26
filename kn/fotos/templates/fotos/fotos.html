@@ -10,7 +10,7 @@
 <script type="text/javascript"
         src="{{ MEDIA_URL }}base/jquery-ui-1.8.22/the.js" defer></script>
 {% endif %}
-<script type="text/javascript" src="{{ MEDIA_URL }}fotos/fotos.js?v=3"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}fotos/fotos.js?v=4"></script>
 <script type="text/javascript">
 'use strict';
 expandHeader = false;
@@ -42,7 +42,7 @@ if ('srcset' in (new Image())) {
 {% block styles %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css"
-        href="{{ MEDIA_URL }}fotos/fotos.css?v=3" />
+        href="{{ MEDIA_URL }}fotos/fotos.css?v=4" />
 {% if fotos_admin %}
 <link rel="stylesheet" type="text/css"
     deferred-href="{{ MEDIA_URL }}base/jquery-ui-1.8.22/the.css"/>
@@ -87,13 +87,10 @@ dit album zien.{% endblocktrans %}</p>
 {% else %}
 <ul id="fotos"></ul>
 {% endif %}
-<div id="foto"></div>
-<div class="template foto-frame">
-  <div class="image-wrapper">
-    <img class="img"/>
-    <a class="nav prev"><img src="{{ MEDIA_URL }}fotos/prev.svg" alt="{% trans "Vorige" %}" title="{% trans "Vorige" %}"/></a>
-    <a class="nav next"><img src="{{ MEDIA_URL }}fotos/next.svg" alt="{% trans "Volgende" %}" title="{% trans "Volgende" %}"/></a>
-  </div>
+<div id="foto">
+  <div class="images"></div>
+  <a class="nav prev"><img src="{{ MEDIA_URL }}fotos/prev.svg" alt="{% trans "Vorige" %}" title="{% trans "Vorige" %}"/></a>
+  <a class="nav next"><img src="{{ MEDIA_URL }}fotos/next.svg" alt="{% trans "Volgende" %}" title="{% trans "Volgende" %}"/></a>
   <a class="nav close" href><img src="{{ MEDIA_URL }}fotos/close.svg" alt="{% trans "Sluiten" %}" title="{% trans "Sluiten" %}"/></a>
   <a class="nav open-sidebar" href><img src="{{ MEDIA_URL }}fotos/sidebar.svg" alt="{% trans "Tags" %}" title="{% trans "Tags" %}"/></a>
   <div class="sidebar">
@@ -137,7 +134,6 @@ dit album zien.{% endblocktrans %}</p>
       <a class="orig">{% trans "origineel" %}</a>
     </div>
   </div>
-  <link rel="prefetch" as="image" class="prefetch-image"/>
 </div>
 <div id="fotos-footer">
   <a class="download" href="?download">{% trans "Download dit fotoalbum" %}</a>

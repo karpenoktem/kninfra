@@ -1,6 +1,12 @@
 [Unit]
 Description=Daan applies changes on phassa thought up by Giedo
+Requires=infra-dir.service mongodb.service
+After=infra-dir.service mongodb.service
 
 [Service]
-ExecStart=/root/bin/daan
+ExecStart=/root/kninfra/bin/daan
 EnvironmentFile=-/etc/default/daan
+Type=notify
+
+[Install]
+WantedBy=multi-user.target

@@ -15,10 +15,10 @@ def _lines_of_file_as_set(path):
     ret = set()
     with open(path) as f:
         while True:
-            l = f.readline()
-            if not l:
+            line = f.readline()
+            if not line:
                 break
-            ret.add(l[:-1])
+            ret.add(line[:-1])
     return ret
 
 
@@ -48,24 +48,25 @@ def homedir(request, root, subdir, path):
         response['Content-Length'] = os.path.getsize(p)
         response['Content-Disposition'] = 'attachment'
         return response
-    l = set()
+    lines = set()
     if os.path.isdir(p1):
-        l.update(os.listdir(p1))
+        lines.update(os.listdir(p1))
     if os.path.isdir(p2):
-        l.update(os.listdir(p2))
+        lines.update(os.listdir(p2))
     if os.path.isfile(os.path.join(p1, '.ignore')):
-        l -= _lines_of_file_as_set(os.path.join(p1, '.ignore'))
+        lines -= _lines_of_file_as_set(os.path.join(p1, '.ignore'))
     if os.path.isfile(os.path.join(p2, '.ignore')):
-        l -= _lines_of_file_as_set(os.path.join(p2, '.ignore'))
+        lines -= _lines_of_file_as_set(os.path.join(p2, '.ignore'))
     _p = os.path.join(subdir, '...', path)
     return render(request,
                   'browser/dirlist.html',
                   {'list': [(c, os.path.join(path, c),
                    os.path.isdir(os.path.join(p1, c)) or
                    os.path.isdir(os.path.join(p2, c)))
-                            for c in sorted(l)],
+                            for c in sorted(lines)],
                    'subdir': subdir, 'root': original_root,
                    'path': _p},
                   )
+
 
 # vim: et:sta:bs=2:sw=4:

@@ -1,0 +1,11 @@
+[Unit]
+Description=Create /run/infra
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "mkdir -p /run/infra/; chgrp sys-interinfra /run/infra; chmod g+w /run/infra"
+
+[Install]
+WantedBy=multi-user.target
+

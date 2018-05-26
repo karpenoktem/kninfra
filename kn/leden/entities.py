@@ -2,11 +2,15 @@ import datetime
 import email.utils
 import functools
 import hashlib
+import os
 import re
+
+import PIL.Image
 
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.signals import user_logged_in
+from django.core.files.storage import default_storage
 from django.db.models import permalink
 from django.utils import six
 from django.utils.crypto import constant_time_compare
@@ -14,6 +18,7 @@ from django.utils.six.moves import range
 from django.utils.translation import ugettext as _
 
 from kn.base.conf import DT_MAX, DT_MIN
+from kn.fotos.utils import resize_proportional
 from kn.leden.date import now
 from kn.leden.mongo import SONWrapper, _id, db, son_property
 
@@ -39,6 +44,7 @@ ecol = db['entities']   # entities: users, group, tags, studies, ...
 #                "nick" : "Giedo",
 #                "dateOfBirth" : ISODate("..."),
 #                "titles" : [ ] },
+#   "is_underage" : false,
 #   "is_active" : 0,
 #   "emailAddresses" : [ { "email" : "...",
 #                          "from" : ISODate("2004-08-31T00:00:00Z"),
@@ -131,11 +137,8 @@ ncol = db['notes']      # notes on entities by the secretaris
 # ----------------------------------------------------------------------
 # { "_id" : ObjectId("4e99b5460032a006e3000013"),
 #   "on" : ObjectId("4e6fcc85e60edf3dc000029d"),
-#   "closed_by" : ObjectId("4e6fcc85e60edf3dc00001d4"),
 #   "note" : "Adres veranderd. Was:  (...) Nijmegen",
 #   "at" : ISODate("2011-03-24T00:00:00Z"),
-#   "closed_at" : ISODate("2012-08-25T14:53:17.413Z"),
-#   "open" : false,
 #   "by" : ObjectId("4e6fcc85e60edf3dc0000410")
 # }
 
@@ -172,8 +175,6 @@ def ensure_indices():
                        ('from', -1)])
     # notes
     ncol.ensure_index([('on', 1),
-                       ('at', 1)])
-    ncol.ensure_index([('open', 1),
                        ('at', 1)])
     # informacie notifications
     incol.ensure_index('when')
@@ -330,19 +331,6 @@ def by_year_of_birth(year):
                         'person.dateOfBirth': {
                             '$lt': datetime.datetime(year + 1, 1, 1),
                             '$gte': datetime.datetime(year, 1, 1)}}):
-        yield entity(m)
-
-
-def by_age(max_age=None):
-    """ Finds entities under a certain age """
-    # This function could be extended to allow for a range of ages (e.g. adding
-    # a min_age argument)
-    date = datetime.date.today()
-    date = date.replace(year=date.year - max_age)
-    dt = datetime.datetime.combine(date, datetime.time(0, 0, 0, 0))
-    for m in ecol.find({'types': 'user',
-                        'person.dateOfBirth': {
-                            '$gt': dt}}):
         yield entity(m)
 
 
@@ -699,19 +687,9 @@ def note_by_id(the_id):
     return None if tmp is None else Note(tmp)
 
 
-def get_open_notes():
-    # Prefetch the `by' field.  (We do not need to prefetch the `closed_by'
-    # fields, obviously.)
-    ds = ncol.find({'open': True}, ['by'])
-    ids = set()
-    for d in ds:
-        if d['by'] is not None:
-            ids.add(d['by'])
-    lut = by_ids(list(ids))
-    lut[None] = None
-    # Actually fetch the notes.
-    for d in ncol.find({'open': True}, sort=[('at', 1)]):
-        yield Note(d, lut[d['by']])
+def get_notes():
+    for d in ncol.find({}, sort=[('at', 1)]):
+        yield Note(d)
 
 # Functions to work with informacie-notifications
 # ######################################################################
@@ -1065,6 +1043,32 @@ class Entity(SONWrapper):
             self.save()
 
     @property
+    def photo_size(self):
+        if not self.name:
+            return None
+        path = os.path.join(settings.SMOELEN_PHOTOS_PATH, str(self.name))
+
+        if not default_storage.exists(path + '.jpg'):
+            return None
+        img = PIL.Image.open(default_storage.open(path + '.jpg'))
+        width, height = img.size
+        if default_storage.exists(path + '.orig'):
+            # smoel was created using newer strategy. Shrink until it fits the
+            # requirements.
+            width, height = resize_proportional(img.size[0], img.size[1],
+                                                settings.SMOELEN_WIDTH,
+                                                settings.SMOELEN_HEIGHT)
+        elif width > settings.SMOELEN_WIDTH:
+            # smoel was created as high-resolution image, probably 600px wide
+            width /= 2
+            height /= 2
+        else:
+            # smoel was created as normal image, probably 300px wide
+            pass
+
+        return width, height
+
+    @property
     def canonical_full_email(self):
         """ Returns the string
 
@@ -1103,29 +1107,14 @@ class Entity(SONWrapper):
         dt = now()
         note = Note({'note': what,
                      'on': self._id,
-                     'open': True,
                      'by': None if by is None else _id(by),
-                     'at': dt,
-                     'closed_by': None,
-                     'closed_at': None})
+                     'at': dt})
         note.save()
         return note
 
     def get_notes(self):
-        # Prefetch the entities referenced in the by and closed_by fields
-        # of the notes.
-        ds = ncol.find({'on': self._id}, ['by', 'closed_by'])
-        ids = set()
-        for d in ds:
-            if d['by'] is not None:
-                ids.add(d['by'])
-            if d.get('closed_by') is not None:
-                ids.add(d['closed_by'])
-        lut = by_ids(list(ids))
-        lut[None] = None
-        # Actually fetch the notes.
         for d in ncol.find({'on': self._id}, sort=[('at', 1)]):
-            yield Note(d, lut[d['by']], lut[d.get('closed_by')])
+            yield Note(d)
 
     def __eq__(self, other):
         if not isinstance(other, Entity):
@@ -1410,14 +1399,41 @@ class User(Entity):
     def dateOfBirth(self):
         return self._data.get('person', {}).get('dateOfBirth')
 
+    def set_dateOfBirth(self, dateOfBirth, save=True):
+        if 'person' not in self._data:
+            self._data['person'] = {}
+        self._data['person']['dateOfBirth'] = dateOfBirth
+        if 'is_underage' in self._data:
+            del self._data['is_underage']
+        if save:
+            self.save()
+
+    def remove_dateOfBirth(self, save=True):
+        """ Remove date of birth property """
+
+        person = self._data.get('person', {})
+        if 'dateOfBirth' in person:
+            self._data['is_underage'] = self.is_underage
+            person['dateOfBirth'] = None
+            if save:
+                self.save()
+
     @property
     def age(self):
         # age is a little difficult to calculate because of leap years
         # see http://stackoverflow.com/a/9754466
         today = datetime.date.today()
-        born = self.dateOfBirth
-        return (today.year - born.year
-                - ((today.month, today.day) < (born.month, born.day)))
+        date = self.dateOfBirth
+        if not date:
+            return None
+        return (today.year - date.year
+                - ((today.month, today.day) < (date.month, date.day)))
+
+    @property
+    def is_underage(self):
+        if self.age is not None:
+            return self.age < 18
+        return self._data['is_underage']
 
     @property
     def got_unix_user(self):
@@ -1513,18 +1529,13 @@ class Brand(Entity):
 
 
 class Note(SONWrapper):
-
-    def __init__(self, data, prefetched_by=None, prefetched_closed_by=None):
-        super(Note, self).__init__(data, ncol)
-        self._cached_by = prefetched_by
-        self._cached_closed_by = prefetched_closed_by
     at = son_property(('at',))
-    closed_at = son_property(('closed_at',))
     note = son_property(('note',))
     by_id = son_property(('by',))
     on_id = son_property(('on',))
-    closed_by_id = son_property(('closed_by',))
-    open = son_property(('open',), True)
+
+    def __init__(self, data):
+        super(Note, self).__init__(data, ncol)
 
     @property
     def id(self):
@@ -1536,30 +1547,11 @@ class Note(SONWrapper):
 
     @property
     def by(self):
-        if self._cached_by is not None:
-            return self._cached_by
-        if self._data['by'] is None:
-            return None
         return by_id(self._data['by'])
 
     @property
     def messageId(self):
         return '<note/%s@%s>' % (self.id, settings.MAILDOMAIN)
-
-    @property
-    def closed_by(self):
-        if self._cached_closed_by is not None:
-            return self._cached_closed_by
-        if self._data['closed_by'] is None:
-            return None
-        return by_id(self._data['closed_by'])
-
-    def close(self, closed_by_id, save_now=True):
-        self._data['closed_by'] = closed_by_id
-        self._data['closed_at'] = now()
-        self._data['open'] = False
-        if save_now:
-            self.save()
 
 
 class InformacieNotification(SONWrapper):

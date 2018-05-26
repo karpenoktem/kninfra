@@ -139,6 +139,7 @@ def _set_metadata(data, request):
         entity.set_rotation(rotation, save=False)
 
         result['largeSize'] = entity.get_cache_size('large')
+        result['large2xSize'] = entity.get_cache_size('large2x')
 
     if entity._type in ['foto', 'video']:
         if 'description' not in data:
@@ -160,6 +161,7 @@ def _set_metadata(data, request):
         entity.set_tags(tags, save=True)
 
         result['thumbnailSize'] = entity.get_cache_size('thumb')
+        result['thumbnail2xSize'] = entity.get_cache_size('thumb2x')
 
     entity.set_title(title, save=False)
 

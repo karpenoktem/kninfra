@@ -3,7 +3,6 @@ import datetime
 
 import kn.leden.entities as Es
 
-
 # In the old administration, we only registered membership of `leden' rounded
 # to years.  However, we kept the registration date separately.  In the
 # conversion to Mongo, we have stored this registration date in

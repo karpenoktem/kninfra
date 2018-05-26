@@ -18,7 +18,6 @@ op deze website en daar buiten:{% endblocktrans %}</p>
 {% store_external_url "wiki-home" as url_wiki_home %}
 {% url "fotos" "" as url_fotos %}
 {% url "aktanokturna" as url_akta %}
-{% store_external_url "forum" as url_forum %}
 {% store_external_url "irc" as url_irc %}
 <ul>
     <li>{% blocktrans %}De ledenadministratie aka het
@@ -44,8 +43,6 @@ op deze website en daar buiten:{% endblocktrans %}</p>
     <li>{% blocktrans %}Een <a href="{{ url_wiki_home }}">wiki</a> waar iedereen
         voor de vereniging nuttige informatie op kan
         plempen.</a>{% endblocktrans %}</li>
-    <li>{% blocktrans %}Het <a href="{{ url_forum }}">forum</a>, dat helaas
-        nauwelijks meer wordt gebruikt.{% endblocktrans %}</li>
     <li>{% blocktrans %}Een <a href="{{ url_irc }}">chatkanaal</a> (IRC),
         zie <a href="{{ url_wiki }}/IRC"
             >het wiki-artikel</a>.{% endblocktrans %}</li>
@@ -58,9 +55,8 @@ op deze website en daar buiten:{% endblocktrans %}</p>
 <h2>{% trans "Gegevens en instellingen" %}</h2>
 
 <ul>
-    <li><a href="{{ user.get_absolute_url }}">{% blocktrans %}Verander je profiel
-            (profielfoto, zichbaarheid telefoonnummer){% endblocktrans %}</a></li>
     <li><a href="{% url "chpasswd" %}">{% trans "Verander je wachtwoord" %}</a></li>
+    <li><a href="{% url "ik-settings" %}">{% trans "Instellingen" %}</a></li>
     <li><a href="{% url "balans" %}">{% trans "Bekijk je balans." %}</a></li>
 </ul>
 

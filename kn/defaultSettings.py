@@ -6,7 +6,6 @@ import locale
 
 from django.utils.translation import ugettext_lazy as _
 
-
 # We want smart default. Eg: on a particular installation BASE_URL might be
 # overwritten (default: karpenoktem.nl).  However, if it is, we want other
 # defaults, which depend on BASE_URL, to use the overwritten BASE_URL.
@@ -30,7 +29,6 @@ def defaultSettings(glbls):
     d.VILLANET_SECRET_API_KEY = None
     # These should be of the form ('host', 'user', 'password', 'db')
     d.WIKI_MYSQL_SECRET = None
-    d.FORUM_MYSQL_SECRET = None
     d.WOLK_MYSQL_SECRET = None
 
     d.DOMAINNAME = 'karpenoktem.nl'
@@ -104,13 +102,6 @@ def defaultSettings(glbls):
 
     d.PHOTOS_DIR = '/var/fotos'
     d.USER_DIRS = '/mnt/phassa/home/'
-
-    d.VPN_COMMONNAME_POSTFIX = '.vpn.' + d.DOMAINNAME
-    d.VPN_OPENSSL_CONFIG = 'kn-openssl.cnf'
-    d.VPN_KEYSTORE = d.INFRA_HOME + '/vpnkeys'
-    d.VPN_INSTALLER_STORAGE = d.STORAGE_ROOT + '/openvpn'
-    d.VPN_INSTALLER_PATH = 'openvpn'
-    d.VPN_INSTALLER_REPOS = d.INFRA_HOME + '/openvpn'
 
     d.QUASSEL_CONFIGDIR = '/var/lib/quassel'
 
@@ -208,7 +199,6 @@ def defaultSettings(glbls):
         'stukken': d.BASE_URL + '/groups/leden/',
         'wiki': d.BASE_URL + '/wiki',
         'wiki-home': d.BASE_URL + '/wiki/Hoofdpagina',
-        'forum': d.BASE_URL + '/forum/',
         'irc': d.BASE_URL + '/irc',
     }
 

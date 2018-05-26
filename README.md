@@ -120,8 +120,6 @@ Naast de website draaien we nog een heleboel andere diensten, zoals
  * Een [IRC Server](https://karpenoktem.nl/irc) die draait op
    [inspircd](http://www.inspircd.org) en
    [atheme](http://atheme.net/atheme.html).
- * Een [punbb](http://punbb.informer.com)
-   [forum](https://karpenoktem.nl/forum)
 
 En nog een aantal die niet *user-facing* zijn:
 

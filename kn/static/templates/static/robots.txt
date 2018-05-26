@@ -1,8 +1,13 @@
 User-agent: *
-Disallow: {{ MEDIA_URL }}base/common.js
 Disallow: /fotos/
+Disallow: /en/photos/
+Disallow: /nl/photos/
 Disallow: /foto/
+Disallow: /en/foto/
+Disallow: /nl/foto/
 Disallow: /~bas/
 Disallow: /mailman/archives/
 Disallow: /groups/leden/aktas/
+Disallow: /en/groups/leden/aktas/
+Disallow: /nl/groups/leden/aktas/
 Disallow: /kndjango.fcgi/

@@ -49,7 +49,7 @@ voor
 {% if account == user %}
 {% blocktrans with bedrag=balans.abstotal %} 
 Volgens de boekhouding ben je 
-ons nog  <strong>€&nbsp;{{ bedrag }}</strong> veschuldigd.
+ons nog  <strong>€&nbsp;{{ bedrag }}</strong> verschuldigd.
 {% endblocktrans %}
 {% else %}
 {% blocktrans with bedrag=balans.abstotal naam=account.humanName \

@@ -1,7 +1,13 @@
 [Unit]
 Description=Hans handles Mailman for Giedo
+Requires=infra-dir.service
+After=infra-dir.service
 
 [Service]
 ExecStart=/home/infra/bin/hans
 EnvironmentFile=-/etc/default/hans
 User=infra
+Type=notify
+
+[Install]
+WantedBy=multi-user.target

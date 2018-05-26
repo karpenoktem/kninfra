@@ -9,11 +9,8 @@ from django.conf import settings
 import kn.leden.entities as Es
 from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.db import update_db
-from kn.utils.giedo.forum import generate_forum_changes
 from kn.utils.giedo.fotos import scan_fotos
 from kn.utils.giedo.mailman import generate_mailman_changes
-from kn.utils.giedo.openvpn import (create_openvpn_installer,
-                                    create_openvpn_zip, generate_openvpn_zips)
 from kn.utils.giedo.postfix import (generate_postfix_map,
                                     generate_postfix_slm_map)
 from kn.utils.giedo.quassel import generate_quassel_changes
@@ -28,39 +25,41 @@ class Giedo(WhimDaemon):
 
     def __init__(self):
         super(Giedo, self).__init__(settings.GIEDO_SOCKET)
-        self.l = logging.getLogger('giedo')
+        self.log = logging.getLogger('giedo')
         self.last_sync_ts = 0
-        self.daan, self.cilia, self.moniek = None, None, None
+        self.daan, self.cilia, self.moniek, self.hans = None, None, None, None
         try:
             self.daan = WhimClient(settings.DAAN_SOCKET)
-        except:
-            self.l.exception("Couldn't connect to daan")
+        except Exception:
+            self.log.exception("Couldn't connect to daan")
         try:
             self.cilia = WhimClient(settings.CILIA_SOCKET)
-        except:
-            self.l.exception("Couldn't connect to cilia")
+        except Exception:
+            self.log.exception("Couldn't connect to cilia")
         try:
             self.moniek = WhimClient(settings.MONIEK_SOCKET)
-        except:
-            self.l.exception("Couldn't connect to moniek")
+        except Exception:
+            self.log.exception("Couldn't connect to moniek")
         try:
             self.hans = WhimClient(settings.HANS_SOCKET)
-        except:
-            self.l.exception("Couldn't connect to hans")
+        except Exception:
+            self.log.exception("Couldn't connect to hans")
         self.mirte = mirte.get_a_manager()
         self.threadPool = self.mirte.get_a('threadPool')
         self.operation_lock = threading.Lock()
-        self.openvpn_lock = threading.Lock()
         self.ss_actions = (
             ('postfix', self.daan, self._gen_postfix),
             ('postfix-slm', self.daan, self._gen_postfix_slm),
             ('mailman', self.hans, self._gen_mailman),
-            ('forum', self.daan, self._gen_forum),
             ('unix', self.cilia, self._gen_unix),
             ('wiki', self.daan, self._gen_wiki),
             ('ldap', self.daan, self._gen_ldap),
             ('wolk', self.cilia, self._gen_wolk),
             ('quassel', self.daan, self._gen_quassel))
+
+    def pre_mainloop(self):
+        super(Giedo, self).pre_mainloop()
+        self.notify_systemd()
 
     def _gen_quassel(self):
         return {'type': 'quassel',
@@ -90,17 +89,9 @@ class Giedo(WhimDaemon):
         return {'type': 'wiki',
                 'changes': generate_wiki_changes(self)}
 
-    def _gen_forum(self):
-        return {'type': 'forum',
-                'changes': generate_forum_changes(self)}
-
     def _gen_unix(self):
         return {'type': 'unix',
                 'map': generate_unix_map(self)}
-
-    def _sync_openvpn(self):
-        with self.openvpn_lock:
-            generate_openvpn_zips(self)
 
     def sync(self):
         update_db_start = time.time()
@@ -110,11 +101,12 @@ class Giedo(WhimDaemon):
         todo_lock = threading.Lock()
         todo_event = threading.Event()
 
-        def _sync_action(func, *args):
+        def _sync_action(func, name, daemon, action):
             try:
-                func(*args)
+                func(name, daemon, action)
             except Exception:
-                logging.exception("Uncaught exception")
+                logging.exception('uncaught exception in %s (daemon %s)' %
+                                  (name, daemon))
             with todo_lock:
                 todo[0] -= 1
                 if todo[0] == 0:
@@ -131,9 +123,8 @@ class Giedo(WhimDaemon):
             logging.info("send %s %.4f (%s to go)" %
                          (name, elapsed, todo[0] - 1))
 
-        for act in self.ss_actions:
-            self.threadPool.execute(_sync_action, _entry, *act)
-        self.threadPool.execute(self._sync_openvpn)
+        for action in self.ss_actions:
+            self.threadPool.execute(_sync_action, _entry, *action)
         todo_event.wait()
         self.last_sync_ts = time.time()
 
@@ -176,17 +167,6 @@ class Giedo(WhimDaemon):
         elif d['type'] == 'fotoadmin-scan-fotos':
             with self.operation_lock:
                 return scan_fotos()
-        elif d['type'] == 'openvpn_create':
-            with self.operation_lock:
-                # XXX hoeft niet onder de operation_lock?
-                u = Es.by_name(d['user'])
-                if u is None:
-                    return {'error': 'no such user'}
-                u = u.as_user()
-                if d['want'] == 'exe':
-                    create_openvpn_installer(self, u)
-                else:
-                    create_openvpn_zip(self, u)
         elif d['type'] == 'update-site-agenda':
             with self.operation_lock:
                 return update_site_agenda(self)
@@ -201,7 +181,10 @@ class Giedo(WhimDaemon):
                            'fin-get-gnucash-object',
                            'fin-get-years',
                            'fin-get-errors'):
-            return self.moniek.send(d)
+            try:
+                return self.moniek.send(d)
+            except IOError as e:
+                return {'error': 'IOError: ' + e.args[0]}
         elif d['type'] in ('maillist-get-moderated-lists',
                            'maillist-activate-moderation',
                            'maillist-get-moderator-cookie',

@@ -1,3 +1,6 @@
+
+var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
+
 'use strict';
 (function(){
   // Same as encodeURIComponent, but does not escape '/'.  Looks prettier.
@@ -11,13 +14,15 @@
     return ((m % n) + n) % n;
   }
 
-  function Foto(data) {
+  function Foto(data, parentPath) {
     for (var k in data) {
       this[k] = data[k];
     }
     if (!this.tags) {
       this.tags = [];
     }
+
+    this.relpath = data.path.substr(parentPath.length + 1);
 
     this.calculate_cache_urls();
   };
@@ -66,8 +71,16 @@
     this.parents = {};
     this.people = {};
     this.allpeople = [];
+    this.swipe_start = null;
+    this.swipe_moved = null;
+    this.zoom_distance = null; // pinch-zoom action
+    this.zoom_center = null;   // pinch-zoom action
+    this.zoom_current = null;  // pinch-zoom action
+    this.zoom_previous = null; // zoom session
+    this.zoom_pan = null;      // pan action
     this.read_fotos(this.get_url_path(), data);
     this.nav_timeout = null;
+    this.init_foto_frame();
   };
 
   KNF.prototype.change_path = function(path, query, keep_url) {
@@ -119,7 +132,7 @@
           this.search_results = {};
           var prev = null;
           for (var i=0; i<data.results.length; i++) {
-            var foto = new Foto(data.results[i]);
+            var foto = new Foto(data.results[i], this.path);
             if (foto.type != 'album') {
               if (prev !== null) {
                 prev.next = foto;
@@ -283,7 +296,7 @@
     if (!data.children) return;
     var prev = null;
     $.each(data.children, function(i, c) {
-      c = new Foto(c);
+      c = new Foto(c, path);
       album.children[c.name] = c;
 
       if (prev !== null) {
@@ -384,56 +397,235 @@
   };
 
   KNF.prototype.change_foto = function(foto, confirmed) {
-    if (this.foto) {
-      if (this.saving_status >= 2 && !confirmed) {
-        // Usually changes are saved within 100ms, so wait that time and try
-        // again.
-        setTimeout(function() {
-          if (this.saving_status < 2) {
-            this.change_foto(foto);
-          } else if (confirm('Wijzigingen zijn niet opgeslagen.\nDoorgaan?')) {
-            this.change_foto(foto, true);
-          }
-        }.bind(this), 100);
-        return;
-      }
-      $('#foto').hide();
-      $('#foto .foto-frame').remove();
-      $('html').removeClass('noscroll');
-      delete this.foto.newTags;
+    // check for unsaved changes
+    if (this.saving_status >= 2 && !confirmed) {
+      console.warn('waiting until changes are saved');
+      // Usually changes are saved within 100ms, so wait that time and try
+      // again.
+      setTimeout(function() {
+        if (this.saving_status < 2) {
+          this.change_foto(foto);
+        } else if (confirm('Wijzigingen zijn niet opgeslagen.\nDoorgaan?')) {
+          this.change_foto(foto, true);
+        }
+      }.bind(this), 100);
+      return;
     }
+
     foto = foto || null;
     if (foto && foto.type != 'foto') {
       foto = null;
     }
-    this.foto = foto;
+
+    var frame = $('#foto');
+
     if (!foto) {
+      // close photo frame if there is one
+      if (this.foto) {
+        frame.css('display', 'none'); // hide
+        $('html').removeClass('noscroll');
+        delete this.foto.newTags;
+        this.foto = null;
+      }
+      $('.images', frame).empty();
       this.apply_url(false);
       return;
     }
+
+    var direction = '';
+    if (this.foto === foto.prev) {
+      direction = 'forward';
+    } else if (this.foto === foto.next) {
+      direction = 'backward';
+    }
+
+    // Remove previous image
+    var prev = $('#foto .images img[state=prev]');
+    var current = $('#foto .images img[state=current]');
+    var next = $('#foto .images img[state=next]');
+
+    if (direction === 'forward') {
+      if (prev.length) {
+        prev.remove();
+      }
+      prev = current;
+      current = next;
+      next = null;
+
+      if (!current.length) { // current doesn't exist yet
+        var current = $('<img class="img" state="current">');
+        current.attr('data-relpath', foto.relpath);
+        current.attr('src', this.chooseFoto(foto).src);
+        $('.images', frame).append(current);
+        this.resize(current);
+      }
+
+      prev.attr('state', 'prev');
+      current.attr('state', 'current');
+      prev.css({
+        'opacity': 0,
+        'transform': 'translateX(-20px)',
+      });
+      prev.addClass('settle');
+
+      current.css({
+        'opacity': 0,
+        'transform': 'translateX(20px)',
+      });
+      current.css('opacity'); // Force a reflow
+      current.addClass('settle');
+      current.css({
+        'opacity': 1,
+        'transform': 'translateX(0)',
+      });
+
+      setTimeout(function() {
+        current.removeClass('settle');
+        if (prev.attr('state') === 'prev') {
+          prev.removeClass('settle');
+          prev.css({
+            'opacity': 0,
+            'transform': 'translateX(-9999px)',
+          });
+        }
+      }.bind(this), SWITCH_DURATION);
+    } else if (direction == 'backward') {
+      if (next.length) {
+        next.remove();
+      }
+      next = current;
+      current = prev;
+      prev = null;
+
+      if (!current.length) { // current doesn't exist yet
+        var current = $('<img class="img" state="current">');
+        current.attr('data-relpath', foto.relpath);
+        current.attr('src', this.chooseFoto(foto).src);
+        $('.images', frame).prepend(current);
+        this.resize(current);
+      }
+
+      next.attr('state', 'next');
+      current.attr('state', 'current');
+      next.css({
+        'opacity': 0,
+        'transform': 'translateX(20px)',
+      });
+      next.addClass('settle');
+
+      current.css({
+        'opacity': 0,
+        'transform': 'translateX(-20px)',
+      });
+      current.css('opacity'); // Force a reflow
+      current.addClass('settle');
+      current.css({
+        'opacity': 1,
+        'transform': 'translateX(0)',
+      });
+
+      setTimeout(function() {
+        current.removeClass('settle');
+        if (next.attr('state') == 'next') {
+          next.removeClass('settle');
+          next.css({
+            'opacity': 0,
+            'transform': 'translateX(9999px)',
+          });
+        }
+      }.bind(this), SWITCH_DURATION);
+    } else {
+      // Probably this is the first image (after clicking one).
+      $('.images', frame).empty();
+      var current = $('<img class="img" state="current">');
+      current.attr('data-relpath', foto.relpath);
+      current.attr('src', this.chooseFoto(foto).src);
+      $('.images', frame).append(current);
+      this.resize(current);
+    }
+
+    this.update_foto_frame(foto, direction);
+    $('html').addClass('noscroll');
+    frame.css('display', 'flex'); // show
+    this.onresize();
+  };
+
+  KNF.prototype.update_foto_frame = function(foto, direction) {
+    console.log('updating to', foto.name);
+    this.foto = foto;
+
+    // Reset (clear) zoom action
+    this.zoom_previous = null;
+    this.zoom_current = null;
+    this.zoom_distance = null;
+    this.zoom_center = null;
+    this.zoom_pan = null;
+
+    var frame = $('#foto');
+
+    $('.preload-image', frame).remove(); // remove old preloaders
+    var preloadHref = null;
+    if (direction == 'backward' && foto.prev && foto.prev.type === 'foto') {
+      // user will likely move to the left again
+      preloadHref = this.chooseFoto(foto.prev).src;
+    } else if (foto.next && foto.next.type === 'foto') {
+      // user will likely move to the right again
+      preloadHref = this.chooseFoto(foto.next).src;
+    }
+    if (preloadHref) {
+      var preload = $('<link rel="preload" as="image" class="preload-image"/>');
+      preload.attr('href', preloadHref);
+      preload.on('load', function(e) {
+        console.log('preload loaded:', e.target.href);
+      });
+      frame.append(preload);
+    }
+
+    // Update buttons, URL, title, etc.
     if (this.get_hash() != foto.anchor()) {
       this.apply_url(false);
     }
-    $('html').addClass('noscroll');
-    var frame = $('.foto-frame.template').clone().removeClass('template');
-    frame.appendTo('#foto');
     $('.title', frame)
         .text(foto.title ? foto.title : foto.name);
-    if (foto.prev)
+    if (foto.prev && foto.prev.type != 'album')
       $('.prev', frame)
           .attr('href', '#'+encodePath(foto.prev.anchor()));
-    if (foto.next)
+    else
+      $('.prev', frame)
+          .removeAttr('href');
+    if (foto.next && foto.next.type != 'album')
       $('.next', frame)
           .attr('href', '#'+encodePath(foto.next.anchor()));
+    else
+      $('.next', frame)
+          .removeAttr('href');
     $('.orig', frame)
         .attr('href', foto.full);
+    $('.description', frame).text(foto.description || '');
+
+    var sidebar = $('.sidebar', frame);
+    $('input.title', sidebar)
+        .val(this.foto.title)
+        .attr('placeholder', this.foto.name);
+    $('h2.title', sidebar)
+        .text(this.foto.title || this.foto.name);
+    $('.description', sidebar)
+        .val(this.foto.description);
+    $('select.visibility', sidebar)
+        .val(this.foto.visibility);
+
+    this.update_foto_tags(sidebar);
+  };
+
+  KNF.prototype.init_foto_frame = function() {
+    var frame = $('#foto');
     $('.close', frame)
-        .click(function() {
+        .on('click', function() {
           this.change_foto(null);
           return false;
         }.bind(this));
     $('.open-sidebar', frame)
-        .click(function() {
+        .on('click', function(e) {
           if (this.sidebar) {
             this.close_sidebar();
           } else {
@@ -441,18 +633,8 @@
           }
           return false;
         }.bind(this));
-    if (foto.description)
-      $('.description', frame).text(foto.description);
 
-    $('.img', frame).on('load', this.onresize.bind(this));
-    this.update_foto_src(foto);
-    if (foto.next) {
-      $('.prefetch-image', frame)
-        .attr('href', this.chooseFoto(foto.next).src);
-    }
-
-    // Define these events here, not in show_sidebar, otherwise they fire twice.
-    var sidebar = $('#foto .sidebar');
+    var sidebar = $('.sidebar', frame);
     $('form', sidebar)
         .submit(function() {
           this.save_metadata();
@@ -492,44 +674,509 @@
           return false;
         }.bind(this));
 
-    $('#foto').show();
-
-    var sidebar = $('#foto .sidebar');
-    $('input.title', sidebar)
-        .val(this.foto.title)
-        .attr('placeholder', this.foto.name);
-    $('h2.title', sidebar)
-        .text(this.foto.title || this.foto.name);
-    if (this.foto.description)
-      $('.description', sidebar)
-          .val(this.foto.description);
-    $('select.visibility', sidebar)
-        .val(this.foto.visibility);
-
-    this.update_foto_tags(sidebar);
-
     function showhide() {
       if (this.nav_timeout === null) {
-        $('#foto').addClass('show-nav');
+        frame.addClass('show-nav');
       } else {
         clearTimeout(this.nav_timeout);
       }
       this.nav_timeout = setTimeout(function() {
         this.nav_timeout = null;
-        $('#foto').removeClass('show-nav');
+        frame.removeClass('show-nav');
       }.bind(this), 1500);
     }
     frame.mousemove(showhide.bind(this));
     frame.on('touchstart', showhide.bind(this));
 
-    this.onresize();
-    $('#foto').show();
+    frame.on('touchstart', this.touchstart.bind(this));
+    frame.on('touchmove', this.touchmove.bind(this));
+    frame.on('touchend', this.touchend.bind(this));
+    frame.on('wheel', this.framewheel.bind(this));
   };
 
-  KNF.prototype.update_foto_src = function (foto) {
+  KNF.prototype.touchstart = function (e) {
+    // Ignore the third (or more) finger
+    if (e.originalEvent.touches.length > 2) return;
+
+    // A second finger was placed on the surface
+    if (e.originalEvent.touches.length == 2) {
+      var prev = $('#foto .images img[state=prev]');
+      if (prev.length) {
+        // Possibly within a swipe to the right. Let this image disappear to the left.
+        var propsPrev = this.chooseFoto(this.foto.prev);
+        prev.css('transform', 'translateX('+Math.min(0, -(this.maxWidth+propsPrev.width)/2) + 'px)')
+        prev.addClass('settle');
+        setTimeout(function() {
+          prev.removeClass('settle');
+          prev.css('transform', 'translateX(-9999px)');
+        }, SWITCH_DURATION);
+      }
+
+      var next = $('#foto .images img[state=next]');
+      if (next.length) {
+        // Possibly within a swipe to the left. Fade the next image.
+        next.css({
+          'transform': 'scale(0.5)',
+          'opacity':   0,
+        });
+        next.addClass('settle');
+        setTimeout(function() {
+          next.removeClass('settle');
+          next.css('transform', 'translateX(9999px)');
+        }, SWITCH_DURATION);
+      }
+
+      if (this.zoom_pan !== null) {
+        // We were panning, but now placing a 2nd finger on the surface.
+        this.zoom_pan = null;
+        if (this.zoom_current !== null) {
+          this.zoom_previous = this.zoom_current;
+          this.zoom_current = null;
+        }
+      }
+
+      // TODO: code duplication
+      var points = [{
+        x: e.originalEvent.touches[0].clientX,
+        y: e.originalEvent.touches[0].clientY,
+      }, {
+        x: e.originalEvent.touches[1].clientX,
+        y: e.originalEvent.touches[1].clientY,
+      }];
+      var width = Math.abs(points[0].x - points[1].x);
+      var height = Math.abs(points[0].y - points[1].y);
+      // Distance between the two fingers (Pythagorean theorem)
+      // Use the changed distance to calculate the scale (zoom) and the center
+      // to calculate the movement.
+      this.zoom_distance = Math.sqrt(width*width + height*height);
+      // center between the fingers
+      this.zoom_center = {
+        x1: (points[0].x+points[1].x)/2,
+        y1: (points[0].y+points[1].y)/2,
+      };
+      // center between the fingers after move - currently the same.
+      this.zoom_center.x2 = this.zoom_center.x1;
+      this.zoom_center.y2 = this.zoom_center.y1;
+
+      if (this.zoom_previous === null) {
+        // Start a pinch-zoom session: this is the first time two are together
+        // on a surface since a switch/unzoom
+        this.zoom_previous = {
+          translateX: 0,
+          translateY: 0,
+          scale: 1,
+        };
+        // assume the first finger is points[0]
+        var moved = points[0].x - this.swipe_start;
+        this.swipe_start = null;
+        if (moved < 0) {
+          this.zoom_previous.translateX = moved;
+          console.log('extra translateX', this.zoom_previous.translateX);
+        }
+        console.log('created zoom session', this.zoom_previous);
+      }
+    } else {
+      // The first finger was placed on the surface
+      if (this.zoom_previous === null) {
+        this.swipe_start = e.originalEvent.touches[0].clientX;
+        console.log('swipe start', this.swipe_start);
+      }
+    }
+  };
+
+  KNF.prototype.touchmove = function(e) {
+    if (this.swipe_start === null && this.zoom_previous === null) return;
+
+    e.preventDefault();
+
+    // Inside a pinch-zoom operation
+    if (e.originalEvent.touches.length > 1) {
+      // TODO: code duplication
+      var points = [{
+        x: e.originalEvent.touches[0].clientX,
+        y: e.originalEvent.touches[0].clientY,
+      }, {
+        x: e.originalEvent.touches[1].clientX,
+        y: e.originalEvent.touches[1].clientY,
+      }];
+      var width = Math.abs(points[0].x - points[1].x);
+      var height = Math.abs(points[0].y - points[1].y);
+      // Distance between the two fingers (Pythagorean theorem)
+      // Use the changed distance to calculate the scale (zoom) and the center
+      // to calculate the movement.
+      var distance = Math.sqrt(width*width + height*height);
+      this.zoom_center.x2 = (points[0].x+points[1].x)/2;
+      this.zoom_center.y2 = (points[0].y+points[1].y)/2;
+      var translateX = this.zoom_center.x2-this.zoom_center.x1;
+      var translateY = this.zoom_center.y2-this.zoom_center.y1;
+      var scale = distance / this.zoom_distance;
+      this.zoom_current = {
+        translateX: this.zoom_previous.translateX + translateX,
+        translateY: this.zoom_previous.translateY + translateY,
+        scale: this.zoom_previous.scale * scale,
+      };
+      // Add the fact that we're not zooming in the middle but possibly
+      // somewhere on the edge, so the position should be adjusted.
+      // If we didn't do anything, the center of the zoom would always be the
+      // middle of the image.
+      // So what are we doing here?
+      // 1. Calculate the distance between the zoom_previous image center
+      //    (screen center + translation) and the previous touch center.
+      // 2. Scale this distance to what would be the current zoom center.
+      // 3. Subtract the distance of (1) so we get the distance between the
+      //    centers of zoom_previous and zoom_current.
+      // 4. Add this distance to the zoom_current translation.
+      var middlePointDistanceX = (this.zoom_previous.translateX + this.maxWidth/2 - this.zoom_center.x1);
+      this.zoom_current.translateX +=  middlePointDistanceX * scale - middlePointDistanceX;
+      var middlePointDistanceY = (this.zoom_previous.translateY + this.maxHeight/2 - this.zoom_center.y1);
+      this.zoom_current.translateY +=  middlePointDistanceY * scale - middlePointDistanceY;
+
+      this.apply_transform(this.zoom_current, false);
+      return;
+    }
+
+    // Move photo while zoomed - only a single finger is used now
+    if (this.zoom_previous !== null) {
+      var point = {
+        x: e.originalEvent.touches[0].clientX,
+        y: e.originalEvent.touches[0].clientY,
+      };
+      if (this.zoom_pan === null) {
+        this.zoom_pan = point;
+      } else {
+        var translateX = point.x - this.zoom_pan.x;
+        var translateY = point.y - this.zoom_pan.y;
+        this.zoom_current = {
+          translateX: this.zoom_previous.translateX + translateX,
+          translateY: this.zoom_previous.translateY + translateY,
+          scale: this.zoom_previous.scale,
+        };
+        this.apply_transform(this.zoom_current, false);
+      }
+      return;
+    }
+
+    // We're within a swipe action (to the left or right).
+
+    var moved = (e.originalEvent.touches[0].clientX - this.swipe_start);
+    if (moved > 0 && (!this.foto.prev || this.foto.prev.type === 'album')) {
+      // first photo
+      moved = 0;
+    }
+    if (moved < 0 && (!this.foto.next || this.foto.next.type === 'album')) {
+      // last photo
+      moved = 0;
+    }
+
+    this.swipe_moved = moved;
+
+    var current = $('#foto .images img[state=current]');
+    var prev = $('#foto .images img[state=prev]'); // possibly 0
+    var next = $('#foto .images img[state=next]'); // possibly 0
+
+    if (moved < 0) {
+      // Preview next image
+      if (next.length == 0) {
+        next = $('<img class="img" state="next"/>');
+        next.attr('data-relpath', this.foto.next.relpath);
+        next.attr('src', this.chooseFoto(this.foto.next).src);
+        $('#foto .images').prepend(next);
+        this.resize(next);
+      }
+      next.removeClass('settle'); // just in case
+      next.css({
+        'opacity':   Math.min(1, 1 - (this.maxWidth - -moved) / this.maxWidth),
+        'transform': 'scale(' +Math.min(1, 1 - (this.maxWidth - -moved) / this.maxWidth / 2) + ')',
+      });
+      current.css({
+        'transform': 'scale(1) translateX(' + moved + 'px)',
+        'opacity':   1,
+      });
+    } else {
+      next.css('opacity', 0);
+    }
+
+    if (moved > 0) {
+      // Preview previous image
+      var props = this.chooseFoto(this.foto.prev);
+      if (prev.length == 0) {
+        prev = $('<img class="img" state="prev"/>');
+        prev.attr('data-relpath', this.foto.prev.relpath);
+        prev.attr('src', props.src);
+        $('#foto .images').append(prev);
+        this.resize(prev);
+      }
+      prev.removeClass('settle'); // just in case
+      prev.css({
+        'transform': 'translateX('+Math.min(0, moved - (this.maxWidth+props.width)/2) + 'px)',
+        'opacity':   1,
+      });
+      current.css({
+        'transform': 'scale('+Math.min(1, 1 - moved / this.maxWidth / 2)+')',
+        'opacity':   Math.min(1, 1 - moved / this.maxWidth),
+      });
+    } else {
+      prev.css('opacity', 0);
+    }
+
+    if (moved == 0) {
+      current.css({
+        'transform': '',
+        'opacity':   1,
+      });
+    }
+  };
+
+  KNF.prototype.touchend = function(e) {
+    // ignore lifting the third (or more) finger
+    if (e.originalEvent.touches.length > 1) return;
+
+    // Lifting the 2nd finger
+    if (e.originalEvent.touches.length == 1) {
+      console.log('end of zoom - panning now', e.originalEvent.touches[0]);
+      if (this.zoom_current !== null) {
+        this.zoom_previous = this.zoom_current;
+        this.zoom_current = null;
+      }
+      return;
+    }
+
+    if (this.zoom_previous !== null) {
+      if (this.zoom_pan !== null) {
+        // End of panning
+        this.zoom_pan = null;
+        if (this.zoom_current !== null) {
+          this.zoom_previous = this.zoom_current;
+          this.zoom_current = null;
+        }
+      }
+      // Check for needed 'jump' at end of pinch zoom to center and zoom back
+      // to 100% if needed
+      var current = $('#foto .images img[state=current]');
+      if (this.fix_zoom_end(this.zoom_center.x2, this.zoom_center.y2)) {
+        console.log('end of zoom/pan gesture');
+        this.apply_transform(this.zoom_previous, true);
+      }
+
+      return;
+    }
+
+    // We haven't moved yet - it's just a tap?
+    if (this.swipe_moved === null) return;
+
+    // The swipe action has ended. See whether we should switch the image or
+    // just jump back to the current.
+
+    var moved = this.swipe_moved;
+    this.swipe_start = null;
+    this.swipe_moved = null;
+
+    var current = $('#foto .images img[state=current]').last();
+    var next = $('#foto .images img[state=next]'); // possibly 0
+    var prev = $('#foto .images img[state=prev]'); // possibly 0
+
+    if (moved < this.maxWidth / -16 && this.foto.next && this.foto.next.type != 'album') {
+      // next image
+      console.log('end of swipe: next image');
+      next.addClass('settle');
+      next.css({
+        'transform': '',
+        'opacity':   1,
+      });
+
+      var props = this.chooseFoto(this.foto);
+      current.css({
+        'transform': 'translateX('+Math.min(0, -(this.maxWidth+props.width)/2) + 'px)',
+        'opacity':   1,
+      });
+      current.addClass('settle');
+
+      prev.remove();
+      current.attr('state', 'prev');
+      next.attr('state', 'current');
+      setTimeout(function() {
+        $('#foto .images img[state=prev]')
+          .removeClass('settle')
+          .css('transform', 'translateX(-9999px)');
+        $('#foto .images img[state=current]')
+          .removeClass('settle');
+        // Create the next image (to cache)
+        // not sure whether it actually helps...
+        // TODO: code duplication
+        if (this.foto.next && this.foto.next.type != 'album' &&
+            $('#foto .images img[state=next]').length == 0) {
+          var next = $('<img class="img" state="next">');
+          next.attr('data-relpath', this.foto.next.relpath);
+          next.css('transform', 'translateX(9999px)'); // off-screen
+          next.attr('src', this.chooseFoto(this.foto.next).src);
+          $('#foto .images').prepend(next);
+          this.resize(next);
+        }
+      }.bind(this), SWITCH_DURATION);
+
+      this.update_foto_frame(this.foto.next, 'right');
+
+    } else if (moved > this.maxWidth / 16 && this.foto.prev && this.foto.prev.type != 'album') {
+      // previous image
+      console.log('end of swipe: previous image');
+      prev.css({
+        'transform': '',
+      });
+      prev.addClass('settle');
+
+      current.css({
+        'transform': 'scale(0.5)',
+        'opacity':   0,
+      });
+      current.addClass('settle');
+
+      next.remove();
+      current.attr('state', 'next');
+      prev.attr('state', 'current');
+      setTimeout(function() {
+        $('#foto .images img[state=current]')
+          .removeClass('settle');
+        $('#foto .images img[state=next]')
+          .removeClass('settle');
+        // cache the previous image in case the user goes back one more
+        // TODO: code duplication
+        if (this.foto.prev && this.foto.prev.type != 'album' &&
+            $('#foto .images img[state=prev]').length == 0) {
+          var prev = $('<img class="img" state="prev">');
+          prev.attr('data-relpath', this.foto.prev.relpath);
+          prev.css('transform', 'translateX(-9999px)'); // off-screen
+          prev.attr('src', this.chooseFoto(this.foto.prev).src);
+          $('#foto .images').append(prev);
+          this.resize(prev);
+        }
+      }.bind(this), SWITCH_DURATION);
+
+      this.update_foto_frame(this.foto.prev, 'left');
+
+    } else {
+      // current image
+      console.log('end of swipe: current image');
+      current.css({
+        'transform': '',
+        'opacity':   1,
+      });
+      current.addClass('settle');
+
+      next.css({
+        'transform': 'scale(0.5)',
+        'opacity':   0,
+      });
+      next.addClass('settle');
+
+      prev.css({
+        'transform': 'translateX('+(-this.maxWidth-8)+'px)',
+      });
+      prev.addClass('settle');
+
+      setTimeout(function() {
+        current.removeClass('settle');
+        next.removeClass('settle');
+        prev.removeClass('settle');
+      }.bind(this), SWITCH_DURATION);
+    }
+  };
+
+  KNF.prototype.framewheel = function(e) {
+    var delta = e.originalEvent.deltaY;
+    if (delta === 0) return;
+
+    if (this.zoom_previous === null) {
+      this.zoom_previous = {
+        translateX: 0,
+        translateY: 0,
+        scale: 1,
+      };
+    }
+
+    // There should be a better formula for this... but I can't think of one.
+    var scale = 1.1;
+    if (delta > 0) {
+      var scale = Math.pow(scale, -1);
+    }
+    this.zoom_previous.scale *= scale;
+
+    // Adjust the zoom center, just like in touchmove.
+    var middlePointDistanceX = (this.zoom_previous.translateX + this.maxWidth/2 - e.originalEvent.clientX);
+    this.zoom_previous.translateX +=  middlePointDistanceX * scale - middlePointDistanceX;
+    var middlePointDistanceY = (this.zoom_previous.translateY + this.maxHeight/2 - e.originalEvent.clientY);
+    this.zoom_previous.translateY +=  middlePointDistanceY * scale - middlePointDistanceY;
+
+    this.fix_zoom_end(e.originalEvent.clientX, e.originalEvent.clientY);
+    this.apply_transform(this.zoom_previous, false);
+  };
+
+  // Fixes things like the image shooting off the side or zooming with scale < 0
+  KNF.prototype.fix_zoom_end = function(centerX, centerY) {
+    if (this.zoom_previous.scale <= 1) {
+      // Zoomed out - exit zoom/pan session (to enable back/forward swipe)
+      this.zoom_previous = null;
+      return true;
+    }
+
+    // Still zoomed in - jump back to center if needed
     var props = this.chooseFoto(this.foto);
-    $('#foto .img')
-        .attr('src', props.src);
+    var jump = {
+      scale: Math.min(6, this.zoom_previous.scale),
+      translateX: this.zoom_previous.translateX,
+      translateY: this.zoom_previous.translateY,
+    };
+
+    // Adjust the zoom center, just like in touchmove.
+    var middlePointDistanceX = (jump.translateX + this.maxWidth/2 - centerX);
+    jump.translateX +=  middlePointDistanceX * (jump.scale/this.zoom_previous.scale) - middlePointDistanceX;
+    var middlePointDistanceY = (jump.translateY + this.maxHeight/2 - centerY);
+    jump.translateY +=  middlePointDistanceY * (jump.scale/this.zoom_previous.scale) - middlePointDistanceY;
+
+    // Remove black borders - don't let the image move past the border of
+    // the frame.
+    var borderX = props.width/2*jump.scale - this.maxWidth/2;
+    var borderY = props.height/2*jump.scale - this.maxHeight/2;
+    jump.translateX = Math.max(-borderX, Math.min(borderX, jump.translateX));
+    jump.translateY = Math.max(-borderY, Math.min(borderY, jump.translateY));
+
+    // Jump to the center if the image is smaller than the frame.
+    if (props.width * jump.scale <= this.maxWidth) {
+      jump.translateX = 0;
+    }
+    if (props.height* jump.scale <= this.maxHeight) {
+      jump.translateY = 0;
+    }
+    if (jump.scale != this.zoom_previous.scale ||
+        jump.translateX != this.zoom_previous.translateX ||
+        jump.translateY != this.zoom_previous.translateY) {
+      // A jump is necessary.
+      this.zoom_previous = jump;
+      return true;
+    }
+
+    // No change
+    return false;
+  };
+
+  KNF.prototype.apply_transform = function(zoom, animate) {
+    var current = $('#foto .images img[state=current]');
+    if (zoom === null) {
+      current.css({
+        transform: '',
+        opacity:   1,
+      });
+    } else {
+      current.css({
+        transform: 'translate(' + zoom.translateX + 'px, ' + zoom.translateY + 'px) scale(' + zoom.scale + ')',
+        opacity: 1,
+      });
+    }
+    if (animate) {
+      current.addClass('settle');
+      setTimeout(function() {
+        current.removeClass('settle');
+      }, SWITCH_DURATION);
+    }
   };
 
   KNF.prototype.update_foto_tags = function(sidebar) {
@@ -630,13 +1277,15 @@
   KNF.prototype.open_sidebar = function() {
     this.sidebar = true;
     $('#foto').addClass('sidebar');
-    this.onresize();
+    this.updateMaxSize();
+    this.resize();
   };
 
   KNF.prototype.close_sidebar = function() {
     this.sidebar = false;
     $('#foto').removeClass('sidebar');
-    this.onresize();
+    this.updateMaxSize();
+    this.resize();
   };
 
   KNF.prototype.removeFoto = function() {
@@ -726,14 +1375,17 @@
         }.bind(this), 1000);
 
         foto.thumbnailSize = data.thumbnailSize;
+        foto.thumbnail2xSize = data.thumbnail2xSize;
         foto.largeSize = data.largeSize;
+        foto.large2xSize = data.large2xSize;
 
         foto.description = description;
         foto.visibility = visibility;
 
         foto.calculate_cache_urls();
-        if (foto == this.foto) {
-          this.update_foto_src(foto);
+        if (foto === this.foto) {
+          img.attr('src', this.chooseFoto(foto).src);
+          this.resize(img);
         }
 
         foto.tags = tags;
@@ -747,7 +1399,7 @@
         }
 
         if (foto === this.foto) {
-          var frame = $('#foto .foto-frame');
+          var frame = $('#foto');
           $('.title', frame)
               .text(foto.title ? foto.title : foto.name);
           $('.description', frame)
@@ -757,7 +1409,7 @@
   };
 
   KNF.prototype.updateMaxSize = function() {
-    var wrapper = $('#foto .image-wrapper');
+    var wrapper = $('#foto .images');
     // The maxWidth/maxHeight property may be 0 when the frame isn't yet
     // visible.
     // window.outer* vars are a fallback (and the width is wrong when the
@@ -774,8 +1426,6 @@
     if ('devicePixelRatio' in window) {
       devicePixelRatio = window.devicePixelRatio;
     }
-
-    this.updateMaxSize();
 
     var src = foto.large;
     var width = foto.largeSize[0];
@@ -807,16 +1457,33 @@
   };
 
   KNF.prototype.onresize = function() {
-    if (this.foto === null) return;
+    this.updateMaxSize();
+    this.resize();
+  };
 
-    var props = this.chooseFoto(this.foto);
-
-    var img = $('#foto .img');
-    img.css({'width': props.width,
-             'height': props.height});
-    if (props.src == this.foto.large2x &&
-        img.attr('src') != this.foto.large2x) {
-      img.attr('src', props.src);
+  KNF.prototype.resize = function() {
+    if (arguments.length == 0) {
+      arguments = $('#foto .images img');
+    }
+    for (var i=0; i<arguments.length; i++) {
+      var img = $(arguments[i]);
+      if (img === null) continue;
+      console.log('updating', img.attr('data-relpath'));
+      if (this.search_query) {
+        var foto = this.search_results[img.attr('data-relpath')];
+      } else {
+        var foto = this.fotos[this.path].children[img.attr('data-relpath')];
+      }
+      var props = this.chooseFoto(foto);
+      img.css({'width': props.width,
+               'height': props.height,
+               'left': (this.maxWidth-props.width)/2,
+               'top': (this.maxHeight-props.height)/2});
+      // switch to 2x if needed (but don't switch back for this photo)
+      if (props.src == foto.large2x &&
+          img.attr('src') != foto.large2x) {
+        img.attr('src', props.src);
+      }
     }
   };
 
@@ -941,6 +1608,7 @@
       $('#search').val(search);
     }
 
+    this.updateMaxSize();
     this.onpopstate();
   };
 

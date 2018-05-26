@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kninfra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-06 19:16+0100\n"
+"POT-Creation-Date: 2018-02-07 14:31+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -81,11 +81,11 @@ msgstr "^ledenmail-template/?$"
 msgid "referer header mist"
 msgstr "referer header is missing"
 
-#: kn/base/mail.py:56
+#: kn/base/mail.py:63
 msgid "subject blok mist"
 msgstr "subject block is missing"
 
-#: kn/base/mail.py:58
+#: kn/base/mail.py:65
 msgid "html of plain blok mist"
 msgstr "html or plain block is missing"
 
@@ -200,11 +200,11 @@ msgstr "%s is a folder --- not a file"
 msgid "Going outside of the root"
 msgstr "Going outside of the root"
 
-#: kn/defaultSettings.py:121
+#: kn/defaultSettings.py:123
 msgid "Nederlands"
 msgstr "Dutch"
 
-#: kn/defaultSettings.py:122
+#: kn/defaultSettings.py:124
 msgid "Engels"
 msgstr "English"
 
@@ -225,7 +225,7 @@ msgstr "Computer name"
 msgid "Volledige naam voor mensen"
 msgstr "Full human name"
 
-#: kn/fotos/forms.py:36 kn/fotos/templates/fotos/admin/move.html.py:30
+#: kn/fotos/forms.py:36 kn/fotos/templates/fotos/admin/move.html:30
 msgid "Verplaats"
 msgstr "Move"
 
@@ -272,17 +272,17 @@ msgid "Bewerk naam en zichtbaarheid"
 msgstr "Edit name and visibility"
 
 #: kn/fotos/templates/fotos/fotos.html:64
-#: kn/fotos/templates/fotos/fotos.html:108
+#: kn/fotos/templates/fotos/fotos.html:105
 msgid "Publiek"
 msgstr "Public"
 
 #: kn/fotos/templates/fotos/fotos.html:65
-#: kn/fotos/templates/fotos/fotos.html:109
+#: kn/fotos/templates/fotos/fotos.html:106
 msgid "Alleen leden"
 msgstr "Members-only"
 
 #: kn/fotos/templates/fotos/fotos.html:66
-#: kn/fotos/templates/fotos/fotos.html:110
+#: kn/fotos/templates/fotos/fotos.html:107
 msgid "Fototaggers"
 msgstr "Phototaggers"
 
@@ -307,49 +307,53 @@ msgid ""
 "dit album zien."
 msgstr ""
 
-#: kn/fotos/templates/fotos/fotos.html:94
+#: kn/fotos/templates/fotos/fotos.html:92
 msgid "Vorige"
 msgstr "Previous"
 
-#: kn/fotos/templates/fotos/fotos.html:95
+#: kn/fotos/templates/fotos/fotos.html:93
 msgid "Volgende"
 msgstr "Next"
 
-#: kn/fotos/templates/fotos/fotos.html:97
+#: kn/fotos/templates/fotos/fotos.html:94
 msgid "Sluiten"
 msgstr "Close"
 
-#: kn/fotos/templates/fotos/fotos.html:98
+#: kn/fotos/templates/fotos/fotos.html:95
 msgid "Tags"
 msgstr "Tags"
 
-#: kn/fotos/templates/fotos/fotos.html:102
+#: kn/fotos/templates/fotos/fotos.html:99
 msgid "Titel"
 msgstr "Title"
 
-#: kn/fotos/templates/fotos/fotos.html:104
+#: kn/fotos/templates/fotos/fotos.html:101
 msgid "Beschrijving..."
 msgstr "Description..."
 
-#: kn/fotos/templates/fotos/fotos.html:105 kn/subscriptions/forms.py:40
+#: kn/fotos/templates/fotos/fotos.html:102 kn/subscriptions/forms.py:40
 msgid "Beschrijving"
 msgstr "Description"
 
-#: kn/fotos/templates/fotos/fotos.html:107
+#: kn/fotos/templates/fotos/fotos.html:104
 msgid "Zichtbaarheid"
 msgstr "Visibility"
 
-#: kn/fotos/templates/fotos/fotos.html:112
+#: kn/fotos/templates/fotos/fotos.html:109
 msgid "Verwijder"
 msgstr "Delete"
 
-#: kn/fotos/templates/fotos/fotos.html:126
+#: kn/fotos/templates/fotos/fotos.html:123
 msgid "Tags:"
 msgstr "Tags:"
 
-#: kn/fotos/templates/fotos/fotos.html:137
+#: kn/fotos/templates/fotos/fotos.html:134
 msgid "origineel"
 msgstr "original"
+
+#: kn/fotos/templates/fotos/fotos.html:139
+msgid "Download dit fotoalbum"
+msgstr ""
 
 #: kn/fotos/urls.py:18
 msgid "^foto/admin/?$"
@@ -371,16 +375,16 @@ msgstr "^photos/(?P<path>.*)$"
 msgid "^foto/(?P<cache>[^/]+)/(?P<path>.*)$"
 msgstr "^photo/(?P<cache>[^/]+)/(?P<path>.*)$"
 
-#: kn/fotos/views.py:168
+#: kn/fotos/views.py:195
 msgid "Fotoalbum aangemaakt!"
 msgstr "Gallery created!"
 
-#: kn/fotos/views.py:170
+#: kn/fotos/views.py:197
 #, python-format
 msgid "Er is een fout opgetreden: %s"
 msgstr "An error has occured: %s"
 
-#: kn/fotos/views.py:171
+#: kn/fotos/views.py:198
 msgid "geen foutmelding"
 msgstr "no error"
 
@@ -436,7 +440,7 @@ msgstr "e.g.: Vaart, van der"
 msgid "E-Mail adres"
 msgstr "E-mail address"
 
-#: kn/leden/forms.py:78 kn/leden/templates/leden/user_detail.html.py:217
+#: kn/leden/forms.py:78 kn/leden/templates/leden/user_detail.html:217
 msgid "Geboortedatum"
 msgstr "Date of birth"
 
@@ -456,7 +460,7 @@ msgstr "Postal code"
 msgid "Woonplaats"
 msgstr "City"
 
-#: kn/leden/forms.py:83 kn/leden/templates/leden/user_detail.html.py:100
+#: kn/leden/forms.py:83 kn/leden/templates/leden/user_detail.html:100
 #: kn/leden/templates/leden/user_detail.html:156
 msgid "Telefoonnummer"
 msgstr "Phone number"
@@ -506,7 +510,7 @@ msgstr "Uit"
 msgid "Zooi"
 msgstr "Zooi"
 
-#: kn/leden/forms.py:105 kn/leden/templates/leden/fiscus_debtmail.html.py:25
+#: kn/leden/forms.py:105 kn/leden/templates/leden/fiscus_debtmail.html:25
 #: kn/moderation/templates/moderation/overview.html:9
 #: kn/planning/templates/planning/event_edit.html:11
 msgid "Naam"
@@ -544,16 +548,108 @@ msgstr "No new password given"
 msgid "Niet hetzelfde nieuwe wachtwoord opnieuw gegeven"
 msgstr "The new passwords do not match"
 
+#: kn/leden/templates/leden/balans.html:16
+msgid "Balans"
+msgstr ""
+
+#: kn/leden/templates/leden/balans.html:22
+#, python-format
+msgid ""
+"\n"
+"Volgens de boekhouding krijg je\n"
+"nog <strong>€&nbsp;%(bedrag)s</strong> van ons.\n"
+msgstr ""
+
+#: kn/leden/templates/leden/balans.html:36
+msgid ""
+"\n"
+"Volgens de boekhouding zijn we elkaar op het moment\n"
+"niets verschuldigd (in financiële zin).\n"
+msgstr ""
+
+#: kn/leden/templates/leden/balans.html:50
+#, python-format
+msgid ""
+" \n"
+"Volgens de boekhouding ben je \n"
+"ons nog  <strong>€&nbsp;%(bedrag)s</strong> verschuldigd.\n"
+msgstr ""
+
+#: kn/leden/templates/leden/balans.html:70
+#: kn/leden/templates/leden/fin-show.html:114
+#: kn/leden/templates/leden/fin-show.html:273
+#, fuzzy
+#| msgid "Huisnummer"
+msgid "nummer"
+msgstr "House number"
+
+#: kn/leden/templates/leden/balans.html:71
+#, fuzzy
+#| msgid "Datum"
+msgid "datum"
+msgstr "Date"
+
+#: kn/leden/templates/leden/balans.html:72
+#, fuzzy
+#| msgid "Beschrijving"
+msgid "omschrijving / post"
+msgstr "Description"
+
+#: kn/leden/templates/leden/balans.html:73
+#: kn/leden/templates/leden/fin-show.html:117
+#: kn/leden/templates/leden/fin-show.html:180
+#: kn/leden/templates/leden/fin-show.html:216
+#: kn/leden/templates/leden/fin-show.html:275
+msgid "bedrag (€)"
+msgstr ""
+
+#: kn/leden/templates/leden/balans.html:74
+#: kn/leden/templates/leden/fin-show.html:118
+msgid "som (€)"
+msgstr ""
+
+#: kn/leden/templates/leden/balans.html:107
+msgid ""
+"\n"
+"Je hebt op het moment nog geen debiteuren- en crediteurenrekening\n"
+"in onze boekhouding.  \n"
+msgstr ""
+
+#: kn/leden/templates/leden/balans.html:129
+#, python-format
+msgid ""
+"\n"
+"Heb je vragen?  Neem dan contact\n"
+"op met %(name)s via <a href=\"mailto:%(email)s\">%(email)s</a>!\n"
+msgstr ""
+
+#: kn/leden/templates/leden/balans.html:135
+#, python-format
+msgid ""
+"\n"
+"(Het bovenstaande overzicht is gebaseerd op de\n"
+"boekhouding van %(datum)s. Betalingen, declaraties en andere gebeurtenissen\n"
+"van een latere datum zullen hier binnenkort verschijnen.)\n"
+msgstr ""
+
+#: kn/leden/templates/leden/balans.html:144
+msgid ""
+"\n"
+"Bekijk ook de balans van\n"
+msgstr ""
+
 #: kn/leden/templates/leden/base.html:22 kn/leden/templates/leden/home.html:7
 msgid "Smoelenboek"
 msgstr "Smoelenboek"
 
 #: kn/leden/templates/leden/base.html:25
+#: kn/leden/templates/leden/bl-namecheck.html:9
 #: kn/leden/templates/leden/entity_base.html:137
 msgid "Leden"
 msgstr "Members"
 
 #: kn/leden/templates/leden/base.html:27
+#: kn/leden/templates/leden/bl-namecheck.html:46
 msgid "Commissies"
 msgstr "Committees"
 
@@ -614,45 +710,112 @@ msgid "Debiteuren e-mailen"
 msgstr ""
 
 #: kn/leden/templates/leden/base.html:62
+msgid "Boekenlezers"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:64
+#: kn/leden/templates/leden/bl-namecheck.html:7
+msgid "Presentielijst"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:65 kn/leden/templates/leden/fins.html:7
+msgid "Boekhoudingen"
+msgstr ""
+
+#: kn/leden/templates/leden/base.html:70
 #: kn/leden/templates/leden/entity_base.html:36
 msgid "Foto's"
 msgstr "Photos"
 
-#: kn/leden/templates/leden/base.html:64
+#: kn/leden/templates/leden/base.html:72
 msgid "Foto's verplaatsen"
 msgstr "Move photos"
 
-#: kn/leden/templates/leden/base.html:69
+#: kn/leden/templates/leden/base.html:77
 msgid "Planning"
 msgstr "Planning"
 
-#: kn/leden/templates/leden/base.html:72
+#: kn/leden/templates/leden/base.html:80
 msgid "Beheer"
 msgstr "Manage"
 
-#: kn/leden/templates/leden/base.html:73
+#: kn/leden/templates/leden/base.html:81
 msgid "Nieuw"
 msgstr "New"
 
-#: kn/leden/templates/leden/base.html:78
+#: kn/leden/templates/leden/base.html:86
 msgid "Wiki"
 msgstr "Wiki"
 
-#: kn/leden/templates/leden/base.html:79
+#: kn/leden/templates/leden/base.html:87
 msgid "Forum"
 msgstr "Forum"
 
-#: kn/leden/templates/leden/base.html:80
+#: kn/leden/templates/leden/base.html:88
 msgid "Stukken"
 msgstr "Pieces"
 
-#: kn/leden/templates/leden/base.html:89
+#: kn/leden/templates/leden/base.html:97
 msgid "Zoeken ..."
 msgstr "Search ..."
 
-#: kn/leden/templates/leden/base.html:104
+#: kn/leden/templates/leden/base.html:112
 msgid "Wijzingen worden doorgevoerd ..."
 msgstr "Changes are being carried out ..."
+
+#: kn/leden/templates/leden/bl-namecheck.html:12
+msgid ""
+"\n"
+"&#10007;&nbsp;De volgende leden staan in de ledenadministratie, maar niet in "
+"de boekhouding:\n"
+msgstr ""
+
+#: kn/leden/templates/leden/bl-namecheck.html:23
+msgid ""
+"\n"
+"&#10003;&nbsp;Alle leden staan in de boekhouding.\n"
+msgstr ""
+
+#: kn/leden/templates/leden/bl-namecheck.html:30
+msgid ""
+"\n"
+"&#10007;&nbsp;De volgende leden worden genoemd in de boekhouding, maar staan "
+"niet in de ledenadministratie:\n"
+msgstr ""
+
+#: kn/leden/templates/leden/bl-namecheck.html:41
+msgid ""
+"\n"
+"&#10003;&nbsp;Alle leden die in boekhouding genoemd worden staan in de "
+"ledenadministratie.\n"
+msgstr ""
+
+#: kn/leden/templates/leden/bl-namecheck.html:49
+msgid ""
+"\n"
+"&#10007;&nbsp;De volgende commissies staan in de ledenadministratie, maar "
+"niet in de boekhouding:\n"
+msgstr ""
+
+#: kn/leden/templates/leden/bl-namecheck.html:60
+msgid ""
+"\n"
+"&#10003;&nbsp;Alle commissies staan in de boekhouding.\n"
+msgstr ""
+
+#: kn/leden/templates/leden/bl-namecheck.html:67
+msgid ""
+"\n"
+"&#10007;&nbsp;De volgende commissies worden genoemd in de boekhouding, maar "
+"staan niet in de ledenadministratie:\n"
+msgstr ""
+
+#: kn/leden/templates/leden/bl-namecheck.html:78
+msgid ""
+"\n"
+"&#10003;&nbsp;Alle commissies die in boekhouding genoemd worden staan in de "
+"ledenadministratie.\n"
+msgstr ""
 
 #: kn/leden/templates/leden/brand_detail.html:12
 #: kn/leden/templates/leden/entity_base.html:142
@@ -701,7 +864,7 @@ msgid ""
 "\n"
 "Volgens onze boekhouding ben je ons nog € %(debt)s verschuldigd, zie:\n"
 "\n"
-"   %(BASE_URL)s%(url_ik_balans)s\n"
+"   %(BASE_URL)s%(url_balans)s\n"
 "\n"
 "Zou je dit bedrag over kunnen boeken naar %(account_number)s\n"
 "ten name van %(account_holder)s ?\n"
@@ -832,6 +995,161 @@ msgstr "on"
 #: kn/leden/templates/leden/entity_base.html:276
 msgid "Voeg notitie toe"
 msgstr "Add note"
+
+#: kn/leden/templates/leden/fin-errors.html:12
+msgid "Punten van de autokasco"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-overview.html:7
+msgid "Boekhouding jaar "
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:21
+#, python-format
+msgid ""
+"\n"
+"Er is geen object in de boekhouding van jaar %(year)s\n"
+"met de code &ldquo;%(handle)s&rdquo;.\n"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:29
+#, python-format
+msgid ""
+"\n"
+"Er zijn %(aantal)s objecten in de boekhouding\n"
+"met code &ldquo;%(handle)s&rdquo;:\n"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:39
+#, fuzzy
+#| msgid "Tot jaar"
+msgid "jaar"
+msgstr "Until year"
+
+#: kn/leden/templates/leden/fin-show.html:41
+#: kn/leden/templates/leden/fin-show.html:177
+#, fuzzy
+#| msgid "lid"
+msgid "id"
+msgstr "member"
+
+#: kn/leden/templates/leden/fin-show.html:44
+#: kn/leden/templates/leden/fin-show.html:192
+#: kn/leden/templates/leden/fin-show.html:240
+#: kn/leden/templates/leden/fin-show.html:256
+msgid "geen"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:49
+msgid "type"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:55
+msgid "Rekening"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:62
+#, fuzzy
+#| msgid "inactief"
+msgid "Transactie"
+msgstr "inactive"
+
+#: kn/leden/templates/leden/fin-show.html:64
+#, fuzzy
+#| msgid "Huisnummer"
+msgid "zonder nummer"
+msgstr "House number"
+
+#: kn/leden/templates/leden/fin-show.html:66
+msgid "Split"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:68
+msgid "Dag "
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:68
+#, fuzzy
+#| msgid "van de"
+msgid " van "
+msgstr "of the"
+
+#: kn/leden/templates/leden/fin-show.html:80
+#, fuzzy
+#| msgid "Voornaam"
+msgid "naam"
+msgstr "First name"
+
+#: kn/leden/templates/leden/fin-show.html:81
+#, fuzzy
+#| msgid "Beginkas"
+msgid "begin"
+msgstr "Initial balance"
+
+#: kn/leden/templates/leden/fin-show.html:82
+msgid "eind"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:87
+#, fuzzy
+#| msgid "^taal$"
+msgid "totaal"
+msgstr "^language$"
+
+#: kn/leden/templates/leden/fin-show.html:115
+#, fuzzy
+#| msgid "Datum"
+msgid "datum "
+msgstr "Date"
+
+#: kn/leden/templates/leden/fin-show.html:116
+#: kn/leden/templates/leden/fin-show.html:274
+#, fuzzy
+#| msgid "Beschrijving"
+msgid "omschrijving / rekening"
+msgstr "Description"
+
+#: kn/leden/templates/leden/fin-show.html:178
+#: kn/leden/templates/leden/fin-show.html:212
+msgid "rekening"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:179
+#: kn/leden/templates/leden/fin-show.html:220
+msgid "noot"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:208
+#, fuzzy
+#| msgid "inactief"
+msgid "transactie"
+msgstr "inactive"
+
+#: kn/leden/templates/leden/fin-show.html:229
+#, fuzzy
+#| msgid "vorige"
+msgid "vorige dag"
+msgstr "previous"
+
+#: kn/leden/templates/leden/fin-show.html:230
+msgid "startbalans"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:231
+msgid "omzet"
+msgstr ""
+
+#: kn/leden/templates/leden/fin-show.html:232
+#, fuzzy
+#| msgid "^links/?$"
+msgid "eindbalans"
+msgstr "^links/?$"
+
+#: kn/leden/templates/leden/fin-show.html:233
+#, fuzzy
+#| msgid "volgende"
+msgid "volgende dag"
+msgstr "next"
 
 #: kn/leden/templates/leden/fiscus_debtmail.html:10
 msgid ""
@@ -1033,7 +1351,9 @@ msgstr ""
 "            sistergroup on Facebook</a>."
 
 #: kn/leden/templates/leden/home.html:58
-msgid "Instellingen"
+#, fuzzy
+#| msgid "Instellingen"
+msgid "Gegevens en instellingen"
 msgstr "Preferences"
 
 #: kn/leden/templates/leden/home.html:61
@@ -1048,89 +1368,8 @@ msgstr ""
 msgid "Verander je wachtwoord"
 msgstr "Change your password"
 
-#: kn/leden/templates/leden/ik_balans.html:16
-msgid "Balans"
-msgstr ""
-
-#: kn/leden/templates/leden/ik_balans.html:20
-#, python-format
-msgid ""
-"\n"
-"Volgens de boekhouding krijg je\n"
-"nog <strong>€&nbsp;%(bedrag)s</strong> van ons.\n"
-msgstr ""
-
-#: kn/leden/templates/leden/ik_balans.html:25
-msgid ""
-"\n"
-"Volgens de boekhouding zijn we elkaar op het moment\n"
-"niets verschuldigd (in financiële zin).\n"
-msgstr ""
-
-#: kn/leden/templates/leden/ik_balans.html:30
-#, python-format
-msgid ""
-" \n"
-"Volgens de boekhouding ben je \n"
-"ons nog  <strong>€&nbsp;%(bedrag)s</strong> veschuldigd.\n"
-msgstr ""
-
-#: kn/leden/templates/leden/ik_balans.html:40
-#, fuzzy
-#| msgid "Huisnummer"
-msgid "nummer"
-msgstr "House number"
-
-#: kn/leden/templates/leden/ik_balans.html:41
-#, fuzzy
-#| msgid "Datum"
-msgid "datum"
-msgstr "Date"
-
-#: kn/leden/templates/leden/ik_balans.html:42
-#, fuzzy
-#| msgid "Beschrijving"
-msgid "omschrijving / post"
-msgstr "Description"
-
-#: kn/leden/templates/leden/ik_balans.html:43
-msgid "bedrag (€)"
-msgstr ""
-
-#: kn/leden/templates/leden/ik_balans.html:44
-msgid "som (€)"
-msgstr ""
-
-#: kn/leden/templates/leden/ik_balans.html:75
-msgid ""
-"\n"
-"Je hebt op het moment nog geen debiteuren- en crediteurenrekening\n"
-"in onze boekhouding.  \n"
-msgstr ""
-
-#: kn/leden/templates/leden/ik_balans.html:82
-#, python-format
-msgid ""
-"\n"
-"Betalingen kunnen gericht worden aan %(rekeningnummer)s\n"
-"ten name van %(rekeninghouder)s.\n"
-msgstr ""
-
-#: kn/leden/templates/leden/ik_balans.html:88
-#, python-format
-msgid ""
-"\n"
-"Heb je vragen?  Neem dan contact\n"
-"op met %(name)s via <a href=\"mailto:%(email)s\">%(email)s</a>!\n"
-msgstr ""
-
-#: kn/leden/templates/leden/ik_balans.html:94
-#, python-format
-msgid ""
-"\n"
-"(Het bovenstaande overzicht is gebaseerd op de\n"
-"boekhouding van %(datum)s. Betalingen, declaraties en andere gebeurtenissen\n"
-"van een latere datum zullen hier binnenkort verschijnen.)\n"
+#: kn/leden/templates/leden/home.html:64
+msgid "Bekijk je balans."
 msgstr ""
 
 #: kn/leden/templates/leden/ik_chpasswd.html:12
@@ -1694,7 +1933,7 @@ msgstr "^me/?$"
 #: kn/leden/urls.py:55
 #, fuzzy
 #| msgid "^links/?$"
-msgid "^ik/balans/?$"
+msgid "^balans/?$"
 msgstr "^links/?$"
 
 #: kn/leden/urls.py:56
@@ -1742,112 +1981,136 @@ msgid "^fiscus/email-debitors$"
 msgstr ""
 
 #: kn/leden/urls.py:74
+msgid "^boekenlezers/presentielijst$"
+msgstr ""
+
+#: kn/leden/urls.py:76
+msgid "^fin$"
+msgstr ""
+
+#: kn/leden/urls.py:77
+#, fuzzy
+#| msgid "^bouwjaar/(?P<year>\\d+)/$"
+msgid "^fin(?P<year>\\d+)$"
+msgstr "^yearOfBirth/(?P<year>\\d+)/$"
+
+#: kn/leden/urls.py:78
+#, fuzzy
+#| msgid "^bouwjaar/(?P<year>\\d+)/$"
+msgid "^fin(?P<year>\\d+)/errors$"
+msgstr "^yearOfBirth/(?P<year>\\d+)/$"
+
+#: kn/leden/urls.py:80
+msgid "^fin(?P<year>\\d+)/show/(?P<handle>.*)$"
+msgstr ""
+
+#: kn/leden/urls.py:82
 msgid "^relaties/(?P<_id>[^/]+)/beindig$"
 msgstr "^relations/(?P<_id>[^/]+)/end$"
 
-#: kn/leden/urls.py:76
+#: kn/leden/urls.py:84
 msgid "^relaties/begin$"
 msgstr "^relations/begin$"
 
-#: kn/leden/urls.py:78
+#: kn/leden/urls.py:86
 msgid "^tags/tag$"
 msgstr "^tags/tag$"
 
-#: kn/leden/urls.py:80
+#: kn/leden/urls.py:88
 msgid "^tags/untag$"
 msgstr "^tags/untag$"
 
-#: kn/leden/urls.py:82
+#: kn/leden/urls.py:90
 msgid "^noteer$"
 msgstr "^addNote$"
 
-#: kn/leden/urls.py:85
+#: kn/leden/urls.py:93
 msgid "^statistieken/?$"
 msgstr "^statistics/?$"
 
-#: kn/leden/urls.py:87
+#: kn/leden/urls.py:95
 msgid "^grafiek/(?P<graph>[-a-z/]+)\\.(?P<ext>[a-z]+)/?$"
 msgstr "^graph/(?P<graph>[-a-z/]+)\\.(?P<ext>[a-z]+)/?$"
 
-#: kn/leden/urls.py:91
+#: kn/leden/urls.py:99
 msgid "^styles/leden/$"
 msgstr "^styles/leden/$"
 
-#: kn/leden/urls.py:96
+#: kn/leden/urls.py:104
 msgid "^taal$"
 msgstr "^language$"
 
-#: kn/leden/views.py:74
+#: kn/leden/views.py:73
 #, python-format
 msgid "Entiteit is niet een %s"
 msgstr "Entity is not a %s"
 
-#: kn/leden/views.py:78
+#: kn/leden/views.py:77
 msgid "Onbekende entiteit type"
 msgstr "Unknown entity type"
 
-#: kn/leden/views.py:330
+#: kn/leden/views.py:329
 msgid "Missende `smoel' in FILES"
 msgstr "Missing `smoel' in FILES"
 
-#: kn/leden/views.py:332
+#: kn/leden/views.py:331
 msgid "Missende `id' in POST"
 msgstr "Missing `id' in POST"
 
-#: kn/leden/views.py:335
+#: kn/leden/views.py:334
 msgid "Entiteit heeft geen naam"
 msgstr "Entity does not have a name"
 
-#: kn/leden/views.py:384
+#: kn/leden/views.py:383
 #, python-format
 msgid "Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."
 msgstr "Dear %s, but off course: your password has been changed."
 
-#: kn/leden/views.py:653
+#: kn/leden/views.py:652
 #, python-format
 msgid "Email gestuurd naar %s."
 msgstr ""
 
-#: kn/leden/views.py:657
+#: kn/leden/views.py:656
 #, python-format
 msgid "Email naar %(user)s faalde: %(e)s."
 msgstr ""
 
-#: kn/leden/views.py:683
+#: kn/leden/views.py:682
 #, fuzzy
 #| msgid "studie is al beeindigt"
 msgid "Relatie was al beëindigd."
 msgstr "study already ended"
 
-#: kn/leden/views.py:722
+#: kn/leden/views.py:721
 msgid "Deze relatie bestaat al"
 msgstr "This relation already exists"
 
-#: kn/leden/views.py:747
+#: kn/leden/views.py:746
 msgid "'group' is niet een groep"
 msgstr "'group' is not a group"
 
-#: kn/leden/views.py:755
+#: kn/leden/views.py:754
 msgid "'tag' is niet een stempel"
 msgstr "'tag' is not a tag"
 
-#: kn/leden/views.py:790
+#: kn/leden/views.py:789
 msgid "Gebruiker is niet geactiveerd"
 msgstr "User is not active"
 
-#: kn/leden/views.py:797
+#: kn/leden/views.py:796
 msgid "Wachtwoord gereset!"
 msgstr "Password reset!"
 
-#: kn/leden/views.py:806
+#: kn/leden/views.py:805
 msgid "missende `on' of `note'"
 msgstr "Missing `on' or `note'"
 
-#: kn/leden/views.py:827
+#: kn/leden/views.py:826
 msgid "Agenda geupdate!"
 msgstr "Agenda has been updated"
 
-#: kn/leden/views.py:842
+#: kn/leden/views.py:841
 msgid "Je verzoek wordt verwerkt. Verwacht binnen 5 minuten een e-mail."
 msgstr "Your request is being processed.  Expect an e-mail within 5 minutes."
 
@@ -1937,7 +2200,7 @@ msgid ""
 "De moderatiemodus op %(name)s is verlopen.\n"
 msgstr ""
 
-#: kn/moderation/views.py:36
+#: kn/moderation/views.py:27
 msgid "Toegang geweigerd"
 msgstr "Permission denied"
 
@@ -2335,7 +2598,9 @@ msgstr ""
 #: kn/static/templates/static/bestuur10.html:39
 #: kn/static/templates/static/bestuur11.html:46
 #: kn/static/templates/static/bestuur12.html:43
-#: kn/static/templates/static/bestuur13.html:44
+#: kn/static/templates/static/bestuur13a.html:44
+#: kn/static/templates/static/bestuur13b.html:64
+#: kn/static/templates/static/bestuur14.html:80
 #: kn/static/templates/static/bestuur5.html:31
 #: kn/static/templates/static/bestuur6.html:26
 #: kn/static/templates/static/bestuur7.html:42
@@ -2354,6 +2619,7 @@ msgstr ""
 #: kn/static/templates/static/bestuur10.html:41
 #: kn/static/templates/static/bestuur11.html:48
 #: kn/static/templates/static/bestuur12.html:45
+#: kn/static/templates/static/bestuur13a.html:46
 #: kn/static/templates/static/bestuur5.html:33
 #: kn/static/templates/static/bestuur6.html:28
 #: kn/static/templates/static/bestuur7.html:44
@@ -2453,47 +2719,56 @@ msgid ""
 msgstr ""
 
 #: kn/static/templates/static/bestuur12.html:33
-#: kn/static/templates/static/bestuur13.html:33
+#: kn/static/templates/static/bestuur13a.html:33
+#: kn/static/templates/static/bestuur13b.html:52
+#: kn/static/templates/static/bestuur14.html:70
 msgid ""
 "Alle bestuursleden zijn bereikbaar op hun\n"
 "functie@karpenoktem.nl of op de volgende adressen:"
 msgstr ""
 
 #: kn/static/templates/static/bestuur12.html:46
-msgid "dertiende bestuur"
+#: kn/static/templates/static/bestuur13b.html:65
+msgid "dertiende bestuur (oude samenstelling)"
 msgstr ""
 
-#: kn/static/templates/static/bestuur13.html:11
+#: kn/static/templates/static/bestuur13a.html:11
+#: kn/static/templates/static/bestuur13b.html:26
 #: kn/static/templates/static/bestuur7.html:14
 msgid "penningmeester"
 msgstr ""
 
-#: kn/static/templates/static/bestuur13.html:12
+#: kn/static/templates/static/bestuur13a.html:12
+#: kn/static/templates/static/bestuur13b.html:31
 msgid "vice-voorzitter"
 msgstr ""
 
-#: kn/static/templates/static/bestuur13.html:13
+#: kn/static/templates/static/bestuur13a.html:13
+#: kn/static/templates/static/bestuur13b.html:29
 #: kn/static/templates/static/bestuur7.html:15
 #, fuzzy
 #| msgid "Commissies"
 msgid "pandcommissaris"
 msgstr "Committees"
 
-#: kn/static/templates/static/bestuur13.html:14
+#: kn/static/templates/static/bestuur13a.html:14
+#: kn/static/templates/static/bestuur13b.html:28
 #: kn/static/templates/static/bestuur7.html:20
 msgid "voorzitter"
 msgstr ""
 
-#: kn/static/templates/static/bestuur13.html:15
+#: kn/static/templates/static/bestuur13a.html:15
+#: kn/static/templates/static/bestuur13b.html:30
 #: kn/static/templates/static/bestuur7.html:19
 #, fuzzy
 #| msgid "Secretariaat"
 msgid "secretaris"
 msgstr "Secretariat"
 
-#: kn/static/templates/static/bestuur13.html:18
+#: kn/static/templates/static/bestuur13a.html:18
 msgid ""
-"Het <strong>dertiende bestuur</strong> der A.S.V Karpe Noktem\n"
+"Het <strong>dertiende bestuur</strong> (oude samenstelling) der A.S.V Karpe "
+"Noktem\n"
 "bestaat uit een groep met een hoge variatie in capaciteiten,\n"
 "studies en zelfs lengte.  Aan het roer staat voorzitter <em>Roel Bouman</"
 "em>,\n"
@@ -2513,12 +2788,93 @@ msgid ""
 "van."
 msgstr ""
 
-#: kn/static/templates/static/bestuur13.html:41
+#: kn/static/templates/static/bestuur13a.html:41
+#: kn/static/templates/static/bestuur13b.html:60
 msgid "of"
 msgstr ""
 
-#: kn/static/templates/static/bestuur13.html:45
+#: kn/static/templates/static/bestuur13a.html:45
 msgid "twaalfde bestuur."
+msgstr ""
+
+#: kn/static/templates/static/bestuur13a.html:47
+msgid "dertiende bestuur (huidige samenstelling)"
+msgstr ""
+
+#: kn/static/templates/static/bestuur13b.html:27
+#, fuzzy
+#| msgid "Commissies"
+msgid "commissaris extern"
+msgstr "Committees"
+
+#: kn/static/templates/static/bestuur13b.html:35
+msgid ""
+"Het <strong>dertiende bestuur</strong> (huidige samenstelling) der A.S.V "
+"Karpe Noktem\n"
+"bestaat uit een groep met een hoge variatie in capaciteiten,\n"
+"studies en zelfs lengte.  Aan het roer staat voorzitter <em>Roel Bouman</"
+"em>,\n"
+"student Data Science en Scheikunde, die zijn brede kennis op veel vlakken "
+"in\n"
+"kan zetten.  Bijgestaan wordt hij door Artificial Intelligence student\n"
+"<em>Sophie Fennema</em>, die naast de administratie het contact zal "
+"onderhouden\n"
+"met zusjes.  Als Geneeskunde  student draagt <em>Willanka Kappelle</em>\n"
+"niet alleen de verantwoordelijkheid voor haar toekomstige\n"
+"pati&euml;nten, maar ook voor de financi&euml;n.\n"
+"<em>Lenno Ruijters</em>, student Engels, maakt gebruik van zijn grote mond\n"
+"in overleggen als pandcommissaris.\n"
+"<em>Max de Grauw</em> is naast zijn drukke studie Artificial\n"
+"Intelligence bezig als commissaris extern en onderhoudt het contact met "
+"koepels.\n"
+"<em>Eva Prins</em> heeft haar communicatie vaardigheden geperfectioneerd in\n"
+"haar studie Engels en maakt hier als vice-voorzitter gretig gebruik\n"
+"van."
+msgstr ""
+
+#: kn/static/templates/static/bestuur13b.html:68
+#, fuzzy
+#| msgid "volgende"
+msgid "Het volgende"
+msgstr "next"
+
+#: kn/static/templates/static/bestuur13b.html:69
+#, fuzzy
+#| msgid "verstuur"
+msgid "veertiende bestuur"
+msgstr "send"
+
+#: kn/static/templates/static/bestuur14.html:54
+msgid ""
+"Het <strong>veertiende bestuur</strong> der A.S.V. Karpe\n"
+"Noktem is een jong, maar enthousiast team van charismatische en ambitieuze\n"
+"studenten met een groot aanbod aan gevarieerde kennis.  Aan het hoofd staat "
+"als\n"
+"voorzitter <em>Jessie Rijniers</em>, die als studente International "
+"Business\n"
+"Administation veel geleerd heeft over organisaties en hier haar team mee "
+"zal\n"
+"ondersteunen. Aan haar rechterhand staat <em>Niels Boer</em>, die naast "
+"zijn\n"
+"studie Artificial Intelligence zijn thuis zal vinden in de administratie en "
+"de\n"
+"communicatie binnen en buiten de vereniging als secretaris. <em>Cansel Sert</"
+"em>\n"
+"zal als penningmeester haar kennis over 18<sup>e</sup>-eeuwse kooplieden\n"
+"gebruiken uit haar studie Nederlandse taal en cultuur om voor de financiën "
+"te\n"
+"zorgen.  <em>Randy Smits</em>, student Filosofie, zal zijn kennis over "
+"retorica\n"
+"gebruiken binnen Villa-overleggen als pandcommissaris. <em>Marieke van\n"
+"\tOoyen</em> zal haar kennis over Commerciële Economie goed gebruiken bij de "
+"PR,\n"
+"het bijhouden van de drankvoorraad en het inplannen van sociëteitsdiensten "
+"als\n"
+"vice-voorzitter."
+msgstr ""
+
+#: kn/static/templates/static/bestuur14.html:81
+msgid "dertiende bestuur (nieuwe samenstelling)"
 msgstr ""
 
 #: kn/static/templates/static/bestuur4.html:7
@@ -3521,7 +3877,7 @@ msgid ""
 "iedereen die zich niet tot traditionele studentenverenigingen aangetrokken\n"
 "voelt. Wij brengen HBO- en WO-studenten op een ongedwongen manier\n"
 "samen. De meeste  verenigingen eisen van nieuwe leden een ontgroening\n"
-"en jarenlange aanwezigheidsplicht. Bij Karpe Noktem zijn er geen\n"
+"en jarenlange aanwezigheidsplicht. Bij Karpe Noktem is er geen\n"
 "introductieperiode of ontgroening. Karpe Noktem wil vooral iedereen\n"
 "wat bieden: concerten voor de muziekfreaks, Spelletjesdagen voor "
 "bordspelfanaten,\n"
@@ -3724,96 +4080,114 @@ msgid "^bestuur12/?$"
 msgstr ""
 
 #: kn/static/urls.py:76
+#, fuzzy
+#| msgid "Bestuurspipo"
+msgid "^bestuur13a/?$"
+msgstr "^board/?$"
+
+#: kn/static/urls.py:78
+#, fuzzy
+#| msgid "Bestuurspipo"
+msgid "^bestuur13b/?$"
+msgstr "^board/?$"
+
+#: kn/static/urls.py:80
 msgid "^bestuur13/?$"
 msgstr ""
 
-#: kn/static/urls.py:80
+#: kn/static/urls.py:82
+#, fuzzy
+#| msgid "Bestuurspipo"
+msgid "^bestuur14/?$"
+msgstr "Board thingamabob"
+
+#: kn/static/urls.py:86
 #, fuzzy
 #| msgid "Bestuurspipo"
 msgid "^bestuur/?$"
 msgstr "^board/?$"
 
-#: kn/static/urls.py:83
+#: kn/static/urls.py:89
 msgid "^introPoster2016/?$"
 msgstr ""
 
-#: kn/static/urls.py:86
+#: kn/static/urls.py:92
 msgid "^introPoster2015/?$"
 msgstr ""
 
-#: kn/static/urls.py:89
+#: kn/static/urls.py:95
 msgid "^introPoster2014/?$"
 msgstr ""
 
-#: kn/static/urls.py:92
+#: kn/static/urls.py:98
 msgid "^introPoster2013/?$"
 msgstr ""
 
-#: kn/static/urls.py:95
+#: kn/static/urls.py:101
 msgid "^introPoster2012/?$"
 msgstr ""
 
-#: kn/static/urls.py:98
+#: kn/static/urls.py:104
 msgid "^introPoster2011/?$"
 msgstr ""
 
-#: kn/static/urls.py:101
+#: kn/static/urls.py:107
 msgid "^introPoster2010/?$"
 msgstr ""
 
-#: kn/static/urls.py:104
+#: kn/static/urls.py:110
 msgid "^introPoster2009/?$"
 msgstr ""
 
-#: kn/static/urls.py:107
+#: kn/static/urls.py:113
 msgid "^lustrumPoster5/?$"
 msgstr ""
 
-#: kn/static/urls.py:110
+#: kn/static/urls.py:116
 msgid "^lustrumPoster(?:10)?/?$"
 msgstr ""
 
-#: kn/static/urls.py:113
+#: kn/static/urls.py:119
 msgid "^openweekPoster2013/?$"
 msgstr ""
 
-#: kn/static/urls.py:116
+#: kn/static/urls.py:122
 msgid "^openweekPoster2014/?$"
 msgstr ""
 
-#: kn/static/urls.py:119
+#: kn/static/urls.py:125
 msgid "^openweekPoster2015/?$"
 msgstr ""
 
-#: kn/static/urls.py:122
+#: kn/static/urls.py:128
 msgid "^openweek2Poster2015/?$"
 msgstr ""
 
-#: kn/static/urls.py:125
+#: kn/static/urls.py:131
 msgid "^openweekPoster2016/?$"
 msgstr ""
 
-#: kn/static/urls.py:129
+#: kn/static/urls.py:135
 msgid "^lustrum/?$"
 msgstr ""
 
-#: kn/static/urls.py:132
+#: kn/static/urls.py:138
 msgid "^intro2008/?$"
 msgstr ""
 
-#: kn/static/urls.py:135
+#: kn/static/urls.py:141
 msgid "^intro2009/?$"
 msgstr ""
 
-#: kn/static/urls.py:138
+#: kn/static/urls.py:144
 msgid "^intro2010/?$"
 msgstr ""
 
-#: kn/static/urls.py:143
+#: kn/static/urls.py:149
 msgid "^hink-stap/(?P<name>wiki|forum|stukken)$"
 msgstr ""
 
-#: kn/static/urls.py:153
+#: kn/static/urls.py:159
 msgid "^styles/static/$"
 msgstr ""
 
@@ -4223,9 +4597,6 @@ msgstr "^planning/"
 
 #~ msgid "Dienst"
 #~ msgstr "Shift"
-
-#~ msgid "Beginkas"
-#~ msgstr "Initial balance"
 
 #~ msgid "Eindkas"
 #~ msgstr "Final balance"
