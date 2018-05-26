@@ -2,6 +2,11 @@
 
 {% load i18n %}
 
+{% block styles %}
+{{ block.super }}
+<link href="{{ MEDIA_URL }}leden/entity_detail.css" rel="stylesheet" />
+{% endblock styles %}
+
 {% block head %}
 <script>
 var object_id = '{{ object.id }}';

@@ -41,6 +41,8 @@ function call_api(el) {
     progress.textContent = 'Opslaan...'; // TODO: i18n
   }
   el.disabled = true;
+  el.dataset.lastChange = (new Date()).getTime();
+  var lastChange = el.dataset.lastChange;
   $.post(leden_api_url,
     {
       csrfmiddlewaretoken: csrf_token,
@@ -54,8 +56,13 @@ function call_api(el) {
       if (el.type == 'checkbox') {
         // can do inline feedback
         if (data.ok) {
-          progress.textContent = '';
+          progress.textContent = 'Opgeslagen!'; // TODO: i18n
           el.disabled = false;
+          setTimeout(function() {
+            if (lastChange === el.dataset.lastChange) {
+              progress.textContent = '';
+            }
+          }, 1000);
         } else {
           progress.textContent = data.error;
           el.disabled = false;
