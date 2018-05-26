@@ -1,7 +1,7 @@
+import os.path
 import bson
 import pymongo
 import yaml
-import os.path
 
 MONGO_DATABASE = 'kn'
 MONGO_HOST = 'localhost'
