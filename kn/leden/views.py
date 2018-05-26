@@ -7,6 +7,7 @@ from datetime import date
 from decimal import Decimal
 from hashlib import sha256
 from itertools import chain
+from wsgiref.util import FileWrapper
 
 import PIL.Image
 
