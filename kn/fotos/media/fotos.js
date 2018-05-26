@@ -547,6 +547,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     this.update_foto_frame(foto, direction);
     $('html').addClass('noscroll');
     frame.css('display', 'flex'); // show
+    this.onresize();
   };
 
   KNF.prototype.update_foto_frame = function(foto, direction) {
