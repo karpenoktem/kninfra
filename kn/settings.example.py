@@ -1,7 +1,9 @@
 # Example of settings.py.
 
 import os
-import os.path
+
+from kn.defaultSettings import defaultSettings  # noqa: E402
+
 #
 # You MUST change
 #
@@ -30,8 +32,6 @@ INFRA_REPO = os.path.join(os.path.dirname(__file__), "../")
 #
 # Do not remove the following
 #
-
-from kn.defaultSettings import defaultSettings  # noqa: E402
 
 defaultSettings(globals())
 
