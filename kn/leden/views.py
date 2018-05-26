@@ -381,9 +381,7 @@ def ik_settings(request):
             'hasPhoto': True,
             'photoWidth': photo_size[0],
             'photoHeight': photo_size[1]})
-    return render_to_response('leden/settings.html',
-                              ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/settings.html', ctx)
 
 
 def rauth(request):
