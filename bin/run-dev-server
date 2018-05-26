@@ -1,5 +1,6 @@
 #!/bin/sh
 
 PYTHON="${PYTHON:-python}"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-$PYTHON $HOME/repo/manage.py runserver 0:8001
+$PYTHON $DIR/../manage.py runserver 0:8001
