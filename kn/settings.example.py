@@ -1,7 +1,7 @@
 # Example of settings.py.
 
-import os.path
 import os
+import os.path
 #
 # You MUST change
 #
