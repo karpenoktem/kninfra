@@ -170,13 +170,6 @@ def defaultSettings(glbls):
                     "kn.leden.context_processors.may_manage_planning",
                     "django.template.context_processors.request",
                 ),
-                # TODO: upgrade the template loader
-                #'loaders': (
-                #    ('kn.base.template.SlashNewlineStrippingTemplateLoader', (
-                #        'django.template.loaders.filesystem.Loader',
-                #        'django.template.loaders.app_directories.Loader',
-                #    )),
-                #),
             },
         },
     ]

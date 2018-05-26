@@ -93,8 +93,7 @@ met code &ldquo;{{ handle }}&rdquo;:
 	{% for child in obj.children|dictsort:"name" %}
 	<tr>
 		<td>
-		<a href="{% url 'fin-show' year \
-			obj.path|concat:":"|concat:child.name %}">
+		<a href="{% url 'fin-show' year obj.path|concat:":"|concat:child.name %}">
 			{{ child.name }}
 		</a>
 		</td>

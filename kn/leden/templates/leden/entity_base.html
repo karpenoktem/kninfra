@@ -98,10 +98,10 @@ $(function(){
 <form action="{% url "relation-end" _id=r.id %}"
         method="post"
         {# TODO translate #}
-        onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
-        wil uitschrijven als \
-        {% if r.how %}{{ r.how.humanName }}{% else %}lid{% endif %} \
-        {{ r.with.genitive_prefix }} {{ r.with.humanName }}?');">
+        onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} ' +
+        'wil uitschrijven als ' +
+        '{% if r.how %}{{ r.how.humanName }}{% else %}lid{% endif %} ' +
+        '{{ r.with.genitive_prefix }} {{ r.with.humanName }}?');">
 
 {% csrf_token %}
 <input type="submit" value="{% trans "be&euml;indig" %}" />
@@ -116,11 +116,11 @@ $(function(){
 {% if related or object.is_user %}
 <form action="{% url "relation-begin" %}" method="post"
         {# TODO translate #}
-        onsubmit="return confirm('Weet je zeker dat je {{ object.humanName }} \
-        wil inschrijven als \
-        '+ (entityChoiceField_get('relation_begin1_how') ?
-        entityChoiceField_get('relation_begin1_how') : 'lid') +' \
-        van '+ entityChoiceField_get('relation_begin1_with') +'?');">
+        onsubmit="return confirm('Weet je zeker dat je {{ object.humanName }} ' +
+        'wil inschrijven als ' +
+        (entityChoiceField_get('relation_begin1_how') ?
+        entityChoiceField_get('relation_begin1_how') : 'lid') +
+        ' van ' + entityChoiceField_get('relation_begin1_with') + '?');">
         {% csrf_token %}
         <input type="hidden" name="who" value="{{ object.id }}" />
         {% trans "Voeg als" %}
@@ -153,10 +153,10 @@ $(function(){
 <form action="{% url "relation-end" _id=r.id %}"
         method="post"
         {# TODO translate #}
-        onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} \
-        wil uitschrijven als \
-        {% if r.how %}{{ r.how.humanName }}{% else %}lid{% endif %} \
-        {{ r.with.genitive_prefix }} {{ r.with.humanName }}?');">
+        onsubmit="return confirm('Weet je zeker dat je {{ r.who.humanName }} ' +
+        'wil uitschrijven als ' +
+        '{% if r.how %}{{ r.how.humanName }}{% else %}lid{% endif %} ' +
+        '{{ r.with.genitive_prefix }} {{ r.with.humanName }}?');">
 {% csrf_token %}
 <input type="submit" value="{% trans "be&euml;indig" %}" />
 </form>
@@ -170,12 +170,12 @@ $(function(){
 {% if rrelated or object.is_group %}
 <form action="{% url "relation-begin" %}" method="post"
         {# TODO translate #}
-        onsubmit="return confirm('Weet je zeker dat je '+
-        entityChoiceField_get('relation_begin2_who') +' \
-        wil inschrijven als \
-        '+ (entityChoiceField_get('relation_begin2_how') ?
-        entityChoiceField_get('relation_begin2_how') : 'lid') +' \
-        van {{ object.humanName }}?');">
+        onsubmit="return confirm('Weet je zeker dat je ' +
+        entityChoiceField_get('relation_begin2_who') +
+        ' wil inschrijven als ' +
+        (entityChoiceField_get('relation_begin2_how') ?
+        entityChoiceField_get('relation_begin2_how') : 'lid') +
+        ' van {{ object.humanName }}?');">
         {% csrf_token %}
         <input type="hidden" name="with" value="{{ object.id }}" />
         {% trans "Voeg" %}
@@ -198,9 +198,9 @@ $(function(){
     <form action="{% url "untag" %}"
             method="post"
             {# TODO translate #}
-            onsubmit="return confirm('Weet je zeker dat je de stempel \
-            {{ t.humanName }} wilt verwijderen \
-            {{ object.humanName.genitive }}?');">
+            onsubmit="return confirm('Weet je zeker dat je de stempel ' +
+            '{{ t.humanName }} wilt verwijderen ' +
+            '{{ object.humanName.genitive }}?');">
 
     {% csrf_token %}
     <input type="hidden" name="group" value="{{ object.id }}" />
