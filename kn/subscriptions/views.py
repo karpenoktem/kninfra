@@ -5,7 +5,6 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
-from django.template import RequestContext
 from django.utils import six
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST

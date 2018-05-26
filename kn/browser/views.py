@@ -6,7 +6,6 @@ from wsgiref.util import FileWrapper
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
 
@@ -61,8 +60,8 @@ def homedir(request, root, subdir, path):
     return render(request,
                   'browser/dirlist.html',
                   {'list': [(c, os.path.join(path, c),
-                   os.path.isdir(os.path.join(p1, c)) or
-                   os.path.isdir(os.path.join(p2, c)))
+                             os.path.isdir(os.path.join(p1, c)) or
+                             os.path.isdir(os.path.join(p2, c)))
                             for c in sorted(lines)],
                    'subdir': subdir, 'root': original_root,
                    'path': _p},

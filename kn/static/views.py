@@ -2,7 +2,6 @@ import os
 
 from django.conf import settings
 from django.shortcuts import redirect, render
-from django.template import RequestContext
 
 _slideshow_images = None
 

@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.template import RequestContext
 
 import kn.agenda.entities as Es_a
 

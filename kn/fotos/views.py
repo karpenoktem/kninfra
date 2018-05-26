@@ -12,7 +12,6 @@ from django.core.urlresolvers import reverse
 from django.http import (Http404, HttpResponse, HttpResponseNotModified,
                          QueryDict, StreamingHttpResponse)
 from django.shortcuts import redirect, render
-from django.template import RequestContext
 from django.utils import six
 from django.utils.encoding import filepath_to_uri
 from django.utils.http import http_date
