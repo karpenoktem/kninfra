@@ -19,7 +19,7 @@ from django.core.files.storage import default_storage
 from django.core.paginator import EmptyPage, Paginator
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import Context, RequestContext
 from django.template.loader import get_template
 from django.template.loader_tags import BlockNode
