@@ -187,34 +187,32 @@
         </li>
         {% endfor %}{# a in object.addresses #}
         </ul>
-        </dd>
-        {% endif %}{# object.addresses #}
-        {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
-    {% if object.dateOfBirth or "secretariaat" in user.cached_groups_names %}
+    </dd>
+    {% endif %}{# object.addresses #}
+    {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
+    {% if object.dateOfBirth or "secretariaat" in user.cached_groups_names or object == user %}
     <dt>
-        {% if object.visibility.dateOfBirth or "secretariaat" in user.cached_groups_names %}
         {% trans "Geboortedatum" %}
-        {% if "secretariaat" in user.cached_groups_names %}
+        {% if "secretariaat" in user.cached_groups_names %}{# object.dateOfBirth #}
+          {% if object.dateOfBirth %}
+            <button data-action="entity_remove_property:dateOfBirth:!{% trans "Weet je zeker dat je de geboortedatum wilt verwijderen?" %}">{% trans "Verwijder" %}</button>
+          {% else %}
+            <button data-action="entity_set_property:dateOfBirth:?Nieuwe geboortedatum (yyyy-mm-dd):" title="{% trans "Stel nieuwe geboortedatum in" %}">{% trans "Stel in" %}</button>
+          {% endif %}
+        {% endif %}
+    </dt>
+    <dd>
         {% if object.dateOfBirth %}
-        <button data-action="entity_remove_property:dateOfBirth:!{% trans "Weet je zeker dat je de geboortedatum wilt verwijderen?" %}">{% trans "Verwijder" %}</button>
+          <a href="{% url "entities-by-year-of-birth" year=object.dateOfBirth.year %}">{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth|date:"m-d" }}
         {% else %}
-        <button data-action="entity_set_property:dateOfBirth:?Nieuwe geboortedatum (yyyy-mm-dd):" title="{% trans "verander zichtbaarheid van het telefoonnummer" %}">{% trans "Stel in" %}</button>
+          {% trans "Geen geboortedatum geregistreerd." %}
+          {% if object.is_underage %}
+            {% trans "Wel dat dit lid minderjarig is." %}
+          {% else %}{# object.is_underage #}
+            {% trans "Wel dat dit lid 18+ is." %}
+          {% endif %}{# object.is_underage #}
         {% endif %}{# object.dateOfBirth #}
-        {% endif %}{# "secretariaat" in user.cached_groups_names #}
-        </dt>
-        <dd>
-            {% if object.dateOfBirth %}
-              <a href="{% url "entities-by-year-of-birth" year=object.dateOfBirth.year %}">{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth|date:"m-d" }}
-            {% else %}
-              {% trans "Geen geboortedatum geregistreerd." %}
-              {% if object.is_underage %}
-                {% trans "Wel dat dit lid minderjarig is." %}
-              {% else %}{# object.is_underage #}
-                {% trans "Wel dat dit lid 18+ is." %}
-              {% endif %}{# object.is_underage #}
-            {% endif %}{# object.dateOfBirth #}
-        </dd>
-        {% endif %}{# object.visibility.dateOfBirth #}
-    {% endif %}
+    </dd>
+    {% endif %}{# may view dateOfBirth #}
 </dl>
 {% endblock entity_body %}
