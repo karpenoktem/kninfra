@@ -201,6 +201,7 @@ def defaultSettings(glbls):
 
     d.DEBUG = True
     d.TEMPLATE_DEBUG = d.DEBUG
+    d.MAIL_DEBUG = d.DEBUG
 
     d.ABSOLUTE_MEDIA_URL = d.BASE_URL + d.MEDIA_URL
 

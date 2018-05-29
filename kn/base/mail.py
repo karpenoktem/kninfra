@@ -92,6 +92,11 @@ def render_then_email(
         email.attach_alternative(rendered_nodes['html'].strip(), "text/html")
 
     # And send!
-    email.send()
+    if settings.MAIL_DEBUG:
+        # Test installs usually don't have email configured, but often do have a
+        # console. Print the raw email there, for easier debugging.
+        print(email.message().as_string())
+    else:
+        email.send()
 
 # vim: et:sta:bs=2:sw=4:
