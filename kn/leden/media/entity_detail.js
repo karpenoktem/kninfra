@@ -73,6 +73,7 @@ function call_api(el) {
           window.location.reload();
         } else {
           alert(data.error);
+          el.disabled = false;
         }
       }
     });
