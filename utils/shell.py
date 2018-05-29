@@ -124,9 +124,5 @@ def create_extern(humanName, email, name=None):
         'tags': [Es.id_by_name('externen')],
         'is_active': False,
         'has_unix_user': False,
-        'emailAddresses': [{
-            'email': email,
-            'from': DT_MIN,
-            'until': DT_MAX
-        }],
+        'email': email,
     })

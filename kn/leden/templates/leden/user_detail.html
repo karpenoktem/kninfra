@@ -24,7 +24,7 @@
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
         <dt>{% trans "Achterliggend e-mailadres" %}<dt>
         <dd>
-        {{ object.primary_email }}
+        {{ object.email }}
         {% if "secretariaat" in user.cached_groups_names %}
         <button onclick="var new_address = prompt('{% trans "Nieuw e-mail adres" %}');
                          if (!new_address) return false;
@@ -85,16 +85,10 @@
         </ul>
         </dd>
         {% endif %}{# object.primary_study or "secretariaat" in user.cached_groups_names and addStudyForm #}
-        {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
-        {% if object.telephones or "secretariaat" in user.cached_groups_names %}
+
+        {% if object.visibility.telephone or "secretariaat" in user.cached_groups_names or object == user %}
         <dt>
         {% trans "Telefoonnummer" %}
-        {% if "secretariaat" in user.cached_groups_names or user == object %}
-          &nbsp;
-          <label title="{% trans "Of het telefoonnummer voor alle leden zichtbaar is" %}">
-            <input type="checkbox" {% if object.visibility.telephone %}checked{% endif %} data-action="entity_update_visibility:telephone"> {% trans "zichtbaar" %} <span class="progress"></span>
-          </label>
-        {% endif %}
         {% if "secretariaat" in user.cached_groups_names %}
         <button onclick="var new_phone = prompt('{% trans "Nieuw telefoonnummer" %}');
                          if (!new_phone) return false;
@@ -112,37 +106,23 @@
         {% endif %}{# "secretariaat" in user.cached_groups_names #}
         </dt>
         <dd>
-        <ul>
-        {% for t in object.telephones %}
-        <li>
-        {{ t.number }}
-        {% if t.from or t.until %}
-        ({% if t.from %}
-        {% trans "van" %} {{ t.from.date }}
-        {% endif %}
-        {% if t.until %}
-        {% trans "tot" %} {{ t.until.date }}
-        {% endif %})
-        {% endif %}
-        </li>
-        {% endfor %}{# t in object.telephones #}
-        </ul>
+          {% if object.telephone %}
+            {{ object.telephone }}
+          {% else %}
+            {% trans "Geen telefoonnummer geregistreerd." %}
+          {% endif %}
         </dd>
-        {% endif %}{# object.telephones #}
-        {% elif object.visibility.telephone %}
-        <dt>{% trans "Telefoonnummer" %}</dt>
-        <dd>{{ object.primary_telephone }}</dd>
         {% endif %}
+
         {% if "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object %}
-	{% if object.addresses %}
-    <dt>{% trans "Adres" %}
+        <dt>{% trans "Adres" %}
         {% if "secretariaat" in user.cached_groups_names %}
         <button onclick="var new_addr = prompt(
                         '{% trans "Nieuw adres (straatnaam, nummer, postcode, plaats)" %}',
-                        '{{ object.primary_address.street|escapejs }}, '+
-                        '{{ object.primary_address.number|escapejs }}, '+
-                        '{{ object.primary_address.zip|escapejs }}, '+
-                        '{{ object.primary_address.city|escapejs }}');
+                        '{{ object.address.street|escapejs }}, '+
+                        '{{ object.address.number|escapejs }}, '+
+                        '{{ object.address.zip|escapejs }}, '+
+                        '{{ object.address.city|escapejs }}');
                          if (!new_addr) return false;
                          var addr = new_addr.split(',');
                          if (addr.length != 4) {
@@ -170,25 +150,14 @@
         {% endif %}{# "secretariaat" in user.cached_groups_names #}
         </dt>
         <dd>
-        <ul>
-        {% for a in object.addresses %}
-        <li>
-        <address>{{ a.street }} {{ a.number }}<br/>
-                {{ a.zip }} {{ a.city }}
-        </address>
-        {% if a.from or a.until %}
-        ({% if a.from %}
-        {% trans "van" %} {{ a.from.date }}
+        {% if object.address %}
+          <address>{{ object.address.street }} {{ object.address.number }}<br/>
+                  {{ object.address.zip }} {{ object.address.city }}
+          </address>
+        {% else %}
+          {% trans "Geen woonadres geregistreerd." %}
         {% endif %}
-        {% if a.until %}
-        {% trans "tot" %} {{ a.until.date }}
-        {% endif %})
-        {% endif %}
-        </li>
-        {% endfor %}{# a in object.addresses #}
-        </ul>
     </dd>
-    {% endif %}{# object.addresses #}
     {% endif %}{# "secretariaat" in user.cached_groups_names or "admlezers" in user.cached_groups_names or user == object #}
     {% if object.dateOfBirth or "secretariaat" in user.cached_groups_names or object == user %}
     <dt>

@@ -30,12 +30,10 @@ ecol = db['entities']   # entities: users, group, tags, studies, ...
 # Example of a user
 # ----------------------------------------------------------------------
 # {"_id" : ObjectId("4e6fcc85e60edf3dc0000270"),
-#  "addresses" : [ { "city" : "Nijmegen",
-#                    "zip" : "...",
-#                    "number" : "...",
-#                    "street" : "...",
-#                    "from" : ISODate("2004-..."),
-#                    "until" : DT_MAX) } ],
+#  "address" : { "city" : "Nijmegen",
+#                "zip" : "...",
+#                "number" : "...",
+#                "street" : "..." },
 #   "types" : [ "user" ],
 #   "names" : [ "giedo" ],
 #   "humanNames" : [ { "human" : "Giedo Jansen" } ],
@@ -46,18 +44,14 @@ ecol = db['entities']   # entities: users, group, tags, studies, ...
 #                "titles" : [ ] },
 #   "is_underage" : false,
 #   "is_active" : 0,
-#   "emailAddresses" : [ { "email" : "...",
-#                          "from" : ISODate("2004-08-31T00:00:00Z"),
-#                          "until" : DT_MAX } ],
+#   "email" : "...",
 #   "password" : "pbkdf2_sha256$15000$...$...",
 #   "studies" : [ { "institute" : ObjectId("4e6fcc85e60edf3dc000001d"),
 #                   "study" : ObjectId("4e6fcc85e60edf3dc0000030"),
 #                   "number" : "...",
 #                   "from" : ...,
 #                   "until" : DT_MAX } ],
-#   "telephones" : [ { "number" : "...",
-#                      "from" : ISODate("2004-08-31T00:00:00Z"),
-#                      "until" : ISODate("5004-09-01T00:00:00Z") } ] },
+#   "telephone" : "...",
 #   "preferred_language": "nl",
 #   "preferences" : {
 #       "visibility" : {
@@ -948,19 +942,12 @@ class Entity(SONWrapper):
         return TYPE_MAP[self.type](self._data)
 
     def update_address(self, street, number, _zip, city, save=True):
-        """ Adds (street, number, _zip, city) as new and primary address. """
-        if 'addresses' not in self._data:
-            self._data['addresses'] = []
-        addresses = self._data['addresses']
-        dt = now()
-        if addresses:
-            addresses[0]['until'] = dt
-        addresses.insert(0, {'street': street,
-                             'number': number,
-                             'zip': _zip,
-                             'city': city,
-                             'from': dt,
-                             'until': DT_MAX})
+        """ Sets (street, number, _zip, city) as address. """
+        self._data['address'] = {
+            'street': street,
+            'number': number,
+            'zip': _zip,
+            'city': city}
         if save:
             self.save()
 
@@ -980,31 +967,15 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
-    def update_primary_telephone(self, new, save=True):
-        """ Adds @new as new and primary telephone number. """
-        if 'telephones' not in self._data:
-            self._data['telephones'] = []
-        addrs = self._data['telephones']
-        dt = now()
-        if addrs:
-            addrs[0]['until'] = dt
-        addrs.insert(0, {'number': new,
-                         'from': dt,
-                         'until': DT_MAX})
+    def update_telephone(self, new, save=True):
+        """ Sets @new as telephone number. """
+        self._data['telephone'] = new
         if save:
             self.save()
 
-    def update_primary_email(self, new, save=True):
-        """ Adds @new as new and primary e-mail address. """
-        if 'emailAddresses' not in self._data:
-            self._data['emailAddresses'] = []
-        addrs = self._data['emailAddresses']
-        dt = now()
-        if addrs:
-            addrs[0]['until'] = dt
-        addrs.insert(0, {'email': new,
-                         'from': dt,
-                         'until': DT_MAX})
+    def update_email(self, new, save=True):
+        """ Sets @new as e-mail address. """
+        self._data['email'] = new
         if save:
             self.save()
 
@@ -1157,6 +1128,10 @@ class Group(Entity):
 
 class User(Entity):
 
+    address = son_property(('address',))
+    telephone = son_property(('telephone',))
+    email = son_property(('email',))
+
     def __init__(self, data):
         super(User, self).__init__(data)
         self._primary_study = -1
@@ -1240,14 +1215,6 @@ class User(Entity):
             'bestuur' in self.cached_groups_names
 
     @property
-    def primary_email(self):
-        # the primary email address is always the first one;
-        # we ignore the until field.
-        if len(self._data['emailAddresses']) == 0:
-            return None
-        return self._data['emailAddresses'][0]['email']
-
-    @property
     def full_name(self):
         if ('person' not in self._data or
                 'family' not in self._data['person'] or
@@ -1270,31 +1237,6 @@ class User(Entity):
     @property
     def preferred_language(self):
         return self._data.get('preferred_language', settings.LANGUAGE_CODE)
-
-    @property
-    def telephones(self):
-        ret = []
-        for t in self._data.get('telephones', ()):
-            ret.append({'from': None if t['from'] == DT_MIN
-                        else t['from'],
-                        'until': None if t['until'] == DT_MAX
-                        else t['until'],
-                        'number': t['number']})
-        return ret
-
-    @property
-    def primary_telephone(self):
-        telephones = self.telephones
-        if not telephones:
-            return None
-        return telephones[0]['number']
-
-    @property
-    def primary_address(self):
-        addresses = self.addresses
-        if not addresses:
-            return None
-        return addresses[0]
 
     @property
     def studies(self):
@@ -1421,28 +1363,6 @@ class User(Entity):
             return self._data['has_unix_user']
         else:
             return True
-
-    @property
-    def emailAddresses(self):
-        ret = []
-        for a in self._data.get('emailAddresses', ()):
-            if a['from'] == DT_MIN:
-                a['from'] = None
-            if a['until'] == DT_MAX:
-                a['until'] = None
-            ret.append(a)
-        return ret
-
-    @property
-    def addresses(self):
-        ret = []
-        for a in self._data.get('addresses', ()):
-            if a['from'] == DT_MIN:
-                a['from'] = None
-            if a['until'] == DT_MAX:
-                a['until'] = None
-            ret.append(a)
-        return ret
 
     @property
     def preferences(self):

@@ -27,7 +27,7 @@ for u in args_to_users(args):
         u.study,
         u.dateOfBirth,
         u.dateJoined,
-        u.primary_email,
+        u.email,
         u.addr_street,
         u.addr_number,
         u.addr_zipCode,

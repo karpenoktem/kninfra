@@ -26,30 +26,8 @@ Personalia  {{ u.full_name }}
   Achternaam            {{ u.last_name }}
   Geboortedatum         {{ u.dateOfBirth.date }}
   Gebruikersnamen       {{ u.names|join:" " }}
-
-  Telefoonnummer(s)
-{% for t in u.telephones %}\
-    * {{ t.number }}\
-{% if t.from and t.until %}\
- [ van {{ t.from.date }} tot {{ t.until.date }} ]
-{% else %}{% if t.from %}\
- [ van {{ t.from.date }} ]
-{% else %}{% if t.until %}\
- [ tot {{ t.until.date }} ]
-{% endif %}{% endif %}{% endif %}\
-{% endfor %}
-
-  E-Mail adres(sen)
-{% for a in u.emailAddresses %}\
-    * {{ a.email }}\
-{% if a.from and a.until %}\
- [ van {{ a.from.date }} tot {{ a.until.date }} ]
-{% else %}{% if a.from %}\
- [ van {{ a.from.date }} ]
-{% else %}{% if a.until %}\
- [ tot {{ a.until.date }} ]
-{% endif %}{% endif %}{% endif %}\
-{% endfor %}
+  Telefoonnummer        {{ u.telephone }}
+  E-Mail adres          {{ u.email }}
 
   Studies
 {% for study in u.studies %}\
@@ -67,20 +45,11 @@ Personalia  {{ u.full_name }}
       Studentnummer     {{ study.number }}
 {% endfor %}
 
-  Adres(sen)
-{% for a in u.addresses %}\
-    * {% if a.from and a.until %}\
-[ van {{ a.from.date }} tot {{ a.until.date }} ]
-{% else %}{% if a.from %}\
-[ van {{ a.from.date }} ]
-{% else %}{% if a.until %}\
-[ tot {{ a.until.date }} ]
-{% endif %}{% endif %}{% endif %}\
-       Straat            {{ a.street }} 
-       Nummer            {{ a.number }}
-       Postcode          {{ a.zip }}
-       Stad              {{ a.city }}
-{% endfor %}\
+  Adres
+    Straat            {{ u.address.street }}
+    Nummer            {{ u.address.number }}
+    Postcode          {{ u.address.zip }}
+    Stad              {{ u.address.city }}
 
 {% if comms %}
 Lidmaatschap commissies

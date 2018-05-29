@@ -761,12 +761,12 @@ entities:
   types: [tag]
 
 - _id: &test_id !id '4e6fcc85e60edf3dc00001d4'
-  addresses:
-  - {city: Nijmegen, from:  &dt_min !!timestamp '2014-1-1 00:00:00',
-                    until: &dt_max !!timestamp '5004-09-01 00:00:00',
-                    number: 123, street: straat, zip: 1234 AB}
-  emailAddresses:
-  - {email: 'webcie@kn.cx', from: *dt_min, until: *dt_max}
+  address:
+    city: Nijmegen
+    number: 123
+    street: straat
+    zip: 1234 AB
+  email: 'webcie@kn.cx'
   humanNames:
   - {human: Test Gebruiker}
   is_active: 1
@@ -779,13 +779,12 @@ entities:
     titles: []
   types: [user]
 - _id: &admin_id !id '4e6fcc85e60edf3dc00001d5'
-  addresses:
-  - {city: Nijmegen, from: *dt_min, number: 123,
-                    street: straat, until: *dt_max,
-                        zip: 1234 AB}
-  emailAddresses:
-  - {email: 'webcie@kn.cx', from: *dt_min,
-     until: *dt_max}
+  address:
+    city: Nijmegen
+    number: 123
+    street: straat
+    zip: 1234 AB
+  email: 'webcie@kn.cx'
   humanNames:
   - {human: Test Admin}
   is_active: 1
@@ -801,8 +800,8 @@ relations:
 - who: *test_id
   with: *leden_id
   how: null
-  from: *dt_min
-  until: *dt_max
+  from: &dt_min !!timestamp '2014-1-1 00:00:00'
+  until: &dt_max !!timestamp '5004-09-01 00:00:00'
 - who: *admin_id
   with: *leden_id
   how: null

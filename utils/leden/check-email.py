@@ -32,7 +32,7 @@ def check_email():
                 others.append(rel)
         print(m.name)
         render_then_email('leden/check-email.mail.txt',
-                          m.primary_email,
+                          m.email,
                           {'u': m,
                            'comms': comms,
                            'lists': lists,

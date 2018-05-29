@@ -33,7 +33,7 @@
 			<td>€ {{ debdata.debt }}</td>
 			<td>{{ name }}</td>
 			<td>{% if debdata.user %}
-				{{ debdata.user.primary_email }}
+				{{ debdata.user.email }}
 			{% else %}
 				<em>{% trans "onbekend" %}</em></td>
 			{% endif %}

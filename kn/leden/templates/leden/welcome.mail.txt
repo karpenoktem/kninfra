@@ -33,34 +33,15 @@ Bij voorbaat dank,
 -----------------------------------------------------------
 
   {% blocktrans with first_name=u.first_name last_name=u.last_name \
-                   dateOfBirth=u.dateOfBirth.date names=u.names|join:" " %}\
+                   dateOfBirth=u.dateOfBirth.date names=u.names|join:" "
+                   telephone=u.telephone %}\
 Voornaam              {{ first_name }}
   Achternaam            {{ last_name }}
   Geboortedatum         {{ dateOfBirth }}
   Gebruikersnamen       {{ names }}
+  Telefoonnummer        {{ telephone }}
+  E-Mail adres          {{ u.email }}
 {% endblocktrans %}
-
-  {% trans "Telefoonnummer(s)" %}
-{% for t in u.telephones %}    * {{ t.number }}\
-{% if t.from and t.until %}\
- [ {% trans "van" %} {{ t.from.date }} {% trans "tot" %} {{ t.until.date }} ]
-{% else %}{% if t.from %}\
- [ {% trans "van" %} {{ t.from.date }} ]
-{% else %}{% if t.until %}\
- [ {% trans "tot" %} {{ t.until.date }} ]
-{% endif %}{% endif %}{% endif %}\
-{% endfor %}
-
-  {% trans "E-Mail adres(sen)" %}
-{% for a in u.emailAddresses %}    * {{ a.email }}\
-{% if a.from and a.until %}\
- [ {% trans "van" %} {{ a.from.date }} {% trans "tot" %} {{ a.until.date }} ]
-{% else %}{% if a.from %}\
- [ {% trans "van" %} {{ a.from.date }} ]
-{% else %}{% if a.until %}\
- [ {% trans "tot" %} {{ a.until.date }} ]
-{% endif %}{% endif %}{% endif %}\
-{% endfor %}
 
   {% trans "Studie(s)" %}
 {% for study in u.studies %}\
@@ -81,16 +62,9 @@ Studie            {{ study_name }}
 {% endblocktrans %}
 {% endfor %}
 
-  {% trans "Adres(sen)" %}
-{% for a in u.addresses %}    * {% if a.from and a.until %}\
-[ {% trans "van" %} {{ a.from.date }} {% trans "tot" %} {{ a.until.date }} ]
-{% else %}{% if a.from %}\
-[ {% trans "van" %} {{ a.from.date }} ]
-{% else %}{% if a.until %}\
-[ {% trans "tot" %} {{ a.until.date }} ]
-{% endif %}{% endif %}{% endif %}\
-{% blocktrans with street=a.street number=a.number zip=a.zip city=a.city %}\
-Straat            {{ street }} 
+  {% trans "Adres" %}
+{% blocktrans with street=u.address.street number=u.address.number zip=u.address.zip city=u.address.city %}
+      Straat            {{ street }}
       Nummer            {{ number }}
       Postcode          {{ zip }}
       Stad              {{ city }}

@@ -49,11 +49,11 @@ var object_id = '{{ object.id }}';
   </dd>
   <dt>{% trans "Telefoonnummer" %}</dt>
   <dd>
-    {% if object.primary_telephone %}
-      {{ object.primary_telephone }}
+    {% if object.telephone %}
+      {{ object.telephone }}
       <label title="{% trans "Of het telefoonnummer voor alle leden zichtbaar is" %}"><input type="checkbox" {% if object.visibility.telephone %}checked{% endif %} data-action="entity_update_visibility:telephone"> {% trans "zichtbaar" %} <span class="progress"></span></label>
     {% else %}
-      Geen telefoonnummer geregistreerd.
+      {% trans "Geen telefoonnummer geregistreerd." %}
     {% endif %}
   </dd>
   <dt>{% trans "Geboortedatum" %}</dt>

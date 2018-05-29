@@ -423,21 +423,13 @@ def secr_add_user(request):
                     'dateOfBirth': date_to_dt(
                         fd['dateOfBirth'])
                 },
-                'emailAddresses': [
-                    {'email': fd['email'],
-                     'from': DT_MIN,
-                     'until': DT_MAX}],
-                'addresses': [
-                    {'street': fd['addr_street'],
-                     'number': fd['addr_number'],
-                     'zip': fd['addr_zip'],
-                     'city': fd['addr_city'],
-                     'from': DT_MIN,
-                     'until': DT_MAX}],
-                'telephones': [
-                    {'number': fd['telephone'],
-                     'from': DT_MIN,
-                     'until': DT_MAX}],
+                'email': fd['email'],
+                'address': {
+                    'street': fd['addr_street'],
+                    'number': fd['addr_number'],
+                    'zip': fd['addr_zip'],
+                    'city': fd['addr_city']},
+                'telephone': fd['telephone'],
                 'studies': [
                     {'institute': _id(fd['study_inst']),
                      'study': _id(fd['study']),
