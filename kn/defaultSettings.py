@@ -32,7 +32,7 @@ def defaultSettings(glbls):
     d.WOLK_MYSQL_SECRET = None
 
     d.DOMAINNAME = 'karpenoktem.nl'
-    d.LDAP_HOST = 'localhost'
+    d.LDAP_URL = 'ldap://localhost'
     d.LDAP_SUFFIX = 'dc=' + ',dc='.join(d.DOMAINNAME.split('.'))
     d.LDAP_BASE = 'ou=users,' + d.LDAP_SUFFIX
     d.LDAP_USER = 'cn=infra,' + d.LDAP_SUFFIX

@@ -18,7 +18,7 @@ def ldap_setpass(daan, user, password):
     if not settings.LDAP_PASS:
         logging.warning('ldap: no credentials available, skipping')
         return
-    ld = ldap.open(settings.LDAP_HOST)
+    ld = ldap.initialize(settings.LDAP_URL)
     ld.bind_s(settings.LDAP_USER, settings.LDAP_PASS)
     udn = 'uid=%s,%s' % (user, settings.LDAP_BASE)
     try:
@@ -34,15 +34,15 @@ def ldap_setpass(daan, user, password):
         if 'sambaNTPassword' in _o:
             ld.modify_s(udn, ldap.modlist.modifyModlist(
                 {'sambaNTPassword': _o['sambaNTPassword'][0]},
-                {'sambaNTPassword': [nthash(password)]}))
+                {'sambaNTPassword': [nthash(password).encode('utf-8')]}))
         else:
             # NOTE See /doc/ldap/scheme.ldif
             #      We added the scheme *after* the creation of the database.
             #      Thus, the user may still miss the objectClass knAccount.
             ld.modify_s(udn, ldap.modlist.modifyModlist(
                 {'objectClass': _o['objectClass']},
-                {'objectClass': _o['objectClass'] + ['knAccount'],
-                 'sambaNTPassword': [nthash(password)]}))
+                {'objectClass': _o['objectClass'] + [b'knAccount'],
+                 'sambaNTPassword': [nthash(password).encode('utf-8')]}))
     finally:
         ld.unbind_s()
 
@@ -52,7 +52,7 @@ def ldap_setpass(daan, user, password):
 def apply_ldap_changes(daan, changes):
     if not changes:
         return
-    ld = ldap.open(settings.LDAP_HOST)
+    ld = ldap.initialize(settings.LDAP_URL)
     ld.bind_s(settings.LDAP_USER, settings.LDAP_PASS)
     try:
         for uid in changes['remove']:
