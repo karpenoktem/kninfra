@@ -10,7 +10,7 @@ from kn.utils.daan.fotoadmin import (fotoadmin_create_event,
                                      fotoadmin_move_fotos)
 from kn.utils.daan.postfix import set_postfix_map, set_postfix_slm_map
 from kn.utils.daan.quassel import apply_quassel_changes, quassel_setpass
-from kn.utils.daan.wiki import apply_wiki_changes
+from kn.utils.daan.wiki import apply_wiki_changes, wiki_setpass
 from kn.utils.whim import WhimDaemon
 
 
@@ -49,6 +49,8 @@ class Daan(WhimDaemon):
         elif d['type'] == 'setpass':
             with self.ldap_lock:
                 ldap_setpass(self, d['user'], d['pass'])
+            with self.wiki_lock:
+                wiki_setpass(self, d['user'], d['pass'])
             with self.quassel_lock:
                 quassel_setpass(self, d['user'], d['pass'])
         elif d['type'] == 'fotoadmin-create-event':

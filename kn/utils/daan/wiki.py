@@ -1,6 +1,16 @@
+import subprocess
+
 import pymysql
 
 from django.conf import settings
+
+
+def wiki_setpass(daan, user, password):
+    subprocess.call(['sudo', '-u', settings.MEDIAWIKI_USER,
+                     'php', 'maintenance/changePassword.php',
+                     '--user', user,
+                     '--password', password],
+                    cwd=settings.MEDIAWIKI_PATH)
 
 
 def apply_wiki_changes(daan, changes):
