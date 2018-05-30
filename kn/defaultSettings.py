@@ -101,8 +101,6 @@ def defaultSettings(glbls):
     d.PHOTOS_DIR = '/var/fotos'
     d.USER_DIRS = '/mnt/phassa/home/'
 
-    d.QUASSEL_CONFIGDIR = '/var/lib/quassel'
-
     d.INTERNAL_IPS = ['83.162.203.144']  # bas
     d.LOCALE = 'nl_NL.UTF-8'
     d.LANGUAGE_CODE = 'nl'
