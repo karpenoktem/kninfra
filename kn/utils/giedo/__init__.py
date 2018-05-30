@@ -13,7 +13,6 @@ from kn.utils.giedo.fotos import scan_fotos
 from kn.utils.giedo.mailman import generate_mailman_changes
 from kn.utils.giedo.postfix import (generate_postfix_map,
                                     generate_postfix_slm_map)
-from kn.utils.giedo.quassel import generate_quassel_changes
 from kn.utils.giedo.siteagenda import update_site_agenda
 from kn.utils.giedo.unix import generate_unix_map
 from kn.utils.giedo.wiki import generate_wiki_changes
@@ -54,16 +53,11 @@ class Giedo(WhimDaemon):
             ('unix', self.cilia, self._gen_unix),
             ('wiki', self.daan, self._gen_wiki),
             ('ldap', self.daan, self._gen_ldap),
-            ('wolk', self.cilia, self._gen_wolk),
-            ('quassel', self.daan, self._gen_quassel))
+            ('wolk', self.cilia, self._gen_wolk))
 
     def pre_mainloop(self):
         super(Giedo, self).pre_mainloop()
         self.notify_systemd()
-
-    def _gen_quassel(self):
-        return {'type': 'quassel',
-                'changes': generate_quassel_changes(self)}
 
     def _gen_wolk(self):
         return {'type': 'wolk',
