@@ -49,8 +49,6 @@ urlpatterns = [
         template_name='static/media.html'), name='media'),
     url(_(r'^links/?$'), TemplateView.as_view(
         template_name='static/links.html'), name='links'),
-    url(_(r'^irc/?$'), TemplateView.as_view(
-        template_name='static/irc.html'), name='irc'),
     url(r'^robots.txt/?$', TemplateView.as_view(
         template_name='static/robots.txt',
         content_type='text/plain'), name='robotstxt'),
