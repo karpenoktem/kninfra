@@ -117,9 +117,6 @@ Naast de website draaien we nog een heleboel andere diensten, zoals
    [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) pakket.
  * De [wolk](https://karpenoktem.nl/wolk/) een 'dropbox'
    met [OwnCloud](https://owncloud.org).
- * Een [IRC Server](https://karpenoktem.nl/irc) die draait op
-   [inspircd](http://www.inspircd.org) en
-   [atheme](http://atheme.net/atheme.html).
 
 En nog een aantal die niet *user-facing* zijn:
 
