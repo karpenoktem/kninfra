@@ -189,7 +189,6 @@ def defaultSettings(glbls):
         'stukken': d.BASE_URL + '/groups/leden/',
         'wiki': d.BASE_URL + '/wiki',
         'wiki-home': d.BASE_URL + '/wiki/Hoofdpagina',
-        'irc': d.BASE_URL + '/irc',
     }
 
     d.DT_MIN = datetime.datetime(2004, 8, 31)
