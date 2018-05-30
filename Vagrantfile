@@ -96,8 +96,7 @@ def ensure_pillar_is_generated
                 'mysql_daan', 'mailman_default', 'ldap_infra', 'mysql_piwik',
                 'ldap_daan', 'ldap_freeradius', 'ldap_admin',
                 'ldap_saslauthd', 'wiki_key', 'wiki_upgrade_key',
-                'wiki_admin', 'irc_services_secret', 'irc_die_pass',
-                'irc_restart_pass']
+                'wiki_admin' ]
 
     path = vagrant_pillar_path
     return if File.exists?(path) and File.mtime(path) >= File.mtime(__FILE__)
