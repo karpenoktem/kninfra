@@ -47,7 +47,7 @@ def samba_setpass(cilia, user, password):
     ph = subprocess.Popen(['smbpasswd', '-as', user],
                           stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                           stderr=subprocess.STDOUT, close_fds=True)
-    return ph.communicate(password.encode() + "\n")[0]
+    return ph.communicate((password + '\n').encode())[0]
 
 
 def set_samba_map(cilia, _map):
