@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import json
 import logging
 import os
 from decimal import Decimal
@@ -21,7 +20,6 @@ from django.shortcuts import redirect, render_to_response
 from django.template import Context, RequestContext
 from django.template.loader import get_template
 from django.template.loader_tags import BlockNode
-from django.utils.crypto import constant_time_compare
 from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
@@ -401,19 +399,6 @@ def accounts_api(request):
         ret = {'valid': False}
 
     return JsonHttpResponse(ret)
-
-
-def api_users(request):
-    verified_key = False
-    for key in settings.ALLOWED_API_KEYS:
-        if constant_time_compare(request.REQUEST['key'], key):
-            verified_key = True
-    if not verified_key:
-        raise PermissionDenied
-    ret = {}
-    for m in Es.users():
-        ret[str(m.name)] = m.full_name
-    return HttpResponse(json.dumps(ret), content_type="text/json")
 
 
 @login_required

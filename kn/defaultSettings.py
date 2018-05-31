@@ -21,7 +21,6 @@ def defaultSettings(glbls):
 
     # CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
     # SECRET_KEY = 'CHANGE ME'
-    # ALLOWED_API_KEYS = ('CHANGE ME',)
     # MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 
     # You are very likely to override these

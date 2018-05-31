@@ -10,7 +10,6 @@ from kn.defaultSettings import defaultSettings  # noqa: E402
 
 CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
 SECRET_KEY = 'CHANGE ME'
-ALLOWED_API_KEYS = ('CHANGE ME',)
 MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 
 #
