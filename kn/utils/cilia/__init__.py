@@ -7,7 +7,6 @@ from django.conf import settings
 
 from kn.utils.cilia.fotoadmin import (fotoadmin_remove_moved_fotos,
                                       fotoadmin_scan_userdirs)
-from kn.utils.cilia.samba import samba_setpass, set_samba_map
 from kn.utils.cilia.unix import set_unix_map, unix_setpass
 from kn.utils.cilia.wolk import apply_wolk_changes, wolk_setpass
 from kn.utils.whim import WhimDaemon
@@ -18,7 +17,6 @@ class Cilia(WhimDaemon):
     def __init__(self):
         super(Cilia, self).__init__(settings.CILIA_SOCKET)
         self.unix_lock = threading.Lock()
-        self.samba_lock = threading.Lock()
         self.fotoadmin_lock = threading.Lock()
         self.wolk_lock = threading.Lock()
 
@@ -32,14 +30,9 @@ class Cilia(WhimDaemon):
         if d['type'] == 'unix':
             with self.unix_lock:
                 set_unix_map(self, d['map'])
-            # XXX decide where we will call this as this is a bit ugly
-            with self.samba_lock:
-                set_samba_map(self, d['map'])
         elif d['type'] == 'setpass':
             with self.unix_lock:
                 unix_setpass(self, d['user'], d['pass'])
-            with self.samba_lock:
-                samba_setpass(self, d['user'], d['pass'])
             with self.wolk_lock:
                 wolk_setpass(self, d['user'], d['pass'])
         elif d['type'] == 'fotoadmin-scan-userdirs':
