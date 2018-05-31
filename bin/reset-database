@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 PYTHON="${PYTHON:-python}"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ ! -d /vagrant ]; then
     # This is not a production server
@@ -14,10 +15,10 @@ if [ ! -d /vagrant ]; then
 fi
 
 # Empty the database
-/usr/bin/mongo kn --eval 'db.dropDatabase()'
+mongo kn --eval 'db.dropDatabase()'
 
 # Fill it with the test data
-$PYTHON /home/infra/repo/salt/states/sankhara/initializeDb.py
+$PYTHON $DIR/../salt/states/sankhara/initializeDb.py
 
 # For some reason, this may be necessary.
 # run-fcgi

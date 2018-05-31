@@ -1,5 +1,9 @@
 # Example of settings.py.
 
+import os
+
+from kn.defaultSettings import defaultSettings  # noqa: E402
+
 #
 # You MUST change
 #
@@ -22,14 +26,12 @@ MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 # PHOTOS_MYSQL_SECRET = ('localhost', 'fotos', 'CHANGE ME', 'fotos')
 # LDAP_PASS = 'CHANGE_ME'
 # DOMAINNAME = 'karpenoktem.nl'
-# INFRA_HOME = '/home/infra'
-# INFRA_REPO = '/home/infra/repo'
+INFRA_HOME = os.environ['HOME']
+INFRA_REPO = os.path.join(os.path.dirname(__file__), "../")
 
 #
 # Do not remove the following
 #
-
-from kn.defaultSettings import defaultSettings  # noqa: E402
 
 defaultSettings(globals())
 

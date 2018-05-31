@@ -1,10 +1,12 @@
+import os.path
+
 import bson
 import pymongo
 import yaml
 
 MONGO_DATABASE = 'kn'
 MONGO_HOST = 'localhost'
-DB_FILE = '/home/infra/initial-db.yaml'
+DB_FILE = os.path.join(os.path.dirname(__file__), "initial-db.yaml")
 
 yaml.SafeLoader.add_constructor('!id',
                                 lambda loader, node: bson.objectid.ObjectId(
