@@ -3,9 +3,7 @@
 import json
 import logging
 import os
-from datetime import date
 from decimal import Decimal
-from hashlib import sha256
 from itertools import chain
 
 import PIL.Image
@@ -13,7 +11,6 @@ import PIL.Image
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage import default_storage
 from django.core.paginator import EmptyPage, Paginator
@@ -25,7 +22,6 @@ from django.template import Context, RequestContext
 from django.template.loader import get_template
 from django.template.loader_tags import BlockNode
 from django.utils.crypto import constant_time_compare
-from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
@@ -395,66 +391,6 @@ def ik_settings(request):
     return render_to_response('leden/settings.html',
                               ctx,
                               context_instance=RequestContext(request))
-
-
-def rauth(request):
-    """
-        An implementation of Jille Timmermans' rauth scheme
-        The token that is given to the authenticated user is only valid until
-        the end of the day.
-    """
-    if request.REQUEST.get('url') is None:
-        raise Http404
-    if (request.REQUEST.get('validate') is not None and
-            request.REQUEST.get('user') is not None):
-        token = sha256('%s|%s|%s|%s' % (
-            request.REQUEST['user'],
-            date.today(),
-            request.REQUEST['url'],
-            settings.SECRET_KEY)).hexdigest()
-        if constant_time_compare(request.REQUEST['validate'], token):
-            return HttpResponse("OK")
-        return HttpResponse("INVALID")
-
-    '''
-    The next check will allow you to request information about the user that
-    is currently logged in using the 'fetch'-get attribute with the property
-    names seperated by commas.
-    A JSON string will be returned containing the information.
-    '''
-    if (request.REQUEST.get('fetch') is not None and
-            request.REQUEST.get('user') is not None):
-        token = sha256('%s|%s|%s|%s' % (
-            request.REQUEST['user'],
-            date.today(),
-            request.REQUEST['url'],
-            settings.SECRET_KEY)).hexdigest()
-        if constant_time_compare(request.REQUEST['token'], token):
-            user = Es.by_name(request.REQUEST['user'])
-            properties = {
-                'firstname': user.first_name,
-                'lastname': user.last_name,
-                'fullname': user.full_name,
-                'groups': list(user.cached_groups_names)
-            }
-            return HttpResponse(json.dumps(dict([
-                (k, properties[k]) for k in
-                set(s.strip() for s in request.REQUEST.get('fetch').split(','))
-                if k in properties
-            ])))
-        return HttpResponse("INVALID TOKEN")
-    if not request.user.is_authenticated():
-        return redirect_to_login('%s?url=%s' % (
-            reverse('rauth'),
-            urlquote(request.REQUEST['url'])))
-    token = sha256('%s|%s|%s|%s' % (str(request.user.name),
-                                    date.today(),
-                                    request.REQUEST['url'],
-                                    settings.SECRET_KEY)).hexdigest()
-    return HttpResponseRedirect('%s%suser=%s&token=%s' % (
-        request.REQUEST['url'],
-        '?' if request.REQUEST['url'].find('?') == -1 else '&',
-        str(request.user.name), token))
 
 
 def accounts_api(request):

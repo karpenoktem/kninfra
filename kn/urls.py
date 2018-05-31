@@ -24,7 +24,6 @@ urlpatterns += i18n_patterns(
     url(_(r'^poll/'), include('kn.poll.urls')),
     url(_(r'^accounts/login/$'), auth.views.login, name='login'),
     url(_(r'^accounts/logout/$'), auth.views.logout_then_login, name='logout'),
-    url(_(r'^accounts/rauth/$'), 'kn.leden.views.rauth', name='rauth'),
     url(_(r'^accounts/api/$'), 'kn.leden.views.accounts_api', name='auth-api'),
     url(_(r'^moderatie/'), include('kn.moderation.urls')),
     url(_(r'^planning/'), include('kn.planning.urls')),
