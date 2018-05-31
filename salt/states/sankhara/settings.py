@@ -15,6 +15,7 @@ WIKI_MYSQL_SECRET = ('localhost', 'giedo',
 LDAP_PASS = '{{ pillar['secrets']['ldap_infra'] }}'
 DOMAINNAME = '{{ grains['fqdn'] }}'
 INFRA_UID = 2000  # Keep in synch. with kninfra.sls
+SCHEME = 'http'
 
 from kn.defaultSettings import defaultSettings  # noqa: E402
 
