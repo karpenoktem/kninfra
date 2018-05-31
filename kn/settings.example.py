@@ -16,11 +16,7 @@ MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 #
 # You might want to set one of the following.
 # See defaultSettings.py for more settings.
-#
-
-# VILLANET_SECRET_API_KEY = None
-
-#   These should be of the form ('host', 'user', 'password', 'db')
+# These should be of the form ('host', 'user', 'password', 'db')
 # WIKI_MYSQL_SECRET = ('localhost', 'wiki', 'CHANGE ME', 'wiki')
 # FORUM_MYSQL_SECRET = ('localhost', 'punbb', 'CHANGE ME', 'punbb')
 # PHOTOS_MYSQL_SECRET = ('localhost', 'fotos', 'CHANGE ME', 'fotos')

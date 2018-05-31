@@ -25,9 +25,8 @@ def defaultSettings(glbls):
     # MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 
     # You are very likely to override these
-    # ############################################################
-    d.VILLANET_SECRET_API_KEY = None
     # These should be of the form ('host', 'user', 'password', 'db')
+    # ############################################################
     d.WIKI_MYSQL_SECRET = None
     d.WOLK_MYSQL_SECRET = None
 
