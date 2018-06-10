@@ -146,7 +146,6 @@ def defaultSettings(glbls):
         'django.contrib.sessions',
         'django.contrib.messages',
         'kn.leden',
-        'kn.poll',
         'kn.subscriptions',
         'kn.browser',
         'kn.reglementen',
