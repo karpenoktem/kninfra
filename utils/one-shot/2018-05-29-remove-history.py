@@ -12,19 +12,17 @@ def remove_history_item(user, plural, singular, key=None, save=False):
             print('ERROR: user has "%s" and "%s" as key: %s' % (plural, singular, user))
             return
 
-        if len(user._data[plural]) == 0:
-            print('WARNING: user has no "%s": %s' % (plural, user))
-            return
+        if len(user._data[plural]) != 0:
+            item = user._data[plural][0]
+            del item['from']
+            del item['until']
+            if key is not None:
+                item = item[key]
+            user._data[singular] = item
 
-        item = user._data[plural][0]
-        del item['from']
-        del item['until']
-        if key is not None:
-            item = item[key]
-        user._data[singular] = item
         del user._data[plural]
 
-        print('converted: %-20s %s' % (user.name, user._data[singular]))
+        print('converted: %-20s %s' % (user.name, user._data.get(singular, '<none>')))
         if save:
             user.save()
     elif singular in user._data:
