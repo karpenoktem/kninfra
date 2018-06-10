@@ -750,6 +750,9 @@ def balans(request):
         if not account:
             raise Http404
 
+    if account not in accounts:
+        raise PermissionDenied
+
     accounts = [(a, a == account) for a in accounts]
 
     balans = giedo.fin_get_account(account)
