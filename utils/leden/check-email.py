@@ -9,8 +9,6 @@ import kn.leden.entities as Es
 from kn.base.mail import render_then_email
 from kn.leden.mongo import _id
 
-DAYS_IN_YEAR = 365.242199
-
 
 def check_email():
     comm_ids = [_id(x) for x in Es.by_name('comms').get_bearers()]
