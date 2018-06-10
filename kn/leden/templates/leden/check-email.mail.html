@@ -1,0 +1,148 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}
+[Karpe Noktem] Controle ledenadministratie
+{% endblocktrans %}
+{% endblock subject %}
+
+
+{% block html %}
+<p>Beste {{ u.first_name }},</p>
+
+<p>Elk jaar controleren wij de gegevens die zijn opgenomen in de
+ledenadministratie. Over jou is het volgende opgenomen.</p>
+
+<p>Zou je kunnen controleren of het klopt?</p>
+
+<p>Bij voorbaat dank,</p>
+
+<p>Niels Boer</p>
+
+<hr/>
+
+<h2>Personalia</h2>
+
+<table>
+  <tr>
+    <th>Voornaam</th>
+    <td>{{ u.first_name }}</td>
+  </tr>
+  <tr>
+    <th>Achternaam</th>
+    <td>{{ u.last_name }}</td>
+  </tr>
+  <tr>
+    <th>Geboortedatum</th>
+    <td>{{ u.dateOfBirth.date }}</td>
+  </tr>
+  <tr>
+    <th>Gebruikersnamen</th>
+    <td>{{ u.names|join:" " }}</td>
+  </tr>
+  <tr>
+    <th>Telefoonnummer</th>
+    <td>{{ u.telephone }}</td>
+  </tr>
+  <tr>
+    <th>E-Mail adres</th>
+    <td>{{ u.email }}</td>
+  </tr>
+</table>
+
+<h3>Studies</h3>
+<ul>
+{% for study in u.studies %}
+  <li>
+{% if study.from and study.until %}
+    Van {{study.from.date}} tot {{study.until.date}} studeerde je
+{% elif study.from %}
+    Vanaf {{study.from.date}} studeer je
+{% elif study.until %}
+    Tot {{study.until.date}} studeerde je
+{% else %}
+    Je studeert
+{% endif %}
+    <a href="{{ BASE_URL }}{{ study.study.get_absolute_url }}">{{ study.study.humanName }}</a>
+    bij instituut <a href="{{ BASE_URL }}{{ study.institute.get_absolute_url }}">{{ study.institute.humanName }}</a>
+    met studentnummer <em>{{ study.number }}</em>.
+  </li>
+{% endfor %}
+</ul>
+
+<h3>Adres</h3>
+<blockquote>
+{{ u.address.street }} {{ u.address.number }}<br/>
+{{ u.address.zip }} {{ u.address.city }}
+</blockquote>
+
+{% if comms %}
+<h3>Lidmaatschap commissies</h3>
+
+<ul>
+  {% for rel in comms %}
+  <li>
+    {% if rel.how %}{{ rel.how.humanName }}{% else %}Lid{% endif %}
+    van de <a href="{{ BASE_URL }}{{ rel.with.get_absolute_url }}">{{ rel.with.humanName }}</a>
+    {% if rel.from and rel.until %}
+      (van {{ rel.from.date }} tot {{ rel.until.date }})
+    {% elif rel.from %}
+      (vanaf {{ rel.from.date }})
+    {% elif rel.until %}
+      (tot {{ rel.until.date }})
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+
+{% endif %}
+
+{% if lists %}
+<h3>Lidmaatschap vrije e-maillijsten</h3>
+
+<ul>
+  {% for rel in lists %}
+  <li>
+    {% if rel.how %}{{ rel.how.humanName }}{% else %}Lid{% endif %}
+    van de <a href="{{ BASE_URL }}{{ rel.with.get_absolute_url }}">{{ rel.with.humanName }}</a>
+    {% if rel.from and rel.until %}
+      (van {{ rel.from.date }} tot {{ rel.until.date }})
+    {% elif rel.from %}
+      (vanaf {{ rel.from.date }})
+    {% elif rel.until %}
+      (tot {{ rel.until.date }})
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+
+{% endif %}
+
+{% if others %}
+<h3>Lidmaatschap andere groepen</h3>
+
+<ul>
+{% for rel in others %}
+  <li>
+    {% if rel.how %}{{ rel.how.humanName }}{% else %}Lid{% endif %}
+    van de <a href="{{ BASE_URL }}{{ rel.with.get_absolute_url }}">{{ rel.with.humanName }}</a>
+    {% if rel.from and rel.until %}
+      (van {{ rel.from.date }} tot {{ rel.until.date }})
+    {% elif rel.from %}
+      (vanaf {{ rel.from.date }})
+    {% elif rel.until %}
+      (tot {{ rel.until.date }})
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+
+{% endif %}
+
+<style>
+table th {
+  text-align: left;
+}
+</style>
+
+{% endblock html %}

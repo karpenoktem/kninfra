@@ -29,7 +29,7 @@ def check_email():
             else:
                 others.append(rel)
         print(m.name)
-        render_then_email('leden/check-email.mail.txt',
+        render_then_email('leden/check-email.mail.html',
                           m.email,
                           {'u': m,
                            'comms': comms,
