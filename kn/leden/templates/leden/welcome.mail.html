@@ -1,27 +1,33 @@
 {% load i18n %}
 
+{% block from %}
+{% blocktrans %}
+Secretaris Karpe Noktem <secretaris@karpenoktem.nl>
+{% endblocktrans %}
+{% endblock %}
+
 {% block subject %}
 {% blocktrans %}
-[Karpe Noktem] Controle ledenadministratie
+[Karpe Noktem] Jouw gegevens
 {% endblocktrans %}
-{% endblock subject %}
-
+{% endblock %}
 
 {% block html %}
 {% blocktrans with first_name=u.first_name %}
-<p>Beste {{ first_name }},</p>
+Beste {{ first_name }},
+{% endblocktrans %}
 
-<p>Elk jaar controleren wij de gegevens die zijn opgenomen in de
-ledenadministratie. Over jou is het volgende opgenomen.</p>
+{% blocktrans %}
+<p>Welkom bij Karpe Noktem!</p>
 
-<p>Zou je kunnen controleren of het klopt?</p>
+<p>Wij hebben de volgende gegevens van jouw inschrijfformulier
+overgenomen. Kun je controleren of deze kloppen?</p>
 
 <p>Bij voorbaat dank,</p>
 
-<p>Niels Boer</p>
+<p>Bas van Wijk</p>
 {% endblocktrans %}
 
-<hr/>
 
 <h2>{% trans "Personalia" %}</h2>
 
@@ -81,64 +87,5 @@ ledenadministratie. Over jou is het volgende opgenomen.</p>
 {{ u.address.street }} {{ u.address.number }}<br/>
 {{ u.address.zip }} {{ u.address.city }}
 </blockquote>
-
-{# TODO: i18n for the below lists. #}
-
-{% if comms %}
-<h3>{% trans "Lidmaatschap commissies" %}</h3>
-<ul>
-  {% for rel in comms %}
-  <li>
-    {% if rel.how %}{{ rel.how.humanName }}{% else %}Lid{% endif %}
-    van de <a href="{{ BASE_URL }}{{ rel.with.get_absolute_url }}">{{ rel.with.humanName }}</a>
-    {% if rel.from and rel.until %}
-      (van {{ rel.from.date }} tot {{ rel.until.date }})
-    {% elif rel.from %}
-      (vanaf {{ rel.from.date }})
-    {% elif rel.until %}
-      (tot {{ rel.until.date }})
-    {% endif %}
-  </li>
-  {% endfor %}
-</ul>
-{% endif %}
-
-{% if lists %}
-<h3>{% trans "Lidmaatschap vrije e-maillijsten" %}</h3>
-<ul>
-  {% for rel in lists %}
-  <li>
-    {% if rel.how %}{{ rel.how.humanName }}{% else %}Lid{% endif %}
-    van de <a href="{{ BASE_URL }}{{ rel.with.get_absolute_url }}">{{ rel.with.humanName }}</a>
-    {% if rel.from and rel.until %}
-      (van {{ rel.from.date }} tot {{ rel.until.date }})
-    {% elif rel.from %}
-      (vanaf {{ rel.from.date }})
-    {% elif rel.until %}
-      (tot {{ rel.until.date }})
-    {% endif %}
-  </li>
-  {% endfor %}
-</ul>
-{% endif %}
-
-{% if others %}
-<h3>{% trans "Lidmaatschap andere groepen" %}</h3>
-<ul>
-{% for rel in others %}
-  <li>
-    {% if rel.how %}{{ rel.how.humanName }}{% else %}Lid{% endif %}
-    van de <a href="{{ BASE_URL }}{{ rel.with.get_absolute_url }}">{{ rel.with.humanName }}</a>
-    {% if rel.from and rel.until %}
-      (van {{ rel.from.date }} tot {{ rel.until.date }})
-    {% elif rel.from %}
-      (vanaf {{ rel.from.date }})
-    {% elif rel.until %}
-      (tot {{ rel.until.date }})
-    {% endif %}
-  </li>
-  {% endfor %}
-</ul>
-{% endif %}
 
 {% endblock html %}

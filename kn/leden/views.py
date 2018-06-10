@@ -465,7 +465,7 @@ def secr_add_user(request):
                 'user': u,
                 'password': pwd})
             # Send the welcome e-mail
-            render_then_email("leden/welcome.mail.txt", u, {
+            render_then_email("leden/welcome.mail.html", u, {
                 'u': u})
             Es.notify_informacie('adduser', request.user, entity=u._id)
             return HttpResponseRedirect(reverse('user-by-name',
