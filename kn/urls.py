@@ -21,7 +21,6 @@ urlpatterns += i18n_patterns(
     url(_(r'^smoelen/'), include('kn.leden.urls')),
     url(_(r'^activiteit/'), include('kn.subscriptions.urls')),
     url(_(r'^reglementen/'), include('kn.reglementen.urls')),
-    url(_(r'^poll/'), include('kn.poll.urls')),
     url(_(r'^accounts/login/$'), login, name='login'),
     url(_(r'^accounts/logout/$'), logout_then_login, name='logout'),
     url(_(r'^accounts/api/$'), 'kn.leden.views.accounts_api', name='auth-api'),
