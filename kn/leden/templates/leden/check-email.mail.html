@@ -25,27 +25,27 @@ ledenadministratie. Over jou is het volgende opgenomen.</p>
 
 <table>
   <tr>
-    <th>Voornaam</th>
+    <th style="text-align: left;">Voornaam</th>
     <td>{{ u.first_name }}</td>
   </tr>
   <tr>
-    <th>Achternaam</th>
+    <th style="text-align: left;">Achternaam</th>
     <td>{{ u.last_name }}</td>
   </tr>
   <tr>
-    <th>Geboortedatum</th>
+    <th style="text-align: left;">Geboortedatum</th>
     <td>{{ u.dateOfBirth.date }}</td>
   </tr>
   <tr>
-    <th>Gebruikersnamen</th>
+    <th style="text-align: left;">Gebruikersnamen</th>
     <td>{{ u.names|join:" " }}</td>
   </tr>
   <tr>
-    <th>Telefoonnummer</th>
+    <th style="text-align: left;">Telefoonnummer</th>
     <td>{{ u.telephone }}</td>
   </tr>
   <tr>
-    <th>E-Mail adres</th>
+    <th style="text-align: left;">E-Mail adres</th>
     <td>{{ u.email }}</td>
   </tr>
 </table>
@@ -138,11 +138,5 @@ ledenadministratie. Over jou is het volgende opgenomen.</p>
 </ul>
 
 {% endif %}
-
-<style>
-table th {
-  text-align: left;
-}
-</style>
 
 {% endblock html %}
