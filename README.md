@@ -68,7 +68,6 @@ De Django website is te vinden onder de `kn` map, met daaronder de volgende
 
 Wat minder gebruikte *apps* zijn:
 
- * `kn/moderation`. E-Mail moderatie
  * `kn/browser`.  Voor het online browser van bestanden zoals de
     [stukken pagina](https://karpenoktem.nl/groups/leden/).
 

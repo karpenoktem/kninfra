@@ -25,7 +25,6 @@ urlpatterns += i18n_patterns(
     url(_(r'^accounts/login/$'), login, name='login'),
     url(_(r'^accounts/logout/$'), logout_then_login, name='logout'),
     url(_(r'^accounts/api/$'), 'kn.leden.views.accounts_api', name='auth-api'),
-    url(_(r'^moderatie/'), include('kn.moderation.urls')),
     url(_(r'^planning/'), include('kn.planning.urls')),
     url(r'', include('kn.base.urls')),
     url(r'', include('kn.agenda.urls')),

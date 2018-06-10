@@ -151,7 +151,6 @@ def defaultSettings(glbls):
         'kn.browser',
         'kn.reglementen',
         'kn.base',
-        'kn.moderation',
         'kn.planning',
         'kn.fotos',
         'kn.static',
