@@ -695,7 +695,7 @@ def user_reset_password(request, _id):
     pwd = pseudo_randstr()
     u.set_password(pwd)
     giedo.change_password(str(u.name), pwd, pwd)
-    render_then_email("leden/reset-password.mail.txt", u, {
+    render_then_email("leden/reset-password.mail.html", u, {
         'user': u,
         'password': pwd})
     messages.info(request, _("Wachtwoord gereset!"))
