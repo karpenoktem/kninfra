@@ -148,7 +148,6 @@ def defaultSettings(glbls):
         'kn.leden',
         'kn.subscriptions',
         'kn.browser',
-        'kn.reglementen',
         'kn.base',
         'kn.moderation',
         'kn.planning',
