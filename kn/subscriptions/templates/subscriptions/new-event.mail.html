@@ -1,0 +1,22 @@
+{% load i18n %}
+
+{% block from %}
+{% trans "Karpe Noktem Activiteiten <root@karpenoktem.nl>" %}
+{% endblock from %}
+
+{% block subject %}
+{% blocktrans with humanName=event.humanName %}
+Activiteit: {{ humanName }}
+{% endblocktrans %}
+{% endblock subject %}
+
+{% block html %}
+{% url "event-detail" name=event.name as event_url %}
+{% blocktrans with event_name=event.humanName user_fullname=user.full_name user_url=user.get_absolute_url %}
+<p><a href="{{ BASE_URL}}{{ user_url }}">{{ user_fullname }}</a> heeft een nieuwe activiteit aangemaakt: <a href="{{ BASE_URL }}{{ url_event }}">{{ event_name }}</a></p>
+{% endblocktrans %}
+
+<blockquote>
+  {{ event.description_html|safe }}
+</blockquote>
+{% endblock html %}

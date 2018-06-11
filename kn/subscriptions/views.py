@@ -220,7 +220,7 @@ def event_new_or_edit(request, edit=None):
             e.save()
             render_then_email(
                 'subscriptions/' +
-                ('event-edited' if edit else 'new-event') + '.mail.txt',
+                ('event-edited' if edit else 'new-event') + '.mail.html',
                 Es.by_name('secretariaat').canonical_full_email, {
                     'event': e,
                     'user': request.user
