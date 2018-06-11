@@ -175,8 +175,7 @@ class Event(SONWrapper):
     @property
     def messageId(self):
         """ Unique ID to be used in e.g. References: headers """
-        return '<%s@%s>' % (self.get_absolute_url().strip('/'),
-                            settings.MAILDOMAIN)
+        return '<activiteit/%s@%s>' % (self.name, settings.MAILDOMAIN)
 
     def has_read_access(self, user):
         return (self.owner == user or
