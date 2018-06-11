@@ -108,10 +108,7 @@ $(document).ready(function() {
         var headerFixedThreshold = headerHeight - collapsedHeaderHeight;
 
         // Skip to content after first view.
-        // Scrolling needs the media queries to work. Media queries don't work in
-        // IE8, and getComputedStyle doesn't work either so this is a test to
-        // exclude old browsers.
-        if (sessionStorage['visited'] && window.getComputedStyle &&
+        if (sessionStorage['visited'] &&
             getComputedStyle(document.body).paddingTop == headerHeight + "px") {
             $(document.body).addClass('viewedBefore');
             // <html> for Firefox, <body> for other browsers
@@ -204,21 +201,13 @@ function unobfuscateEmail() {
     for (var i=0; i<emails.length; i++) {
         var email = emails[i];
         var email_link = document.createElement('a');
-        if (email.textContent) {
-            email_link.textContent = rot13(email.textContent);
-        } else { /* IE8 */
-            email_link.innerText = rot13(email.innerText);
-        }
+        email_link.textContent = rot13(email.textContent);
         email_link.href = 'mailto:' + (email_link.textContent || email_link.innerText);
         email_link.setAttribute('class', 'email');
         email.parentNode.insertBefore(email_link, email);
         email.parentNode.removeChild(email);
     }
 }
-if (document.addEventListener) {
-    document.addEventListener('DOMContentLoaded', unobfuscateEmail);
-} else { /* IE8 */
-    window.attachEvent('onload', unobfuscateEmail);
-}
+document.addEventListener('DOMContentLoaded', unobfuscateEmail);
 
 // vim: et:sta:bs=2:sw=4:
