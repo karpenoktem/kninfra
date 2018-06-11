@@ -17,16 +17,14 @@ from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render_to_response
-from django.template import Context, RequestContext
-from django.template.loader import get_template
-from django.template.loader_tags import BlockNode
+from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
 from kn.base._random import pseudo_randstr
 from kn.base.conf import DT_MAX, DT_MIN
 from kn.base.http import JsonHttpResponse, redirect_to_referer
-from kn.base.mail import render_then_email
+from kn.base.mail import render_message, render_then_email
 from kn.base.text import humanized_enum
 from kn.fotos.utils import resize_proportional
 from kn.leden import fin, giedo
@@ -543,11 +541,11 @@ def fiscus_debtmail(request):
         for user_name in users_to_email:
             user = Es.by_name(user_name)
 
-            ctx['first_name'] = user.first_name,
+            ctx['first_name'] = user.first_name
             ctx['debt'] = data[user.full_name]['debt']
 
             try:
-                render_then_email("leden/debitor.mail.txt",
+                render_then_email('leden/debitor.mail.html',
                                   to=user, ctx=ctx,
                                   cc=[],  # ADD penningmeester
                                   from_email=ctx['quaestor']['email'],
@@ -562,16 +560,9 @@ def fiscus_debtmail(request):
                                {'user': user_name, 'e': repr(e)})
 
     # get a sample of the email that will be sent for the quaestor's review.
-    email = ""
-    email_template = get_template('leden/debitor.mail.txt')
-
     ctx['first_name'] = '< Naam >'
     ctx['debt'] = '< Debet >'
-    context = Context(ctx)
-    for node in email_template:
-        if isinstance(node, BlockNode) and node.name == "plain":
-            email = node.render(context)
-            break
+    email = render_message('leden/debitor.mail.html', ctx)['html']
 
     return render_to_response('leden/fiscus_debtmail.html',
                               {'data': data, 'email': email},

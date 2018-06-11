@@ -6,7 +6,6 @@ import django.template.loader
 from django.conf import settings
 from django.template.loader_tags import BlockNode
 from django.utils import translation
-from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
 
@@ -20,32 +19,12 @@ except ImportError:
 # TODO translate e-mail to the language preferred by the recipient
 
 
-def render_then_email(
-        template_name,
-        to,
-        ctx={},
-        cc=[],
-        bcc=[],
-        from_email=None,
-        reply_to=None,
-        headers=None):
-    """ Render an e-mail from a template and send it. """
+def render_message(template_name, ctx, to=None):
     # What language to send the mail in?
     language = settings.LANGUAGE_CODE
     if isinstance(to, Es.User):
         language = to.preferred_language
 
-    # Normalize arguments
-    addrs = {'to': to, 'cc': cc, 'bcc': bcc}
-    for what in ('to', 'cc', 'bcc'):
-        if not isinstance(addrs[what], (tuple, list)):
-            addrs[what] = [addrs[what]]
-        addrs[what] = [x.canonical_full_email if isinstance(x, Es.User) else x
-                       for x in addrs[what]]
-    if headers is None:
-        headers = {}
-
-    # Render template
     request_language = translation.get_language()
     translation.activate(language)
     try:
@@ -59,9 +38,35 @@ def render_then_email(
     finally:
         translation.activate(request_language)
     if 'subject' not in rendered_nodes:
-        raise KeyError(_("subject blok mist"))
+        raise KeyError('missing subject block')
     if 'plain' not in rendered_nodes and 'html' not in rendered_nodes:
-        raise KeyError(_("html of plain blok mist"))
+        raise KeyError('missing plain and html block')
+    return rendered_nodes
+
+
+def render_then_email(
+        template_name,
+        to,
+        ctx={},
+        cc=[],
+        bcc=[],
+        from_email=None,
+        reply_to=None,
+        headers=None):
+    """ Render an e-mail from a template and send it. """
+
+    # Normalize arguments
+    addrs = {'to': to, 'cc': cc, 'bcc': bcc}
+    for what in ('to', 'cc', 'bcc'):
+        if not isinstance(addrs[what], (tuple, list)):
+            addrs[what] = [addrs[what]]
+        addrs[what] = [x.canonical_full_email if isinstance(x, Es.User) else x
+                       for x in addrs[what]]
+    if headers is None:
+        headers = {}
+
+    # Render template
+    rendered_nodes = render_message(template_name, ctx, to=to)
 
     # Set up e-mail
     if addrs['cc']:
