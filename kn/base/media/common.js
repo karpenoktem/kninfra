@@ -44,10 +44,14 @@ function entityChoiceField_get(id) {
 function create_entityChoiceField(id, params) {
     if(!params) params = {};
     if(!params.input_type) params.input_type = 'text';
-    $('#'+id).after("<input type='"+params.input_type+"' id='_"+id+"' />");
-    var box = $('#_'+id);
+    var hiddenEl = $('#'+id);
+    var visibleEl = $("<input />");
+    visibleEl.attr('id', '_' + id);
+    visibleEl.attr('type', params.input_type)
+    visibleEl.attr('required', hiddenEl.attr('required'));
+    hiddenEl.after(visibleEl);
     if(params.placeholder) {
-        box.attr('placeholder', params.placeholder);
+        visibleEl.attr('placeholder', params.placeholder);
     }
     var myParams = {
         source: function(request, response) {
@@ -61,10 +65,13 @@ function create_entityChoiceField(id, params) {
                 });
         },
         select: function(event, ui) {
-            $("#_"+id).val(ui.item.value);
-            $("#"+id).val(ui.item.key);
+            visibleEl.val(ui.item.value);
+            hiddenEl.val(ui.item.key);
             if (params.select) {
                 params.select(ui.item.value, ui.item.key);
+            }
+            if (hiddenEl.attr('required')) {
+                visibleEl[0].setCustomValidity('');
             }
             return false;
         },
@@ -73,9 +80,16 @@ function create_entityChoiceField(id, params) {
     if(params.position) {
         myParams.position = params.position;
     }
-    box.autocomplete(myParams).focus(function() {
+    visibleEl.autocomplete(myParams).focus(function() {
         $(this).trigger('keydown.autocomplete');
     });
+    console.log(id, hiddenEl.attr('required'));
+    if (hiddenEl.attr('required')) {
+      visibleEl[0].setCustomValidity('Geen entity ingevuld');
+      visibleEl.on('input', function() {
+          visibleEl[0].setCustomValidity('Geen entity ingevuld (bewerkt)');
+      });
+    }
 }
 
 function checkGiedoSync(goal) {
