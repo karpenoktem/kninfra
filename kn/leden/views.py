@@ -461,7 +461,7 @@ def secr_add_user(request):
             pwd = pseudo_randstr()
             u.set_password(pwd)
             giedo.change_password(str(u.name), pwd, pwd)
-            render_then_email("leden/set-password.mail.txt", u, {
+            render_then_email("leden/set-password.mail.html", u, {
                 'user': u,
                 'password': pwd})
             # Send the welcome e-mail
