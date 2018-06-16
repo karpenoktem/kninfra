@@ -79,8 +79,9 @@ def delete_note(data, request):
         return {'ok': False, 'error': 'Note not found'}
     note.delete()
     render_then_email('leden/note-deleted.mail.html',
-                      Es.by_name('secretariaat').canonical_full_email, {
-                          'note': note}, headers={
+                      Es.by_name('secretariaat').canonical_full_email,
+                      {'note': note, 'closed_by': request.user},
+                      headers={
                               'In-Reply-To': note.messageId,
                               'References': note.messageId,
                       })
