@@ -18,7 +18,7 @@ def vcard(u):
     c.add('fn')
     c.fn.value = u.full_name()
     le = c.add('email', 'kn')
-    le.value = u.primary_email
+    le.value = u.email
     le.type_paramlist = ['INTERNET']
     c.add('X-ABLabel', 'kn').value = 'kn'
     if u.telephone is not None:

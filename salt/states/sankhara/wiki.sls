@@ -32,6 +32,7 @@ install wiki:
                 --dbuser wiki \
                 --dbpass {{ pillar['secrets']['mysql_wiki'] }} \
                 --installdbpass {{ pillar['secrets']['mysql_wiki'] }}
+            php /var/lib/mediawiki/maintenance/update.php --quick
             touch /etc/mediawiki/.is-installed
 /etc/mediawiki/LocalSettings.php:
     file.managed:

@@ -9,7 +9,6 @@ from django.utils import six
 
 import kn.fotos.entities as fEs  # noqa: F401
 import kn.leden.entities as Es  # noqa: F401
-import kn.poll.entities as poll_Es  # noqa: F401
 import kn.reglementen.entities as regl_Es  # noqa: F401
 import kn.subscriptions.entities as subscr_Es  # noqa: F401
 from kn.base.conf import DT_MAX, DT_MIN
@@ -124,9 +123,5 @@ def create_extern(humanName, email, name=None):
         'tags': [Es.id_by_name('externen')],
         'is_active': False,
         'has_unix_user': False,
-        'emailAddresses': [{
-            'email': email,
-            'from': DT_MIN,
-            'until': DT_MAX
-        }],
+        'email': email,
     })

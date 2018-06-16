@@ -27,25 +27,17 @@
 		{% endblock %}
 		<script type="text/javascript"
                         src="{{ MEDIA_URL }}base/jquery-1.11.1.min.js"></script>
-		<!--[if lte IE 8]>
-		<script type="text/javascript" src="{{ MEDIA_URL }}base/ie8.js"></script>
-		<![endif]-->
 		<script type="text/javascript"
 			src="{{ MEDIA_URL }}base/common.js?v=4"></script>
 		<link rel="icon" href="{{ MEDIA_URL }}base/favicon.ico" />
 		<link rel="apple-touch-icon" href="{{ MEDIA_URL }}base/touch-icon-128.png" />
 		<script type="text/javascript">
-		  function loadDeferredCSS() {
+		  window.addEventListener('DOMContentLoaded', function () {
 		    var links = document.querySelectorAll('link[deferred-href]');
 		    for (var i=0; i<links.length; i++) {
 		      links[i].setAttribute('href', links[i].getAttribute('deferred-href'));
 		    }
-		  }
-		  if (window.addEventListener) {
-		    window.addEventListener('DOMContentLoaded', loadDeferredCSS);
-		  } else {
-		    window.attachEvent('onload', loadDeferredCSS);
-		  }
+		  });
 
 		  var csrf_token = "{{ csrf_token }}";
 		  var leden_api_url = "{% url "leden-api" %}";

@@ -44,10 +44,14 @@ function entityChoiceField_get(id) {
 function create_entityChoiceField(id, params) {
     if(!params) params = {};
     if(!params.input_type) params.input_type = 'text';
-    $('#'+id).after("<input type='"+params.input_type+"' id='_"+id+"' />");
-    var box = $('#_'+id);
+    var hiddenEl = $('#'+id);
+    var visibleEl = $("<input />");
+    visibleEl.attr('id', '_' + id);
+    visibleEl.attr('type', params.input_type)
+    visibleEl.attr('required', hiddenEl.attr('required'));
+    hiddenEl.after(visibleEl);
     if(params.placeholder) {
-        box.attr('placeholder', params.placeholder);
+        visibleEl.attr('placeholder', params.placeholder);
     }
     var myParams = {
         source: function(request, response) {
@@ -61,10 +65,13 @@ function create_entityChoiceField(id, params) {
                 });
         },
         select: function(event, ui) {
-            $("#_"+id).val(ui.item.value);
-            $("#"+id).val(ui.item.key);
+            visibleEl.val(ui.item.value);
+            hiddenEl.val(ui.item.key);
             if (params.select) {
                 params.select(ui.item.value, ui.item.key);
+            }
+            if (hiddenEl.attr('required')) {
+                visibleEl[0].setCustomValidity('');
             }
             return false;
         },
@@ -73,9 +80,16 @@ function create_entityChoiceField(id, params) {
     if(params.position) {
         myParams.position = params.position;
     }
-    box.autocomplete(myParams).focus(function() {
+    visibleEl.autocomplete(myParams).focus(function() {
         $(this).trigger('keydown.autocomplete');
     });
+    console.log(id, hiddenEl.attr('required'));
+    if (hiddenEl.attr('required')) {
+      visibleEl[0].setCustomValidity('Geen entity ingevuld');
+      visibleEl.on('input', function() {
+          visibleEl[0].setCustomValidity('Geen entity ingevuld (bewerkt)');
+      });
+    }
 }
 
 function checkGiedoSync(goal) {
@@ -108,10 +122,7 @@ $(document).ready(function() {
         var headerFixedThreshold = headerHeight - collapsedHeaderHeight;
 
         // Skip to content after first view.
-        // Scrolling needs the media queries to work. Media queries don't work in
-        // IE8, and getComputedStyle doesn't work either so this is a test to
-        // exclude old browsers.
-        if (sessionStorage['visited'] && window.getComputedStyle &&
+        if (sessionStorage['visited'] &&
             getComputedStyle(document.body).paddingTop == headerHeight + "px") {
             $(document.body).addClass('viewedBefore');
             // <html> for Firefox, <body> for other browsers
@@ -204,21 +215,13 @@ function unobfuscateEmail() {
     for (var i=0; i<emails.length; i++) {
         var email = emails[i];
         var email_link = document.createElement('a');
-        if (email.textContent) {
-            email_link.textContent = rot13(email.textContent);
-        } else { /* IE8 */
-            email_link.innerText = rot13(email.innerText);
-        }
+        email_link.textContent = rot13(email.textContent);
         email_link.href = 'mailto:' + (email_link.textContent || email_link.innerText);
         email_link.setAttribute('class', 'email');
         email.parentNode.insertBefore(email_link, email);
         email.parentNode.removeChild(email);
     }
 }
-if (document.addEventListener) {
-    document.addEventListener('DOMContentLoaded', unobfuscateEmail);
-} else { /* IE8 */
-    window.attachEvent('onload', unobfuscateEmail);
-}
+document.addEventListener('DOMContentLoaded', unobfuscateEmail);
 
 // vim: et:sta:bs=2:sw=4:

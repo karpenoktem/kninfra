@@ -21,13 +21,11 @@ def defaultSettings(glbls):
 
     # CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
     # SECRET_KEY = 'CHANGE ME'
-    # ALLOWED_API_KEYS = ('CHANGE ME',)
     # MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 
     # You are very likely to override these
-    # ############################################################
-    d.VILLANET_SECRET_API_KEY = None
     # These should be of the form ('host', 'user', 'password', 'db')
+    # ############################################################
     d.WIKI_MYSQL_SECRET = None
     d.WOLK_MYSQL_SECRET = None
 
@@ -103,8 +101,6 @@ def defaultSettings(glbls):
     d.PHOTOS_DIR = '/var/fotos'
     d.USER_DIRS = '/mnt/phassa/home/'
 
-    d.QUASSEL_CONFIGDIR = '/var/lib/quassel'
-
     d.INTERNAL_IPS = ['83.162.203.144']  # bas
     d.LOCALE = 'nl_NL.UTF-8'
     d.LANGUAGE_CODE = 'nl'
@@ -144,7 +140,6 @@ def defaultSettings(glbls):
         'django.contrib.sessions',
         'django.contrib.messages',
         'kn.leden',
-        'kn.poll',
         'kn.subscriptions',
         'kn.browser',
         'kn.reglementen',
@@ -192,7 +187,6 @@ def defaultSettings(glbls):
         'stukken': d.BASE_URL + '/groups/leden/',
         'wiki': d.BASE_URL + '/wiki',
         'wiki-home': d.BASE_URL + '/wiki/Hoofdpagina',
-        'irc': d.BASE_URL + '/irc',
     }
 
     d.DT_MIN = datetime.datetime(2004, 8, 31)
@@ -201,6 +195,7 @@ def defaultSettings(glbls):
     d.USERNAME_CHARS = 'qwertyuiopasdfghjklzxcvbnm123456789-'
 
     d.DEBUG = True
+    d.MAIL_DEBUG = d.DEBUG
 
     d.ABSOLUTE_MEDIA_URL = d.BASE_URL + d.MEDIA_URL
 

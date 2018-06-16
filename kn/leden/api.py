@@ -121,17 +121,17 @@ def entity_update_primary(data, request):
     if e is None:
         return {'ok': False, 'error': 'Entity not found'}
     if (typ == 'email'):
-        """ >> {action:"entity_update_primary_email",id:"4e6fcc85e60edf3dc0000270",
+        """ >> {action:"entity_update_email",id:"4e6fcc85e60edf3dc0000270",
                     new:"giedo@univ.gov"} """
         if not email_re.match(new):
             return {'ok': False, 'error': 'Not valid e-mail address'}
-        e.update_primary_email(new)
+        e.update_email(new)
     elif (typ == 'telephone'):
-        """ >> {action:"entity_update_primary_telephone",id:"4e6fcc85e60edf3dc0000270",
+        """ >> {action:"entity_update_telephone",id:"4e6fcc85e60edf3dc0000270",
                     new:"+31611223344"} """
         if not len(new) > 9:
             return {'ok': False, 'error': 'Phone number is too short'}
-        e.update_primary_telephone(new)
+        e.update_telephone(new)
     elif (typ == 'address'):
         """ >> {action:"entity_update_address",id:"4e6fcc85e60edf3dc0000270",
                     street:"Street",

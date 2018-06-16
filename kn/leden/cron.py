@@ -9,7 +9,7 @@ def send_informacie_digest():
     ntfs = Es.pop_all_informacie_notifications()
     if not ntfs:
         return
-    render_then_email('leden/informacie-digest.mail.txt',
+    render_then_email('leden/informacie-digest.mail.html',
                       Es.by_name('informacie').canonical_full_email, {
                           'ntfs': ntfs})
 

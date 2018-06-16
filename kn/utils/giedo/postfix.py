@@ -24,7 +24,7 @@ def generate_postfix_map(giedo):
         for nm in e.other_names:
             tbl["%s@%s" % (nm, settings.MAILDOMAIN)] = (e.canonical_email,)
         if e.type == 'user':
-            tbl[e.canonical_email] = (e.primary_email,)
+            tbl[e.canonical_email] = (e.email,)
         elif e.type == 'group':
             if e.got_mailman_list and e.name:
                 tbl[e.canonical_email] = ('%s@%s' % (

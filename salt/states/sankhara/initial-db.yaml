@@ -438,7 +438,7 @@ entities:
   names: [in]
   tags: [!id '4e6fcc85e60edf3dc00000bc', !id '4ea9ce060032a04a41000001']
   types: [group, tag]
-- _id: !id '4e6fcc85e60edf3dc000007d'
+- _id: &comms_id !id '4e6fcc85e60edf3dc000007d'
   description: Alle commissies van Karpe Noktem.
   humanNames:
   - {genitive_prefix: van de, human: Commissies, name: comms}
@@ -493,6 +493,24 @@ entities:
   - {genitive_prefix: van de, human: Draai, name: draai}
   names: [draai]
   tags: [!id '4e6fcc85e60edf3dc000006d']
+  types: [group, tag]
+- description: Constructief Opererende Culinaire Koks
+  humanNames:
+  - {genitive_prefix: van de, human: COCKS, name: cocks}
+  names: [cocks]
+  tags: [*comms_id]
+  types: [group, tag]
+- description: De commissie van de soos
+  humanNames:
+  - {genitive_prefix: van de, human: SoosCie, name: sooscie}
+  names: [sooscie]
+  tags: [*comms_id]
+  types: [group, tag]
+- description: Barco
+  humanNames:
+  - {genitive_prefix: van de, human: BarCo, name: barco}
+  names: [barco]
+  tags: [*comms_id]
   types: [group, tag]
 - description: De DJ's.
   humanNames:
@@ -736,12 +754,12 @@ entities:
   types: [tag]
 
 - _id: &test_id !id '4e6fcc85e60edf3dc00001d4'
-  addresses:
-  - {city: Nijmegen, from:  &dt_min !!timestamp '2014-1-1 00:00:00',
-                    until: &dt_max !!timestamp '5004-09-01 00:00:00',
-                    number: 123, street: straat, zip: 1234 AB}
-  emailAddresses:
-  - {email: 'webcie@kn.cx', from: *dt_min, until: *dt_max}
+  address:
+    city: Nijmegen
+    number: 123
+    street: straat
+    zip: 1234 AB
+  email: 'webcie@kn.cx'
   humanNames:
   - {human: Test Gebruiker}
   is_active: 1
@@ -754,13 +772,12 @@ entities:
     titles: []
   types: [user]
 - _id: &admin_id !id '4e6fcc85e60edf3dc00001d5'
-  addresses:
-  - {city: Nijmegen, from: *dt_min, number: 123,
-                    street: straat, until: *dt_max,
-                        zip: 1234 AB}
-  emailAddresses:
-  - {email: 'webcie@kn.cx', from: *dt_min,
-     until: *dt_max}
+  address:
+    city: Nijmegen
+    number: 123
+    street: straat
+    zip: 1234 AB
+  email: 'webcie@kn.cx'
   humanNames:
   - {human: Test Admin}
   is_active: 1
@@ -776,8 +793,8 @@ relations:
 - who: *test_id
   with: *leden_id
   how: null
-  from: *dt_min
-  until: *dt_max
+  from: &dt_min !!timestamp '2014-1-1 00:00:00'
+  until: &dt_max !!timestamp '5004-09-01 00:00:00'
 - who: *admin_id
   with: *leden_id
   how: null

@@ -1,0 +1,144 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}
+[Karpe Noktem] Controle ledenadministratie
+{% endblocktrans %}
+{% endblock subject %}
+
+
+{% block html %}
+{% blocktrans with first_name=u.first_name %}
+<p>Beste {{ first_name }},</p>
+
+<p>Elk jaar controleren wij de gegevens die zijn opgenomen in de
+ledenadministratie. Over jou is het volgende opgenomen.</p>
+
+<p>Zou je kunnen controleren of het klopt?</p>
+
+<p>Bij voorbaat dank,</p>
+
+<p>Niels Boer</p>
+{% endblocktrans %}
+
+<hr/>
+
+<h2>{% trans "Personalia" %}</h2>
+
+<table>
+  <tr>
+    <th style="text-align: left;">{% trans "Voornaam" %}</th>
+    <td>{{ u.first_name }}</td>
+  </tr>
+  <tr>
+    <th style="text-align: left;">{% trans "Achternaam" %}</th>
+    <td>{{ u.last_name }}</td>
+  </tr>
+  <tr>
+    <th style="text-align: left;">{% trans "Geboortedatum" %}</th>
+    <td>{{ u.dateOfBirth.date }}</td>
+  </tr>
+  <tr>
+    <th style="text-align: left;">{% trans "Gebruikersnamen" %}</th>
+    <td>{{ u.names|join:" " }}</td>
+  </tr>
+  <tr>
+    <th style="text-align: left;">{% trans "Telefoonnummer" %}</th>
+    <td>{{ u.telephone }}</td>
+  </tr>
+  <tr>
+    <th style="text-align: left;">{% trans "E-Mail adres" %}</th>
+    <td>{{ u.email }}</td>
+  </tr>
+</table>
+
+<h3>{% trans "Studie(s)" %}</h3>
+<ul>
+{% for study in u.studies %}
+{% with from=study.from.date until=study.until.date %}
+  <li>
+    {% if study.from and study.until %}
+      {% blocktrans %}Van {{ from }} tot {{ until }} studeerde je{% endblocktrans %}
+    {% elif study.from %}
+      {% blocktrans %}Vanaf {{ from }} studeer je{% endblocktrans %}
+    {% elif study.until %}
+      {% blocktrans %}Tot {{ until }} studeerde je{% endblocktrans %}
+    {% else %}
+      Je studeert
+    {% endif %}
+    {% blocktrans with base_url=BASE_URL study_url=study.study.get_absolute_url study_name=study.study.humanName institute_url=study.institute.get_absolute_url institute_name=study.institute.humanName study_number=study.number %}
+      <a href="{{ BASE_URL }}{{ study_url }}">{{ study_name }}</a>
+      bij instituut <a href="{{ BASE_URL }}{{ study_url }}">{{ study_name }}</a>
+      met studentnummer <em>{{ study_number }}</em>.
+    {% endblocktrans %}
+  </li>
+{% endwith %}
+{% endfor %}
+</ul>
+
+<h3>{% trans "Adres" %}</h3>
+<blockquote>
+{{ u.address.street }} {{ u.address.number }}<br/>
+{{ u.address.zip }} {{ u.address.city }}
+</blockquote>
+
+{# TODO: i18n for the below lists. #}
+
+{% if comms %}
+<h3>{% trans "Lidmaatschap commissies" %}</h3>
+<ul>
+  {% for rel in comms %}
+  <li>
+    {% if rel.how %}{{ rel.how.humanName }}{% else %}Lid{% endif %}
+    van de <a href="{{ BASE_URL }}{{ rel.with.get_absolute_url }}">{{ rel.with.humanName }}</a>
+    {% if rel.from and rel.until %}
+      (van {{ rel.from.date }} tot {{ rel.until.date }})
+    {% elif rel.from %}
+      (vanaf {{ rel.from.date }})
+    {% elif rel.until %}
+      (tot {{ rel.until.date }})
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if lists %}
+<h3>{% trans "Lidmaatschap vrije e-maillijsten" %}</h3>
+<ul>
+  {% for rel in lists %}
+  <li>
+    {% if rel.how %}{{ rel.how.humanName }}{% else %}Lid{% endif %}
+    van de <a href="{{ BASE_URL }}{{ rel.with.get_absolute_url }}">{{ rel.with.humanName }}</a>
+    {% if rel.from and rel.until %}
+      (van {{ rel.from.date }} tot {{ rel.until.date }})
+    {% elif rel.from %}
+      (vanaf {{ rel.from.date }})
+    {% elif rel.until %}
+      (tot {{ rel.until.date }})
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if others %}
+<h3>{% trans "Lidmaatschap andere groepen" %}</h3>
+<ul>
+{% for rel in others %}
+  <li>
+    {% if rel.how %}{{ rel.how.humanName }}{% else %}Lid{% endif %}
+    van de <a href="{{ BASE_URL }}{{ rel.with.get_absolute_url }}">{{ rel.with.humanName }}</a>
+    {% if rel.from and rel.until %}
+      (van {{ rel.from.date }} tot {{ rel.until.date }})
+    {% elif rel.from %}
+      (vanaf {{ rel.from.date }})
+    {% elif rel.until %}
+      (tot {{ rel.until.date }})
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock html %}

@@ -1,0 +1,29 @@
+{% load i18n %}
+
+{% block from %}
+{{ quaestor.name }}  <{{ quaestor.email }}>
+{% endblock %}
+
+{% block subject %}
+{% trans "Betalingsherinnering" %}
+{% endblock %}
+
+{% block html %}
+{% url "balans" as url_balans %}
+{% blocktrans with quaestor_name=quaestor.name %}
+<p>Beste {{ first_name }},</p>
+
+<p>Volgens onze boekhouding ben je ons nog € {{ debt }} verschuldigd, zie:</p>
+
+<blockquote>
+  <a href="{{ BASE_URL }}{{ url_balans }}">{{ BASE_URL }}{{ url_balans }}</a>
+</blockquote>
+
+<p>Zou je dit bedrag over kunnen boeken naar {{ account_number }} ten name van
+{{ account_holder }} ?</p>
+
+<p>Met een vriendelijke groet,</p>
+
+<p>{{ quaestor_name }}</p>
+{% endblocktrans %}
+{% endblock %}

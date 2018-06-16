@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import json
 import logging
 import os
-from datetime import date
 from decimal import Decimal
-from hashlib import sha256
 from itertools import chain
 from wsgiref.util import FileWrapper
 
@@ -14,25 +11,20 @@ import PIL.Image
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage import default_storage
 from django.core.paginator import EmptyPage, Paginator
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.template import Context, RequestContext
-from django.template.loader import get_template
-from django.template.loader_tags import BlockNode
-from django.utils.crypto import constant_time_compare
-from django.utils.http import urlquote
+from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
 from kn.base._random import pseudo_randstr
 from kn.base.conf import DT_MAX, DT_MIN
-from kn.base.http import JsonHttpResponse, get_param, redirect_to_referer
-from kn.base.mail import render_then_email
+from kn.base.http import JsonHttpResponse, redirect_to_referer
+from kn.base.mail import render_message, render_then_email
 from kn.base.text import humanized_enum
 from kn.fotos.utils import resize_proportional
 from kn.leden import fin, giedo
@@ -385,66 +377,6 @@ def ik_settings(request):
     return render(request, 'leden/settings.html', ctx)
 
 
-def rauth(request):
-    """
-        An implementation of Jille Timmermans' rauth scheme
-        The token that is given to the authenticated user is only valid until
-        the end of the day.
-    """
-    if get_param(request, 'url') is None:
-        raise Http404
-    if (get_param(request, 'validate') is not None and
-            get_param(request, 'user') is not None):
-        token = sha256('%s|%s|%s|%s' % (
-            get_param(request, 'user'),
-            date.today(),
-            get_param(request, 'url'),
-            settings.SECRET_KEY)).hexdigest()
-        if constant_time_compare(get_param(request, 'validate'), token):
-            return HttpResponse("OK")
-        return HttpResponse("INVALID")
-
-    '''
-    The next check will allow you to request information about the user that
-    is currently logged in using the 'fetch'-get attribute with the property
-    names seperated by commas.
-    A JSON string will be returned containing the information.
-    '''
-    if (get_param(request, 'fetch') is not None and
-            get_param(request, 'user') is not None):
-        token = sha256('%s|%s|%s|%s' % (
-            get_param(request, 'user'),
-            date.today(),
-            get_param(request, 'url'),
-            settings.SECRET_KEY)).hexdigest()
-        if constant_time_compare(get_param(request, 'token'), token):
-            user = Es.by_name(get_param(request, 'user'))
-            properties = {
-                'firstname': user.first_name,
-                'lastname': user.last_name,
-                'fullname': user.full_name,
-                'groups': list(user.cached_groups_names)
-            }
-            return HttpResponse(json.dumps(dict([
-                (k, properties[k]) for k in
-                set(s.strip() for s in get_param(request, 'fetch').split(','))
-                if k in properties
-            ])))
-        return HttpResponse("INVALID TOKEN")
-    if not request.user.is_authenticated():
-        return redirect_to_login('%s?url=%s' % (
-            reverse('rauth'),
-            urlquote(get_param(request, 'url'))))
-    token = sha256('%s|%s|%s|%s' % (str(request.user.name),
-                                    date.today(),
-                                    get_param(request, 'url'),
-                                    settings.SECRET_KEY)).hexdigest()
-    return HttpResponseRedirect('%s%suser=%s&token=%s' % (
-        get_param(request, 'url'),
-        '?' if get_param(request, 'url').find('?') == -1 else '&',
-        str(request.user.name), token))
-
-
 def accounts_api(request):
     if request.user.is_authenticated():
         ret = {'valid': True,
@@ -453,19 +385,6 @@ def accounts_api(request):
         ret = {'valid': False}
 
     return JsonHttpResponse(ret)
-
-
-def api_users(request):
-    verified_key = False
-    for key in settings.ALLOWED_API_KEYS:
-        if constant_time_compare(get_param(request, 'key'), key):
-            verified_key = True
-    if not verified_key:
-        raise PermissionDenied
-    ret = {}
-    for m in Es.users():
-        ret[str(m.name)] = m.full_name
-    return HttpResponse(json.dumps(ret), content_type="text/json")
 
 
 @login_required
@@ -490,21 +409,13 @@ def secr_add_user(request):
                     'dateOfBirth': date_to_dt(
                         fd['dateOfBirth'])
                 },
-                'emailAddresses': [
-                    {'email': fd['email'],
-                     'from': DT_MIN,
-                     'until': DT_MAX}],
-                'addresses': [
-                    {'street': fd['addr_street'],
-                     'number': fd['addr_number'],
-                     'zip': fd['addr_zip'],
-                     'city': fd['addr_city'],
-                     'from': DT_MIN,
-                     'until': DT_MAX}],
-                'telephones': [
-                    {'number': fd['telephone'],
-                     'from': DT_MIN,
-                     'until': DT_MAX}],
+                'email': fd['email'],
+                'address': {
+                    'street': fd['addr_street'],
+                    'number': fd['addr_number'],
+                    'zip': fd['addr_zip'],
+                    'city': fd['addr_city']},
+                'telephone': fd['telephone'],
                 'studies': [
                     {'institute': _id(fd['study_inst']),
                      'study': _id(fd['study']),
@@ -536,11 +447,11 @@ def secr_add_user(request):
             pwd = pseudo_randstr()
             u.set_password(pwd)
             giedo.change_password(str(u.name), pwd, pwd)
-            render_then_email("leden/set-password.mail.txt", u, {
+            render_then_email("leden/set-password.mail.html", u, {
                 'user': u,
                 'password': pwd})
             # Send the welcome e-mail
-            render_then_email("leden/welcome.mail.txt", u, {
+            render_then_email("leden/welcome.mail.html", u, {
                 'u': u})
             Es.notify_informacie('adduser', request.user, entity=u._id)
             return HttpResponseRedirect(reverse('user-by-name',
@@ -615,11 +526,11 @@ def fiscus_debtmail(request):
         for user_name in users_to_email:
             user = Es.by_name(user_name)
 
-            ctx['first_name'] = user.first_name,
+            ctx['first_name'] = user.first_name
             ctx['debt'] = data[user.full_name]['debt']
 
             try:
-                render_then_email("leden/debitor.mail.txt",
+                render_then_email('leden/debitor.mail.html',
                                   to=user, ctx=ctx,
                                   cc=[],  # ADD penningmeester
                                   from_email=ctx['quaestor']['email'],
@@ -634,16 +545,9 @@ def fiscus_debtmail(request):
                                {'user': user_name, 'e': repr(e)})
 
     # get a sample of the email that will be sent for the quaestor's review.
-    email = ""
-    email_template = get_template('leden/debitor.mail.txt')
-
     ctx['first_name'] = '< Naam >'
     ctx['debt'] = '< Debet >'
-    context = Context(ctx)
-    for node in email_template:
-        if isinstance(node, BlockNode) and node.name == "plain":
-            email = node.render(context)
-            break
+    email = render_message('leden/debitor.mail.html', ctx)['html']
 
     return render(request, 'leden/fiscus_debtmail.html',
                   {'data': data, 'email': email})
@@ -766,7 +670,7 @@ def user_reset_password(request, _id):
     pwd = pseudo_randstr()
     u.set_password(pwd)
     giedo.change_password(str(u.name), pwd, pwd)
-    render_then_email("leden/reset-password.mail.txt", u, {
+    render_then_email("leden/reset-password.mail.html", u, {
         'user': u,
         'password': pwd})
     messages.info(request, _("Wachtwoord gereset!"))
@@ -812,6 +716,9 @@ def balans(request):
         account = Es.by_name(request.GET['account'])
         if not account:
             raise Http404
+
+    if account not in accounts:
+        raise PermissionDenied
 
     accounts = [(a, a == account) for a in accounts]
 

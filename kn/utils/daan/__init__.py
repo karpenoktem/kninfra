@@ -9,8 +9,7 @@ from kn.utils.daan._ldap import apply_ldap_changes, ldap_setpass
 from kn.utils.daan.fotoadmin import (fotoadmin_create_event,
                                      fotoadmin_move_fotos)
 from kn.utils.daan.postfix import set_postfix_map, set_postfix_slm_map
-from kn.utils.daan.quassel import apply_quassel_changes, quassel_setpass
-from kn.utils.daan.wiki import apply_wiki_changes, wiki_setpass
+from kn.utils.daan.wiki import apply_wiki_changes
 from kn.utils.whim import WhimDaemon
 
 
@@ -21,7 +20,6 @@ class Daan(WhimDaemon):
         self.postfix_lock = threading.Lock()
         self.postfix_slm_lock = threading.Lock()
         self.wiki_lock = threading.Lock()
-        self.quassel_lock = threading.Lock()
         self.ldap_lock = threading.Lock()
         self.fotoadmin_lock = threading.Lock()
 
@@ -37,9 +35,6 @@ class Daan(WhimDaemon):
         elif d['type'] == 'postfix-slm':
             with self.postfix_slm_lock:
                 return set_postfix_slm_map(self, d['map'])
-        elif d['type'] == 'quassel':
-            with self.quassel_lock:
-                return apply_quassel_changes(self, d['changes'])
         elif d['type'] == 'wiki':
             with self.wiki_lock:
                 return apply_wiki_changes(self, d['changes'])
@@ -49,10 +44,6 @@ class Daan(WhimDaemon):
         elif d['type'] == 'setpass':
             with self.ldap_lock:
                 ldap_setpass(self, d['user'], d['pass'])
-            with self.wiki_lock:
-                wiki_setpass(self, d['user'], d['pass'])
-            with self.quassel_lock:
-                quassel_setpass(self, d['user'], d['pass'])
         elif d['type'] == 'fotoadmin-create-event':
             with self.fotoadmin_lock:
                 return fotoadmin_create_event(self, d['date'],

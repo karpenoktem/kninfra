@@ -30,7 +30,7 @@ kninfra packages:
             {% else %}
             - python-django
             - python-dev
-            - msgpack-python
+            - python-msgpack
             - python-setuptools
             - python-pyparsing
             - python-markdown
@@ -280,3 +280,10 @@ django.socket:
     file.managed:
         - contents: infra ALL=NOPASSWD:ALL
 {% endif %}
+
+# i18n
+Django compilemessages:
+    cmd.run:
+        - creates: /vagrant/locale/en/LC_MESSAGES/django.mo
+        - name: >
+            /vagrant/manage.py compilemessages

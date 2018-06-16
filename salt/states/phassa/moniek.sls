@@ -9,7 +9,7 @@ moniek packages:
             - python3-markdown
             {% else %}
             - python-django
-            - msgpack-python
+            - python-msgpack
             - python-setuptools
             - python-pyparsing
             - python-markdown

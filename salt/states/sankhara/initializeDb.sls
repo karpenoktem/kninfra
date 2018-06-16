@@ -9,7 +9,7 @@ Initialize database:
             - file: /home/infra/initial-db.yaml
 initial giedo-sync:
     cmd.run:
-        - user: infra
+        - runas: infra
         - creates: /home/infra/.initial-giedo-sync-run
         # - timeout: 1
         - name: >
@@ -17,7 +17,7 @@ initial giedo-sync:
             touch /home/infra/.initial-giedo-sync-run
 initial scan-fotos:
     cmd.run:
-        - user: infra
+        - runas: infra
         - creates: /home/infra/.initial-scan-fotos-run
         - name: >
             scan-fotos &&

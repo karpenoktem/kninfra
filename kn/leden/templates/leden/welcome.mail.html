@@ -1,0 +1,91 @@
+{% load i18n %}
+
+{% block from %}
+{% blocktrans %}
+Secretaris Karpe Noktem <secretaris@karpenoktem.nl>
+{% endblocktrans %}
+{% endblock %}
+
+{% block subject %}
+{% blocktrans %}
+[Karpe Noktem] Jouw gegevens
+{% endblocktrans %}
+{% endblock %}
+
+{% block html %}
+{% blocktrans with first_name=u.first_name %}
+Beste {{ first_name }},
+{% endblocktrans %}
+
+{% blocktrans %}
+<p>Welkom bij Karpe Noktem!</p>
+
+<p>Wij hebben de volgende gegevens van jouw inschrijfformulier
+overgenomen. Kun je controleren of deze kloppen?</p>
+
+<p>Bij voorbaat dank,</p>
+
+<p>Bas van Wijk</p>
+{% endblocktrans %}
+
+
+<h2>{% trans "Personalia" %}</h2>
+
+<table>
+  <tr>
+    <th style="text-align: left;">{% trans "Voornaam" %}</th>
+    <td>{{ u.first_name }}</td>
+  </tr>
+  <tr>
+    <th style="text-align: left;">{% trans "Achternaam" %}</th>
+    <td>{{ u.last_name }}</td>
+  </tr>
+  <tr>
+    <th style="text-align: left;">{% trans "Geboortedatum" %}</th>
+    <td>{{ u.dateOfBirth.date }}</td>
+  </tr>
+  <tr>
+    <th style="text-align: left;">{% trans "Gebruikersnamen" %}</th>
+    <td>{{ u.names|join:" " }}</td>
+  </tr>
+  <tr>
+    <th style="text-align: left;">{% trans "Telefoonnummer" %}</th>
+    <td>{{ u.telephone }}</td>
+  </tr>
+  <tr>
+    <th style="text-align: left;">{% trans "E-Mail adres" %}</th>
+    <td>{{ u.email }}</td>
+  </tr>
+</table>
+
+<h3>{% trans "Studie(s)" %}</h3>
+<ul>
+{% for study in u.studies %}
+{% with from=study.from.date until=study.until.date %}
+  <li>
+    {% if study.from and study.until %}
+      {% blocktrans %}Van {{ from }} tot {{ until }} studeerde je{% endblocktrans %}
+    {% elif study.from %}
+      {% blocktrans %}Vanaf {{ from }} studeer je{% endblocktrans %}
+    {% elif study.until %}
+      {% blocktrans %}Tot {{ until }} studeerde je{% endblocktrans %}
+    {% else %}
+      Je studeert
+    {% endif %}
+    {% blocktrans with base_url=BASE_URL study_url=study.study.get_absolute_url study_name=study.study.humanName institute_url=study.institute.get_absolute_url institute_name=study.institute.humanName study_number=study.number %}
+      <a href="{{ BASE_URL }}{{ study_url }}">{{ study_name }}</a>
+      bij instituut <a href="{{ BASE_URL }}{{ study_url }}">{{ study_name }}</a>
+      met studentnummer <em>{{ study_number }}</em>.
+    {% endblocktrans %}
+  </li>
+{% endwith %}
+{% endfor %}
+</ul>
+
+<h3>{% trans "Adres" %}</h3>
+<blockquote>
+{{ u.address.street }} {{ u.address.number }}<br/>
+{{ u.address.zip }} {{ u.address.city }}
+</blockquote>
+
+{% endblock html %}

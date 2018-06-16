@@ -126,7 +126,7 @@ $(function(){
         {% trans "Voeg als" %}
         <input name="how" id="relation_begin1_how" type="hidden" />
         {% trans "toe aan" %}
-        <input name="with" id="relation_begin1_with" type="hidden" />
+        <input name="with" id="relation_begin1_with" type="hidden" required />
         <input type="submit" value="{% trans "verstuur" %}" />
 </form>{# relation-begin #}
 {% endif %}{# related or object.is_user #}

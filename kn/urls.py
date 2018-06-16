@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
-from django.contrib import auth
+from django.contrib.auth.views import login, logout_then_login
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView
 
@@ -23,10 +23,8 @@ urlpatterns += i18n_patterns(
     url(_(r'^smoelen/'), include('kn.leden.urls')),
     url(_(r'^activiteit/'), include('kn.subscriptions.urls')),
     url(_(r'^reglementen/'), include('kn.reglementen.urls')),
-    url(_(r'^poll/'), include('kn.poll.urls')),
-    url(_(r'^accounts/login/$'), auth.views.login, name='login'),
-    url(_(r'^accounts/logout/$'), auth.views.logout_then_login, name='logout'),
-    url(_(r'^accounts/rauth/$'), views.rauth, name='rauth'),
+    url(_(r'^accounts/login/$'), login, name='login'),
+    url(_(r'^accounts/logout/$'), logout_then_login, name='logout'),
     url(_(r'^accounts/api/$'), views.accounts_api, name='auth-api'),
     url(_(r'^moderatie/'), include('kn.moderation.urls')),
     url(_(r'^planning/'), include('kn.planning.urls')),
