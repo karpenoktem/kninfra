@@ -26,8 +26,7 @@ def homedir(request, root, subdir, path):
     original_root = root
     root = os.path.abspath(root)
     p1 = os.path.realpath(os.path.join(root, subdir, 'public_html', path))
-    p2 = os.path.realpath(os.path.join(root, subdir,
-                                       'protected_html', path))
+    p2 = os.path.realpath(os.path.join(root, subdir, 'protected_html', path))
     if (not p1[:len(root)] == root or not p2[:len(root)] == root):
         raise ValueError(_("Going outside of the root"))
     if os.path.exists(p1):
@@ -43,10 +42,12 @@ def homedir(request, root, subdir, path):
         # world read access?
         if os.stat(p).st_mode & 4 != 4:
             raise Http404
-        response = HttpResponse(FileWrapper(open(p, 'rb')),
-                                content_type=mimetypes.guess_type(p)[0])
+        content_type = mimetypes.guess_type(p)[0]
+        response = HttpResponse(FileWrapper(open(p, 'rb')), content_type=content_type)
         response['Content-Length'] = os.path.getsize(p)
-        response['Content-Disposition'] = 'attachment'
+        if content_type not in ['text/plain', 'application/pdf']:
+            # Only try to render safe file types in the browser (not HTML).
+            response['Content-Disposition'] = 'attachment'
         return response
     lines = set()
     if os.path.isdir(p1):
