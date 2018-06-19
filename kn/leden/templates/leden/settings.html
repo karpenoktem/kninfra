@@ -60,6 +60,25 @@ var object_id = '{{ object.id }}';
   <dd>
     <a href="mailto:{{ object.email}}">{{ object.email }}</a>
   </dd>
+  <dt>{% trans "Studie" %}</dt>
+  <dd>
+    <ul>
+      {% for s in object.studies %}
+      <li>
+        <a href="{{ s.study.get_absolute_url }}">{{ s.study.humanName }}</a>
+        {% trans "op" %}
+        <a href="{{ s.institute.get_absolute_url }}">{{ s.institute.humanName}}</a>
+        {% if s.number %}
+          {% trans "studentnummer" %} {{ s.number }}
+        {% endif %}
+        {% if s.from or s.until %}
+          {# single line to avoid spaces #}
+          ({% if s.from %}{% trans "van" %} {{ s.from.date }}{% endif %}{% if s.until %}{% trans "tot" %} {{ s.until.date }}{% endif %})
+        {% endif %}
+        </li>
+      {% endfor %}{# s in object.studies #}
+    </ul>
+  </dd>
   <dt>{% trans "Telefoonnummer" %}</dt>
   <dd>
     {% if object.telephone %}

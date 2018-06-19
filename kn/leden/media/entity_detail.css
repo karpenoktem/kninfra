@@ -42,3 +42,7 @@ input + .progress {
 	color: #888;
 	font-style: italic;
 }
+
+dd > ul {
+	padding-left: 0; /* avoid double indent */
+}
