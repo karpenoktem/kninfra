@@ -211,6 +211,8 @@ def entity_remove_property(data, request):
     property = data['key']
     if property == 'dateOfBirth':
         e.remove_dateOfBirth()
+    elif property == 'address':
+        e.remove_address()
     else:
         return {'ok': False, 'error': 'Unknown property "%s"' % property}
 

@@ -951,6 +951,11 @@ class Entity(SONWrapper):
         if save:
             self.save()
 
+    def remove_address(self, save=True):
+        del self._data['address']
+        if save:
+            self.save()
+
     def update_study(self, study, institute, number, save=True):
         """ Adds (study, institute, number) as new and primary. """
         if 'studies' not in self._data:

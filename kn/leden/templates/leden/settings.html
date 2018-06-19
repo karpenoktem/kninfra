@@ -56,12 +56,30 @@ var object_id = '{{ object.id }}';
       {% trans "Geen telefoonnummer geregistreerd." %}
     {% endif %}
   </dd>
-  <dt>{% trans "Geboortedatum" %}</dt>
+  <dt>{% trans "Adres" %}
+    {% if object.address %}
+      <button data-action="entity_remove_property:address:!{% trans "Weet je zeker dat je je adres wilt verwijderen? Dit kan alleen hersteld worden door de secretaris. Je zult dan ook geen kerstkaart meer krijgen." %}">{% trans "Verwijder" %}</button>
+    {% endif %}
+  </dt>
+  <dd>
+    {% if object.address %}
+      <address>
+        {{ object.address.street }} {{ object.address.number }}<br/>
+        {{ object.address.zip }} {{ object.address.city }}
+      </address>
+    {% else %}
+      {% trans "Geen woonadres geregistreerd." %}
+    {% endif %}
+  </dd>
+  <dt>{% trans "Geboortedatum" %}
+  {% if object.dateOfBirth %}
+      <button data-action="entity_remove_property:dateOfBirth:!{% trans "Weet je zeker dat je je geboortedatum wilt verwijderen? Dit kan alleen hersteld worden door de secretaris." %}">{% trans "Verwijder" %}</button>
+      <span class="progress"></span>
+    {% endif %}
+  </dt>
   <dd>
     {% if object.dateOfBirth %}
       {{ object.dateOfBirth|date:"Y-m-d" }}
-      <button data-action="entity_remove_property:dateOfBirth:!{% trans "Weet je zeker dat je je geboortedatum wilt verwijderen? Dit kan alleen hersteld worden door de secretaris." %}">{% trans "Verwijder" %}</button>
-      <span class="progress"></span>
     {% else %}
       {% trans "Geen geboortedatum geregistreerd." %}
       {% if object.is_underage %}
