@@ -47,6 +47,10 @@ var object_id = '{{ object.id }}';
     <input type="submit" value="{% trans "Nieuwe foto instellen" %}" />
     </form>
   </dd>
+  <dt>{% trans "E-Mailadres" %}</dt>
+  <dd>
+    <a href="mailto:{{ object.email}}">{{ object.email }}</a>
+  </dd>
   <dt>{% trans "Telefoonnummer" %}</dt>
   <dd>
     {% if object.telephone %}
