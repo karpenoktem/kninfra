@@ -47,9 +47,11 @@ kninfra packages:
             {% endif %}
             - gettext
             - imagemagick
+            - uwsgi
+            - uwsgi-plugin-python
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'uwsgi', 'tarjan', 'reserved', 'iso8601', 'google-api-python-client', 'zipseeker', 'pyasn1>=0.4.1'] %}
+{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved', 'iso8601', 'google-api-python-client', 'zipseeker', 'pyasn1>=0.4.1'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:

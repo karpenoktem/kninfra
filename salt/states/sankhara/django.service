@@ -4,7 +4,7 @@ Requires=infra-dir.service mongodb.service giedo.service
 After=infra-dir.service mongodb.service giedo.service
 
 [Service]
-ExecStart=/usr/local/bin/uwsgi --ini /home/infra/uwsgi.ini --socket /var/run/infra/S-django
+ExecStart=/usr/bin/uwsgi --ini /home/infra/uwsgi.ini --socket /var/run/infra/S-django
 User=infra
 Group=www-data
 Restart=on-failure
