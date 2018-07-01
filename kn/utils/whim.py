@@ -21,7 +21,7 @@ import sdnotify
 
 class WhimClient(object):
 
-    def __init__(self, address, family='unix', timeout=10):
+    def __init__(self, address, family='unix', timeout=5*60):
         self._address = address
         self._family = family
         self._timeout = timeout
