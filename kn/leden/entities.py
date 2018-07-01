@@ -178,6 +178,7 @@ def ensure_indices():
 # ######################################################################
 
 class EntityException(Exception):
+
     '''
     Exception that is raised when invalid input is entered (e.g. overlapping
     dates).
@@ -706,6 +707,7 @@ def pop_all_informacie_notifications():
 
 
 class EntityName(object):
+
     """ Wrapper object for a name of an entity """
 
     def __init__(self, entity, name):
@@ -734,6 +736,7 @@ class EntityName(object):
 
 @six.python_2_unicode_compatible
 class EntityHumanName(object):
+
     """ Wrapper object for a humanName of an entity """
 
     def __init__(self, entity, data):
@@ -772,6 +775,7 @@ class EntityHumanName(object):
 
 
 class Entity(SONWrapper):
+
     """ Base object for every Entity """
 
     def __init__(self, data):
@@ -1133,6 +1137,25 @@ class Group(Entity):
 
 class User(Entity):
 
+    class _Meta(object):
+        """ Django expects a user object to have a _meta instance.
+            This class is used to emulate it. """
+
+        class _PK(object):
+            def __init__(self, user):
+                self.__user = user
+
+            def value_to_string(self, obj):
+                assert obj is self.__user
+                # Due to a regression in new Django, their session framework
+                # expects an integer as identifier.  So we just convert our
+                # _id hexstring to an integer.  See also kn.leden.auth.
+                return int(str(self.__user._id), 16)
+
+        def __init__(self, user):
+            self.__user = user
+            self.pk = User._Meta._PK(user)
+
     address = son_property(('address',))
     telephone = son_property(('telephone',))
     email = son_property(('email',))
@@ -1140,6 +1163,7 @@ class User(Entity):
     def __init__(self, data):
         super(User, self).__init__(data)
         self._primary_study = -1
+        self._meta = User._Meta(self)
 
     @permalink
     def get_absolute_url(self):
@@ -1205,10 +1229,6 @@ class User(Entity):
         # required by django's auth
         return True
     # Required by Django's auth. framework
-
-    @property
-    def pk(self):
-        return str(_id(self))
 
     def get_username(self):
         # implements Django's User object

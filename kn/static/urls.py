@@ -12,7 +12,7 @@ from kn.static import views
 urlpatterns = [
     url(_(r'^home/?$'), views.home, name='home'),
     url(_(r'^default/?$'), views.home, name='default'),
-    url(r'^/?$', views.home, name='root'),
+    url(r'^$', views.home, name='root'),
     # url(r'^/?$', RedirectView.as_view(
     #           url=reverse_lazy('openweek2Poster2015'))),
     # TODO we have to specify a separate url entry to make the reverse URL work
@@ -35,7 +35,7 @@ urlpatterns = [
     url(_(r'^akta/?$'), TemplateView.as_view(
         template_name='static/aktanokturna.html'), name='aktanokturna'),
     url(_(r'^(?:an|aktanokturna)/?$'), RedirectView.as_view(
-        url='/akta')),
+        url='/akta', permanent=True)),
 
     url(_(r'^zusjes/?$'), TemplateView.as_view(
         template_name='static/zusjes.html'), name='zusjes'),
@@ -76,14 +76,13 @@ urlpatterns = [
     url(_(r'^bestuur13b/?$'), TemplateView.as_view(
         template_name='static/bestuur13b.html'), name='bestuur13b'),
     url(_(r'^bestuur13/?$'), RedirectView.as_view(
-        url='/bestuur13b'), name='bestuur13'),
+        url='/bestuur13b', permanent=True), name='bestuur13'),
     url(_(r'^bestuur14/?$'), TemplateView.as_view(
         template_name='static/bestuur14.html'), name='bestuur14'),
     # TODO we want to use reverse, but it is not initialized properly
     #      at this moment in the request handler.
     url(_(r'^bestuur/?$'), RedirectView.as_view(
         url='/bestuur14', permanent=False), name='bestuur'),
-
     url(_(r'^introPoster2016/?$'), TemplateView.as_view(
         template_name='static/introPoster2016.html'),
         name='introPoster2016'),
@@ -151,7 +150,7 @@ urlpatterns = [
     url(r'^img/(?P<subdir>.*)', direct_to_folder,
         {'root': os.path.join(settings.MEDIA_ROOT, 'static/img')}),
     url(r'^baragenda/?$', RedirectView.as_view(
-        url='/planning')),  # TODO use reverse_url
+        url='/planning', permanent=True)),  # TODO use reverse_url
 
     # style
     url(_(r'^styles/static/$'),

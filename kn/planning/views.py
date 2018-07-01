@@ -5,12 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
-from kn.base.http import JsonHttpResponse
+from kn.base.http import JsonHttpResponse, get_param
 from kn.leden.date import date_to_dt, date_to_midnight, now
 from kn.leden.entities import DT_MIN
 from kn.leden.mongo import _id
@@ -155,11 +154,10 @@ def planning_view(request):
             ei['vacancies'][index].sort(key=lambda x: x['begin'])
         events.append(ei)
     events.sort(key=lambda x: x['datetime'])
-    return render_to_response('planning/overview.html',
-                              {'events': events,
-                               'pools': pools_tpl,
-                               'period': period},
-                              context_instance=RequestContext(request))
+    return render(request, 'planning/overview.html',
+                  {'events': events,
+                   'pools': pools_tpl,
+                   'period': period})
 
 
 @login_required
@@ -235,9 +233,8 @@ def planning_manage(request, poolname):
 
     events = list(events.values())
     events.sort(key=lambda e: e['date'])
-    return render_to_response('planning/manage.html',
-                              {'events': events, 'pool': pool},
-                              context_instance=RequestContext(request))
+    return render(request, 'planning/manage.html',
+                  {'events': events, 'pool': pool})
 
 
 @login_required
@@ -247,9 +244,8 @@ def planning_poollist(request):
         # here?
         raise PermissionDenied
     pools = list(Pool.all())
-    return render_to_response('planning/pools.html',
-                              {'pools': pools},
-                              context_instance=RequestContext(request))
+    return render(request, 'planning/pools.html',
+                  {'pools': pools})
 
 
 @login_required
@@ -285,8 +281,7 @@ def event_create(request):
                                                 args=(e._id,)))
     else:
         form = EventCreateForm()
-    return render_to_response('planning/event_create.html', {'form': form},
-                              context_instance=RequestContext(request))
+    return render(request, 'planning/event_create.html', {'form': form})
 
 
 @login_required
@@ -342,18 +337,18 @@ def event_edit(request, eventid):
         v.vid = str(v._id)
         vacancies.append(v)
     vacancies.sort(key=lambda x: str(x.pool_id) + str(x.begin))
-    return render_to_response(
+    return render(
+        request,
         'planning/event_edit.html',
         {'name': e.name, 'kind': e.kind, 'date': e.date.date(),
          'avform': avform, 'vacancies': vacancies},
-        context_instance=RequestContext(request)
     )
 
 
 def _api_send_reminder(request):
-    if 'vacancy_id' not in request.REQUEST:
+    if not get_param(request, 'vacancy_id'):
         return JsonHttpResponse({'error': 'missing argument'})
-    v = Vacancy.by_id(request.REQUEST['vacancy_id'])
+    v = Vacancy.by_id(get_param(request, 'vacancy_id'))
     if not v:
         raise Http404
     if not v.pool.may_manage(request.user):
@@ -365,7 +360,7 @@ def _api_send_reminder(request):
 @require_POST
 @login_required
 def planning_api(request):
-    action = request.REQUEST.get('action')
+    action = request.POST.get('action')
     if action == 'send-reminder':
         return _api_send_reminder(request)
     else:
@@ -398,7 +393,6 @@ def planning_template(request, poolname):
                            in sorted(shifts.items(), key=lambda x: x[0])]
         events.append(ei)
     events.sort(key=lambda x: x['date'])
-    return render_to_response('planning/template.html', {'events': events},
-                              context_instance=RequestContext(request))
+    return render(request, 'planning/template.html', {'events': events})
 
 # vim: et:sta:bs=2:sw=4:

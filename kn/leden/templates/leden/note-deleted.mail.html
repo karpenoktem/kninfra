@@ -4,18 +4,13 @@
 {% trans "Notitie op " %}{{ note.on.humanName }}
 {% endblock %}
 
-{% block html %}\
-<p>{% blocktrans with noter_name=note.by.humanName \
-                   noter_url=note.by.get_absolute_url \
-                   on_name=note.on.humanName \
-                   on_url=note.on.get_absolute_url \
-                   closer_name=note.closed_by.humanName \
-                   closer_url=note.closed_by.get_absolute_url %}
+{% block html %}
+<p>{% blocktrans with noter_name=note.by.humanName noter_url=note.by.get_absolute_url on_name=note.on.humanName on_url=note.on.get_absolute_url closer_name=closed_by.humanName closer_url=closed_by.get_absolute_url %}
 De volgende notitie van
     <a href="{{ BASE_URL }}{{ noter_url }}">{{ noter_name }}</a>
     op <a href="{{ BASE_URL }}{{ on_url }}">{{ on_name }}</a>
     is door <a href="{{ BASE_URL }}{{ closer_url }}">{{ closer_name }}</a>
-    gesloten.
+    verwijderd.
 {% endblocktrans %}</p>
 
 <blockquote>{{ note.note }}</blockquote>

@@ -18,8 +18,7 @@
 {% trans "Deze versie is (nog) niet aangenomen en daarmee niet van kracht." %}
 {% else %}
 	{% if version.valid_until %}
-        {% blocktrans with valid_from=version.valid_from.date \
-                           valid_until=version.valid_until.date %}
+        {% blocktrans with valid_from=version.valid_from.date valid_until=version.valid_until.date %}
         Deze versie was aangenomen op {{ valid_from }} en
         van kracht tot {{ valid_until }}.{% endblocktrans %}
 	{% else %}

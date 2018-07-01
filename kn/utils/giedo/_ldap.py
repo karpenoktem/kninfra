@@ -13,7 +13,7 @@ def generate_ldap_changes(giedo):
         logging.warning('ldap: no credentials available, skipping')
         return None
     todo = {'upsert': [], 'remove': []}
-    ld = ldap.open(settings.LDAP_HOST)
+    ld = ldap.initialize(settings.LDAP_URL)
     ld.bind_s(settings.LDAP_USER, settings.LDAP_PASS)
     try:
         users = Es.by_name('leden').get_members()

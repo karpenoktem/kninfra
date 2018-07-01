@@ -6,9 +6,15 @@
 
 {% block body %}
 <script type="text/javascript">
-    function planning_api(data, cb) {
+    function planning_api(data, callback) {
         data.csrfmiddlewaretoken = '{{ csrf_token }}';
-        $.post("/planning/!api", data, cb, "json");
+        $.ajax('/planning/!api', {
+            method: 'POST',
+            data: data,
+            dataType: 'json',
+        })
+            .done(callback)
+            .fail(function(e) { callback({error: e.statusText}) });
     }
 
     function set_select_by_id(fieldid, value) {
@@ -24,11 +30,10 @@
     }
 
     function reminder_sent(d) {
-        if(d.error) {
-            alert(d.error);
-        }
-        if(d.success) {
+        if (d.success) {
             alert('Ok');
+        } else {
+            alert('Error:\n' + d.error);
         }
     }
 

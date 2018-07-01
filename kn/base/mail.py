@@ -32,7 +32,8 @@ def render_message(template_name, ctx, to=None):
         rendered_nodes = {}
         ctx['BASE_URL'] = settings.BASE_URL
         context = django.template.Context(ctx)
-        for node in template.nodelist:
+        context.template = template.backend  # hack, not sure why this is needed?
+        for node in template.template.nodelist:
             if isinstance(node, BlockNode):
                 rendered_nodes[node.name] = node.render(context)
     finally:

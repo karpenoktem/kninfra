@@ -11,7 +11,7 @@ from kn.base.http import JsonHttpResponse
 
 @require_POST
 def view(request):
-    data = json.loads(request.REQUEST.get('data', '{}'))
+    data = json.loads(request.POST.get('data', '{}'))
     action = data.get('action')
     handler = ACTION_HANDLER_MAP.get(action, None)
     if handler is None:

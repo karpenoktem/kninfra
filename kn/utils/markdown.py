@@ -9,9 +9,11 @@ This module depends on Markdown: http://pypi.python.org/pypi/Markdown """
 
 
 class FixHeadingsExtension(Extension):
+
     """ FixHeadingsExtension wordt gebruikt als extension voor markdown.Markdown
         zodat header tags veranderd worden '<h2>' -> '<div class="md_h2">' """
     class FixHeadingsProcessor(Treeprocessor):
+
         """ FixHeadingsProcessor van Daan, zie FixHeadingsExtension voor het
             gebruik van de class.  """
 

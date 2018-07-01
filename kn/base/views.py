@@ -1,9 +1,9 @@
 import mimetypes
 import os
 import os.path
+from wsgiref.util import FileWrapper
 
 from django.core.exceptions import SuspiciousOperation
-from django.core.servers.basehttp import FileWrapper
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
 from django.utils.http import is_safe_url

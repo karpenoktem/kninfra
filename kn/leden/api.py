@@ -17,7 +17,7 @@ from kn.leden.utils import find_name_for_user, parse_date
 @login_required
 @require_POST
 def view(request):
-    data = json.loads(request.REQUEST.get('data', '{}'))
+    data = json.loads(request.POST.get('data', '{}'))
     action = data.get('action')
     handler = ACTION_HANDLER_MAP.get(action, None)
     if handler is None:
@@ -79,8 +79,9 @@ def delete_note(data, request):
         return {'ok': False, 'error': 'Note not found'}
     note.delete()
     render_then_email('leden/note-deleted.mail.html',
-                      Es.by_name('secretariaat').canonical_full_email, {
-                          'note': note}, headers={
+                      Es.by_name('secretariaat').canonical_full_email,
+                      {'note': note, 'closed_by': request.user},
+                      headers={
                               'In-Reply-To': note.messageId,
                               'References': note.messageId,
                       })

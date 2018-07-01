@@ -3,7 +3,7 @@ from django.conf.urls import url
 from kn.reglementen import views
 
 urlpatterns = [
-    url(r'^/?$',
+    url(r'^$',
         views.reglement_list, name='reglement-list'),
     url(r'^(?P<name>[^/]+)/?$',
         views.reglement_detail, name='reglement-detail'),

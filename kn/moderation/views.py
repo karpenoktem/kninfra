@@ -7,8 +7,7 @@ import six
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
@@ -138,9 +137,8 @@ def overview(request):
             'description': ml_state[name]['description'],
             'queue': ml_state[name]['queue']
         })
-    return render_to_response('moderation/overview.html',
-                              {'lists': lists,
-                               'is_moderator': is_moderator},
-                              context_instance=RequestContext(request))
+    return render(request, 'moderation/overview.html',
+                  {'lists': lists,
+                   'is_moderator': is_moderator})
 
 # vim: et:sta:bs=2:sw=4:

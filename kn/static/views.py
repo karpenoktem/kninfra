@@ -1,8 +1,7 @@
 import os
 
 from django.conf import settings
-from django.shortcuts import redirect, render_to_response
-from django.template import RequestContext
+from django.shortcuts import redirect, render
 
 _slideshow_images = None
 
@@ -15,9 +14,8 @@ def home(request):
         for fn in sorted(os.listdir(path)):
             _slideshow_images.append(os.path.join(settings.MEDIA_URL,
                                                   'static/slideshow', fn))
-    return render_to_response('static/home.html',
-                              {'slideshow_images': _slideshow_images},
-                              context_instance=RequestContext(request))
+    return render(request, 'static/home.html',
+                  {'slideshow_images': _slideshow_images})
 
 # legacy URL redirect view
 

@@ -4,6 +4,7 @@ import logging
 import os
 from decimal import Decimal
 from itertools import chain
+from wsgiref.util import FileWrapper
 
 import PIL.Image
 
@@ -13,10 +14,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage import default_storage
 from django.core.paginator import EmptyPage, Paginator
-from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render_to_response
+from django.shortcuts import redirect, render
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
@@ -44,10 +44,9 @@ def user_list(request, page):
         p = pr.page(1 if page is None else page)
     except EmptyPage:
         raise Http404
-    return render_to_response('leden/user_list.html',
-                              {'users': [Es.User(m) for m in p.object_list],
-                               'page_obj': p, 'paginator': pr},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/user_list.html',
+                  {'users': [Es.User(m) for m in p.object_list],
+                   'page_obj': p, 'paginator': pr})
 
 
 @login_required
@@ -174,8 +173,7 @@ def _user_detail(request, user):
         addStudyForm = AddStudyForm()
     if user.last_study_end_date < DT_MAX:
         ctx['addStudyForm'] = addStudyForm
-    return render_to_response('leden/user_detail.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/user_detail.html', ctx)
 
 
 def _group_detail(request, group):
@@ -192,14 +190,12 @@ def _group_detail(request, group):
     ctx.update({'isFreeToJoin': group.has_tag(Es.by_name('!free-to-join')),
                 'request': request,
                 'relation_with_group': rel_id})
-    return render_to_response('leden/group_detail.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/group_detail.html', ctx)
 
 
 def _tag_detail(request, tag):
     ctx = _entity_detail(request, tag)
-    return render_to_response('leden/tag_detail.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/tag_detail.html', ctx)
 
 
 def _brand_detail(request, brand):
@@ -214,8 +210,7 @@ def _brand_detail(request, brand):
         r['until_year'] = (None if r['until'] is None else
                            Es.date_to_year(r['until']))
         r['virtual'] = Es.relation_is_virtual(r)
-    return render_to_response('leden/brand_detail.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/brand_detail.html', ctx)
 
 
 def _study_detail(request, study):
@@ -232,8 +227,7 @@ def _study_detail(request, study):
                              'institute': _study['institute']})
     ctx['students'].sort(key=lambda s: (Es.dt_until(s['until']),
                                         s['student'].humanName))
-    return render_to_response('leden/study_detail.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/study_detail.html', ctx)
 
 
 def _institute_detail(request, institute):
@@ -250,8 +244,7 @@ def _institute_detail(request, institute):
                              'study': _study['study']})
     ctx['students'].sort(key=lambda s: (Es.dt_until(s['until']),
                                         s['student'].humanName))
-    return render_to_response('leden/institute_detail.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/institute_detail.html', ctx)
 
 
 @login_required
@@ -265,15 +258,13 @@ def entities_by_year_of_birth(request, year):
         ctx['next_year'] = _year + 1
     if _year - 1 in years:
         ctx['previous_year'] = _year - 1
-    return render_to_response('leden/entities_by_year_of_birth.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/entities_by_year_of_birth.html', ctx)
 
 
 @login_required
 def years_of_birth(request):
-    return render_to_response('leden/years_of_birth.html', {
-        'years': reversed(Es.get_years_of_birth())},
-        context_instance=RequestContext(request))
+    return render(request, 'leden/years_of_birth.html', {
+        'years': reversed(Es.get_years_of_birth())})
 
 
 @login_required
@@ -282,7 +273,7 @@ def users_underage(request):
     users = filter(lambda u: u.is_active, users)
     users = filter(lambda u: u.is_underage, users)
     users = sorted(users, key=lambda x: x.dateOfBirth)
-    return render_to_response('leden/entities_underage.html', {
+    return render('leden/entities_underage.html', {
         'users': users},
         context_instance=RequestContext(request))
 
@@ -369,9 +360,8 @@ def ik_chpasswd(request):
         form = ChangePasswordForm()
     errl.extend(form.non_field_errors())
     errstr = humanized_enum(errl)
-    return render_to_response('leden/ik_chpasswd.html',
-                              {'form': form, 'errors': errstr},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/ik_chpasswd.html',
+                  {'form': form, 'errors': errstr})
 
 
 @login_required
@@ -384,9 +374,7 @@ def ik_settings(request):
             'hasPhoto': True,
             'photoWidth': photo_size[0],
             'photoHeight': photo_size[1]})
-    return render_to_response('leden/settings.html',
-                              ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/settings.html', ctx)
 
 
 def accounts_api(request):
@@ -470,18 +458,16 @@ def secr_add_user(request):
                                                 args=(fd['username'],)))
     else:
         form = AddUserForm()
-    return render_to_response('leden/secr_add_user.html',
-                              {'form': form},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/secr_add_user.html',
+                  {'form': form})
 
 
 @login_required
 def secr_notes(request):
     if 'secretariaat' not in request.user.cached_groups_names:
         raise PermissionDenied
-    return render_to_response('leden/secr_notes.html',
-                              {'notes': list(Es.get_notes())},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/secr_notes.html',
+                  {'notes': Es.get_notes()})
 
 
 @login_required
@@ -511,8 +497,7 @@ def secr_add_group(request):
             return HttpResponseRedirect(reverse('group-by-name', args=(nm,)))
     else:
         form = AddGroupForm()
-    return render_to_response('leden/secr_add_group.html', {'form': form},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/secr_add_group.html', {'form': form})
 
 
 @login_required
@@ -564,9 +549,8 @@ def fiscus_debtmail(request):
     ctx['debt'] = '< Debet >'
     email = render_message('leden/debitor.mail.html', ctx)['html']
 
-    return render_to_response('leden/fiscus_debtmail.html',
-                              {'data': data, 'email': email},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/fiscus_debtmail.html',
+                  {'data': data, 'email': email})
 
 
 @login_required
@@ -741,12 +725,11 @@ def balans(request):
     balans = giedo.fin_get_account(account)
     if 'error' in balans:
         raise ValueError('error while retrieving balans: ' + balans['error'])
-    return render_to_response('leden/balans.html',
-                              {'balans': fin.BalansInfo(balans),
-                               'quaestor': fin.quaestor(),
-                               'accounts': accounts,
-                               'account': account},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/balans.html',
+                  {'balans': fin.BalansInfo(balans),
+                   'quaestor': fin.quaestor(),
+                   'accounts': accounts,
+                   'account': account})
 
 
 @login_required
@@ -756,9 +739,8 @@ def boekenlezers_name_check(request):
 
     results = giedo.fin_check_names()
 
-    return render_to_response('leden/bl-namecheck.html',
-                              {'results': results},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/bl-namecheck.html',
+                  {'results': results})
 
 
 @login_required
@@ -816,11 +798,10 @@ def fin_show(request, year, handle):
                 else:
                     tr['checktype'] = 'none'
 
-    return render_to_response('leden/fin-show.html',
-                              {'year': year,
-                               'objs': objs,
-                               'handle': handle},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/fin-show.html',
+                  {'year': year,
+                   'objs': objs,
+                   'handle': handle})
 
 
 @login_required
@@ -832,10 +813,9 @@ def fin_errors(request, year):
 
     errors = giedo.fin_get_errors(year)
 
-    return render_to_response('leden/fin-errors.html',
-                              {'year': year,
-                               'errors': errors},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/fin-errors.html',
+                  {'year': year,
+                   'errors': errors})
 
 
 @login_required
@@ -845,9 +825,8 @@ def fins(request):
 
     years = giedo.fin_get_years()
 
-    return render_to_response('leden/fins.html',
-                              {'years': years},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/fins.html',
+                  {'years': years})
 
 
 @login_required
@@ -857,9 +836,8 @@ def fin_overview(request, year):
     if 'boekenlezers' not in request.user.cached_groups_names:
         raise PermissionDenied
 
-    return render_to_response('leden/fin-overview.html',
-                              {'year': year},
-                              context_instance=RequestContext(request))
+    return render(request, 'leden/fin-overview.html',
+                  {'year': year})
 
 
 def language(request):

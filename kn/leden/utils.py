@@ -4,7 +4,6 @@ import unidecode
 
 from django.conf import settings
 from django.utils import dateparse
-from django.utils.six.moves import range
 
 import kn.leden.entities as Es
 
@@ -19,7 +18,7 @@ def find_name_for_user(first_name, last_name):
             bits = s.split(',', 2)
             s = bits[1] + ' ' + bits[0]
         s = unidecode.unidecode(s).lower()
-        s = filter(lambda x: x in settings.USERNAME_CHARS + ' ', s)
+        s = ''.join((x for x in s if x in settings.USERNAME_CHARS))
         if last_name:
             s = s.replace('van ', 'V ')
             s = s.replace('der ', 'D ')

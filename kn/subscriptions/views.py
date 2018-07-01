@@ -4,8 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.utils import six
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
@@ -35,12 +34,11 @@ def event_list(request):
                 closed_events.append(e)
             else:
                 closed_leden_events.append(e)
-    return render_to_response('subscriptions/event_list.html',
-                              {'open_events': open_events,
-                               'closed_events': closed_events,
-                               'open_leden_events': open_leden_events,
-                               'closed_leden_events': closed_leden_events},
-                              context_instance=RequestContext(request))
+    return render(request, 'subscriptions/event_list.html',
+                  {'open_events': open_events,
+                   'closed_events': closed_events,
+                   'open_leden_events': open_leden_events,
+                   'closed_leden_events': closed_leden_events})
 
 
 @login_required
@@ -108,21 +106,20 @@ def event_detail(request, name):
            'listInvited': listInvited,
            'has_read_access': has_read_access,
            'has_write_access': has_write_access}
-    return render_to_response('subscriptions/event_detail.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'subscriptions/event_detail.html', ctx)
 
 
 def _api_event_set_opened(request):
-    if ('id' not in request.REQUEST
-            or not isinstance(request.REQUEST['id'], six.string_types)):
+    if ('id' not in request.POST
+            or not isinstance(request.POST['id'], six.string_types)):
         return JsonHttpResponse({'error': 'invalid or missing argument "id"'})
-    e = subscr_Es.event_by_id(request.REQUEST['id'])
+    e = subscr_Es.event_by_id(request.POST['id'])
     if not e:
         raise Http404
     if not e.has_write_access(request.user):
         raise PermissionDenied
 
-    opened = {'true': True, 'false': False}.get(request.REQUEST.get('opened'))
+    opened = {'true': True, 'false': False}.get(request.POST.get('opened'))
     if opened is True:
         e.open(request.user)
     elif opened is False:
@@ -136,9 +133,9 @@ def _api_event_set_opened(request):
 
 
 def _api_get_email_addresses(request):
-    if 'id' not in request.REQUEST:
+    if 'id' not in request.POST:
         return JsonHttpResponse({'error': 'missing arguments'})
-    event = subscr_Es.event_by_id(request.REQUEST['id'])
+    event = subscr_Es.event_by_id(request.POST['id'])
     if not event:
         raise Http404
     if (not event.has_public_subscriptions and
@@ -154,7 +151,7 @@ def _api_get_email_addresses(request):
 @require_POST
 @login_required
 def api(request):
-    action = request.REQUEST.get('action')
+    action = request.POST.get('action')
     if action == 'get-email-addresses':
         return _api_get_email_addresses(request)
     elif action == 'event-set-opened':
@@ -239,7 +236,6 @@ def event_new_or_edit(request, edit=None):
         form = AddEventForm(d)
     ctx = {'form': form,
            'edit': edit}
-    return render_to_response('subscriptions/event_new_or_edit.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'subscriptions/event_new_or_edit.html', ctx)
 
 # vim: et:sta:bs=2:sw=4:

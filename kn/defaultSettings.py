@@ -30,7 +30,7 @@ def defaultSettings(glbls):
     d.WOLK_MYSQL_SECRET = None
 
     d.DOMAINNAME = 'karpenoktem.nl'
-    d.LDAP_HOST = 'localhost'
+    d.LDAP_URL = 'ldap://localhost'
     d.LDAP_SUFFIX = 'dc=' + ',dc='.join(d.DOMAINNAME.split('.'))
     d.LDAP_BASE = 'ou=users,' + d.LDAP_SUFFIX
     d.LDAP_USER = 'cn=infra,' + d.LDAP_SUFFIX
@@ -124,12 +124,6 @@ def defaultSettings(glbls):
     d.USE_I18N = True
 
     d.ROOT_URLCONF = 'kn.urls'
-    d.TEMPLATE_LOADERS = (
-        ('kn.base.template.SlashNewlineStrippingTemplateLoader', (
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-        )),
-    )
     d.MIDDLEWARE_CLASSES = (
         'django.contrib.sessions.middleware.SessionMiddleware',
         # 'django.middleware.locale.LocaleMiddleware',
@@ -156,17 +150,24 @@ def defaultSettings(glbls):
         'kn.static',
         'kn.agenda',
     )
-    d.TEMPLATE_CONTEXT_PROCESSORS = (
-        "django.contrib.auth.context_processors.auth",
-        "django.core.context_processors.debug",
-        "django.core.context_processors.i18n",
-        "django.core.context_processors.media",
-        "django.contrib.messages.context_processors.messages",
-        "kn.base.context_processors.base_url",
-        "kn.leden.context_processors.may_manage_planning",
-        "django.core.context_processors.request",
-    )
-    d.TEMPLATE_DIRS = ()
+    d.TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': (
+                    "django.contrib.auth.context_processors.auth",
+                    "django.template.context_processors.debug",
+                    "django.template.context_processors.i18n",
+                    "django.template.context_processors.media",
+                    "django.contrib.messages.context_processors.messages",
+                    "kn.base.context_processors.base_url",
+                    "kn.leden.context_processors.may_manage_planning",
+                    "django.template.context_processors.request",
+                ),
+            },
+        },
+    ]
     d.AUTHENTICATION_BACKENDS = (
         'kn.leden.auth.MongoBackend',
     )
@@ -194,7 +195,6 @@ def defaultSettings(glbls):
     d.USERNAME_CHARS = 'qwertyuiopasdfghjklzxcvbnm123456789-'
 
     d.DEBUG = True
-    d.TEMPLATE_DEBUG = d.DEBUG
     d.MAIL_DEBUG = d.DEBUG
 
     d.ABSOLUTE_MEDIA_URL = d.BASE_URL + d.MEDIA_URL

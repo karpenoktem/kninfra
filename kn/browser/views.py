@@ -1,12 +1,11 @@
 import mimetypes
 import os
 import os.path
+from wsgiref.util import FileWrapper
 
 from django.conf import settings
-from django.core.servers.basehttp import FileWrapper
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
 
@@ -59,15 +58,15 @@ def homedir(request, root, subdir, path):
     if os.path.isfile(os.path.join(p2, '.ignore')):
         lines -= _lines_of_file_as_set(os.path.join(p2, '.ignore'))
     _p = os.path.join(subdir, '...', path)
-    return render_to_response(
-        'browser/dirlist.html',
-        {'list': [(c, os.path.join(path, c),
-                   os.path.isdir(os.path.join(p1, c)) or
-                   os.path.isdir(os.path.join(p2, c)))
-                  for c in sorted(lines)],
-         'subdir': subdir, 'root': original_root,
-         'path': _p},
-        context_instance=RequestContext(request)
-    )
+    return render(request,
+                  'browser/dirlist.html',
+                  {'list': [(c, os.path.join(path, c),
+                             os.path.isdir(os.path.join(p1, c)) or
+                             os.path.isdir(os.path.join(p2, c)))
+                            for c in sorted(lines)],
+                   'subdir': subdir, 'root': original_root,
+                   'path': _p},
+                  )
+
 
 # vim: et:sta:bs=2:sw=4:
