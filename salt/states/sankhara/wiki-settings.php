@@ -87,5 +87,9 @@ $wgGroupPermission['sysop']['patrol'] = false;
 # $wgGroupPermissions['sysop']['apc'] = true;
 $wgAllowExternalImagesFrom = array('https://nirodha.karpenoktem.nl/');
 
+{% if grains['vagrant'] %}
+$wgShowExceptionDetails = true;
+{% endif %}
+
 require_once "/etc/mediawiki/knauth/KNAuth.php";
 $wgKNAuthVerifyURL = 'http://localhost/accounts/api/';

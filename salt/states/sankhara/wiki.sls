@@ -25,14 +25,14 @@ install wiki:
     cmd.run:
         - creates: /etc/mediawiki/.is-installed
         - name: >
+            rm -f /etc/mediawiki/LocalSettings.php &&
             php /var/lib/mediawiki/maintenance/install.php KNWiki Admin \
-                --dbname wiki --dbpass {{ pillar['secrets']['mysql_wiki'] }} \
-                --pass {{ pillar['secrets']['wiki_admin'] }} \
-                --installdbuser wiki --lang nl \
-                --dbuser wiki \
+                --dbname wiki --dbuser wiki \
                 --dbpass {{ pillar['secrets']['mysql_wiki'] }} \
-                --installdbpass {{ pillar['secrets']['mysql_wiki'] }}
-            php /var/lib/mediawiki/maintenance/update.php --quick
+                --pass {{ pillar['secrets']['wiki_admin'] }} \
+                --installdbuser wiki \
+                --installdbpass {{ pillar['secrets']['mysql_wiki'] }} \
+                --scriptpath /wiki &&
             touch /etc/mediawiki/.is-installed
 /etc/mediawiki/LocalSettings.php:
     file.managed:
