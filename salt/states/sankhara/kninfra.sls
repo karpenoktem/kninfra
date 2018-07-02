@@ -44,6 +44,7 @@ kninfra packages:
             - python-six
             - python-sdnotify
             - python-pymysql
+            - python-oauth2client
             {% endif %}
             - gettext
             - imagemagick
