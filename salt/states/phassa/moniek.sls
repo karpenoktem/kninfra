@@ -7,16 +7,20 @@ moniek packages:
             - python3-setuptools
             - python3-pyparsing
             - python3-markdown
+            - python3-git
+            - python3-sdnotify
             {% else %}
             - python-django
             - python-msgpack
             - python-setuptools
             - python-pyparsing
             - python-markdown
+            - python-git
+            - python-sdnotify
             {% endif %}
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'GitPython', 'sdnotify'] %}
+{% for pkg in ['mirte'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
