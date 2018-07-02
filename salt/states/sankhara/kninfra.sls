@@ -16,6 +16,8 @@ kninfra packages:
             - python3-unidecode
             - python3-sdnotify
             - python3-pymysql
+            - python3-iso8601
+            - python3-googleapi
 
             # python2 packages for hans
             - python-six
@@ -45,6 +47,8 @@ kninfra packages:
             - python-sdnotify
             - python-pymysql
             - python-oauth2client
+            - python-iso8601
+            - python-googleapi
             {% endif %}
             - gettext
             - imagemagick
@@ -52,7 +56,7 @@ kninfra packages:
             - uwsgi-plugin-python
 
 # pip packages
-{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved', 'iso8601', 'google-api-python-client', 'zipseeker', 'pyasn1>=0.4.1'] %}
+{% for pkg in ['mirte', 'sarah', 'tarjan', 'reserved', 'zipseeker'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
