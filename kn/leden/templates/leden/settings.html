@@ -62,6 +62,7 @@ var object_id = '{{ object.id }}';
   </dd>
   <dt>{% trans "Studie" %}</dt>
   <dd>
+    {% if object.studies %}
     <ul>
       {% for s in object.studies %}
       <li>
@@ -81,6 +82,9 @@ var object_id = '{{ object.id }}';
         </li>
       {% endfor %}{# s in object.studies #}
     </ul>
+    {% else %}
+    Geen studies geregistreerd.
+    {% endif %}
   </dd>
   <dt>{% trans "Telefoonnummer" %}</dt>
   <dd>
