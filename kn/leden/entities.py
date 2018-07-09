@@ -1159,6 +1159,7 @@ class User(Entity):
     address = son_property(('address',))
     telephone = son_property(('telephone',))
     email = son_property(('email',))
+    pk = son_property(('_id'),)  # primary key for Django
 
     def __init__(self, data):
         super(User, self).__init__(data)
