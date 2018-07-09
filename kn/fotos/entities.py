@@ -477,13 +477,7 @@ class FotoAlbum(FotoEntity):
             query_filter['tags'] = _id
         else:
             # do a full-text search
-            for result in db.command('text', 'fotos',
-                                     search=q,
-                                     filter=query_filter,
-                                     limit=96,  # dividable by 2, 3 and 4
-                                     )['results']:
-                yield entity(result['obj'])
-            return
+            query_filter['$text'] = {'$search': q}
 
         # search for album or tag
         for o in fcol.find(query_filter).sort('date', -1):
