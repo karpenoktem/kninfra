@@ -189,6 +189,13 @@ def defaultSettings(glbls):
         'wiki-home': d.BASE_URL + '/wiki/Hoofdpagina',
     }
 
+    d.HOME_SLIDESHOW = [
+        d.MEDIA_URL + 'static/slideshow/boogschieten.jpg',
+        d.MEDIA_URL + 'static/slideshow/gala2014.jpg',
+        d.MEDIA_URL + 'static/slideshow/jurrien.jpg',
+        d.MEDIA_URL + 'static/slideshow/zeilen.jpg',
+    ]
+
     d.DT_MIN = datetime.datetime(2004, 8, 31)
     d.DT_MAX = datetime.datetime(5004, 9, 1)
 
