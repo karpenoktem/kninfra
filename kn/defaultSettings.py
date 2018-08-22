@@ -190,10 +190,12 @@ def defaultSettings(glbls):
     }
 
     d.HOME_SLIDESHOW = [
+        d.MEDIA_URL + 'static/slideshow/horroruil.jpg',
         d.MEDIA_URL + 'static/slideshow/boogschieten.jpg',
         d.MEDIA_URL + 'static/slideshow/gala2014.jpg',
         d.MEDIA_URL + 'static/slideshow/jurrien.jpg',
         d.MEDIA_URL + 'static/slideshow/zeilen.jpg',
+        d.MEDIA_URL + 'static/slideshow/horrormuffins.jpg',
     ]
 
     d.DT_MIN = datetime.datetime(2004, 8, 31)
