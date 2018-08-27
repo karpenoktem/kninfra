@@ -189,7 +189,7 @@ def update_db(giedo):
     # Set is_active on Users if and only if they are not in the `leden' group.
     # TODO We might optimize this by including it in a more generic process
     active_users = [rel['who'] for rel in Es.by_name('leden').get_rrelated(
-        None, dt_now, dt_now, False, False, False)]
+        None, dt_now, dt_now, deref=set())]
     for u in Es.users():
         is_active = u._id in active_users
         if u.is_active == is_active:
