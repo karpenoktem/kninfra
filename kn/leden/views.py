@@ -17,7 +17,6 @@ from django.core.paginator import EmptyPage, Paginator
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
@@ -273,9 +272,7 @@ def users_underage(request):
     users = filter(lambda u: u.is_active, users)
     users = filter(lambda u: u.is_underage, users)
     users = sorted(users, key=lambda x: x.dateOfBirth)
-    return render('leden/entities_underage.html', {
-        'users': users},
-        context_instance=RequestContext(request))
+    return render(request, 'leden/entities_underage.html', {'users': users})
 
 
 @login_required
