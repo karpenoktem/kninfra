@@ -58,12 +58,15 @@ def main():
             continue
         break
 
+    today = datetime.datetime.today()
+    max_year = today.year - Es.DT_MIN.year + 1
+
     # Fetch ids of all current members
     leden_id = Es.id_by_name('leden')
 
     print('If you became a member after june,'
           ' you should be in the next year ...')
-    for year in range(min_year + 1, max_year + 1):
+    for year in range(min_year + 1, max_year):
         start_of_year = Es.year_to_range(year)[0]
         informal_start = start_of_year - datetime.timedelta(3 * 365 / 12)
         for rel in Es.rcol.find({'with': leden_id,
@@ -80,7 +83,7 @@ def main():
 
     print('Any relation that starts near the change of year, should start')
     print('exactly on the change of year ...')
-    for year in range(min_year + 1, max_year + 1):
+    for year in range(min_year + 1, max_year):
         start_of_year = Es.year_to_range(year)[0]
         window = datetime.timedelta(1, 12 * 60 * 60)
         for rel in Es.rcol.find({'from': {'$gt': start_of_year - window,
@@ -100,7 +103,7 @@ def main():
 
     print('Any relation that ends near the change of year, should end')
     print('exactly on the change of year ...')
-    for year in range(min_year + 1, max_year + 1):
+    for year in range(min_year + 1, max_year):
         start_of_year = Es.year_to_range(year)[0]
         end_of_year = Es.year_to_range(year)[0] - datetime.timedelta(0, 1)
         window = datetime.timedelta(1, 12 * 60 * 60)
