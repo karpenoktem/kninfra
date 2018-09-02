@@ -122,6 +122,19 @@ def main():
                 rel['until'] = end_of_year
                 Es.rcol.save(rel)
 
+    print('End eerstejaars relations from previous year ...')
+    ej = Es.by_name('eerstejaars')
+    members = Es.rcol.find({'with': ej._data['_id'], 'until': Es.DT_MAX})
+    for r in sorted(members, key=lambda r: r['from']):
+        member = Es.by_id(r['who'])
+        if r['from'] >= datetime.datetime(today.year, 7, 1):
+            continue  # Only just became a member, don't remove.
+        until = datetime.datetime(today.year, 8, 31, 23, 59, 59)
+        print(' {:25} from {:26} until None -> {}'.format(member.humanName, str(r['from']), str(until)))
+        if args.apply:
+            r['until'] = until
+            Es.rcol.save(r)
+
 
 if __name__ == '__main__':
     main()
