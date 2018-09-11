@@ -1,0 +1,21 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block body %}
+
+<p>{% blocktrans %}Alle bestuursleden zijn bereikbaar op hun
+functie@karpenoktem.nl of op de volgende adressen:{% endblocktrans %}</p>
+<ul>
+  <li>{% filter email %}toms@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}robins@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}jonathan@karpenoktem.nl{% endfilter %}</li>
+  <li>{% filter email %}denny@karpenoktem.nl{% endfilter %}</li>
+</ul>
+
+<div style="float: left;">⇐ {% trans "Het vorige" %},
+<a href="{% url "bestuur14" %}">{% trans "veertiende bestuur" %}</a>
+</div>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}
