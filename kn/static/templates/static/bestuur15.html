@@ -3,15 +3,73 @@
 {% load base %}
 {% load i18n %}
 
-{% block body %}
+{% block styles %}
+{{ block.super }}
+<style>
+.bestuur-members {
+  display: flex;
+  justify-content: space-between;
+}
+.bestuur-members .member {
+  padding: 0 4px;
+}
+.bestuur-members .role {
+  font-size: smaller;
+}
+</style>
+{% endblock styles %}
 
-<p>{% blocktrans %}Alle bestuursleden zijn bereikbaar op hun
-functie@karpenoktem.nl of op de volgende adressen:{% endblocktrans %}</p>
+{% block body %}
+<img width="800"
+     src="{{ MEDIA_URL }}static/img/bestuur15.jpg" alt="Bestuursfoto bestuur 15"/>
+
+<div class="bestuur-members">
+  <div class="member">
+    Robin Schreuder Goedheijt
+    <div class="role">(penningmeester)</div>
+  </div>
+
+  <div class="member">
+    Tom Smitjes
+    <div class="role">(voorzitter)</div>
+  </div>
+
+  <div class="member">
+    Denny Daamen
+    <div class="role">(pandcommissaris)</div>
+  </div>
+
+  <div class="member">
+    Jonathan van Nuus
+    <div class="role">(secretaris)</div>
+  </div>
+</div>
+
+<p>{% blocktrans %}Het <strong>vijftiende bestuur</strong> der A.S.V. Karpe
+Noktem is klein maar fijn, een hecht clubje onder wiens vleugels de rest van de
+vereniging het lustrumjaar vol energie tegemoet kan gaan.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Als voorzitter kan de informaticastudent <strong>Tom
+Smitjes</strong> zijn onmiskenbare positiviteit en enthousiasme inzetten om het
+bestuur te leiden en het gezicht van Karpe Noktem naar de buitenwereld te zijn.
+Aan zijn rechterhand staat secretaris <strong>Jonathan van Nuus</strong>, de
+metalhead die de ruige randjes van de vereniging belichaamt. Met zijn studie
+filosofie beantwoordt hij in de communicatie met leden de vragen die ertoe doen.
+Elke good cop heeft een bad cop nodig en in het geval van Tom is dat
+<strong>Robin Schreuder Goedheijt</strong>, een stoere vrouw die zich als
+student Notarieel Recht zeer thuis voelt in de rol van penningmeester. Als
+afsluiter is daar <strong>Denny "Ik ben Denny" Daamen</strong>. Niet alleen is
+hij Denny, maar ook de pandcommissaris, die zijn interdisciplinaire kennis kan
+gebruiken bij allerlei zaken rondom de Villa van Schaeck, zusterverenigingen en
+onze vele bordspellen.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Alle bestuursleden zijn bereikbaar op de volgende adressen:
+{% endblocktrans %}</p>
 <ul>
-  <li>{% filter email %}toms@karpenoktem.nl{% endfilter %}</li>
-  <li>{% filter email %}robins@karpenoktem.nl{% endfilter %}</li>
-  <li>{% filter email %}jonathan@karpenoktem.nl{% endfilter %}</li>
-  <li>{% filter email %}denny@karpenoktem.nl{% endfilter %}</li>
+  <li>Tom Smitjes, {% filter email %}voorzitter@karpenoktem.nl{% endfilter %}</li>
+  <li>Jonathan van Nuus, {% filter email %}secretaris@karpenoktem.nl{% endfilter %}</li>
+  <li>Robin Schreuder Goedheijt, {% filter email %}penningmeester@karpenoktem.nl{% endfilter %}</li>
+  <li>Denny Daamen, {% filter email %}pandcommissaris@karpenoktem.nl{% endfilter %}</li>
 </ul>
 
 <div style="float: left;">⇐ {% trans "Het vorige" %},
