@@ -1379,9 +1379,10 @@ class User(Entity):
 
     @property
     def is_underage(self):
+        ''' Return True, False, or None (if unknown). '''
         if self.age is not None:
             return self.age < 18
-        return self._data['is_underage']
+        return self._data.get('is_underage', None)
 
     @property
     def got_unix_user(self):
