@@ -479,6 +479,11 @@ class FotoAlbum(FotoEntity):
             # do a full-text search
             query_filter['$text'] = {'$search': q}
 
+        # Don't let non-logged-in users search individual photos, to avoid
+        # exposing tags.
+        if user is None or not user.is_authenticated():
+            query_filter['type'] = 'album'
+
         # search for album or tag
         for o in fcol.find(query_filter).sort('date', -1):
             yield entity(o)

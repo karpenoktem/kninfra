@@ -70,7 +70,7 @@ def entities_json(children, user):
                 entry['thumbnailSize'] = album_foto.get_cache_size('thumb')
                 entry['thumbnailPath'] = album_foto.full_path
 
-        if child._type != 'album':
+        if child._type != 'album' and user is not None and user.is_authenticated():
             tags = []
             tagged = child.get_tags()
             if tagged:

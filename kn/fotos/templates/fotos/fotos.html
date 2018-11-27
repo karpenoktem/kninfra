@@ -120,9 +120,11 @@ dit album zien.{% endblocktrans %}</p>
       <h2 class="title"></h2>
       <p class="description"></p>
 {% endif %}
+{% if user.is_authenticated %}
       {% trans "Tags:" %}
       <ul class="tags">
       </ul>
+{% endif %}
 {% if fotos_admin %}
       <div class="save-wrapper">
         <input type="submit" class="hidden-submit" tabindex="-1"/>
