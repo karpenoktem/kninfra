@@ -35,12 +35,13 @@ def update(agendas):
         quadrupels (title, description, start, end). See fetch.fetch. """
     acol.remove()
     for key, events in agendas.items():
-        for title, description, start, end in events:
+        for title, description, start, end, location in events:
             AgendaEvent({'agenda': key,
                          'title': title,
                          'description': description,
                          'start': start,
-                         'end': end}).save()
+                         'end': end,
+                         'location': location}).save()
 
 
 @six.python_2_unicode_compatible
@@ -55,6 +56,7 @@ class AgendaEvent(SONWrapper):
 
     start = son_property(('start',))
     end = son_property(('end',))
+    location = son_property(('location',))
     description = son_property(('description',))
     title = son_property(('title',))
 

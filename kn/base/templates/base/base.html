@@ -9,29 +9,22 @@
     rel="stylesheet" type="text/css" />
 {% endblock styles %}
 
-{% block styles-inline %}
-{{ block.super }}
-<style type="text/css">
-#header {
-	background-image: url('{% header %}');
-}
-</style>
-{% endblock styles-inline %}
-
 {% block header %}
 {{ block.super }}
-<div id="header">
+<div id="header" class="toggle">
     <div class="container">
         <a href="{% url "home" %}" id="logo">
-            <img width="310" src="{{ MEDIA_URL }}base/logo.png"
+            <img src="{{ MEDIA_URL }}base/knlogo.svg" width="32" height="32"/>
+            <img width="248" src="{{ MEDIA_URL }}base/logo.png"
                     alt="Karpe Noktem" />
         </a>
-        <div id="navigator" class="container">
+        <img src="{{ MEDIA_URL }}base/menu-white.svg" width="32" height="32" align="right" class="toggle-button"/>
+        <div id="navigator" class="container toggle-window">
         {% block topmenu %}
         <ul>
             <li><a href="{% url "agenda" %}">{% trans "agenda" %}</a></li>
             <li><a href="{% url "over" %}">{% trans "over" %}</a></li>
-            <li><a href="{% url "fotos" "" %}">{% trans "foto's" %}</a></li>
+            <li><a href="{% url "fotos" "" %}"><img src="{{ MEDIA_URL }}base/photo_camera.svg" class="icon"/> {% trans "foto's" %}</a></li>
             <li><a href="{% url "contact" %}">{% trans "contact" %}</a></li>
             {% if user.is_authenticated %}
             <li><a href="{% url "logout" %}">{% trans "uitloggen" %}</a></li>

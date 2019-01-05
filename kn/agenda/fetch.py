@@ -55,13 +55,14 @@ def fetch_agenda(h, cal_id):
     cal = build('calendar', 'v3', http=h, cache_discovery=False)
     request = cal.events().list(calendarId=cal_id,
                                 timeMin=timeMin,
-                                fields='items(summary,description,start,end)')
+                                fields='items(summary,description,start,end,location)')
     response = request.execute()
     agenda = []
     for item in response['items']:
         agenda.append((item.get('summary', '?'), item.get('description', ''),
                        parse_item_date(item['start']),
-                       parse_item_date(item['end'])))
+                       parse_item_date(item['end']),
+                       item.get('location')))
     return agenda
 
 

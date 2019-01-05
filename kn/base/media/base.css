@@ -6,24 +6,6 @@ html {
 body {
 	box-sizing: border-box;
 	height: 100%;
-	padding-top: 70px;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-flex-direction: column;
-	flex-direction: column;
-}
-@media screen and (max-width: 800px) {
-	body {
-		padding-top: 112px;
-	}
-}
-@media screen and (min-width: 801px) {
-	body.header-expanded {
-		padding-top: 400px;
-	}
-	body.viewedBefore {
-		height: calc(100% + 330px); /* prevent jumping around with short pages */
-	}
 }
 
 
@@ -32,10 +14,10 @@ body {
 .toggle-window {
 	position: absolute;
 	left: auto;
-        display: none;
+	display: none;
 }
 .toggle.toggle-open .toggle-window {
-        display: block;
+	display: block;
 }
 
 .tabs > .tabHeads > .tabHead {
@@ -64,167 +46,44 @@ body {
 
 /* header */
 #header {
-	z-index: 5;
-	position: absolute;
-	top: -330px;
-	background-repeat: no-repeat;
-	background-position: center;
-	height: 400px;
-	width: 100%;
 	margin: 0;
-	background-size: 900px;
-	background-color: #000;
-	font-family: sans-serif;
+	background-color: #383838;
+	font-family: Roboto;
 	font-size: 16px;
 }
-
-@media screen and (min-width: 801px) {
-	body.header-expanded #header {
-		top: 0;
-		position: absolute;
-	}
-	body #header.fixed {
-		position: fixed;
-		top: -330px;
-	}
-
-	#header {
-		box-shadow: 0px 2px 3px #a31e1b;
-		position: fixed;
-	}
-	/* reduce flicker on page load by loading the page with the header collapsed
-	 * and expanding it with JS while scrolling to the right position */
-	#header.expanded {
-		position: absolute;
-		top: 0;
-	}
-}
-#header > * {
-	position: relative;
-	height: 100%;
-}
 #header #logo {
-	display: block;
-	position: absolute;
-	bottom: 8px;
-	line-height: 0;
-}
-@media screen and (max-width: 800px) {
-	#header #logo {
-		left: 10px;
-		right: 10px;
-	}
-	#header #logo img {
-		max-width: 100%;
-	}
+	line-height: 1;
 }
 
-/* navigator */
 #navigator {
 	position: absolute;
-	height: 42px;
-	margin: 0;
-	padding: 0;
-	font-variant: small-caps;
-	right: 10px;
-	bottom: 0px;
-	background-color: rgba(0, 0, 0, 0.75);
-}
-#navigator > ul { /* hack for #loginButton positioning */
-	display: inline-block;
-	width: 100%;
-	box-sizing: border-box;
+	z-index: 1;
+	bottom: 0;
+	right: 0;
+	top: 56px;
+	min-width: 200px;
+	background-color: #f7f7f7;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 #navigator ul {
-	list-style: none;
-	margin: 0;
+	list-style-type: none;
+	padding: 0;
 }
-#navigator ul, #navigator li > a {
-	padding: 8px 6px;
-}
-#navigator li {
-	display: inline;
-	margin: 0 6px;
-}
-#navigator li > a {
-	border-bottom: solid 3px transparent;
-}
-#navigator li > a:link,
-#navigator li > a:visited {
-	color: #a0a0a0;
-	text-decoration: none;
-}
-#navigator li > a:hover {
-	border-bottom: solid 3px #a31e1b;
-	color: #f0f0f0;
-}
-#navigator li > a:active {
-	color: #f0f0f0;
-	text-decoration: underline;
-}
-#navigator li > a.active {
-	color: #f0f0f0;
-	font-weight: bold;
-}
-@media screen and (min-width: 801px) {
-	#navigator {
-		right: 10px;
-		bottom: 0px;
-	}
-}
-@media screen and (max-width: 800px) {
-	#navigator {
-		left: 0px;
-		right: 0px;
-		bottom: -42px;
-		box-shadow: 0px 1px 4px #a31e1b;
-	}
-	#navigator ul {
-		background-color: rgba(0, 0, 0, 0.90);
-		padding: 8px 5px;
-	}
-}
-@media screen and (max-width: 550px) {
-	#navigator li {
-		margin: 0;
-	}
-	#navigator li > a {
-		padding: 8px 4px;
-	}
-	#loginButton .label {
-		/* not enough space */
-		display: none;
-	}
-	#navigator img {
-		vertical-align: middle;
-	}
+#navigator img.icon {
+	vertical-align: middle;
+	opacity: 0.78;
 }
 
 /* content */
 #content {
 	padding-bottom: 6px; /* prevent collapsing of margins */
-	background-color: #f0f0f0;
+	background-color: #f7f7f7;
 	background-image: url('uiltje.svg');
 	background-repeat: no-repeat;
 	background-position: 100% 0%;
 	background-attachment: scroll;
-	-webkit-flex-grow: 1;
 	flex-grow: 1;
-	-webkit-flex-shrink: 0;
 	flex-shrink: 0;
-}
-.no-svg #content {
-	background-image: url('uiltje.png');
-}
-@media screen and (min-width: 801px) {
-	#content {
-		padding-top: 20px;
-	}
-}
-@supports (display: flex) {
-	#content {
-		min-height: 0; /* initial */
-	}
 }
 
 /* content */
@@ -422,9 +281,6 @@ body {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
-	}
-	.container {
-		padding: 0 10px;
 	}
 }
 

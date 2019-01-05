@@ -1,19 +1,4 @@
-var collapsedHeaderHeight = 70;
-var headerHeight = 400;
-var headerCollapsed = true;
-var expandHeader = true;
-
-// Work around a bug in Safari in private mode: Storage doesn't work.
-var supportsStorage = true;
-try {
-    localStorage.setItem('test', '');
-    localStorage.removeItem('test');
-    sessionStorage.setItem('test', '');
-    sessionStorage.removeItem('test');
-} catch (error) {
-    console.warn('localStorage or sessionStorage not supported');
-    supportsStorage = false;
-}
+'use strict';
 
 function email(t, d, u) {
     var email = u + '@' + d + '.' + t;
@@ -102,11 +87,6 @@ function checkGiedoSync(goal) {
         });
 }
 
-function isMobile() {
-    // use matchMedia if available
-    return 'ontouchstart' in document.documentElement && (window.matchMedia ? window.matchMedia('(max-device-width: 800px)') : true);
-}
-
 $(document).ready(function() {
     // ScrollUp animation
     $("#scrollUp").click(function(event) {
@@ -114,44 +94,6 @@ $(document).ready(function() {
         event.preventDefault();
         return false;
     });
-
-    if (expandHeader && supportsStorage) {
-        /* reduce flicker on page load by loading the page with the header collapsed
-         * and expanding it with JS while scrolling to the right position */
-        $(document.body).addClass('header-expanded');
-        var headerFixedThreshold = headerHeight - collapsedHeaderHeight;
-
-        // Skip to content after first view.
-        if (sessionStorage['visited'] &&
-            getComputedStyle(document.body).paddingTop == headerHeight + "px") {
-            $(document.body).addClass('viewedBefore');
-            // <html> for Firefox, <body> for other browsers
-            document.documentElement.scrollTop = headerFixedThreshold;
-            document.body.scrollTop = headerFixedThreshold;
-        }
-
-        function fixHeader() {
-            var shouldBeCollapsed = $(window).scrollTop() > headerFixedThreshold;
-            if (headerCollapsed !== shouldBeCollapsed) {
-                // don't touch the DOM if that's not needed!
-                headerCollapsed = shouldBeCollapsed;
-                if (shouldBeCollapsed) {
-                    $('#header').addClass('fixed');
-                } else {
-                    $('#header').removeClass('fixed');
-                }
-            }
-        }
-        // Menubar half-fixed
-        if (! isMobile()) {
-            $(window).scroll(fixHeader);
-            fixHeader();
-        }
-    }
-
-    if (supportsStorage) {
-        sessionStorage['visited'] = 'true';
-    }
 
     $('.toggle').each(function(i, toggle) {
         toggle = $(toggle);
@@ -169,10 +111,6 @@ $(document).ready(function() {
             target.parents('.toggle-window').length) return;
         $('.toggle').removeClass('toggle-open');
     });
-
-    if (!window.SVGSVGElement) {
-        $(document.documentElement).addClass('no-svg');
-    }
 
     $('.tabs').each(function(i, tabBox) {
         $('.tabHead', tabBox).each(function(j, tabHeader) {

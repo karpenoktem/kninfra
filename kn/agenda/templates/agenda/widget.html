@@ -1,26 +1,36 @@
 <ul id="agenda"{% if type %} class="small"{% endif %}>
 {% for item in agenda %}
-  {% ifchanged %}
-  <li class="monthSeparator">{{ item.month }}</li>
-  {% endifchanged %}
   <li class="item closed"
     onclick="$(this).toggleClass('closed');">
-    <div class="dateholder">
+    <div class="header">
       <div class="date">
-        {{ item.shortdate }}
+        <span class="day">{{ item.start.date.day }}</span>
+        <span class="month">{{ item.start.date|date:"D b" }}</span>
       </div>
-    </div>
-    <div class="arrow"></div>
-    <div class="item_content">
       <div class="titlebar">
         <span class="title">{{ item.title }}</span>
-    {% if item.end.date != item.start.date %}
-      <span class="datelong">{{ item.start.date }}&mdash;{{ item.end.date }}</span>
-    {% endif %}
       </div>
+    </div>
+    <div class="item-content">
+      {% if item.location %}
+      <div class="row">
+        Locatie:
+        <a href="https://google.com/maps?q={{ item.location }}">{{ item.location }}</a>.
+      </div>
+      {% endif %}
+      <div class="row">
+        Tijd:
+        {% if item.end.date != item.start.date %}
+        <span class="datelong">{{ item.start.date }}&mdash;{{ item.end.date }}</span>
+        {% else %}
+        <span class="datelong">{{ item.start.date }}&mdash;{{ item.end.date }}</span>
+        {% endif %}
+      </div>
+      {% if item.description %}
       <div class="description">
         {{ item.description|safe|linebreaksbr }}
       </div>
+      {% endif %}
     </div>
   </li>
 {% endfor %}

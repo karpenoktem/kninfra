@@ -35,7 +35,7 @@ a:hover, a:focus {
 .container {
 	margin: 0 auto;
 	max-width: 850px;
-	padding: 0 15px;
+	padding: 12px;
 }
 
 #footer {
