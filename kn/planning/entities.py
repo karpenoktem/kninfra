@@ -19,7 +19,13 @@ def may_manage_planning(user):
     if not hasattr(user, 'cached_groups_names'):
         # e.g. AnonymousUser
         return False
-    return bool(user.cached_groups_names & PLANNER_GROUPS)
+    if user.cached_groups_names & PLANNER_GROUPS:
+        return True
+    dt = now()
+    if len(list(user.get_related(Es.by_name('!brand-planner'), dt, dt, False, False, False))):
+        # The user has any role 'planner' so they may manage it.
+        return True
+    return False
 
 # TODO save vacancies in events?
 
@@ -132,8 +138,14 @@ class Pool(SONWrapper):
         '''
         Is this user allowed to manage this pool?
         '''
-        return bool(user.cached_groups_names & set(['secretariaat',
-                                                    self.administrator]))
+        if 'secretariaat' in user.cached_groups_names:
+            return True
+        if self.administrator in user.cached_groups_names:
+            return True
+        if user.is_related_with(Es.by_name(self.name),
+                                how=Es.by_name('!brand-planner')):
+            return True
+        return False
 
 # Generic functions for Vacancy.begin and end.
 #
