@@ -1,12 +1,19 @@
 {% extends "leden/base.html" %}
 {% load base %}
+{% load planning %}
 
 {% block body %}
 <h1>Planning overview</h1>
 <ul>
 {% for pool in pools %}
-<li><a href="{% url "planning_manage" pool.name %}">{{ pool.name }}</a>
-                ({{ pool.administrator }})</li>
+<li>
+    {% if pool|may_manage:user %}
+    <a href="{% url "planning_manage" pool.name %}">{{ pool.name }}</a>
+                ({{ pool.administrator }})
+    {% else %}
+    {{ pool.name }} ({{ pool.administrator }})
+    {% endif %}
+</li>
 {% endfor %}
 </ul>
 {{ block.super }}
