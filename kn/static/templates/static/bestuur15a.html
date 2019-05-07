@@ -21,7 +21,7 @@
 
 {% block body %}
 <img width="800"
-     src="{{ MEDIA_URL }}static/img/bestuur15.jpg" alt="Bestuursfoto bestuur 15"/>
+     src="{{ MEDIA_URL }}static/img/bestuur15a.jpg" alt="Bestuursfoto bestuur 15 A"/>
 
 <div class="bestuur-members">
   <div class="member">
@@ -75,5 +75,9 @@ onze vele bordspellen.{% endblocktrans %}</p>
 <div style="float: left;">⇐ {% trans "Het vorige" %},
 <a href="{% url "bestuur14" %}">{% trans "veertiende bestuur" %}</a>
 </div>
+<div style="float: right;">{% trans "Het volgende" %},
+<a href="{% url "bestuur15b" %}">{% trans "vijftiende bestuur (nieuwe samenstelling)" %}</a> ⇒
+</div>
+
 {% endblock %}
 {# vim: set sw=2 ts=2 et: #}

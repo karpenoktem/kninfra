@@ -1,0 +1,68 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block styles %}
+{{ block.super }}
+<style>
+.bestuur-members {
+  display: flex;
+  justify-content: space-between;
+}
+.bestuur-members .member {
+  padding: 0 4px;
+}
+.bestuur-members .role {
+  font-size: smaller;
+}
+</style>
+{% endblock styles %}
+
+{% block body %}
+<img width="800"
+     src="{{ MEDIA_URL }}static/img/bestuur15b.jpg" alt="Bestuursfoto bestuur 15"/>
+
+<div class="bestuur-members">
+  <div class="member">
+    Robin Schreuder Goedheijt
+    <div class="role">(penningmeester)</div>
+  </div>
+
+  <div class="member">
+    Jonathan van Nuus
+    <div class="role">(secretaris)</div>
+  </div>
+
+  <div class="member">
+    Randy Smits
+    <div class="role">(voorzitter, pandcommissaris)</div>
+  </div>
+</div>
+
+<p>{% blocktrans %}Bestuur 15b van A.S.V. Karpe Noktem is een klein bestuur die
+alles op alles heeft gezet om dit mooie lustrumjaar tot een succesvolle
+afsluiting te brengen.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}In het midden ligt de secretaris Jonathan van Nuus, de
+metalhead die de ruige randjes van de vereniging belichaamt. Met zijn studie
+filosofie beantwoordt hij in de communicatie met leden de vragen die ertoe doen.
+Links van hem staat Robin Schreuder Goedheijt, een stoere vrouw die zich als
+student Notarieel Recht zeer thuis voelt in de rol van penningmeester. Rechts
+staat Randy Smits, geïmporteerd uit bestuur 14 om de rol van voorzitter op zich
+te nemen en tevens contact met het pand te onderhouden.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Alle bestuursleden zijn bereikbaar op de volgende adressen:
+{% endblocktrans %}</p>
+<ul>
+  <li>Robin Schreuder Goedheijt, {% filter email %}penningmeester@karpenoktem.nl{% endfilter %}</li>
+  <li>Jonathan van Nuus, {% filter email %}secretaris@karpenoktem.nl{% endfilter %}</li>
+  <li>Randy Smits, {% filter email %}voorzitter@karpenoktem.nl{% endfilter %}</li>
+</ul>
+
+<div style="float: left;">⇐ {% trans "Het vorige" %},
+<a href="{% url "bestuur15a" %}">{% trans "vijftiende bestuur (oude samenstelling)" %}</a>
+</div>
+
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}
