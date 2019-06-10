@@ -70,7 +70,6 @@ def defaultSettings(glbls):
     d.MONGO_DB = 'kn'
 
     d.MODED_MAILINGLISTS = ['discussie', 'in', 'uit', 'test']
-    d.MODERATORS_GROUP = 'moderators'
     d.MOD_UI_URI = '/mailman/admindb/%s'
     d.MOD_RENEW_INTERVAL = datetime.timedelta(0, 15 * 60)
     d.MOD_DESIRED_URI_PREFIX = d.SCHEME + '://' + d.DOMAINNAME
@@ -144,7 +143,6 @@ def defaultSettings(glbls):
         'kn.browser',
         'kn.reglementen',
         'kn.base',
-        'kn.moderation',
         'kn.planning',
         'kn.fotos',
         'kn.static',

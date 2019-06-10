@@ -131,31 +131,4 @@ def fin_get_years():
         'type': 'fin-get-years',
     })
 
-
-def maillist_get_moderated_lists():
-    return get_giedo_connection().send({
-        'type': 'maillist-get-moderated-lists'
-    })
-
-
-def maillist_activate_moderation(name):
-    return get_giedo_connection().send({
-        'type': 'maillist-activate-moderation',
-        'name': name
-    })
-
-
-def maillist_deactivate_moderation(name):
-    return get_giedo_connection().send({
-        'type': 'maillist-deactivate-moderation',
-        'name': name
-    })
-
-
-def maillist_get_moderator_cookie(name):
-    return get_giedo_connection().send({
-        'type': 'maillist-get-moderator-cookie',
-        'name': name
-    })
-
 # vim: et:sta:bs=2:sw=4:

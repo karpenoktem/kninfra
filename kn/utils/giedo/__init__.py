@@ -179,11 +179,6 @@ class Giedo(WhimDaemon):
                 return self.moniek.send(d)
             except IOError as e:
                 return {'error': 'IOError: ' + e.args[0]}
-        elif d['type'] in ('maillist-get-moderated-lists',
-                           'maillist-activate-moderation',
-                           'maillist-get-moderator-cookie',
-                           'maillist-deactivate-moderation'):
-            return self.hans.send(d)
         else:
             logging.warn("Unknown command: %s" % d['type'])
 
