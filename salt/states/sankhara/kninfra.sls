@@ -179,15 +179,6 @@ https://github.com/awesterb/koert:
 /home/infra/py/koert:
     file.symlink:
         - target: /home/infra/scm/koert
-https://github.com/karpenoktem/regl:
-    git.latest:
-        - user: infra
-        - target: /home/infra/scm/regl
-    require:
-        - pkg: git
-/home/infra/py/regl:
-    file.symlink:
-        - target: /home/infra/scm/regl
 # We cannot set user/group on /vagrant.  Thus also not on /home/infra/repo.
 # We circumvent by using a symlink
 /home/infra/repo/kn/settings.py:

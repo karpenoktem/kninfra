@@ -141,7 +141,6 @@ def defaultSettings(glbls):
         'kn.leden',
         'kn.subscriptions',
         'kn.browser',
-        'kn.reglementen',
         'kn.base',
         'kn.planning',
         'kn.fotos',

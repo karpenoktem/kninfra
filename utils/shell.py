@@ -9,7 +9,6 @@ from django.utils import six
 
 import kn.fotos.entities as fEs  # noqa: F401
 import kn.leden.entities as Es  # noqa: F401
-import kn.reglementen.entities as regl_Es  # noqa: F401
 import kn.subscriptions.entities as subscr_Es  # noqa: F401
 from kn.base.conf import DT_MAX, DT_MIN
 from kn.leden import giedo  # noqa: F401
