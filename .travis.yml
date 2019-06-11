@@ -8,5 +8,5 @@ install:
     - pip install autopep8
 script:
     - flake8
-    - autopep8 -d -aar . --exclude settings.py --ignore E26
-    - isort -c -df -rc .
+    - autopep8 -d -aar . --exclude 'settings.py,*_pb2.py,*_pb2_grpc.py' --ignore E26
+    - isort -c -df -rc --skip-glob='*_pb2.py' --skip-glob='*_pb2_grpc.py' .

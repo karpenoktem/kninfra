@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+// Hans talks directly to Mailman.
+service Hans {
+    // Get all lists with all memberships.
+    rpc GetMembership(GetMembershipReq) returns (GetMembershipResp) {};
+
+    // Apply changes: create new lists for the 'create' property, and add/remove
+    // members of a list with the add/remove properties.
+    rpc ApplyChanges(ApplyChangesReq) returns (ApplyChangesResp) {};
+}
+
+message GetMembershipReq {
+    // No arguments.
+}
+
+message GetMembershipResp {
+    map<string, ListInfo> membership = 1;
+}
+
+message ApplyChangesReq {
+    repeated ListCreateReq create = 1;
+    map<string, MemberList> add = 2;
+    map<string, MemberList> remove = 3;
+}
+
+message ApplyChangesResp {
+}
+
+message ListInfo {
+    repeated string emails = 1;
+}
+
+message ListCreateReq {
+    string name = 1;
+    string humanName = 2;
+}
+
+// A list of member email addresses to add or remove from a mailing list.
+message MemberList {
+    repeated string emails = 1;
+}

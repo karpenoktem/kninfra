@@ -2,11 +2,13 @@ import logging
 import threading
 import time
 
+import grpc
 import mirte  # github.com/bwesterb/mirte
 
 from django.conf import settings
 
 import kn.leden.entities as Es
+import kn.utils.hans.hans_pb2_grpc as hans_pb2_grpc
 from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.db import update_db
 from kn.utils.giedo.fotos import scan_fotos
@@ -40,20 +42,21 @@ class Giedo(WhimDaemon):
         except Exception:
             self.log.exception("Couldn't connect to moniek")
         try:
-            self.hans = WhimClient(settings.HANS_SOCKET)
+            self.hans = hans_pb2_grpc.HansStub(
+                grpc.insecure_channel('unix:' + settings.HANS_SOCKET))
         except Exception:
             self.log.exception("Couldn't connect to hans")
         self.mirte = mirte.get_a_manager()
         self.threadPool = self.mirte.get_a('threadPool')
         self.operation_lock = threading.Lock()
         self.ss_actions = (
-            ('postfix', self.daan, self._gen_postfix),
-            ('postfix-slm', self.daan, self._gen_postfix_slm),
-            ('mailman', self.hans, self._gen_mailman),
-            ('unix', self.cilia, self._gen_unix),
-            ('wiki', self.daan, self._gen_wiki),
-            ('ldap', self.daan, self._gen_ldap),
-            ('wolk', self.cilia, self._gen_wolk))
+            ('postfix', self.daan.send, self._gen_postfix),
+            ('postfix-slm', self.daan.send, self._gen_postfix_slm),
+            ('mailman', self.hans.ApplyChanges, self._gen_mailman),
+            ('unix', self.cilia.send, self._gen_unix),
+            ('wiki', self.daan.send, self._gen_wiki),
+            ('ldap', self.daan.send, self._gen_ldap),
+            ('wolk', self.cilia.send, self._gen_wolk))
 
     def pre_mainloop(self):
         super(Giedo, self).pre_mainloop()
@@ -76,8 +79,7 @@ class Giedo(WhimDaemon):
                 'map': generate_postfix_map(self)}
 
     def _gen_mailman(self):
-        return {'type': 'maillist-apply-changes',
-                'changes': generate_mailman_changes(self)}
+        return generate_mailman_changes(self.hans)
 
     def _gen_wiki(self):
         return {'type': 'wiki',
@@ -106,13 +108,13 @@ class Giedo(WhimDaemon):
                 if todo[0] == 0:
                     todo_event.set()
 
-        def _entry(name, daemon, action):
+        def _entry(name, send, action):
             start = time.time()
             msg = action()
             elapsed = time.time() - start
             logging.info("generate %s %.4f" % (name, elapsed))
             start = time.time()
-            daemon.send(msg)
+            send(msg)
             elapsed = time.time() - start
             logging.info("send %s %.4f (%s to go)" %
                          (name, elapsed, todo[0] - 1))
