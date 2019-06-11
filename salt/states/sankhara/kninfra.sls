@@ -56,7 +56,7 @@ kninfra packages:
             - uwsgi-plugin-python
 
 # pip packages
-{% for pkg in ['mirte', 'tarjan', 'reserved', 'zipseeker'] %}
+{% for pkg in ['grpcio', 'mirte', 'protobuf', 'tarjan', 'reserved', 'zipseeker'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:
@@ -74,7 +74,7 @@ kninfra packages:
 {% endfor %}
 
 # python2 packages for hans
-{% for pkg in ['mirte', 'msgpack-python'] %}
+{% for pkg in ['grpcio', 'mirte', 'protobuf'] %}
 {{ pkg }} python2:
     pip.installed:
         - name: {{ pkg }}
