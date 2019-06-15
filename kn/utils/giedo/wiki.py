@@ -7,9 +7,10 @@ from django.conf import settings
 from django.utils import six
 
 import kn.leden.entities as Es
+import kn.utils.daan.daan_pb2 as daan_pb2
 
 
-def generate_wiki_changes(self):
+def generate_wiki_changes():
     creds = settings.WIKI_MYSQL_SECRET
     if not creds:
         logging.warning('wiki: no credentials available, skipping')
@@ -26,7 +27,7 @@ def generate_wiki_changes(self):
     try:
         with dc.cursor() as c:
             c.execute("SELECT user_id, user_name FROM user")
-            todo = {'add': [], 'remove': [], 'activate': [], 'deactivate': []}
+            todo = daan_pb2.WikiChanges()
 
             cur, old = Es.by_name('leden').get_current_and_old_members()
             for m in itertools.chain(cur, old):
@@ -43,14 +44,16 @@ def generate_wiki_changes(self):
                 if user not in users:
                     if user == 'admin':
                         continue
-                    todo['remove'].append(user)
+                    todo.remove.append(user)
                     logging.info("wiki: removing user %s", user)
                 else:
                     id2name[uid] = user
                     del users[user]
             for name, user in six.iteritems(users):
-                todo['add'].append((name, six.text_type(user.humanName),
-                                    user.canonical_email))
+                todo.add.append(daan_pb2.WikiUser(
+                    name=name,
+                    humanName=six.text_type(user.humanName),
+                    email=user.canonical_email))
 
             c.execute("""SELECT ug_user FROM user_groups
                          WHERE ug_group=%s""", 'leden')
@@ -59,12 +62,12 @@ def generate_wiki_changes(self):
                     continue
                 user = id2name[uid]
                 if user not in ausers:
-                    todo['deactivate'].append(user)
+                    todo.deactivate.append(user)
                 else:
                     ausers.remove(user)
 
             for name in ausers:
-                todo['activate'].append(name)
+                todo.activate.append(name)
     finally:
         dc.close()
     return todo

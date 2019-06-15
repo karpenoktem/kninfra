@@ -8,6 +8,8 @@ import mirte  # github.com/bwesterb/mirte
 from django.conf import settings
 
 import kn.leden.entities as Es
+import kn.utils.daan.daan_pb2 as daan_pb2
+import kn.utils.daan.daan_pb2_grpc as daan_pb2_grpc
 import kn.utils.hans.hans_pb2_grpc as hans_pb2_grpc
 from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.db import update_db
@@ -30,7 +32,8 @@ class Giedo(WhimDaemon):
         self.last_sync_ts = 0
         self.daan, self.cilia, self.moniek, self.hans = None, None, None, None
         try:
-            self.daan = WhimClient(settings.DAAN_SOCKET)
+            self.daan = daan_pb2_grpc.DaanStub(
+                grpc.insecure_channel('unix:' + settings.DAAN_SOCKET))
         except Exception:
             self.log.exception("Couldn't connect to daan")
         try:
@@ -50,12 +53,12 @@ class Giedo(WhimDaemon):
         self.threadPool = self.mirte.get_a('threadPool')
         self.operation_lock = threading.Lock()
         self.ss_actions = (
-            ('postfix', self.daan.send, self._gen_postfix),
-            ('postfix-slm', self.daan.send, self._gen_postfix_slm),
+            ('postfix', self.daan.SetPostfixMap, self._gen_postfix),
+            ('postfix-slm', self.daan.SetPostfixSenderLoginMap, self._gen_postfix_slm),
             ('mailman', self.hans.ApplyChanges, self._gen_mailman),
             ('unix', self.cilia.send, self._gen_unix),
-            ('wiki', self.daan.send, self._gen_wiki),
-            ('ldap', self.daan.send, self._gen_ldap),
+            ('wiki', self.daan.ApplyWikiChanges, self._gen_wiki),
+            ('ldap', self.daan.ApplyLDAPChanges, self._gen_ldap),
             ('wolk', self.cilia.send, self._gen_wolk))
 
     def pre_mainloop(self):
@@ -67,23 +70,19 @@ class Giedo(WhimDaemon):
                 'changes': generate_wolk_changes(self)}
 
     def _gen_ldap(self):
-        return {'type': 'ldap',
-                'changes': generate_ldap_changes(self)}
+        return generate_ldap_changes()
 
     def _gen_postfix_slm(self):
-        return {'type': 'postfix-slm',
-                'map': generate_postfix_slm_map(self)}
+        return generate_postfix_slm_map()
 
     def _gen_postfix(self):
-        return {'type': 'postfix',
-                'map': generate_postfix_map(self)}
+        return generate_postfix_map()
 
     def _gen_mailman(self):
         return generate_mailman_changes(self.hans)
 
     def _gen_wiki(self):
-        return {'type': 'wiki',
-                'changes': generate_wiki_changes(self)}
+        return generate_wiki_changes()
 
     def _gen_unix(self):
         return {'type': 'unix',
@@ -140,7 +139,9 @@ class Giedo(WhimDaemon):
                 d2 = {'type': 'setpass',
                       'user': d['user'],
                       'pass': d['newpass']}
-                self.daan.send(d2)
+                self.daan.SetLDAPPassword(daan_pb2.LDAPNewPassword(
+                    user=d['user'],
+                    password=d['newpass']))
                 self.cilia.send(d2)
                 return {'success': True}
         elif d['type'] == 'ping':
@@ -149,9 +150,14 @@ class Giedo(WhimDaemon):
             return self.cilia.send(d)
         elif d['type'] == 'fotoadmin-move-fotos':
             with self.operation_lock:
-                ret = self.daan.send(d)
-                if 'success' not in ret:
-                    return ret
+                try:
+                    self.daan.FotoadminMoveFotos(daan_pb2.FotoadminMoveAction(
+                        event=d['event'],
+                        store=d['store'],
+                        user=d['user'],
+                        dir=d['dir']))
+                except grpc.RpcError as e:
+                    return {'error': e.details()}
                 ret = scan_fotos()
                 if 'success' not in ret:
                     return ret
@@ -168,7 +174,14 @@ class Giedo(WhimDaemon):
                 return update_site_agenda(self)
         elif d['type'] in ['fotoadmin-create-event']:
             with self.operation_lock:
-                return self.daan.send(d)
+                try:
+                    self.daan.FotoadminCreateEvent(daan_pb2.FotoadminEvent(
+                        date=d['date'],
+                        name=d['name'],
+                        humanName=d['humanname']))
+                except grpc.RpcError as e:
+                    return {'error': e.details()}
+                return {'success': True}
         elif d['type'] == 'last-synced?':
             return self.last_sync_ts
         elif d['type'] in ('fin-get-account',

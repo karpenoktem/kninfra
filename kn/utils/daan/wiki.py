@@ -3,8 +3,8 @@ import pymysql
 from django.conf import settings
 
 
-def apply_wiki_changes(daan, changes):
-    if not changes:
+def apply_wiki_changes(changes):
+    if not changes.add and not changes.remove and not changes.activate and not changes.deactivate:
         return
     creds = settings.WIKI_MYSQL_SECRET
     dc = pymysql.connect(
@@ -15,7 +15,7 @@ def apply_wiki_changes(daan, changes):
         charset='utf8'
     )
     try:
-        for user, realname, email in changes['add']:
+        for wikiUser in changes.add:
             with dc.cursor() as c:
                 q = """
         INSERT INTO `user` (`user_name`,
@@ -45,18 +45,18 @@ def apply_wiki_changes(daan, changes):
             NULL,
             '20081102154303',
             0);"""
-                c.execute(q, (user.capitalize(), realname, email))
-        for user in changes['remove']:
+                c.execute(q, (wikiUser.name.capitalize(), wikiUser.humanName, wikiUser.email))
+        for user in changes.remove:
             with dc.cursor() as c:
                 c.execute("DELETE FROM `user` WHERE `user_name`=%s",
                           user.capitalize())
-        for user in changes['activate']:
+        for user in changes.activate:
             with dc.cursor() as c:
                 # Issue #11: .capitalize() is required due to binary-charset
                 c.execute("""INSERT INTO `user_groups` (ug_user, ug_group)
                     SELECT user_id, %s FROM `user` WHERE user_name=%s""",
                           ('leden', user.capitalize()))
-        for user in changes['deactivate']:
+        for user in changes.deactivate:
             with dc.cursor() as c:
                 # Issue #11: .capitalize() is required due to binary-charset
                 c.execute("""DELETE FROM `user_groups` WHERE ug_group=%s AND

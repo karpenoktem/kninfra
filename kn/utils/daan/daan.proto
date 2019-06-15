@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+// Daan is the root daemon.
+service Daan {
+    rpc SetPostfixMap(PostfixMap) returns (Empty) {};
+    rpc SetPostfixSenderLoginMap(PostfixMap) returns (Empty) {};
+
+    // Apply changes to synced wiki users previously thought up by giedo.
+    rpc ApplyWikiChanges(WikiChanges) returns (Empty) {};
+
+    // Apply changes to the LDAP database previously thought up by giedo.
+    rpc ApplyLDAPChanges(LDAPChanges) returns (Empty) {};
+
+    // Set the LDAP password.
+    rpc SetLDAPPassword(LDAPNewPassword) returns (Empty) {};
+
+    // Create a new event in the photo album.
+    rpc FotoadminCreateEvent(FotoadminEvent) returns (Empty) {};
+
+    // Move a user photo directory into the photo album created above.
+    rpc FotoadminMoveFotos(FotoadminMoveAction) returns (Empty) {};
+}
+
+// A key-value map where the key is an email address and the value is a list of
+// names (plain usernames or email addresses).
+message PostfixMap {
+    map<string, Strings> map = 1;
+}
+
+// WikiChanges describes all changes to apply to the wiki database: which users
+// to add/remove and which users to activate/deactivate.
+message WikiChanges {
+    repeated WikiUser add = 1;
+    repeated string remove = 2;
+    repeated string activate = 3;
+    repeated string deactivate = 4;
+}
+
+// This is a single user object, used when adding a user to the wiki database.
+message WikiUser {
+    string name = 1;
+    string humanName = 2;
+    string email = 3;
+}
+
+message LDAPChanges {
+    repeated LDAPUser upsert = 1;
+    repeated string remove = 2;
+}
+
+message LDAPUser {
+    bytes uid = 1;
+    bytes email = 2;
+    bytes lastName = 3;
+    bytes humanName = 4;
+}
+
+message LDAPNewPassword {
+    bytes user = 1;
+    bytes password = 2;
+}
+
+message FotoadminEvent {
+    string date = 1;
+    string name = 2;
+    string humanName = 3;
+}
+
+message FotoadminMoveAction {
+    string event = 1;
+    string store = 2;
+    string user = 3;
+    string dir = 4;
+}
+
+// A list of values. Protobuf does not support lists directly in a map.
+message Strings {
+    repeated string values = 1;
+}
+
+message Empty {
+}
