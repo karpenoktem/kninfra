@@ -6,13 +6,14 @@ from django.conf import settings
 from django.utils import six
 
 import kn.leden.entities as Es
+import kn.utils.daan.daan_pb2 as daan_pb2
 
 
-def generate_ldap_changes(giedo):
+def generate_ldap_changes():
     if not settings.LDAP_PASS:
         logging.warning('ldap: no credentials available, skipping')
         return None
-    todo = {'upsert': [], 'remove': []}
+    todo = daan_pb2.LDAPChanges()
     ld = ldap.initialize(settings.LDAP_URL)
     ld.bind_s(settings.LDAP_USER, settings.LDAP_PASS)
     try:
@@ -27,10 +28,11 @@ def generate_ldap_changes(giedo):
                                           entry['cn'][0])
         for u in users:
             uid = str(u.name).encode('utf-8')
-            should_have = (uid,
-                           u.canonical_email.encode('utf-8'),
-                           u.last_name.encode('utf-8'),
-                           six.text_type(u.humanName).encode('utf-8'))
+            should_have = daan_pb2.LDAPUser(
+                uid=uid,
+                email=u.canonical_email.encode('utf-8'),
+                lastName=u.last_name.encode('utf-8'),
+                humanName=six.text_type(u.humanName).encode('utf-8'))
             if uid in unaccounted_for:
                 unaccounted_for.remove(uid)
                 if in_ldap[uid] == should_have:
@@ -38,10 +40,10 @@ def generate_ldap_changes(giedo):
                 logging.info('ldap: updating %s', uid)
             else:
                 logging.info('ldap: adding %s', uid)
-            todo['upsert'].append(should_have)
+            todo.upsert.append(should_have)
 
         for uid in unaccounted_for:
-            todo['remove'].append(uid)
+            todo.remove.append(uid)
             logging.info('ldap: removing %s', uid)
     finally:
         ld.unbind_s()

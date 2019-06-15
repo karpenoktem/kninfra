@@ -6,13 +6,14 @@ from django.conf import settings
 from django.utils import six
 
 import kn.leden.entities as Es
+import kn.utils.daan.daan_pb2 as daan_pb2
 from kn.leden.date import now
 
 # TODO (issue #7) handle cycles properly.
 
 
-def generate_postfix_map(giedo):
-    tbl = dict()  # the virtual map
+def generate_postfix_map():
+    tbl = daan_pb2.PostfixMap()  # the virtual map
     non_mailman_groups = {}
     dt_now = now()
     id2email = {}
@@ -22,32 +23,31 @@ def generate_postfix_map(giedo):
             continue
         id2email[e._id] = e.canonical_email
         for nm in e.other_names:
-            tbl["%s@%s" % (nm, settings.MAILDOMAIN)] = (e.canonical_email,)
+            tbl.map["%s@%s" % (nm, settings.MAILDOMAIN)].values.append(e.canonical_email)
         if e.type == 'user':
-            tbl[e.canonical_email] = (e.email,)
+            tbl.map[e.canonical_email].values.append(e.email)
         elif e.type == 'group':
             if e.got_mailman_list and e.name:
-                tbl[e.canonical_email] = ('%s@%s' % (
-                    str(e.name), settings.LISTS_MAILDOMAIN),)
+                tbl.map[e.canonical_email].values.append('%s@%s' % (
+                    str(e.name), settings.LISTS_MAILDOMAIN))
             else:
-                tbl[e.canonical_email] = []
                 non_mailman_groups[e._id] = e
         else:
             logging.warn("postfix: unhandled type: %s" % e.type)
         id_email = "%s@%s" % (e.id, settings.MAILDOMAIN)
-        if id_email not in tbl:
-            tbl[id_email] = (e.canonical_email,)
+        if id_email not in tbl.map:
+            tbl.map[id_email].values.append(e.canonical_email)
     # handle the non-mailman groups
     for rel in Es.query_relations(_with=list(non_mailman_groups),
                                   _from=dt_now, until=dt_now, how=None):
         e = non_mailman_groups[rel['with']]
         email = id2email.get(rel['who'])
         if email is not None:
-            tbl[e.canonical_email].append(email)
+            tbl.map[e.canonical_email].values.append(email)
     return tbl
 
 
-def generate_postfix_slm_map(giedo):
+def generate_postfix_slm_map():
     # We generate the postfix "sender_login_maps".
     # This is used to decide by postfix whether a given user is allowed to
     # send e-mail as if it was coming from a particular e-mail address.
@@ -100,11 +100,11 @@ def generate_postfix_slm_map(giedo):
                         tbl[str(name)] = set()
                     tbl[str(name)].add(str(ulut[u_id].name))
     # Clean up tbl to return.
-    ret = {}
+    ret = daan_pb2.PostfixMap()
     for name, users in six.iteritems(tbl):
         if not users:
             continue
-        ret["%s@%s" % (name, settings.MAILDOMAIN)] = tuple(users)
+        ret.map["%s@%s" % (name, settings.MAILDOMAIN)].values.extend(users)
     return ret
 
 # vim: et:sta:bs=2:sw=4:

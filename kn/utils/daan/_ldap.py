@@ -12,7 +12,7 @@ def nthash(password):
     return hashlib.new('md4', password.encode('utf-16le')).hexdigest().upper()
 
 
-def ldap_setpass(daan, user, password):
+def ldap_setpass(user, password):
     if not password:
         return
     if not settings.LDAP_PASS:
@@ -49,20 +49,21 @@ def ldap_setpass(daan, user, password):
 # TODO exception safety
 
 
-def apply_ldap_changes(daan, changes):
-    if not changes:
+def apply_ldap_changes(changes):
+    if not changes.upsert and not changes.remove:
         return
     ld = ldap.initialize(settings.LDAP_URL)
     ld.bind_s(settings.LDAP_USER, settings.LDAP_PASS)
     try:
-        for uid in changes['remove']:
+        for uid in changes.remove:
             if six.PY3:
                 # pyldap is a bit inconsistent with unicode/bytes API between
                 # python 2 and python 3.
                 uid = uid.decode()
             dn = 'uid=' + uid + ',' + settings.LDAP_BASE
             ld.delete_s(dn)
-        for uid, mail, sn, cn in changes['upsert']:
+        for ldapUser in changes.upsert:
+            uid = ldapUser.uid
             if six.PY3:
                 uid = uid.decode()
             dn = 'uid=' + uid + ',' + settings.LDAP_BASE
@@ -71,9 +72,9 @@ def apply_ldap_changes(daan, changes):
             if not res:
                 entry = {'objectClass': [b'inetOrgPerson'],
                          'uid': [uid.encode()],
-                         'sn': [sn],
-                         'cn': [cn],
-                         'mail': [mail]}
+                         'sn': [ldapUser.lastName],
+                         'cn': [ldapUser.humanName],
+                         'mail': [ldapUser.email]}
                 ld.add_s(dn, ldap.modlist.addModlist(entry))
                 continue
             _o = res[0][1]
@@ -82,9 +83,9 @@ def apply_ldap_changes(daan, changes):
                    'cn': _o['cn'][0],
                    'mail': _o['mail'][0]}
             new = {'uid': [uid.encode()],
-                   'sn': [sn],
-                   'cn': [cn],
-                   'mail': [mail]}
+                   'sn': [ldapUser.lastName],
+                   'cn': [ldapUser.humanName],
+                   'mail': [ldapUser.email]}
             ld.modify_s(dn, ldap.modlist.modifyModlist(old, new))
     finally:
         ld.unbind_s()
