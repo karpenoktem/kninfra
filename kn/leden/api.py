@@ -226,9 +226,8 @@ def entity_end_study(data, request):
     '''
     if 'id' not in data or not isinstance(data['id'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "id"'}
-    if 'property' not in data or not isinstance(data['property'],
-                                                six.string_types):
-        return {'ok': False, 'error': 'Missing argument "property"'}
+    if 'key' not in data or not isinstance(data['key'], six.string_types):
+        return {'ok': False, 'error': 'Missing argument "key"'}
     if 'value' not in data or not isinstance(data['value'], six.string_types):
         return {'ok': False, 'error': 'Missing argument "value"'}
 
@@ -245,7 +244,7 @@ def entity_end_study(data, request):
     if not end_date:
         return {'ok': False, 'error': 'No valid end date given'}
     try:
-        study = int(data['property'])
+        study = int(data['key'])
     except ValueError:
         return {'ok': False, 'error': 'Invalid study'}
     try:
