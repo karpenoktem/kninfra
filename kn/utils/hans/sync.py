@@ -2,9 +2,10 @@ import logging
 import os.path
 import subprocess
 
+import protobufs.messages.hans_pb2 as hans_pb2
+
 from django.conf import settings
 
-import kn.utils.hans.hans_pb2 as hans_pb2
 from kn.utils.hans import mailman
 
 

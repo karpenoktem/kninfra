@@ -1,13 +1,13 @@
 import itertools
 import logging
 
+import protobufs.messages.daan_pb2 as daan_pb2
 import pymysql
 
 from django.conf import settings
 from django.utils import six
 
 import kn.leden.entities as Es
-import kn.utils.daan.daan_pb2 as daan_pb2
 
 
 def generate_wiki_changes():

@@ -1,12 +1,12 @@
 import logging
 
+import protobufs.messages.daan_pb2 as daan_pb2
 from tarjan.tc import tc
 
 from django.conf import settings
 from django.utils import six
 
 import kn.leden.entities as Es
-import kn.utils.daan.daan_pb2 as daan_pb2
 from kn.leden.date import now
 
 # TODO (issue #7) handle cycles properly.

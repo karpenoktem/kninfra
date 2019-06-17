@@ -5,11 +5,11 @@ import time
 from concurrent import futures
 
 import grpc
+import protobufs.messages.hans_pb2_grpc as hans_pb2_grpc
 import sdnotify
 
 from django.conf import settings
 
-import kn.utils.hans.hans_pb2_grpc as hans_pb2_grpc
 from kn.utils.hans.service import Hans
 
 if __name__ == '__main__':

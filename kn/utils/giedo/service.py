@@ -4,13 +4,14 @@ import time
 
 import grpc
 import mirte  # github.com/bwesterb/mirte
+import protobufs.messages.common_pb2 as common_pb2
+import protobufs.messages.daan_pb2 as daan_pb2
+import protobufs.messages.daan_pb2_grpc as daan_pb2_grpc
+import protobufs.messages.hans_pb2_grpc as hans_pb2_grpc
 
 from django.conf import settings
 
 import kn.leden.entities as Es
-import kn.utils.daan.daan_pb2 as daan_pb2
-import kn.utils.daan.daan_pb2_grpc as daan_pb2_grpc
-import kn.utils.hans.hans_pb2_grpc as hans_pb2_grpc
 from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.db import update_db
 from kn.utils.giedo.fotos import scan_fotos

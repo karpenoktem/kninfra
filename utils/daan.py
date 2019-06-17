@@ -6,11 +6,11 @@ import time
 from concurrent import futures
 
 import grpc
+import protobufs.messages.daan_pb2_grpc as daan_pb2_grpc
 import sdnotify
 
 from django.conf import settings
 
-import kn.utils.daan.daan_pb2_grpc as daan_pb2_grpc
 from kn.utils.daan.service import Daan
 
 if __name__ == '__main__':
