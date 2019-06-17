@@ -84,5 +84,3 @@ def scan_fotos():
     elif album.update_metadata(None):
         album.save()
     scan_album(album)
-
-    return {'success': True}

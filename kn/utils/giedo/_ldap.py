@@ -1,12 +1,12 @@
 import logging
 
 import ldap
+import protobufs.messages.daan_pb2 as daan_pb2
 
 from django.conf import settings
 from django.utils import six
 
 import kn.leden.entities as Es
-import kn.utils.daan.daan_pb2 as daan_pb2
 
 
 def generate_ldap_changes():

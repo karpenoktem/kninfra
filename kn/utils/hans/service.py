@@ -2,8 +2,9 @@ from __future__ import absolute_import
 
 import threading
 
-import kn.utils.hans.hans_pb2 as hans_pb2
-import kn.utils.hans.hans_pb2_grpc as hans_pb2_grpc
+import protobufs.messages.hans_pb2 as hans_pb2
+import protobufs.messages.hans_pb2_grpc as hans_pb2_grpc
+
 from kn.utils.hans.sync import maillist_apply_changes, maillist_get_membership
 
 

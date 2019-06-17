@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "protobufs/messages/common.proto";
+
 // Daan is the root daemon.
 service Daan {
     rpc SetPostfixMap(PostfixMap) returns (Empty) {};
@@ -76,7 +78,4 @@ message FotoadminMoveAction {
 // A list of values. Protobuf does not support lists directly in a map.
 message Strings {
     repeated string values = 1;
-}
-
-message Empty {
 }

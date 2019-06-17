@@ -1,9 +1,10 @@
 import logging
 
+import protobufs.messages.hans_pb2 as hans_pb2
+
 from django.utils import six
 
 import kn.leden.entities as Es
-import kn.utils.hans.hans_pb2 as hans_pb2
 from kn.leden.date import now
 
 
