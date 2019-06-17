@@ -20,7 +20,7 @@ moniek packages:
             {% endif %}
 
 # pip packages
-{% for pkg in ['mirte'] %}
+{% for pkg in ['grpcio', 'mirte', 'protobuf'] %}
 {{ pkg }}:
 {% if pillar['python3'] %}
     pip.installed:

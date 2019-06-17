@@ -1,4 +1,5 @@
 import koert.gnucash.export as koertexport
+import protobufs.messages.moniek_pb2 as moniek_pb2
 import six
 
 
@@ -21,14 +22,13 @@ def check_names(moniek, names):
     gcf = moniek.gcf
     book = gcf.book
 
-    absent_from_gnucash = {}
-    absent_from_website = {}
+    absent_from_gnucash = moniek_pb2.FinNamesList()
+    absent_from_website = moniek_pb2.FinNamesList()
 
     for t, tnames in six.iteritems(names):
         paths = gcf.meta['accounts'][t]
         found_one = False
-
-        absent_from_gnucash[t] = set()
+        missingNames = set()
 
         for name in tnames:
             for path in paths:
@@ -36,22 +36,23 @@ def check_names(moniek, names):
                     found_one = True
                     break
             if not found_one:
-                absent_from_gnucash[t].add(name)
+                missingNames.add(name)
 
-        absent_from_gnucash[t] = list(absent_from_gnucash[t])
+        getattr(absent_from_gnucash, t).extend(list(missingNames))
 
     for t, paths in six.iteritems(gcf.meta['accounts']):
-        absent_from_website[t] = set()
         tnames = frozenset(names[t])
+        missingNames = set()
 
         for path in paths:
             for name in book.ac_by_path(path).children:
                 if name not in tnames:
-                    absent_from_website[t].add(name)
+                    missingNames.add(name)
 
-        absent_from_website[t] = list(absent_from_website[t])
+        getattr(absent_from_website, t).extend(list(missingNames))
 
-    return {'gnucash': absent_from_gnucash, 'website': absent_from_website}
+    return moniek_pb2.FinMissingNames(gnucash=absent_from_gnucash,
+                                      website=absent_from_website)
 
 
 def get_gnucash_object(moniek, year, handle):
@@ -59,7 +60,7 @@ def get_gnucash_object(moniek, year, handle):
     which should (but does not always) contain one object."""
     gcf = moniek.gcf_by_year(year)
     if gcf is None:
-        return {'type': 'error', 'message': 'no such year'}
+        return None
     book = gcf.book
 
     return [koertexport.export(obj) for obj in book.obj_by_handle(handle)]
@@ -68,7 +69,7 @@ def get_gnucash_object(moniek, year, handle):
 def get_errors(moniek, year):
     gcf = moniek.gcf_by_year(year)
     if gcf is None:
-        return {'type': 'error', 'message': 'no such year'}
+        return None
 
     return koertexport.export_checks_of_book(gcf.book)
 

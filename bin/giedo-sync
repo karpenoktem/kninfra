@@ -2,5 +2,4 @@
 
 PYTHON="${PYTHON:-python}"
 
-echo '{"type":"sync"}' \
-    | exec $PYTHON $HOME/repo/bin/whim-client /var/run/infra/S-giedo
+exec $PYTHON /home/infra/repo/utils/giedo-sync.py

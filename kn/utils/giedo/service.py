@@ -7,7 +7,10 @@ import mirte  # github.com/bwesterb/mirte
 import protobufs.messages.common_pb2 as common_pb2
 import protobufs.messages.daan_pb2 as daan_pb2
 import protobufs.messages.daan_pb2_grpc as daan_pb2_grpc
+import protobufs.messages.giedo_pb2 as giedo_pb2
+import protobufs.messages.giedo_pb2_grpc as giedo_pb2_grpc
 import protobufs.messages.hans_pb2_grpc as hans_pb2_grpc
+import protobufs.messages.moniek_pb2_grpc as moniek_pb2_grpc
 
 from django.conf import settings
 
@@ -22,13 +25,13 @@ from kn.utils.giedo.siteagenda import update_site_agenda
 from kn.utils.giedo.unix import generate_unix_map
 from kn.utils.giedo.wiki import generate_wiki_changes
 from kn.utils.giedo.wolk import generate_wolk_changes
-from kn.utils.whim import WhimClient, WhimDaemon
+from kn.utils.whim import WhimClient
 
 
-class Giedo(WhimDaemon):
+class Giedo(giedo_pb2_grpc.GiedoServicer):
 
     def __init__(self):
-        super(Giedo, self).__init__(settings.GIEDO_SOCKET)
+        super(Giedo, self).__init__()
         self.log = logging.getLogger('giedo')
         self.last_sync_ts = 0
         self.daan, self.cilia, self.moniek, self.hans = None, None, None, None
@@ -42,7 +45,8 @@ class Giedo(WhimDaemon):
         except Exception:
             self.log.exception("Couldn't connect to cilia")
         try:
-            self.moniek = WhimClient(settings.MONIEK_SOCKET)
+            self.moniek = moniek_pb2_grpc.MoniekStub(
+                grpc.insecure_channel('unix:' + settings.MONIEK_SOCKET))
         except Exception:
             self.log.exception("Couldn't connect to moniek")
         try:
@@ -61,10 +65,6 @@ class Giedo(WhimDaemon):
             ('wiki', self.daan.ApplyWikiChanges, self._gen_wiki),
             ('ldap', self.daan.ApplyLDAPChanges, self._gen_ldap),
             ('wolk', self.cilia.send, self._gen_wolk))
-
-    def pre_mainloop(self):
-        super(Giedo, self).pre_mainloop()
-        self.notify_systemd()
 
     def _gen_wolk(self):
         return {'type': 'wolk',
@@ -124,78 +124,100 @@ class Giedo(WhimDaemon):
         todo_event.wait()
         self.last_sync_ts = time.time()
 
-    def handle(self, d):
-        if d['type'] == 'sync':
-            with self.operation_lock:
-                return self.sync()
-        elif d['type'] == 'setpass':
-            with self.operation_lock:
-                u = Es.by_name(d['user'])
-                if u is None:
-                    return {'error': 'no such user'}
-                u = u.as_user()
-                if not u.check_password(d['oldpass']):
-                    return {'error': 'wrong old password'}
-                u.set_password(d['newpass'])
-                d2 = {'type': 'setpass',
-                      'user': d['user'],
-                      'pass': d['newpass']}
-                self.daan.SetLDAPPassword(daan_pb2.LDAPNewPassword(
-                    user=d['user'],
-                    password=d['newpass']))
-                self.cilia.send(d2)
-                return {'success': True}
-        elif d['type'] == 'ping':
-            return {'pong': True}
-        elif d['type'] == 'fotoadmin-scan-userdirs':
-            return self.cilia.send(d)
-        elif d['type'] == 'fotoadmin-move-fotos':
-            with self.operation_lock:
-                try:
-                    self.daan.FotoadminMoveFotos(daan_pb2.FotoadminMoveAction(
-                        event=d['event'],
-                        store=d['store'],
-                        user=d['user'],
-                        dir=d['dir']))
-                except grpc.RpcError as e:
-                    return {'error': e.details()}
-                ret = scan_fotos()
-                if 'success' not in ret:
-                    return ret
-                return self.cilia.send({
-                    'type': 'fotoadmin-remove-moved-fotos',
-                    'store': d['store'],
-                    'user': d['user'],
-                    'dir': d['dir']})
-        elif d['type'] == 'fotoadmin-scan-fotos':
-            with self.operation_lock:
-                return scan_fotos()
-        elif d['type'] == 'update-site-agenda':
-            with self.operation_lock:
-                return update_site_agenda(self)
-        elif d['type'] in ['fotoadmin-create-event']:
-            with self.operation_lock:
-                try:
-                    self.daan.FotoadminCreateEvent(daan_pb2.FotoadminEvent(
-                        date=d['date'],
-                        name=d['name'],
-                        humanName=d['humanname']))
-                except grpc.RpcError as e:
-                    return {'error': e.details()}
-                return {'success': True}
-        elif d['type'] == 'last-synced?':
-            return self.last_sync_ts
-        elif d['type'] in ('fin-get-account',
-                           'fin-get-debitors',
-                           'fin-check-names',
-                           'fin-get-gnucash-object',
-                           'fin-get-years',
-                           'fin-get-errors'):
+    def sync_locked(self):
+        with self.operation_lock:
+            self.sync()
+
+    def SyncBlocking(self, request, context):
+        self.sync_locked()
+        return common_pb2.Empty()
+
+    def SyncAsync(self, request, context):
+        self.threadPool.execute(self.sync_locked)
+        return common_pb2.Empty()
+
+    def LastSynced(self, request, context):
+        return giedo_pb2.LastSyncedResult(time=self.last_sync_ts)
+
+    def SetPassword(self, request, context):
+        with self.operation_lock:
+            u = Es.by_name(request.user)
+            if u is None:
+                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+                context.set_details('no such user')
+                return common_pb2.Empty()
+            u = u.as_user()
+            if not u.check_password(request.oldpass):
+                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+                context.set_details('wrong old password')
+                return common_pb2.Empty()
+            u.set_password(request.newpass)
+            self.daan.SetLDAPPassword(daan_pb2.LDAPNewPassword(
+                user=request.user.encode(),
+                password=request.newpass.encode()))
+            self.cilia.send({'type': 'setpass',
+                             'user': request.user,
+                             'pass': request.newpass})
+        return common_pb2.Empty()
+
+    def FotoadminScanUserdirs(self, request, context):
+        resp = giedo_pb2.FotoadminUserdirs()
+        for path, displayName in self.cilia.send({'type': 'fotoadmin-scan-userdirs'}):
+            resp.userdirs.append(giedo_pb2.FotoadminUserdir(path=path, displayName=displayName))
+        return resp
+
+    def FotoadminCreateEvent(self, request, context):
+        with self.operation_lock:
             try:
-                return self.moniek.send(d)
-            except IOError as e:
-                return {'error': 'IOError: ' + e.args[0]}
-        else:
-            logging.warn("Unknown command: %s" % d['type'])
+                self.daan.FotoadminCreateEvent(request)
+            except grpc.RpcError as e:
+                context.set_code(e.code())
+                context.set_details(e.details())
+        return common_pb2.Empty()
+
+    def FotoadminMoveFotos(self, request, context):
+        with self.operation_lock:
+            self.daan.FotoadminMoveFotos(request)
+            scan_fotos()
+            ret = self.cilia.send({
+                'type': 'fotoadmin-remove-moved-fotos',
+                'store': request.store,
+                'user': request.user,
+                'dir': request.dir})
+            if 'success' not in ret:
+                context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+                context.set_details(ret['error'])
+        return common_pb2.Empty()
+
+    def ScanFotos(self, request, context):
+        with self.operation_lock:
+            scan_fotos()
+        return common_pb2.Empty()
+
+    def UpdateSiteAgenda(self, request, context):
+        with self.operation_lock:
+            ret = update_site_agenda()
+            if 'success' not in ret:
+                context.set_code(grpc.StatusCode.UNKNOWN)
+                context.set_details(ret['error'])
+        return common_pb2.Empty()
+
+    def FinGetAccount(self, request, context):
+        return self.moniek.FinGetAccount(request)
+
+    def FinGetDebitors(self, request, context):
+        return self.moniek.FinGetDebitors(request)
+
+    def FinCheckNames(self, request, context):
+        return self.moniek.FinCheckNames(request)
+
+    def FinGetGnuCashObject(self, request, context):
+        return self.moniek.FinGetGnuCashObject(request)
+
+    def FinGetYears(self, request, context):
+        return self.moniek.FinGetYears(request)
+
+    def FinGetErrors(self, request, context):
+        return self.moniek.FinGetErrors(request)
 
 # vim: et:sta:bs=2:sw=4:
