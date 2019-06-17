@@ -4,11 +4,8 @@ from kn.agenda.entities import update
 from kn.agenda.fetch import fetch
 
 
-def update_site_agenda(giedo):
-    try:
-        agendas = fetch()
-    except Exception as err:
-        return {'error': str(err)}
+def update_site_agenda():
+    agendas = fetch()
     if agendas is None:
         logging.warning('agenda: could not fetch agenda')
         return {'error': 'Failed to fetch agendas'}

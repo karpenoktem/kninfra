@@ -1,6 +1,7 @@
 {% extends "leden/base.html" %}
 
 {% load i18n %}
+{% load fin %}
 
 {% block styles %}
 {{ block.super }}
@@ -75,7 +76,7 @@ uitgegeven voor
         <tbody>
             <tr>
                 <td>{{ tr.data.num }}</td>
-                <td class="date">{{ tr.data.date.text }}</td>
+                <td class="date">{{ tr.data.date.seconds|unix_to_datetime|date:"Y-m-d"}}</td>
                 <td>{{ tr.data.description }}</td>
                 <td class="value"><span class="sum">{{ tr.value }}</span></td>
                 <td class="value"><span class="sum">{{ tr.sum }}</span></td>

@@ -28,25 +28,25 @@ class TrInfo:
 
     def __init__(self, data):
         self.data = data
-        self.mutations = [MutInfo(mut) for mut in data['muts']]
-        self.value = Decimal(data['value'])
-        self.sum = Decimal(data['sum'])
+        self.mutations = [MutInfo(mut) for mut in data.mutations]
+        self.value = Decimal(data.value)
+        self.sum = Decimal(data.sum)
 
 
 class MutInfo:
 
     def __init__(self, data):
         self.data = data
-        self.value = Decimal(data['value'])
-        self.sum = Decimal(data['sum'])
+        self.value = Decimal(data.value)
+        self.sum = Decimal(data.sum)
 
 
 class BalansInfo:
 
     def __init__(self, data):
         self.data = data
-        self.total = Decimal(data['total'])
-        self.transactions = [TrInfo(tr) for tr in data['trs']]
+        self.total = Decimal(data.total)
+        self.transactions = [TrInfo(tr) for tr in data.transactions]
 
     @property
     def abstotal(self):
@@ -62,8 +62,8 @@ class BalansInfo:
 
     @property
     def in_books(self):
-        return len(self.data['accounts']) > 0
+        return len(self.data.accounts) > 0
 
     @property
     def mtime(self):
-        return strftime("%Y-%m-%d", gmtime(self.data['mtime']))
+        return strftime("%Y-%m-%d", gmtime(self.data.mtime))
