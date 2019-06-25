@@ -17,9 +17,10 @@ def set_postfix_map(tbl):
     # TODO check whether the entries are valid and within karpenoktem.nl!
     with open(settings.POSTFIX_VIRTUAL_MAP, 'w') as f:
         for k, v in six.iteritems(tbl):
-            if not v.values:
+            emails = filter(lambda x: x, v.values)
+            if not emails:
                 continue
-            f.write("%s %s\n" % (k, ', '.join(v.values)))
+            f.write("%s %s\n" % (k, ', '.join(emails)))
     call(['postmap', settings.POSTFIX_VIRTUAL_MAP])
 
 # vim: et:sta:bs=2:sw=4:
