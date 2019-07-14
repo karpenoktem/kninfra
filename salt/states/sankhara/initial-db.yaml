@@ -11,13 +11,13 @@ entities:
   names: ['!year-overrides']
   tags: [!id '4e6fcc85e60edf3dc0000000']
   types: [tag]
-- _id: !id '4e6fcc85e60edf3dc0000002'
+- _id: &virtual_id !id '4e6fcc85e60edf3dc0000002'
   humanNames:
   - {human: Virtuele groep, name: '!virtual-group'}
   names: ['!virtual-group']
   tags: [!id '4e6fcc85e60edf3dc0000000']
   types: [tag]
-- _id: !id '4e6fcc85e60edf3dc0000003'
+- _id: &sofa_brand_id !id '4e6fcc85e60edf3dc0000003'
   humanNames:
   - {human: Sofa merk, name: '!sofa-brand'}
   names: ['!sofa-brand']
@@ -349,7 +349,8 @@ entities:
 - humanNames:
   - {human: Docent Engels}
   types: [study]
-- description: Het bestuur
+- _id: &bestuur_id !id '4e6fcc85e60edf3dc0000067'
+  description: Het bestuur
   humanNames:
   - {genitive_prefix: van het, human: Bestuur, name: bestuur}
   names: [bestuur, bestuul, parkhangen, festivals]
@@ -752,6 +753,23 @@ entities:
   names: [disputen]
   tags: [!id '4e6fcc85e60edf3dc0000086']
   types: [tag]
+- humanNames:
+  - {human: 'Secretaris'}
+  _id: &brand_secretaris_id !id '4e6fcc85e60edf3dc0000bcd'
+  names: []
+  sofa_suffix: 'secretaris'
+  tags: [*sofa_brand_id]
+  types: [brand]
+- humanNames:
+  - human: 'Bestuur Secretaris'
+    name: 'bestuur-secretaris'
+  names: ['bestuur-secretaris', 'secretaris', 'penvoerder', 'abactis']
+  tags: [*virtual_id]
+  virtual:
+    how: *brand_secretaris_id
+    with: *bestuur_id
+    type: 'sofa'
+  types: [group, tag]
 
 - _id: &test_id !id '4e6fcc85e60edf3dc00001d4'
   address:
