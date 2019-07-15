@@ -1,7 +1,8 @@
 {% load i18n %}
-    <ul>
+    <ul id="{{ listid }}">
     {% for subscr in list %}
     <li><a href="{{ subscr.user.get_absolute_url }}"
+           data-email="{{ subscr.user.canonical_full_email}}"
         >{{ subscr.user.full_name }}</a>
         {% if has_read_access %}
         {% for mutation in subscr.history reversed %}

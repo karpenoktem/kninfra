@@ -131,30 +131,11 @@ def _api_event_set_opened(request):
 
     return JsonHttpResponse({'success': True})
 
-
-def _api_get_email_addresses(request):
-    if 'id' not in request.POST:
-        return JsonHttpResponse({'error': 'missing arguments'})
-    event = subscr_Es.event_by_id(request.POST['id'])
-    if not event:
-        raise Http404
-    if (not event.has_public_subscriptions and
-            not event.has_read_access(request.user)):
-        raise PermissionDenied
-    # XXX We can optimize this query
-    return JsonHttpResponse({
-        'success': True,
-        'addresses': [s.user.canonical_full_email
-                      for s in event.listSubscribed]})
-
-
 @require_POST
 @login_required
 def api(request):
     action = request.POST.get('action')
-    if action == 'get-email-addresses':
-        return _api_get_email_addresses(request)
-    elif action == 'event-set-opened':
+    if action == 'event-set-opened':
         return _api_event_set_opened(request)
     else:
         return JsonHttpResponse({'error': 'unknown action'})
