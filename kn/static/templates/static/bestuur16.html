@@ -1,0 +1,87 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block styles %}
+{{ block.super }}
+<style>
+.bestuur-members {
+  display: flex;
+  justify-content: space-between;
+}
+.bestuur-members .member {
+  padding: 0 4px;
+}
+.bestuur-members .role {
+  font-size: smaller;
+}
+</style>
+{% endblock styles %}
+
+{% block body %}
+<!--<img width="800"
+     src="{{ MEDIA_URL }}static/img/bestuur16.jpg" alt="Bestuursfoto bestuur 16"/>-->
+
+<div class="bestuur-members">
+  <div class="member">
+    Ruben Kok
+    <div class="role">(voorzitter)</div>
+  </div>
+
+  <div class="member">
+    Floor van Hattum
+    <div class="role">(vicevoorzitter)</div>
+  </div>
+
+  <div class="member">
+    Jelle Cuperus
+    <div class="role">(secretaris (1 september t/m 7 januari))</div>
+  </div>
+
+  <div class="member">
+    Tanja van Alfen
+    <div class="role">(secretaris (8 januari t/m 31 augustus))</div>
+  </div>
+
+  <div class="member">
+    Hilde Kerkhoven
+    <div class="role">(penningmeester)</div>
+  </div>
+
+  <div class="member">
+    Juul de Jager
+    <div class="role">(commissaris bar)</div>
+  </div>
+
+  <div class="member">
+    Martijn Kuipers
+    <div class="role">(commissaris intern)</div>
+  </div>
+</div>
+
+<p>Het <strong>zestiende bestuur</strong> der A.S.V. Karpe Noktem is een groep enthousiaste, gepassioneerde studenten, die met zeven hoofden zowel kwaliteit als kwantiteit bevat. Met hun veelzijdige kennis en kunde, zullen zij de vereniging naar een glansrijke toekomst leiden.</p>
+<p>Kopstuk van dit gezelschap is <strong>Ruben Kok</strong> als voorzitter. Zijn studie <em>Communicatie en multimedia design</em> zal goed van pas komen bij het ontwerpen van een communicatieve werkhouding voor niet alleen zijn bestuur, maar ook de gehele vereniging.</p>
+<p>Aansluitend daarop zal <strong>Floor van Hattum</strong> haar grenzeloze enthousiasme en positiviteit inzetten als vicevoorzitter. Dankzij haar kennis van de studie <em>Social Work</em> beheerst zij de vaardigheden om niet alleen haar leden, maar ook de reünisten en externe krachten tevreden te houden.</p>
+<p>Met zijn sprankelende persoonlijkheid is <strong>Jelle Cuperus</strong> een uitstekend persoon om te dienen als contactpersoon van de vereniging. Zijn <em>opleiding tot docent Engels</em> geeft hem alle middelen om als secretaris de leden genoeg kennis te geven over interne zaken.</p>
+<p>Waarom zou je genieten van maar één charismatische secretaris als je er ook twee kunt hebben? <strong>Tanja van Alfen</strong> zal het stokje na de eerste helft van het jaar overnemen. Als student <em>Artificial Intelligence</em> gebruikt zij haar kennis over programmeren om de ledenadministratie, al dan niet geautomatiseerd, zo strak mogelijk te houden.</p>
+<p><strong>Hilde Kerkhoven</strong> zal als penningmeester zicht houden over de financiën van de vereniging. Mede vanwege haar studie <em>Artificial Intelligence</em> zal zij een secuur oogje in het zeil houden en ervoor zorgen dat robots niet met het geld aan de haal gaan.</p>
+<p>De functie commissaris bar zal door <strong>Juul de Jager</strong> bekleed worden. Zijn interesse in de horeca zal ervoor zorgen dat onze favoriete activiteiten voorzien zullen zijn van de heerlijkste drank. Als student <em>Psychologie</em> is hij ook uiterst bekwaam in het beheren van de Villa namens onze vereniging.</p>
+<p>Met de functie commissaris intern, zal <strong>Martijn Kuipers</strong> met zijn eindeloze geduld de commissies onder zijn hoede nemen. Met zijn hulpvaardige en vriendelijke houding en zijn studie <em>Psychologie</em>, is hij de geschikte persoon om de samenwerking van onze commissies in top conditie te houden.</p>
+<p>Alle bestuursleden zijn bereikbaar op de volgende adressen:</p>
+<ul>
+<li>Ruben Kok, {% filter email %}voorzitter@karpenoktem.nl{% endfilter %}</li>
+<li>Floor van Hattum, {% filter email %}vicevoorzitter@karpenoktem.nl{% endfilter %}</li>
+<li>Jelle Cuperus, {% filter email %}secretaris@karpenoktem.nl{% endfilter %} (1 september t/m 7 januari)</li>
+<li>Tanja van Alfen, {% filter email %}secretaris@karpenoktem.nl{% endfilter %} (8 januari t/m 31 augustus)</li>
+<li>Hilde Kerkhoven, {% filter email %}penningmeester@karpenoktem.nl{% endfilter %}</li>
+<li>Juul de Jager, {% filter email %}commissarisbar@karpenoktem.nl{% endfilter %}</li>
+<li>Martijn Kuipers, {% filter email %}commissarisintern@karpenoktem.nl{% endfilter %}</li>
+</ul>
+
+<div style="float: left;">⇐ {% trans "Het vorige" %},
+<a href="{% url "bestuur15b" %}">{% trans "vijftiende bestuur (nieuwe samenstelling)" %}</a>
+</div>
+
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}
