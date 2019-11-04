@@ -33,7 +33,7 @@ in {
     };
     services.mediawiki = {
       enable = true;
-      # httpd = "nginx";
+      # httpd = "nginx"; # TODO
       database.type = "postgres";
     };
   };

@@ -1,19 +1,29 @@
 {
+  # config for the server (both real and VM)
   vipassana = { pkgs, config, ... }: {
-    # generic config for the server
+    # import ./services/default.nix, which imports the other files there
+    # this way, we have access to the kn.django module
     imports = [ ./services ];
+    # define a package overlay, see ./packages/default.nix
     nixpkgs.overlays = [ (import ./packages) ];
     environment.systemPackages = with pkgs; [
-      htop iftop iotop ncdu
-      python3.pkgs.ipython
-      # ipython 6 does not support python2
-      psmisc socat
-      git
-      neomutt
+      htop iftop iotop ncdu psmisc socat git neomutt
     ];
-    # environment.noXlibs = true; # smaller, but not cached
+
+    # pin things like state file layouts for postgresql
+    system.stateVersion = "19.09";
+
+    # this changes some packages so that there is no X dependency
+    # allowing for the total system size to be smaller.
+    # however, these builds are not cached by cache.nixos.org, so
+    # the build will take longer:
+    # environment.noXlibs = true;
+
+    # set EDITOR to vim
     programs.vim.defaultEditor = true;
+    # this installs /etc/vimrc
     environment.etc."vimrc".source = ../salt/states/common/vimrc;
+    # install en_US and nl_NL locales
     i18n.supportedLocales = [
       "en_US.UTF-8/UTF-8"
       "nl_NL.UTF-8/UTF-8"
@@ -49,15 +59,18 @@
       };
     };
     networking.hostName = "vipassana.karpenoktem.nl";
+    # enable/disable various KN services
     kn = {
-      wiki.enable = false;
-      mailman.enable = false;
+      wiki.enable = false; # TODO
+      mailman.enable = false; # TODO
       django.enable = true;
     };
+    # allow remote http access
     networking.firewall.allowedTCPPorts = [ 80 443 ];
   };
+  # merged-in config for virtualized system
   virt = {
-    # merged-in config for virtualized system
+    # install the vm-ssh.key.pub for ssh access
     users.users.root.openssh.authorizedKeys.keyFiles = [
       ./vm-ssh.key.pub
     ];
@@ -70,14 +83,18 @@
           nix-build -A vm && ./result/bin/switch-running-vm
         website:
           http://localhost:8080/
+        to get out:
+          poweroff
       '';
     };
+    # qemu settings:
     virtualisation = {
       # set up serial console
       graphics = false;
       qemu = {
         options = [ "-serial mon:stdio" ];
         # forward port 22 to 2222 and port 80 to 8080
+        # based on the default in nixpkgs
         networkingOptions = [
           "-net nic,netdev=user.0,model=virtio"
           "-netdev user,id=user.0,hostfwd=tcp::2222-:22,hostfwd=tcp::8080-:80\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"

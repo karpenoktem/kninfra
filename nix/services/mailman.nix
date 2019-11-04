@@ -1,3 +1,4 @@
+
 { config, lib, pkgs, ... }:
 let cfg = config.kn.mailman;
 in {
