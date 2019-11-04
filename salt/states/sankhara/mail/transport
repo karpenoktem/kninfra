@@ -1,4 +1,0 @@
-lists.karpenoktem.nl        mailman:
-{% if grains['vagrant'] %}
-*                           local:infra
-{% endif %}
