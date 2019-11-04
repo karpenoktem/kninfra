@@ -50,6 +50,10 @@ in {
       preStart = ''
         rm -f /var/lib/kndjango/settings.py
         cp ${pkgs.kninfra}/kn/settings.example.py /var/lib/kndjango/settings.py
+        if [ ! -f /var/lib/kndjango/database-initialized ]; then
+          ${pkgs.kninfra}/libexec/initializeDb.py
+          touch /var/lib/kndjango/database-initialized
+        fi
       '';
       serviceConfig = {
         StateDirectory = "kndjango";
