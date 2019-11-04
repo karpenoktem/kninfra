@@ -11,6 +11,7 @@
       git
       neomutt
     ];
+    # environment.noXlibs = true; # smaller, but not cached
     programs.vim.defaultEditor = true;
     environment.etc."vimrc".source = ../salt/states/common/vimrc;
     i18n.supportedLocales = [

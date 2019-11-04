@@ -1,10 +1,10 @@
 self: super: {
   kninfra = super.callPackage ./kndjango.nix { };
-  vipassana-vm = (import <nixpkgs/nixos/lib/eval-config.nix> {
+  vipassana-vm = (import "${super.path}/nixos/lib/eval-config.nix" {
     modules = with (import ../infra.nix); [
       vipassana
       virt
-      <nixpkgs/nixos/modules/virtualisation/qemu-vm.nix>
+      "${super.path}/nixos/modules/virtualisation/qemu-vm.nix"
     ];
   }).config.system.build.vm.overrideAttrs (old:
     let
