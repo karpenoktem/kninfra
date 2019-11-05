@@ -1,9 +1,9 @@
 import logging
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 import grpc
-import mirte  # github.com/bwesterb/mirte
 import protobufs.messages.common_pb2 as common_pb2
 import protobufs.messages.daan_pb2 as daan_pb2
 import protobufs.messages.daan_pb2_grpc as daan_pb2_grpc
@@ -26,7 +26,6 @@ from kn.utils.giedo.wiki import generate_wiki_changes
 from kn.utils.giedo.wolk import generate_wolk_changes
 from kn.utils.whim import WhimClient
 
-
 class Giedo(giedo_pb2_grpc.GiedoServicer):
 
     def __init__(self):
@@ -44,8 +43,7 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
                 grpc.insecure_channel('unix:' + settings.HANS_SOCKET))
         except Exception:
             self.log.exception("Couldn't connect to hans")
-        self.mirte = mirte.get_a_manager()
-        self.threadPool = self.mirte.get_a('threadPool')
+        self.threadPool = ThreadPoolExecutor(max_workers=4)
         self.operation_lock = threading.Lock()
         self.ss_actions = (
             ('postfix', self.daan.SetPostfixMap, self._gen_postfix),
@@ -79,6 +77,7 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
                 'map': generate_unix_map(self)}
 
     def sync(self):
+        logging.info("what are you syncing about?")
         update_db_start = time.time()
         update_db(self)
         logging.info("update_db %s" % (time.time() - update_db_start))
@@ -109,7 +108,7 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
                          (name, elapsed, todo[0] - 1))
 
         for action in self.ss_actions:
-            self.threadPool.execute(_sync_action, _entry, *action)
+            self.threadPool.submit(_sync_action, _entry, *action)
         todo_event.wait()
         self.last_sync_ts = time.time()
 
@@ -122,7 +121,7 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
         return common_pb2.Empty()
 
     def SyncAsync(self, request, context):
-        self.threadPool.execute(self.sync_locked)
+        self.threadPool.submit(self.sync_locked)
         return common_pb2.Empty()
 
     def LastSynced(self, request, context):

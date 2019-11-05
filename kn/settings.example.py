@@ -3,6 +3,7 @@
 import os
 
 from kn.defaultSettings import defaultSettings  # noqa: E402
+from pathlib import Path
 
 #
 # You MUST change
@@ -24,7 +25,8 @@ MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 INFRA_HOME = os.environ['HOME']
 INFRA_REPO = os.path.join(os.path.dirname(__file__), "../")
 
-#
+GIEDO_SOCKET = "/run/infra/giedo"
+
 # Do not remove the following
 #
 
