@@ -31,6 +31,14 @@ in {
       type = types.path;
     };
   };
+  options.kn.giedo = with lib; {
+    enable = mkEnableOption "KN Giedo";
+    socket = mkOption {
+      default = "/run/infra/giedo";
+      description = "The socket path to use for Giedo";
+      type = types.path;
+    };
+  };
   config = lib.mkIf cfg.enable {
     services = {
       # TODO: limit access to mongodb
@@ -46,7 +54,31 @@ in {
         };
       };
     };
+    users.groups.infra = {};
     # socket activation
+    systemd.sockets.giedo = {
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [ config.kn.giedo.socket ];
+      socketConfig = {
+        SocketGroup = "infra";
+        SocketMode = "0660";
+      };
+    };
+    systemd.services.giedo = rec {
+      requires = [ "mongodb.service" ];
+      after = requires;
+      environment.HOME = "/var/lib/kndjango";
+      serviceConfig = {
+        ExecStart = "${pkgs.kninfra}/utils/giedo.py";
+        DynamicUser = true;
+        Restart = "on-failure";
+        SupplementaryGroups = "infra";
+        Type = "notify";
+        NotifyAccess = "all";
+        StateDirectory = "kndjango";
+        # todo: initialize infra
+      };
+    };
     systemd.sockets.kndjango = {
       wantedBy = [ "sockets.target" ];
       listenStreams = [ config.kn.django.socket ];
@@ -79,6 +111,7 @@ in {
         DynamicUser = true;
         Restart = "on-failure";
         KillSignal = "SIGQUIT";
+        SupplementaryGroups = "infra";
         # uwsgi is systemd-aware
         Type = "notify";
         NotifyAccess = "all";

@@ -36,8 +36,20 @@ self: super: {
   graphene = super.graphene.overrideAttrs (o: {
     propagatedBuildInputs = (builtins.filter (x: x.name != "graphene-django") o.propagatedBuildInputs);
   });
+  tarjan = (python.mkDerivation rec {
+    pname = "tarjan";
+    version = "0.2.4.dev0";
+    buildInputs = [];
+    src = pkgs.fetchFromGitHub {
+      owner = "bwesterb";
+      repo = "py-tarjan";
+      rev = "e6e89524601b0f8d4b4a94423cde5c5abc5a04ec";
+      sha256 = "0a013cgzc3bk2c4d40ccpbjm9pqcdhk8ks7knnghdl12d54g4xdm";
+    };
+  });
   inherit (pkgs.python37Packages)
     pymongo six protobuf grpcio
     msgpack html2text unidecode pyx pillow
-    markdown pyparsing;
+    markdown pyparsing ldap httplib2 oauth2client google_api_python_client
+    pymysql;
 }
