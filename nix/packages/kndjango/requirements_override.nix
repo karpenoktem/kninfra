@@ -48,7 +48,7 @@ self: super: {
     };
   });
   inherit (python.__old)
-    pymongo six protobuf grpcio
+    pymongo six grpcio
     msgpack html2text unidecode pyx pillow
     markdown pyparsing ldap httplib2 oauth2client google_api_python_client
     pymysql;

@@ -22,6 +22,7 @@ let
     # patching pip so it does not try to remove files when running nix-shell
     overrides =
       self: super: {
+        protobuf = super.protobuf.override { protobuf = pkgs.protobuf3_9; };
         # bootstrapped-pip = super.bootstrapped-pip.overrideDerivation (old: {
         #   patchPhase = ''
         #     if [ -e $out/${pkgs.python37.sitePackages}/pip/req/req_install.py ]; then
