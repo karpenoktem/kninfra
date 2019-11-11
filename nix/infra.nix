@@ -61,7 +61,7 @@
     networking.hostName = "vipassana.karpenoktem.nl";
     # enable/disable various KN services
     kn = {
-      wiki.enable = false; # TODO
+      wiki.enable = true;
       mailman.enable = false; # TODO
       django.enable = true;
     };
@@ -89,6 +89,8 @@
     };
     # qemu settings:
     virtualisation = {
+      memorySize = 1024;
+      diskSize = 1024;
       # set up serial console
       graphics = false;
       qemu = {
