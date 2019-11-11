@@ -4,7 +4,10 @@ let
 in
 stdenv.mkDerivation {
   name = "kninfra";
-  src = stdenv.lib.cleanSource ../..;
+  src = stdenv.lib.cleanSourceWith {
+    src = ../..;
+    filter = path: type: !(stdenv.lib.hasSuffix "qcow2" path);
+  };
   buildInputs = [ makeWrapper requirements.interpreter ];
   PYTHONPATH = python37.pkgs.makePythonPath (builtins.attrValues requirements.packages);
   installPhase = ''
