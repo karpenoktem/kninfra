@@ -20,13 +20,16 @@
 {% endblock styles %}
 
 {% block body %}
-<!--<img width="800"
-     src="{{ MEDIA_URL }}static/img/bestuur16a.jpg" alt="Bestuursfoto bestuur 16"/>-->
+<picture>
+  <source srcset="{{ MEDIA_URL }}static/img/bestuur16a-800.webp 800w, {{ MEDIA_URL }}static/img/bestuur16a-1600.webp 1600w" type="image/webp" />
+  <source srcset="{{ MEDIA_URL }}static/img/bestuur16a.jpg 800w" />
+  <img width="800" height="396" src="{{ MEDIA_URL }}static/img/bestuur16a.jpg" alt="Bestuursfoto bestuur 16" />
+</picture>
 
 <div class="bestuur-members">
   <div class="member">
-    Ruben Kok
-    <div class="role">(voorzitter)</div>
+    Juul de Jager
+    <div class="role">(commissaris bar)</div>
   </div>
 
   <div class="member">
@@ -35,28 +38,28 @@
   </div>
 
   <div class="member">
-    Jelle Cuperus
-    <div class="role">(secretaris (1 september t/m 7 januari))</div>
-  </div>
-
-  <div class="member">
-    Tanja van Alfen
-    <div class="role">(secretaris (8 januari t/m 31 augustus))</div>
-  </div>
-
-  <div class="member">
     Hilde Kerkhoven
     <div class="role">(penningmeester)</div>
   </div>
 
   <div class="member">
-    Juul de Jager
-    <div class="role">(commissaris bar)</div>
+    Ruben Kok
+    <div class="role">(voorzitter)</div>
+  </div>
+
+  <div class="member">
+    Jelle Cuperus
+    <div class="role">(secretaris (1 september t/m 7 januari))</div>
   </div>
 
   <div class="member">
     Martijn Kuipers
     <div class="role">(commissaris intern)</div>
+  </div>
+
+  <div class="member">
+    Tanja van Alfen
+    <div class="role">(secretaris (8 januari t/m 31 augustus))</div>
   </div>
 </div>
 
