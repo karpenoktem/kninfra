@@ -11,6 +11,13 @@
   justify-content: space-between;
   text-align: center;
 }
+@media screen and (max-width: 800px) {
+    .bestuur-members {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
 .bestuur-members .member {
   padding: 0 4px;
 }
@@ -23,6 +30,9 @@ picture {
 }
 picture img {
     height: auto;
+}
+p {
+    text-align: justify;
 }
 </style>
 {% endblock styles %}
