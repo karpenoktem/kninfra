@@ -46,6 +46,7 @@ class EventCreateForm(forms.Form):
     template = forms.ChoiceField(label="Soort", required=False, choices=(
         ('', _('Geen')),
         ('borrel', _('Borrel')),
+        ('borreleten', _('Borrel met eten')),
         ('kleinfeest', _('Klein feest')),
         ('grootfeest', _('Groot feest')),
         ('dranktelling', _('Dranktelling')),
