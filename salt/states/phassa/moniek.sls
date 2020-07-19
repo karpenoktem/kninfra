@@ -44,8 +44,7 @@ right version of six:
         - group: sys-interinfra
         - dir_mode: 770
 kn-boekenlezers:
-    group.present:
-        - home: /groups/boekenlezers
+    group.present
 /groups/boekenlezers:
     file.directory:
         - dir_mode: 770

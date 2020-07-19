@@ -188,11 +188,6 @@ https://github.com/awesterb/koert:
         - user: vagrant
         - group: vagrant
         {% endif %}
-"giedo mysql user":
-    mysql_user.present:
-        - host: localhost
-        - name: giedo
-        - password: {{ pillar['secrets']['mysql_giedo'] }}
 /var/run/infra:
     file.directory:
         - user: root

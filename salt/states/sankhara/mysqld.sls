@@ -21,3 +21,8 @@ mariadb:
         - mode: 600
         - user: root
         - group: root
+"giedo mysql user":
+    mysql_user.present:
+        - host: localhost
+        - name: giedo
+        - password: {{ pillar['secrets']['mysql_giedo'] }}
