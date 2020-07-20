@@ -1,0 +1,43 @@
+{% extends "static/zakelijk.html" %}
+{% load base %}
+{% load i18n %}
+
+{% block body %}
+<h2> Onze vereniging en onze mogelijkheden </h2>
+<p>{% blocktrans %}
+Alternatief, dynamisch, kleinschalig en gezellig: dat is Karpe Noktem. 
+Als vereniging kunnen wij u mogelijkheden bieden om bekendheid te geven aan uw product of dienst. Daarnaast beschikken wij over gemotiveerde, enthousiaste leden die 
+zo nu en dan graag vrijwilligen. {% endblocktrans %}
+<h3>Posters, flyers en verenigingsblad </h3>
+<p>{% blocktrans %} Om onze eigen activiteiten te promoten verspreiden wij posters in verscheidende kroegen in de stad en op de Radboud Universiteit. Daarnaast hebben wij een verenigingsblad, de Akta Nokturna, die
+zo'n twee keer per jaar uitkomt en gelezen wordt door zowel onze leden als geinteresseerde externen. Via deze kopij zouden wij uw product of dienst meer bekendheid kunnen verlenen. {% endblocktrans %} </p>
+<h3>Banners en links op de website</h3>
+<p>{% blocktrans %} De website is het visitekaartje van de vereniging, maar ook het punt waar onze leden vaak komen om dingen binnen de vereniging te regelen. Uw banner of link kan op onze sponsoring-pagina geplaatst worden om 
+uw product of dienst te promoten. {% endblocktrans %}</p>
+<h3>Social media </h3>
+<p>{% blocktrans %}
+Onze promotiecommissie is actief op zowel Facebook als Instagram. Wij delen onder andere evenementen en fotos en zouden zo ook u kunnen promoten. {% endblocktrans %} </p>
+<h3> Vrijwilligers </h3>
+<p>{% blocktrans %}
+Wij kunnen een groep enthousiaste vrijwilligers bieden. Dit past bij de sociale grondvesten van onze vereniging, maar misschien ook bij u. {% endblocktrans %} </p>
+</p>
+<h2>Meer weten?</h2>
+<dl>
+  <dt>{% blocktrans %} Als u meer wil weten over deze mogelijkheden of wil overleggen over sponsoring, kunt u zich wenden tot onze penningmeester. {% endblocktrans %} </dt>
+  <dd>
+    {% filter email %}penningmeester@karpenoktem.nl{% endfilter %}</dd>
+  </dd>
+  <dt>
+  {% blocktrans %} U kunt ons ook bereiken via ons postadres: {% endblocktrans %}
+  </dt>
+  <dd>
+    <abbr title="Alternatieve Studentenvereniging">ASV</abbr> Karpe Noktem <br/>
+    Postbus 1221 <br/>
+    6501BE Nijmegen
+  </dd>
+
+
+
+
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}

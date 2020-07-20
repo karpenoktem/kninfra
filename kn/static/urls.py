@@ -31,7 +31,12 @@ urlpatterns = [
         template_name='static/geschiedenis.html'), name='geschiedenis'),
     url(_(r'^activiteiten/?$'), TemplateView.as_view(
         template_name='static/activiteiten.html'), name='activiteiten'),
-
+    url(_(r'^zakelijk/?$'), TemplateView.as_view(
+        template_name='static/sponsorworden.html'), name='zakelijk'),
+    url(_(r'^sponsors/?$'), TemplateView.as_view(
+        template_name='static/sponsors.html'), name='sponsors'),
+    url(_(r'^sponsorworden/?$'), TemplateView.as_view(
+        template_name='static/sponsorworden.html'), name='sponsorworden'),
     url(_(r'^akta/?$'), TemplateView.as_view(
         template_name='static/aktanokturna.html'), name='aktanokturna'),
     url(_(r'^(?:an|aktanokturna)/?$'), RedirectView.as_view(
@@ -43,8 +48,6 @@ urlpatterns = [
         template_name='static/route.html'), name='route'),
     url(_(r'^merchandise/?$'), TemplateView.as_view(
         template_name='static/merchandise.html'), name='merchandise'),
-    url(_(r'^sponsoren/?$'), TemplateView.as_view(
-        template_name='static/sponsoren.html'), name='sponsoren'),
     url(_(r'^media/?$'), TemplateView.as_view(
         template_name='static/media.html'), name='media'),
     url(_(r'^links/?$'), TemplateView.as_view(
