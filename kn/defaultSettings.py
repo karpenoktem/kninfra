@@ -194,7 +194,6 @@ def defaultSettings(glbls):
         d.MEDIA_URL + 'static/slideshow/roel.jpg',
         d.MEDIA_URL + 'static/slideshow/galalampjes.jpg',
         d.MEDIA_URL + 'static/slideshow/lan.jpg',
-        
     ]
 
     d.DT_MIN = datetime.datetime(2004, 8, 31)
