@@ -187,14 +187,13 @@ def defaultSettings(glbls):
     }
 
     d.HOME_SLIDESHOW = [
-
         d.MEDIA_URL + 'static/slideshow/picknicktafel.jpg',
         d.MEDIA_URL + 'static/slideshow/galapoker.jpg',
         d.MEDIA_URL + 'static/slideshow/tie-dye.jpg',
         d.MEDIA_URL + 'static/slideshow/roel.jpg',
         d.MEDIA_URL + 'static/slideshow/galalampjes.jpg',
         d.MEDIA_URL + 'static/slideshow/lan.jpg',
-        ]
+    ]
 
     d.DT_MIN = datetime.datetime(2004, 8, 31)
     d.DT_MAX = datetime.datetime(5004, 9, 1)
