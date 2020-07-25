@@ -1,0 +1,13 @@
+{% extends "static/base.html" %}
+
+{% load i18n %}
+
+{% block submenu %}
+<div id="submenu-wrapper" class="toggle">
+    <a id="submenu-button" href="" class="toggle-button">&nbsp;</a>
+    <ul id="submenu" class="toggle-window">
+        <li><a href="{% url "sponsorworden" %}">{% trans "Sponsor worden?" %}</a></li>        
+        <li><a href="{% url "sponsors" %}">{% trans "Onze sponsors" %}</a></li>
+    </ul>
+</div>
+{% endblock %}

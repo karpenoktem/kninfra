@@ -24,7 +24,23 @@
         {% endfor %}{# chief in chiefs #}
         </dd>
         {% endif %}{# chiefs #}
-
+        {# Test code for displaying treasurers #}
+        {% if penningmeesters %}
+        <dt>{% if penningmeesters|length > 1 %}
+            {% trans "Penningmeesters" %}
+            {% else %}
+            {% trans "Penningmeester" %}
+            {%endif %}
+        </dt>
+        <dd>
+        {% for penningmeester in penningmeesters %} 
+        {% if not forloop.first %} </br>{% endif %}
+        <a href="{{ penningmeester.who.get_absolute_url }}">{{ penningmeester.who.humanName }}</a>
+        {{penningmeester|rel_when}}
+        </dd>
+        {% endfor %} {#treasurers#}
+        {% endif %} {#treasurers#}
+        {# End test code for displaying treasurers #}
         {% if pipos %}
         <dt>
         {% if pipos|length > 1 %}

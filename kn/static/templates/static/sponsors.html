@@ -1,0 +1,45 @@
+{% extends "static/zakelijk.html" %}
+{% load i18n %}
+
+{% block body %}
+<style>
+ul {
+  list-style-type: none;
+}
+
+li img {
+  float: left;
+  width: 200px;
+  max-height: 200px;
+  padding: 10px;
+}
+
+
+</style>
+
+<h3>Onze sponsors</h3>
+  <div>
+    <ul>
+      <li>
+        <img src={{ MEDIA_URL }}static/img/sponsors/studentenwegwijzer.png />
+
+        {% blocktrans %}
+        <h4>Studentenwegwijzer</h4>
+        <p>
+        Alle nieuwtjes en de beste aanbiedingen voor studenten op één plek? Meer informatie over Karpe Noktem? Dit en meer vind je op het studentenplatform <a href="https:/www.studentenwegwijzer.nl">studentenwegwijzer.nl</a>.        </p>
+        {% endblocktrans %}
+      </li>
+      <li>
+        <img src= {{ MEDIA_URL }}static/img/sponsors/club9.svg />
+        {% blocktrans %}
+        <h4>Club9</h4>
+        <p>
+         Heb je een (nieuw) matras nodig? Maar geen zin om oneindig te gaan proefliggen, of niet het geld voor de aanschaf? Huur een matras van Club 9!
+         Elke 5 jaar wordt je matras vervangen, en je betaalt per maand. Met de code 9R3G-FZM2-C9GN krijg je 10% korting     op het maandbedrag, en krijgt Karpe Noktem €100,-. Kijk voor meer informatie op <a href="https://www.club9-sleep    service.nl/?coupon=9R3G-FZM2-C9GN">Club9</a>.
+        </p>
+        {% endblocktrans %}
+      </li>
+    </ul>
+  </div>
+{% endblock %}
+{# vim: set sw=2 ts=2 et: #}

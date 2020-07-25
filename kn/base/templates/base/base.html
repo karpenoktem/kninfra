@@ -23,7 +23,7 @@
 <div id="header">
     <div class="container">
         <a href="{% url "home" %}" id="logo">
-            <img width="310" src="{{ MEDIA_URL }}base/logo.png"
+            <img width="220" src="{{ MEDIA_URL }}base/logo.png"
                     alt="Karpe Noktem" />
         </a>
         <div id="navigator" class="container">
@@ -32,6 +32,7 @@
             <li><a href="{% url "agenda" %}">{% trans "agenda" %}</a></li>
             <li><a href="{% url "over" %}">{% trans "over" %}</a></li>
             <li><a href="{% url "fotos" "" %}">{% trans "foto's" %}</a></li>
+	    <li><a href="{% url "zakelijk"%}">{% trans "zakelijk" %}</a></li>
             <li><a href="{% url "contact" %}">{% trans "contact" %}</a></li>
             {% if user.is_authenticated %}
             <li><a href="{% url "logout" %}">{% trans "uitloggen" %}</a></li>

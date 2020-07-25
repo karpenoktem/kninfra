@@ -108,6 +108,7 @@ def _entity_detail(request, e):
            'now': now(),
            'tags': sorted(tags, key=Es.entity_humanName),
            'object': e,
+           'penningmeesters': [],
            'chiefs': [],
            'pipos': [],
            'reps': []}
@@ -122,6 +123,9 @@ def _entity_detail(request, e):
             if str(r['how'].name) == '!brand-vertegenwoordiger':
                 r['hidden'] = True
                 ctx['reps'].append(r)
+            if str(r['how'].name) == '!brand-penningmeester':
+                r['hidden'] = True
+                ctx['penningmeesters'].append(r)
     # Is request.user allowed to add (r)relations?
     if ('secretariaat' in request.user.cached_groups_names
             and (e.is_group or e.is_user)):
