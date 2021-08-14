@@ -47,7 +47,10 @@ class Microservice(object):
            self.server.add_insecure_port('unix:' + fallback_socket)
         else:
            logging.info("listening on systemd managed socket")
-        self.server.add_insecure_port('external:systemd_socket')
+           try:
+               self.server.add_insecure_port('external:systemd_socket')
+           except RuntimeError:
+               print("ignoring error :)")
         self.server.start()
         for sock in sockets:
             sock.setblocking(False)
