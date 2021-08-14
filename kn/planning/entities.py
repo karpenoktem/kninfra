@@ -10,7 +10,7 @@ pcol = db['planning_pools']
 ecol = db['planning_events']
 vcol = db['planning_vacancies']
 
-PLANNER_GROUPS = {'bestuur', 'barco', 'disco', 'chef', 'secretariaat'}
+PLANNER_GROUPS = {'bestuur', 'barco', 'disco', 'chef', 'secretariaat', 'sooscie'}
 
 
 def may_manage_planning(user):
