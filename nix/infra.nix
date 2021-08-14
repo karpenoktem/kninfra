@@ -11,7 +11,7 @@
     ];
 
     # pin things like state file layouts for postgresql
-    system.stateVersion = "19.09";
+    system.stateVersion = "21.05";
 
     # this changes some packages so that there is no X dependency
     # allowing for the total system size to be smaller.
@@ -75,7 +75,7 @@
     users.users.root.openssh.authorizedKeys.keyFiles = [
       ./vm-ssh.key.pub
     ];
-    services.mingetty = {
+    services.getty = {
       autologinUser = "root";
       helpLine = ''
         ssh access:
@@ -95,6 +95,7 @@
       # set up serial console
       graphics = false;
       qemu = {
+        # todo: higher 9p msize
         options = [ "-serial mon:stdio" ];
         # forward port 22 to 2222 and port 80 to 8080
         # based on the default in nixpkgs

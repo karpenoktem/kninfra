@@ -11,6 +11,7 @@ self: super: {
       # add switch-running-vm, ssh scripts
       ssh = self.writeShellScript "ssh" ''
         set -e
+        chmod 0600 ${toString ./..}/vm-ssh.key
         ssh -o StrictHostKeyChecking=no -i ${toString ./..}/vm-ssh.key root@localhost -p 2222 "$@"
       '';
       switch-running-vm = self.writeShellScript "switch-running-vm" ''

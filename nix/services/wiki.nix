@@ -111,7 +111,7 @@ in {
         //require_once "/etc/mediawiki/knauth/KNAuth.php";
         $wgKNAuthVerifyURL = 'http://localhost/accounts/api/';
       '';
-      passwordFile = pkgs.writeText "mediawiki-password" "hello123";
+      passwordFile = pkgs.writeText "mediawiki-password" "0e6hW5br5ecUjvcI";
     };
     services.httpd = {
       enable = lib.mkForce false;
