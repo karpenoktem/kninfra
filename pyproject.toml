@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "kninfra"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+graphene = "^2.1.9"
+graphene-django = "^2.1.0"
+sdnotify = "^0.3.2"
+reserved = "^0.1.1"
+zipseeker = "^1.0.11"
+django = "1.8.19"
+docutils = "^0.17.1"
+tarjan = { git = "https://github.com/bwesterb/py-tarjan.git" }
+mirte = { git = "https://github.com/bwesterb/mirte.git", tag = "0.1.8" }
+#koert = { git = "https://github.com/awesterb/koert.git" }
+
+GitPython = "^3.1.20"
+pymongo = "^3.12.0"
+grpcio = "^1.39.0"
+protobuf = "^3.17.3"
+Pillow = "^8.3.1"
+html2text = "^2020.1.16"
+Unidecode = "^1.2.0"
+PyX = "^0.15"
+Markdown = "^3.3.4"
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

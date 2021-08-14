@@ -58,7 +58,8 @@
         ];
       };
     };
-    networking.hostName = "vipassana.karpenoktem.nl";
+    networking.hostName = "vipassana";
+    networking.domain = "karpenoktem.nl";
     # enable/disable various KN services
     kn = {
       wiki.enable = true;

@@ -1,15 +1,41 @@
-{stdenv, pkgs, python37, makeWrapper}:
+{stdenv, lib, pkgs, poetry2nix, python3, makeWrapper}:
 let
-  requirements = import ./kndjango/requirements.nix { inherit pkgs; };
+  requirements = poetry2nix.mkPoetryEnv {
+    projectDir = ../../.;
+    overrides = poetry2nix.overrides.withDefaults (self: super: {
+      gitpython = super.gitpython.overridePythonAttrs (old: {
+        inherit (python3.pkgs.GitPython) patches doCheck pythonImportsCheck;
+        propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optionals (self.pythonOlder "3.10") [ self.typing-extensions ];
+      });
+      graphene-django = super.graphene-django.overridePythonAttrs (o: {
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ self.pytestrunner ];
+        doCheck = false;
+        # pretty sure this exists?!
+        preConfigure = ''
+          ${o.preConfigure or ""}
+          sed -i '/singledispatch/d' setup.py
+        '';
+      });
+      sarah = super.sarah.overridePythonAttrs (old: {
+        # remove mirte cycle
+        propagatedBuildInputs =
+          builtins.filter (i: i.pname != "mirte") old.propagatedBuildInputs;
+        preConfigure = ''
+          ${old.preConfigure or ""}
+          sed -i '/mirte/d' setup.py
+        '';
+      });
+    });
+  };
 in
 stdenv.mkDerivation {
   name = "kninfra";
-  src = stdenv.lib.cleanSourceWith {
+  src = lib.cleanSourceWith {
     src = ../..;
-    filter = path: type: !(stdenv.lib.hasSuffix "qcow2" path);
+    filter = path: type: !(lib.hasSuffix "qcow2" path);
   };
-  buildInputs = [ makeWrapper requirements.interpreter ];
-  PYTHONPATH = python37.pkgs.makePythonPath (builtins.attrValues requirements.packages);
+  buildInputs = [ makeWrapper requirements ];
+  PYTHONPATH = "${requirements}/${requirements.sitePackages}";
   installPhase = ''
     mkdir $out $out/libexec
     cp --reflink=auto -R kn locale manage.py media protobufs utils bin $out

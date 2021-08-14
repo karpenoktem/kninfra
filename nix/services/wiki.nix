@@ -119,7 +119,7 @@ in {
       group = "nginx";
     };
     services.phpfpm.phpOptions = ''
-      extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
+      extension=${pkgs.phpExtensions.apcu}/lib/php/extensions/apcu.so
     '';
   };
 }
