@@ -82,6 +82,8 @@ def update_db(giedo):
     sofa_vgroups = []
     yeargroup_vgroups = []
     for vg in virtual_groups:
+        if 'virtual' not in vg._data:
+            raise ValueError('group %s is not virtual' % vg)
         if vg._data['virtual']['type'] == 'sofa':
             sofa_vgroups.append(vg)
         elif vg._data['virtual']['type'] == 'year-group':
