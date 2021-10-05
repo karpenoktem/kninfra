@@ -174,8 +174,7 @@ def _user_detail(request, user):
                 return redirect_to_referer(request)
     else:
         addStudyForm = AddStudyForm()
-    if user.last_study_end_date < DT_MAX:
-        ctx['addStudyForm'] = addStudyForm
+    ctx['addStudyForm'] = addStudyForm
     return render(request, 'leden/user_detail.html', ctx)
 
 
