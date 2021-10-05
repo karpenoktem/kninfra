@@ -189,6 +189,7 @@ def defaultSettings(glbls):
     d.HOME_SLIDESHOW = [
         d.MEDIA_URL + 'static/slideshow/picknicktafel.jpg',
         d.MEDIA_URL + 'static/slideshow/galapoker.jpg',
+        d.MEDIA_URL + 'static/slideshow/alternatief.jpg',
         d.MEDIA_URL + 'static/slideshow/tie-dye.jpg',
         d.MEDIA_URL + 'static/slideshow/roel.jpg',
         d.MEDIA_URL + 'static/slideshow/galalampjes.jpg',
