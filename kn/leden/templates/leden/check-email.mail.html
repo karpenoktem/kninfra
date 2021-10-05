@@ -18,7 +18,7 @@ ledenadministratie. Over jou is het volgende opgenomen.</p>
 
 <p>Bij voorbaat dank,</p>
 
-<p>Niels Boer</p>
+<p>Lotte Brouwers</p>
 {% endblocktrans %}
 
 <hr/>
@@ -68,7 +68,7 @@ ledenadministratie. Over jou is het volgende opgenomen.</p>
     {% endif %}
     {% blocktrans with base_url=BASE_URL study_url=study.study.get_absolute_url study_name=study.study.humanName institute_url=study.institute.get_absolute_url institute_name=study.institute.humanName study_number=study.number %}
       <a href="{{ BASE_URL }}{{ study_url }}">{{ study_name }}</a>
-      bij instituut <a href="{{ BASE_URL }}{{ study_url }}">{{ study_name }}</a>
+      bij instituut <a href="{{ BASE_URL }}{{ institute_url }}">{{ institute_name }}</a>
       met studentnummer <em>{{ study_number }}</em>.
     {% endblocktrans %}
   </li>
