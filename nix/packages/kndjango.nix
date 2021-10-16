@@ -36,6 +36,9 @@ stdenv.mkDerivation {
   };
   buildInputs = [ makeWrapper requirements ];
   PYTHONPATH = "${requirements}/${requirements.sitePackages}";
+  buildPhase = ''
+    python -m py_compile $(find . -iname '*.py')
+  '';
   installPhase = ''
     mkdir $out $out/libexec
     cp --reflink=auto -R kn locale manage.py media protobufs utils bin $out
