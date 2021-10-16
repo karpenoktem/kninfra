@@ -3,7 +3,6 @@ import errno
 import mimetypes
 import os
 import os.path
-import random
 import re
 import subprocess
 from collections import namedtuple
@@ -35,7 +34,7 @@ def ensure_indices():
     fcol.ensure_index([('type', 1), ('oldId', 1)], sparse=True)
     fcol.ensure_index([('path', 1), ('name', 1)])
     fcol.ensure_index([('type', 1), ('path', 1),
-                       ('random', 1), ('effectiveVisibility', 1)])
+                       ('effectiveVisibility', 1)])
     fcol.ensure_index('tags', sparse=True)
     fcol.ensure_index([('caches', 1), ('type', 1)], sparse=True)
     fcol.ensure_index([('path', 1), ('effectiveVisibility', 1), ('name', 1)])
@@ -437,21 +436,18 @@ class FotoAlbum(FotoEntity):
         ).sort('name', 1)]
 
     def get_random_foto_for(self, user):
-        r = random.random()
         required_visibility = self.required_visibility(user)
-        while True:
-            f = entity(fcol.find_one(
-                {'random': {'$lt': r},
-                 'path': {'$regex': re.compile(
-                     "^%s(/|$)" % re.escape(self.full_path))},
-                 'type': 'foto',
-                 'effectiveVisibility': {'$in': tuple(required_visibility)}},
-                sort=[('random', -1)]))
-            if f is not None:
-                return f
-            if r == 1:
-                return None
-            r = 1
+        try:
+            return entity(next(fcol.aggregate([
+                {'$match': {
+                    'path': {'$regex': re.compile(
+                        "^%s(/|$)" % re.escape(self.full_path))},
+                    'type': 'foto',
+                    'effectiveVisibility': {'$in': tuple(required_visibility)}}},
+                {'$sample': {'size': 1}}
+            ])))
+        except StopIteration:
+            return None
 
     def search(self, q, user):
         required_visibility = self.required_visibility(user)
