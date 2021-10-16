@@ -74,6 +74,7 @@ in {
       requires = [ "mongodb.service" "kn_initial_state.service" ];
       after = requires;
       environment = kn_env;
+      path = [ "${lib.getBin pkgs.imagemagick}/bin" ];
       serviceConfig = {
         ExecStart = "${pkgs.kninfra}/utils/giedo.py";
         DynamicUser = true;
@@ -94,6 +95,8 @@ in {
     };
     environment.systemPackages = [(
       pkgs.runCommandNoCC "knshell" { buildInputs = [ pkgs.makeWrapper ]; } ''
+        makeWrapper ${pkgs.kninfra}/utils/scan-fotos.py $out/bin/kn-scan-fotos \
+        ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') kn_env)}
         makeWrapper ${pkgs.kninfra}/bin/shell $out/bin/knshell \
         ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') kn_env)}
       ''
@@ -102,10 +105,13 @@ in {
       requires = [ "mongodb.service" "kn_initial_state.service" ];
       after = requires;
       environment = kn_env;
+      # todo: should this be here?
+      path = [ (lib.getBin pkgs.imagemagick) ];
       serviceConfig = {
         ExecStart = "${uwsgi_pkg}/bin/uwsgi --json ${uswgi_conf}";
         # allocate a dynamic user for every run. maximum sandboxing
         DynamicUser = true;
+        CacheDirectory = "fotos";
         Restart = "on-failure";
         KillSignal = "SIGQUIT";
         SupplementaryGroups = "infra";
@@ -114,6 +120,10 @@ in {
         NotifyAccess = "all";
       };
     };
+    # create /var/photos directory
+    systemd.tmpfiles.rules = [
+      "d /var/fotos 0550 root infra -"
+    ];
     systemd.services.kn_initial_state = rec {
       requires = [ "mongodb.service" ];
       after = requires;
