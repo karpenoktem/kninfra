@@ -40,6 +40,7 @@ stdenv.mkDerivation {
     mkdir $out $out/libexec
     cp --reflink=auto -R kn locale manage.py media protobufs utils bin $out
     cp --reflink=auto -R salt/states/sankhara/initial{-db.yaml,izeDb.py} $out/libexec
+    makeWrapper $(type -p ipython) $out/bin/shell --add-flags "-i $out/utils/shell.py"
     chmod +x $out/libexec/initializeDb.py
   '';
 }

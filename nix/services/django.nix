@@ -92,6 +92,12 @@ in {
         SocketMode = "0660";
       };
     };
+    environment.systemPackages = [(
+      pkgs.runCommandNoCC "knshell" { buildInputs = [ pkgs.makeWrapper ]; } ''
+        makeWrapper ${pkgs.kninfra}/bin/shell $out/bin/knshell \
+        ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') kn_env)}
+      ''
+    )];
     systemd.services.kndjango = rec {
       requires = [ "mongodb.service" "kn_initial_state.service" ];
       after = requires;
