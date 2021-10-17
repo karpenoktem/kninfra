@@ -92,10 +92,12 @@ urlpatterns = [
         template_name='static/bestuur16a.html'), name='bestuur16a'),
     url(_(r'^bestuur17a/?$'), TemplateView.as_view(
         template_name='static/bestuur17a.html'), name='bestuur17a'),
+    url(_(r'^bestuur18a/?$'), TemplateView.as_view(
+        template_name='static/bestuur18a.html'), name='bestuur18a'),
     # TODO we want to use reverse, but it is not initialized properly
     #      at this moment in the request handler.
     url(_(r'^bestuur/?$'), RedirectView.as_view(
-        url='/bestuur17a', permanent=False), name='bestuur'),
+        url='/bestuur18a', permanent=False), name='bestuur'),
     url(_(r'^introPoster2016/?$'), TemplateView.as_view(
         template_name='static/introPoster2016.html'),
         name='introPoster2016'),
