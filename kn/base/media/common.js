@@ -107,6 +107,42 @@ function isMobile() {
     return 'ontouchstart' in document.documentElement && (window.matchMedia ? window.matchMedia('(max-device-width: 800px)') : true);
 }
 
+function qr_popup(url, elem) {
+    if (window.QRCode) {
+        var x = $("#qr-popup").remove()
+        if (!x.length) {
+            x = $('<div id="qr-popup"></div>')
+        }
+        var cnv = $('<canvas width=200 height=200>')
+        cnv.appendTo(x.empty())
+        x.appendTo(elem.parentNode)
+        QRCode.toCanvas(cnv[0], url, {width: 200})
+    } else {
+        // load QRCode from unpkg
+        var s = document.createElement("script")
+        s.setAttribute("src", "https://unpkg.com/qrcode@1.5.0/build/qrcode.js")
+        s.setAttribute("integrity", "sha384-hviKJNnYw4mnQ7yyq3dNQJXvzMtC2LDqfqVD1fECghvfaduQeAhvhp88wmz8P0Tu")
+        s.setAttribute("crossorigin", "anonymous")
+        s.addEventListener("load", function() {
+            qr_popup(url, elem)
+        })
+        document.body.appendChild(s)
+    }
+}
+
+function add_qr_links() {
+    // insert (QR) link on all whatsapp chat links
+    $('a[href^="https://chat.whatsapp.com"]').each(function() {
+        var link = this
+        var qr = $('<a class="qr-link" href="#qr">QR</a>').insertAfter(link)
+        qr.click(function(event) {
+            qr_popup(link.href, qr[0])
+            event.preventDefault()
+            return false
+        })
+    })
+}
+
 $(document).ready(function() {
     // ScrollUp animation
     $("#scrollUp").click(function(event) {
@@ -197,6 +233,8 @@ $(document).ready(function() {
     $('#langpicker').change(function(e) {
         e.target.form.submit();
     });
+
+    add_qr_links()
 });
 
 // Implement rot13 for email obscurification
