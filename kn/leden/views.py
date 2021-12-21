@@ -248,6 +248,11 @@ def _institute_detail(request, institute):
                                         s['student'].humanName))
     return render(request, 'leden/institute_detail.html', ctx)
 
+@login_required
+def smoelen_home(request):
+    return render(request, 'leden/home.html', {
+        "PRIVATE_GROUPS": settings.PRIVATE_GROUPS
+    })
 
 @login_required
 def entities_by_year_of_birth(request, year):
@@ -452,7 +457,9 @@ def secr_add_user(request):
                 'password': pwd})
             # Send the welcome e-mail
             render_then_email("leden/welcome.mail.html", u, {
-                'u': u})
+                'u': u,
+                "PRIVATE_GROUPS": settings.PRIVATE_GROUPS
+            })
             Es.notify_informacie('adduser', request.user, entity=u._id)
             return HttpResponseRedirect(reverse('user-by-name',
                                                 args=(fd['username'],)))
