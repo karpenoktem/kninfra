@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-14 15:54+0200\n"
+"POT-Creation-Date: 2021-12-21 12:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -418,12 +418,12 @@ msgid "Gebruikersnaam is niet toegestaan"
 msgstr ""
 
 #: kn/leden/forms.py:69 kn/leden/templates/leden/check-email.mail.html:30
-#: kn/leden/templates/leden/welcome.mail.html:36
+#: kn/leden/templates/leden/welcome.mail.html:44
 msgid "Voornaam"
 msgstr ""
 
 #: kn/leden/forms.py:71 kn/leden/templates/leden/check-email.mail.html:34
-#: kn/leden/templates/leden/welcome.mail.html:40
+#: kn/leden/templates/leden/welcome.mail.html:48
 msgid "Achternaam"
 msgstr ""
 
@@ -432,14 +432,14 @@ msgid "bijv.: Vaart, van der"
 msgstr ""
 
 #: kn/leden/forms.py:77 kn/leden/templates/leden/check-email.mail.html:50
-#: kn/leden/templates/leden/welcome.mail.html:56
+#: kn/leden/templates/leden/welcome.mail.html:64
 msgid "E-Mail adres"
 msgstr ""
 
 #: kn/leden/forms.py:78 kn/leden/templates/leden/check-email.mail.html:38
 #: kn/leden/templates/leden/settings.html:113
 #: kn/leden/templates/leden/user_detail.html:164
-#: kn/leden/templates/leden/welcome.mail.html:44
+#: kn/leden/templates/leden/welcome.mail.html:52
 msgid "Geboortedatum"
 msgstr ""
 
@@ -462,7 +462,7 @@ msgstr ""
 #: kn/leden/forms.py:83 kn/leden/templates/leden/check-email.mail.html:46
 #: kn/leden/templates/leden/settings.html:89
 #: kn/leden/templates/leden/user_detail.html:91
-#: kn/leden/templates/leden/welcome.mail.html:52
+#: kn/leden/templates/leden/welcome.mail.html:60
 msgid "Telefoonnummer"
 msgstr ""
 
@@ -892,51 +892,51 @@ msgid ""
 "\n"
 "<p>Bij voorbaat dank,</p>\n"
 "\n"
-"<p>Niels Boer</p>\n"
+"<p>Lotte Brouwers</p>\n"
 msgstr ""
 
 #: kn/leden/templates/leden/check-email.mail.html:26
-#: kn/leden/templates/leden/welcome.mail.html:32
+#: kn/leden/templates/leden/welcome.mail.html:40
 msgid "Personalia"
 msgstr ""
 
 #: kn/leden/templates/leden/check-email.mail.html:42
 #: kn/leden/templates/leden/user_detail.html:16
-#: kn/leden/templates/leden/welcome.mail.html:48
+#: kn/leden/templates/leden/welcome.mail.html:56
 msgid "Gebruikersnamen"
 msgstr ""
 
 #: kn/leden/templates/leden/check-email.mail.html:55
-#: kn/leden/templates/leden/welcome.mail.html:61
+#: kn/leden/templates/leden/welcome.mail.html:69
 msgid "Studie(s)"
 msgstr ""
 
 #: kn/leden/templates/leden/check-email.mail.html:61
-#: kn/leden/templates/leden/welcome.mail.html:67
+#: kn/leden/templates/leden/welcome.mail.html:75
 #, python-format
 msgid "Van %(from)s tot %(until)s studeerde je"
 msgstr ""
 
 #: kn/leden/templates/leden/check-email.mail.html:63
-#: kn/leden/templates/leden/welcome.mail.html:69
+#: kn/leden/templates/leden/welcome.mail.html:77
 #, python-format
 msgid "Vanaf %(from)s studeer je"
 msgstr ""
 
 #: kn/leden/templates/leden/check-email.mail.html:65
-#: kn/leden/templates/leden/welcome.mail.html:71
+#: kn/leden/templates/leden/welcome.mail.html:79
 #, python-format
 msgid "Tot %(until)s studeerde je"
 msgstr ""
 
 #: kn/leden/templates/leden/check-email.mail.html:69
-#: kn/leden/templates/leden/welcome.mail.html:75
+#: kn/leden/templates/leden/welcome.mail.html:83
 #, python-format
 msgid ""
 "\n"
 "      <a href=\"%(BASE_URL)s%(study_url)s\">%(study_name)s</a>\n"
-"      bij instituut <a href=\"%(BASE_URL)s%(study_url)s\">%(study_name)s</"
-"a>\n"
+"      bij instituut <a href=\"%(BASE_URL)s%(institute_url)s\">"
+"%(institute_name)s</a>\n"
 "      met studentnummer <em>%(study_number)s</em>.\n"
 "    "
 msgstr ""
@@ -944,7 +944,7 @@ msgstr ""
 #: kn/leden/templates/leden/check-email.mail.html:79
 #: kn/leden/templates/leden/settings.html:98
 #: kn/leden/templates/leden/user_detail.html:118
-#: kn/leden/templates/leden/welcome.mail.html:85
+#: kn/leden/templates/leden/welcome.mail.html:93
 msgid "Adres"
 msgstr ""
 
@@ -1376,23 +1376,23 @@ msgstr ""
 #: kn/leden/templates/leden/home.html:47
 msgid ""
 "Het <a href=\"https://www.facebook.com/groups/279385195413570/\">\n"
-"            zusjesgroepje op Facebook</a>."
-msgstr ""
-
-#: kn/leden/templates/leden/home.html:51
-msgid "Gegevens en instellingen"
+"        zusjesgroepje op Facebook</a>."
 msgstr ""
 
 #: kn/leden/templates/leden/home.html:54
+msgid "Gegevens en instellingen"
+msgstr ""
+
+#: kn/leden/templates/leden/home.html:57
 msgid "Verander je wachtwoord"
 msgstr ""
 
-#: kn/leden/templates/leden/home.html:55
+#: kn/leden/templates/leden/home.html:58
 #: kn/leden/templates/leden/settings.html:22
 msgid "Instellingen"
 msgstr ""
 
-#: kn/leden/templates/leden/home.html:56
+#: kn/leden/templates/leden/home.html:59
 msgid "Bekijk je balans."
 msgstr ""
 
@@ -1990,6 +1990,12 @@ msgid ""
 "<p>Wij hebben de volgende gegevens van jouw inschrijfformulier\n"
 "overgenomen. Kun je controleren of deze kloppen?</p>\n"
 "\n"
+"<p>Join ook onze chatgroepen:</p>\n"
+msgstr ""
+
+#: kn/leden/templates/leden/welcome.mail.html:33
+msgid ""
+"\n"
 "<p>Met geautomatiseerde groet,</p>\n"
 "\n"
 "<p>Het smoelenboek</p>\n"
@@ -2024,183 +2030,183 @@ msgstr ""
 msgid "tot %s"
 msgstr ""
 
-#: kn/leden/urls.py:12
+#: kn/leden/urls.py:10
 msgid "^gebruikers/(?:p/(?P<page>[0-9]+)/)?$"
 msgstr ""
 
-#: kn/leden/urls.py:14
+#: kn/leden/urls.py:12
 msgid "^naamdrager/(?P<name>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:16
+#: kn/leden/urls.py:14
 msgid "^id/(?P<_id>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:18
+#: kn/leden/urls.py:16
 msgid "^gebruiker/(?P<name>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:20
+#: kn/leden/urls.py:18
 msgid "^gebruiker/id/(?P<_id>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:22
+#: kn/leden/urls.py:20
 msgid "^gebruiker/id/(?P<_id>[^/]+)/reset-wachtwoord$"
 msgstr ""
 
-#: kn/leden/urls.py:24
+#: kn/leden/urls.py:22
 msgid "^groep/(?P<name>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:26
+#: kn/leden/urls.py:24
 msgid "^groep/id/(?P<_id>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:28
+#: kn/leden/urls.py:26
 msgid "^brand/(?P<name>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:30
+#: kn/leden/urls.py:28
 msgid "^brand/id/(?P<_id>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:32
+#: kn/leden/urls.py:30
 msgid "^stempel/(?P<name>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:34
+#: kn/leden/urls.py:32
 msgid "^stempel/id/(?P<_id>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:36
+#: kn/leden/urls.py:34
 msgid "^studie/(?P<name>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:38
+#: kn/leden/urls.py:36
 msgid "^studie/id/(?P<_id>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:40
+#: kn/leden/urls.py:38
 msgid "^instituut/(?P<name>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:43
+#: kn/leden/urls.py:41
 msgid "^instituut/id/(?P<_id>[^/]+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:46
+#: kn/leden/urls.py:44
 msgid "^bouwjaar/$"
 msgstr ""
 
-#: kn/leden/urls.py:48
+#: kn/leden/urls.py:46
 msgid "^bouwjaar/(?P<year>\\d+)/$"
 msgstr ""
 
-#: kn/leden/urls.py:50
+#: kn/leden/urls.py:48
 msgid "^smoel/(?P<name>[^.]+).jpg$"
 msgstr ""
 
-#: kn/leden/urls.py:52
+#: kn/leden/urls.py:50
 msgid "^geenalcohol/$"
 msgstr ""
 
-#: kn/leden/urls.py:54
+#: kn/leden/urls.py:52
 msgid "^ik/?$"
 msgstr ""
 
-#: kn/leden/urls.py:55
+#: kn/leden/urls.py:53
 msgid "^balans/?$"
 msgstr ""
 
-#: kn/leden/urls.py:56
+#: kn/leden/urls.py:54
 msgid "^ik/wachtwoord$"
 msgstr ""
 
-#: kn/leden/urls.py:57
+#: kn/leden/urls.py:55
 msgid "^ik/settings$"
 msgstr ""
 
-#: kn/leden/urls.py:58
+#: kn/leden/urls.py:56
 msgid "^ik/smoel$"
 msgstr ""
 
-#: kn/leden/urls.py:59
+#: kn/leden/urls.py:57
 msgid "^api/?$"
 msgstr ""
 
-#: kn/leden/urls.py:60
+#: kn/leden/urls.py:58
 msgid "^secretariaat/inschrijven$"
 msgstr ""
 
-#: kn/leden/urls.py:62
+#: kn/leden/urls.py:60
 msgid "^secretariaat/update-site-agenda/$"
 msgstr ""
 
-#: kn/leden/urls.py:64
+#: kn/leden/urls.py:62
 msgid "^secretariaat/addgroup$"
 msgstr ""
 
-#: kn/leden/urls.py:66
+#: kn/leden/urls.py:64
 msgid "^secretariaat/notes$"
 msgstr ""
 
-#: kn/leden/urls.py:68
+#: kn/leden/urls.py:66
 msgid "^fiscus/email-debitors$"
 msgstr ""
 
-#: kn/leden/urls.py:70
+#: kn/leden/urls.py:68
 msgid "^boekenlezers/presentielijst$"
 msgstr ""
 
-#: kn/leden/urls.py:72
+#: kn/leden/urls.py:70
 msgid "^fin$"
 msgstr ""
 
-#: kn/leden/urls.py:73
+#: kn/leden/urls.py:71
 msgid "^fin(?P<year>\\d+)$"
 msgstr ""
 
-#: kn/leden/urls.py:74
+#: kn/leden/urls.py:72
 msgid "^fin(?P<year>\\d+)/errors$"
 msgstr ""
 
-#: kn/leden/urls.py:76
+#: kn/leden/urls.py:74
 msgid "^fin(?P<year>\\d+)/show/(?P<handle>.*)$"
 msgstr ""
 
-#: kn/leden/urls.py:78
+#: kn/leden/urls.py:76
 msgid "^relaties/(?P<_id>[^/]+)/beindig$"
 msgstr ""
 
-#: kn/leden/urls.py:80
+#: kn/leden/urls.py:78
 msgid "^relaties/begin$"
 msgstr ""
 
-#: kn/leden/urls.py:82
+#: kn/leden/urls.py:80
 msgid "^tags/tag$"
 msgstr ""
 
-#: kn/leden/urls.py:84
+#: kn/leden/urls.py:82
 msgid "^tags/untag$"
 msgstr ""
 
-#: kn/leden/urls.py:86
+#: kn/leden/urls.py:84
 msgid "^noteer$"
 msgstr ""
 
-#: kn/leden/urls.py:89
+#: kn/leden/urls.py:87
 msgid "^statistieken/?$"
 msgstr ""
 
-#: kn/leden/urls.py:91
+#: kn/leden/urls.py:89
 msgid "^grafiek/(?P<graph>[-a-z/]+)\\.(?P<ext>[a-z]+)/?$"
 msgstr ""
 
-#: kn/leden/urls.py:95
+#: kn/leden/urls.py:93
 msgid "^styles/leden/$"
 msgstr ""
 
-#: kn/leden/urls.py:100
+#: kn/leden/urls.py:98
 msgid "^taal$"
 msgstr ""
 
@@ -2208,62 +2214,62 @@ msgstr ""
 msgid "Onbekende entiteit type"
 msgstr ""
 
-#: kn/leden/views.py:290
+#: kn/leden/views.py:294
 msgid "Missende `smoel' in FILES"
 msgstr ""
 
-#: kn/leden/views.py:292
+#: kn/leden/views.py:296
 msgid "Missende `id' in POST"
 msgstr ""
 
-#: kn/leden/views.py:295
+#: kn/leden/views.py:299
 msgid "Entiteit heeft geen naam"
 msgstr ""
 
-#: kn/leden/views.py:344
+#: kn/leden/views.py:348
 #, python-format
 msgid "Lieve %s, maar natuurlijk, jouw wachtwoord is veranderd."
 msgstr ""
 
-#: kn/leden/views.py:541
+#: kn/leden/views.py:547
 #, python-format
 msgid "Email gestuurd naar %s."
 msgstr ""
 
-#: kn/leden/views.py:545
+#: kn/leden/views.py:551
 #, python-format
 msgid "Email naar %(user)s faalde: %(e)s."
 msgstr ""
 
-#: kn/leden/views.py:563
+#: kn/leden/views.py:569
 msgid "Relatie was al beëindigd."
 msgstr ""
 
-#: kn/leden/views.py:602
+#: kn/leden/views.py:608
 msgid "Deze relatie bestaat al"
 msgstr ""
 
-#: kn/leden/views.py:627
+#: kn/leden/views.py:633
 msgid "'group' is niet een groep"
 msgstr ""
 
-#: kn/leden/views.py:635
+#: kn/leden/views.py:641
 msgid "'tag' is niet een stempel"
 msgstr ""
 
-#: kn/leden/views.py:670
+#: kn/leden/views.py:676
 msgid "Gebruiker is niet geactiveerd"
 msgstr ""
 
-#: kn/leden/views.py:677
+#: kn/leden/views.py:683
 msgid "Wachtwoord gereset!"
 msgstr ""
 
-#: kn/leden/views.py:686
+#: kn/leden/views.py:692
 msgid "missende `on' of `note'"
 msgstr ""
 
-#: kn/leden/views.py:707
+#: kn/leden/views.py:713
 msgid "Agenda geupdate!"
 msgstr ""
 
@@ -2280,50 +2286,54 @@ msgid "Borrel"
 msgstr ""
 
 #: kn/planning/forms.py:49
-msgid "Klein feest"
+msgid "Borrel met eten"
 msgstr ""
 
 #: kn/planning/forms.py:50
-msgid "Groot feest"
+msgid "Klein feest"
 msgstr ""
 
 #: kn/planning/forms.py:51
-msgid "Dranktelling"
+msgid "Groot feest"
 msgstr ""
 
 #: kn/planning/forms.py:52
-msgid "Dranklevering"
+msgid "Dranktelling"
 msgstr ""
 
 #: kn/planning/forms.py:53
-msgid "Vrijdag"
+msgid "Dranklevering"
 msgstr ""
 
 #: kn/planning/forms.py:54
+msgid "Vrijdag"
+msgstr ""
+
+#: kn/planning/forms.py:55
 msgid "Vrijdag (met tappers)"
 msgstr ""
 
-#: kn/planning/forms.py:60
+#: kn/planning/forms.py:61
 msgid "Shiftnaam"
 msgstr ""
 
-#: kn/planning/forms.py:62
+#: kn/planning/forms.py:63
 msgid "Begintijd"
 msgstr ""
 
-#: kn/planning/forms.py:67 kn/planning/forms.py:73
+#: kn/planning/forms.py:68 kn/planning/forms.py:74
 msgid "bij benadering"
 msgstr ""
 
-#: kn/planning/forms.py:67 kn/planning/forms.py:73
+#: kn/planning/forms.py:68 kn/planning/forms.py:74
 msgid "exact"
 msgstr ""
 
-#: kn/planning/forms.py:69
+#: kn/planning/forms.py:70
 msgid "Eindtijd"
 msgstr ""
 
-#: kn/planning/forms.py:76
+#: kn/planning/forms.py:77
 msgid "Type"
 msgstr ""
 
@@ -2414,85 +2424,92 @@ msgstr ""
 msgid "^manage/(?P<poolname>[^/]+)/template/?$"
 msgstr ""
 
-#: kn/planning/views.py:31 kn/planning/views.py:43 kn/planning/views.py:76
+#: kn/planning/views.py:31 kn/planning/views.py:40 kn/planning/views.py:55
+#: kn/planning/views.py:90
 msgid "eerste dienst"
 msgstr ""
 
-#: kn/planning/views.py:32 kn/planning/views.py:44 kn/planning/views.py:77
+#: kn/planning/views.py:32 kn/planning/views.py:41 kn/planning/views.py:56
+#: kn/planning/views.py:77 kn/planning/views.py:91
 msgid "tweede dienst"
 msgstr ""
 
-#: kn/planning/views.py:33 kn/planning/views.py:45 kn/planning/views.py:78
+#: kn/planning/views.py:33 kn/planning/views.py:42 kn/planning/views.py:57
+#: kn/planning/views.py:78 kn/planning/views.py:92
 msgid "derde dienst"
 msgstr ""
 
-#: kn/planning/views.py:35 kn/planning/views.py:38 kn/planning/views.py:47
-#: kn/planning/views.py:64 kn/planning/views.py:80 kn/planning/views.py:88
+#: kn/planning/views.py:35 kn/planning/views.py:50 kn/planning/views.py:59
+#: kn/planning/views.py:76 kn/planning/views.py:94 kn/planning/views.py:102
 msgid "openen"
 msgstr ""
 
-#: kn/planning/views.py:36 kn/planning/views.py:40 kn/planning/views.py:48
-#: kn/planning/views.py:65 kn/planning/views.py:81 kn/planning/views.py:89
+#: kn/planning/views.py:36 kn/planning/views.py:52 kn/planning/views.py:60
+#: kn/planning/views.py:79 kn/planning/views.py:95 kn/planning/views.py:103
 msgid "sluiten"
 msgstr ""
 
 #: kn/planning/views.py:39
-msgid "prime-time"
+msgid "nulde dienst"
 msgstr ""
 
-#: kn/planning/views.py:52
-msgid "eerste dienst, tapper 1"
-msgstr ""
-
-#: kn/planning/views.py:54
-msgid "eerste dienst, tapper 2"
-msgstr ""
-
-#: kn/planning/views.py:56
-msgid "tweede dienst, tapper 1"
-msgstr ""
-
-#: kn/planning/views.py:58
-msgid "tweede dienst, tapper 2"
-msgstr ""
-
-#: kn/planning/views.py:60
-msgid "derde dienst, tapper 1"
-msgstr ""
-
-#: kn/planning/views.py:62
-msgid "derde dienst, tapper 2"
-msgstr ""
-
-#: kn/planning/views.py:68
-msgid "Teller 1"
-msgstr ""
-
-#: kn/planning/views.py:69
-msgid "Teller 2"
-msgstr ""
-
-#: kn/planning/views.py:72
-msgid "Persoon 1"
-msgstr ""
-
-#: kn/planning/views.py:73
-msgid "Persoon 2"
-msgstr ""
-
-#: kn/planning/views.py:83 kn/planning/views.py:91
+#: kn/planning/views.py:44 kn/planning/views.py:97 kn/planning/views.py:105
 msgid "Kok"
 msgstr ""
 
-#: kn/planning/views.py:85 kn/planning/views.py:93
+#: kn/planning/views.py:47 kn/planning/views.py:99 kn/planning/views.py:107
 msgid "Wokker"
 msgstr ""
 
-#: kn/planning/views.py:96
+#: kn/planning/views.py:51
+msgid "middelste dienst"
+msgstr ""
+
+#: kn/planning/views.py:64
+msgid "eerste dienst, tapper 1"
+msgstr ""
+
+#: kn/planning/views.py:66
+msgid "eerste dienst, tapper 2"
+msgstr ""
+
+#: kn/planning/views.py:68
+msgid "tweede dienst, tapper 1"
+msgstr ""
+
+#: kn/planning/views.py:70
+msgid "tweede dienst, tapper 2"
+msgstr ""
+
+#: kn/planning/views.py:72
+msgid "derde dienst, tapper 1"
+msgstr ""
+
+#: kn/planning/views.py:74
+msgid "derde dienst, tapper 2"
+msgstr ""
+
+#: kn/planning/views.py:82
+msgid "Teller 1"
+msgstr ""
+
+#: kn/planning/views.py:83
+msgid "Teller 2"
+msgstr ""
+
+#: kn/planning/views.py:86
+msgid "Persoon 1"
+msgstr ""
+
+#: kn/planning/views.py:87
+msgid "Persoon 2"
+msgstr ""
+
+#: kn/planning/views.py:110
 msgid "Kok 1"
 msgstr ""
 
-#: kn/planning/views.py:97
+#: kn/planning/views.py:111
 msgid "Kok 2"
 msgstr ""
 
@@ -2904,7 +2921,7 @@ msgstr ""
 
 #: kn/static/templates/static/bestuur15b.html:47
 msgid ""
-"In het midden ligt de secretaris Jonathan van Nuus, de\n"
+"In het midden ligt de secretaris Jonathan van Nuus, de\n"
 "metalhead die de ruige randjes van de vereniging belichaamt. Met zijn "
 "studie\n"
 "filosofie beantwoordt hij in de communicatie met leden de vragen die ertoe "
