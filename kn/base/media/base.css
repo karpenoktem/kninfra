@@ -534,3 +534,30 @@ form.top-aligned textarea {
 form.top-aligned input[type=checkbox] {
 	float: right;
 }
+
+.qr-link::before {
+    content: "(";
+    color: #102020;
+}
+.qr-link::after {
+    content: ")";
+    color: #102020;
+}
+.qr-link {
+    margin-left: 0.5em;
+}
+#qr-popup {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-color: white;
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-left: 3em;
+    padding: 10px;
+}
+#qr-popup canvas {
+    width: 100%;
+    height: 100%;
+}
