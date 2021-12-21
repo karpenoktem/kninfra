@@ -6,9 +6,7 @@ from django.views.generic import TemplateView
 from kn.leden import api, graphs, views
 
 urlpatterns = [
-    url(r'^$',
-        login_required(TemplateView.as_view(template_name='leden/home.html')),
-        name='smoelen-home'),
+    url(r'^$', views.smoelen_home, name='smoelen-home'),
     url(_(r'^gebruikers/(?:p/(?P<page>[0-9]+)/)?$'),
         views.user_list, name='user-list'),
     url(_(r'^naamdrager/(?P<name>[^/]+)/$'),

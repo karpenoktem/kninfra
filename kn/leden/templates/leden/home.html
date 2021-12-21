@@ -45,7 +45,10 @@ op deze website en daar buiten:{% endblocktrans %}</p>
     <li>{% blocktrans %}Een <a href="https://www.facebook.com/groups/170930412922856/">
             Karpe Noktem groep op Facebook</a>.{% endblocktrans %}</li>
     <li>{% blocktrans %}Het <a href="https://www.facebook.com/groups/279385195413570/">
-            zusjesgroepje op Facebook</a>.{% endblocktrans %}</li>
+        zusjesgroepje op Facebook</a>.{% endblocktrans %}</li>
+    {% for group in PRIVATE_GROUPS %}
+    <li><a href="{{group.1}}">{{group.0}}</a>.</li>
+    {% endfor %}
 </ul>
 
 <h2>{% trans "Gegevens en instellingen" %}</h2>

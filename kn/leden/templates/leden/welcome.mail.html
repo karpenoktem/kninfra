@@ -23,6 +23,14 @@ Beste {{ first_name }},
 <p>Wij hebben de volgende gegevens van jouw inschrijfformulier
 overgenomen. Kun je controleren of deze kloppen?</p>
 
+<p>Join ook onze chatgroepen:</p>
+{% endblocktrans %}
+<ul>
+  {% for group in PRIVATE_GROUPS %}
+  <li><a href="{{group.1}}">{{group.0}}</a></li>
+  {% endfor %}
+</ul>
+{% blocktrans %}
 <p>Met geautomatiseerde groet,</p>
 
 <p>Het smoelenboek</p>

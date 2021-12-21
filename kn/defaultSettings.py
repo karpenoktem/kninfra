@@ -216,6 +216,8 @@ def defaultSettings(glbls):
 
     d.QUAESTOR_USERNAME = "penningmeester"
 
+    d.PRIVATE_GROUPS = []
+
     try:
         locale.setlocale(locale.LC_ALL, d.LOCALE)
     except locale.Error:
