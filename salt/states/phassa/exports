@@ -1,1 +1,0 @@
-/srv/nfs {{ pillar['ip-sankhara'] }}(ro,async,no_subtree_check,crossmnt,no_root_squash)

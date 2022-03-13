@@ -10,7 +10,6 @@ import subprocess
 from django.conf import settings
 
 import kn.fotos.entities as fEs
-from kn.fotos.roots import FOTO_ROOTS
 
 
 class FotoadminError(ValueError):
@@ -47,8 +46,9 @@ def fotoadmin_move_fotos(event, store, user, directory):
         raise FotoadminError('Invalid user')
     if not re.match(r'^[^/\\.][^/]*$', directory):
         raise FotoadminError('Invalid dir')
-    if store not in FOTO_ROOTS:
-        raise FotoadminError('Invalid store')
+    # if store not in FOTO_ROOTS:
+    #     raise FotoadminError('Invalid store')
+    raise FotoAdminError("TODO: Fix") # TODO: Fix
     root = FOTO_ROOTS[store]
     user_path = os.path.join(root.base, user)
     if not os.path.isdir(user_path):

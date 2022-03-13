@@ -1,8 +1,7 @@
 $sankhara_ip = '10.107.110.2'
-$phassa_ip = '10.107.110.3'
 
 POST_UP_MSG = <<-EOM
-The virtual machines sankhara and phassa should be running:
+The virtual machine sankhara should be running:
 
    http://%{sankhara_ip}
    KN user: admin    password: %{chucknorris}
@@ -54,12 +53,6 @@ def configure_vagrant
         end
 
         int = public_interface
-
-        config.vm.define "phassa" do |config|
-            common config, "phassa"
-            config.vm.network :public_network, :bridge => int if int
-            config.vm.network :private_network, ip: $phassa_ip
-        end
 
         config.vm.define "sankhara", primary: true do |config|
             common config, "sankhara"
@@ -116,7 +109,6 @@ def ensure_pillar_is_generated
 
     # Some other settings
     pillar['ldap-suffix'] = 'dc=vagrant-sankhara,dc=lan'
-    pillar['ip-phassa'] = $phassa_ip
     pillar['ip-sankhara'] = $sankhara_ip
 
     pillar['python3'] = false unless pillar.include? 'python3'
