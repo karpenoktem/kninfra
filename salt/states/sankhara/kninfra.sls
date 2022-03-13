@@ -224,9 +224,6 @@ fotos:
 /etc/systemd/system/daan.service:
     file.managed:
         - source: salt://sankhara/daan.service
-/etc/systemd/system/cilia-tunnel.service:
-    file.managed:
-        - source: salt://sankhara/cilia-tunnel.service
 /etc/systemd/system/giedo.service:
     file.managed:
         - source: salt://sankhara/giedo.service

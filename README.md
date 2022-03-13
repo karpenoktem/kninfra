@@ -139,9 +139,6 @@ aangebracht.  Dit wordt gedaan door vijf verschillende *daemons*
  * **daan** draait als de `root`-gebruiker op *sankhara*.  *daan* voert de
    wijzigingen op *sankhara* uit die *giedo* nodig acht.  De code an *daan*
    is te vinden onder `kn/utils/daan`.  (Daan was de eerste secretaris.)
- * **cilia** draait als de `root`-gebruiker op *phassa* en voert daar de
-   wijzigingen van *giedo* door.  Code: `kn/utils/cilia`.  (Cilia was de
-   eerste commissaris activiteiten.)
  * **hans** draait als de `list`-gebruiker op *sankhara* en laat giedo
    de mailman e-maillijsten inkijken en aanpassen.  Code: `kn/utils/hans`.
    

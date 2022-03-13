@@ -16,7 +16,7 @@ import sdnotify
     A client connects to the server and sends a JSON document.  The server
     handles that message and returns by sending a JSON document of its own.
 
-    Whim is used internally by the sync daemons Giedo, Daan and Cilia """
+    Whim is used internally by the sync daemons Giedo, Daan """
 
 
 class WhimClient(object):

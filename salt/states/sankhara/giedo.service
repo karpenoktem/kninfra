@@ -1,7 +1,7 @@
 [Unit]
 Description=Giedo figures out what to change
-Requires=infra-dir.service mongodb.service daan.service cilia-tunnel.service hans.service
-After=infra-dir.service mongodb.service daan.service cilia-tunnel.service hans.service
+Requires=infra-dir.service mongodb.service daan.service hans.service
+After=infra-dir.service mongodb.service daan.service hans.service
 
 [Service]
 ExecStart=/home/infra/bin/giedo

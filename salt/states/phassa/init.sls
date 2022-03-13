@@ -4,4 +4,3 @@ include:
     - .nfs
     - .nginx
     - .infra-dir
-    - .cilia
