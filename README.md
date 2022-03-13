@@ -142,10 +142,6 @@ aangebracht.  Dit wordt gedaan door vijf verschillende *daemons*
  * **cilia** draait als de `root`-gebruiker op *phassa* en voert daar de
    wijzigingen van *giedo* door.  Code: `kn/utils/cilia`.  (Cilia was de
    eerste commissaris activiteiten.)
- * **moniek** draait als de `sys-moniek`-gebruiker op *phassa* en heeft
-   toegang tot de financiële boekhouding die op *phassa* staat.  Via *moniek*
-   (via *giedo*) kan de website bij de boekhouding.  Code: `kn/utils/moniek`.
-   (Moniek was de eerste penningmeester.)
  * **hans** draait als de `list`-gebruiker op *sankhara* en laat giedo
    de mailman e-maillijsten inkijken en aanpassen.  Code: `kn/utils/hans`.
    

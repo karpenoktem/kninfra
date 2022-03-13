@@ -26,7 +26,7 @@ from kn.base.http import JsonHttpResponse, redirect_to_referer
 from kn.base.mail import render_message, render_then_email
 from kn.base.text import humanized_enum
 from kn.fotos.utils import resize_proportional
-from kn.leden import fin, giedo
+from kn.leden import giedo
 from kn.leden.date import date_to_dt, now
 from kn.leden.forms import (AddGroupForm, AddStudyForm, AddUserForm,
                             ChangePasswordForm)
@@ -508,59 +508,6 @@ def secr_add_group(request):
 
 
 @login_required
-def fiscus_debtmail(request):
-
-    if 'fiscus' not in request.user.cached_groups_names:
-        raise PermissionDenied
-
-    data = dict([(debitor.name, {'debt': Decimal(debitor.debt)}) for debitor in
-                 giedo.fin_get_debitors()])
-
-    for user in Es.users():
-        name = user.full_name
-        if name in data:
-            data[name]['user'] = user
-
-    ctx = {
-        'BASE_URL': settings.BASE_URL,
-        'quaestor': fin.quaestor(),
-        'account_number': settings.BANK_ACCOUNT_NUMBER,
-        'account_holder': settings.BANK_ACCOUNT_HOLDER,
-    }
-
-    if request.method == 'POST' and 'debitor' in request.POST:
-        users_to_email = request.POST.getlist('debitor')
-        for user_name in users_to_email:
-            user = Es.by_name(user_name)
-
-            ctx['first_name'] = user.first_name
-            ctx['debt'] = data[user.full_name]['debt']
-
-            try:
-                render_then_email('leden/debitor.mail.html',
-                                  to=user, ctx=ctx,
-                                  cc=[],  # ADD penningmeester
-                                  from_email=ctx['quaestor']['email'],
-                                  reply_to=ctx['quaestor']['email'])
-                messages.info(
-                    request,
-                    _("Email gestuurd naar %s.") %
-                    user_name)
-            except Exception as e:
-                messages.error(request,
-                               _("Email naar %(user)s faalde: %(e)s.") %
-                               {'user': user_name, 'e': repr(e)})
-
-    # get a sample of the email that will be sent for the quaestor's review.
-    ctx['first_name'] = '< Naam >'
-    ctx['debt'] = '< Debet >'
-    email = render_message('leden/debitor.mail.html', ctx)['html']
-
-    return render(request, 'leden/fiscus_debtmail.html',
-                  {'data': data, 'email': email})
-
-
-@login_required
 def relation_end(request, _id):
     rel = Es.relation_by_id(_id)
     if rel is None:
@@ -712,137 +659,6 @@ def secr_update_site_agenda(request):
     giedo.update_site_agenda()
     messages.info(request, _("Agenda geupdate!"))
     return redirect_to_referer(request)
-
-
-@login_required
-def balans(request):
-    accounts = fin.get_account_entities_of(request.user)
-
-    account = request.user
-    if 'account' in request.GET:
-        account = Es.by_name(request.GET['account'])
-        if not account:
-            raise Http404
-
-    if account not in accounts:
-        raise PermissionDenied
-
-    accounts = [(a, a == account) for a in accounts]
-
-    balans = giedo.fin_get_account(account)
-    return render(request, 'leden/balans.html',
-                  {'balans': fin.BalansInfo(balans),
-                   'quaestor': fin.quaestor(),
-                   'accounts': accounts,
-                   'account': account})
-
-
-@login_required
-def boekenlezers_name_check(request):
-    if 'boekenlezers' not in request.user.cached_groups_names:
-        raise PermissionDenied
-
-    results = giedo.fin_check_names()
-
-    return render(request, 'leden/bl-namecheck.html',
-                  {'results': results})
-
-
-@login_required
-def fin_show(request, year, handle):
-    year = int(year)
-
-    if 'boekenlezers' not in request.user.cached_groups_names:
-        raise PermissionDenied
-
-    objs = giedo.fin_get_gnucash_object(year, handle)
-
-    # compute some values used in the template
-    for obj in objs:
-        if obj['type'] != "account":
-            continue
-        obj['ancestors'] = []
-        prefix = ""
-        for bit in obj['path'].split(":"):
-            obj['ancestors'].append({'prefix': prefix, 'name': bit})
-            prefix += bit + ":"
-
-        obj['has_transactions'] = False
-        s = Decimal(0)
-        for day in obj['days']:
-            checktypes = set()
-            for check in day['checks']:
-                checktypes.add(check['type'])
-            if 'error' in checktypes:
-                day['checktype'] = 'error'
-            elif 'warning' in checktypes:
-                day['checktype'] = 'warning'
-            else:
-                day['checktype'] = 'none'
-            for tr in day['transactions']:
-                checktypes = set()
-                for check in tr['checks']:
-                    checktypes.add(check['type'])
-                obj['has_transactions'] = True
-                old_s = s
-                for sp in tr['splits']:
-                    for check in sp['checks']:
-                        checktypes.add(check['type'])
-                    if sp['account'] == obj['path']:
-                        sp['counts'] = True
-                        s += Decimal(sp['value'])
-                        sp['sum'] = s
-                    else:
-                        sp['counts'] = False
-                tr['sum'] = s
-                tr['value'] = s - old_s
-                if 'error' in checktypes:
-                    tr['checktype'] = 'error'
-                elif 'warning' in checktypes:
-                    tr['checktype'] = 'warning'
-                else:
-                    tr['checktype'] = 'none'
-
-    return render(request, 'leden/fin-show.html',
-                  {'year': year,
-                   'objs': objs,
-                   'handle': handle})
-
-
-@login_required
-def fin_errors(request, year):
-    year = int(year)
-
-    if 'boekenlezers' not in request.user.cached_groups_names:
-        raise PermissionDenied
-
-    errors = giedo.fin_get_errors(year)
-
-    return render(request, 'leden/fin-errors.html',
-                  {'year': year,
-                   'errors': errors})
-
-
-@login_required
-def fins(request):
-    if 'boekenlezers' not in request.user.cached_groups_names:
-        raise PermissionDenied
-
-    years = giedo.fin_get_years()
-
-    return render(request, 'leden/fins.html',
-                  {'years': years})
-
-
-@login_required
-def fin_overview(request, year):
-    year = int(year)
-
-    if 'boekenlezers' not in request.user.cached_groups_names:
-        raise PermissionDenied
-
-    return render(request, 'leden/fin-overview.html',
-                  {'year': year})
 
 
 def language(request):

@@ -10,7 +10,6 @@ import protobufs.messages.daan_pb2_grpc as daan_pb2_grpc
 import protobufs.messages.giedo_pb2 as giedo_pb2
 import protobufs.messages.giedo_pb2_grpc as giedo_pb2_grpc
 import protobufs.messages.hans_pb2_grpc as hans_pb2_grpc
-import protobufs.messages.moniek_pb2_grpc as moniek_pb2_grpc
 
 from django.conf import settings
 
@@ -34,7 +33,7 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
         super(Giedo, self).__init__()
         self.log = logging.getLogger('giedo')
         self.last_sync_ts = 0
-        self.daan, self.cilia, self.moniek, self.hans = None, None, None, None
+        self.daan, self.cilia, self.hans = None, None, None
         try:
             self.daan = daan_pb2_grpc.DaanStub(
                 grpc.insecure_channel('unix:' + settings.DAAN_SOCKET))
@@ -44,11 +43,6 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
             self.cilia = WhimClient(settings.CILIA_SOCKET)
         except Exception:
             self.log.exception("Couldn't connect to cilia")
-        try:
-            self.moniek = moniek_pb2_grpc.MoniekStub(
-                grpc.insecure_channel('unix:' + settings.MONIEK_SOCKET))
-        except Exception:
-            self.log.exception("Couldn't connect to moniek")
         try:
             self.hans = hans_pb2_grpc.HansStub(
                 grpc.insecure_channel('unix:' + settings.HANS_SOCKET))
@@ -202,23 +196,5 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
                 context.set_code(grpc.StatusCode.UNKNOWN)
                 context.set_details(ret['error'])
         return common_pb2.Empty()
-
-    def FinGetAccount(self, request, context):
-        return self.moniek.FinGetAccount(request)
-
-    def FinGetDebitors(self, request, context):
-        return self.moniek.FinGetDebitors(request)
-
-    def FinCheckNames(self, request, context):
-        return self.moniek.FinCheckNames(request)
-
-    def FinGetGnuCashObject(self, request, context):
-        return self.moniek.FinGetGnuCashObject(request)
-
-    def FinGetYears(self, request, context):
-        return self.moniek.FinGetYears(request)
-
-    def FinGetErrors(self, request, context):
-        return self.moniek.FinGetErrors(request)
 
 # vim: et:sta:bs=2:sw=4:

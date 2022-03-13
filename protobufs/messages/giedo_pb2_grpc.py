@@ -4,7 +4,6 @@ import grpc
 from protobufs.messages import common_pb2 as protobufs_dot_messages_dot_common__pb2
 from protobufs.messages import daan_pb2 as protobufs_dot_messages_dot_daan__pb2
 from protobufs.messages import giedo_pb2 as protobufs_dot_messages_dot_giedo__pb2
-from protobufs.messages import moniek_pb2 as protobufs_dot_messages_dot_moniek__pb2
 
 
 class GiedoStub(object):
@@ -61,36 +60,6 @@ class GiedoStub(object):
         '/Giedo/UpdateSiteAgenda',
         request_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
         response_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-        )
-    self.FinGetAccount = channel.unary_unary(
-        '/Giedo/FinGetAccount',
-        request_serializer=protobufs_dot_messages_dot_moniek__pb2.FinGetAccountReq.SerializeToString,
-        response_deserializer=protobufs_dot_messages_dot_moniek__pb2.FinGetAccountResp.FromString,
-        )
-    self.FinGetDebitors = channel.unary_unary(
-        '/Giedo/FinGetDebitors',
-        request_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
-        response_deserializer=protobufs_dot_messages_dot_moniek__pb2.FinDebitors.FromString,
-        )
-    self.FinCheckNames = channel.unary_unary(
-        '/Giedo/FinCheckNames',
-        request_serializer=protobufs_dot_messages_dot_moniek__pb2.FinNamesList.SerializeToString,
-        response_deserializer=protobufs_dot_messages_dot_moniek__pb2.FinMissingNames.FromString,
-        )
-    self.FinGetGnuCashObject = channel.unary_unary(
-        '/Giedo/FinGetGnuCashObject',
-        request_serializer=protobufs_dot_messages_dot_moniek__pb2.FinObjectRequest.SerializeToString,
-        response_deserializer=protobufs_dot_messages_dot_moniek__pb2.FinObject.FromString,
-        )
-    self.FinGetYears = channel.unary_unary(
-        '/Giedo/FinGetYears',
-        request_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
-        response_deserializer=protobufs_dot_messages_dot_moniek__pb2.FinYears.FromString,
-        )
-    self.FinGetErrors = channel.unary_unary(
-        '/Giedo/FinGetErrors',
-        request_serializer=protobufs_dot_messages_dot_moniek__pb2.FinYear.SerializeToString,
-        response_deserializer=protobufs_dot_messages_dot_moniek__pb2.FinErrors.FromString,
         )
 
 
@@ -171,56 +140,6 @@ class GiedoServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def FinGetAccount(self, request, context):
-    """FinGetAccount returns the balance sheet for one account, including all
-    transactions.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def FinGetDebitors(self, request, context):
-    """FinGetDebitors returns a list of users that are in depth. This is used
-    for sending reminder messages, for example.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def FinCheckNames(self, request, context):
-    """FinCheckNames checks whether the names (users, committees) in the website
-    match up with what is in the financial administration. It returns a list
-    of missing names on both sides.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def FinGetGnuCashObject(self, request, context):
-    """FinGetGnuCashObject returns an opaque blob that contains a
-    msgpack-serialized buffer of the GnuCash object(s) with the given path.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def FinGetYears(self, request, context):
-    """FinGetYears returns a map where the keys are the currently tracked years
-    and the values are the YAML files that contain the cached data for those
-    years.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def FinGetErrors(self, request, context):
-    """FinGetErrors returns a list of errors and other questionable things in
-    the financial administration of the given year.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
 
 def add_GiedoServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -268,36 +187,6 @@ def add_GiedoServicer_to_server(servicer, server):
           servicer.UpdateSiteAgenda,
           request_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
           response_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
-      ),
-      'FinGetAccount': grpc.unary_unary_rpc_method_handler(
-          servicer.FinGetAccount,
-          request_deserializer=protobufs_dot_messages_dot_moniek__pb2.FinGetAccountReq.FromString,
-          response_serializer=protobufs_dot_messages_dot_moniek__pb2.FinGetAccountResp.SerializeToString,
-      ),
-      'FinGetDebitors': grpc.unary_unary_rpc_method_handler(
-          servicer.FinGetDebitors,
-          request_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-          response_serializer=protobufs_dot_messages_dot_moniek__pb2.FinDebitors.SerializeToString,
-      ),
-      'FinCheckNames': grpc.unary_unary_rpc_method_handler(
-          servicer.FinCheckNames,
-          request_deserializer=protobufs_dot_messages_dot_moniek__pb2.FinNamesList.FromString,
-          response_serializer=protobufs_dot_messages_dot_moniek__pb2.FinMissingNames.SerializeToString,
-      ),
-      'FinGetGnuCashObject': grpc.unary_unary_rpc_method_handler(
-          servicer.FinGetGnuCashObject,
-          request_deserializer=protobufs_dot_messages_dot_moniek__pb2.FinObjectRequest.FromString,
-          response_serializer=protobufs_dot_messages_dot_moniek__pb2.FinObject.SerializeToString,
-      ),
-      'FinGetYears': grpc.unary_unary_rpc_method_handler(
-          servicer.FinGetYears,
-          request_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-          response_serializer=protobufs_dot_messages_dot_moniek__pb2.FinYears.SerializeToString,
-      ),
-      'FinGetErrors': grpc.unary_unary_rpc_method_handler(
-          servicer.FinGetErrors,
-          request_deserializer=protobufs_dot_messages_dot_moniek__pb2.FinYear.FromString,
-          response_serializer=protobufs_dot_messages_dot_moniek__pb2.FinErrors.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

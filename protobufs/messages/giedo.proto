@@ -5,7 +5,6 @@ syntax = "proto3";
 
 import "protobufs/messages/common.proto";
 import "protobufs/messages/daan.proto";
-import "protobufs/messages/moniek.proto";
 
 service Giedo {
     // SyncAsync starts a synchronization action in the background.
@@ -44,32 +43,6 @@ service Giedo {
     // UpdateSiteAgenda fetches the current agenda from Google Calendar and
     // updates the cached agenda on the website with it.
     rpc UpdateSiteAgenda(Empty) returns (Empty) {};
-
-    // FinGetAccount returns the balance sheet for one account, including all
-    // transactions.
-    rpc FinGetAccount(FinGetAccountReq) returns (FinGetAccountResp) {};
-
-    // FinGetDebitors returns a list of users that are in depth. This is used
-    // for sending reminder messages, for example.
-    rpc FinGetDebitors(Empty) returns (FinDebitors) {};
-
-    // FinCheckNames checks whether the names (users, committees) in the website
-    // match up with what is in the financial administration. It returns a list
-    // of missing names on both sides.
-    rpc FinCheckNames(FinNamesList) returns (FinMissingNames) {};
-
-    // FinGetGnuCashObject returns an opaque blob that contains a
-    // msgpack-serialized buffer of the GnuCash object(s) with the given path.
-    rpc FinGetGnuCashObject(FinObjectRequest) returns (FinObject) {};
-
-    // FinGetYears returns a map where the keys are the currently tracked years
-    // and the values are the YAML files that contain the cached data for those
-    // years.
-    rpc FinGetYears(Empty) returns (FinYears) {};
-
-    // FinGetErrors returns a list of errors and other questionable things in
-    // the financial administration of the given year.
-    rpc FinGetErrors(FinYear) returns (FinErrors) {};
 }
 
 // GiedoSetPassword contains the arguments for Giedo.SetPassword.

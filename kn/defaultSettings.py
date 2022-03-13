@@ -87,7 +87,6 @@ def defaultSettings(glbls):
     d.HANS_SOCKET = '/var/run/infra/S-hans'
     d.DAAN_SOCKET = '/var/run/infra/S-daan'
     d.CILIA_SOCKET = '/var/run/infra/S-cilia'
-    d.MONIEK_SOCKET = '/var/run/infra/S-moniek'
 
     d.GOOGLE_CALENDAR_IDS = {
         'kn': 'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com',

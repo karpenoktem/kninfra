@@ -15,7 +15,6 @@ _sym_db = _symbol_database.Default()
 
 from protobufs.messages import common_pb2 as protobufs_dot_messages_dot_common__pb2
 from protobufs.messages import daan_pb2 as protobufs_dot_messages_dot_daan__pb2
-from protobufs.messages import moniek_pb2 as protobufs_dot_messages_dot_moniek__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -23,9 +22,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x1eprotobufs/messages/giedo.proto\x1a\x1fprotobufs/messages/common.proto\x1a\x1dprotobufs/messages/daan.proto\x1a\x1fprotobufs/messages/moniek.proto\"B\n\x10GiedoSetPassword\x12\x0c\n\x04user\x18\x01 \x01(\t\x12\x0f\n\x07oldpass\x18\x02 \x01(\t\x12\x0f\n\x07newpass\x18\x03 \x01(\t\"8\n\x11\x46otoadminUserdirs\x12#\n\x08userdirs\x18\x01 \x03(\x0b\x32\x11.FotoadminUserdir\"5\n\x10\x46otoadminUserdir\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x13\n\x0b\x64isplayName\x18\x02 \x01(\t\" \n\x10LastSyncedResult\x12\x0c\n\x04time\x18\x01 \x01(\x01\x32\xa0\x05\n\x05Giedo\x12\x1d\n\tSyncAsync\x12\x06.Empty\x1a\x06.Empty\"\x00\x12 \n\x0cSyncBlocking\x12\x06.Empty\x1a\x06.Empty\"\x00\x12)\n\nLastSynced\x12\x06.Empty\x1a\x11.LastSyncedResult\"\x00\x12*\n\x0bSetPassword\x12\x11.GiedoSetPassword\x1a\x06.Empty\"\x00\x12\x35\n\x15\x46otoadminScanUserdirs\x12\x06.Empty\x1a\x12.FotoadminUserdirs\"\x00\x12\x31\n\x14\x46otoadminCreateEvent\x12\x0f.FotoadminEvent\x1a\x06.Empty\"\x00\x12\x34\n\x12\x46otoadminMoveFotos\x12\x14.FotoadminMoveAction\x1a\x06.Empty\"\x00\x12\x1d\n\tScanFotos\x12\x06.Empty\x1a\x06.Empty\"\x00\x12$\n\x10UpdateSiteAgenda\x12\x06.Empty\x1a\x06.Empty\"\x00\x12\x38\n\rFinGetAccount\x12\x11.FinGetAccountReq\x1a\x12.FinGetAccountResp\"\x00\x12(\n\x0e\x46inGetDebitors\x12\x06.Empty\x1a\x0c.FinDebitors\"\x00\x12\x32\n\rFinCheckNames\x12\r.FinNamesList\x1a\x10.FinMissingNames\"\x00\x12\x36\n\x13\x46inGetGnuCashObject\x12\x11.FinObjectRequest\x1a\n.FinObject\"\x00\x12\"\n\x0b\x46inGetYears\x12\x06.Empty\x1a\t.FinYears\"\x00\x12&\n\x0c\x46inGetErrors\x12\x08.FinYear\x1a\n.FinErrors\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x1eprotobufs/messages/giedo.proto\x1a\x1fprotobufs/messages/common.proto\x1a\x1dprotobufs/messages/daan.proto\"B\n\x10GiedoSetPassword\x12\x0c\n\x04user\x18\x01 \x01(\t\x12\x0f\n\x07oldpass\x18\x02 \x01(\t\x12\x0f\n\x07newpass\x18\x03 \x01(\t\"8\n\x11\x46otoadminUserdirs\x12#\n\x08userdirs\x18\x01 \x03(\x0b\x32\x11.FotoadminUserdir\"5\n\x10\x46otoadminUserdir\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x13\n\x0b\x64isplayName\x18\x02 \x01(\t\" \n\x10LastSyncedResult\x12\x0c\n\x04time\x18\x01 \x01(\x01\x32\x84\x03\n\x05Giedo\x12\x1d\n\tSyncAsync\x12\x06.Empty\x1a\x06.Empty\"\x00\x12 \n\x0cSyncBlocking\x12\x06.Empty\x1a\x06.Empty\"\x00\x12)\n\nLastSynced\x12\x06.Empty\x1a\x11.LastSyncedResult\"\x00\x12*\n\x0bSetPassword\x12\x11.GiedoSetPassword\x1a\x06.Empty\"\x00\x12\x35\n\x15\x46otoadminScanUserdirs\x12\x06.Empty\x1a\x12.FotoadminUserdirs\"\x00\x12\x31\n\x14\x46otoadminCreateEvent\x12\x0f.FotoadminEvent\x1a\x06.Empty\"\x00\x12\x34\n\x12\x46otoadminMoveFotos\x12\x14.FotoadminMoveAction\x1a\x06.Empty\"\x00\x12\x1d\n\tScanFotos\x12\x06.Empty\x1a\x06.Empty\"\x00\x12$\n\x10UpdateSiteAgenda\x12\x06.Empty\x1a\x06.Empty\"\x00\x62\x06proto3')
   ,
-  dependencies=[protobufs_dot_messages_dot_common__pb2.DESCRIPTOR,protobufs_dot_messages_dot_daan__pb2.DESCRIPTOR,protobufs_dot_messages_dot_moniek__pb2.DESCRIPTOR,])
+  dependencies=[protobufs_dot_messages_dot_common__pb2.DESCRIPTOR,protobufs_dot_messages_dot_daan__pb2.DESCRIPTOR,])
 
 
 
@@ -70,8 +69,8 @@ _GIEDOSETPASSWORD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=131,
-  serialized_end=197,
+  serialized_start=98,
+  serialized_end=164,
 )
 
 
@@ -101,8 +100,8 @@ _FOTOADMINUSERDIRS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=199,
-  serialized_end=255,
+  serialized_start=166,
+  serialized_end=222,
 )
 
 
@@ -139,8 +138,8 @@ _FOTOADMINUSERDIR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=257,
-  serialized_end=310,
+  serialized_start=224,
+  serialized_end=277,
 )
 
 
@@ -170,8 +169,8 @@ _LASTSYNCEDRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=312,
-  serialized_end=344,
+  serialized_start=279,
+  serialized_end=311,
 )
 
 _FOTOADMINUSERDIRS.fields_by_name['userdirs'].message_type = _FOTOADMINUSERDIR
@@ -217,8 +216,8 @@ _GIEDO = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=347,
-  serialized_end=1019,
+  serialized_start=314,
+  serialized_end=702,
   methods=[
   _descriptor.MethodDescriptor(
     name='SyncAsync',
@@ -299,60 +298,6 @@ _GIEDO = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=protobufs_dot_messages_dot_common__pb2._EMPTY,
     output_type=protobufs_dot_messages_dot_common__pb2._EMPTY,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='FinGetAccount',
-    full_name='Giedo.FinGetAccount',
-    index=9,
-    containing_service=None,
-    input_type=protobufs_dot_messages_dot_moniek__pb2._FINGETACCOUNTREQ,
-    output_type=protobufs_dot_messages_dot_moniek__pb2._FINGETACCOUNTRESP,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='FinGetDebitors',
-    full_name='Giedo.FinGetDebitors',
-    index=10,
-    containing_service=None,
-    input_type=protobufs_dot_messages_dot_common__pb2._EMPTY,
-    output_type=protobufs_dot_messages_dot_moniek__pb2._FINDEBITORS,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='FinCheckNames',
-    full_name='Giedo.FinCheckNames',
-    index=11,
-    containing_service=None,
-    input_type=protobufs_dot_messages_dot_moniek__pb2._FINNAMESLIST,
-    output_type=protobufs_dot_messages_dot_moniek__pb2._FINMISSINGNAMES,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='FinGetGnuCashObject',
-    full_name='Giedo.FinGetGnuCashObject',
-    index=12,
-    containing_service=None,
-    input_type=protobufs_dot_messages_dot_moniek__pb2._FINOBJECTREQUEST,
-    output_type=protobufs_dot_messages_dot_moniek__pb2._FINOBJECT,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='FinGetYears',
-    full_name='Giedo.FinGetYears',
-    index=13,
-    containing_service=None,
-    input_type=protobufs_dot_messages_dot_common__pb2._EMPTY,
-    output_type=protobufs_dot_messages_dot_moniek__pb2._FINYEARS,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='FinGetErrors',
-    full_name='Giedo.FinGetErrors',
-    index=14,
-    containing_service=None,
-    input_type=protobufs_dot_messages_dot_moniek__pb2._FINYEAR,
-    output_type=protobufs_dot_messages_dot_moniek__pb2._FINERRORS,
     serialized_options=None,
   ),
 ])

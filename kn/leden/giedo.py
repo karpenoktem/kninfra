@@ -6,7 +6,6 @@ import protobufs.messages.common_pb2 as common_pb2
 import protobufs.messages.daan_pb2 as daan_pb2
 import protobufs.messages.giedo_pb2 as giedo_pb2
 import protobufs.messages.giedo_pb2_grpc as giedo_pb2_grpc
-import protobufs.messages.moniek_pb2 as moniek_pb2
 import six
 
 from django.conf import settings
@@ -91,40 +90,5 @@ def fotoadmin_move_fotos(event, store, user, dir):
         store=store,
         user=user,
         dir=dir))
-
-
-def fin_get_account(ent):
-    return giedo.FinGetAccount(moniek_pb2.FinGetAccountReq(
-        name=six.text_type(ent.name),
-        fullName=six.text_type(ent.humanName),
-        accountType="user" if ent.is_user else "group"))
-
-
-def fin_get_debitors():
-    return giedo.FinGetDebitors(common_pb2.Empty()).debitors
-
-
-def fin_check_names():
-    users = Es.by_name('leden').as_group().get_members()
-    comms = Es.by_name('comms').as_tag().get_bearers()
-    req = moniek_pb2.FinNamesList()
-    req.user.extend([six.text_type(user.humanName) for user in users])
-    req.group.extend([six.text_type(com.humanName) for com in comms])
-    return giedo.FinCheckNames(req)
-
-
-def fin_get_gnucash_object(year, handle):
-    obj = giedo.FinGetGnuCashObject(moniek_pb2.FinObjectRequest(
-        year=year,
-        handle=handle))
-    return msgpack.unpackb(obj.msgpack, encoding='utf-8')
-
-
-def fin_get_errors(year):
-    return giedo.FinGetErrors(moniek_pb2.FinYear(year=year)).errors
-
-
-def fin_get_years():
-    return giedo.FinGetYears(common_pb2.Empty()).years
 
 # vim: et:sta:bs=2:sw=4:
