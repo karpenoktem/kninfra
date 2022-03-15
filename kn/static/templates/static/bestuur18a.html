@@ -3,10 +3,46 @@
 {% load base %}
 {% load i18n %}
 
+{% block styles %}
+{{ block.super }}
+<style>
+/* make photo full-width on small devices */
+@media screen and (max-width: 800px) {
+    #content img {
+        padding: 0;
+        margin: 4px 0;
+        max-width: 100vw;
+        border: 0;
+        margin-left: -15px;
+    }
+}
+@media screen and (max-width: 550px) {
+    #content img {
+        margin-left: -10px;
+    }
+}
+
+figure {
+    display: block;
+    text-align: center;
+    margin: 0;
+}
+figure img {
+    height: auto;
+}
+figcaption {
+    margin-left: 1em;
+}
+</style>
+{% endblock styles %}
 {% block body %}
-
-<img width="707" src="{{ MEDIA_URL }}static/img/bestuur18a.jpg" alt="Bestuursfoto bestuur 18 A"/>
-
+<figure>
+  <img width="800" height="532" src="{{ MEDIA_URL }}static/img/bestuur18a.jpg" alt="Bestuursfoto bestuur 18 A"
+       srcset="{{ MEDIA_URL }}static/img/bestuur18a-800.webp 1x, {{ MEDIA_URL }}static/img/bestuur18a-1600.webp 2x" />
+  <figcaption>
+    <small>Van links naar rechts: Lotte (Secretaris), Femke (Penningmeester), Bas (Pandcommissaris), Stephanie (Commissaris Activiteiten), Caitlin (Voorzitter)</small>
+  </figcaption>
+</figure>
 <div style="white-space: pre-line">Wij zijn bestuur 18, een diverse groep mensen
 Leer ons kennen voordat je je een ander bestuur gaat wensen
 We willen ons dus voorstellen via dit bericht
