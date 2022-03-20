@@ -36,19 +36,9 @@ class GiedoStub(object):
         request_serializer=protobufs_dot_messages_dot_giedo__pb2.GiedoSetPassword.SerializeToString,
         response_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
         )
-    self.FotoadminScanUserdirs = channel.unary_unary(
-        '/Giedo/FotoadminScanUserdirs',
-        request_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
-        response_deserializer=protobufs_dot_messages_dot_giedo__pb2.FotoadminUserdirs.FromString,
-        )
     self.FotoadminCreateEvent = channel.unary_unary(
         '/Giedo/FotoadminCreateEvent',
         request_serializer=protobufs_dot_messages_dot_daan__pb2.FotoadminEvent.SerializeToString,
-        response_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-        )
-    self.FotoadminMoveFotos = channel.unary_unary(
-        '/Giedo/FotoadminMoveFotos',
-        request_serializer=protobufs_dot_messages_dot_daan__pb2.FotoadminMoveAction.SerializeToString,
         response_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
         )
     self.ScanFotos = channel.unary_unary(
@@ -100,25 +90,8 @@ class GiedoServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def FotoadminScanUserdirs(self, request, context):
-    """FotoadminScanUserdirs returns a list of directories containing photo
-    albums uploaded by users that can be moved into the KN photo album.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
   def FotoadminCreateEvent(self, request, context):
     """Create a new event in the photo album.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def FotoadminMoveFotos(self, request, context):
-    """FotoadminMoveFotos moves photos from the location in the user directory
-    (unix, wolk), to an event in the photo book. The photos are removed from
-    the user directory afterwards.
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -163,19 +136,9 @@ def add_GiedoServicer_to_server(servicer, server):
           request_deserializer=protobufs_dot_messages_dot_giedo__pb2.GiedoSetPassword.FromString,
           response_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
       ),
-      'FotoadminScanUserdirs': grpc.unary_unary_rpc_method_handler(
-          servicer.FotoadminScanUserdirs,
-          request_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-          response_serializer=protobufs_dot_messages_dot_giedo__pb2.FotoadminUserdirs.SerializeToString,
-      ),
       'FotoadminCreateEvent': grpc.unary_unary_rpc_method_handler(
           servicer.FotoadminCreateEvent,
           request_deserializer=protobufs_dot_messages_dot_daan__pb2.FotoadminEvent.FromString,
-          response_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
-      ),
-      'FotoadminMoveFotos': grpc.unary_unary_rpc_method_handler(
-          servicer.FotoadminMoveFotos,
-          request_deserializer=protobufs_dot_messages_dot_daan__pb2.FotoadminMoveAction.FromString,
           response_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
       ),
       'ScanFotos': grpc.unary_unary_rpc_method_handler(

@@ -15,8 +15,6 @@ urlpatterns = [
 
     # TODO add fallback for old foto links
     # TODO change wiki links, etc.
-    url(_(r'^foto/admin/?$'),
-        views.fotoadmin_move, name='fotoadmin-move'),
     url(_(r'^foto/admin/create/?$'),
         views.fotoadmin_create_event, name='fotoadmin-create-event'),
     url(_(r'^fotos/api/?$'),

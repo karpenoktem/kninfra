@@ -21,7 +21,7 @@ from django.utils.translation import ugettext as _
 import kn.fotos.entities as fEs
 import kn.leden.entities as Es
 from kn.fotos.api import album_json, album_parents_json
-from kn.fotos.forms import CreateEventForm, getMoveFotosForm, list_events
+from kn.fotos.forms import CreateEventForm, list_events
 from kn.leden import giedo
 
 
@@ -194,28 +194,10 @@ def fotoadmin_create_event(request):
             else:
                 messages.error(request, _('Er is een fout opgetreden: %s') %
                                ret.get('error', _('geen foutmelding')))
-            return redirect('fotoadmin-move')
+            return redirect('fotos')
     else:
         form = CreateEventForm()
     return render(request, 'fotos/admin/create.html',
                   {'form': form, 'events': list_events()})
-
-
-@login_required
-def fotoadmin_move(request):
-    if not fEs.is_admin(request.user):
-        raise PermissionDenied
-    MoveFotosForm = getMoveFotosForm()
-    if request.method == 'POST':
-        form = MoveFotosForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            (store, user, dir) = cd['move_src'].split('/')
-            giedo.fotoadmin_move_fotos(cd['move_dst'], store, user, dir)
-            return redirect('fotos', path=cd['move_dst'])
-    else:
-        form = MoveFotosForm()
-    return render(request, 'fotos/admin/move.html',
-                  {'form': form})
 
 # vim: et:sta:bs=2:sw=4:

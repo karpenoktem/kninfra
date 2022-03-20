@@ -24,17 +24,8 @@ service Giedo {
     // user is not found or the old password doesn't match.
     rpc SetPassword(GiedoSetPassword) returns (Empty) {};
 
-    // FotoadminScanUserdirs returns a list of directories containing photo
-    // albums uploaded by users that can be moved into the KN photo album.
-    rpc FotoadminScanUserdirs(Empty) returns (FotoadminUserdirs) {};
-
     // Create a new event in the photo album.
     rpc FotoadminCreateEvent(FotoadminEvent) returns (Empty) {};
-
-    // FotoadminMoveFotos moves photos from the location in the user directory
-    // (unix, wolk), to an event in the photo book. The photos are removed from
-    // the user directory afterwards.
-    rpc FotoadminMoveFotos(FotoadminMoveAction) returns (Empty) {};
 
     // ScanFotos runs a (blocking) scan to index all photos in the photo book.
     // New photos are added and old photos are marked lost.
@@ -50,18 +41,6 @@ message GiedoSetPassword {
     string user = 1;
     string oldpass = 2;
     string newpass = 3;
-}
-
-// FotoadminUserdirs contains the arguments for Giedo.FotoadminScanUserdirs.
-message FotoadminUserdirs {
-    repeated FotoadminUserdir userdirs = 1;
-}
-
-// A FotoadminUserdir is one photo album read from one of the user's directories
-// (user home directory, wolk, etc.).
-message FotoadminUserdir {
-    string path = 1;
-    string displayName = 2;
 }
 
 // LastSyncedResult contains the time when the last synchronization was

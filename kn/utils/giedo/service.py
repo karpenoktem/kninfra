@@ -155,12 +155,6 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
                 context.set_details(e.details())
         return common_pb2.Empty()
 
-    def FotoadminMoveFotos(self, request, context):
-        with self.operation_lock:
-            self.daan.FotoadminMoveFotos(request)
-            scan_fotos()
-        return common_pb2.Empty()
-
     def ScanFotos(self, request, context):
         with self.operation_lock:
             scan_fotos()
