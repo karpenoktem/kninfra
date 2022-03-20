@@ -61,10 +61,11 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
             ('postfix', self.daan.SetPostfixMap, self._gen_postfix),
             ('postfix-slm', self.daan.SetPostfixSenderLoginMap, self._gen_postfix_slm),
             ('mailman', self.hans.ApplyChanges, self._gen_mailman),
-            ('unix', self.cilia.send, self._gen_unix),
+            #('unix', self.cilia.send, self._gen_unix),
             ('wiki', self.daan.ApplyWikiChanges, self._gen_wiki),
             ('ldap', self.daan.ApplyLDAPChanges, self._gen_ldap),
-            ('wolk', self.cilia.send, self._gen_wolk))
+            #('wolk', self.cilia.send, self._gen_wolk),
+        )
 
     def _gen_wolk(self):
         return {'type': 'wolk',
