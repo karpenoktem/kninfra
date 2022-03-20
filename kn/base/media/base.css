@@ -476,6 +476,10 @@ textarea {
 	#loginButton {
 		float: right;
 	}
+
+  .github-ribbon {
+      display: none !important;
+  }
 }
 @media screen and (max-width: 400px) {
 	#loginButton {
@@ -560,4 +564,12 @@ form.top-aligned input[type=checkbox] {
 #qr-popup canvas {
     width: 100%;
     height: 100%;
+}
+
+.github-ribbon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: block;
+    z-index: 100;
 }
