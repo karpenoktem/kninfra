@@ -1173,6 +1173,21 @@ class User(Entity):
                     {'name': self.name})
         return ('user-by-id', (), {'_id': self.id})
 
+    @property
+    def email_from_addresses(self):
+        '''
+        Return all the email adresses from which this user can send email.
+        '''
+        names = set(self.names)
+        for group in self.cached_groups:
+            if group.got_mailman_list:
+                # Not allowed to send mail from a mailing list.
+                continue
+            # The remaining groups are roles inside a group, for example
+            # "bestuur-secretaris" and "secretaris".
+            names.update(group.names)
+        return sorted(map(lambda n: '%s@%s' % (n, settings.MAILDOMAIN), names))
+
     def set_password(self, pwd, save=True):
         self._data['password'] = make_password(pwd)
         if save:

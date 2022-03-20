@@ -738,6 +738,12 @@ def balans(request):
 
 
 @login_required
+def ik_smtp(request):
+    return render(request, 'leden/ik_smtp.html',
+                  {'smtp_server': settings.MAILDOMAIN})
+
+
+@login_required
 def boekenlezers_name_check(request):
     if 'boekenlezers' not in request.user.cached_groups_names:
         raise PermissionDenied
