@@ -62,7 +62,10 @@ def maillist_apply_changes(changes):
             for em in changes.add[l].emails:
                 pw = mailman.Utils.MakeRandomPassword()
                 desc = mailman.UserDesc.UserDesc(em, '', pw, False)
-                mlo[l].ApprovedAddMember(desc, False, False)
+                try:
+                    mlo[l].ApprovedAddMember(desc, False, False)
+                except Exception as e: # TODO remove me
+                    pass
         for l in changes.remove:
             if not ensure_opened(l):
                 continue
