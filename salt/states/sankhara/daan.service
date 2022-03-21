@@ -1,5 +1,5 @@
 [Unit]
-Description=Daan applies changes on phassa thought up by Giedo
+Description=Daan applies changes on sankhara thought up by Giedo
 Requires=infra-dir.service mongodb.service
 After=infra-dir.service mongodb.service
 

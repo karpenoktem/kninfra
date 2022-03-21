@@ -51,28 +51,6 @@
             </ul>
         </li>
         {% endif %}
-        {% if "fiscus" in user.cached_groups_names %}
-        <li><span>{% trans "Fiscus" %}</span>
-            <ul>
-                <li><a href="{% url "fiscus-debtmail"  %}">{% trans "Debiteuren e-mailen" %}</a></li>
-            </ul>
-        </li>
-        {% endif %}
-	{% if "boekenlezers" in user.cached_groups_names %}
-        <li><span>{% trans "Boekenlezers" %}</span>
-            <ul>
-                <li><a href="{% url "bl-namecheck"  %}">{% trans "Presentielijst" %}</a></li>
-                <li><a href="{% url "fins"  %}">{% trans "Boekhoudingen" %}</a></li>
-            </ul>
-        </li>
-	{% endif %}
-        {% if "fotocie" in user.cached_groups_names or "webcie" in user.cached_groups_names %}
-        <li><a href="{% url "fotos" "" %}">{% trans "Foto's" %}</a>
-            <ul>
-                <li><a href="{% url "fotoadmin-move" %}">{% trans "Foto's verplaatsen" %}</a></li>
-            </ul>
-        </li>
-        {% endif %}
 
         <li><a href="{% url "planning-home"  %}">{% trans "Planning" %}</a>
             {% if may_manage_planning %}

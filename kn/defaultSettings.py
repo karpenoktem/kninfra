@@ -27,7 +27,6 @@ def defaultSettings(glbls):
     # These should be of the form ('host', 'user', 'password', 'db')
     # ############################################################
     d.WIKI_MYSQL_SECRET = None
-    d.WOLK_MYSQL_SECRET = None
 
     d.DOMAINNAME = 'karpenoktem.nl'
     d.LDAP_URL = 'ldap://localhost'
@@ -44,7 +43,6 @@ def defaultSettings(glbls):
 
     d.MEDIA_URL = '/djmedia/'
     d.STORAGE_URL = '/djmedia/storage'
-    d.WOLK_DATA_PATH = '/mnt/phassa/srv/wolk'
     d.INFRA_UID = 1002
 
     d.SCHEME = 'https'
@@ -86,8 +84,6 @@ def defaultSettings(glbls):
     d.GIEDO_SOCKET = '/var/run/infra/S-giedo'
     d.HANS_SOCKET = '/var/run/infra/S-hans'
     d.DAAN_SOCKET = '/var/run/infra/S-daan'
-    d.CILIA_SOCKET = '/var/run/infra/S-cilia'
-    d.MONIEK_SOCKET = '/var/run/infra/S-moniek'
 
     d.GOOGLE_CALENDAR_IDS = {
         'kn': 'vssp95jliss0lpr768ec9spbd8@group.calendar.google.com',
@@ -98,7 +94,6 @@ def defaultSettings(glbls):
     d.POSTFIX_SLM_MAP = '/etc/postfix/virtual/kninfra_slm_maps'
 
     d.PHOTOS_DIR = '/var/fotos'
-    d.USER_DIRS = '/mnt/phassa/home/'
 
     d.INTERNAL_IPS = ['83.162.203.144']  # bas
     d.LOCALE = 'nl_NL.UTF-8'

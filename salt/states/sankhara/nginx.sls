@@ -9,9 +9,6 @@ nginx packages:
     file.absent
 /etc/nginx/sankhara.d:
     file.directory
-/etc/nginx/sankhara.d/20-phassaProxy.conf:
-    file.managed:
-        - source: salt://sankhara/phassaProxy.nginx.conf
 /etc/nginx/backends:
     file.directory
 /etc/nginx/backends/fcgiwrap:

@@ -4,12 +4,8 @@
   /_/ |_/___/ |___/ /_/|_|\_,_/_/ / .__/\__/ /_/|_/\___/_/\_\\__/\__/_/_/_/
 {%- if grains['host'] == 'vagrant-sankhara' %}
                vagrant-sankhara  /_/        dienstenserver
-{%- elif grains['host'] == 'vagrant-phassa' %}
-                 vagrant-phassa  /_/        leden loginserver 
 {%- elif grains['host'] == 'sankhara' %}
         sankhara.karpenoktem.nl  /_/        dienstenserver
-{%- elif grains['host'] == 'phassa' %}
-          phassa.karpenoktem.nl  /_/        leden loginserver 
 {%- else %}
           ???                    /_/        {{ grains['fqdn'] }}
 {% endif %}

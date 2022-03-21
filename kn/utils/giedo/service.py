@@ -10,7 +10,6 @@ import protobufs.messages.daan_pb2_grpc as daan_pb2_grpc
 import protobufs.messages.giedo_pb2 as giedo_pb2
 import protobufs.messages.giedo_pb2_grpc as giedo_pb2_grpc
 import protobufs.messages.hans_pb2_grpc as hans_pb2_grpc
-import protobufs.messages.moniek_pb2_grpc as moniek_pb2_grpc
 
 from django.conf import settings
 
@@ -34,21 +33,12 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
         super(Giedo, self).__init__()
         self.log = logging.getLogger('giedo')
         self.last_sync_ts = 0
-        self.daan, self.cilia, self.moniek, self.hans = None, None, None, None
+        self.daan, self.hans = None, None
         try:
             self.daan = daan_pb2_grpc.DaanStub(
                 grpc.insecure_channel('unix:' + settings.DAAN_SOCKET))
         except Exception:
             self.log.exception("Couldn't connect to daan")
-        try:
-            self.cilia = WhimClient(settings.CILIA_SOCKET)
-        except Exception:
-            self.log.exception("Couldn't connect to cilia")
-        try:
-            self.moniek = moniek_pb2_grpc.MoniekStub(
-                grpc.insecure_channel('unix:' + settings.MONIEK_SOCKET))
-        except Exception:
-            self.log.exception("Couldn't connect to moniek")
         try:
             self.hans = hans_pb2_grpc.HansStub(
                 grpc.insecure_channel('unix:' + settings.HANS_SOCKET))
@@ -61,10 +51,8 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
             ('postfix', self.daan.SetPostfixMap, self._gen_postfix),
             ('postfix-slm', self.daan.SetPostfixSenderLoginMap, self._gen_postfix_slm),
             ('mailman', self.hans.ApplyChanges, self._gen_mailman),
-            #('unix', self.cilia.send, self._gen_unix),
             ('wiki', self.daan.ApplyWikiChanges, self._gen_wiki),
-            ('ldap', self.daan.ApplyLDAPChanges, self._gen_ldap),
-            #('wolk', self.cilia.send, self._gen_wolk),
+            ('ldap', self.daan.ApplyLDAPChanges, self._gen_ldap)
         )
 
     def _gen_wolk(self):
@@ -156,16 +144,7 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
             self.daan.SetLDAPPassword(daan_pb2.LDAPNewPassword(
                 user=request.user.encode(),
                 password=request.newpass.encode()))
-            self.cilia.send({'type': 'setpass',
-                             'user': request.user,
-                             'pass': request.newpass})
         return common_pb2.Empty()
-
-    def FotoadminScanUserdirs(self, request, context):
-        resp = giedo_pb2.FotoadminUserdirs()
-        for path, displayName in self.cilia.send({'type': 'fotoadmin-scan-userdirs'}):
-            resp.userdirs.append(giedo_pb2.FotoadminUserdir(path=path, displayName=displayName))
-        return resp
 
     def FotoadminCreateEvent(self, request, context):
         with self.operation_lock:
@@ -174,20 +153,6 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
             except grpc.RpcError as e:
                 context.set_code(e.code())
                 context.set_details(e.details())
-        return common_pb2.Empty()
-
-    def FotoadminMoveFotos(self, request, context):
-        with self.operation_lock:
-            self.daan.FotoadminMoveFotos(request)
-            scan_fotos()
-            ret = self.cilia.send({
-                'type': 'fotoadmin-remove-moved-fotos',
-                'store': request.store,
-                'user': request.user,
-                'dir': request.dir})
-            if 'success' not in ret:
-                context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-                context.set_details(ret['error'])
         return common_pb2.Empty()
 
     def ScanFotos(self, request, context):
@@ -202,23 +167,5 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
                 context.set_code(grpc.StatusCode.UNKNOWN)
                 context.set_details(ret['error'])
         return common_pb2.Empty()
-
-    def FinGetAccount(self, request, context):
-        return self.moniek.FinGetAccount(request)
-
-    def FinGetDebitors(self, request, context):
-        return self.moniek.FinGetDebitors(request)
-
-    def FinCheckNames(self, request, context):
-        return self.moniek.FinCheckNames(request)
-
-    def FinGetGnuCashObject(self, request, context):
-        return self.moniek.FinGetGnuCashObject(request)
-
-    def FinGetYears(self, request, context):
-        return self.moniek.FinGetYears(request)
-
-    def FinGetErrors(self, request, context):
-        return self.moniek.FinGetErrors(request)
 
 # vim: et:sta:bs=2:sw=4:

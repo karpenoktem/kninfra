@@ -45,11 +45,6 @@ class DaanStub(object):
         request_serializer=protobufs_dot_messages_dot_daan__pb2.FotoadminEvent.SerializeToString,
         response_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
         )
-    self.FotoadminMoveFotos = channel.unary_unary(
-        '/Daan/FotoadminMoveFotos',
-        request_serializer=protobufs_dot_messages_dot_daan__pb2.FotoadminMoveAction.SerializeToString,
-        response_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-        )
 
 
 class DaanServicer(object):
@@ -98,13 +93,6 @@ class DaanServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def FotoadminMoveFotos(self, request, context):
-    """Move a user photo directory into the photo album created above.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
 
 def add_DaanServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -136,11 +124,6 @@ def add_DaanServicer_to_server(servicer, server):
       'FotoadminCreateEvent': grpc.unary_unary_rpc_method_handler(
           servicer.FotoadminCreateEvent,
           request_deserializer=protobufs_dot_messages_dot_daan__pb2.FotoadminEvent.FromString,
-          response_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
-      ),
-      'FotoadminMoveFotos': grpc.unary_unary_rpc_method_handler(
-          servicer.FotoadminMoveFotos,
-          request_deserializer=protobufs_dot_messages_dot_daan__pb2.FotoadminMoveAction.FromString,
           response_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
       ),
   }

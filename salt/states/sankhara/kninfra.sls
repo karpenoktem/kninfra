@@ -170,15 +170,6 @@ fotos:
         - template: jinja
         - user: infra
         - mode: 600
-https://github.com/awesterb/koert:
-    git.latest:
-        - user: infra
-        - target: /home/infra/scm/koert
-    require:
-        - pkg: git
-/home/infra/py/koert:
-    file.symlink:
-        - target: /home/infra/scm/koert
 # We cannot set user/group on /vagrant.  Thus also not on /home/infra/repo.
 # We circumvent by using a symlink
 /home/infra/repo/kn/settings.py:
@@ -233,12 +224,6 @@ https://github.com/awesterb/koert:
 /etc/systemd/system/daan.service:
     file.managed:
         - source: salt://sankhara/daan.service
-/etc/systemd/system/cilia-tunnel.service:
-    file.managed:
-        - source: salt://sankhara/cilia-tunnel.service
-/etc/systemd/system/moniek-tunnel.service:
-    file.managed:
-        - source: salt://sankhara/moniek-tunnel.service
 /etc/systemd/system/giedo.service:
     file.managed:
         - source: salt://sankhara/giedo.service

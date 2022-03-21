@@ -118,16 +118,15 @@ En nog een aantal die niet *user-facing* zijn:
  * Een [saslauthd](http://www.linuxcommand.org/man_pages/saslauthd8.html)
    die gebruikt wordt door postfix om gebruikers te authenticeren.
 
-Karpe Noktem heeft twee servers: *sankhara* en *phassa*.  De website
-en de meeste andere diensten draaien op *sankhara*.  Op *phassa* kunnen
-leden inloggen en bestanden met elkaar delen.
+Karpe Noktem heeft 1 server: *sankhara*. De website
+en de meeste andere diensten draaien op *sankhara*.
 
-Al deze verschillende diensten op *sankhara* en *phassa* moeten
+Al deze verschillende diensten op *sankhara* moeten
 gesynchroniseerd blijven met de ledenadministratie: als iemand in een
 commissie gaat moet zij ook automatisch in de goede e-maillijsten en
-wolk-groepen komen.  Bij elke verandering van de ledenadmnistratie wordt
+wolk-groepen komen.  Bij elke verandering van de ledenadministratie wordt
 er gecontroleerd of alle instellingen nog ok zijn en zo nodig veranderingen
-aangebracht.  Dit wordt gedaan door vijf verschillende *daemons*
+aangebracht.  Dit wordt gedaan door drie verschillende *daemons*
 (programma's die in de achtergrond draaien).
 
  * **giedo** draait als de `infra`-gebruiker op *sankhara*.  Dat is dezelfde
@@ -139,13 +138,6 @@ aangebracht.  Dit wordt gedaan door vijf verschillende *daemons*
  * **daan** draait als de `root`-gebruiker op *sankhara*.  *daan* voert de
    wijzigingen op *sankhara* uit die *giedo* nodig acht.  De code an *daan*
    is te vinden onder `kn/utils/daan`.  (Daan was de eerste secretaris.)
- * **cilia** draait als de `root`-gebruiker op *phassa* en voert daar de
-   wijzigingen van *giedo* door.  Code: `kn/utils/cilia`.  (Cilia was de
-   eerste commissaris activiteiten.)
- * **moniek** draait als de `sys-moniek`-gebruiker op *phassa* en heeft
-   toegang tot de financiële boekhouding die op *phassa* staat.  Via *moniek*
-   (via *giedo*) kan de website bij de boekhouding.  Code: `kn/utils/moniek`.
-   (Moniek was de eerste penningmeester.)
  * **hans** draait als de `list`-gebruiker op *sankhara* en laat giedo
    de mailman e-maillijsten inkijken en aanpassen.  Code: `kn/utils/hans`.
    

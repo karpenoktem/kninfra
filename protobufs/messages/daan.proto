@@ -18,9 +18,6 @@ service Daan {
 
     // Create a new event in the photo album.
     rpc FotoadminCreateEvent(FotoadminEvent) returns (Empty) {};
-
-    // Move a user photo directory into the photo album created above.
-    rpc FotoadminMoveFotos(FotoadminMoveAction) returns (Empty) {};
 }
 
 // A key-value map where the key is an email address and the value is a list of
@@ -66,13 +63,6 @@ message FotoadminEvent {
     string date = 1;
     string name = 2;
     string humanName = 3;
-}
-
-message FotoadminMoveAction {
-    string event = 1;
-    string store = 2;
-    string user = 3;
-    string dir = 4;
 }
 
 // A list of values. Protobuf does not support lists directly in a map.

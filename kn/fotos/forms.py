@@ -15,10 +15,6 @@ def list_events():
     return events
 
 
-def move_fotos_list_events():
-    return [(x, x) for x in list_events()]
-
-
 class CreateEventForm(forms.Form):
     humanName = forms.CharField(label=_('Naam voor mensen'))
     date = forms.DateField(label=_('Datum'), initial=date.today)
@@ -30,13 +26,5 @@ class CreateEventForm(forms.Form):
     humanName.widget.attrs['onblur'] = ('createTechName(); ' +
                                         'createFullHumanname();')
 
-
-def getMoveFotosForm():
-    class MoveFotosForm(forms.Form):
-        move_src = forms.ChoiceField(label=_('Verplaats'),
-                                     choices=giedo.fotoadmin_scan_userdirs())
-        move_dst = forms.ChoiceField(label=_('naar'),
-                                     choices=move_fotos_list_events())
-    return MoveFotosForm
 
 # vim: et:sta:bs=2:sw=4:

@@ -105,13 +105,6 @@ def change_username(oldname, newname, do):
             dc.commit()
         dc.close()
 
-    newhome = '/home/%s' % newname
-    cmd = ['ssh', 'root@phassa', 'usermod', '-l',
-           newname, '-d', newhome, '-m', oldname]
-    print('linux: executing:', ' '.join(cmd))
-    if do:
-        subprocess.call(cmd)
-
     if do:
         e.save()
 

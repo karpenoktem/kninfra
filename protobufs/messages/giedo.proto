@@ -5,7 +5,6 @@ syntax = "proto3";
 
 import "protobufs/messages/common.proto";
 import "protobufs/messages/daan.proto";
-import "protobufs/messages/moniek.proto";
 
 service Giedo {
     // SyncAsync starts a synchronization action in the background.
@@ -25,17 +24,8 @@ service Giedo {
     // user is not found or the old password doesn't match.
     rpc SetPassword(GiedoSetPassword) returns (Empty) {};
 
-    // FotoadminScanUserdirs returns a list of directories containing photo
-    // albums uploaded by users that can be moved into the KN photo album.
-    rpc FotoadminScanUserdirs(Empty) returns (FotoadminUserdirs) {};
-
     // Create a new event in the photo album.
     rpc FotoadminCreateEvent(FotoadminEvent) returns (Empty) {};
-
-    // FotoadminMoveFotos moves photos from the location in the user directory
-    // (unix, wolk), to an event in the photo book. The photos are removed from
-    // the user directory afterwards.
-    rpc FotoadminMoveFotos(FotoadminMoveAction) returns (Empty) {};
 
     // ScanFotos runs a (blocking) scan to index all photos in the photo book.
     // New photos are added and old photos are marked lost.
@@ -44,32 +34,6 @@ service Giedo {
     // UpdateSiteAgenda fetches the current agenda from Google Calendar and
     // updates the cached agenda on the website with it.
     rpc UpdateSiteAgenda(Empty) returns (Empty) {};
-
-    // FinGetAccount returns the balance sheet for one account, including all
-    // transactions.
-    rpc FinGetAccount(FinGetAccountReq) returns (FinGetAccountResp) {};
-
-    // FinGetDebitors returns a list of users that are in depth. This is used
-    // for sending reminder messages, for example.
-    rpc FinGetDebitors(Empty) returns (FinDebitors) {};
-
-    // FinCheckNames checks whether the names (users, committees) in the website
-    // match up with what is in the financial administration. It returns a list
-    // of missing names on both sides.
-    rpc FinCheckNames(FinNamesList) returns (FinMissingNames) {};
-
-    // FinGetGnuCashObject returns an opaque blob that contains a
-    // msgpack-serialized buffer of the GnuCash object(s) with the given path.
-    rpc FinGetGnuCashObject(FinObjectRequest) returns (FinObject) {};
-
-    // FinGetYears returns a map where the keys are the currently tracked years
-    // and the values are the YAML files that contain the cached data for those
-    // years.
-    rpc FinGetYears(Empty) returns (FinYears) {};
-
-    // FinGetErrors returns a list of errors and other questionable things in
-    // the financial administration of the given year.
-    rpc FinGetErrors(FinYear) returns (FinErrors) {};
 }
 
 // GiedoSetPassword contains the arguments for Giedo.SetPassword.
@@ -77,18 +41,6 @@ message GiedoSetPassword {
     string user = 1;
     string oldpass = 2;
     string newpass = 3;
-}
-
-// FotoadminUserdirs contains the arguments for Giedo.FotoadminScanUserdirs.
-message FotoadminUserdirs {
-    repeated FotoadminUserdir userdirs = 1;
-}
-
-// A FotoadminUserdir is one photo album read from one of the user's directories
-// (user home directory, wolk, etc.).
-message FotoadminUserdir {
-    string path = 1;
-    string displayName = 2;
 }
 
 // LastSyncedResult contains the time when the last synchronization was

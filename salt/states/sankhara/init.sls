@@ -1,6 +1,5 @@
 include:
     - .ssh
-    - .nfs
     - .interinfra
     - .nginx
     - .mysqld
