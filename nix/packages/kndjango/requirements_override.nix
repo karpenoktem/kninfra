@@ -47,7 +47,7 @@ self: super: {
       sha256 = "0a013cgzc3bk2c4d40ccpbjm9pqcdhk8ks7knnghdl12d54g4xdm";
     };
   });
-  inherit (pkgs.python37Packages)
+  inherit (python.__old)
     pymongo six protobuf grpcio
     msgpack html2text unidecode pyx pillow
     markdown pyparsing ldap httplib2 oauth2client google_api_python_client

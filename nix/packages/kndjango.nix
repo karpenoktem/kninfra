@@ -7,10 +7,6 @@ stdenv.mkDerivation {
   src = stdenv.lib.cleanSource ../..;
   buildInputs = [ makeWrapper requirements.interpreter ];
   PYTHONPATH = python37.pkgs.makePythonPath (builtins.attrValues requirements.packages);
-  buildPhase = ''
-    rm kn/settings.py
-    ln -s /var/lib/kndjango/settings.py kn/settings.py
-  '';
   installPhase = ''
     mkdir $out $out/libexec
     cp --reflink=auto -R kn locale manage.py media protobufs utils bin $out

@@ -9,10 +9,9 @@ from pathlib import Path
 # You MUST change
 #
 
-CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
-SECRET_KEY = 'CHANGE ME'
-MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
-
+# CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
+# SECRET_KEY = 'CHANGE ME'
+# MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 #
 # You might want to set one of the following.
 # See defaultSettings.py for more settings.
@@ -22,14 +21,14 @@ MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 # PHOTOS_MYSQL_SECRET = ('localhost', 'fotos', 'CHANGE ME', 'fotos')
 # LDAP_PASS = 'CHANGE_ME'
 # DOMAINNAME = 'karpenoktem.nl'
-INFRA_HOME = os.environ['HOME']
+# INFRA_HOME = os.environ['HOME']
 INFRA_REPO = os.path.join(os.path.dirname(__file__), "../")
 
-GIEDO_SOCKET = "/run/infra/giedo"
+#GIEDO_SOCKET = "/run/infra/giedo"
 
 for varname, value in os.environ.items():
     if varname.startswith("KN_"):
-        globals[varname[3:]] = value
+        globals()[varname[3:]] = value
 
 # Do not remove the following
 #

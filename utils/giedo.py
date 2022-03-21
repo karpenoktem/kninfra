@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
-import logging
-import time
-from concurrent import futures
 
 import protobufs.messages.giedo_pb2_grpc as giedo_pb2_grpc
 

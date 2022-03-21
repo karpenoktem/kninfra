@@ -12,16 +12,14 @@ from django.conf import settings
 import ctypes, socket, os
 from select import select 
 
-from kn.utils.giedo.service import Giedo
-
 def systemd_get_sockets():
     no_fds = int(os.getenv("LISTEN_FDS", "0"))
-    return [socket.fromfd(fd, socket.AF_UNIX, socket.SOCK_STREAM) for fd in range(3, 3+no_fds)]
+    return [socket.socket(fileno=fd) for fd in range(3, 3+no_fds)]
 
 class TcpListenerWrapper(object):
     # https://github.com/grpc/grpc/blob/master/src/core/lib/iomgr/tcp_server_posix.cc#L575
     handleFun = ctypes.CFUNCTYPE(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_void_p) 
-    def __init__(self, fd):
+    def __init__(self):
         self.pointer = ctypes.pointer((ctypes.c_size_t)())
     def __int__(self):
         # used by grpc to make the pointer type
@@ -37,7 +35,7 @@ class Microservice(object):
             level=logging.DEBUG,
             format="%(relativeCreated)d %(levelname)-8s%(name)s:%(message)s"
         )
-        self.external_fd_listener = TcpListenerWrapper(None)
+        self.external_fd_listener = TcpListenerWrapper()
         self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=4), options={
             "external:systemd_socket": self.external_fd_listener
         }.items())
@@ -45,14 +43,20 @@ class Microservice(object):
     def start(self, fallback_socket):
         sockets = systemd_get_sockets()
         if len(sockets) == 0:
-            self.server.add_insecure_port('unix:' + fallback_socket)
+           logging.info("falling back to unix socket")
+           self.server.add_insecure_port('unix:' + fallback_socket)
+        else:
+           logging.info("listening on systemd managed socket")
         self.server.add_insecure_port('external:systemd_socket')
         self.server.start()
         for sock in sockets:
-            sock.listen()
+            sock.setblocking(False)
         sdnotify.SystemdNotifier().notify("READY=1")
         while True:
             readable, _, _ = select(sockets, [], [], 60*60*24)
             for sock in readable:
-                conn,_ = sock.accept()
-                self.external_fd_listener.handle(sock.fileno(), conn.fileno())
+                #fd,addr = sock._accept()
+                conn, addr = sock.accept()
+                conn.setblocking(False)
+                fd2 = os.dup(conn.fileno())
+                self.external_fd_listener.handle(sock.fileno(), fd2)

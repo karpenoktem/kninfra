@@ -5,6 +5,14 @@
 let
   cfg = config.kn.django;
   # generate a json file with configuration for uwsgi
+  kn_env = {
+    DJANGO_SETTINGS_MODULE = "kn.settings_env";
+    KN_GIEDO_SOCKET = config.kn.giedo.socket;
+    KN_SECRET_KEY = "CHANGE ME";
+    KN_CHUCK_NORRIS_HIS_SECRET = "CHANGE ME";
+    # GRPC_VERBOSITY="DEBUG";
+    # GRPC_TRACE="tcp";
+  };
   uswgi_conf = pkgs.writeText "uwsgi.json" (builtins.toJSON {
     uwsgi = {
       plugins = "python3";
@@ -13,9 +21,7 @@ let
       master = true;
       enable_threads = true;
       env = [
-        "DJANGO_SETTINGS_MODULE=kn.settings"
         "PYTHONPATH=${pkgs.kninfra.PYTHONPATH}"
-        "HOME=/var/lib/kndjango"
       ];
     };
   });
@@ -65,9 +71,9 @@ in {
       };
     };
     systemd.services.giedo = rec {
-      requires = [ "mongodb.service" ];
+      requires = [ "mongodb.service" "kn_initial_state.service" ];
       after = requires;
-      environment.HOME = "/var/lib/kndjango";
+      environment = kn_env;
       serviceConfig = {
         ExecStart = "${pkgs.kninfra}/utils/giedo.py";
         DynamicUser = true;
@@ -75,8 +81,6 @@ in {
         SupplementaryGroups = "infra";
         Type = "notify";
         NotifyAccess = "all";
-        StateDirectory = "kndjango";
-        # todo: initialize infra
       };
     };
     systemd.sockets.kndjango = {
@@ -89,24 +93,11 @@ in {
       };
     };
     systemd.services.kndjango = rec {
-      requires = [ "mongodb.service" ];
+      requires = [ "mongodb.service" "kn_initial_state.service" ];
       after = requires;
-      preStart = ''
-        # reset the settings file
-        # TODO: remove?
-        rm -f /var/lib/kndjango/settings.py
-        cp ${pkgs.kninfra}/kn/settings.example.py /var/lib/kndjango/settings.py
-        # initialize the DB if this has not happened before
-        # TODO: only in VM
-        if [ ! -f /var/lib/kndjango/database-initialized ]; then
-          ${pkgs.kninfra}/libexec/initializeDb.py
-          touch /var/lib/kndjango/database-initialized
-        fi
-      '';
+      environment = kn_env;
       serviceConfig = {
         ExecStart = "${uwsgi_pkg}/bin/uwsgi --json ${uswgi_conf}";
-        # have systemd create and manage /var/lib/kndjango
-        StateDirectory = "kndjango";
         # allocate a dynamic user for every run. maximum sandboxing
         DynamicUser = true;
         Restart = "on-failure";
@@ -116,6 +107,23 @@ in {
         Type = "notify";
         NotifyAccess = "all";
       };
+    };
+    systemd.services.kn_initial_state = rec {
+      requires = [ "mongodb.service" ];
+      after = requires;
+      serviceConfig = {
+        StateDirectory = "kndjango";
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        # initialize the DB if this has not happened before
+        # TODO: only in VM
+        if [ ! -f /var/lib/kndjango/database-initialized ]; then
+          ${pkgs.kninfra}/libexec/initializeDb.py
+          touch /var/lib/kndjango/database-initialized
+        fi
+      '';
     };
   };
 }
