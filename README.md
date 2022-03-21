@@ -90,9 +90,6 @@ Daarnaast zijn er de volgende mappen/bestanden:
    Anderen worden automatisch gedraaid, zoals
    `utils/cron/send-informacie-digest.py` dat de informacie informatie e-mails
    stuurt.
- * `salt`.  Bevat de beschrijvingen van hoe de servers geïnstalleerd kunnen
-   worden met behulp van [saltstack](https://saltstack.com).  Zie ook het
-   kopje *Vagrant* hier beneden.
  * `locale`.  Bevat vertalingen.
  * `kn/urls.py` beschrijft welke *app* achter welke URL zit.
 
@@ -141,21 +138,3 @@ aangebracht.  Dit wordt gedaan door drie verschillende *daemons*
  * **hans** draait als de `list`-gebruiker op *sankhara* en laat giedo
    de mailman e-maillijsten inkijken en aanpassen.  Code: `kn/utils/hans`.
    
-Vagrant
--------
-
-Met [vagrant](https://www.vagrantup.com) is het systeem op je eigen
-computer te testen:
-
- 1. Installeer [vagrant](https://www.vagrantup.com).
- 2. Maak een kopie van deze *repository* met [git](https://git-scm.com)
-
-        $ git clone https://github.com/karpenoktem/kninfra
-
- 3. Start vagrant:
-
-        $ cd pad/naar/kninfra
-        $ vagrant up
-           (...)
-        $ vagrant ssh
-
