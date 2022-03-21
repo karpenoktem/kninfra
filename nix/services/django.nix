@@ -8,6 +8,7 @@ let
   kn_env = {
     DJANGO_SETTINGS_MODULE = "kn.settings_env";
     KN_GIEDO_SOCKET = config.kn.giedo.socket;
+    KN_HANS_SOCKET = config.kn.hans.socket;
     KN_SECRET_KEY = "CHANGE ME";
     KN_CHUCK_NORRIS_HIS_SECRET = "CHANGE ME";
     # GRPC_VERBOSITY="DEBUG";
@@ -42,6 +43,14 @@ in {
     socket = mkOption {
       default = "/run/infra/giedo";
       description = "The socket path to use for Giedo";
+      type = types.path;
+    };
+  };
+  options.kn.hans = with lib; {
+    enable = mkEnableOption "KN Hans";
+    socket = mkOption {
+      default = "/run/infra/hans";
+      description = "The socket path to use for Hans";
       type = types.path;
     };
   };
@@ -91,6 +100,29 @@ in {
         SocketGroup = "nginx";
         SocketUser = "nginx";
         SocketMode = "0660";
+      };
+    };
+    systemd.sockets.hans = {
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [ config.kn.hans.socket ];
+      socketConfig = {
+        SocketGroup = "infra";
+        SocketMode = "0660";
+      };
+    };
+    systemd.services.hans = rec {
+      requires = [ "kn_initial_state.service" ]; # todo: mailman
+      after = requires;
+      environment = kn_env // {
+        KN_MAILMAN_PATH = pkgs.mailman2;
+      };
+      serviceConfig = {
+        ExecStart = "${pkgs.kninfra}/bin/hans";
+        User = config.services.mailman2.user;
+        Restart = "on-failure";
+        Type = "notify";
+        SupplementaryGroups = "infra"; # todo: reason about security
+        NotifyAccess = "all";
       };
     };
     environment.systemPackages = [(

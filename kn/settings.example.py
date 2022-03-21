@@ -1,4 +1,5 @@
 # Example of settings.py.
+# this file should retain python2 compatibility until Hans is ported to python3
 
 import os
 

@@ -63,11 +63,12 @@
     # enable/disable various KN services
     kn = {
       wiki.enable = true;
-      mailman.enable = false; # TODO
+      #mailman.enable = true; # TODO
       django.enable = true;
     };
     # allow remote http access
     networking.firewall.allowedTCPPorts = [ 80 443 ];
+    services.mailman2.enable = true;
   };
   # merged-in config for virtualized system
   virt = {

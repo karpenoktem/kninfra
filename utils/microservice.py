@@ -1,4 +1,5 @@
 # vim: et:sta:bs=2:sw=4:
+# this file should retain python2 compatibility until Hans is ported to python3
 import _import  # noqa: F401
 import logging
 import time
@@ -14,7 +15,10 @@ from select import select
 
 def systemd_get_sockets():
     no_fds = int(os.getenv("LISTEN_FDS", "0"))
-    return [socket.socket(fileno=fd) for fd in range(3, 3+no_fds)]
+    try:
+        return [socket.socket(fileno=fd) for fd in range(3, 3+no_fds)]
+    except TypeError: # python2 compat
+        return [socket.fromfd(fd, socket.AF_UNIX, socket.SOCK_STREAM) for fd in range(3, 3+no_fds)]
 
 class TcpListenerWrapper(object):
     # https://github.com/grpc/grpc/blob/master/src/core/lib/iomgr/tcp_server_posix.cc#L575
