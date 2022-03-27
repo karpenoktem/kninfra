@@ -1,7 +1,0 @@
-PYTHONPATH="/home/infra/py:$PYTHONPATH"
-
-{% if pillar['python3'] %}
-PYTHON="python3"
-{% else %}
-PYTHON="python"
-{% endif %}
