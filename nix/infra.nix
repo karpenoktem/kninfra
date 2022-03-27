@@ -39,7 +39,10 @@
       logcheck = {
         enable = true;
         extraRulesDirs = [
-          (builtins.fetchGit https://github.com/bwesterb/x-logcheck)
+          (builtins.fetchGit {
+            url = https://github.com/bwesterb/x-logcheck;
+            rev = "3180507e96b317984e22e9ca01771f106190b0ef";
+          })
         ];
       };
       postfix.enable = true;

@@ -23,6 +23,12 @@ self: super: {
       vipassana
       virt
       "${super.path}/nixos/modules/virtualisation/qemu-vm.nix"
+      ({...}: {
+        config.nixpkgs = {
+          pkgs = self;
+          inherit (self) system;
+        };
+      })
     ];
   }).config.system.build.vm.overrideAttrs (old:
     let

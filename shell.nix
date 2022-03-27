@@ -1,4 +1,10 @@
-let pkgs = import ./nix; in
-(import ./default.nix).overrideAttrs (o: {
-  buildInputs = o.buildInputs ++ [pkgs.poetry pkgs.gettext];
-})
+# flake-compat boilerplate
+(import (
+  let
+    lock = builtins.fromJSON (builtins.readFile ./flake.lock);
+  in fetchTarball {
+    url = "https://github.com/edolstra/flake-compat/archive/${lock.nodes.flake-compat.locked.rev}.tar.gz";
+    sha256 = lock.nodes.flake-compat.locked.narHash; }
+) {
+  src =  ./.;
+}).shellNix
