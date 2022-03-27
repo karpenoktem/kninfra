@@ -141,8 +141,8 @@ aangebracht.  Dit wordt gedaan door drie verschillende *daemons*
  * **hans** draait als de `list`-gebruiker op *sankhara* en laat giedo
    de mailman e-maillijsten inkijken en aanpassen.  Code: `kn/utils/hans`.
    
-Development
------------
+Development VM
+--------------
 
 Met [nix](https://nixos.org/nix/) is het systeem op je eigen computer te testen:
 
@@ -154,12 +154,26 @@ Met [nix](https://nixos.org/nix/) is het systeem op je eigen computer te testen:
  3. Start een VM
 
         $ cd pad/naar/kninfra
-        $ nix-build -A vm
+        $ nix build .#vm
            (...)
-        $ ./result/bin/run-vipassana.karpenoktem.nl-vm
+        $ ./result/bin/run-vipassana-vm
            (andere terminal)
         $ ./result/bin/ssh
  4. Verander dingen
 
         $ nix-build -A vm && ./result/bin/switch-running-vm
+
+Development Server
+------------------
+
+Een VM is handig om de hele website, inclusief daemons te testen. Vaak wil je alleen
+maar iets aan de website veranderen.
+
+ 1. Volg stap 1 en 2 hierboven
+ 2.
+ 
+        $ nix develop
+        $ mongod --db-path ../kn-db &
+        $ ./bin/reset-database
+        $ ./bin/run-dev-server
 
