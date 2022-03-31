@@ -29,14 +29,16 @@ in
       };
     };
     systemd.services.daan = rec {
-      requires = [ "initialize_ldap.service" ];
+      requires = [ "initialize_ldap.service" "postfix.service" ];
       after = requires ++ [ "mediawiki-init.service" ];
+      path = [ pkgs.postfix ];
       description = "KN Daan";
       environment = config.kn.shared_env // {
         KN_LDAP_USER = cfg.ldap.user;
         KN_LDAP_PASS = cfg.ldap.pass;
         KN_WIKI_MYSQL_SECRET = "('/run/mysqld/mysqld.sock', 'root', '', 'mediawiki')";
       };
+      preStart = "mkdir -p /var/lib/postfix/conf/virtual";
       serviceConfig = {
         ExecStart = "${pkgs.kninfra}/utils/daan.py";
         Restart = "on-failure";

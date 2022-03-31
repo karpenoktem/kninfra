@@ -17,13 +17,47 @@ in {
       home = "/var/lib/mailman";
       isSystemUser = true;
     };
+    users.groups.mailman = {};
     systemd.tmpfiles.rules = lib.mkIf cfg.enable [
-      "d /var/lib/mailman 700 ${cfg.user} nogroup -"
+      "d /var/lib/mailman 02775 ${cfg.user} mailman -"
+      "d /var/lib/mailman/lists 02775 ${cfg.user} mailman -"
+      "d /var/lib/mailman/data 02775 ${cfg.user} mailman -"
+      "d /var/lib/mailman/qfiles 02770 ${cfg.user} mailman -"
+      "d /var/lib/mailman/archives 02775 ${cfg.user} mailman -"
+      "d /var/lib/mailman/archives/public 02775 ${cfg.user} mailman -"
+      "d /var/lib/mailman/archives/private 02770 ${cfg.user} mailman -"
+      "d /var/lib/mailman/logs 02775 ${cfg.user} mailman -"
+      "d /var/lib/mailman/locks 02775 ${cfg.user} mailman -"
+      "d /var/lib/mailman/spam 02775 ${cfg.user} mailman -"
     ];
 
     # systemd.services.mailman = {
       
     # };
+    environment.etc."mailman_cfg.py".text = ''
+      from Defaults import *
+
+      # TODO https
+      DEFAULT_URL_PATTERN = 'https://%s/mailman/'
+      IMAGE_LOGOS = '/mailman-icons/'
+
+      MAILMAN_USER = "list"
+      MAILMAN_GROUP = "mailman"
+      
+      DEFAULT_EMAIL_HOST = 'lists.${config.networking.domain}'
+      DEFAULT_URL_HOST = '${config.networking.domain}'
+      
+      add_virtualhost(DEFAULT_URL_HOST, DEFAULT_EMAIL_HOST)
+      
+      DEFAULT_SERVER_LANGUAGE = 'en'
+      USE_ENVELOPE_SENDER = 0
+      DEFAULT_SEND_REMINDERS = 0
+      MTA = 'Postfix'
+      POSTFIX_STYLE_VIRTUAL_DOMAINS = ['lists.${config.networking.domain}']
+      VIRTUAL_HOST_OVERVIEW = Off
+      DEB_LISTMASTER = 'wortel@${config.networking.domain}'
+      DEFAULT_LIST_ADVERTISED = False
+    '';
     services.nginx.enable = true;
     services.nginx.virtualHosts.kn = {
       locations."/mailman-icons/".alias =

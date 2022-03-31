@@ -131,7 +131,7 @@ in
       serviceConfig = {
         # todo: string escape, security
         ExecStart = with globals.passwords.ldap;
-          "${pkgs.kninfra}/libexec/initialize-ldap.py karpenoktem.nl ${admin} ${infra} ${daan} ${freeradius} ${saslauthd}";
+          "${pkgs.kninfra}/libexec/initialize-ldap.py ${config.networking.domain} ${admin} ${infra} ${daan} ${freeradius} ${saslauthd}";
         Type = "oneshot";
         User = "root";
       };

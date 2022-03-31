@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
   ];
 
   installTargets = "doinstall"; # Leave out the 'update' target that's implied by 'install'.
+  postInstall = ''
+    rm -f $out/Mailman/mm_cfg.py $out/Mailman/mm_cfg.pyc
+    ln -s /etc/mailman_cfg.py $out/Mailman/mm_cfg.py
+  '';
 
   makeFlags = [ "DIRSETGID=:" ];
 

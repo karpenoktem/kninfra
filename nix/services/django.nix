@@ -119,6 +119,7 @@ in {
       after = requires;
       environment = kn_env // {
         KN_MAILMAN_PATH = pkgs.mailman2;
+        KN_MAILMAN_DEFAULT_PASSWORD = "asdf";
       };
       serviceConfig = {
         ExecStart = "${pkgs.kninfra}/bin/hans";
