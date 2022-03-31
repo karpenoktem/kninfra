@@ -79,6 +79,8 @@ in
       wiki.enable = true;
       #mailman.enable = true; # TODO
       django.enable = true;
+      daan.enable = true;
+      daan.ldap.pass = globals.passwords.ldap.daan;
     };
     # allow remote http, ssh access
     networking.firewall.allowedTCPPorts = lib.mkForce [ 22 80 443 ];

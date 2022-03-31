@@ -5,15 +5,7 @@
 let
   cfg = config.kn.django;
   # generate a json file with configuration for uwsgi
-  kn_env = {
-    DJANGO_SETTINGS_MODULE = "kn.settings_env";
-    KN_GIEDO_SOCKET = config.kn.giedo.socket;
-    KN_HANS_SOCKET = config.kn.hans.socket;
-    KN_SECRET_KEY = "CHANGE ME";
-    KN_CHUCK_NORRIS_HIS_SECRET = "CHANGE ME";
-    # GRPC_VERBOSITY="DEBUG";
-    # GRPC_TRACE="tcp";
-  };
+  kn_env = config.kn.shared_env;
   uswgi_conf = pkgs.writeText "uwsgi.json" (builtins.toJSON {
     uwsgi = {
       plugins = "python3";
@@ -36,6 +28,18 @@ in {
       default = "/run/infra/S-django";
       description = "The socket path to use for UWSGI";
       type = types.path;
+    };
+  };
+  options.kn.shared_env = lib.mkOption {
+    default = {
+      DJANGO_SETTINGS_MODULE = "kn.settings_env";
+      KN_GIEDO_SOCKET = config.kn.giedo.socket;
+      KN_HANS_SOCKET = config.kn.hans.socket;
+      KN_DAAN_SOCKET = config.kn.daan.socket;
+      KN_SECRET_KEY = "CHANGE ME";
+      KN_CHUCK_NORRIS_HIS_SECRET = "CHANGE ME";
+      # GRPC_VERBOSITY="DEBUG";
+      # GRPC_TRACE="tcp";
     };
   };
   options.kn.giedo = with lib; {
@@ -130,6 +134,8 @@ in {
         makeWrapper ${pkgs.kninfra}/utils/scan-fotos.py $out/bin/kn-scan-fotos \
         ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') kn_env)}
         makeWrapper ${pkgs.kninfra}/bin/shell $out/bin/knshell \
+        ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') kn_env)}
+        makeWrapper ${pkgs.kninfra}/utils/giedo-sync.py $out/bin/kn-giedo-sync \
         ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') kn_env)}
       ''
     )];
