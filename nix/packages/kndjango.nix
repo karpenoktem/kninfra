@@ -27,19 +27,35 @@ let
       });
     });
   };
+  # inverse of sourceByRegex, https://github.com/NixOS/nixpkgs/blob/master/lib/sources.nix#L138
+  sourceByNotRegex = src: regexes: let
+    isFiltered = src ? _isLibCleanSourceWith;
+    origSrc = if isFiltered then src.origSrc else src;
+  in lib.cleanSourceWith {
+    filter = (path: type:
+      let relPath = lib.removePrefix (toString origSrc + "/") (toString path);
+      in !(lib.any (re: builtins.match re relPath != null) regexes));
+    inherit src;
+  };
 in
 stdenv.mkDerivation {
   name = "kninfra";
-  src = lib.cleanSourceWith {
-    src = ../..;
-    filter = path: type: !(lib.hasSuffix "qcow2" path);
-  };
+  src = sourceByNotRegex (lib.cleanSource ../..) [
+    "\.qcow2$" # vm drive, never include this
+    "^kn/static/media$" # share this between drvs, to optimize CI size
+    # avoid rebuilds:
+    "\.nix$"
+    "\.md$"
+    "^nix$"
+  ];
+  static_media = ../../kn/static/media;
   buildInputs = [ makeWrapper requirements ];
   PYTHONPATH = "${requirements}/${requirements.sitePackages}";
   buildPhase = ''
     python -m py_compile $(find . -iname '*.py')
   '';
   installPhase = ''
+    ln -s $static_media kn/static/media
     mkdir $out $out/libexec
     cp --reflink=auto -R kn locale manage.py media protobufs utils bin $out
     cp --reflink=auto -R salt/states/sankhara/initial{-db.yaml,izeDb.py} $out/libexec
