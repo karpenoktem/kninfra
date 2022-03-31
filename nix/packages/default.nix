@@ -33,10 +33,17 @@ self: super: {
   }).config.system.build.vm.overrideAttrs (old:
     let
       # add switch-running-vm, ssh scripts
+      # todo: host key checking for sanity
       ssh = self.writeShellScript "ssh" ''
         set -e
-        chmod 0600 ${toString ./..}/vm-ssh.key
-        ssh -o StrictHostKeyChecking=no -i ${toString ./..}/vm-ssh.key root@localhost -p 2222 "$@"
+        key="$(mktemp)-vm-ssh.key"
+        function finish {
+          rm -f $key
+        }
+        cp ${toString ./..}/vm-ssh.key "$key"
+        trap finish EXIT
+        chmod 0600 $key
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "$key" root@localhost -p 2222 "$@"
       '';
       switch-running-vm = self.writeShellScript "switch-running-vm" ''
         set -e
