@@ -59,6 +59,9 @@ in {
     };
   };
   config = lib.mkIf cfg.enable {
+    users.users.giedo = {
+      isSystemUser = true;
+    };
     services = {
       # TODO: limit access to mongodb
       mongodb.enable = true;
@@ -86,11 +89,20 @@ in {
     systemd.services.giedo = rec {
       requires = [ "mongodb.service" "kn_initial_state.service" ];
       after = requires;
-      environment = kn_env;
+      environment = kn_env // {
+        KN_LDAP_USER = "cn=infra,dc=karpenoktem,dc=nl"; # TODO suffix
+        KN_LDAP_PASS = "asdf";
+      };
       path = [ "${lib.getBin pkgs.imagemagick}/bin" ];
       serviceConfig = {
+        User = "giedo";
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        ProtectDevices = true;
+        # todo: more sandboxing
+        ReadWritePaths = ["/run/infra"];
         ExecStart = "${pkgs.kninfra}/utils/giedo.py";
-        DynamicUser = true;
         Restart = "on-failure";
         SupplementaryGroups = "infra";
         Type = "notify";

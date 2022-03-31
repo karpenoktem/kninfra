@@ -12,7 +12,7 @@ in
     };
     ldap.user = mkOption {
       type = types.str;
-      default = "daan";
+      default = "cn=daan,dc=karpenoktem,dc=nl"; # todo suffix
     };
     ldap.pass = mkOption {
       type = types.str;
@@ -36,7 +36,6 @@ in
       environment = config.kn.shared_env // {
         KN_LDAP_USER = cfg.ldap.user;
         KN_LDAP_PASS = cfg.ldap.pass;
-        KN_WIKI_MYSQL_SECRET = "('/run/mysqld/mysqld.sock', 'root', '', 'mediawiki')";
       };
       preStart = "mkdir -p /var/lib/postfix/conf/virtual";
       serviceConfig = {

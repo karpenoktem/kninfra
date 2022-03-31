@@ -31,6 +31,14 @@ in {
         '';
       };
     };
+    services.mysql.ensureUsers = [
+      {
+        name = "giedo";
+        ensurePermissions = {
+          "mediawiki.*" = "SELECT";
+        };
+      }
+    ];
     services.mediawiki = {
       enable = true;
       name = "KnWiki";

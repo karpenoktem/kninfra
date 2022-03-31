@@ -13,17 +13,23 @@ import kn.leden.entities as Es
 def generate_wiki_changes():
     creds = settings.WIKI_MYSQL_SECRET
     if not creds:
-        logging.warning('wiki: no credentials available, skipping')
-        return None
+        dc = pymysql.connect(
+            unix_socket='/run/mysqld/mysqld.sock',
+            database='mediawiki',
+            charset='utf8'
+        )
+        # logging.warning('wiki: no credentials available, skipping')
+        # return None
+    else:
+        dc = pymysql.connect(
+            host=creds[0],
+            user=creds[1],
+            password=creds[2],
+            db=creds[3],
+            charset='utf8'
+        )
     users = dict()
     id2name = dict()
-    dc = pymysql.connect(
-        host=creds[0],
-        user=creds[1],
-        password=creds[2],
-        db=creds[3],
-        charset='utf8'
-    )
     try:
         with dc.cursor() as c:
             c.execute("SELECT user_id, user_name FROM user")

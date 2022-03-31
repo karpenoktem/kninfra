@@ -7,13 +7,22 @@ def apply_wiki_changes(changes):
     if not changes.add and not changes.remove and not changes.activate and not changes.deactivate:
         return
     creds = settings.WIKI_MYSQL_SECRET
-    dc = pymysql.connect(
-        host=creds[0],
-        user=creds[1],
-        password=creds[2],
-        db=creds[3],
-        charset='utf8'
-    )
+    if not creds:
+        dc = pymysql.connect(
+            unix_socket='/run/mysqld/mysqld.sock',
+            database='mediawiki',
+            charset='utf8'
+        )
+        # logging.warning('wiki: no credentials available, skipping')
+        # return None
+    else:
+        dc = pymysql.connect(
+            host=creds[0],
+            user=creds[1],
+            password=creds[2],
+            db=creds[3],
+            charset='utf8'
+        )
     try:
         for wikiUser in changes.add:
             with dc.cursor() as c:
