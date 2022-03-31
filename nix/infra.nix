@@ -1,6 +1,17 @@
+let
+  globals.ldap_suffix = "dc=karpenoktem,dc=nl";
+  # TODO: ldap security
+  globals.passwords.ldap = {
+    admin = "asdf";
+    infra = "asdf";
+    daan = "asdf";
+    freeradius = "asdf";
+    saslauthd = "asdf";
+  };
+in
 {
   # config for the server (both real and VM)
-  vipassana = { pkgs, config, ... }: {
+  vipassana = { pkgs, lib, config, ... }: {
     # import ./services/default.nix, which imports the other files there
     # this way, we have access to the kn.django module
     imports = [ ./services ];
@@ -69,9 +80,62 @@
       #mailman.enable = true; # TODO
       django.enable = true;
     };
-    # allow remote http access
-    networking.firewall.allowedTCPPorts = [ 80 443 ];
+    # allow remote http, ssh access
+    networking.firewall.allowedTCPPorts = lib.mkForce [ 22 80 443 ];
     services.mailman2.enable = true;
+    services.openldap = {
+      enable = true;
+      urlList = [ "ldapi:///" "ldap://localhost" ];
+      settings.children = {
+        "olcDatabase={0}config" = {
+          attrs = {
+            objectClass = "olcDatabaseConfig";
+            olcDatabase = "{0}config";
+            olcAccess = [ "{0}to * by dn.exact=uidNumber=0+gidNumber=0,cn=peercred,cn=external,cn=auth manage stop by * none stop" ];
+          };
+        };
+        "olcDatabase={1}mdb".attrs = {
+          objectClass = [ "olcdatabaseconfig" "olcmdbconfig" ];
+          olcDatabase = "{1}mdb";
+          olcDbDirectory = "/var/db/openldap";
+          olcSuffix = globals.ldap_suffix;
+        };
+        "cn=schema".includes = (
+          map (schema: "${pkgs.openldap}/etc/schema/${schema}.ldif") [ "core" "cosine" "inetorgperson" "nis" ]
+        );
+        # todo: indices (objectClass, uid)
+      };
+    };
+    services.saslauthd = {
+      enable = true;
+      # todo: start after slapd?
+      package = pkgs.cyrus_sasl.override { enableLdap = true; };
+      mechanism = "ldap";
+      # todo: ldapi peer auth, eliminates saslauthd password
+      config = ''
+        ldap_servers: ldap://localhost
+        ldap_search_base: ou=users,${globals.ldap_suffix}
+        ldap_filter: (uid=%u)
+        ldap_bind_dn: cn=saslauthd,${globals.ldap_suffix}
+        ldap_bind_pw: ${globals.passwords.ldap.saslauthd}
+      '';
+    };
+    systemd.services.initialize_ldap = {
+      wantedBy = [ "multi-user.target" ];
+      after = [ "openldap.service" ];
+      requires = [ "openldap.service" ];
+      description = "Set LDAP passwords";
+      path = [ pkgs.openldap ];
+      serviceConfig = {
+        # todo: string escape, security
+        ExecStart = with globals.passwords.ldap;
+          "${pkgs.kninfra}/libexec/initialize-ldap.py karpenoktem.nl ${admin} ${infra} ${daan} ${freeradius} ${saslauthd}";
+        Type = "oneshot";
+        User = "root";
+      };
+      # only run when ldap-initialized does not exist
+      unitConfig.ConditionPathExists = "!/root/.ldap-initialized";
+    };
   };
   # merged-in config for virtualized system
   virt = {

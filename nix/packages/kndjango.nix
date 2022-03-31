@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     ln -s $static_media kn/static/media
     mkdir $out $out/libexec
     cp --reflink=auto -R kn locale manage.py media protobufs utils bin $out
-    cp --reflink=auto -R salt/states/sankhara/initial{-db.yaml,izeDb.py} $out/libexec
+    cp --reflink=auto -R salt/states/sankhara/initial{-db.yaml,ize{Db,-ldap}.py} $out/libexec
     makeWrapper $(type -p ipython) $out/bin/shell --add-flags "-i $out/utils/shell.py"
     makeWrapper ${python2-hans}/bin/python $out/bin/hans --add-flags "$out/utils/hans.py"
     chmod +x $out/libexec/initializeDb.py
