@@ -22,10 +22,12 @@ def generate_ldap_changes():
         in_ldap = {}
         for dn, entry in ld.search_s(settings.LDAP_BASE, ldap.SCOPE_ONELEVEL):
             unaccounted_for.add(entry['uid'][0])
-            in_ldap[(entry['uid'][0])] = (entry['uid'][0],
-                                          entry['mail'][0],
-                                          entry['sn'][0],
-                                          entry['cn'][0])
+            in_ldap[(entry['uid'][0])] = daan_pb2.LDAPUser(
+                uid=entry['uid'][0],
+                email=entry['mail'][0],
+                lastName=entry['sn'][0],
+                humanName=entry['cn'][0]
+            )
         for u in users:
             uid = str(u.name).encode('utf-8')
             should_have = daan_pb2.LDAPUser(
