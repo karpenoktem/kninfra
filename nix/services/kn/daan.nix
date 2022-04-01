@@ -33,7 +33,7 @@ in
       after = requires ++ [ "mediawiki-init.service" ];
       path = [ pkgs.postfix ];
       description = "KN Daan";
-      environment = config.kn.shared_env // {
+      environment = config.kn.shared.env // {
         KN_LDAP_USER = cfg.ldap.user;
         KN_LDAP_PASS = cfg.ldap.pass;
       };

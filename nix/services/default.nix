@@ -1,9 +1,12 @@
 {
   imports = [
-    ./daan.nix
-    ./django.nix
-    ./mailman.nix
-    ./wiki.nix
-    ./ldap.nix
+    ./kn/daan.nix
+    ./kn/django.nix
+    ./kn/giedo.nix
+    ./kn/hans.nix
+    ./kn/ldap.nix
+    ./kn/shared.nix
+    ./kn/wiki.nix
+    ./mailman2.nix
   ];
 }

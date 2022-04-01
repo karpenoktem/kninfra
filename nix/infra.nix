@@ -46,7 +46,7 @@ in
     '';
     services = {
       logcheck = {
-        enable = true;
+        enable = false;
         extraRulesDirs = [
           (builtins.fetchGit {
             url = https://github.com/bwesterb/x-logcheck;
@@ -74,15 +74,23 @@ in
     networking.domain = "karpenoktem.nl";
     # enable/disable various KN services
     kn = {
+      shared.enable = true;
+      shared.initialDB = true;
       wiki.enable = true;
       #mailman.enable = true; # TODO
       django.enable = true;
       daan.enable = true;
       daan.ldap.pass = globals.passwords.ldap.daan;
+      hans.enable = true;
       ldap = {
         enable = true;
         suffix = "dc=karpenoktem,dc=nl";
         domain = "karpenoktem.nl";
+      };
+      giedo = {
+        enable = true;
+        ldap.user = "cn=infra,dc=karpenoktem,dc=nl";
+        ldap.pass = globals.passwords.ldap.giedo;
       };
     };
     # allow remote http, ssh access
