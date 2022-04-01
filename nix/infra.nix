@@ -2,12 +2,11 @@ let
   globals.ldap_suffix = "dc=karpenoktem,dc=nl";
   # TODO: ldap security
   globals.passwords.ldap = {
-    admin = "asdf";
     infra = "asdf";
     daan = "asdf";
-    freeradius = "asdf";
     saslauthd = "asdf";
   };
+
 in
 {
   # config for the server (both real and VM)
@@ -100,12 +99,79 @@ in
           objectClass = [ "olcdatabaseconfig" "olcmdbconfig" ];
           olcDatabase = "{1}mdb";
           olcDbDirectory = "/var/db/openldap";
+          olcRootDN = "cn=admin,${globals.ldap_suffix}";
           olcSuffix = globals.ldap_suffix;
+          # run slapindex when changing this
+          olcDbIndex = [
+            "objectClass eq"
+            "uid pres,eq"
+          ];
+          olcAccess = let
+            suffix = globals.ldap_suffix;
+            local = ''"gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth"'';
+          in [
+            ''
+              to dn.subtree="ou=users,${suffix}"
+               attrs=userPassword,shadowLastChange
+               by dn="cn=infra,${suffix}" read
+               by dn="cn=daan,${suffix}" write
+               by dn.base=${local} write
+               by anonymous auth
+               by * none
+            ''
+            ''
+              to attrs=sambaNTPassword
+               by dn="cn=daan,${suffix}" write
+               by dn.base=${local} write
+               by self write
+               by * none
+            ''
+            ''
+              to attrs=userPassword,shadowLastChange
+               by self write
+               by dn.base=${local} write
+               by dn="cn=saslauthd,${suffix}" auth
+               by dn="cn=daan,${suffix}" write
+               by anonymous auth
+               by * none
+            ''
+            ''
+              to dn.subtree="ou=users,${suffix}"
+               by dn="cn=saslauthd,${suffix}" read
+               by dn="cn=infra,${suffix}" read
+               by dn="cn=daan,${suffix}" write
+               by dn.base=${local} write
+               by * none
+            ''
+            ''
+              to *
+               by dn.base=${local} write
+               by * none
+            ''
+          ];
         };
         "cn=schema".includes = (
           map (schema: "${pkgs.openldap}/etc/schema/${schema}.ldif") [ "core" "cosine" "inetorgperson" "nis" ]
         );
-        # todo: indices (objectClass, uid)
+        "cn=schema".children."cn=kn".attrs = {
+          objectClass = "olcSchemaConfig";
+          cn = "kn";
+          olcAttributeTypes = [
+            ''
+              ( 1.3.6.1.4.1.7165.2.1.25 NAME
+               'sambaNTPassword' DESC 'MD4 hash of the unicode password'
+               EQUALITY caseIgnoreIA5Match SYNTAX
+               1.3.6.1.4.1.1466.115.121.1.26{32} SINGLE-VALUE )
+            ''
+          ];
+          olcObjectClasses = [
+            ''
+              ( 1.3.6.1.4.1.7165.2.2.6 NAME
+               'knAccount' DESC 'KN account' SUP top
+               AUXILIARY MUST ( uid ) MAY ( sambaNTPassword ) )
+            ''
+          ];
+        };
       };
     };
     services.saslauthd = {
@@ -131,7 +197,7 @@ in
       serviceConfig = {
         # todo: string escape, security
         ExecStart = with globals.passwords.ldap;
-          "${pkgs.kninfra}/libexec/initialize-ldap.py ${config.networking.domain} ${admin} ${infra} ${daan} ${freeradius} ${saslauthd}";
+          "${pkgs.kninfra}/libexec/initialize-ldap.py ${config.networking.domain} ${infra} ${daan} ${saslauthd}";
         Type = "oneshot";
         User = "root";
       };
