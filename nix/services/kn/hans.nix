@@ -23,9 +23,7 @@ in {
         SocketMode = "0660";
       };
     };
-    systemd.services.hans = rec {
-      requires = [ "kn_initial_state.service" ];
-      after = requires;
+    systemd.services.hans = {
       environment = kn_env // {
         KN_MAILMAN_PATH = pkgs.mailman2;
         KN_MAILMAN_DEFAULT_PASSWORD = "asdf";

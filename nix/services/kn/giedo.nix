@@ -37,7 +37,7 @@ in {
       };
     };
     systemd.services.giedo = rec {
-      requires = [ "mongodb.service" "kn_initial_state.service" ];
+      requires = [ "mongodb.service" ];
       after = requires;
       environment = kn_env // cfg.env // {
         KN_LDAP_USER = "cn=infra,dc=karpenoktem,dc=nl"; # TODO suffix

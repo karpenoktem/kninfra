@@ -10,7 +10,7 @@ in {
   options.kn.shared = with lib; {
     enable = mkEnableOption "KN DB";
     initialDB = mkOption {
-      type = types.boolean;
+      type = types.bool;
     };
     env = mkOption {
       type = types.attrsOf types.str;
@@ -25,7 +25,6 @@ in {
     };
   };
   config = lib.mkIf cfg.enable {
-    kn.shared.initialDB = true; # TODO
     kn.shared.env = {
       DJANGO_SETTINGS_MODULE = "kn.settings_env";
       KN_GIEDO_SOCKET = config.kn.giedo.socket;
@@ -48,22 +47,31 @@ in {
     systemd.tmpfiles.rules = [
       "d /var/fotos 0550 root infra -"
     ];
-    systemd.services.kn_initial_state = rec {
-      requires = [ "mongodb.service" ];
-      after = requires;
-      serviceConfig = {
-        StateDirectory = "kndjango";
-        Type = "oneshot";
-        RemainAfterExit = true;
+    systemd.services = lib.mkIf cfg.initialDB {
+      giedo = rec {
+        requires = [ "kn_initial_state.service" ];
+        after = requires;
       };
-      script = ''
-        # initialize the DB if this has not happened before
-        # TODO: only in VM
-        if [ ! -f /var/lib/kndjango/database-initialized ]; then
-          ${pkgs.kninfra}/libexec/initializeDb.py
-          touch /var/lib/kndjango/database-initialized
-        fi
-      '';
+      django = rec {
+        requires = [ "kn_initial_state.service" ];
+        after = requires;
+      };
+      kn_initial_state = rec {
+        requires = [ "mongodb.service" ];
+        after = requires;
+        serviceConfig = {
+          StateDirectory = "kndjango";
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script = ''
+          # initialize the DB if this has not happened before
+          if [ ! -f /var/lib/kndjango/database-initialized ]; then
+            ${pkgs.kninfra}/libexec/initializeDb.py
+            touch /var/lib/kndjango/database-initialized
+          fi
+        '';
+      };
     };
   };
 }

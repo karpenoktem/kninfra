@@ -117,6 +117,7 @@ in
     users.users.root.openssh.authorizedKeys.keyFiles = [
       ./vm-ssh.key.pub
     ];
+    kn.shared.initialDB = true;
     services.getty = {
       autologinUser = "root";
       helpLine = ''
@@ -137,7 +138,6 @@ in
       # set up serial console
       graphics = false;
       qemu = {
-        # todo: higher 9p msize
         options = [ "-serial mon:stdio" ];
         # forward port 22 to 2222 and port 80 to 8080
         # based on the default in nixpkgs

@@ -52,7 +52,7 @@ in {
       };
     };
     systemd.services.kndjango = rec {
-      requires = [ "mongodb.service" "kn_initial_state.service" ];
+      requires = [ "mongodb.service" ];
       after = requires;
       environment = kn_env;
       # todo: should this be here?
