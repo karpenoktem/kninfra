@@ -24,7 +24,6 @@ from kn.utils.giedo.siteagenda import update_site_agenda
 from kn.utils.giedo.unix import generate_unix_map
 from kn.utils.giedo.wiki import generate_wiki_changes
 from kn.utils.giedo.wolk import generate_wolk_changes
-from kn.utils.whim import WhimClient
 
 
 class Giedo(giedo_pb2_grpc.GiedoServicer):
