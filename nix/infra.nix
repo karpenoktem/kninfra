@@ -5,9 +5,10 @@ let
     daan = "asdf";
     saslauthd = "asdf";
   };
-
-in
-{
+  toLdap = lib: domain:
+    with lib;
+    concatMapStringsSep "," (x: "dc=${x}") (splitString "." domain);
+in rec {
   # config for the server (both real and VM)
   vipassana = { pkgs, lib, config, ... }: {
     # import ./services/default.nix, which imports the other files there
@@ -16,12 +17,21 @@ in
     # define a package overlay, see ./packages/default.nix
     nixpkgs.overlays = [ (import ./packages) ];
     environment.systemPackages = with pkgs; [
-      htop iftop iotop ncdu psmisc socat git neomutt
+      htop
+      iftop
+      iotop
+      ncdu
+      psmisc
+      socat
+      git
+      neomutt
     ];
 
     # pin things like state file layouts for postgresql
     system.stateVersion = "21.05";
 
+    users.mutableUsers = false;
+    time.timeZone = "Europe/Amsterdam";
     # this changes some packages so that there is no X dependency
     # allowing for the total system size to be smaller.
     # however, these builds are not cached by cache.nixos.org, so
@@ -33,23 +43,20 @@ in
     # this installs /etc/vimrc
     environment.etc."vimrc".source = ../salt/states/common/vimrc;
     # install en_US and nl_NL locales
-    i18n.supportedLocales = [
-      "en_US.UTF-8/UTF-8"
-      "nl_NL.UTF-8/UTF-8"
-    ];
+    i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" "nl_NL.UTF-8/UTF-8" ];
     users.motd = ''
-     ___   _____   __  __ __                    _  __     __   __   
-    / _ | / __/ | / / / //_/__ ________  ___   / |/ /__  / /__/ /____ __ _ 
-   / __ |_\ \ | |/ / / ,< / _ `/ __/ _ \/ -_) /    / _ \/  '_/ __/ -_)  ' \
-  /_/ |_/___/ |___/ /_/|_|\_,_/_/ / .__/\__/ /_/|_/\___/_/\_\\__/\__/_/_/_/
-               ${config.networking.hostName}  /_/        dienstenserver
-    '';
+         ___   _____   __  __ __                    _  __     __   __   
+        / _ | / __/ | / / / //_/__ ________  ___   / |/ /__  / /__/ /____ __ _ 
+       / __ |_\ \ | |/ / / ,< / _ `/ __/ _ \/ -_) /    / _ \/  '_/ __/ -_)  ' \
+      /_/ |_/___/ |___/ /_/|_|\_,_/_/ / .__/\__/ /_/|_/\___/_/\_\\__/\__/_/_/_/
+                   ${config.networking.hostName}  /_/        dienstenserver
+        '';
     services = {
       logcheck = {
         enable = false;
         extraRulesDirs = [
           (builtins.fetchGit {
-            url = https://github.com/bwesterb/x-logcheck;
+            url = "https://github.com/bwesterb/x-logcheck";
             rev = "3180507e96b317984e22e9ca01771f106190b0ef";
           })
         ];
@@ -84,12 +91,12 @@ in
       hans.enable = true;
       ldap = {
         enable = true;
-        suffix = "dc=karpenoktem,dc=nl";
-        domain = "karpenoktem.nl";
+        suffix = toLdap lib config.networking.domain;
+        domain = config.networking.domain;
       };
       giedo = {
         enable = true;
-        ldap.user = "cn=infra,dc=karpenoktem,dc=nl";
+        ldap.user = "cn=infra,${config.lda.suffix}";
         ldap.pass = globals.passwords.ldap.giedo;
       };
     };
@@ -111,12 +118,70 @@ in
       '';
     };
   };
+  staging = { lib, ... }: {
+    # nixos-rebuild switch --flake '.#staging' --target-host root@dev.kn.cx --build-host localhost
+    imports = [ vipassana hetzner ];
+    networking = {
+      hostName = lib.mkForce "staging";
+      domain = lib.mkForce "dev.kn.cx";
+      interfaces.eth0.ipv6.addresses = [{
+        address = "2a01:4f8:c17:4eec::";
+        prefixLength = 64;
+      }];
+    };
+    users.users.root = {
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDo1N5E6qkb3McJOvv0PqI7E8iYLAcjil5RWc+zeTtN/ yorick"
+      ];
+      # pass yorick/kn/stage
+      hashedPassword =
+        "$6$2ngK32gHW3AsOFOS$G/nsXxPUi9ePaa0gOrNaNN1nBDSYfeDkLdWZI3ad05jdvdyzMoCzZC/YFn8lFO1CLapKSQFStLgI3HPqPy1/h0";
+    };
+    kn.shared.initialDB = true;
+    # for now, be absolutely sure about exposed services
+    # until I've fixed the passwords :D
+    networking.firewall.allowedUDPPorts = lib.mkForce [ ];
+    networking.firewall.allowedTCPPorts = lib.mkOverride 49 [ 22 ]; # 80 443
+  };
+  hetzner = { modulesPath, ... }: {
+    # installation:
+    # make hetzner cloud, mount nixos 21.11 iso
+    # rescue console, curl https://pub.yori.cc/install-hetzner.sh | bash
+    # unmount, restart server, login with yorick's ssh key
+    imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
+    boot.loader.grub = {
+      enable = true;
+      version = 2;
+      devices = [ "/dev/sda" ];
+    };
+    networking.usePredictableInterfaceNames = false;
+    networking.useDHCP = false;
+    networking.interfaces.eth0 = { useDHCP = true; };
+    networking.defaultGateway6 = {
+      address = "fe80::1";
+      interface = "eth0";
+    };
+    services.openssh.permitRootLogin = "prohibit-password";
+
+    boot.initrd.availableKernelModules =
+      [ "ahci" "xhci_pci" "virtio_pci" "sd_mod" "sr_mod" ];
+    boot.initrd.kernelModules = [ ];
+    boot.kernelModules = [ ];
+    boot.extraModulePackages = [ ];
+
+    fileSystems."/" = {
+      device = "/dev/sda1";
+      fsType = "ext4";
+    };
+
+    swapDevices = [ ];
+
+    hardware.cpu.amd.updateMicrocode = true;
+  };
   # merged-in config for virtualized system
   virt = {
     # install the vm-ssh.key.pub for ssh access
-    users.users.root.openssh.authorizedKeys.keyFiles = [
-      ./vm-ssh.key.pub
-    ];
+    users.users.root.openssh.authorizedKeys.keyFiles = [ ./vm-ssh.key.pub ];
     kn.shared.initialDB = true;
     services.getty = {
       autologinUser = "root";
