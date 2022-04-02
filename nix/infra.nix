@@ -142,6 +142,14 @@ in rec {
     # until I've fixed the passwords :D
     networking.firewall.allowedUDPPorts = lib.mkForce [ ];
     networking.firewall.allowedTCPPorts = lib.mkOverride 49 [ 22 ]; # 80 443
+    nix.binaryCaches = [
+      "https://cache.nixos.org"
+      "https://kninfra.cachix.org"
+    ];
+    nix.binaryCachePublicKeys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "kninfra.cachix.org-1:l6SeUehzysoUHUX86/gmqiWaa9Jy7dTSFnPcWGw3zGo="
+    ];
   };
   hetzner = { modulesPath, ... }: {
     # installation:
