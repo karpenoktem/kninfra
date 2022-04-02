@@ -90,11 +90,6 @@ in {
         '';
       };
     };
-    security.wrappers.mailman-mailman-mail = {
-      source = "${pkgs.mailman2}/mail/mailman";
-      setgid = true;
-      group = "mailman";
-    };
     security.wrappers = lib.listToAttrs (lib.flip map cgi (name: {
       name = "mailman-${name}-cgi";
       value = {
@@ -102,7 +97,13 @@ in {
         setgid = true;
         group = "mailman";
       };
-    }));
+    })) // {
+      mailman-mailman-mail = {
+        source = "${pkgs.mailman2}/mail/mailman";
+        setgid = true;
+        group = "mailman";
+      };
+    };
     users.groups.cgi = {};
     services.fcgiwrap = {
       enable = true;
