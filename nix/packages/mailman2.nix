@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--without-permcheck"
-    "--with-cgi-ext=.cgi"
+    "--with-cgi-gid=cgi"
     "--with-var-prefix=/var/lib/mailman"
   ];
 

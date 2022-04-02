@@ -1,6 +1,19 @@
 
 { config, lib, pkgs, ... }:
 let cfg = config.services.mailman2;
+    cgi = [
+      "admin"
+      "admindb"
+      "confirm"
+      "create"
+      "edithtml"
+      "listinfo"
+      "options"
+      "private"
+      "rmlist"
+      "roster"
+      "subscribe"
+    ];
 in {
   options.services.mailman2 = with lib; {
     enable = mkEnableOption "mailman";
@@ -63,7 +76,10 @@ in {
       locations."/mailman-icons/".alias =
         "${pkgs.mailman2}/icons/";
       locations."~ ^/mailman(/[^/]+)(/.+)?$" = {
-        root = "${pkgs.mailman2}/cgi-bin";
+        # mailman wants to be setgid 'mailman'
+        root = pkgs.linkFarm "mailman-cgi-bin" (lib.flip map cgi (name:
+          { inherit name; path = "/run/wrappers/bin/mailman-${name}-cgi"; }
+        ));
         extraConfig = ''
           fastcgi_pass unix:${config.services.fcgiwrap.socketAddress};
           fastcgi_read_timeout 720;
@@ -74,6 +90,24 @@ in {
         '';
       };
     };
-    services.fcgiwrap.enable = true;
+    security.wrappers.mailman-mailman-mail = {
+      source = "${pkgs.mailman2}/mail/mailman";
+      setgid = true;
+      group = "mailman";
+    };
+    security.wrappers = lib.listToAttrs (lib.flip map cgi (name: {
+      name = "mailman-${name}-cgi";
+      value = {
+        source = "${pkgs.mailman2}/cgi-bin/${name}";
+        setgid = true;
+        group = "mailman";
+      };
+    }));
+    users.groups.cgi = {};
+    services.fcgiwrap = {
+      enable = true;
+      user = "nginx";
+      group = "cgi";
+    };
   };
 }
