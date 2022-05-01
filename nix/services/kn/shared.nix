@@ -52,7 +52,7 @@ in {
         requires = [ "kn_initial_state.service" ];
         after = requires;
       };
-      django = rec {
+      kndjango = rec {
         requires = [ "kn_initial_state.service" ];
         after = requires;
       };
