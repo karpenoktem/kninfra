@@ -1,5 +1,30 @@
 { config, lib, pkgs, ... }:
-let cfg = config.kn.wiki;
+
+let
+  cfg = config.kn.wiki;
+
+  package = pkgs.stdenv.mkDerivation rec {
+    pname = "mediawiki-full";
+    version = src.version;
+    src = pkgs.mediawiki;
+
+    installPhase = ''
+      mkdir -p $out
+      cp -r * $out/
+
+      rm -rf $out/share/mediawiki/skins/*
+      rm -rf $out/share/mediawiki/extensions/*
+
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: ''
+        ln -s ${v} $out/share/mediawiki/skins/${k}
+      '') config.services.mediawiki.skins)}
+
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: ''
+        ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
+      '') config.services.mediawiki.extensions)}
+    '';
+  };
+
 in {
   options.kn.wiki.enable = lib.mkEnableOption "wiki";
   config = lib.mkIf cfg.enable {
@@ -12,16 +37,16 @@ in {
         rewrite ^/wiki /W/index.php;
       '';
       locations."/W/" = {
-        alias = "${pkgs.mediawiki}/share/mediawiki/";
+        alias = "${package}/share/mediawiki/";
         index = "index.html index.php";
       };
       # We would like to write this as a .php block within the previous
       # location block, but then we run into the following nginx bug
       #  http://trac.nginx.org/nginx/ticket/97
       locations."~ ^/W(/.+.php)$" = {
-        alias = "${pkgs.mediawiki}/share/mediawiki$1";
+        alias = "${package}/share/mediawiki$1";
         extraConfig = ''
-          if (!-f ${pkgs.mediawiki}/share/mediawiki$1) { return 404; }
+          if (!-f ${package}/share/mediawiki$1) { return 404; }
 
           fastcgi_param SCRIPT_FILENAME $document_root$1;
           fastcgi_index index.php;
