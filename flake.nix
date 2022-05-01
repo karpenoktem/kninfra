@@ -26,7 +26,7 @@
           devShell = packages.kninfra.overrideAttrs (o: {
             # extra packages inside the shell
             buildInputs = o.buildInputs
-              ++ (with legacyPackages; [ poetry gettext mongodb ]);
+              ++ (with legacyPackages; [ poetry gettext mongodb nixos-rebuild ]);
           });
         });
     in out // {
