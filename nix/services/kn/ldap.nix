@@ -4,9 +4,9 @@ let
   inherit (cfg) suffix;
   local = ''"gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth"'';
   globals.passwords.ldap = {
-    infra = "asdf";
-    daan = "asdf";
-    saslauthd = "asdf";
+    infra = "CHANGE ME";
+    daan = "CHANGE ME";
+    saslauthd = "CHANGE ME";
   };
 in {
   options.kn.ldap = with lib; {

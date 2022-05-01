@@ -41,7 +41,7 @@ in {
       after = requires;
       environment = kn_env // cfg.env // {
         KN_LDAP_USER = "cn=infra,dc=karpenoktem,dc=nl"; # TODO suffix
-        KN_LDAP_PASS = "asdf";
+        KN_LDAP_PASS = "CHANGE ME";
         KN_DAAN_SOCKET = config.kn.daan.socket;
         KN_HANS_SOCKET = config.kn.hans.socket;
       };

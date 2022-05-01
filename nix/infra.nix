@@ -1,9 +1,9 @@
 let
   # TODO: ldap security
   globals.passwords.ldap = {
-    infra = "asdf";
-    daan = "asdf";
-    saslauthd = "asdf";
+    infra = "CHANGE ME";
+    daan = "CHANGE ME";
+    saslauthd = "CHANGE ME";
   };
   toLdap = lib: domain:
     with lib;

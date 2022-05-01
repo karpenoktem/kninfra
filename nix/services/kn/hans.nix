@@ -26,7 +26,7 @@ in {
     systemd.services.hans = {
       environment = kn_env // {
         KN_MAILMAN_PATH = pkgs.mailman2;
-        KN_MAILMAN_DEFAULT_PASSWORD = "asdf";
+        KN_MAILMAN_DEFAULT_PASSWORD = "CHANGE ME";
       };
       serviceConfig = {
         ExecStart = "${pkgs.kninfra}/bin/hans";
