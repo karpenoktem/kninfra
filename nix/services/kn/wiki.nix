@@ -76,12 +76,13 @@ in {
         enableSSL = false;
         adminAddr = "yorick@yori.cc";
       };
-      extensions.KNAuth = pkgs.fetchFromGitHub {
-        owner = "karpenoktem";
-        repo = "knauth";
-        rev = "549f5f3a4298669d2feadbbd6d070fde436f8b7b";
-        sha256 = "1jx5krm989zb6866yn8gvarsgzpyfyl72f3agljszg78fcmm37hc";
-      };
+      extensions.KNAuth = /home/ayke/src/knauth;
+      #pkgs.fetchFromGitHub {
+      #  owner = "karpenoktem";
+      #  repo = "knauth";
+      #  rev = "549f5f3a4298669d2feadbbd6d070fde436f8b7b";
+      #  sha256 = "1jx5krm989zb6866yn8gvarsgzpyfyl72f3agljszg78fcmm37hc";
+      #};
       extraConfig = ''
         $wgScriptPath       = "/W";
         $wgArticlePath      = "/wiki/$1";
@@ -141,7 +142,7 @@ in {
         # $wgGroupPermissions['sysop']['apc'] = true;
         $wgAllowExternalImagesFrom = array('https://nirodha.karpenoktem.nl/');
         
-        // TODO, only in VM
+        // TODO, only in VM xx
         //{% if grains['vagrant'] %}
         $wgShowExceptionDetails = true;
         //{% endif %}
@@ -159,6 +160,7 @@ in {
     };
     services.phpfpm.phpOptions = ''
       extension=${pkgs.phpExtensions.apcu}/lib/php/extensions/apcu.so
+      display_errors = On
     '';
   };
 }

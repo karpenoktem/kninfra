@@ -25,6 +25,7 @@ in rec {
       socat
       git
       neomutt
+      wget
     ];
 
     # pin things like state file layouts for postgresql
