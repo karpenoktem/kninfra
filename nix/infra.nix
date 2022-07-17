@@ -129,6 +129,7 @@ in rec {
         prefixLength = 64;
       }];
     };
+    kn.shared.env.KN_ALLOWED_HOSTS = "dev.kn.cx";
     users.users.root = {
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDo1N5E6qkb3McJOvv0PqI7E8iYLAcjil5RWc+zeTtN/ yorick"
@@ -145,6 +146,9 @@ in rec {
     # until I've fixed the passwords :D
     networking.firewall.allowedUDPPorts = lib.mkForce [ ];
     networking.firewall.allowedTCPPorts = lib.mkOverride 49 [ 22 ]; # 80 443
+    networking.firewall.extraCommands = ''
+      ip6tables -A nixos-fw -p tcp --dport 80 -m iprange --src-range 2a02:a464:5ed::/48 -j nixos-fw-accept
+    '';
     nix.binaryCaches = [
       "https://cache.nixos.org"
       "https://kninfra.cachix.org"

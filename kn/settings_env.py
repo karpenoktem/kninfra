@@ -30,6 +30,9 @@ for varname, value in os.environ.items():
     if varname.startswith("KN_"):
         globals()[varname[3:]] = value
 
+# TODO(HACK): should have structured config
+if "ALLOWED_HOSTS" in globals() and type(globals()["ALLOWED_HOSTS"]) == str:
+    ALLOWED_HOSTS = [ALLOWED_HOSTS]
 # Do not remove the following
 #
 
