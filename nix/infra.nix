@@ -147,7 +147,7 @@ in rec {
     networking.firewall.allowedUDPPorts = lib.mkForce [ ];
     networking.firewall.allowedTCPPorts = lib.mkOverride 49 [ 22 ]; # 80 443
     networking.firewall.extraCommands = ''
-      ip6tables -A nixos-fw -p tcp --dport 80 -m iprange --src-range 2a02:a464:5ed::/48 -j nixos-fw-accept
+      ip6tables -A nixos-fw -p tcp --dport 80 -s 2a02:a464:5ed::/48 -j nixos-fw-accept
     '';
     nix.binaryCaches = [
       "https://cache.nixos.org"
