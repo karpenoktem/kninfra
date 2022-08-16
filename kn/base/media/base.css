@@ -571,5 +571,5 @@ form.top-aligned input[type=checkbox] {
     right: 0;
     top: 0;
     display: block;
-    z-index: 100;
+    z-index: 9;
 }
