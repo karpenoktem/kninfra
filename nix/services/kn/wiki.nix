@@ -76,13 +76,19 @@ in {
         enableSSL = false;
         adminAddr = "yorick@yori.cc";
       };
-      extensions.KNAuth = pkgs.fetchFromGitHub {
-        owner = "karpenoktem";
-        repo = "knauth";
-        rev = "549f5f3a4298669d2feadbbd6d070fde436f8b7b";
-        sha256 = "1jx5krm989zb6866yn8gvarsgzpyfyl72f3agljszg78fcmm37hc";
-      };
-      extraConfig = ''
+      extraConfig = let
+        extensions.Auth_remoteuser = pkgs.fetchFromGitHub {
+          owner = "wikimedia";
+          repo = "mediawiki-extensions-Auth_remoteuser";
+          # old rev, work around bug where methods ran twice
+          # causing CAS failures
+          rev = "311b311ee900a33637c15cd57e4556b0ed688a75";
+          sha256 = "sha256-eFKDA9CU4V9QKZd+GsI3sZTwwXvD6doVC76ASD16hrA=";
+          # rev = "d331705ee38164f3a0c28bd2bd2b604a1cf3c54e";
+          # sha256 = "sha256-exTv/b7BJTCi8HZ+Y0qv4SNLQZcfTVj1RCeAbbYce6A=";
+        };
+        in ''
+        // $wgDebugLogFile = "/tmp/debug-mediawiki.log";
         $wgScriptPath       = "/W";
         $wgArticlePath      = "/wiki/$1";
         $wgResourceBasePath = $wgScriptPath;
@@ -119,7 +125,8 @@ in {
 
         $wgResourceLoaderMaxQueryLength = -1;
 
-        $wgGroupPermissions['*']['createaccount'] = false;
+        $wgGroupPermissions['*']['autocreateaccount'] = false;
+        $wgGroupPermissions['*']['createaccount'] = true;
         $wgGroupPermissions['*']['edit'] = false;
         $wgGroupPermissions['*']['read'] = false;
         $wgGroupPermissions['webcie']['delete'] = true;
@@ -146,9 +153,9 @@ in {
         $wgShowExceptionDetails = true;
         //{% endif %}
         
-        // TODO
-        //require_once "/etc/mediawiki/knauth/KNAuth.php";
         $wgKNAuthVerifyURL = 'http://localhost/accounts/api/';
+        wfLoadExtension("Auth_remoteuser", "${extensions.Auth_remoteuser}/extension.json");
+        include "${./knauth.php}";
       '';
       passwordFile = pkgs.writeText "mediawiki-password" "0e6hW5br5ecUjvcI";
     };
