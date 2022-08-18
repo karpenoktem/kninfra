@@ -7,9 +7,6 @@ service Daan {
     rpc SetPostfixMap(PostfixMap) returns (Empty) {};
     rpc SetPostfixSenderLoginMap(PostfixMap) returns (Empty) {};
 
-    // Apply changes to synced wiki users previously thought up by giedo.
-    rpc ApplyWikiChanges(WikiChanges) returns (Empty) {};
-
     // Apply changes to the LDAP database previously thought up by giedo.
     rpc ApplyLDAPChanges(LDAPChanges) returns (Empty) {};
 
@@ -24,22 +21,6 @@ service Daan {
 // names (plain usernames or email addresses).
 message PostfixMap {
     map<string, Strings> map = 1;
-}
-
-// WikiChanges describes all changes to apply to the wiki database: which users
-// to add/remove and which users to activate/deactivate.
-message WikiChanges {
-    repeated WikiUser add = 1;
-    repeated string remove = 2;
-    repeated string activate = 3;
-    repeated string deactivate = 4;
-}
-
-// This is a single user object, used when adding a user to the wiki database.
-message WikiUser {
-    string name = 1;
-    string humanName = 2;
-    string email = 3;
 }
 
 message LDAPChanges {

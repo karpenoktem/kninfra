@@ -28,6 +28,11 @@
             buildInputs = o.buildInputs
               ++ (with legacyPackages; [ poetry gettext mongodb nixos-rebuild ]);
           });
+          devShells.protobufs = legacyPackages.mkShell {
+            buildInputs = [ (legacyPackages.python3.withPackages (p: with p; [
+              grpcio-tools
+            ])) ];
+          };
         });
     in out // {
       nixosConfigurations.staging =
