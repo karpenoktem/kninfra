@@ -8,7 +8,6 @@ import protobufs.messages.daan_pb2_grpc as daan_pb2_grpc
 from kn.utils.daan._ldap import apply_ldap_changes, ldap_setpass
 from kn.utils.daan.fotoadmin import (FotoadminError, fotoadmin_create_event)
 from kn.utils.daan.postfix import set_postfix_map, set_postfix_slm_map
-from kn.utils.daan.wiki import apply_wiki_changes
 
 
 class Daan(daan_pb2_grpc.DaanServicer):
@@ -17,7 +16,6 @@ class Daan(daan_pb2_grpc.DaanServicer):
         super(Daan, self).__init__()
         self.postfix_lock = threading.Lock()
         self.postfix_slm_lock = threading.Lock()
-        self.wiki_lock = threading.Lock()
         self.ldap_lock = threading.Lock()
         self.fotoadmin_lock = threading.Lock()
 
@@ -32,9 +30,7 @@ class Daan(daan_pb2_grpc.DaanServicer):
         return common_pb2.Empty()
 
     def ApplyWikiChanges(self, request, context):
-        with self.wiki_lock:
-            apply_wiki_changes(request)
-        return common_pb2.Empty()
+        raise NotImplementedError()
 
     def ApplyLDAPChanges(self, request, context):
         with self.ldap_lock:
