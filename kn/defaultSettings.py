@@ -178,8 +178,8 @@ def defaultSettings(glbls):
 
     d.EXTERNAL_URLS = {
         'stukken': d.BASE_URL + '/groups/leden/',
-        'wiki': d.BASE_URL + '/wiki',
-        'wiki-home': d.BASE_URL + '/wiki/Hoofdpagina',
+        'wiki': '/wiki',
+        'wiki-home': '/wiki/Hoofdpagina',
     }
 
     d.HOME_SLIDESHOW = [
