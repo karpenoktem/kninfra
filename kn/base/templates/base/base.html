@@ -28,6 +28,9 @@
         <a href="{% url "home" %}" id="logo">
             <img width="220" src="{{ MEDIA_URL }}base/logo.png"
                     alt="Karpe Noktem" />
+            {% if DEV_BANNER != None %}
+              <div id="dev-banner">{{ DEV_BANNER }}</div>
+            {% endif %}
         </a>
         <div id="navigator" class="container">
         {% block topmenu %}

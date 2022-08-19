@@ -539,6 +539,22 @@ form.top-aligned input[type=checkbox] {
 	float: right;
 }
 
+#dev-banner {
+    line-height: normal;
+    background-color: red;
+    display: inline-block;
+    padding: 1px;
+    position: absolute;
+    bottom: -20px;
+    transform: rotate(-16deg) translate(-50%, -50%);
+    box-shadow: 0 0 5px 5px red;
+    border: 1px solid red;
+    opacity: 90%;
+    color: white;
+    text-shadow: 0 0px 5px white;
+    border-radius: 0px;
+}
+
 .qr-link::before {
     content: "(";
     color: #102020;

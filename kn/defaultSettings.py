@@ -155,6 +155,7 @@ def defaultSettings(glbls):
                     "django.template.context_processors.media",
                     "django.contrib.messages.context_processors.messages",
                     "kn.base.context_processors.base_url",
+                    "kn.base.context_processors.dev_banner",
                     "kn.leden.context_processors.may_manage_planning",
                     "django.template.context_processors.request",
                 ),
