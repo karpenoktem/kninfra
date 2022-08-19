@@ -29,9 +29,6 @@ class Daan(daan_pb2_grpc.DaanServicer):
             set_postfix_slm_map(request.map)
         return common_pb2.Empty()
 
-    def ApplyWikiChanges(self, request, context):
-        raise NotImplementedError()
-
     def ApplyLDAPChanges(self, request, context):
         with self.ldap_lock:
             apply_ldap_changes(request)
