@@ -399,28 +399,6 @@ python-versions = ">=3.5"
 traitlets = "*"
 
 [[package]]
-name = "mirte"
-version = "0.1.8"
-description = ""
-category = "main"
-optional = false
-python-versions = "*"
-develop = false
-
-[package.dependencies]
-docutils = ">=0.3"
-msgpack-python = ">=0.1.0"
-pyyaml = ">=3.00"
-sarah = ">=0.1.2"
-six = ">=1.2"
-
-[package.source]
-type = "git"
-url = "https://github.com/bwesterb/mirte.git"
-reference = "0.1.8"
-resolved_reference = "824c49ad5259274cbce4e963e4a97b935c12ffc0"
-
-[[package]]
 name = "msgpack-python"
 version = "0.5.6"
 description = "MessagePack (de)serializer."
@@ -676,19 +654,6 @@ description = "Reactive Extensions (Rx) for Python"
 category = "main"
 optional = false
 python-versions = "*"
-
-[[package]]
-name = "sarah"
-version = "0.1.4"
-description = "Library with miscellaneous functionality"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-docutils = ">=0.3"
-mirte = ">=0.1.2"
-six = ">=1.2"
 
 [[package]]
 name = "sdnotify"
@@ -999,7 +964,6 @@ matplotlib-inline = [
     {file = "matplotlib-inline-0.1.3.tar.gz", hash = "sha256:a04bfba22e0d1395479f866853ec1ee28eea1485c1d69a6faf00dc3e24ff34ee"},
     {file = "matplotlib_inline-0.1.3-py3-none-any.whl", hash = "sha256:aed605ba3b72462d64d475a21a9296f400a19c4f74a31b59103d2a99ffd5aa5c"},
 ]
-mirte = []
 msgpack-python = [
     {file = "msgpack-python-0.5.6.tar.gz", hash = "sha256:378cc8a6d3545b532dfd149da715abae4fda2a3adb6d74e525d0d5e51f46909b"},
 ]
@@ -1297,9 +1261,6 @@ rsa = [
 rx = [
     {file = "Rx-1.6.1-py2.py3-none-any.whl", hash = "sha256:7357592bc7e881a95e0c2013b73326f704953301ab551fbc8133a6fadab84105"},
     {file = "Rx-1.6.1.tar.gz", hash = "sha256:13a1d8d9e252625c173dc795471e614eadfe1cf40ffc684e08b8fff0d9748c23"},
-]
-sarah = [
-    {file = "sarah-0.1.4.tar.gz", hash = "sha256:035d0ee66cffe1b870ed8353f00cb103cdcf72d56785b094b4d5cf04f5f290f6"},
 ]
 sdnotify = [
     {file = "sdnotify-0.3.2.tar.gz", hash = "sha256:73977fc746b36cc41184dd43c3fe81323e7b8b06c2bb0826c4f59a20c56bb9f1"},

@@ -14,7 +14,6 @@ zipseeker = "^1.0.11"
 django = "1.8.19"
 docutils = "^0.17.1"
 tarjan = { git = "https://github.com/bwesterb/py-tarjan.git" }
-mirte = { git = "https://github.com/bwesterb/mirte.git", tag = "0.1.8" }
 #koert = { git = "https://github.com/awesterb/koert.git" }
 
 GitPython = "^3.1.20"
