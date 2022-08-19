@@ -22,7 +22,6 @@ from kn.utils.giedo.postfix import (generate_postfix_map,
                                     generate_postfix_slm_map)
 from kn.utils.giedo.siteagenda import update_site_agenda
 from kn.utils.giedo.unix import generate_unix_map
-from kn.utils.giedo.wolk import generate_wolk_changes
 from kn.utils.whim import WhimClient
 
 class Giedo(giedo_pb2_grpc.GiedoServicer):
@@ -50,10 +49,6 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
             ('mailman', self.hans.ApplyChanges, self._gen_mailman),
             ('ldap', self.daan.ApplyLDAPChanges, self._gen_ldap)
         )
-
-    def _gen_wolk(self):
-        return {'type': 'wolk',
-                'changes': generate_wolk_changes(self)}
 
     def _gen_ldap(self):
         return generate_ldap_changes()

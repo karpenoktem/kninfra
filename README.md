@@ -108,8 +108,6 @@ Naast de website draaien we nog een heleboel andere diensten, zoals
    om e-mail te ontvangen en te versturen.
  * Een [wiki](https://karpenoktem.nl/wiki/) met het
    [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) pakket.
- * De [wolk](https://karpenoktem.nl/wolk/) een 'dropbox'
-   met [OwnCloud](https://owncloud.org).
 
 En nog een aantal die niet *user-facing* zijn:
 
@@ -123,8 +121,8 @@ en de meeste andere diensten draaien op *sankhara*.
 
 Al deze verschillende diensten op *sankhara* moeten
 gesynchroniseerd blijven met de ledenadministratie: als iemand in een
-commissie gaat moet zij ook automatisch in de goede e-maillijsten en
-wolk-groepen komen.  Bij elke verandering van de ledenadministratie wordt
+commissie gaat moet zij ook automatisch in de goede e-maillijsten komen.
+Bij elke verandering van de ledenadministratie wordt
 er gecontroleerd of alle instellingen nog ok zijn en zo nodig veranderingen
 aangebracht.  Dit wordt gedaan door drie verschillende *daemons*
 (programma's die in de achtergrond draaien).
