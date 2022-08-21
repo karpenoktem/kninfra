@@ -7,24 +7,6 @@ let
         inherit (python3.pkgs.GitPython) patches doCheck pythonImportsCheck;
         propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optionals (self.pythonOlder "3.10") [ self.typing-extensions ];
       });
-      graphene-django = super.graphene-django.overridePythonAttrs (o: {
-        propagatedBuildInputs = o.propagatedBuildInputs ++ [ self.pytestrunner ];
-        doCheck = false;
-        # pretty sure this exists?!
-        preConfigure = ''
-          ${o.preConfigure or ""}
-          sed -i '/singledispatch/d' setup.py
-        '';
-      });
-      sarah = super.sarah.overridePythonAttrs (old: {
-        # remove mirte cycle
-        propagatedBuildInputs =
-          builtins.filter (i: i.pname != "mirte") old.propagatedBuildInputs;
-        preConfigure = ''
-          ${old.preConfigure or ""}
-          sed -i '/mirte/d' setup.py
-        '';
-      });
     });
   };
   # inverse of sourceByRegex, https://github.com/NixOS/nixpkgs/blob/master/lib/sources.nix#L138
