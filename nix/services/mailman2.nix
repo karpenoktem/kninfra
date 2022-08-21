@@ -29,8 +29,11 @@ in {
       uid = 316; # see misc/ids.nix
       home = "/var/lib/mailman";
       isSystemUser = true;
+      group = "mailman";
     };
-    users.groups.mailman = {};
+    users.groups.mailman = {
+      gid = 316;
+    };
     systemd.tmpfiles.rules = lib.mkIf cfg.enable [
       "d /var/lib/mailman 02775 ${cfg.user} mailman -"
       "d /var/lib/mailman/lists 02775 ${cfg.user} mailman -"
@@ -96,12 +99,14 @@ in {
         source = "${pkgs.mailman2}/cgi-bin/${name}";
         setgid = true;
         group = "mailman";
+        owner = "root";
       };
     })) // {
       mailman-mailman-mail = {
         source = "${pkgs.mailman2}/mail/mailman";
         setgid = true;
         group = "mailman";
+        owner = "root";
       };
     };
     users.groups.cgi = {};

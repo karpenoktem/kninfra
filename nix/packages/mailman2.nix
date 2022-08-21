@@ -9,7 +9,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-e46SIjZKvf0lyyBTxCIxmqx7Ygwofdl5cD4DmdcvQ5A=";
   };
 
-  buildInputs = [ python2 python2.pkgs.dnspython ];
+  buildInputs = [ python2 (python2.pkgs.buildPythonPackage (rec {
+    pname = "dnspython";
+    version = "1.16.0";
+    src = python2.pkgs.fetchPypi {
+      inherit pname version;
+      extension = "zip";
+      sha256 = "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01";
+    };
+    doCheck = false;
+  })) ];
 
   patches = [ ./fix-var-prefix.patch ];
 

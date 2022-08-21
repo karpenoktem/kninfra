@@ -2,22 +2,16 @@ self: super: {
   mailman2 = super.callPackage ./mailman2.nix {};
   kninfra = super.callPackage ./kndjango.nix { };
   # minimal python2 environment for Hans
-  python2-hans = super.python2.withPackages (ps: [
-    ps.sdnotify
-    ps.grpcio
-    (ps.buildPythonPackage rec {
-      pname = "Django";
-      version = "1.8.19";
-      src = ps.fetchPypi {
-        inherit pname version;
-        hash = "sha256-M9RKXPnTMyR6mjdK4UeLeLg8m3jrMW/ASt3mIFO0wEc=";
-      };
-      doCheck = false;
-      postFixup = ''
-        wrapPythonProgramsIn $out/bin "$out $pythonPath"
-      '';
-    })
-  ]);
+  python2-hans = self.poetry2nix.mkPoetryEnv {
+    projectDir = ../poetry-hans;
+    python = self.python2;
+    overrides = self.poetry2nix.overrides.withDefaults (self: super: {
+      # conflict on backport site-pkg
+      configparser = super.configparser.overrideAttrs (o: {
+        meta.priority = 100;
+      });
+    });
+  };
   vipassana-vm = (import "${super.path}/nixos/lib/eval-config.nix" {
     modules = with (import ../infra.nix); [
       vipassana

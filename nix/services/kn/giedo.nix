@@ -26,7 +26,9 @@ in {
     kn.shared.enable = true;
     users.users.giedo = {
       isSystemUser = true;
+      group = "giedo";
     };
+    users.groups.giedo = {};
     # socket activation
     systemd.sockets.giedo = {
       wantedBy = [ "sockets.target" ];
