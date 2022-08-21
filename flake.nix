@@ -12,7 +12,7 @@
         flake-utils.lib.eachSystem [ "x86_64-linux" ] (system: rec {
           overlay = import ./nix/packages;
           legacyPackages = import nixpkgs {
-            overlays = [ overlay ];
+            overlays = [ overlay (self: super: { inherit inputs; }) ];
             inherit system;
           };
           # buildable with `nix build .#kninfra`, etc
