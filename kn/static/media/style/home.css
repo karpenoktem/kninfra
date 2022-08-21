@@ -2,6 +2,7 @@
 #slider-wrapper {
 	max-width: 475px;
 	float: left;
+  margin-right: 20px;
 }
 #agenda-wrapper {
 	margin-left: 525px;
