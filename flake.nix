@@ -1,18 +1,23 @@
 {
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-21.05";
   inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.poetry2nix = {
+    url = "github:nix-community/poetry2nix";
+    inputs.nixpkgs.follows = "nixpkgs";
+    inputs.flake-utils.follows = "flake-utils";
+  };
   inputs.flake-compat = {
     url = "github:edolstra/flake-compat";
     flake = false;
   };
-  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, poetry2nix, ... }@inputs:
     let
       out =
         # add your fancy ARM macbook to this list
         flake-utils.lib.eachSystem [ "x86_64-linux" ] (system: rec {
           overlay = import ./nix/packages;
           legacyPackages = import nixpkgs {
-            overlays = [ overlay (self: super: { inherit inputs; }) ];
+            overlays = [ poetry2nix.overlay overlay (self: super: { inherit inputs; }) ];
             inherit system;
           };
           # buildable with `nix build .#kninfra`, etc
