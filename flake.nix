@@ -10,14 +10,23 @@
     url = "github:edolstra/flake-compat";
     flake = false;
   };
-  outputs = { self, nixpkgs, flake-utils, poetry2nix, ... }@inputs:
+  inputs.agenix = {
+    url = "github:ryantm/agenix";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+  outputs = { self, nixpkgs, flake-utils, poetry2nix, agenix, ... }@inputs:
     let
       out =
         # add your fancy ARM macbook to this list
         flake-utils.lib.eachSystem [ "x86_64-linux" ] (system: rec {
           overlay = import ./nix/packages;
           legacyPackages = import nixpkgs {
-            overlays = [ poetry2nix.overlay overlay (self: super: { inherit inputs; }) ];
+            overlays = [
+              poetry2nix.overlay
+              overlay
+              agenix.overlay
+              (self: super: { inherit inputs; })
+            ];
             inherit system;
           };
           # buildable with `nix build .#kninfra`, etc
@@ -41,6 +50,9 @@
         });
     in out // {
       nixosConfigurations.staging =
-        out.legacyPackages.x86_64-linux.nixos (import ./nix/infra.nix).staging;
+        out.legacyPackages.x86_64-linux.nixos [
+          inputs.agenix.nixosModule
+          (import ./nix/infra.nix).staging
+        ];
     };
 }

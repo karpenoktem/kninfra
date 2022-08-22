@@ -16,6 +16,7 @@ self: super: {
     modules = with (import ../infra.nix); [
       vipassana
       virt
+      self.inputs.agenix.nixosModule
       "${super.path}/nixos/modules/virtualisation/qemu-vm.nix"
       ({...}: {
         config.nixpkgs = {
