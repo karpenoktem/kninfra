@@ -21,8 +21,6 @@ in {
     kn.shared.env = {
       DJANGO_SETTINGS_MODULE = "kn.settings_env";
       KN_GIEDO_SOCKET = config.kn.giedo.socket;
-      KN_SECRET_KEY = "CHANGE ME";
-      KN_CHUCK_NORRIS_HIS_SECRET = "CHANGE ME";
       # GRPC_VERBOSITY="DEBUG";
       # GRPC_TRACE="tcp";
     };
@@ -44,11 +42,14 @@ in {
       giedo = rec {
         requires = [ "kn_initial_state.service" ];
         after = requires;
+        serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       };
       kndjango = rec {
         requires = [ "kn_initial_state.service" ];
         after = requires;
+        serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       };
+      hans.serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       kn_initial_state = rec {
         requires = [ "mongodb.service" ];
         after = requires;

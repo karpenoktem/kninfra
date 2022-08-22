@@ -28,6 +28,8 @@ rec {
     # the build will take longer:
     # environment.noXlibs = true;
 
+    age.secrets.kn-env = {};
+
     # set EDITOR to vim
     programs.vim.defaultEditor = true;
     # this installs /etc/vimrc
@@ -108,6 +110,7 @@ rec {
         prefixLength = 64;
       }];
     };
+    age.secrets.kn-env.file = ../secrets/staging.age;
     kn.shared.env.KN_ALLOWED_HOSTS = "dev.kn.cx";
     users.users.root = {
       openssh.authorizedKeys.keys = [
@@ -176,6 +179,17 @@ rec {
   virt = {
     # install the vm-ssh.key.pub for ssh access
     users.users.root.openssh.authorizedKeys.keyFiles = [ ./vm-ssh.key.pub ];
+    # vm hostkey, obfuscased using b64 to avoid false positives
+    # in security scanners
+    system.activationScripts.hostkey.text = ''
+      base64 -d ${./vm-host.key.b64} > /root/vm-host.key
+      chmod 0600 /root/vm-host.key
+    '';
+    system.activationScripts.agenixRoot.deps = [ "hostkey" ];
+    services.openssh.hostKeys = [
+      { path = "/root/vm-host.key"; type = "ed25519"; }
+    ];
+    age.secrets.kn-env.file = ../secrets/vm.age;
     kn.shared.initialDB = true;
     services.getty = {
       autologinUser = "root";
