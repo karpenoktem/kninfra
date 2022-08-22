@@ -12,6 +12,7 @@ grpcio = "^1.39.0"
 
 hatchling = ""
 pytest = ""
+protobuf = "3.17.3"
 
 [tool.poetry.dev-dependencies]
 
