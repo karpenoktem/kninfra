@@ -217,14 +217,18 @@ in rec {
       diskSize = 1024;
       # set up serial console
       graphics = false;
+      forwardPorts = [
+        {
+          host.port = 8080;
+          guest.port = 80;
+        }
+        {
+          host.port = 2222;
+          guest.port = 22;
+        }
+      ];
       qemu = {
         options = [ "-serial mon:stdio" ];
-        # forward port 22 to 2222 and port 80 to 8080
-        # based on the default in nixpkgs
-        networkingOptions = [
-          "-net nic,netdev=user.0,model=virtio"
-          "-netdev user,id=user.0,hostfwd=tcp::2222-:22,hostfwd=tcp::8080-:80\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
-        ];
       };
     };
   };
