@@ -1,14 +1,4 @@
-let
-  # TODO: ldap security
-  globals.passwords.ldap = {
-    infra = "CHANGE ME";
-    daan = "CHANGE ME";
-    saslauthd = "CHANGE ME";
-  };
-  toLdap = lib: domain:
-    with lib;
-    concatMapStringsSep "," (x: "dc=${x}") (splitString "." domain);
-in rec {
+rec {
   # config for the server (both real and VM)
   vipassana = { pkgs, lib, config, ... }: {
     # import ./services/default.nix, which imports the other files there
@@ -87,17 +77,10 @@ in rec {
       #mailman.enable = true; # TODO
       django.enable = true;
       daan.enable = true;
-      daan.ldap.pass = globals.passwords.ldap.daan;
       hans.enable = true;
-      ldap = {
-        enable = true;
-        suffix = toLdap lib config.networking.domain;
-        domain = config.networking.domain;
-      };
+      rimapd.enable = true;
       giedo = {
         enable = true;
-        ldap.user = "cn=infra,${config.lda.suffix}";
-        ldap.pass = globals.passwords.ldap.giedo;
       };
     };
     # allow remote http, ssh access
@@ -105,18 +88,14 @@ in rec {
     services.mailman2.enable = true;
     services.saslauthd = {
       enable = true;
-      # todo: start after slapd?
-      package = pkgs.cyrus_sasl.override { enableLdap = true; };
-      mechanism = "ldap";
-      # todo: ldapi peer auth, eliminates saslauthd password
-      config = ''
-        ldap_servers: ldap://localhost
-        ldap_search_base: ou=users,${config.kn.ldap.suffix}
-        ldap_filter: (uid=%u)
-        ldap_bind_dn: cn=saslauthd,${config.kn.ldap.suffix}
-        ldap_bind_pw: ${globals.passwords.ldap.saslauthd}
-      '';
+      mechanism = "rimap";
     };
+    # TODO(upstream) to nixpkgs
+    # upstream currently doesn't support the config scheme for this mechanism
+    systemd.services.saslauthd.serviceConfig.ExecStart = let
+      cfg = config.services.saslauthd;
+    in
+      lib.mkForce "@${cfg.package}/sbin/saslauthd saslauthd -a ${cfg.mechanism} -O 127.0.0.1/${toString config.kn.rimapd.port}";
   };
   staging = { lib, ... }: {
     # nixos-rebuild switch --flake '.#staging' --target-host root@dev.kn.cx --build-host localhost

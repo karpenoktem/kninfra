@@ -7,6 +7,7 @@
     ./kn/ldap.nix
     ./kn/shared.nix
     ./kn/wiki.nix
+    ./kn/rimapd.nix
     ./mailman2.nix
   ];
 }
