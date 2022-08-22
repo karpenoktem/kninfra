@@ -14,7 +14,6 @@ import protobufs.messages.hans_pb2_grpc as hans_pb2_grpc
 from django.conf import settings
 
 import kn.leden.entities as Es
-from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.db import update_db
 from kn.utils.giedo.fotos import scan_fotos
 from kn.utils.giedo.mailman import generate_mailman_changes
@@ -45,12 +44,8 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
         self.ss_actions = (
             ('postfix', self.daan.SetPostfixMap, self._gen_postfix),
             ('postfix-slm', self.daan.SetPostfixSenderLoginMap, self._gen_postfix_slm),
-            ('mailman', self.hans.ApplyChanges, self._gen_mailman),
-            ('ldap', self.daan.ApplyLDAPChanges, self._gen_ldap)
+            ('mailman', self.hans.ApplyChanges, self._gen_mailman)
         )
-
-    def _gen_ldap(self):
-        return generate_ldap_changes()
 
     def _gen_postfix_slm(self):
         return generate_postfix_slm_map()
@@ -129,9 +124,6 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
                 context.set_details('wrong old password')
                 return common_pb2.Empty()
             u.set_password(request.newpass)
-            self.daan.SetLDAPPassword(daan_pb2.LDAPNewPassword(
-                user=request.user.encode(),
-                password=request.newpass.encode()))
         return common_pb2.Empty()
 
     def FotoadminCreateEvent(self, request, context):

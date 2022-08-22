@@ -7,12 +7,6 @@ service Daan {
     rpc SetPostfixMap(PostfixMap) returns (Empty) {};
     rpc SetPostfixSenderLoginMap(PostfixMap) returns (Empty) {};
 
-    // Apply changes to the LDAP database previously thought up by giedo.
-    rpc ApplyLDAPChanges(LDAPChanges) returns (Empty) {};
-
-    // Set the LDAP password.
-    rpc SetLDAPPassword(LDAPNewPassword) returns (Empty) {};
-
     // Create a new event in the photo album.
     rpc FotoadminCreateEvent(FotoadminEvent) returns (Empty) {};
 }
@@ -21,23 +15,6 @@ service Daan {
 // names (plain usernames or email addresses).
 message PostfixMap {
     map<string, Strings> map = 1;
-}
-
-message LDAPChanges {
-    repeated LDAPUser upsert = 1;
-    repeated string remove = 2;
-}
-
-message LDAPUser {
-    bytes uid = 1;
-    bytes email = 2;
-    bytes lastName = 3;
-    bytes humanName = 4;
-}
-
-message LDAPNewPassword {
-    bytes user = 1;
-    bytes password = 2;
 }
 
 message FotoadminEvent {

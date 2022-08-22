@@ -30,11 +30,6 @@ def defaultSettings(glbls):
     d.WIKI_MYSQL_SECRET = None
 
     d.DOMAINNAME = 'karpenoktem.nl'
-    d.LDAP_URL = 'ldap://localhost'
-    d.LDAP_SUFFIX = 'dc=' + ',dc='.join(d.DOMAINNAME.split('.'))
-    d.LDAP_BASE = 'ou=users,' + d.LDAP_SUFFIX
-    d.LDAP_USER = 'cn=infra,' + d.LDAP_SUFFIX
-    d.LDAP_PASS = None
 
     # Settings you probably want to change
     # ############################################################

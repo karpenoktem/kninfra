@@ -26,16 +26,6 @@ class DaanStub(object):
                 request_serializer=protobufs_dot_messages_dot_daan__pb2.PostfixMap.SerializeToString,
                 response_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
                 )
-        self.ApplyLDAPChanges = channel.unary_unary(
-                '/Daan/ApplyLDAPChanges',
-                request_serializer=protobufs_dot_messages_dot_daan__pb2.LDAPChanges.SerializeToString,
-                response_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-                )
-        self.SetLDAPPassword = channel.unary_unary(
-                '/Daan/SetLDAPPassword',
-                request_serializer=protobufs_dot_messages_dot_daan__pb2.LDAPNewPassword.SerializeToString,
-                response_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-                )
         self.FotoadminCreateEvent = channel.unary_unary(
                 '/Daan/FotoadminCreateEvent',
                 request_serializer=protobufs_dot_messages_dot_daan__pb2.FotoadminEvent.SerializeToString,
@@ -59,20 +49,6 @@ class DaanServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def ApplyLDAPChanges(self, request, context):
-        """Apply changes to the LDAP database previously thought up by giedo.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def SetLDAPPassword(self, request, context):
-        """Set the LDAP password.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def FotoadminCreateEvent(self, request, context):
         """Create a new event in the photo album.
         """
@@ -91,16 +67,6 @@ def add_DaanServicer_to_server(servicer, server):
             'SetPostfixSenderLoginMap': grpc.unary_unary_rpc_method_handler(
                     servicer.SetPostfixSenderLoginMap,
                     request_deserializer=protobufs_dot_messages_dot_daan__pb2.PostfixMap.FromString,
-                    response_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
-            ),
-            'ApplyLDAPChanges': grpc.unary_unary_rpc_method_handler(
-                    servicer.ApplyLDAPChanges,
-                    request_deserializer=protobufs_dot_messages_dot_daan__pb2.LDAPChanges.FromString,
-                    response_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
-            ),
-            'SetLDAPPassword': grpc.unary_unary_rpc_method_handler(
-                    servicer.SetLDAPPassword,
-                    request_deserializer=protobufs_dot_messages_dot_daan__pb2.LDAPNewPassword.FromString,
                     response_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
             ),
             'FotoadminCreateEvent': grpc.unary_unary_rpc_method_handler(
@@ -149,40 +115,6 @@ class Daan(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Daan/SetPostfixSenderLoginMap',
             protobufs_dot_messages_dot_daan__pb2.PostfixMap.SerializeToString,
-            protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def ApplyLDAPChanges(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Daan/ApplyLDAPChanges',
-            protobufs_dot_messages_dot_daan__pb2.LDAPChanges.SerializeToString,
-            protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def SetLDAPPassword(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Daan/SetLDAPPassword',
-            protobufs_dot_messages_dot_daan__pb2.LDAPNewPassword.SerializeToString,
             protobufs_dot_messages_dot_common__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

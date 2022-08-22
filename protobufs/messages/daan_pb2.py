@@ -3,6 +3,7 @@
 # source: protobufs/messages/daan.proto
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -14,309 +15,14 @@ _sym_db = _symbol_database.Default()
 from protobufs.messages import common_pb2 as protobufs_dot_messages_dot_common__pb2
 
 
-DESCRIPTOR = _descriptor.FileDescriptor(
-  name='protobufs/messages/daan.proto',
-  package='',
-  syntax='proto3',
-  serialized_options=None,
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dprotobufs/messages/daan.proto\x1a\x1fprotobufs/messages/common.proto\"e\n\nPostfixMap\x12!\n\x03map\x18\x01 \x03(\x0b\x32\x14.PostfixMap.MapEntry\x1a\x34\n\x08MapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x17\n\x05value\x18\x02 \x01(\x0b\x32\x08.Strings:\x02\x38\x01\"8\n\x0bLDAPChanges\x12\x19\n\x06upsert\x18\x01 \x03(\x0b\x32\t.LDAPUser\x12\x0e\n\x06remove\x18\x02 \x03(\t\"K\n\x08LDAPUser\x12\x0b\n\x03uid\x18\x01 \x01(\x0c\x12\r\n\x05\x65mail\x18\x02 \x01(\x0c\x12\x10\n\x08lastName\x18\x03 \x01(\x0c\x12\x11\n\thumanName\x18\x04 \x01(\x0c\"1\n\x0fLDAPNewPassword\x12\x0c\n\x04user\x18\x01 \x01(\x0c\x12\x10\n\x08password\x18\x02 \x01(\x0c\"?\n\x0e\x46otoadminEvent\x12\x0c\n\x04\x64\x61te\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x11\n\thumanName\x18\x03 \x01(\t\"\x19\n\x07Strings\x12\x0e\n\x06values\x18\x01 \x03(\t2\xef\x01\n\x04\x44\x61\x61n\x12&\n\rSetPostfixMap\x12\x0b.PostfixMap\x1a\x06.Empty\"\x00\x12\x31\n\x18SetPostfixSenderLoginMap\x12\x0b.PostfixMap\x1a\x06.Empty\"\x00\x12*\n\x10\x41pplyLDAPChanges\x12\x0c.LDAPChanges\x1a\x06.Empty\"\x00\x12-\n\x0fSetLDAPPassword\x12\x10.LDAPNewPassword\x1a\x06.Empty\"\x00\x12\x31\n\x14\x46otoadminCreateEvent\x12\x0f.FotoadminEvent\x1a\x06.Empty\"\x00\x62\x06proto3'
-  ,
-  dependencies=[protobufs_dot_messages_dot_common__pb2.DESCRIPTOR,])
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dprotobufs/messages/daan.proto\x1a\x1fprotobufs/messages/common.proto\"e\n\nPostfixMap\x12!\n\x03map\x18\x01 \x03(\x0b\x32\x14.PostfixMap.MapEntry\x1a\x34\n\x08MapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x17\n\x05value\x18\x02 \x01(\x0b\x32\x08.Strings:\x02\x38\x01\"?\n\x0e\x46otoadminEvent\x12\x0c\n\x04\x64\x61te\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x11\n\thumanName\x18\x03 \x01(\t\"\x19\n\x07Strings\x12\x0e\n\x06values\x18\x01 \x03(\t2\x94\x01\n\x04\x44\x61\x61n\x12&\n\rSetPostfixMap\x12\x0b.PostfixMap\x1a\x06.Empty\"\x00\x12\x31\n\x18SetPostfixSenderLoginMap\x12\x0b.PostfixMap\x1a\x06.Empty\"\x00\x12\x31\n\x14\x46otoadminCreateEvent\x12\x0f.FotoadminEvent\x1a\x06.Empty\"\x00\x62\x06proto3')
 
 
 
-
-_POSTFIXMAP_MAPENTRY = _descriptor.Descriptor(
-  name='MapEntry',
-  full_name='PostfixMap.MapEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='PostfixMap.MapEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='PostfixMap.MapEntry.value', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=115,
-  serialized_end=167,
-)
-
-_POSTFIXMAP = _descriptor.Descriptor(
-  name='PostfixMap',
-  full_name='PostfixMap',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='map', full_name='PostfixMap.map', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_POSTFIXMAP_MAPENTRY, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=66,
-  serialized_end=167,
-)
-
-
-_LDAPCHANGES = _descriptor.Descriptor(
-  name='LDAPChanges',
-  full_name='LDAPChanges',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='upsert', full_name='LDAPChanges.upsert', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='remove', full_name='LDAPChanges.remove', index=1,
-      number=2, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=169,
-  serialized_end=225,
-)
-
-
-_LDAPUSER = _descriptor.Descriptor(
-  name='LDAPUser',
-  full_name='LDAPUser',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='uid', full_name='LDAPUser.uid', index=0,
-      number=1, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='email', full_name='LDAPUser.email', index=1,
-      number=2, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='lastName', full_name='LDAPUser.lastName', index=2,
-      number=3, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='humanName', full_name='LDAPUser.humanName', index=3,
-      number=4, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=227,
-  serialized_end=302,
-)
-
-
-_LDAPNEWPASSWORD = _descriptor.Descriptor(
-  name='LDAPNewPassword',
-  full_name='LDAPNewPassword',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='user', full_name='LDAPNewPassword.user', index=0,
-      number=1, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='password', full_name='LDAPNewPassword.password', index=1,
-      number=2, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=304,
-  serialized_end=353,
-)
-
-
-_FOTOADMINEVENT = _descriptor.Descriptor(
-  name='FotoadminEvent',
-  full_name='FotoadminEvent',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='date', full_name='FotoadminEvent.date', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='name', full_name='FotoadminEvent.name', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='humanName', full_name='FotoadminEvent.humanName', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=355,
-  serialized_end=418,
-)
-
-
-_STRINGS = _descriptor.Descriptor(
-  name='Strings',
-  full_name='Strings',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='values', full_name='Strings.values', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=420,
-  serialized_end=445,
-)
-
-_POSTFIXMAP_MAPENTRY.fields_by_name['value'].message_type = _STRINGS
-_POSTFIXMAP_MAPENTRY.containing_type = _POSTFIXMAP
-_POSTFIXMAP.fields_by_name['map'].message_type = _POSTFIXMAP_MAPENTRY
-_LDAPCHANGES.fields_by_name['upsert'].message_type = _LDAPUSER
-DESCRIPTOR.message_types_by_name['PostfixMap'] = _POSTFIXMAP
-DESCRIPTOR.message_types_by_name['LDAPChanges'] = _LDAPCHANGES
-DESCRIPTOR.message_types_by_name['LDAPUser'] = _LDAPUSER
-DESCRIPTOR.message_types_by_name['LDAPNewPassword'] = _LDAPNEWPASSWORD
-DESCRIPTOR.message_types_by_name['FotoadminEvent'] = _FOTOADMINEVENT
-DESCRIPTOR.message_types_by_name['Strings'] = _STRINGS
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
+_POSTFIXMAP = DESCRIPTOR.message_types_by_name['PostfixMap']
+_POSTFIXMAP_MAPENTRY = _POSTFIXMAP.nested_types_by_name['MapEntry']
+_FOTOADMINEVENT = DESCRIPTOR.message_types_by_name['FotoadminEvent']
+_STRINGS = DESCRIPTOR.message_types_by_name['Strings']
 PostfixMap = _reflection.GeneratedProtocolMessageType('PostfixMap', (_message.Message,), {
 
   'MapEntry' : _reflection.GeneratedProtocolMessageType('MapEntry', (_message.Message,), {
@@ -332,27 +38,6 @@ PostfixMap = _reflection.GeneratedProtocolMessageType('PostfixMap', (_message.Me
 _sym_db.RegisterMessage(PostfixMap)
 _sym_db.RegisterMessage(PostfixMap.MapEntry)
 
-LDAPChanges = _reflection.GeneratedProtocolMessageType('LDAPChanges', (_message.Message,), {
-  'DESCRIPTOR' : _LDAPCHANGES,
-  '__module__' : 'protobufs.messages.daan_pb2'
-  # @@protoc_insertion_point(class_scope:LDAPChanges)
-  })
-_sym_db.RegisterMessage(LDAPChanges)
-
-LDAPUser = _reflection.GeneratedProtocolMessageType('LDAPUser', (_message.Message,), {
-  'DESCRIPTOR' : _LDAPUSER,
-  '__module__' : 'protobufs.messages.daan_pb2'
-  # @@protoc_insertion_point(class_scope:LDAPUser)
-  })
-_sym_db.RegisterMessage(LDAPUser)
-
-LDAPNewPassword = _reflection.GeneratedProtocolMessageType('LDAPNewPassword', (_message.Message,), {
-  'DESCRIPTOR' : _LDAPNEWPASSWORD,
-  '__module__' : 'protobufs.messages.daan_pb2'
-  # @@protoc_insertion_point(class_scope:LDAPNewPassword)
-  })
-_sym_db.RegisterMessage(LDAPNewPassword)
-
 FotoadminEvent = _reflection.GeneratedProtocolMessageType('FotoadminEvent', (_message.Message,), {
   'DESCRIPTOR' : _FOTOADMINEVENT,
   '__module__' : 'protobufs.messages.daan_pb2'
@@ -367,72 +52,20 @@ Strings = _reflection.GeneratedProtocolMessageType('Strings', (_message.Message,
   })
 _sym_db.RegisterMessage(Strings)
 
+_DAAN = DESCRIPTOR.services_by_name['Daan']
+if _descriptor._USE_C_DESCRIPTORS == False:
 
-_POSTFIXMAP_MAPENTRY._options = None
-
-_DAAN = _descriptor.ServiceDescriptor(
-  name='Daan',
-  full_name='Daan',
-  file=DESCRIPTOR,
-  index=0,
-  serialized_options=None,
-  create_key=_descriptor._internal_create_key,
-  serialized_start=448,
-  serialized_end=687,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='SetPostfixMap',
-    full_name='Daan.SetPostfixMap',
-    index=0,
-    containing_service=None,
-    input_type=_POSTFIXMAP,
-    output_type=protobufs_dot_messages_dot_common__pb2._EMPTY,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='SetPostfixSenderLoginMap',
-    full_name='Daan.SetPostfixSenderLoginMap',
-    index=1,
-    containing_service=None,
-    input_type=_POSTFIXMAP,
-    output_type=protobufs_dot_messages_dot_common__pb2._EMPTY,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='ApplyLDAPChanges',
-    full_name='Daan.ApplyLDAPChanges',
-    index=2,
-    containing_service=None,
-    input_type=_LDAPCHANGES,
-    output_type=protobufs_dot_messages_dot_common__pb2._EMPTY,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='SetLDAPPassword',
-    full_name='Daan.SetLDAPPassword',
-    index=3,
-    containing_service=None,
-    input_type=_LDAPNEWPASSWORD,
-    output_type=protobufs_dot_messages_dot_common__pb2._EMPTY,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='FotoadminCreateEvent',
-    full_name='Daan.FotoadminCreateEvent',
-    index=4,
-    containing_service=None,
-    input_type=_FOTOADMINEVENT,
-    output_type=protobufs_dot_messages_dot_common__pb2._EMPTY,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-])
-_sym_db.RegisterServiceDescriptor(_DAAN)
-
-DESCRIPTOR.services_by_name['Daan'] = _DAAN
-
+  DESCRIPTOR._options = None
+  _POSTFIXMAP_MAPENTRY._options = None
+  _POSTFIXMAP_MAPENTRY._serialized_options = b'8\001'
+  _POSTFIXMAP._serialized_start=66
+  _POSTFIXMAP._serialized_end=167
+  _POSTFIXMAP_MAPENTRY._serialized_start=115
+  _POSTFIXMAP_MAPENTRY._serialized_end=167
+  _FOTOADMINEVENT._serialized_start=169
+  _FOTOADMINEVENT._serialized_end=232
+  _STRINGS._serialized_start=234
+  _STRINGS._serialized_end=259
+  _DAAN._serialized_start=262
+  _DAAN._serialized_end=410
 # @@protoc_insertion_point(module_scope)

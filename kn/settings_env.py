@@ -18,7 +18,6 @@ from kn.defaultSettings import defaultSettings  # noqa: E402
 # These should be of the form ('host', 'user', 'password', 'db')
 # FORUM_MYSQL_SECRET = ('localhost', 'punbb', 'CHANGE ME', 'punbb')
 # PHOTOS_MYSQL_SECRET = ('localhost', 'fotos', 'CHANGE ME', 'fotos')
-# LDAP_PASS = 'CHANGE_ME'
 # DOMAINNAME = 'karpenoktem.nl'
 # INFRA_HOME = os.environ['HOME']
 INFRA_REPO = os.path.join(os.path.dirname(__file__), "../")

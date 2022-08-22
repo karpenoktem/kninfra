@@ -16,13 +16,6 @@ in {
       type = types.attrsOf types.str;
       default = {};
     };
-    ldap.user = mkOption {
-      type = types.str;
-    };
-    # todo: remove
-    ldap.pass = mkOption {
-      type = types.str;
-    };
   };
   config = lib.mkIf cfg.enable {
     kn.shared.env = {

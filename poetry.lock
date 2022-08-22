@@ -672,18 +672,6 @@ tomli = ">=1.0.0"
 testing = ["xmlschema", "requests", "pygments (>=2.7.2)", "nose", "mock", "hypothesis (>=3.56)", "argcomplete"]
 
 [[package]]
-name = "python-ldap"
-version = "3.4.2"
-description = "Python modules for implementing LDAP clients"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-pyasn1 = ">=0.3.7"
-pyasn1_modules = ">=0.1.5"
-
-[[package]]
 name = "pyx"
 version = "0.15"
 description = "Python package for the generation of PostScript, PDF, and SVG files"
@@ -891,7 +879,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "b8cc7e44be573aef544828e194c263a11ee9d1012b5a6336e0de55989102bb80"
+content-hash = "6cb0f702610fc893ff403bdd746901a871ee0d3d5ea1c6fc1137870648f34507"
 
 [metadata.files]
 aniso8601 = [
@@ -1346,9 +1334,6 @@ pyparsing = [
 pytest = [
     {file = "pytest-7.1.2-py3-none-any.whl", hash = "sha256:13d0e3ccfc2b6e26be000cb6568c832ba67ba32e719443bfe725814d3c42433c"},
     {file = "pytest-7.1.2.tar.gz", hash = "sha256:a06a0425453864a270bc45e71f783330a7428defb4230fb5e6a731fde06ecd45"},
-]
-python-ldap = [
-    {file = "python-ldap-3.4.2.tar.gz", hash = "sha256:b16470a0983aaf09a00ffb8f40b69a2446f3d0be639a229256bce381fcb268f7"},
 ]
 pyx = [
     {file = "PyX-0.15.tar.gz", hash = "sha256:0fc3b00c5e7fb6f4aefbf63b95f624297dde47700a82b8b5ad6ebb346b5e4977"},

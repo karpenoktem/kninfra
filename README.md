@@ -112,7 +112,6 @@ Naast de website draaien we nog een heleboel andere diensten, zoals
 En nog een aantal die niet *user-facing* zijn:
 
  * Een BIND9 DNS server
- * Een LDAP server die gebruikt wordt door radius en saslauthd.
  * Een [saslauthd](http://www.linuxcommand.org/man_pages/saslauthd8.html)
    die gebruikt wordt door postfix om gebruikers te authenticeren.
 
@@ -138,6 +137,8 @@ aangebracht.  Dit wordt gedaan door drie verschillende *daemons*
    is te vinden onder `kn/utils/daan`.  (Daan was de eerste secretaris.)
  * **hans** draait als de `list`-gebruiker op *sankhara* en laat giedo
    de mailman e-maillijsten inkijken en aanpassen.  Code: `kn/utils/hans`.
+ * **rimapd** draait als een anonieme gebruiker op *sankhara* en is de brug
+   tussen saslauthd en de database.
    
 Development VM
 --------------
