@@ -30,7 +30,7 @@ for varname, value in os.environ.items():
 
 # TODO(HACK): should have structured config
 if "ALLOWED_HOSTS" in globals() and type(globals()["ALLOWED_HOSTS"]) == str:
-    ALLOWED_HOSTS = [ALLOWED_HOSTS]
+    ALLOWED_HOSTS = ALLOWED_HOSTS.split(',')
 # Do not remove the following
 #
 

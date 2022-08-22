@@ -111,7 +111,7 @@ rec {
       }];
     };
     age.secrets.kn-env.file = ../secrets/staging.age;
-    kn.shared.env.KN_ALLOWED_HOSTS = "dev.kn.cx";
+    kn.shared.env.KN_ALLOWED_HOSTS = "dev.kn.cx,localhost";
     users.users.root = {
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDo1N5E6qkb3McJOvv0PqI7E8iYLAcjil5RWc+zeTtN/ yorick"
