@@ -19,7 +19,8 @@ $wgAuthRemoteuserUserName = function () {
     if ($wgKNAuthLoginData != null) {
         // there's a bug where this sometimes happens (on mediawiki version mismatch)
         // and causes CAS errors
-        echo "warning: wgAuthRemoteuserUserName ran twice!";
+        // echo "warning: wgAuthRemoteuserUserName ran twice!";
+        return $wgKNAuthLoginData["name"];
         //$e = new \Exception;
         //var_dump($e->getTraceAsString());
     }
@@ -61,7 +62,7 @@ $wgAuthRemoteuserUserPrefsForced = [
 ];
 
 // remove auth links for unregistered users
-Hooks::register("PersonalUrls", static function (&$personalurls) {
+$wgHooks['PersonalUrls'][] = static function (&$personalurls) {
     unset($personalurls["createaccount"]);
     if (isset($personalurls["login-private"])) {
         $personalurls["login-private"] = [
@@ -71,14 +72,14 @@ Hooks::register("PersonalUrls", static function (&$personalurls) {
         ];
     }
     return true;
-});
+};
 
 // XXX: Actually does not seem to save
 // but that's okay
-Hooks::register("GetAutoPromoteGroups", static function (&$user, &$promote) {
+$wgHooks['GetAutoPromoteGroups'][] = static function (&$user, &$promote) {
     global $wgKNAuthLoginData;
     if ($wgKNAuthLoginData != null) {
       $promote = $wgKNAuthLoginData['groups'];
       return true;
     }
-});
+};

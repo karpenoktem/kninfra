@@ -80,12 +80,8 @@ in {
         extensions.Auth_remoteuser = pkgs.fetchFromGitHub {
           owner = "wikimedia";
           repo = "mediawiki-extensions-Auth_remoteuser";
-          # old rev, work around bug where methods ran twice
-          # causing CAS failures
-          rev = "311b311ee900a33637c15cd57e4556b0ed688a75";
-          sha256 = "sha256-eFKDA9CU4V9QKZd+GsI3sZTwwXvD6doVC76ASD16hrA=";
-          # rev = "d331705ee38164f3a0c28bd2bd2b604a1cf3c54e";
-          # sha256 = "sha256-exTv/b7BJTCi8HZ+Y0qv4SNLQZcfTVj1RCeAbbYce6A=";
+          rev = "d331705ee38164f3a0c28bd2bd2b604a1cf3c54e";
+          sha256 = "sha256-exTv/b7BJTCi8HZ+Y0qv4SNLQZcfTVj1RCeAbbYce6A=";
         };
         in ''
         // $wgDebugLogFile = "/tmp/debug-mediawiki.log";
