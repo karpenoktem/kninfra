@@ -11,3 +11,9 @@ Disallow: /groups/leden/aktas/
 Disallow: /en/groups/leden/aktas/
 Disallow: /nl/groups/leden/aktas/
 Disallow: /kndjango.fcgi/
+{% if DEV_BANNER != None %}
+Disallow: /
+
+User-agent: Googlebot
+Disallow: /
+{% endif %}
