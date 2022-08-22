@@ -23,6 +23,20 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (self: super: {
+        # TODO(workaround): upstream to nixpkgs
+        openldap = super.openldap.overrideAttrs (o: {
+          doCheck = false; # takes too long
+          postPatch = ''
+            # change rundir to /run/openldap
+            sed -i 's|#define LDAPI_SOCK LDAP_RUNDIR LDAP_DIRSEP "run" LDAP_DIRSEP "ldapi"|#define LDAPI_SOCK LDAP_DIRSEP "run" LDAP_DIRSEP "openldap" LDAP_DIRSEP "ldapi"|' include/ldap_defaults.h
+          '';
+        });
+      })
+    ];
+    # TODO(upgrade): remove in >22.05
+    systemd.services.openldap.serviceConfig.RuntimeDirectory = "openldap";
     services.openldap = {
       enable = true;
       urlList = [ "ldapi:///" "ldap://localhost" ];
