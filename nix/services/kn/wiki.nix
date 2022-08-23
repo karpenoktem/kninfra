@@ -2,6 +2,8 @@
 
 let
   cfg = config.kn.wiki;
+  knVhost = config.services.nginx.virtualHosts.kn;
+  wgVerifyHost = "http${lib.optionalString knVhost.forceSSL "s"}://${knVhost.serverName}";
 
   package = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
@@ -150,7 +152,7 @@ in {
         $wgShowExceptionDetails = true;
         //{% endif %}
         
-        $wgKNAuthVerifyURL = 'http://localhost/accounts/api/';
+        $wgKNAuthVerifyURL = '${wgVerifyHost}/accounts/api/';
         wfLoadExtension("Auth_remoteuser", "${extensions.Auth_remoteuser}/extension.json");
         include "${./knauth.php}";
       '';

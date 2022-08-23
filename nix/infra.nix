@@ -54,7 +54,11 @@ rec {
         ];
       };
       postfix.enable = true;
-      openssh.enable = true;
+      openssh = {
+        enable = true;
+        passwordAuthentication = false;
+        permitRootLogin = "prohibit-password";
+      };
       sshguard = {
         enable = true;
         whitelist = [
@@ -64,17 +68,25 @@ rec {
           "82.93.241.107/32"
           "82.94.240.40/32"
           "37.252.124.223/32"
-          "sw.w-nz.com"
+          #"sw.w-nz.com"
           "62.163.41.99/32"
+          "2a02:a464:5ed::/48" # yorick
         ];
       };
     };
     networking.hostName = "vipassana";
     networking.domain = "karpenoktem.nl";
+    security.acme.acceptTerms = true;
+    security.acme.defaults.email = let
+      # very basic obfuscation
+      reverseString = with lib; x: concatStrings (reverseList (stringToCharacters x));
+      in 
+        "webcie@${reverseString "ln.metkoneprak"}";
     # enable/disable various KN services
     kn = {
       shared.enable = true;
       shared.initialDB = true;
+      shared.env.KN_ALLOWED_HOSTS = "${config.services.nginx.virtualHosts.kn.serverName}";
       wiki.enable = true;
       #mailman.enable = true; # TODO
       django.enable = true;
@@ -110,8 +122,12 @@ rec {
         prefixLength = 64;
       }];
     };
+    services.nginx.virtualHosts.kn = {
+      serverName = "dev.kn.cx";
+      enableACME = true;
+      forceSSL = true;
+    };
     age.secrets.kn-env.file = ../secrets/staging.age;
-    kn.shared.env.KN_ALLOWED_HOSTS = "dev.kn.cx,localhost";
     users.users.root = {
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDo1N5E6qkb3McJOvv0PqI7E8iYLAcjil5RWc+zeTtN/ yorick"
@@ -127,7 +143,8 @@ rec {
     # for now, be absolutely sure about exposed services
     # until I've fixed the passwords :D
     networking.firewall.allowedUDPPorts = lib.mkForce [ ];
-    networking.firewall.allowedTCPPorts = lib.mkOverride 49 [ 22 ]; # 80 443
+    networking.firewall.allowedTCPPorts = lib.mkOverride 49 [ 22 80 443 ];
+    networking.firewall.logRefusedConnections = false;
     networking.firewall.extraCommands = ''
       ip6tables -A nixos-fw -p tcp --dport 80 -s 2a02:a464:5ed::/48 -j nixos-fw-accept
     '';
@@ -158,7 +175,6 @@ rec {
       address = "fe80::1";
       interface = "eth0";
     };
-    services.openssh.permitRootLogin = "prohibit-password";
 
     boot.initrd.availableKernelModules =
       [ "ahci" "xhci_pci" "virtio_pci" "sd_mod" "sr_mod" ];
@@ -189,6 +205,7 @@ rec {
     services.openssh.hostKeys = [
       { path = "/root/vm-host.key"; type = "ed25519"; }
     ];
+    services.nginx.virtualHosts.kn.serverName = "localhost";
     age.secrets.kn-env.file = ../secrets/vm.age;
     kn.shared.initialDB = true;
     services.getty = {
