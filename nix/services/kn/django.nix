@@ -5,7 +5,10 @@
 let
   cfg = config.kn.django;
   # generate a json file with configuration for uwsgi
-  kn_env = config.kn.shared.env;
+  kn_env = config.kn.shared.env // {
+    KN_ALLOWED_HOSTS =
+      "${config.services.nginx.virtualHosts.kn.serverName}";
+  };
   uswgi_conf = pkgs.writeText "uwsgi.json" (builtins.toJSON {
     uwsgi = {
       plugins = "python3";

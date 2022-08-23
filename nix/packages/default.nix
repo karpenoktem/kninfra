@@ -12,20 +12,10 @@ self: super: {
       });
     });
   };
-  vipassana-vm = (import "${super.path}/nixos/lib/eval-config.nix" {
-    modules = with (import ../infra.nix); [
-      vipassana
-      virt
-      self.inputs.agenix.nixosModule
-      "${super.path}/nixos/modules/virtualisation/qemu-vm.nix"
-      ({...}: {
-        config.nixpkgs = {
-          pkgs = self;
-          inherit (self) system;
-        };
-      })
-    ];
-  }).config.system.build.vm.overrideAttrs (old:
+  vipassana-vm = (self.nixos [
+    (import ../infra.nix).vm
+    self.inputs.agenix.nixosModule
+  ]).vm.overrideAttrs (old:
     let
       # add switch-running-vm, ssh scripts
       # todo: host key checking for sanity

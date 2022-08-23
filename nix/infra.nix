@@ -1,5 +1,12 @@
-rec {
-  # config for the server (both real and VM)
+let
+  # user keys are specified in ./users.toml
+  users = builtins.fromTOML (builtins.readFile ./users.toml);
+  userList = builtins.attrValues users;
+  sshKeys = production:
+    builtins.concatMap (x: x.sshkeys)
+    (builtins.filter (x: x.production == production) userList);
+in rec {
+  # shared config for the server (both real and VM)
   vipassana = { pkgs, lib, config, ... }: {
     # import ./services/default.nix, which imports the other files there
     # this way, we have access to the kn.django module
@@ -20,7 +27,9 @@ rec {
     # pin things like state file layouts for postgresql
     system.stateVersion = "21.05";
 
+    # manage users from the nixos configuration
     users.mutableUsers = false;
+
     time.timeZone = "Europe/Amsterdam";
     # this changes some packages so that there is no X dependency
     # allowing for the total system size to be smaller.
@@ -28,7 +37,8 @@ rec {
     # the build will take longer:
     # environment.noXlibs = true;
 
-    age.secrets.kn-env = {};
+    # set up agenix secret
+    age.secrets.kn-env = { };
 
     # set EDITOR to vim
     programs.vim.defaultEditor = true;
@@ -42,7 +52,7 @@ rec {
        / __ |_\ \ | |/ / / ,< / _ `/ __/ _ \/ -_) /    / _ \/  '_/ __/ -_)  ' \
       /_/ |_/___/ |___/ /_/|_|\_,_/_/ / .__/\__/ /_/|_/\___/_/\_\\__/\__/_/_/_/
                    ${config.networking.hostName}  /_/        dienstenserver
-        '';
+    '';
     services = {
       logcheck = {
         enable = false;
@@ -70,35 +80,35 @@ rec {
           "37.252.124.223/32"
           #"sw.w-nz.com"
           "62.163.41.99/32"
-          "2a02:a464:5ed::/48" # yorick
-        ];
+        ] ++ (lib.concatMap (x: x.allowed-ips) userList);
       };
     };
-    networking.hostName = "vipassana";
-    networking.domain = "karpenoktem.nl";
-    security.acme.acceptTerms = true;
-    security.acme.defaults.email = let
-      # very basic obfuscation
-      reverseString = with lib; x: concatStrings (reverseList (stringToCharacters x));
-      in 
-        "webcie@${reverseString "ln.metkoneprak"}";
+    networking = {
+      hostName = "vipassana";
+      domain = "karpenoktem.nl";
+    };
+    security.acme = {
+      acceptTerms = true;
+      # slightly obfuscated against spammers
+      defaults.email = lib.concatStringsSep "@" [ "webcie" "karpenoktem.nl" ];
+    };
     # enable/disable various KN services
     kn = {
       shared.enable = true;
       shared.initialDB = true;
-      shared.env.KN_ALLOWED_HOSTS = "${config.services.nginx.virtualHosts.kn.serverName}";
       wiki.enable = true;
       #mailman.enable = true; # TODO
       django.enable = true;
       daan.enable = true;
       hans.enable = true;
       rimapd.enable = true;
-      giedo = {
-        enable = true;
-      };
+      giedo.enable = true;
     };
     # allow remote http, ssh access
-    networking.firewall.allowedTCPPorts = lib.mkForce [ 22 80 443 ];
+    networking.firewall = {
+      allowedTCPPorts = lib.mkForce [ 22 80 443 ];
+      allowedUDPPorts = lib.mkForce [ ];
+    };
     services.mailman2.enable = true;
     services.saslauthd = {
       enable = true;
@@ -106,14 +116,23 @@ rec {
     };
     # TODO(upstream) to nixpkgs
     # upstream currently doesn't support the config scheme for this mechanism
-    systemd.services.saslauthd.serviceConfig.ExecStart = let
-      cfg = config.services.saslauthd;
-    in
-      lib.mkForce "@${cfg.package}/sbin/saslauthd saslauthd -a ${cfg.mechanism} -O 127.0.0.1/${toString config.kn.rimapd.port}";
+    systemd.services.saslauthd.serviceConfig.ExecStart =
+      let cfg = config.services.saslauthd;
+      in lib.mkForce
+      "@${cfg.package}/sbin/saslauthd saslauthd -a ${cfg.mechanism} -O 127.0.0.1/${
+        toString config.kn.rimapd.port
+      }";
+    nix.binaryCaches =
+      [ "https://cache.nixos.org" "https://kninfra.cachix.org" ];
+    nix.binaryCachePublicKeys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "kninfra.cachix.org-1:l6SeUehzysoUHUX86/gmqiWaa9Jy7dTSFnPcWGw3zGo="
+    ];
   };
+
   staging = { lib, ... }: {
     # nixos-rebuild switch --flake '.#staging' --target-host root@dev.kn.cx --build-host localhost
-    imports = [ vipassana hetzner ];
+    imports = [ vipassana ./hetzner.nix ];
     networking = {
       hostName = lib.mkForce "staging";
       domain = lib.mkForce "dev.kn.cx";
@@ -129,82 +148,34 @@ rec {
     };
     age.secrets.kn-env.file = ../secrets/staging.age;
     users.users.root = {
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDo1N5E6qkb3McJOvv0PqI7E8iYLAcjil5RWc+zeTtN/ yorick"
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCbieYUtRGQ4nf4glQvrZDn72doP6W2uw2z9VqFq5sZLROXYa4jW8nwx4h+BiArGs+VPwn6lfsP19PX6yNIk74C/SkO26S1Zvbe7ffNusi6PH2BQIOWeAYKk+eZH+ZOeD8z07uDB7QffwRLwzSaPFg+zfRzsMFoXH/GE9qOQ4lnfk8czTZL7zbZf/yS7mDFztClXFciYsVwgRXNiFpfc+9mOkU0oBWtGo/WGUhB0Hds3a4ylyjjVAcC/l1H2bvc/Q3d6bbn23pUFl2V78Yg1B4b1MT34qbBV6whXAQd7KM9tND2ZhpF2XQ7Spi1QlOac0jup+sE+3bbvcjNqTI05DwJO/dX5F2gSAFkvSY4ZPqSX5ilE/hj4DQuhRgLmQdbVl5IFV9aLYqUvJcCqX9jRFMly4YTFXsFz18rGkxOYGZabcE1usBM2zRVDTtEP6Si5ii76Ocvp8aNFBB2Kf1whg8tziTv3kQEQ9fd2sRtE2J3xveJiwXjUBU2uikSOKe8JP47Tb6PYlv7Ty/6OI51aUQn++R72VNajdBJ1r1osp7leqTJ+sXuLlWLo/a7lDpDmgEI7dbxqmpjLcMce0JzqLKlP1Q2U/nkYy86xkjSTH1rNUI2JAbJx3iTcGy7bq12yfjNfcGAqY4GVXvisK1cpbF0RCjaFExwtmzorljHh6ZHjQ== lars"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINbmv5LOl+qu5tKTaaUq49Jciv3S3hrI4hwVWBh7Spl6 ayke"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBWqwvAk43sLon1UtP/Swl2hRhetG1OmLCrfGp4tBr6V ayke@karpenoktem"
-      ];
+      # add non-production ssh access
+      openssh.authorizedKeys.keys = sshKeys false;
       # pass yorick/kn/stage
       hashedPassword =
         "$6$2ngK32gHW3AsOFOS$G/nsXxPUi9ePaa0gOrNaNN1nBDSYfeDkLdWZI3ad05jdvdyzMoCzZC/YFn8lFO1CLapKSQFStLgI3HPqPy1/h0";
     };
     kn.shared.initialDB = true;
-    # for now, be absolutely sure about exposed services
-    # until I've fixed the passwords :D
-    networking.firewall.allowedUDPPorts = lib.mkForce [ ];
-    networking.firewall.allowedTCPPorts = lib.mkOverride 49 [ 22 80 443 ];
+    # don't log these, there are *a lot*
     networking.firewall.logRefusedConnections = false;
-    networking.firewall.extraCommands = ''
-      ip6tables -A nixos-fw -p tcp --dport 80 -s 2a02:a464:5ed::/48 -j nixos-fw-accept
-    '';
-    nix.binaryCaches = [
-      "https://cache.nixos.org"
-      "https://kninfra.cachix.org"
-    ];
-    nix.binaryCachePublicKeys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "kninfra.cachix.org-1:l6SeUehzysoUHUX86/gmqiWaa9Jy7dTSFnPcWGw3zGo="
-    ];
   };
-  hetzner = { modulesPath, ... }: {
-    # installation:
-    # make hetzner cloud, mount nixos 21.11 iso
-    # rescue console, curl https://pub.yori.cc/install-hetzner.sh | bash
-    # unmount, restart server, login with yorick's ssh key
-    imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
-    boot.loader.grub = {
-      enable = true;
-      version = 2;
-      devices = [ "/dev/sda" ];
-    };
-    networking.usePredictableInterfaceNames = false;
-    networking.useDHCP = false;
-    networking.interfaces.eth0 = { useDHCP = true; };
-    networking.defaultGateway6 = {
-      address = "fe80::1";
-      interface = "eth0";
-    };
 
-    boot.initrd.availableKernelModules =
-      [ "ahci" "xhci_pci" "virtio_pci" "sd_mod" "sr_mod" ];
-    boot.initrd.kernelModules = [ ];
-    boot.kernelModules = [ ];
-    boot.extraModulePackages = [ ];
-
-    fileSystems."/" = {
-      device = "/dev/sda1";
-      fsType = "ext4";
-    };
-
-    swapDevices = [ ];
-
-    hardware.cpu.amd.updateMicrocode = true;
-  };
-  # merged-in config for virtualized system
-  virt = {
-    # install the vm-ssh.key.pub for ssh access
-    users.users.root.openssh.authorizedKeys.keyFiles = [ ./vm-ssh.key.pub ];
-    # vm hostkey, obfuscased using b64 to avoid false positives
-    # in security scanners
+  # virtualized system
+  vm = { modulesPath, ... }: {
+    imports = [ vipassana "${modulesPath}/virtualisation/qemu-vm.nix" ];
+    # set up vm hostkey
+    # obfuscated using b64 to avoid false positives in security scanners
     system.activationScripts.hostkey.text = ''
       base64 -d ${./vm-host.key.b64} > /root/vm-host.key
       chmod 0600 /root/vm-host.key
     '';
     system.activationScripts.agenixRoot.deps = [ "hostkey" ];
-    services.openssh.hostKeys = [
-      { path = "/root/vm-host.key"; type = "ed25519"; }
-    ];
+    services.openssh.hostKeys = [{
+      path = "/root/vm-host.key";
+      type = "ed25519";
+    }];
+    # install the vm-ssh.key.pub for ssh access
+    users.users.root.openssh.authorizedKeys.keyFiles = [ ./vm-ssh.key.pub ];
+
     services.nginx.virtualHosts.kn.serverName = "localhost";
     age.secrets.kn-env.file = ../secrets/vm.age;
     kn.shared.initialDB = true;
@@ -237,9 +208,7 @@ rec {
           guest.port = 22;
         }
       ];
-      qemu = {
-        options = [ "-serial mon:stdio" ];
-      };
+      qemu = { options = [ "-serial mon:stdio" ]; };
     };
   };
 }
