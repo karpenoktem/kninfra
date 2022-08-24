@@ -52,7 +52,7 @@ in {
       rimapd = rec {
         requires = [ "kn_initial_state.service" ];
         after = requires;
-        #serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
+        serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       };
       hans.serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       kn_initial_state = rec {

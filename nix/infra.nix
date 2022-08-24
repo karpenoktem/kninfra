@@ -165,6 +165,7 @@ in rec {
     # set up vm hostkey
     # obfuscated using b64 to avoid false positives in security scanners
     system.activationScripts.hostkey.text = ''
+      mkdir -p /root
       base64 -d ${./vm-host.key.b64} > /root/vm-host.key
       chmod 0600 /root/vm-host.key
     '';
