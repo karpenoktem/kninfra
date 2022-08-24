@@ -145,7 +145,7 @@ Development VM
 
 Met [nix](https://nixos.org/nix/) is het systeem op je eigen computer te testen:
 
- 1. Installeer [nix](https://nixos.org/nix/) (of vanuit je distro)
+ 1. Installeer [nix](https://nixos.org/nix/) (of vanuit je distro, minimaal v2.6)
  2. Maak een kopie van deze *repository* met [git](https://git-scm.com)
 
         $ git clone https://github.com/karpenoktem/kninfra
@@ -153,25 +153,25 @@ Met [nix](https://nixos.org/nix/) is het systeem op je eigen computer te testen:
  3. Start een VM
 
         $ cd pad/naar/kninfra
-        $ nix build .#vm
-           (...)
-        $ ./result/bin/run-vipassana-vm
+        $ nix develop
+        $ vm.start
            (andere terminal)
-        $ ./result/bin/ssh
+        $ vm.ssh
  4. Verander dingen
 
-        $ nix-build -A vm && ./result/bin/switch-running-vm
+        $ vm.deploy
 
 Development Server
 ------------------
 
-Een VM is handig om de hele website, inclusief daemons te testen. Vaak wil je alleen
-maar iets aan de website veranderen.
+Een VM is handig om de hele website, inclusief daemons, te testen, maar dit is
+soms een beetje traag en vaak wil je alleen maar iets aan de website veranderen.
+Je kunt de website op je eigen systeem draaien.
 
  1. Volg stap 1 en 2 hierboven
  2.
  
-        $ nix develop
+        $ nix develop .#python
         $ mongod --db-path ../kn-db &
         $ ./bin/reset-database
         $ ./bin/run-dev-server
