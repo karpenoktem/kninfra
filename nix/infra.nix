@@ -159,9 +159,9 @@ in rec {
     networking.firewall.logRefusedConnections = false;
   };
 
-  # virtualized system
-  vm = { modulesPath, ... }: {
-    imports = [ vipassana "${modulesPath}/virtualisation/qemu-vm.nix" ];
+  # mixin for virtual system (development vm, vm-tests)
+  virtualized = {
+    imports = [ vipassana ];
     # set up vm hostkey
     # obfuscated using b64 to avoid false positives in security scanners
     system.activationScripts.hostkey.text = ''
@@ -173,23 +173,27 @@ in rec {
       path = "/root/vm-host.key";
       type = "ed25519";
     }];
-    # install the vm-ssh.key.pub for ssh access
-    users.users.root.openssh.authorizedKeys.keyFiles = [ ./vm-ssh.key.pub ];
-
     services.nginx.virtualHosts.kn.serverName = "localhost";
     age.secrets.kn-env.file = ../secrets/vm.age;
     kn.shared.initialDB = true;
+  };
+
+  # virtualized system, used for development
+  vm = { modulesPath, ... }: {
+    imports = [ virtualized "${modulesPath}/virtualisation/qemu-vm.nix" ];
+    # install the vm-ssh.key.pub for ssh access
+    users.users.root.openssh.authorizedKeys.keyFiles = [ ./vm-ssh.key.pub ];
     services.getty = {
       autologinUser = "root";
       helpLine = ''
         ssh access:
-          ./result/bin/ssh
+          vm.ssh
         update running system (does not survive reboot):
-          nix-build -A vm && ./result/bin/switch-running-vm
+          vm.deploy
         website:
           http://localhost:8080/
         to get out:
-          poweroff
+          vm.stop
       '';
     };
     # qemu settings:

@@ -49,6 +49,11 @@ in {
         after = requires;
         serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       };
+      rimapd = rec {
+        requires = [ "kn_initial_state.service" ];
+        after = requires;
+        #serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
+      };
       hans.serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       kn_initial_state = rec {
         requires = [ "mongodb.service" ];
