@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm -f $out/Mailman/mm_cfg.py $out/Mailman/mm_cfg.pyc
     ln -s /etc/mailman_cfg.py $out/Mailman/mm_cfg.py
+    cp -r misc $out/
   '';
 
   makeFlags = [ "DIRSETGID=:" ];

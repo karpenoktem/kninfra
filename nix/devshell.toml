@@ -79,3 +79,8 @@ help = "Regenerate protobufs"
 name = "format-nix"
 command = '''fd '\.nix' -x nixfmt'''
 help = "Reformat nix code"
+
+[[commands]]
+name = "vm-check"
+command = "cd $PRJ_ROOT && nix build .#kn.vmCheck -L"
+help = "Run VM checks"

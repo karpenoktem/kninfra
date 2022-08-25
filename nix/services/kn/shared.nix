@@ -49,6 +49,7 @@ in {
         after = requires;
         serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       };
+      daan.serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       rimapd = rec {
         requires = [ "kn_initial_state.service" ];
         after = requires;
@@ -62,12 +63,18 @@ in {
           StateDirectory = "kndjango";
           Type = "oneshot";
           RemainAfterExit = true;
+          EnvironmentFile = config.age.secrets.kn-env.path;
         };
         script = ''
           # initialize the DB if this has not happened before
           if [ ! -f /var/lib/kndjango/database-initialized ]; then
             ${pkgs.kninfra}/libexec/initializeDb.py
             touch /var/lib/kndjango/database-initialized
+          fi
+          if [ ! -f /var/lib/kndjango/mailman-initialized ]; then
+            ${pkgs.mailman2}/bin/newlist --quiet mailman wortel@${config.networking.domain} "$KN_MAILMAN_DEFAULT_PASSWORD"
+            ${pkgs.mailman2}/bin/config_list -i ${pkgs.mailman2}/misc/sitelist.cfg mailman
+            touch /var/lib/kndjango/mailman-initialized
           fi
         '';
       };

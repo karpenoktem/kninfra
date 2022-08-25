@@ -2,6 +2,14 @@
 let
   cfg = config.kn.giedo;
   kn_env = config.kn.shared.env;
+  # create a wrapper to set all the environment variables
+  # todo: I'd use -P on systemd-run, but it breaks the vm test
+  wrapScript = name: script: pkgs.writeShellScript name ''
+    set -e
+    systemd-run -Gt --wait -p EnvironmentFile=/run/agenix/kn-env \
+      ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''-E "${n}"="${v}"'') kn_env)} \
+      ${script} "$@"
+  '';
 in {
   options.kn.giedo = with lib; {
     enable = mkEnableOption "KN Giedo";
@@ -56,10 +64,9 @@ in {
     };
     environment.systemPackages = [(
       pkgs.runCommandNoCC "kngiedo" { buildInputs = [ pkgs.makeWrapper ]; } ''
-        makeWrapper ${pkgs.kninfra}/utils/scan-fotos.py $out/bin/kn-scan-fotos \
-        ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') kn_env)}
-        makeWrapper ${pkgs.kninfra}/utils/giedo-sync.py $out/bin/kn-giedo-sync \
-        ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') kn_env)}
+        mkdir -p $out/bin
+        cp ${wrapScript "kn-scan-fotos" "${pkgs.kninfra}/utils/scan-fotos.py"} $out/bin/kn-scan-fotos
+        cp ${wrapScript "kn-giedo-sync" "${pkgs.kninfra}/utils/giedo-sync.py"} $out/bin/kn-giedo-sync
       ''
     )];
   };

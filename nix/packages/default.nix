@@ -1,7 +1,7 @@
 final: prev: {
   mailman2 = final.callPackage ./mailman2.nix {};
   kninfra = final.callPackage ./kndjango.nix { };
-  kn.checks = final.callPackage ../tests.nix {};
+  kn.vmCheck = final.callPackage ../tests.nix {};
   kn.puppetCheck = final.callPackage ({stdenv, runCommandNoCC, makeWrapper, puppeteer-cli, chromium, nodejs}:
     runCommandNoCC "kn-puppet" {
       buildInputs = [ makeWrapper ];

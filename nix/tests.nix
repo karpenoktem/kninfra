@@ -17,5 +17,6 @@ nixosTest ({
     machine.succeed("${curl}/bin/curl -f -LI http://localhost/")
     machine.succeed("${kn.puppetCheck}/bin/kn-puppet http://localhost admin 'CHANGE ME'")
     machine.succeed("${kn.puppetCheck}/bin/kn-puppet http://localhost test 'CHANGE ME'")
+    machine.succeed("kn-giedo-sync")
   '';
 })

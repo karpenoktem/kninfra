@@ -73,6 +73,9 @@ in {
       VIRTUAL_HOST_OVERVIEW = Off
       DEB_LISTMASTER = 'wortel@${config.networking.domain}'
       DEFAULT_LIST_ADVERTISED = False
+      POSTFIX_ALIAS_CMD = "/run/current-system/sw/bin/postalias"
+      POSTFIX_MAP_CMD = "/run/current-system/sw/bin/postmap"
+      HTML_TO_PLAIN_TEXT_COMMAND = '${pkgs.lynx}/bin/lynx -dump %(filename)s'
     '';
     services.nginx.enable = true;
     services.nginx.virtualHosts.kn = {
