@@ -197,6 +197,7 @@ in rec {
           vm.stop
       '';
     };
+    programs.bash.shellAliases."vm.stop" = "poweroff";
     # qemu settings:
     virtualisation = {
       memorySize = 1024;
