@@ -873,3 +873,13 @@ planning_pools:
   reminder_cc: [ "barco" ]
   administrator: barco
   name: tappers
+
+fotos:
+- _id: !id '55133262b2c7343f1a367bf9'
+  type: "album"
+  name: ""
+  path: null
+  random: 0.29
+  title: "Foto's"
+  visibility: [ "world" ]
+  effectiveVisibility: [ "world" ]
