@@ -194,7 +194,7 @@ def fotoadmin_create_event(request):
             else:
                 messages.error(request, _('Er is een fout opgetreden: %s') %
                                ret.get('error', _('geen foutmelding')))
-            return redirect('fotos')
+            return redirect('fotos', path='')
     else:
         form = CreateEventForm()
     return render(request, 'fotos/admin/create.html',

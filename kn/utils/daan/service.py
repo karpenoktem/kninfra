@@ -33,7 +33,7 @@ class Daan(daan_pb2_grpc.DaanServicer):
                 fotoadmin_create_event(request.date, request.name, request.humanName)
             except FotoadminError as e:
                 context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-                context.set_details(e.message)
+                context.set_details(str(e))
         return common_pb2.Empty()
 
     def FotoadminMoveFotos(self, request, context):
@@ -42,5 +42,5 @@ class Daan(daan_pb2_grpc.DaanServicer):
                 fotoadmin_move_fotos(request.event, request.store, request.user, request.dir)
             except FotoadminError as e:
                 context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-                context.set_details(e.message)
+                context.set_details(str(e))
         return common_pb2.Empty()
