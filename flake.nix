@@ -25,7 +25,7 @@
     let
       out =
         # add your fancy ARM macbook to this list
-        flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
+        flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system:
           let pkgs = self.legacyPackages.${system};
           in {
             legacyPackages = import nixpkgs {
