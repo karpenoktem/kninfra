@@ -4,7 +4,7 @@ let
   userList = builtins.attrValues users;
   sshKeys = production:
     builtins.concatMap (x: x.sshkeys)
-    (builtins.filter (x: x.production == production) userList);
+    (builtins.filter (x: production -> x.production) userList);
 in rec {
   # shared config for the server (both real and VM)
   vipassana = { pkgs, lib, config, ... }: {
