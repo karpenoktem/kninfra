@@ -197,6 +197,7 @@ in rec {
           vm.stop
       '';
     };
+    kn.django.package = "/kninfra";
     programs.bash.shellAliases."vm.stop" = "poweroff";
     # qemu settings:
     virtualisation = {
@@ -204,6 +205,10 @@ in rec {
       diskSize = 1024;
       # set up serial console
       graphics = false;
+      sharedDirectories.kninfra = {
+        source = toString ../.;
+        target = "/kninfra";
+      };
       forwardPorts = [
         {
           host.port = 8080;

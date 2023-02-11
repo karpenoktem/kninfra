@@ -12,7 +12,7 @@ let
   uswgi_conf = pkgs.writeText "uwsgi.json" (builtins.toJSON {
     uwsgi = {
       plugins = "python3";
-      chdir = pkgs.kninfra;
+      chdir = cfg.package;
       module = "kn.wsgi";
       master = true;
       enable_threads = true;
@@ -30,6 +30,12 @@ in {
     socket = mkOption {
       default = "/run/infra/S-django";
       description = "The socket path to use for UWSGI";
+      type = types.path;
+    };
+    package = mkOption {
+      description = "The kninfra package to use";
+      default = pkgs.kninfra;
+      defaultText = "pkgs.kninfra";
       type = types.path;
     };
   };
