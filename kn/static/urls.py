@@ -94,6 +94,8 @@ urlpatterns = [
         template_name='static/bestuur17a.html'), name='bestuur17a'),
     url(_(r'^bestuur18a/?$'), TemplateView.as_view(
         template_name='static/bestuur18a.html'), name='bestuur18a'),
+    url(_(r'^bestuur19a/?$'), TemplateView.as_view(
+        template_name='static/bestuur19a.html'), name='bestuur19a'),
     url(_(r'^bestuur19b/?$'), TemplateView.as_view(
         template_name='static/bestuur19b.html'), name='bestuur19b'),
     # TODO we want to use reverse, but it is not initialized properly

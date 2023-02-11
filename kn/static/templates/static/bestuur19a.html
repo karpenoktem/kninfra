@@ -1,0 +1,35 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block body %}
+
+<p>Bestuur 19a is een vierkoppig interim-bestuur dat is aangesteld om de periode tot de kerst te overbruggen, waarna bestuur 19b de taken kan overnemen.</p>
+
+<p><strong>Tom Krabbenborg</strong> zal als voorzitter het bestuursjaar in goede banen leiden. Tevens zal hij het contact met zusterverenigingen en andere partijen buiten de villa onderhouden. Vanuit zijn scheikundige achtergrond als student Molecular Life Sciences zal hij je kunnen vertellen dat bier een oplossing is.</p>
+
+<p><strong>Nick Willemsen</strong> zal als secretaris de communicatie en administratie van de vereniging op orde houden. Vanuit zijn studie geneeskunde heeft hij hier genoeg ervaring mee.</p>
+
+<p><strong>Lucy de Groot</strong> zal als penningmeester de financiële zaken regelen, zodat er altijd voldoende budget is voor activiteiten, feesten en andere wazige ideeën die door de leden bedacht worden.</p>
+
+<p><strong>Juul de Jager</strong> zal als pandcommissaris het contact met andere verenigingen en het villabestuur onderhouden. Met zijn kennis van psychologie en zijn natuurlijke charmes zal hij zorgen dat dit contact zo soepel mogelijk verloopt.</p>
+
+
+<p>Alle bestuursleden zijn bereikbaar op de volgende adressen:</p>
+<ul>
+	<li>Tom Krabbenborg, {% filter email %}voorzitter@karpenoktem.nl{% endfilter %}</li>
+	<li>Nick Willemsen, {% filter email %}secretaris@karpenoktem.nl{% endfilter %}</li>
+	<li>Lucy de Groot, {% filter email %}penningmeester@karpenoktem.nl{% endfilter %}</li>
+	<li>Juul de Jager, {% filter email %}pandcommissaris@karpenoktem.nl{% endfilter %}</li>
+</ul>
+
+<div style="float: left;">⇐ {% trans "Het vorige" %},
+<a href="{% url "bestuur18a" %}">{% trans "achttiende bestuur" %}</a>
+</div>
+<div style="float: right;">{% trans "Het volgende" %},
+<a href="{% url "bestuur19b" %}">{% trans "negentiende bestuur (nieuwe samenstelling)" %}</a> ⇒
+</div>
+
+{% endblock body %}
+{# vim: set sw=2 ts=2 et: #}
