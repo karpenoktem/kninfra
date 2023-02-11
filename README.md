@@ -161,8 +161,8 @@ Met [nix](https://nixos.org/nix/) is het systeem op je eigen computer te testen:
 
         $ vm.deploy
 
-Development Server
-------------------
+Local Development
+-----------------
 
 Een VM is handig om de hele website, inclusief daemons, te testen, maar dit is
 soms een beetje traag en vaak wil je alleen maar iets aan de website veranderen.
@@ -171,8 +171,9 @@ Je kunt de website op je eigen systeem draaien.
  1. Volg stap 1 en 2 hierboven
  2.
  
-        $ nix develop .#python
-        $ mongod --db-path ../kn-db &
+        $ nix develop '.#python'
+        $ mkdir -p ../kn-db && mongod --dbpath ../kn-db &
+        $ cp ./kn/settings.example.py ./kn/settings.py
         $ ./bin/reset-database
         $ ./bin/run-dev-server
 
