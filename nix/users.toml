@@ -15,7 +15,8 @@ production = true
 [ayke]
 sshkeys = [
   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINbmv5LOl+qu5tKTaaUq49Jciv3S3hrI4hwVWBh7Spl6 ayke",
-  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBWqwvAk43sLon1UtP/Swl2hRhetG1OmLCrfGp4tBr6V ayke@karpenoktem"
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBWqwvAk43sLon1UtP/Swl2hRhetG1OmLCrfGp4tBr6V ayke@karpenoktem",
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEkqGExf0OKNa+Fzq09JRYQjelMK3CjkqUiQEtrnZAry ayke@elstar-linux"
 ]
 allowed-ips = []
 production = true
