@@ -38,6 +38,12 @@ in {
     systemd.tmpfiles.rules = [
       "d /var/fotos 0550 root infra -"
     ];
+    # add fotos user (used by daan for example)
+    users.users.fotos = {
+      isSystemUser = true;
+      group = "fotos";
+    };
+    users.groups.fotos = {};
     systemd.services = lib.mkIf cfg.initialDB {
       giedo = rec {
         requires = [ "kn_initial_state.service" ];
