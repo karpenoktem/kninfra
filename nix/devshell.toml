@@ -31,7 +31,7 @@ help = "Deploy running development VM (resets on reboot)"
 
 [[commands]]
 name = "vm.start"
-command = "cd $PRJ_ROOT; touch .git/shallow; nix-build -A vm && ./result/bin/run-vipassana-vm"
+command = "cd $PRJ_ROOT; nix build .#vm && ./result/bin/run-vipassana-vm"
 category = "development VM"
 help = "Start development VM"
 

@@ -180,7 +180,7 @@ in rec {
   };
 
   # virtualized system, used for development
-  vm = { modulesPath, ... }: {
+  vm = { modulesPath, pkgs, ... }: {
     imports = [ virtualized "${modulesPath}/virtualisation/qemu-vm.nix" ];
     # install the vm-ssh.key.pub for ssh access
     users.users.root.openssh.authorizedKeys.keyFiles = [ ./vm-ssh.key.pub ];
@@ -197,17 +197,26 @@ in rec {
           vm.stop
       '';
     };
-    kn.django.package = "/kninfra";
+    kn.django.package = "/kninfra-pub";
     programs.bash.shellAliases."vm.stop" = "poweroff";
+    system.fsPackages = [ pkgs.bindfs ];
     # qemu settings:
     virtualisation = {
       memorySize = 1024;
       diskSize = 1024;
       # set up serial console
       graphics = false;
+      # Share the PRJ_ROOT into the vm
       sharedDirectories.kninfra = {
-        source = toString ../.;
+        source = "\${PRJ_ROOT:?please run this inside the devshell}";
         target = "/kninfra";
+      };
+      # use bindfs to make it world-readable
+      fileSystems."/kninfra-pub" = {
+        depends = [ "/kninfra" ];
+        device = "/kninfra";
+        fsType = "fuse.bindfs";
+        options = [ "ro" "perms=0555" ];
       };
       forwardPorts = [
         {
