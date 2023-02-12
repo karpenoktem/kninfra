@@ -3,7 +3,9 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
     flake-utils.url = "github:numtide/flake-utils";
     poetry2nix = {
-      url = "github:nix-community/poetry2nix";
+      # TODO: revert to nix-community after
+      # https://github.com/nix-community/poetry2nix/pull/984
+      url = "github:yorickvP/poetry2nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };

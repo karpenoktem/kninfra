@@ -4,25 +4,7 @@ let
     python = python3;
     projectDir = ../../.;
     overrides = poetry2nix.overrides.withDefaults (self: super: {
-      zipseeker = super.zipseeker.overridePythonAttrs (old: {
-        propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
-      });
       tarjan = super.tarjan.overridePythonAttrs (old: {
-        propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
-      });
-      singledispatch = super.singledispatch.overridePythonAttrs (old: {
-        propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
-      });
-      msgpack-python = super.msgpack-python.overridePythonAttrs (old: {
-        propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
-      });
-      graphene-django = super.graphene-django.overridePythonAttrs (old: {
-        propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.singledispatch ];
-        postPatch = ''
-          sed -i '/singledispatch/d' setup.py
-        '';
-      });
-      reserved = super.reserved.overridePythonAttrs (old: {
         propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
       });
       gitpython = super.gitpython.overridePythonAttrs (old: {
