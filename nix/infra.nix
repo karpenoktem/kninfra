@@ -122,12 +122,12 @@ in rec {
       "@${cfg.package}/sbin/saslauthd saslauthd -a ${cfg.mechanism} -O 127.0.0.1/${
         toString config.kn.rimapd.port
       }";
-    nix.binaryCaches =
-      [ "https://cache.nixos.org" "https://kninfra.cachix.org" ];
-    nix.binaryCachePublicKeys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "kninfra.cachix.org-1:l6SeUehzysoUHUX86/gmqiWaa9Jy7dTSFnPcWGw3zGo="
-    ];
+    nix.settings = {
+      substituters = [ "https://kninfra.cachix.org" ];
+      trusted-public-keys = [
+        "kninfra.cachix.org-1:l6SeUehzysoUHUX86/gmqiWaa9Jy7dTSFnPcWGw3zGo="
+      ];
+    };
   };
 
   staging = { lib, ... }: {
@@ -169,7 +169,7 @@ in rec {
       base64 -d ${./vm-host.key.b64} > /root/vm-host.key
       chmod 0600 /root/vm-host.key
     '';
-    system.activationScripts.agenixRoot.deps = [ "hostkey" ];
+    system.activationScripts.agenixInstall.deps = [ "hostkey" ];
     services.openssh.hostKeys = [{
       path = "/root/vm-host.key";
       type = "ed25519";

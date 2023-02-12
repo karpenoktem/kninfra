@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
     flake-utils.url = "github:numtide/flake-utils";
     poetry2nix = {
       url = "github:nix-community/poetry2nix";
@@ -32,7 +32,7 @@
               overlays = with inputs; [
                 poetry2nix.overlay
                 self.overlays.default
-                agenix.overlay
+                agenix.overlays.default
                 devshell.overlay
                 # add 'inputs' pseudo-package
                 (self: super: { inherit inputs; })
@@ -68,7 +68,7 @@
     in out // {
       overlays.default = import ./nix/packages;
       nixosConfigurations.staging = self.legacyPackages.x86_64-linux.nixos [
-        inputs.agenix.nixosModule
+        inputs.agenix.nixosModules.default
         (import ./nix/infra.nix).staging
       ];
     };
