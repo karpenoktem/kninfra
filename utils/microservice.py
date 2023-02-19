@@ -13,6 +13,9 @@ from django.conf import settings
 import ctypes, socket, os
 from select import select 
 
+# systemd integration should be unneccesary after upstream grpc has
+# https://github.com/grpc/grpc/commit/2904ee8fd350eaea128a4593a093e22c24dc5d6f
+# in grpc v1.52.0
 def systemd_get_sockets():
     no_fds = int(os.getenv("LISTEN_FDS", "0"))
     try:
