@@ -1,8 +1,12 @@
 {stdenv, lib, pkgs, poetry2nix, python2-hans, python3, makeWrapper}:
 let
   requirements = poetry2nix.mkPoetryEnv {
+    python = python3;
     projectDir = ../../.;
     overrides = poetry2nix.overrides.withDefaults (self: super: {
+      tarjan = super.tarjan.overridePythonAttrs (old: {
+        propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
+      });
       gitpython = super.gitpython.overridePythonAttrs (old: {
         inherit (python3.pkgs.GitPython) patches doCheck pythonImportsCheck;
         propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optionals (self.pythonOlder "3.10") [ self.typing-extensions ];

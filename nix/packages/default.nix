@@ -1,6 +1,8 @@
 final: prev: {
   mailman2 = final.callPackage ./mailman2.nix {};
-  kninfra = final.callPackage ./kndjango.nix { };
+  kninfra = final.callPackage ./kndjango.nix {
+    python3 = final.python3-kn;
+  };
   kn.vmCheck = final.callPackage ../tests.nix {};
   kn.puppetCheck = final.callPackage ({stdenv, runCommandNoCC, makeWrapper, puppeteer-cli, chromium, nodejs}:
     runCommandNoCC "kn-puppet" {
@@ -14,22 +16,27 @@ final: prev: {
     '') {
     nodejs = final.nodejs-slim_latest;
   };
+  # django 1.8.19 does not support python 3.10
+  # https://stackoverflow.com/q/72032032
+  python3-kn = final.python39;
   # minimal python2 environment for Hans
   python2-hans = final.poetry2nix.mkPoetryEnv {
     projectDir = ../poetry-hans;
     python = final.python2;
     overrides = final.poetry2nix.overrides.withDefaults (self: super: {
+      pytest = null;
+      hatchling = null;
       # conflict on backport site-pkg
       configparser = super.configparser.overrideAttrs (o: {
         meta.priority = 100;
       });
     });
   };
-  python3-with-grpcio = final.python3.withPackages (p: with p; [
+  python3-with-grpcio = final.python3-kn.withPackages (p: with p; [
     grpcio-tools
   ]);
   vipassana-vm = (final.nixos [
     (import ../infra.nix).vm
-    final.inputs.agenix.nixosModule
+    final.inputs.agenix.nixosModules.default
   ]).vm;
 }

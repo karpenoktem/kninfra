@@ -22,7 +22,10 @@ let
     };
   });
   # customize the uwsgi package to have python3 support
-  uwsgi_pkg = pkgs.uwsgi.override { plugins = [ "python3" ]; };
+  uwsgi_pkg = pkgs.uwsgi.override {
+    plugins = [ "python3" ];
+    python3 = pkgs.python3-kn;
+  };
 in {
   # defining the kn.django config settings
   options.kn.django = with lib; {

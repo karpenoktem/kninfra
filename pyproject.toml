@@ -6,8 +6,6 @@ authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-graphene = "^2.1.9"
-graphene-django = "^2.1.0"
 sdnotify = "^0.3.2"
 reserved = "^0.1.1"
 zipseeker = "^1.0.11"
@@ -17,10 +15,12 @@ tarjan = { git = "https://github.com/bwesterb/py-tarjan.git" }
 #koert = { git = "https://github.com/awesterb/koert.git" }
 msgpack-python = "^0.5.6"
 
-hatchling = ""
-pytest = ""
+hatchling = "*"
+pytest = "*"
 
-GitPython = "^3.1.20"
+# match with nixpkgs to keep patch intact in kndjango.nix
+GitPython = "3.1.27"
+
 pymongo = "^3.12.0"
 grpcio = "^1.39.0"
 protobuf = "^3.17.3"
