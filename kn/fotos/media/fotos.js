@@ -1560,7 +1560,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
           e.target.blur();
           return false;
         }
-        if (e.target.value !== '') {
+        if (e.target.value !== '' || e.which == 84) {
           // Don't handle keys when editing a textbox.
           return;
         }
