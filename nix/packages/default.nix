@@ -3,6 +3,7 @@ final: prev: {
   kninfra = final.callPackage ./kndjango.nix {
     python3 = final.python3-kn;
   };
+  ruff = final.callPackage ./ruff.nix {};
   kn.vmCheck = final.callPackage ../tests.nix {};
   kn.puppetCheck = final.callPackage ({stdenv, runCommandNoCC, makeWrapper, puppeteer-cli, chromium, nodejs}:
     runCommandNoCC "kn-puppet" {
