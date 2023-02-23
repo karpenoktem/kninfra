@@ -9,6 +9,7 @@ packages = [
   "nixos-rebuild",
   "gettext",
   "mongodb",
+  "ruff",
 ]
 
 [[commands]]
