@@ -2,15 +2,14 @@
 # this file should retain python2 compatibility until Hans is ported to python3
 import _import  # noqa: F401
 import logging
-import time
 from concurrent import futures
 
 import grpc
 import sdnotify
 
-from django.conf import settings
-
-import ctypes, socket, os
+import ctypes
+import socket
+import os
 from select import select 
 
 # systemd integration should be unneccesary after upstream grpc has

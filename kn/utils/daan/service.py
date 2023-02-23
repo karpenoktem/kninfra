@@ -35,12 +35,3 @@ class Daan(daan_pb2_grpc.DaanServicer):
                 context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
                 context.set_details(str(e))
         return common_pb2.Empty()
-
-    def FotoadminMoveFotos(self, request, context):
-        with self.fotoadmin_lock:
-            try:
-                fotoadmin_move_fotos(request.event, request.store, request.user, request.dir)
-            except FotoadminError as e:
-                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-                context.set_details(str(e))
-        return common_pb2.Empty()

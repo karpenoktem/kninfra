@@ -1216,7 +1216,7 @@ class User(Entity):
         return self.full_name
 
     def set_humanName(self):
-        raise NotImplemented('setting humanName for users is not implemented')
+        raise NotImplementedError('setting humanName for users is not implemented')
 
     @property
     def password(self):

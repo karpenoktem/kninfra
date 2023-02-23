@@ -4,9 +4,6 @@ from __future__ import print_function
 import _import  # noqa: F401
 import argparse
 import getpass
-import subprocess
-
-from django.conf import settings
 
 import kn.leden.entities as Es
 

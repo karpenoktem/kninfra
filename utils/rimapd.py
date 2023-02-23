@@ -2,7 +2,12 @@
 # vim: et:sta:bs=2:sw=4:
 import _import  # noqa: F401
 
-import csv, os, socket, socketserver, sys, time
+import csv
+import os
+import socket
+import socketserver
+import sys
+import time
 import sdnotify
 import kn.leden.entities as Es
 

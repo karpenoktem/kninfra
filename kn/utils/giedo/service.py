@@ -5,7 +5,6 @@ from concurrent.futures import ThreadPoolExecutor
 
 import grpc
 import protobufs.messages.common_pb2 as common_pb2
-import protobufs.messages.daan_pb2 as daan_pb2
 import protobufs.messages.daan_pb2_grpc as daan_pb2_grpc
 import protobufs.messages.giedo_pb2 as giedo_pb2
 import protobufs.messages.giedo_pb2_grpc as giedo_pb2_grpc

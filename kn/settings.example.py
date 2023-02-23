@@ -4,7 +4,6 @@
 import os
 
 from kn.defaultSettings import defaultSettings  # noqa: E402
-from pathlib import Path
 
 #
 # You MUST change
