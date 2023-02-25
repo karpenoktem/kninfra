@@ -27,21 +27,18 @@ function reopen_event () {
     event_set_opened('true');
 }
 
-function copy_emailaddresses_to_clipboard () {
-    _api({'action': 'get-email-addresses',
-          'id': event_object_id},
-        function(d) {
-            if(d.error) {
-                alert(d.error);
-                return;
-            }
-            var s = '';
-            var first = true;
-            for(var i = 0; i < d.addresses.length; i++) {
-                if (first) first = false;
-                else s += ', ';
-                s += d.addresses[i];
-            }
-            prompt("Dit zijn de e-mail adressen", s);
-        });
+function copy_emailaddresses_to_clipboard (elem) {
+    var emails = [].join.call($('#subscribed > li > a').map(function() {
+        return $(this).data('email')
+    }), ', ');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(emails).catch(function(rej) {
+            prompt("Dit zijn de e-mail adressen", emails);
+        }).then(function() {
+            $(elem).text("Gekopieerd!");
+        })
+    } else {
+        prompt("Dit zijn de e-mail adressen", emails);
+    }
+    return true;
 }
