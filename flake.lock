@@ -123,17 +123,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1676216587,
-        "narHash": "sha256-6pX7Sr1iAvVyPWIK3OgamQKu/YYGR28zGeEoReAEPp4=",
-        "owner": "yorickvP",
+        "lastModified": 1677465990,
+        "narHash": "sha256-ghyaxrHMsA3KpUClHEGWuGxJbuf2eP4tdLUxTilxpag=",
+        "owner": "nix-community",
         "repo": "poetry2nix",
-        "rev": "775545fa2c503d56e69567bc2c07361c4422d15b",
+        "rev": "7d4a3a6c3675f554106a9867ffb194243aa73e5e",
         "type": "github"
       },
       "original": {
-        "owner": "yorickvP",
-        "repo": "poetry2nix",
-        "type": "github"
+        "id": "poetry2nix",
+        "type": "indirect"
       }
     },
     "root": {

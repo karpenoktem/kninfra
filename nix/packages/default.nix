@@ -24,14 +24,19 @@ final: prev: {
   python2-hans = final.poetry2nix.mkPoetryEnv {
     projectDir = ../poetry-hans;
     python = final.python2;
-    overrides = final.poetry2nix.overrides.withDefaults (self: super: {
-      pytest = null;
-      hatchling = null;
-      # conflict on backport site-pkg
-      configparser = super.configparser.overrideAttrs (o: {
-        meta.priority = 100;
-      });
-    });
+    # https://github.com/nix-community/poetry2nix/pull/899#issuecomment-1446049098
+    # revert to `poetry2nix.overrides.withDefaults` after that's reverted
+    overrides = [
+      final.poetry2nix.defaultPoetryOverrides
+      (self: super: {
+        pytest = null;
+        hatchling = null;
+        # conflict on backport site-pkg
+        configparser = super.configparser.overrideAttrs (o: {
+          meta.priority = 100;
+        });
+      })
+    ];
   };
   python3-with-grpcio = final.python3-kn.withPackages (p: with p; [
     grpcio-tools
