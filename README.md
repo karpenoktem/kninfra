@@ -146,6 +146,9 @@ Development VM
 Met [nix](https://nixos.org/nix/) is het systeem op je eigen computer te testen:
 
  1. Installeer [nix](https://nixos.org/nix/) (of vanuit je distro, minimaal v2.6)
+
+        $ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+
  2. Maak een kopie van deze *repository* met [git](https://git-scm.com)
 
         $ git clone https://github.com/karpenoktem/kninfra
