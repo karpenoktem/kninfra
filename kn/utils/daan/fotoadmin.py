@@ -5,7 +5,6 @@ import os.path
 import pwd
 import random
 import re
-import subprocess
 
 from django.conf import settings
 

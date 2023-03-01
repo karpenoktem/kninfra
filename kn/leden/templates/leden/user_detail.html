@@ -175,7 +175,7 @@
           <a href="{% url "entities-by-year-of-birth" year=object.dateOfBirth.year %}">{{ object.dateOfBirth.year }}</a>-{{ object.dateOfBirth|date:"m-d" }}
         {% else %}
           {% trans "Geen geboortedatum geregistreerd." %}
-          {% if object.is_underage is None %}
+          {% if object.is_underage == None %}
             {# underage status unknown #}
           {% elif object.is_underage %}
             {% trans "Wel dat dit lid minderjarig is." %}

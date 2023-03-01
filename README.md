@@ -91,6 +91,9 @@ Daarnaast zijn er de volgende mappen/bestanden:
    `utils/cron/send-informacie-digest.py` dat de informacie informatie e-mails
    stuurt.
  * `locale`.  Bevat vertalingen.
+ * `nix`.  Bevat code om de website-infrastructuur en dependencies op te zetten
+   met behulp van [nix](https://nixos.org). Zie ook het kopje *Development*
+   hieronder.
  * `kn/urls.py` beschrijft welke *app* achter welke URL zit.
 
 
@@ -105,13 +108,10 @@ Naast de website draaien we nog een heleboel andere diensten, zoals
    om e-mail te ontvangen en te versturen.
  * Een [wiki](https://karpenoktem.nl/wiki/) met het
    [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) pakket.
- * De [wolk](https://karpenoktem.nl/wolk/) een 'dropbox'
-   met [OwnCloud](https://owncloud.org).
 
 En nog een aantal die niet *user-facing* zijn:
 
  * Een BIND9 DNS server
- * Een LDAP server die gebruikt wordt door radius en saslauthd.
  * Een [saslauthd](http://www.linuxcommand.org/man_pages/saslauthd8.html)
    die gebruikt wordt door postfix om gebruikers te authenticeren.
 
@@ -120,8 +120,8 @@ en de meeste andere diensten draaien op *sankhara*.
 
 Al deze verschillende diensten op *sankhara* moeten
 gesynchroniseerd blijven met de ledenadministratie: als iemand in een
-commissie gaat moet zij ook automatisch in de goede e-maillijsten en
-wolk-groepen komen.  Bij elke verandering van de ledenadministratie wordt
+commissie gaat moet zij ook automatisch in de goede e-maillijsten komen.
+Bij elke verandering van de ledenadministratie wordt
 er gecontroleerd of alle instellingen nog ok zijn en zo nodig veranderingen
 aangebracht.  Dit wordt gedaan door drie verschillende *daemons*
 (programma's die in de achtergrond draaien).
@@ -137,4 +137,46 @@ aangebracht.  Dit wordt gedaan door drie verschillende *daemons*
    is te vinden onder `kn/utils/daan`.  (Daan was de eerste secretaris.)
  * **hans** draait als de `list`-gebruiker op *sankhara* en laat giedo
    de mailman e-maillijsten inkijken en aanpassen.  Code: `kn/utils/hans`.
+ * **rimapd** draait als een anonieme gebruiker op *sankhara* en is de brug
+   tussen saslauthd en de database.
    
+Development VM
+--------------
+
+Met [nix](https://nixos.org/nix/) is het systeem op je eigen computer te testen:
+
+ 1. Installeer [nix](https://nixos.org/nix/) (of vanuit je distro, minimaal v2.6)
+
+        $ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+
+ 2. Maak een kopie van deze *repository* met [git](https://git-scm.com)
+
+        $ git clone https://github.com/karpenoktem/kninfra
+
+ 3. Start een VM
+
+        $ cd pad/naar/kninfra
+        $ nix develop
+        $ vm.start
+           (andere terminal)
+        $ vm.ssh
+ 4. Verander dingen
+
+        $ vm.deploy
+
+Local Development
+-----------------
+
+Een VM is handig om de hele website, inclusief daemons, te testen, maar dit is
+soms een beetje traag en vaak wil je alleen maar iets aan de website veranderen.
+Je kunt de website op je eigen systeem draaien.
+
+ 1. Volg stap 1 en 2 hierboven
+ 2.
+ 
+        $ nix develop '.#python'
+        $ mkdir -p ../kn-db && mongod --dbpath ../kn-db &
+        $ cp ./kn/settings.example.py ./kn/settings.py
+        $ ./bin/reset-database
+        $ ./bin/run-dev-server
+

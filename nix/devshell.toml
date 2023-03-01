@@ -1,0 +1,87 @@
+[devshell]
+packages = [
+  "poetry",
+  "agenix",
+  #"python2",
+  "python3-with-grpcio",
+  "fd",
+  "nixfmt",
+  "nixos-rebuild",
+  "gettext",
+  "mongodb",
+  "ruff",
+]
+
+[[commands]]
+name = "vm.build"
+command = "cd $PRJ_ROOT; nix build .#vm"
+category = "development VM"
+help = "Build development VM"
+
+[[commands]]
+name = "vm.ssh"
+command = "$PRJ_ROOT/nix/vm-ssh.sh \"$@\""
+category = "development VM"
+help = "SSH into development VM"
+
+[[commands]]
+name = "vm.deploy"
+command = "cd $PRJ_ROOT; nix build .#vm && ./nix/vm-ssh.sh $(realpath ./result)/system/bin/switch-to-configuration test"
+category = "development VM"
+help = "Deploy running development VM (resets on reboot)"
+
+[[commands]]
+name = "vm.start"
+command = "cd $PRJ_ROOT; nix build .#vm && ./result/bin/run-vipassana-vm"
+category = "development VM"
+help = "Start development VM"
+
+[[commands]]
+name = "vm.stop"
+command = "$PRJ_ROOT/nix/vm-ssh.sh poweroff"
+category = "development VM"
+help = "Shutdown development VM"
+
+[[commands]]
+name = "staging.build"
+command = "cd $PRJ_ROOT; nixos-rebuild build --flake .#staging"
+category = "staging"
+help = "Build staging configuration"
+
+[[commands]]
+name = "staging.deploy"
+command = "cd $PRJ_ROOT; nixos-rebuild switch --flake .#staging --target-host root@dev.kn.cx"
+category = "staging"
+help = "Deploy staging without reboot"
+
+[[commands]]
+name = "staging.boot-deploy"
+command = "cd $PRJ_ROOT; nixos-rebuild boot --flake .#staging --target-host root@dev.kn.cx"
+category = "staging"
+help = "Copy configuration to staging to activate after reboot"
+
+[[commands]]
+name = "staging.ssh"
+command = "ssh root@dev.kn.cx \"$@\""
+category = "staging"
+help = "SSH into staging"
+
+[[commands]]
+name = "poetry.lock"
+command = "cd $PRJ_ROOT; poetry lock"
+help = "Regenerate poetry.lock file"
+
+[[commands]]
+name = "protobufs"
+command = "cd $PRJ_ROOT/protobufs; make"
+help = "Regenerate protobufs"
+
+[[commands]]
+name = "format-nix"
+command = '''fd '\.nix' -x nixfmt'''
+help = "Reformat nix code"
+
+[[commands]]
+name = "vm-check"
+command = "cd $PRJ_ROOT && nix build .#kn.vmCheck -L"
+help = "Run VM checks"

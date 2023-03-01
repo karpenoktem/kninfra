@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import _import  # noqa: F401
 
 import grpc

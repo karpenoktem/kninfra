@@ -1,5 +1,6 @@
 # Default settings.  Change in settings.py.  See settings.example.py.
 # ###################################################################
+# this file should retain python2 compatibility until Hans is ported to python3
 
 import datetime
 import locale
@@ -29,11 +30,6 @@ def defaultSettings(glbls):
     d.WIKI_MYSQL_SECRET = None
 
     d.DOMAINNAME = 'karpenoktem.nl'
-    d.LDAP_URL = 'ldap://localhost'
-    d.LDAP_SUFFIX = 'dc=' + ',dc='.join(d.DOMAINNAME.split('.'))
-    d.LDAP_BASE = 'ou=users,' + d.LDAP_SUFFIX
-    d.LDAP_USER = 'cn=infra,' + d.LDAP_SUFFIX
-    d.LDAP_PASS = None
 
     # Settings you probably want to change
     # ############################################################
@@ -154,6 +150,7 @@ def defaultSettings(glbls):
                     "django.template.context_processors.media",
                     "django.contrib.messages.context_processors.messages",
                     "kn.base.context_processors.base_url",
+                    "kn.base.context_processors.dev_banner",
                     "kn.leden.context_processors.may_manage_planning",
                     "django.template.context_processors.request",
                 ),
@@ -177,8 +174,8 @@ def defaultSettings(glbls):
 
     d.EXTERNAL_URLS = {
         'stukken': d.BASE_URL + '/groups/leden/',
-        'wiki': d.BASE_URL + '/wiki',
-        'wiki-home': d.BASE_URL + '/wiki/Hoofdpagina',
+        'wiki': '/wiki',
+        'wiki-home': '/wiki/Hoofdpagina',
     }
 
     d.HOME_SLIDESHOW = [

@@ -1,11 +1,10 @@
 import logging
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 import grpc
-import mirte  # github.com/bwesterb/mirte
 import protobufs.messages.common_pb2 as common_pb2
-import protobufs.messages.daan_pb2 as daan_pb2
 import protobufs.messages.daan_pb2_grpc as daan_pb2_grpc
 import protobufs.messages.giedo_pb2 as giedo_pb2
 import protobufs.messages.giedo_pb2_grpc as giedo_pb2_grpc
@@ -14,7 +13,6 @@ import protobufs.messages.hans_pb2_grpc as hans_pb2_grpc
 from django.conf import settings
 
 import kn.leden.entities as Es
-from kn.utils.giedo._ldap import generate_ldap_changes
 from kn.utils.giedo.db import update_db
 from kn.utils.giedo.fotos import scan_fotos
 from kn.utils.giedo.mailman import generate_mailman_changes
@@ -22,9 +20,6 @@ from kn.utils.giedo.postfix import (generate_postfix_map,
                                     generate_postfix_slm_map)
 from kn.utils.giedo.siteagenda import update_site_agenda
 from kn.utils.giedo.unix import generate_unix_map
-from kn.utils.giedo.wiki import generate_wiki_changes
-from kn.utils.giedo.wolk import generate_wolk_changes
-
 
 class Giedo(giedo_pb2_grpc.GiedoServicer):
 
@@ -43,23 +38,13 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
                 grpc.insecure_channel('unix:' + settings.HANS_SOCKET))
         except Exception:
             self.log.exception("Couldn't connect to hans")
-        self.mirte = mirte.get_a_manager()
-        self.threadPool = self.mirte.get_a('threadPool')
+        self.threadPool = ThreadPoolExecutor(max_workers=4)
         self.operation_lock = threading.Lock()
         self.ss_actions = (
             ('postfix', self.daan.SetPostfixMap, self._gen_postfix),
             ('postfix-slm', self.daan.SetPostfixSenderLoginMap, self._gen_postfix_slm),
-            ('mailman', self.hans.ApplyChanges, self._gen_mailman),
-            ('wiki', self.daan.ApplyWikiChanges, self._gen_wiki),
-            ('ldap', self.daan.ApplyLDAPChanges, self._gen_ldap)
+            ('mailman', self.hans.ApplyChanges, self._gen_mailman)
         )
-
-    def _gen_wolk(self):
-        return {'type': 'wolk',
-                'changes': generate_wolk_changes(self)}
-
-    def _gen_ldap(self):
-        return generate_ldap_changes()
 
     def _gen_postfix_slm(self):
         return generate_postfix_slm_map()
@@ -70,14 +55,12 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
     def _gen_mailman(self):
         return generate_mailman_changes(self.hans)
 
-    def _gen_wiki(self):
-        return generate_wiki_changes()
-
     def _gen_unix(self):
         return {'type': 'unix',
                 'map': generate_unix_map(self)}
 
     def sync(self):
+        logging.info("what are you syncing about?")
         update_db_start = time.time()
         update_db(self)
         logging.info("update_db %s" % (time.time() - update_db_start))
@@ -108,7 +91,7 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
                          (name, elapsed, todo[0] - 1))
 
         for action in self.ss_actions:
-            self.threadPool.execute(_sync_action, _entry, *action)
+            self.threadPool.submit(_sync_action, _entry, *action)
         todo_event.wait()
         self.last_sync_ts = time.time()
 
@@ -121,7 +104,7 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
         return common_pb2.Empty()
 
     def SyncAsync(self, request, context):
-        self.threadPool.execute(self.sync_locked)
+        self.threadPool.submit(self.sync_locked)
         return common_pb2.Empty()
 
     def LastSynced(self, request, context):
@@ -140,9 +123,6 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
                 context.set_details('wrong old password')
                 return common_pb2.Empty()
             u.set_password(request.newpass)
-            self.daan.SetLDAPPassword(daan_pb2.LDAPNewPassword(
-                user=request.user.encode(),
-                password=request.newpass.encode()))
         return common_pb2.Empty()
 
     def FotoadminCreateEvent(self, request, context):

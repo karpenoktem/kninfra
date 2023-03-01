@@ -1,16 +1,12 @@
 import time
 
 import grpc
-import msgpack
 import protobufs.messages.common_pb2 as common_pb2
 import protobufs.messages.daan_pb2 as daan_pb2
 import protobufs.messages.giedo_pb2 as giedo_pb2
 import protobufs.messages.giedo_pb2_grpc as giedo_pb2_grpc
-import six
 
 from django.conf import settings
-
-import kn.leden.entities as Es
 
 giedo = giedo_pb2_grpc.GiedoStub(
     grpc.insecure_channel('unix:' + settings.GIEDO_SOCKET))
@@ -83,12 +79,5 @@ def fotoadmin_create_event(date, name, humanName):
         return {'error': e.details()}
     return {'success': True}
 
-
-def fotoadmin_move_fotos(event, store, user, dir):
-    giedo.FotoadminMoveFotos(daan_pb2.FotoadminMoveAction(
-        event=event,
-        store=store,
-        user=user,
-        dir=dir))
 
 # vim: et:sta:bs=2:sw=4:

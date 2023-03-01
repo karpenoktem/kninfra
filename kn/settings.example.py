@@ -1,4 +1,5 @@
 # Example of settings.py.
+# this file should retain python2 compatibility until Hans is ported to python3
 
 import os
 
@@ -16,15 +17,18 @@ MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
 # You might want to set one of the following.
 # See defaultSettings.py for more settings.
 # These should be of the form ('host', 'user', 'password', 'db')
-# WIKI_MYSQL_SECRET = ('localhost', 'wiki', 'CHANGE ME', 'wiki')
 # FORUM_MYSQL_SECRET = ('localhost', 'punbb', 'CHANGE ME', 'punbb')
 # PHOTOS_MYSQL_SECRET = ('localhost', 'fotos', 'CHANGE ME', 'fotos')
-# LDAP_PASS = 'CHANGE_ME'
 # DOMAINNAME = 'karpenoktem.nl'
 INFRA_HOME = os.environ['HOME']
 INFRA_REPO = os.path.join(os.path.dirname(__file__), "../")
 
-#
+GIEDO_SOCKET = "/run/infra/giedo"
+
+for varname, value in os.environ.items():
+    if varname.startswith("KN_"):
+        globals[varname[3:]] = value
+
 # Do not remove the following
 #
 

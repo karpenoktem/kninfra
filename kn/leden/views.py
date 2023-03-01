@@ -17,6 +17,7 @@ from django.core.paginator import EmptyPage, Paginator
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.utils import six
 from django.utils.translation import ugettext as _
 
 import kn.leden.entities as Es
@@ -385,7 +386,10 @@ def ik_settings(request):
 def accounts_api(request):
     if request.user.is_authenticated():
         ret = {'valid': True,
-               'name': request.user.get_username()}
+               'name': request.user.get_username(),
+               'humanName': six.text_type(request.user.humanName),
+               'groups': list(request.user.cached_groups_names),
+               'email': request.user.canonical_email}
     else:
         ret = {'valid': False}
 
