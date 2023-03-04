@@ -3,21 +3,10 @@ from __future__ import print_function
 
 import _import  # noqa: F401
 import argparse
-import getpass
-import subprocess
-
-import pymysql
-
-from django.conf import settings
 
 import kn.leden.entities as Es
 
-
 def change_username(oldname, newname, do):
-    if getpass.getuser() != 'root':
-        print('Cannot rename user: not root')
-        return
-
     e = Es.by_name(newname)
     if oldname not in e._data['names']:
         print('name %r not in entity %r' % (oldname, e))
