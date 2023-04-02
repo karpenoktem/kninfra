@@ -165,6 +165,7 @@ in rec {
     users.groups = lib.mapAttrs (username: options: {}) users;
     security.sudo.enable = true;
     security.sudo.wheelNeedsPassword = false;
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
     kn.shared.initialDB = true;
     # don't log these, there are *a lot*
     networking.firewall.logRefusedConnections = false;
