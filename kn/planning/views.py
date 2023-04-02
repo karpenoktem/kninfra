@@ -33,17 +33,27 @@ templates = {
             [(hm2s(25), False), (hm2s(28), True), _('derde dienst')]],
         'sooscie': [
             [(hm2s(20, 30), False), (hm2s(24), False), _('openen')],
+            [(hm2s(24), False), (hm2s(28), True), _('sluiten')]]},
+      'borrel_met_avondeten': {
+        'tappers': [
+			[(hm2s(19), False), (hm2s(21), False), _('nulde dienst')],
+            [(hm2s(21), False), (hm2s(23), False), _('eerste dienst')],
+            [(hm2s(23), False), (hm2s(25), False), _('tweede dienst')],
+            [(hm2s(25), False), (hm2s(28), True), _('derde dienst')]],
+        'sooscie': [
+            [(hm2s(17), False), (hm2s(20, 30), False), _('openen')],
+			[(hm2s(20, 30), False), (hm2s(24), False), _('middelste dienst')],
             [(hm2s(24), False), (hm2s(28), True), _('sluiten')]],
-        'draai': [
-            [(hm2s(20, 45), False), (hm2s(23), False), _('openen')],
-            [(hm2s(23), False), (hm2s(24), False), _('prime-time')],
-            [(hm2s(24), False), (hm2s(25), True), _('sluiten')]]},
+		'cocks': [
+            [(hm2s(17), True), (hm2s(20), False), _('Kok')]],
+        'wok': [
+            [(hm2s(17), True), (hm2s(20), False), _('WOKker')]]},
     'kleinfeest': {
         'tappers': [
             [(hm2s(20, 30), False), (hm2s(23), False), _('eerste dienst')],
             [(hm2s(23), False), (hm2s(25), False), _('tweede dienst')],
             [(hm2s(25), False), (hm2s(28), True), _('derde dienst')]],
-        'bestuur': [
+        'sooscie': [
             [(hm2s(20, 30), False), (hm2s(24), False), _('openen')],
             [(hm2s(24), False), (hm2s(28), True), _('sluiten')]]},
     'grootfeest': {
@@ -60,15 +70,15 @@ templates = {
                 _('derde dienst, tapper 1')],
             [(hm2s(25), False), (hm2s(28), True),
                 _('derde dienst, tapper 2')]],
-        'bestuur': [
-            [(hm2s(20, 30), False), (hm2s(24), False), _('openen')],
+        'sooscie': [
+            [(hm2s(19), False), (hm2s(24), False), _('openen')],
             [(hm2s(24), False), (hm2s(28), True), _('sluiten')]]},
     'dranktelling': {
-        'barco': [
+        'sooscie': [
             [(hm2s(20), True), (hm2s(20, 30), False), _('Teller 1')],
             [(hm2s(20), True), (hm2s(20, 30), False), _('Teller 2')]]},
     'dranklevering': {
-        'barco': [
+        'sooscie': [
             [(hm2s(9), False), (hm2s(13), False), _('Persoon 1')],
             [(hm2s(9), False), (hm2s(13), False), _('Persoon 2')]]},
     'vrijdag_met_tappers': {
@@ -76,7 +86,7 @@ templates = {
             [(hm2s(20, 30), False), (hm2s(23), False), _('eerste dienst')],
             [(hm2s(23), False), (hm2s(25), False), _('tweede dienst')],
             [(hm2s(25), False), (hm2s(28), True), _('derde dienst')]],
-        'bestuur': [
+        'sooscie': [
             [(hm2s(17), False), (hm2s(22), False), _('openen')],
             [(hm2s(22), False), (hm2s(27), True), _('sluiten')]],
         'cocks': [
@@ -84,7 +94,7 @@ templates = {
         'wok': [
             [(hm2s(16), True), (hm2s(19), False), _('Wokker')]]},
     'vrijdag_zonder_tappers': {
-        'bestuur': [
+        'sooscie': [
             [(hm2s(17), False), (hm2s(22), False), _('openen')],
             [(hm2s(22), False), (hm2s(27), True), _('sluiten')]],
         'cocks': [
@@ -96,6 +106,7 @@ templates = {
             [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 1')],
             [(hm2s(17), True), (hm2s(19, 30), False), _('Kok 2')]]},
 }
+
 
 
 @login_required
