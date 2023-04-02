@@ -57,8 +57,7 @@ in {
 
         mydestination = [ "$myhostname" "localhost" "local.karpenoktem.nl" ];
 
-        mynetworks =
-          [ "127.0.0.0/8" "[::ffff:127.0.0.0]/104" "[::1]/128" ];
+        mynetworks = [ "127.0.0.0/8" "[::ffff:127.0.0.0]/104" "[::1]/128" ];
 
         # opendkim
         smtpd_milters = [ "inet:localhost:11332" "inet:localhost:8891" ];
@@ -130,24 +129,54 @@ in {
           voorzitter@${cfg.domain}  secretaris@${cfg.domain}
         '';
 
-      mapFiles.sender_access = pkgs.writeText "postfix-sender_access" ''
-        # todo import from root@sankhara
-        /etc/postfix/sender_access
-      '';
+      # List of addresses to DISCARD due to spam.
+      mapFiles.sender_access = pkgs.writeText "postfix-sender_access"
+        (lib.concatMapStrings (domain: ''
+          ${domain} DISCARD
+        '') [
+          "admin2@advertise-bz.cn"
+          "admin@advertise-bz.cn"
+          "bellis.host"
+          "beta-training.be"
+          "bitmaner.eu"
+          "contact@news.offerte-specialist.com"
+          "fibrotexe.eu"
+          "fiztonsky.es"
+          "franks-woerterbuch.de"
+          "fyre-tec.com"
+          "fz-juelich.de"
+          "gatco-inc.com"
+          "heractivat-betaal@kpnmail.nl"
+          "hostepro.co.ua"
+          "hu@data.cn.com"
+          "info@jobagent.stepstone.de"
+          "klantenservice.nl"
+          "ledonline11.com"
+          "ledonline8.com"
+          "mellingrush.eu"
+          "modaitaliana.nl"
+          "molingrush.co.ua"
+          "morana-rtd.com"
+          "myfonts.com"
+          "newsletters-no-reply@myfonts.com"
+          "nextdoor.nl"
+          "o3.email.nextdoor.nl"
+          "paysto.co.ua"
+          "win-love.biz.ua"
+          "winsoker.co.ua"
+          "worksolution.co.ua"
+        ]);
 
       enableHeaderChecks = true;
 
       headerChecks = [
         {
-          pattern = "/^From: .*<[a-z]{7}@.*.(eu|ua|us)>/";
+          pattern = "From:.*<[a-z]{7}@.*\\.(eu|ua|us)>$";
           action = "REJECT Looks like spam - please contact us if it isn't.";
         }
+
         {
-          pattern = "/^From: .*@interwood.press>/";
-          action = "REJECT Don't spam us";
-        }
-        {
-          pattern = "/^From: .*@.*.nextdoor.nl>/";
+          pattern = "From:.*@.*\\.nextdoor\\.nl$";
           action = "REJECT";
         }
       ];
