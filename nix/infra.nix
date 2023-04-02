@@ -147,13 +147,24 @@ in rec {
       forceSSL = true;
     };
     age.secrets.kn-env.file = ../secrets/staging.age;
-    users.users.root = {
-      # add non-production ssh access
-      openssh.authorizedKeys.keys = sshKeys false;
-      # pass yorick/kn/stage
-      hashedPassword =
-        "$6$2ngK32gHW3AsOFOS$G/nsXxPUi9ePaa0gOrNaNN1nBDSYfeDkLdWZI3ad05jdvdyzMoCzZC/YFn8lFO1CLapKSQFStLgI3HPqPy1/h0";
+    users.users = (lib.mapAttrs (username: options: {
+      openssh.authorizedKeys.keys = options.sshkeys;
+      group = username;
+      isNormalUser = true;
+      createHome = true;
+      extraGroups = [ "wheel" ];
+    }) users) // {
+      root = {
+        # add non-production ssh access
+        openssh.authorizedKeys.keys = sshKeys false;
+        # pass yorick/kn/stage
+        hashedPassword =
+          "$6$2ngK32gHW3AsOFOS$G/nsXxPUi9ePaa0gOrNaNN1nBDSYfeDkLdWZI3ad05jdvdyzMoCzZC/YFn8lFO1CLapKSQFStLgI3HPqPy1/h0";
+      };
     };
+    users.groups = lib.mapAttrs (username: options: {}) users;
+    security.sudo.enable = true;
+    security.sudo.wheelNeedsPassword = false;
     kn.shared.initialDB = true;
     # don't log these, there are *a lot*
     networking.firewall.logRefusedConnections = false;
