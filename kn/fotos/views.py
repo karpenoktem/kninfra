@@ -22,7 +22,6 @@ import kn.fotos.entities as fEs
 import kn.leden.entities as Es
 from kn.fotos.api import album_json, album_parents_json
 from kn.fotos.forms import CreateEventForm, list_events
-from kn.leden import giedo
 
 
 def fotos(request, path=''):
