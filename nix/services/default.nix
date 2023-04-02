@@ -2,6 +2,7 @@
   imports = [
     ./kn/daan.nix
     ./kn/django.nix
+    ./kn/fotos.nix
     ./kn/giedo.nix
     ./kn/hans.nix
     ./kn/shared.nix

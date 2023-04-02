@@ -82,9 +82,5 @@ in {
         NotifyAccess = "all";
       };
     };
-    # create /var/photos directory
-    systemd.tmpfiles.rules = [
-      "d /var/fotos 0550 root infra -"
-    ];
   };
 }
