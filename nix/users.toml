@@ -27,3 +27,10 @@ sshkeys = [
 ]
 allowed-ips = []
 production = false
+
+[dylan]
+sshkeys = [
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINnv+Cj4rMYVbuK+Ww7fBAF4c8NccLa91emUNUKE8bAr"
+]
+allowed-ips = []
+production = false
