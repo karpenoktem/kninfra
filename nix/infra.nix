@@ -91,6 +91,7 @@ in rec {
       acceptTerms = true;
       # slightly obfuscated against spammers
       defaults.email = lib.concatStringsSep "@" [ "webcie" "karpenoktem.nl" ];
+      defaults.webroot = "/var/lib/acme/acme-challenge";
     };
     # enable/disable various KN services
     kn = {

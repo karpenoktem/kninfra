@@ -1,27 +1,19 @@
 { config, lib, pkgs, ... }:
 
-let cfg = config.kn.mailserver;
+let
+  cfg = config.kn.mailserver;
+  certDir = config.security.acme.certs.${cfg.hostname}.directory;
 
 in {
   options.kn.mailserver = with lib; {
     enable = mkEnableOption "mailserver";
     domain = mkOption { default = "karpenoktem.nl"; };
     hostname = mkOption { default = "vipassana.karpenoktem.nl"; };
-
-    ssl.chain = mkOption {
-      default = "/etc/letsencrypt/live/sankhara.karpenoktem.nl/chain.pem";
-    };
-
-    ssl.cert = mkOption {
-      default = "/etc/letsencrypt/live/sankhara.karpenoktem.nl/cert.pem";
-    };
-
-    ssl.key = mkOption {
-      default = "/etc/letsencrypt/live/sankhara.karpenoktem.nl/privkey.pem";
-    };
   };
 
   config = lib.mkIf cfg.enable {
+    security.acme.certs.${cfg.hostname}.group = "postfix";
+
     services.postfix = {
       enable = true;
       domain = cfg.domain;
@@ -38,10 +30,10 @@ in {
       relayDomains = [ "lists.karpenoktem.nl" ];
       destination = [ "$myhostname" "localhost" "local.${cfg.domain}" ];
 
-      sslCert = cfg.ssl.cert;
-      sslKey = cfg.ssl.key;
-
-      tlsTrustedAuthorities = cfg.ssl.chain; # defaults to ca-bundle?
+      sslCert = "${certDir}/cert.pem";
+      sslKey = "${certDir}/key.pem";
+      # defaults to ca-bundle?
+      tlsTrustedAuthorities = "${certDir}/chain.pem";
 
       # main.cf
       config = {
