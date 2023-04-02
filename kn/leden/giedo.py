@@ -69,15 +69,4 @@ def fotoadmin_scan_userdirs():
     return userdirs
 
 
-def fotoadmin_create_event(date, name, humanName):
-    try:
-        giedo.FotoadminCreateEvent(daan_pb2.FotoadminEvent(
-            date=date,
-            name=name,
-            humanName=humanName))
-    except grpc.RpcError as e:
-        return {'error': e.details()}
-    return {'success': True}
-
-
 # vim: et:sta:bs=2:sw=4:

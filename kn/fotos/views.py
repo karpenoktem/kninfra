@@ -187,13 +187,11 @@ def fotoadmin_create_event(request):
         form = CreateEventForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            ret = giedo.fotoadmin_create_event(str(cd['date']),
-                                               cd['name'], cd['fullHumanName'])
-            if ret.get('success', False):
+            try:
+                fEs.create_event(str(cd['date']), cd['name'], cd['fullHumanName'])
                 messages.info(request, _('Fotoalbum aangemaakt!'))
-            else:
-                messages.error(request, _('Er is een fout opgetreden: %s') %
-                               ret.get('error', _('geen foutmelding')))
+            except fEs.FotoadminError as e:
+                messages.error(request, _('Er is een fout opgetreden: %s') % e)
             return redirect('fotos', path='')
     else:
         form = CreateEventForm()

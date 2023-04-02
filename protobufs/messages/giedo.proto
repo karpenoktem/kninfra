@@ -4,7 +4,6 @@ syntax = "proto3";
 // a message broker between the web application and other daemons.
 
 import "protobufs/messages/common.proto";
-import "protobufs/messages/daan.proto";
 
 service Giedo {
     // SyncAsync starts a synchronization action in the background.
@@ -23,9 +22,6 @@ service Giedo {
     // It either succeeds or returns an error with code INVALID_ARGUMENT if the
     // user is not found or the old password doesn't match.
     rpc SetPassword(GiedoSetPassword) returns (Empty) {};
-
-    // Create a new event in the photo album.
-    rpc FotoadminCreateEvent(FotoadminEvent) returns (Empty) {};
 
     // ScanFotos runs a (blocking) scan to index all photos in the photo book.
     // New photos are added and old photos are marked lost.

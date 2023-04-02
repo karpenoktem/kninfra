@@ -1,8 +1,10 @@
 import datetime
 import errno
+import grp
 import mimetypes
 import os
 import os.path
+import random
 import re
 import subprocess
 from collections import namedtuple
@@ -98,6 +100,38 @@ def actual_visibility(visibility):
         actual |= implies.get(v, frozenset(v))
 
     return actual
+
+
+class FotoadminError(ValueError):
+    pass
+
+
+def create_event(date, name, humanName):
+    # Check whether the event is as expected.
+    if not re.match(r'^20\d{2}-\d{2}-\d{2}$', date):
+        raise FotoadminError('Invalid date')
+    if not re.match(r'^[a-z0-9-]{3,64}$', name):
+        raise FotoadminError('Invalid name')
+    event = date + '-' + name
+    path = os.path.join(settings.PHOTOS_DIR, event)
+    # There is a small race condition here, but it's probably too small to worry
+    # about.
+    if os.path.isdir(path):
+        raise FotoadminError('Event already exists')
+
+    # Create the event.
+    os.mkdir(path, 0o775)
+    os.chown(path, -1, grp.getgrnam('fotos').gr_gid)
+    album = entity({
+        'type': 'album',
+        'eventDate': datetime.datetime.strptime(date, '%Y-%m-%d'),
+        'path': '',
+        'name': event,
+        'random': random.random(),
+        'visibility': ['hidden'],
+        'title': humanName})
+    album.update_metadata(album.get_parent(), save=False)
+    album.save()
 
 
 class FotoEntity(SONWrapper):
