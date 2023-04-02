@@ -6,21 +6,12 @@ import "protobufs/messages/common.proto";
 service Daan {
     rpc SetPostfixMap(PostfixMap) returns (Empty) {};
     rpc SetPostfixSenderLoginMap(PostfixMap) returns (Empty) {};
-
-    // Create a new event in the photo album.
-    rpc FotoadminCreateEvent(FotoadminEvent) returns (Empty) {};
 }
 
 // A key-value map where the key is an email address and the value is a list of
 // names (plain usernames or email addresses).
 message PostfixMap {
     map<string, Strings> map = 1;
-}
-
-message FotoadminEvent {
-    string date = 1;
-    string name = 2;
-    string humanName = 3;
 }
 
 // A list of values. Protobuf does not support lists directly in a map.

@@ -2,7 +2,6 @@ import time
 
 import grpc
 import protobufs.messages.common_pb2 as common_pb2
-import protobufs.messages.daan_pb2 as daan_pb2
 import protobufs.messages.giedo_pb2 as giedo_pb2
 import protobufs.messages.giedo_pb2_grpc as giedo_pb2_grpc
 
@@ -67,17 +66,6 @@ def fotoadmin_scan_userdirs():
     for userdir in giedo.FotoadminScanUserdirs(common_pb2.Empty()).userdirs:
         userdirs.append((userdir.path, userdir.displayName))
     return userdirs
-
-
-def fotoadmin_create_event(date, name, humanName):
-    try:
-        giedo.FotoadminCreateEvent(daan_pb2.FotoadminEvent(
-            date=date,
-            name=name,
-            humanName=humanName))
-    except grpc.RpcError as e:
-        return {'error': e.details()}
-    return {'success': True}
 
 
 # vim: et:sta:bs=2:sw=4:

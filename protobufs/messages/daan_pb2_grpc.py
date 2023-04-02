@@ -26,11 +26,6 @@ class DaanStub(object):
                 request_serializer=protobufs_dot_messages_dot_daan__pb2.PostfixMap.SerializeToString,
                 response_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
                 )
-        self.FotoadminCreateEvent = channel.unary_unary(
-                '/Daan/FotoadminCreateEvent',
-                request_serializer=protobufs_dot_messages_dot_daan__pb2.FotoadminEvent.SerializeToString,
-                response_deserializer=protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-                )
 
 
 class DaanServicer(object):
@@ -49,13 +44,6 @@ class DaanServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def FotoadminCreateEvent(self, request, context):
-        """Create a new event in the photo album.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
 
 def add_DaanServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -67,11 +55,6 @@ def add_DaanServicer_to_server(servicer, server):
             'SetPostfixSenderLoginMap': grpc.unary_unary_rpc_method_handler(
                     servicer.SetPostfixSenderLoginMap,
                     request_deserializer=protobufs_dot_messages_dot_daan__pb2.PostfixMap.FromString,
-                    response_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
-            ),
-            'FotoadminCreateEvent': grpc.unary_unary_rpc_method_handler(
-                    servicer.FotoadminCreateEvent,
-                    request_deserializer=protobufs_dot_messages_dot_daan__pb2.FotoadminEvent.FromString,
                     response_serializer=protobufs_dot_messages_dot_common__pb2.Empty.SerializeToString,
             ),
     }
@@ -115,23 +98,6 @@ class Daan(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Daan/SetPostfixSenderLoginMap',
             protobufs_dot_messages_dot_daan__pb2.PostfixMap.SerializeToString,
-            protobufs_dot_messages_dot_common__pb2.Empty.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def FotoadminCreateEvent(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Daan/FotoadminCreateEvent',
-            protobufs_dot_messages_dot_daan__pb2.FotoadminEvent.SerializeToString,
             protobufs_dot_messages_dot_common__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

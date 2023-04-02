@@ -125,15 +125,6 @@ class Giedo(giedo_pb2_grpc.GiedoServicer):
             u.set_password(request.newpass)
         return common_pb2.Empty()
 
-    def FotoadminCreateEvent(self, request, context):
-        with self.operation_lock:
-            try:
-                self.daan.FotoadminCreateEvent(request)
-            except grpc.RpcError as e:
-                context.set_code(e.code())
-                context.set_details(e.details())
-        return common_pb2.Empty()
-
     def ScanFotos(self, request, context):
         with self.operation_lock:
             scan_fotos()
