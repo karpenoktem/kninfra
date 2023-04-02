@@ -58,7 +58,7 @@ in {
         mydestination = [ "$myhostname" "localhost" "local.karpenoktem.nl" ];
 
         mynetworks =
-          [ "127.0.0.0/8" "[::ffff:127.0.0.0]/104" "[::1]/128" "10.0.0.3" ];
+          [ "127.0.0.0/8" "[::ffff:127.0.0.0]/104" "[::1]/128" ];
 
         # opendkim
         smtpd_milters = [ "inet:localhost:11332" "inet:localhost:8891" ];

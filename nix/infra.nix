@@ -169,6 +169,7 @@ in rec {
     security.sudo.wheelNeedsPassword = false;
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
     kn.shared.initialDB = true;
+    kn.mailserver.hostname = "khandhas.kn.cx";
     # don't log these, there are *a lot*
     networking.firewall.logRefusedConnections = false;
   };
@@ -212,6 +213,8 @@ in rec {
       '';
     };
     kn.django.package = "/kninfra-pub";
+    kn.mailserver.hostname = "mail.local";
+    systemd.services."acme-mail.local".enable = false;
     programs.bash.shellAliases."vm.stop" = "poweroff";
     system.fsPackages = [ pkgs.bindfs ];
     # qemu settings:
