@@ -134,6 +134,18 @@ def create_event(date, name, humanName):
     album.save()
 
 
+def create_foto(album, name, user):
+    photo = entity({
+        'type': 'foto',
+        'path': album.full_path,
+        'name': name,
+        'uploadedBy': _id(user),
+        'random': random.random(),
+        'visibility': ['world']})
+    photo.update_metadata(album, save=False)
+    photo.save()
+
+
 class FotoEntity(SONWrapper):
     CACHES = {}
 
@@ -155,6 +167,7 @@ class FotoEntity(SONWrapper):
     rotation = son_property(('rotation',))
     size = son_property(('size',))
     _search_text = son_property(('search_text',))
+    event_date = son_property(('eventDate',))
 
     visibility = son_property(('visibility',))
     _lost = son_property(('lost',))
@@ -436,6 +449,12 @@ class FotoEntity(SONWrapper):
         if save:
             self.save()
 
+    @property
+    def uploaded_by(self):
+        if not 'uploadedBy' in self._data:
+            return None
+        return Es.by_id(self._data['uploadedBy'])
+
 
 class FotoAlbum(FotoEntity):
 
@@ -468,6 +487,16 @@ class FotoAlbum(FotoEntity):
         return [entity(x) for x in fcol.find(
             {'path': self.full_path}
         ).sort('name', 1)]
+
+    def list_user_fotos(self, user):
+        '''
+        List photos uploaded by the given user.
+        '''
+        return [entity(x) for x in fcol.find({
+                'path': self.full_path,
+                'type': {'$ne': 'album'},
+                'uploadedBy': _id(user)},
+        ).sort([('date', 1), ('name', 1)])]
 
     def get_random_foto_for(self, user):
         required_visibility = self.required_visibility(user)
@@ -690,6 +719,26 @@ class Foto(FotoEntity):
             '-quality', str(self.CACHES[cache].quality),
             target
         ])
+
+    def remove(self):
+        '''
+        Permanently remove the given photo.
+        '''
+        # Delete from the database.
+        fcol.delete_one({'_id': _id(self._id)})
+
+        # Delete cached versions of the photo.
+        for cache in self.caches:
+            try:
+                os.remove(self.get_cache_path(cache))
+            except FileNotFoundError:
+                pass
+
+        # Delete the original photo.
+        try:
+            os.remove(self.get_cache_path('full'))
+        except FileNotFoundError:
+            pass
 
 
 class Video(FotoEntity):

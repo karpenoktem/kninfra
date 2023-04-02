@@ -37,6 +37,7 @@ def album_json(album, user):
 
     return {'children': children,
             'parents': album_parents_json(album),
+            'is_event': bool(album.event_date),
             'visibility': album.visibility[0],
             'people': people}
 
@@ -71,6 +72,9 @@ def entities_json(children, user):
                 entry['thumbnailPath'] = album_foto.full_path
 
         if child._type != 'album' and user is not None and user.is_authenticated():
+            uploaded_by = child.uploaded_by
+            entry['uploadedBy'] = str(uploaded_by.name)
+            people[str(uploaded_by.name)] = six.text_type(uploaded_by.humanName)
             tags = []
             tagged = child.get_tags()
             if tagged:
