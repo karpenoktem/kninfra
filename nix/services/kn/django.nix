@@ -63,6 +63,13 @@ in {
         SocketMode = "0660";
       };
     };
+
+    users.groups.kndjango = { };
+    users.users.kndjango = {
+      isSystemUser = true;
+      group = "kndjango";
+    };
+
     systemd.services.kndjango = rec {
       requires = [ "mongodb.service" ];
       after = requires;
@@ -71,12 +78,14 @@ in {
       path = [ (lib.getBin pkgs.imagemagick) ];
       serviceConfig = {
         ExecStart = "${uwsgi_pkg}/bin/uwsgi --json ${uswgi_conf}";
-        # allocate a dynamic user for every run. maximum sandboxing
         DynamicUser = true;
+        User = "kndjango";
+        Group = "kndjango";
+        SupplementaryGroups = [ "fotos" "infra" ];
+        ReadWritePaths = [ config.kn.fotos.dir ];
         CacheDirectory = "fotos";
         Restart = "on-failure";
         KillSignal = "SIGQUIT";
-        SupplementaryGroups = "infra";
         # uwsgi is systemd-aware
         Type = "notify";
         NotifyAccess = "all";

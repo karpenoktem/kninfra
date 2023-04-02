@@ -9,13 +9,16 @@ in {
       type = lib.types.path;
       default = "/var/fotos";
       description = ''
-        Directory with all fotos in directories named after events.
+        The daan service will create event directories here and the kndjango
+        service will put photos in them.
       '';
     };
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.tmpfiles.rules = [ "d ${cfg.dir} 0550 root infra -" ];
+    # kndjango and daan will create stuff here under their own user and with the
+    # fotos group.
+    systemd.tmpfiles.rules = [ "d ${cfg.dir} 0770 fotos fotos -" ];
 
     users.users.fotos = {
       isSystemUser = true;
