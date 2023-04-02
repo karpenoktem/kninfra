@@ -32,7 +32,6 @@ in {
         devnull: /dev/null
       '';
 
-      #alias_database = hash:/etc/aliases
       hostname = cfg.hostname;
       origin = "$mydomain";
       recipientDelimiter = "+";
@@ -42,15 +41,7 @@ in {
       sslCert = cfg.ssl.cert;
       sslKey = cfg.ssl.key;
 
-      relayDomains = [
-        "khandhas.karpenoktem.com"
-        "khandhas.karpenoktem.nl"
-        "khandhas.kn.cx"
-        "lists.karpenoktem.nl"
-        "lists.khandhas.karpenoktem.com"
-        "lists.khandhas.karpenoktem.nl"
-        "lists.khandhas.kn.cx"
-      ];
+      tlsTrustedAuthorities = cfg.ssl.chain; # defaults to ca-bundle?
 
       # main.cf
       config = {
@@ -60,8 +51,7 @@ in {
         broken_sasl_auth_clients = true;
         recipient_bcc_maps = "hash:/etc/postfix/recipient_bcc_maps";
 
-        smtp_tls_CAfile = cfg.ssl.chain; # defaults to ca-bundle?
-        smtpd_tls_CAfile = cfg.ssl.chain;
+        smtpd_tls_CAfile = config.services.postfix.tlsTrustedAuthorities;
 
         smtpd_banner = "$myhostname ESMTP NO UCE";
         smtpd_helo_required = true;
@@ -102,9 +92,9 @@ in {
         ];
 
         disable_vrfy_command = true;
-        mailbox_size_limit = 0; # defaults to 51200000
-        mailman_destination_recipient_limit = 1;
-        message_size_limit = 51200000; # defaults to 10240000
+        mailbox_size_limit = "0"; # defaults to 51200000
+        mailman_destination_recipient_limit = "1";
+        message_size_limit = "51200000"; # defaults to 10240000
         smtp_sasl_auth_enable = true;
         # defaults to noplaintext,noanonymous
         smtp_sasl_tls_security_options = "noanonymous";

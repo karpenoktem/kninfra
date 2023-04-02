@@ -94,15 +94,16 @@ in rec {
     };
     # enable/disable various KN services
     kn = {
+      daan.enable = true;
+      django.enable = true;
+      fotos.enable = true;
+      giedo.enable = true;
+      hans.enable = true;
+      mailserver.enable = true;
+      rimapd.enable = true;
       shared.enable = true;
       shared.initialDB = true;
       wiki.enable = true;
-      #mailman.enable = true; # TODO
-      django.enable = true;
-      daan.enable = true;
-      hans.enable = true;
-      rimapd.enable = true;
-      giedo.enable = true;
     };
     # allow remote http, ssh access
     networking.firewall = {

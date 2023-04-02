@@ -5,9 +5,10 @@
     ./kn/fotos.nix
     ./kn/giedo.nix
     ./kn/hans.nix
+    ./kn/mail.nix
+    ./kn/rimapd.nix
     ./kn/shared.nix
     ./kn/wiki.nix
-    ./kn/rimapd.nix
     ./mailman2.nix
   ];
 }

@@ -34,7 +34,6 @@ in {
         ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') kn_env)}
       ''
     )];
-    kn.fotos.enable = true;
     systemd.services = lib.mkIf cfg.initialDB {
       giedo = rec {
         requires = [ "kn_initial_state.service" ];
