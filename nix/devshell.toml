@@ -44,19 +44,19 @@ help = "Shutdown development VM"
 
 [[commands]]
 name = "staging.build"
-command = "cd $PRJ_ROOT; nixos-rebuild build --flake .#staging"
+command = "cd $PRJ_ROOT; nixos-rebuild build --fast --flake .#staging"
 category = "staging"
 help = "Build staging configuration"
 
 [[commands]]
 name = "staging.deploy"
-command = "cd $PRJ_ROOT; nixos-rebuild switch --flake .#staging --target-host root@dev.kn.cx"
+command = "cd $PRJ_ROOT; nixos-rebuild switch --fast --flake .#staging --target-host root@dev.kn.cx"
 category = "staging"
 help = "Deploy staging without reboot"
 
 [[commands]]
 name = "staging.boot-deploy"
-command = "cd $PRJ_ROOT; nixos-rebuild boot --flake .#staging --target-host root@dev.kn.cx"
+command = "cd $PRJ_ROOT; nixos-rebuild boot --fast --flake .#staging --target-host root@dev.kn.cx"
 category = "staging"
 help = "Copy configuration to staging to activate after reboot"
 
