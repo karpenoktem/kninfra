@@ -144,7 +144,6 @@ in rec {
       }];
     };
     services.nginx.virtualHosts.kn = {
-      serverName = "dev.kn.cx";
       enableACME = true;
       forceSSL = true;
     };
@@ -170,6 +169,7 @@ in rec {
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
     kn.shared.initialDB = true;
     kn.mailserver.hostname = "khandhas.kn.cx";
+    kn.settings.DOMAINNAME = "dev.kn.cx";
     # don't log these, there are *a lot*
     networking.firewall.logRefusedConnections = false;
   };
@@ -189,8 +189,8 @@ in rec {
       path = "/root/vm-host.key";
       type = "ed25519";
     }];
-    services.nginx.virtualHosts.kn.serverName = "localhost";
     age.secrets.kn-env.file = ../secrets/vm.age;
+    kn.settings.DOMAINNAME = "localhost";
     kn.shared.initialDB = true;
   };
 
@@ -245,7 +245,7 @@ in rec {
           guest.port = 22;
         }
       ];
-      qemu = { options = [ "-serial mon:stdio" ]; };
+      qemu.options = [ "-serial mon:stdio" ];
     };
   };
 }

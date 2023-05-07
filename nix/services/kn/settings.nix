@@ -9,27 +9,29 @@ in {
   options.kn.settings =
     lib.mkOption { type = lib.types.lazyAttrsOf settingsFormat.type; };
 
-  config.environment.variables.KN_SETTINGS = settingsFile.outPath;
+  options.kn.settingsFile = lib.mkOption {
+    type = lib.types.path;
+    default = settingsFile;
+  };
 
   config.kn.settings = lib.mapAttrs (name: lib.mkDefault) (with cfg; {
-    WIKI_MYSQL_SECRET = null;
-
     DOMAINNAME = "karpenoktem.nl";
 
     ALLOWED_HOSTS = [ DOMAINNAME ];
 
-    INFRA_HOME = "/home/infra";
-    INFRA_REPO = INFRA_HOME + "/repo";
+    INFRA_REPO = pkgs.kninfra;
 
     MEDIA_URL = "/djmedia/";
     STORAGE_URL = "/djmedia/storage";
-    INFRA_UID = 1002;
 
     SCHEME = "https";
 
     MEDIA_ROOT = INFRA_REPO + "/media/";
-    STORAGE_ROOT = INFRA_HOME + "/storage";
-    GOOGLE_OAUTH2_KEY = INFRA_HOME + "/google-oauth-key.json";
+
+    STORAGE_ROOT = "/var/lib/kndjango/storage";
+
+    # TODO: Import sankhara:/home/infra/google-oauth-key.json into age-nix
+    GOOGLE_OAUTH2_KEY = pkgs.emptyFile;
 
     BASE_URL = SCHEME + "://" + DOMAINNAME;
     PHOTOS_CACHE_DIR = "/var/cache/fotos";
