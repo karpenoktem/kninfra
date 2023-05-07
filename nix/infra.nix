@@ -170,6 +170,7 @@ in rec {
     kn.shared.initialDB = true;
     kn.mailserver.hostname = "khandhas.kn.cx";
     kn.settings.DOMAINNAME = "dev.kn.cx";
+    kn.settings.MAIL_DEBUG = false;
     # don't log these, there are *a lot*
     networking.firewall.logRefusedConnections = false;
   };
