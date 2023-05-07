@@ -7,6 +7,7 @@
     ./kn/hans.nix
     ./kn/mail.nix
     ./kn/rimapd.nix
+    ./kn/settings.nix
     ./kn/shared.nix
     ./kn/wiki.nix
     ./mailman2.nix
