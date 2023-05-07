@@ -9,14 +9,15 @@ python = "^3.7"
 sdnotify = "^0.3.2"
 reserved = "^0.1.1"
 zipseeker = "^1.0.11"
-django = "1.8.19"
+django = "1.10.7"
 docutils = "^0.17.1"
 tarjan = { git = "https://github.com/bwesterb/py-tarjan.git" }
 #koert = { git = "https://github.com/awesterb/koert.git" }
 msgpack-python = "^0.5.6"
 
-hatchling = "*"
+hatchling = "1.13.0"
 pytest = "*"
+urllib3 = "^1.26.14"
 
 # match with nixpkgs to keep patch intact in kndjango.nix
 GitPython = "3.1.27"
