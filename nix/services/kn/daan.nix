@@ -37,7 +37,7 @@ in {
       description = "KN Daan";
       preStart = "mkdir -p ${cfg.postfixMapDir}";
 
-      environment = {
+      environment = config.kn.shared.env // {
         POSTFIX_VIRTUAL_MAP = "${cfg.postfixMapDir}/kninfra_maps";
         POSTFIX_SLM_MAP = "${cfg.postfixMapDir}/kninfra_slm_maps";
         PHOTOS_DIR = config.kn.fotos.dir;
