@@ -132,6 +132,18 @@ in rec {
     };
   };
 
+  production = { config, ... }: {
+    age.secrets = {
+      google-oauth-key.file = ../secrets/google-oauth-key.json.age;
+      google-oauth-key.owner = "giedo";
+      kn-env.file = ../secrets/production.age;
+    };
+
+    kn.settings = {
+      GOOGLE_OAUTH2_KEY = config.age.secrets.google-oauth-key.path;
+    };
+  };
+
   staging = { lib, ... }: {
     # nixos-rebuild switch --flake '.#staging' --target-host root@dev.kn.cx --build-host localhost
     imports = [ vipassana ./hetzner.nix ];

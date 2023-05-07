@@ -30,9 +30,6 @@ in {
 
     STORAGE_ROOT = "/var/lib/kndjango/storage";
 
-    # TODO: Import sankhara:/home/infra/google-oauth-key.json into age-nix
-    GOOGLE_OAUTH2_KEY = pkgs.emptyFile;
-
     BASE_URL = SCHEME + "://" + DOMAINNAME;
     PHOTOS_CACHE_DIR = "/var/cache/fotos";
     MAILDOMAIN = DOMAINNAME;
