@@ -1,39 +1,25 @@
-# Example of settings.py.
-# this file should retain python2 compatibility until Hans is ported to python3
-
+import datetime
+import json
 import os
 
-from kn.defaultSettings import defaultSettings  # noqa: E402
+from django.utils.translation import ugettext_lazy as _
 
-#
-# You MUST change
-#
+with open(os.environ["KN_SETTINGS"], "r") as f:
+    globals().update(json.load(f))
 
-# CHUCK_NORRIS_HIS_SECRET = 'CHANGE ME'
-# SECRET_KEY = 'CHANGE ME'
-# MAILMAN_DEFAULT_PASSWORD = 'CHANGE ME'
-#
-# You might want to set one of the following.
-# See defaultSettings.py for more settings.
-# These should be of the form ('host', 'user', 'password', 'db')
-# FORUM_MYSQL_SECRET = ('localhost', 'punbb', 'CHANGE ME', 'punbb')
-# PHOTOS_MYSQL_SECRET = ('localhost', 'fotos', 'CHANGE ME', 'fotos')
-# DOMAINNAME = 'karpenoktem.nl'
-# INFRA_HOME = os.environ['HOME']
-INFRA_REPO = os.path.join(os.path.dirname(__file__), "../")
-
-#GIEDO_SOCKET = "/run/infra/giedo"
+# Load more settings from environment variables, useful for secrets.
 
 for varname, value in os.environ.items():
     if varname.startswith("KN_"):
         globals()[varname[3:]] = value
 
-# TODO(HACK): should have structured config
-if "ALLOWED_HOSTS" in globals() and type(globals()["ALLOWED_HOSTS"]) == str:
-    ALLOWED_HOSTS = ALLOWED_HOSTS.split(',')
-# Do not remove the following
-#
+# Settings that cannot be represented in json. These should not need to be
+# changed anyway.
 
-defaultSettings(globals())
+DT_MIN = datetime.datetime(2004, 8, 31)
+DT_MAX = datetime.datetime(5004, 9, 1)
 
-# vim: et:sta:bs=2:sw=4:
+LANGUAGES = [
+    ("nl", _("Nederlands")),
+    ("en", _("Engels")),
+]

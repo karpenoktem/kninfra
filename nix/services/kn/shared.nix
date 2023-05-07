@@ -38,19 +38,23 @@ in {
       giedo = rec {
         requires = [ "kn_initial_state.service" ];
         after = requires;
+        environment.KN_SETTINGS = config.kn.settingsFile;
         serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       };
       kndjango = rec {
         requires = [ "kn_initial_state.service" ];
         after = requires;
+        environment.KN_SETTINGS = config.kn.settingsFile;
         serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       };
       daan.serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       rimapd = rec {
         requires = [ "kn_initial_state.service" ];
         after = requires;
+        environment.KN_SETTINGS = config.kn.settingsFile;
         serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       };
+      hans.environment.KN_SETTINGS = config.kn.settingsFile;
       hans.serviceConfig.EnvironmentFile = config.age.secrets.kn-env.path;
       kn_initial_state = rec {
         requires = [ "mongodb.service" ];

@@ -5,10 +5,7 @@
 let
   cfg = config.kn.django;
   # generate a json file with configuration for uwsgi
-  kn_env = config.kn.shared.env // {
-    KN_ALLOWED_HOSTS =
-      "${config.services.nginx.virtualHosts.kn.serverName}";
-  };
+  kn_env = config.kn.shared.env;
   uswgi_conf = pkgs.writeText "uwsgi.json" (builtins.toJSON {
     uwsgi = {
       plugins = "python3";
@@ -47,6 +44,7 @@ in {
     services.nginx = {
       enable = true;
       virtualHosts.kn = {
+        serverName = config.kn.settings.DOMAINNAME;
         locations."/djmedia/".alias = "${pkgs.kninfra}/media/";
         locations."/".extraConfig = ''
           include ${pkgs.nginx}/conf/uwsgi_params;

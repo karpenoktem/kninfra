@@ -27,8 +27,6 @@ def defaultSettings(glbls):
     # You are very likely to override these
     # These should be of the form ('host', 'user', 'password', 'db')
     # ############################################################
-    d.WIKI_MYSQL_SECRET = None
-
     d.DOMAINNAME = 'karpenoktem.nl'
 
     # Settings you probably want to change
@@ -39,7 +37,6 @@ def defaultSettings(glbls):
 
     d.MEDIA_URL = '/djmedia/'
     d.STORAGE_URL = '/djmedia/storage'
-    d.INFRA_UID = 1002
 
     d.SCHEME = 'https'
 
