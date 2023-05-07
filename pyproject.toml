@@ -9,7 +9,7 @@ python = "^3.7"
 sdnotify = "^0.3.2"
 reserved = "^0.1.1"
 zipseeker = "^1.0.11"
-django = "1.10.7"
+django = "^1.11.29"
 docutils = "^0.17.1"
 tarjan = { git = "https://github.com/bwesterb/py-tarjan.git" }
 #koert = { git = "https://github.com/awesterb/koert.git" }

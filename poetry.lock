@@ -159,15 +159,18 @@ files = [
 
 [[package]]
 name = "django"
-version = "1.10.7"
+version = "1.11.29"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "Django-1.10.7-py2.py3-none-any.whl", hash = "sha256:e68fd450154ad7ee2c88472bb812350490232462adc6e3c6bcb544abe5212134"},
-    {file = "Django-1.10.7.tar.gz", hash = "sha256:593d779dbc2350a245c4f76d26bdcad58a39895e87304fe6d725bbdf84b5b0b8"},
+    {file = "Django-1.11.29-py2.py3-none-any.whl", hash = "sha256:014e3392058d94f40569206a24523ce254d55ad2f9f46c6550b0fe2e4f94cf3f"},
+    {file = "Django-1.11.29.tar.gz", hash = "sha256:4200aefb6678019a0acf0005cd14cfce3a5e6b9b90d06145fcdd2e474ad4329c"},
 ]
+
+[package.dependencies]
+pytz = "*"
 
 [package.extras]
 argon2 = ["argon2-cffi (>=16.1.0)"]
@@ -1031,6 +1034,18 @@ tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 testing = ["argcomplete", "attrs (>=19.2.0)", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
 
 [[package]]
+name = "pytz"
+version = "2023.3"
+description = "World timezone definitions, modern and historical"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pytz-2023.3-py2.py3-none-any.whl", hash = "sha256:a151b3abb88eda1d4e34a9814df37de2a80e301e68ba0fd856fb9b46bfbbbffb"},
+    {file = "pytz-2023.3.tar.gz", hash = "sha256:1d8ce29db189191fb55338ee6d0387d82ab59f3d00eac103412d64e0ebd0c588"},
+]
+
+[[package]]
 name = "pyx"
 version = "0.15"
 description = "Python package for the generation of PostScript, PDF, and SVG files"
@@ -1336,4 +1351,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "027dda927e22bced3363a444c1615efde2da664460356ad1de7e0a196b6895fe"
+content-hash = "856621e9d9d2cde54aa8a56b71e2deb2c7f4785015b7ceef3953d4d2e6f656a1"
