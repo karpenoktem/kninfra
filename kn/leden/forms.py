@@ -23,7 +23,7 @@ class EntityChoiceFieldWidget(forms.TextInput):
         super(EntityChoiceFieldWidget, self).__init__(*args, **kwargs)
 
     def render(self, name, value=None, attrs=None):
-        final_attrs = self.build_attrs(attrs, name=name)
+        final_attrs = {'name': name, **(attrs or dict())}
         code_set_value = ''
         if value:
             code_set_value = (
