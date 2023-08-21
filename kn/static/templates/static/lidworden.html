@@ -6,7 +6,7 @@
 {% url "activiteiten" as url_activiteiten %}
 {% url "route" as url_route %}
 {% url "agenda" as url_agenda %}
-<p>{% blocktrans with secretaris="secretaris@karpenoktem.nl"|email%}
+<p>{% blocktrans with secretaris="secretaris@karpenoktem.nl"|email ik="ik@karpenoktem.nl"|email %}
 Lijkt het je leuk om lid te worden?
 Kom eens een keer langs bij een van onze
 <a href="{{ url_activiteiten }}">activiteiten</a>!
@@ -15,10 +15,10 @@ avondeten op de vrijdag.
 Alle activiteiten zijn te vinden op de <a href="{{ url_agenda }}">agenda</a>.
 Inschrijfformulieren zijn te verkrijgen bij de bar, en kunnen daar ook ingevuld weer ingeleverd worden.
 </p>
+<p>Vind je het spannend om alleen naar een activiteit te gaan? Stuur dan een mailtje naar de Introductie Kommissie ({{ ik }}), dan zorgen wij ervoor dat je samen met een karpe-lid naar een activiteit gaat. </p>
 <p>Vragen? Stuur een e-mail naar {{ secretaris }} en dan is het zo
 geregeld!</p>
 {% endblocktrans %}
-</p>
 
 <p>{% blocktrans with secretaris="secretaris@karpenoktem.nl"|email%}
   Wil je je uitschrijven? Stuur ook dan een mailtje naar
