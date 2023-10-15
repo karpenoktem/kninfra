@@ -8,7 +8,9 @@
 $wgAuthRemoteuserUserUrls = [
     'logout' => '/accounts/logout/',
 ];
-$wgAuthRemoteuserAllowUserSwitch = false;
+// TODO: ideally, we want this `false`, but this broke in
+// https://github.com/wikimedia/mediawiki-extensions-Auth_remoteuser/commit/600299b19011877d88ee6c42a805fd066c7ddb63
+$wgAuthRemoteuserAllowUserSwitch = true;
 $wgAuthRemoteuserRemoveAuthPagesAndLinks = true;
 $wgAuthRemoteuserPriority = 100;
 
@@ -82,4 +84,17 @@ $wgHooks['GetAutoPromoteGroups'][] = static function (&$user, &$promote) {
       $promote = $wgKNAuthLoginData['groups'];
       return true;
     }
+};
+
+// workaround for $wgAuthRemoteuserAllowUserSwitch
+$wgHooks['SpecialPage_initList'][] = static function (&$specials) {
+  unset($specials["ChangePassword"]);
+  unset($specials["PasswordReset"]);
+  unset($specials["CreateAccount"]);
+  unset($specials["Userlogin"]);
+  unset($specials["Userlogout"]);
+  unset($specials["LinkAccounts"]);
+  unset($specials["UnlinkAccounts"]);
+  unset($specials["ChangeCredentials"]);
+  unset($specials["RemoveCredentials"]);
 };

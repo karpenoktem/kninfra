@@ -82,9 +82,8 @@ in {
         extensions.Auth_remoteuser = pkgs.fetchFromGitHub {
           owner = "wikimedia";
           repo = "mediawiki-extensions-Auth_remoteuser";
-          # TODO(debug): use master, need to debug CAS update failed
-          rev = "311b311ee900a33637c15cd57e4556b0ed688a75";
-          sha256 = "sha256-eFKDA9CU4V9QKZd+GsI3sZTwwXvD6doVC76ASD16hrA=";
+          rev = "cf8b45eea7520631efeb1e5055c16ee960bc798a";
+          sha256 = "sha256-2mww+PAurdWuLom29ePbpbqq9BlQSWsxtbN1yiV4UxM=";
         };
         in ''
         // $wgDebugLogFile = "/tmp/debug-mediawiki.log";

@@ -15,6 +15,7 @@ nixosTest ({
     machine.wait_for_unit("saslauthd.service")
     machine.succeed("${cyrus_sasl}/bin/testsaslauthd -u admin -p 'CHANGE ME'")
     machine.succeed("${curl}/bin/curl -f -LI http://localhost/")
+    machine.wait_for_unit("phpfpm-mediawiki.service")
     machine.succeed("${kn.puppetCheck}/bin/kn-puppet http://localhost admin 'CHANGE ME'")
     machine.succeed("${kn.puppetCheck}/bin/kn-puppet http://localhost test 'CHANGE ME'")
     machine.succeed("kn-giedo-sync")
