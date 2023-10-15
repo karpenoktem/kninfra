@@ -30,6 +30,7 @@ final: prev: {
       final.poetry2nix.defaultPoetryOverrides
       (self: super: {
         pytest = null;
+        pytest-runner = null;
         hatchling = null;
         # conflict on backport site-pkg
         configparser = super.configparser.overrideAttrs (o: {

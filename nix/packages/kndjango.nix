@@ -10,6 +10,7 @@ let
       gitpython = super.gitpython.overridePythonAttrs (old: {
         inherit (python3.pkgs.GitPython) patches doCheck pythonImportsCheck;
         propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optionals (self.pythonOlder "3.10") [ self.typing-extensions ];
+        nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkgs.git ];
       });
     });
   };

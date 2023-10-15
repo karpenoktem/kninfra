@@ -66,8 +66,10 @@ in rec {
       postfix.enable = true;
       openssh = {
         enable = true;
-        passwordAuthentication = false;
-        permitRootLogin = "prohibit-password";
+        settings = {
+          PasswordAuthentication = false;
+          PermitRootLogin = "prohibit-password";
+        };
       };
       sshguard = {
         enable = true;

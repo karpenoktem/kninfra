@@ -70,6 +70,7 @@ in {
       enable = true;
       name = "KnWiki";
       # TODO: use this module to host this on nginx
+      # https://github.com/NixOS/nixpkgs/pull/255776
       # httpd = "nginx"; # TODO
       database.createLocally = true;
       #database.type = "postgres";

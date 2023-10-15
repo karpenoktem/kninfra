@@ -6,9 +6,10 @@ nixosTest ({
   nodes.machine = {config, pkgs, lib, ...}: {
     imports = [
       infra.virtualized
-      inputs.agenix.nixosModule
+      inputs.agenix.nixosModules.default
     ];
   };
+  name = "kn-vm-check";
   testScript = ''
     machine.wait_for_unit("kndjango.socket")
     machine.wait_for_unit("nginx.service")

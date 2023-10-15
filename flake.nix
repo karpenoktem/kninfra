@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils";
     poetry2nix = {
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,7 +17,6 @@
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
     };
   };
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
@@ -32,9 +31,16 @@
                 poetry2nix.overlay
                 self.overlays.default
                 agenix.overlays.default
-                devshell.overlay
+                devshell.overlays.default
                 # add 'inputs' pseudo-package
                 (self: super: { inherit inputs; })
+              ];
+              config.permittedInsecurePackages = [
+                "python-2.7.18.6"
+                "python-2.7.18.6-env"
+              ];
+              config.allowUnfreePredicate = pkg: builtins.elem pkg.pname [
+                "mongodb"
               ];
               inherit system;
             };
