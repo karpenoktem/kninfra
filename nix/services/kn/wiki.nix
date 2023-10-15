@@ -74,7 +74,7 @@ in {
       # httpd = "nginx"; # TODO
       database.createLocally = true;
       #database.type = "postgres";
-      virtualHost = {
+      httpd.virtualHost = {
         hostName = "localhost:8080";
         enableSSL = false;
         adminAddr = "yorick@yori.cc";
