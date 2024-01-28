@@ -28,6 +28,9 @@ final: prev: {
     overrides = [
       final.poetry2nix.defaultPoetryOverrides
       (self: super: {
+        wheel = final.python2.pythonForBuild.pkgs.wheel.override {
+          inherit (self) buildPythonPackage;
+        };
         pytest = null;
         pytest-runner = null;
         hatchling = null;
