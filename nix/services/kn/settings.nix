@@ -145,13 +145,11 @@ in {
     };
 
     HOME_SLIDESHOW = map (file: MEDIA_URL + file) [
-      "static/slideshow/picknicktafel.jpg"
-      "static/slideshow/galapoker.jpg"
-      "static/slideshow/alternatief.jpg"
-      "static/slideshow/tie-dye.jpg"
-      "static/slideshow/roel.jpg"
-      "static/slideshow/galalampjes.jpg"
-      "static/slideshow/lan.jpg"
+      "static/slideshow/main 1.size.jpg"
+      "static/slideshow/main 2.size.jpg"
+      "static/slideshow/main 3.size.jpg"
+      "static/slideshow/main 4.size.jpg"
+      "static/slideshow/main 5.size.jpg"
     ];
 
     USERNAME_CHARS = "qwertyuiopasdfghjklzxcvbnm123456789-";
