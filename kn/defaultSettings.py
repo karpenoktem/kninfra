@@ -176,13 +176,11 @@ def defaultSettings(glbls):
     }
 
     d.HOME_SLIDESHOW = [
-        d.MEDIA_URL + 'static/slideshow/picknicktafel.jpg',
-        d.MEDIA_URL + 'static/slideshow/galapoker.jpg',
-        d.MEDIA_URL + 'static/slideshow/alternatief.jpg',
-        d.MEDIA_URL + 'static/slideshow/tie-dye.jpg',
-        d.MEDIA_URL + 'static/slideshow/roel.jpg',
-        d.MEDIA_URL + 'static/slideshow/galalampjes.jpg',
-        d.MEDIA_URL + 'static/slideshow/lan.jpg',
+        d.MEDIA_URL + 'static/slideshow/main 1.size.jpg',
+        d.MEDIA_URL + 'static/slideshow/main 2.size.jpg',
+        d.MEDIA_URL + 'static/slideshow/main 3.size.jpg',
+        d.MEDIA_URL + 'static/slideshow/main 4.size.jpg',
+        d.MEDIA_URL + 'static/slideshow/main 5.size.jpg',
     ]
 
     d.DT_MIN = datetime.datetime(2004, 8, 31)
