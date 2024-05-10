@@ -1,11 +1,21 @@
 {stdenv, lib, pkgs, poetry2nix, python2-hans, python3, makeWrapper}:
 let
+  addBuildInput = pkg: bip: pkg.overridePythonAttrs (old: {
+    propagatedBuildInputs = old.propagatedBuildInputs ++ [ bip ];
+  });
   requirements = poetry2nix.mkPoetryEnv {
     python = python3;
     projectDir = ../../.;
     overrides = poetry2nix.overrides.withDefaults (self: super: {
-      tarjan = super.tarjan.overridePythonAttrs (old: {
-        propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
+      tarjan = addBuildInput super.tarjan self.setuptools;
+      editables = addBuildInput super.editables self.flit-core;
+      py3dns = addBuildInput super.py3dns self.flit-core;
+      atpublic = addBuildInput super.atpublic self.pdm-backend;
+      flufl-i18n = addBuildInput super.flufl-i18n self.pdm-pep517;
+      flufl-lock = addBuildInput super.flufl-lock self.pdm-pep517;
+      publicsuffix2 = addBuildInput super.publicsuffix2 self.requests;
+      mailman = super.mailman.overridePythonAttrs (old: {
+        patches = (old.patches or []) ++ pkgs.mailman.patches;
       });
       gitpython = super.gitpython.overridePythonAttrs (old: {
         inherit (python3.pkgs.GitPython) patches doCheck pythonImportsCheck;
