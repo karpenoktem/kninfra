@@ -101,7 +101,7 @@ in rec {
       django.enable = true;
       fotos.enable = true;
       giedo.enable = true;
-      hans.enable = true;
+      # hans.enable = true;
       mailserver.enable = true;
       rimapd.enable = true;
       shared.enable = true;
@@ -113,7 +113,23 @@ in rec {
       allowedTCPPorts = lib.mkForce [ 22 80 443 ];
       allowedUDPPorts = lib.mkForce [ ];
     };
-    services.mailman2.enable = true;
+    # services.mailman2.enable = true;
+    services.mailman = {
+      enable = true;
+      serve = {
+        enable = true;
+        virtualRoot = "/mailman";
+      };
+      webSettings.STATIC_URL = "/mailman/static/";
+      webSettings.ACCOUNT_ADAPTER =
+        "django_mailman3.views.user_adapter.DisableSignupAdapter";
+
+      # webSettings.EMAIL_PORT = 1025;
+      restApiPassFile = config.age.secrets.mailman-rest.path;
+      siteOwner = lib.concatStringsSep "@" [ "wortel" "karpenoktem.nl" ];
+      webHosts = [ "kn" ];
+      enablePostfix = true;
+    };
     services.saslauthd = {
       enable = true;
       mechanism = "rimap";
@@ -139,6 +155,7 @@ in rec {
       google-oauth-key.file = ../secrets/google-oauth-key.json.age;
       google-oauth-key.owner = "giedo";
       kn-env.file = ../secrets/production.age;
+      mailman-rest.file = ../secrets/mailman-rest-production.age;
     };
 
     kn.settings = {
@@ -162,6 +179,7 @@ in rec {
       forceSSL = true;
     };
     age.secrets.kn-env.file = ../secrets/staging.age;
+    age.secrets.mailman-rest.file = ../secrets/mailman-rest-production.age;
     users.users = (lib.mapAttrs (username: options: {
       openssh.authorizedKeys.keys = options.sshkeys;
       group = username;
@@ -205,6 +223,7 @@ in rec {
       type = "ed25519";
     }];
     age.secrets.kn-env.file = ../secrets/vm.age;
+    age.secrets.mailman-rest.file = ../secrets/mailman-rest-vm.age;
     kn.settings.DOMAINNAME = "localhost";
     kn.shared.initialDB = true;
   };
@@ -234,7 +253,7 @@ in rec {
     system.fsPackages = [ pkgs.bindfs ];
     # qemu settings:
     virtualisation = {
-      memorySize = 1024;
+      memorySize = 2048;
       diskSize = 1024;
       # set up serial console
       graphics = false;
@@ -261,6 +280,21 @@ in rec {
         }
       ];
       qemu.options = [ "-serial mon:stdio" ];
+    };
+    services.nginx.virtualHosts.kn.locations."/mail/" = {
+      proxyPass = "http://127.0.0.1:8025";
+      proxyWebsockets = true;
+    };
+    services.postfix.config.relayhost = "localhost:1025";
+    systemd.services.mailpit = {
+      serviceConfig = {
+        ExecStart = "${pkgs.mailpit}/bin/mailpit -d /var/lib/mailpit/mailpit.db --webroot /mail/";
+        RestartSec = 10;
+        SyslogIdentifier = "mailpit";
+        DynamicUser = true;
+        StateDirectory = "mailpit";
+      };
+      wantedBy = [ "multi-user.target" ];
     };
   };
 }

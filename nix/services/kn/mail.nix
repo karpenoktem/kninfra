@@ -27,13 +27,14 @@ in {
       hostname = cfg.hostname;
       origin = "$mydomain";
       recipientDelimiter = "+";
-      relayDomains = [ "lists.karpenoktem.nl" ];
+      relayDomains = [
+        "lists.karpenoktem.nl"
+        "hash:/var/lib/mailman/data/postfix_domains"
+      ];
       destination = [ "$myhostname" "localhost" "local.${cfg.domain}" ];
 
       sslCert = "${certDir}/cert.pem";
       sslKey = "${certDir}/key.pem";
-      # defaults to ca-bundle?
-      tlsTrustedAuthorities = "${certDir}/chain.pem";
 
       # main.cf
       config = {
@@ -60,11 +61,11 @@ in {
         mynetworks = [ "127.0.0.0/8" "[::ffff:127.0.0.0]/104" "[::1]/128" ];
 
         # opendkim
-        smtpd_milters = [ "inet:localhost:11332" "inet:localhost:8891" ];
-        non_smtpd_milters = "inet:localhost:8891";
+        # smtpd_milters = [ "inet:localhost:11332" "inet:localhost:8891" ];
+        # non_smtpd_milters = "inet:localhost:8891";
 
-        sender_canonical_maps = "pcre:/etc/postfix/sender_canonical_map";
-        smtp_sasl_password_maps = "hash:/etc/postfix/sasl_passwd";
+        # sender_canonical_maps = "pcre:/etc/postfix/sender_canonical_map";
+        # smtp_sasl_password_maps = "hash:/etc/postfix/sasl_passwd";
 
         smtp_tls_session_cache_database =
           "btree:\${data_directory}/smtp_scache";
@@ -74,17 +75,24 @@ in {
 
         smtpd_tls_session_cache_database =
           "btree:\${data_directory}/smtpd_scache";
-        virtual_alias_domains = "/etc/postfix/virtual/domains";
+        virtual_alias_domains = [
+          "lists.kn.cx"
+          "kn.cx"
+          "karpenoktem.nl"
+          "zeusverbond.nl"
+          "karpenoktem.com"
+          "lists.karpenoktem.com"
+          "dispuutcoma.nl"
+        ];
 
         virtual_alias_maps = [
-          "hash:/etc/postfix/virtual/pre-maps"
+          "hash:/var/lib/postfix/conf/virtual_pre_map"
           "hash:${config.kn.daan.postfixMapDir}/kninfra_maps"
-          "hash:/etc/postfix/virtual/post-maps"
+          "hash:/var/lib/postfix/conf/virtual_post_map"
         ];
 
         disable_vrfy_command = true;
         mailbox_size_limit = "0"; # defaults to 51200000
-        mailman_destination_recipient_limit = "1";
         message_size_limit = "51200000"; # defaults to 10240000
         smtp_sasl_auth_enable = true;
         # defaults to noplaintext,noanonymous
@@ -94,7 +102,7 @@ in {
         smtpd_sasl_authenticated_header = true;
         smtpd_sasl_local_domain = "";
         #cyrus_sasl_config_path = /etc/postfix/sasl
-        relay_recipient_maps = [ "hash:/var/lib/mailman/data/virtual-mailman" ];
+        local_recipient_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
 
         smtpd_recipient_restrictions = [
           "permit_mynetworks"
@@ -120,15 +128,38 @@ in {
         ];
       };
 
-      transport = ''
-        lists.${cfg.domain}    mailman:
-      '';
+      config.transport_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
 
       mapFiles.recipient_bcc_maps =
         pkgs.writeText "postfix-recipient-bcc-maps" ''
           voorzitter@${cfg.domain}  secretaris@${cfg.domain}
         '';
 
+      mapFiles.virtual_pre_map = pkgs.writeText "virtual-pre-map" ''
+        leden@dispuutcoma.nl coma@karpenoktem.nl
+        beekmans@dispuutcoma.nl stan@karpenoktem.nl
+
+        postmaster@dispuutcoma.nl wortel@karpenoktem.nl
+        wortel@dispuutcoma.nl wortel@karpenoktem.nl
+        abuse@dispuutcoma.nl wortel@karpenoktem.nl
+      '';
+      mapFiles.virtual_post_map = pkgs.writeText "virtual-post-map" ''
+        root@karpenoktem.nl wortel@karpenoktem.nl
+        postmaster@karpenoktem.nl wortel@karpenoktem.nl
+        geinteresseerden@karpenoktem.nl geinteresseerden@lists.karpenoktem.nl
+        devnull@karpenoktem.nl devnull@localhost
+        @karpenoktem.com @karpenoktem.nl
+        @kn.cx @karpenoktem.nl
+        @lists.karpenoktem.com @lists.karpenoktem.nl
+        @lists.kn.cx @lists.karpenoktem.nl
+        ; @karpenoktem.nl knfilter@gmail.com
+        @karpenoktem.nl catchall@lists.karpenoktem.nl
+        postmaster@zeusverbond.nl wortel@karpenoktem.nl
+        webmaster@zeusverbond.nl wortel@karpenoktem.nl
+        abuse@zeusverbond.nl wortel@karpenoktem.nl
+        hostmaster@zeusverbond.nl wortel@karpenoktem.nl
+        @sankhara.karpenoktem.nl @karpenoktem.nl
+      '';
       # List of addresses to DISCARD due to spam.
       mapFiles.sender_access = pkgs.writeText "postfix-sender_access"
         (lib.concatMapStrings (domain: ''

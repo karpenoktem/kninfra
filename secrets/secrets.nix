@@ -12,4 +12,7 @@ in with hosts; {
   "staging.age".publicKeys = allUsers ++ [ staging ];
   "production.age".publicKeys = allUsers ++ [ production ];
   "google-oauth-key.json.age".publicKeys = allUsers ++ [ production ];
+  "mailman-rest-vm.age".publicKeys = allUsers ++ [ vm ];
+  "mailman-rest-staging.age".publicKeys = allUsers ++ [ staging ];
+  "mailman-rest-production.age".publicKeys = allUsers ++ [ production ];
 }
