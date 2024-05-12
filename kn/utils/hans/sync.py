@@ -52,8 +52,8 @@ class KNStyle:
         mlist.subscription_policy = SubscriptionPolicy.confirm_then_moderate
         mlist.unsubscription_policy = SubscriptionPolicy.open
         mlist.member_roster_visibility = RosterVisibility.moderators
-        mlist.default_nonmember_action = Action.defer
         # TODO set this on the `moderated` lists
+        mlist.default_nonmember_action = Action.accept
         mlist.default_member_action = Action.accept
         mlist.require_explicit_destination = False
         # max_num_recipients = 0
