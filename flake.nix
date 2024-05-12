@@ -1,4 +1,8 @@
 {
+  nixConfig = {
+    extra-trusted-public-keys = "kninfra.cachix.org-1:l6SeUehzysoUHUX86/gmqiWaa9Jy7dTSFnPcWGw3zGo=";
+    extra-substituters = "https://kninfra.cachix.org";
+  };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     flake-utils.url = "github:numtide/flake-utils";
