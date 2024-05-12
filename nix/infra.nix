@@ -101,7 +101,7 @@ in rec {
       django.enable = true;
       fotos.enable = true;
       giedo.enable = true;
-      # hans.enable = true;
+      hans.enable = true;
       mailserver.enable = true;
       rimapd.enable = true;
       shared.enable = true;
@@ -113,18 +113,24 @@ in rec {
       allowedTCPPorts = lib.mkForce [ 22 80 443 ];
       allowedUDPPorts = lib.mkForce [ ];
     };
-    # services.mailman2.enable = true;
     services.mailman = {
       enable = true;
       serve = {
         enable = true;
         virtualRoot = "/mailman";
       };
-      webSettings.STATIC_URL = "/mailman/static/";
-      webSettings.ACCOUNT_ADAPTER =
-        "django_mailman3.views.user_adapter.DisableSignupAdapter";
-
-      # webSettings.EMAIL_PORT = 1025;
+      webSettings = {
+        STATIC_URL = "/mailman/static/";
+        ACCOUNT_ADAPTER =
+          "django_mailman3.views.user_adapter.DisableSignupAdapter";
+        # TODO: narrow
+        ALLOWED_HOSTS = [
+          "localhost"
+          "localhost:8080"
+          "vipassana.kn.cx:8080"
+          config.kn.settings.DOMAINNAME
+        ];
+      };
       restApiPassFile = config.age.secrets.mailman-rest.path;
       siteOwner = lib.concatStringsSep "@" [ "wortel" "karpenoktem.nl" ];
       webHosts = [ "kn" ];
@@ -224,7 +230,7 @@ in rec {
     }];
     age.secrets.kn-env.file = ../secrets/vm.age;
     age.secrets.mailman-rest.file = ../secrets/mailman-rest-vm.age;
-    kn.settings.DOMAINNAME = "localhost";
+    kn.settings.DOMAINNAME = "vipassana.kn.cx";
     kn.shared.initialDB = true;
   };
 
@@ -248,6 +254,7 @@ in rec {
     };
     kn.django.package = "/kninfra-pub";
     kn.mailserver.hostname = "mail.local";
+    kn.settings.ALLOWED_HOSTS = [ "localhost" "localhost:8080" ];
     systemd.services."acme-mail.local".enable = false;
     programs.bash.shellAliases."vm.stop" = "poweroff";
     system.fsPackages = [ pkgs.bindfs ];

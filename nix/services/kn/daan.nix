@@ -13,7 +13,7 @@ in {
 
     postfixMapDir = mkOption {
       type = types.path;
-      default = "/var/lib/postfix/conf/virtual";
+      default = "/var/lib/postfix/virtual";
       description = ''
         Directory where daan will write generated maps for postfix to use.
       '';
@@ -38,9 +38,9 @@ in {
       preStart = "mkdir -p ${cfg.postfixMapDir}";
 
       environment = config.kn.shared.env // {
-        POSTFIX_VIRTUAL_MAP = "${cfg.postfixMapDir}/kninfra_maps";
-        POSTFIX_SLM_MAP = "${cfg.postfixMapDir}/kninfra_slm_maps";
-        PHOTOS_DIR = config.kn.fotos.dir;
+        KN_POSTFIX_VIRTUAL_MAP = "${cfg.postfixMapDir}/kninfra_maps";
+        KN_POSTFIX_SLM_MAP = "${cfg.postfixMapDir}/kninfra_slm_maps";
+        KN_PHOTOS_DIR = config.kn.fotos.dir;
       };
 
       serviceConfig = {
@@ -49,6 +49,7 @@ in {
         # SupplementaryGroups = "infra";
         Type = "notify";
         NotifyAccess = "all";
+        EnvironmentFile = config.age.secrets.kn-env.path;
       };
     };
   };

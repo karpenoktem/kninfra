@@ -29,7 +29,7 @@ def generate_mailman_changes(hans):
     # Find the current members of the mailing lists and find which
     # mailing lists are missing.
     for g in mm_groups:
-        name = str(g.name).encode()
+        name = str(g.name)
         gid2name[g._id] = name
         if name in ml_membership:
             membership_to_check[name] = set(ml_membership[name].emails)
@@ -41,7 +41,7 @@ def generate_mailman_changes(hans):
 
     # Check which memberships are missing in the current mailing lists
     for rel in mm_rels:
-        em = rel['who'].canonical_email.encode()
+        em = rel['who'].canonical_email
         gname = gid2name[rel['with']]
         if em not in membership_to_check[gname]:
             todo.add[gname].emails.append(em)
@@ -55,6 +55,7 @@ def generate_mailman_changes(hans):
             continue
         for em in membership_to_check[n]:
             todo.remove[n].emails.append(em)
+
     return todo
 
 # vim: et:sta:bs=2:sw=4:

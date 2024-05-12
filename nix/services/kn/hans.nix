@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.kn.hans;
-  # generate a json file with configuration for uwsgi
-  kn_env = config.kn.shared.env;
 in {
   options.kn.hans = with lib; {
     enable = mkEnableOption "KN Hans";
@@ -24,15 +22,14 @@ in {
       };
     };
     systemd.services.hans = {
-      environment = kn_env // {
-        KN_MAILMAN_PATH = pkgs.mailman2;
-      };
+      environment = config.kn.shared.env;
       serviceConfig = {
-        ExecStart = "${pkgs.kninfra}/bin/hans";
-        User = config.services.mailman2.user;
+        ExecStart = "${pkgs.kninfra}/utils/hans.py";
+        User = "mailman";
         Restart = "on-failure";
         Type = "notify";
         NotifyAccess = "all";
+        EnvironmentFile = config.age.secrets.kn-env.path;
       };
     };
   };

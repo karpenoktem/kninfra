@@ -10,6 +10,5 @@
     ./kn/settings.nix
     ./kn/shared.nix
     ./kn/wiki.nix
-    ./mailman2.nix
   ];
 }

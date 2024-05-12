@@ -6,7 +6,7 @@ let
   # todo: I'd use -P on systemd-run, but it breaks the vm test
   wrapScript = name: script: pkgs.writeShellScript name ''
     set -e
-    systemd-run -Gt --wait -p EnvironmentFile=/run/agenix/kn-env \
+    systemd-run -Gt --wait -p EnvironmentFile=${config.age.secrets.kn-env.path} \
       ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''-E "${n}"="${v}"'') kn_env)} \
       ${script} "$@"
   '';
@@ -60,6 +60,7 @@ in {
         SupplementaryGroups = "infra";
         Type = "notify";
         NotifyAccess = "all";
+        EnvironmentFile = config.age.secrets.kn-env.path;
       };
     };
     environment.systemPackages = [(

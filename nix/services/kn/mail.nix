@@ -28,7 +28,6 @@ in {
       origin = "$mydomain";
       recipientDelimiter = "+";
       relayDomains = [
-        "lists.karpenoktem.nl"
         "hash:/var/lib/mailman/data/postfix_domains"
       ];
       destination = [ "$myhostname" "localhost" "local.${cfg.domain}" ];
@@ -94,7 +93,7 @@ in {
         disable_vrfy_command = true;
         mailbox_size_limit = "0"; # defaults to 51200000
         message_size_limit = "51200000"; # defaults to 10240000
-        smtp_sasl_auth_enable = true;
+        smtp_sasl_auth_enable = false;
         # defaults to noplaintext,noanonymous
         smtp_sasl_tls_security_options = "noanonymous";
         smtpd_tls_ciphers = "high";

@@ -87,6 +87,7 @@ in {
         # uwsgi is systemd-aware
         Type = "notify";
         NotifyAccess = "all";
+        EnvironmentFile = config.age.secrets.kn-env.path;
       };
     };
   };

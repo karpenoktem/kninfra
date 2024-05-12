@@ -26,6 +26,7 @@ in {
         Restart = "on-failure";
         Type = "notify";
         NotifyAccess = "all";
+        EnvironmentFile = config.age.secrets.kn-env.path;
       };
     };
   };
