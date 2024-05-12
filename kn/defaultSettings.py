@@ -1,6 +1,5 @@
 # Default settings.  Change in settings.py.  See settings.example.py.
 # ###################################################################
-# this file should retain python2 compatibility until Hans is ported to python3
 
 import datetime
 import locale

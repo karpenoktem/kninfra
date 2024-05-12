@@ -4,8 +4,7 @@ import threading
 
 import protobufs.messages.hans_pb2 as hans_pb2
 import protobufs.messages.hans_pb2_grpc as hans_pb2_grpc
-
-from kn.utils.hans.sync import maillist_apply_changes, maillist_get_membership
+from kn.utils.hans.sync import maillist_apply_changes, maillist_get_membership, maillist_init
 
 
 class Hans(hans_pb2_grpc.HansServicer):
@@ -13,6 +12,7 @@ class Hans(hans_pb2_grpc.HansServicer):
     def __init__(self):
         super(Hans, self).__init__()
         self.mailman_lock = threading.Lock()
+        maillist_init()
 
     def GetMembership(self, request, context):
         return maillist_get_membership()

@@ -1,40 +1,37 @@
-import protobufs.messages.hans_pb2 as hans_pb2
+from datetime import timedelta
 
 from django.conf import settings
-
-from mailman.interfaces.listmanager import IListManager
-from mailman.interfaces.domain import IDomainManager
-from mailman.interfaces.styles import IStyle
-from mailman.model.roster import RosterVisibility
-from mailman.interfaces.mailinglist import (SubscriptionPolicy, DMARCMitigateAction)
+from mailman.app.lifecycle import create_list
+from mailman.core.initialize import initialize
+from mailman.database.transaction import transaction
 from mailman.interfaces.action import Action
 from mailman.interfaces.archiver import ArchivePolicy
-from mailman.interfaces.styles import IStyleManager
+from mailman.interfaces.domain import IDomainManager
+from mailman.interfaces.listmanager import IListManager
+from mailman.interfaces.mailinglist import DMARCMitigateAction, SubscriptionPolicy
+from mailman.interfaces.styles import IStyle, IStyleManager
 from mailman.interfaces.usermanager import IUserManager
-from mailman.core.initialize import initialize
-from zope.component import getUtility
-from zope.interface import implementer
-import mailman.config
-from mailman.app.lifecycle import create_list
-from mailman.utilities.datetime import now
-from mailman.database.transaction import transaction
-from datetime import timedelta
+from mailman.model.roster import RosterVisibility
 from mailman.styles.base import (
-    Announcement,
     BasicOperation,
     Bounces,
     Discussion,
     Identity,
     Moderation,
     Private,
-    Public,
 )
+from mailman.utilities.datetime import now
+from zope.component import getUtility
+from zope.interface import implementer
+
+import protobufs.messages.hans_pb2 as hans_pb2
 
 
 @implementer(IStyle)
 class KNStyle:
     name = "kn"
     description = "Default KN Mailing List"
+
     def apply(self, mlist):
         Identity.apply(self, mlist)
         BasicOperation.apply(self, mlist)
@@ -59,38 +56,47 @@ class KNStyle:
         # max_num_recipients = 0
         mlist.archive_policy = ArchivePolicy.private
         mlist.dmarc_mitigate_unconditionally = True
-        mlist.preferred_language = 'nl'
+        mlist.preferred_language = "nl"
         mlist.dmarc_mitigate_action = DMARCMitigateAction.munge_from
         mlist.autoresponse_grace_period = timedelta(days=1)
 
-initialize()
-style_manager = getUtility(IStyleManager)
-style_manager.register(KNStyle())
 
+def maillist_init():
+    initialize()
+    style_manager = getUtility(IStyleManager)
+    style_manager.register(KNStyle())
 
 def maillist_get_membership():
     ret = hans_pb2.GetMembershipResp()
     list_manager = getUtility(IListManager)
     for lst in list_manager:
-        ret.membership[from_fqdn(lst.fqdn_listname)].emails.extend([x.address.email for x in lst.members.members])
+        ret.membership[from_fqdn(lst.fqdn_listname)].emails.extend(
+            [x.address.email for x in lst.members.members]
+        )
     return ret
+
 
 def to_fqdn(listname: str) -> str:
     return f"{listname}@{settings.LISTS_MAILDOMAIN}"
 
+
 def from_fqdn(fqdn_listname: str) -> str:
     return fqdn_listname.removesuffix(f"@{settings.LISTS_MAILDOMAIN}")
+
 
 def maillist_apply_changes(changes):
     user_manager = getUtility(IUserManager)
     list_manager = getUtility(IListManager)
     domain_manager = getUtility(IDomainManager)
-    # print(changes)
     with transaction():
         if settings.LISTS_MAILDOMAIN not in domain_manager:
             domain_manager.add(settings.LISTS_MAILDOMAIN)
         for createReq in changes.create:
-            ml = create_list(to_fqdn(createReq.name), [settings.MAILMAN_DEFAULT_OWNER.replace("localhost", "localhost.")], style_name="kn")
+            ml = create_list(
+                to_fqdn(createReq.name),
+                [settings.MAILMAN_DEFAULT_OWNER],
+                style_name="kn",
+            )
             ml.display_name = createReq.humanName
         for listname in changes.add:
             ml = list_manager.get(to_fqdn(listname))
