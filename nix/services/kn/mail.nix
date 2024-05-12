@@ -11,8 +11,22 @@ in {
     hostname = mkOption { default = "vipassana.karpenoktem.nl"; };
   };
 
+  # inspiration: https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/blob/master/mail-server/postfix.nix?ref_type=heads
   config = lib.mkIf cfg.enable {
     security.acme.certs.${cfg.hostname}.group = "postfix";
+    services.opendkim = {
+      enable = true;
+      selector = "kninfra";
+      domains = "csl:" + (builtins.concatStringsSep "," [
+        config.kn.settings.MAILDOMAIN
+        config.kn.settings.LISTS_MAILDOMAIN
+      ]);
+      configFile = pkgs.writeText "opendkim.conf" ''
+        UMask 0002
+      '';
+    };
+
+    users.users.postfix.extraGroups = [ config.services.opendkim.group ];
 
     services.postfix = {
       enable = true;
@@ -60,8 +74,11 @@ in {
         mynetworks = [ "127.0.0.0/8" "[::ffff:127.0.0.0]/104" "[::1]/128" ];
 
         # opendkim
-        # smtpd_milters = [ "inet:localhost:11332" "inet:localhost:8891" ];
-        # non_smtpd_milters = "inet:localhost:8891";
+        smtpd_milters = [ "unix:/run/opendkim/opendkim.sock" ];
+        #            ++ [ "unix:/run/rspamd/rspamd-milter.sock" ];
+        non_smtpd_milters = [ "unix:/run/opendkim/opendkim.sock" ];
+        milter_protocol = "6";
+        milter_mail_macros = "i {mail_addr} {client_addr} {client_name} {auth_type} {auth_authen} {auth_author} {mail_addr} {mail_host} {mail_mailer}";
 
         # sender_canonical_maps = "pcre:/etc/postfix/sender_canonical_map";
         # smtp_sasl_password_maps = "hash:/etc/postfix/sasl_passwd";
@@ -211,6 +228,8 @@ in {
         }
       ];
     };
+    # todo: policyd-spf
+    # todo: rspamd
 
     networking.firewall.allowedTCPPorts = [ 25 587 465 ];
 
