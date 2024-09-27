@@ -154,24 +154,24 @@ var event_object_id = '{{ object.id }}';
 {% endif %}{# has_write_access #}
 
 {% if has_read_access or object.has_public_subscriptions %}
-    <button onclick="copy_emailaddresses_to_clipboard(); return true;">
+    <button onclick="return copy_emailaddresses_to_clipboard(this)">
         {% trans "Toon e-mail adressen van de ingeschrevenen" %}
     </button>
     {% if listSubscribed %}
     <h2>{% trans "Aanmeldingen" %} ({{ listSubscribed|length }})</h2>
-    {% include "subscriptions/include_list.html" with list=listSubscribed %}
+    {% include "subscriptions/include_list.html" with list=listSubscribed listid="subscribed" %}
     {% else %}
     <p>{% trans "Er zijn (nog) geen aanmeldingen." %}</p>
     {% endif %}{# listSubscribed #}
 
     {% if listUnsubscribed %}
     <h2>{% trans "Afmeldingen" %} ({{ listUnsubscribed|length }})</h2>
-    {% include "subscriptions/include_list.html" with list=listUnsubscribed %}
+    {% include "subscriptions/include_list.html" with list=listUnsubscribed listid="unsubscribed" %}
     {% endif %}{# listUnsubscribed #}
 
     {% if listInvited %}
     <h2>{% trans "Uitnodigingen" %} ({{ listInvited|length }})</h2>
-    {% include "subscriptions/include_list.html" with list=listInvited %}
+    {% include "subscriptions/include_list.html" with list=listInvited listid="invited" %}
     {% endif %}{# listInvited #}
 {% endif %}{# has_read_access or object.has_public_subscriptions#}
 {% endblock %}
