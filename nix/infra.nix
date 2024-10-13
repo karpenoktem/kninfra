@@ -256,7 +256,6 @@ in rec {
       '';
     };
     kn.django.package = "/kninfra-pub";
-    kn.django.serveMediaUsingNginx = false;
     kn.settings.INFRA_REPO = "/kninfra-pub";
     kn.mailserver.hostname = "mail.local";
     programs.bash.shellAliases."vm.stop" = "poweroff";
@@ -264,6 +263,9 @@ in rec {
     # qemu settings:
     virtualisation = {
       diskSize = 1024;
+      # has to be at least this large to work around nginx bug
+      # pread() read only 16360 of 32768
+      msize = 32792;
       # set up serial console
       graphics = false;
       # Share the PRJ_ROOT into the vm

@@ -38,33 +38,19 @@ in {
       defaultText = "pkgs.kninfra";
       type = types.path;
     };
-    serveMediaUsingNginx = mkOption {
-      # doesn't work in VM :(
-      description = ''
-        Use nginx to serve media directory.
-      '';
-      default = true;
-      type = types.bool;
-    };
   };
   config = lib.mkIf cfg.enable {
     kn.shared.enable = true;
     services.nginx = {
       enable = true;
-      virtualHosts.kn = lib.mkMerge [
-        {
-          serverName = config.kn.settings.DOMAINNAME;
-          locations."/".extraConfig = ''
-            include ${pkgs.nginx}/conf/uwsgi_params;
-            uwsgi_pass unix:${config.kn.django.socket};
-          '';
-        }
-        {
-          locations = lib.mkIf cfg.serveMediaUsingNginx {
-            "/djmedia/".alias = "${cfg.package}/media/";
-          };
-        }
-      ];
+      virtualHosts.kn = {
+        serverName = config.kn.settings.DOMAINNAME;
+        locations."/djmedia/".alias = "${cfg.package}/media/";
+        locations."/".extraConfig = ''
+          include ${pkgs.nginx}/conf/uwsgi_params;
+          uwsgi_pass unix:${config.kn.django.socket};
+        '';
+      };
     };
     systemd.sockets.kndjango = {
       wantedBy = [ "sockets.target" ];
