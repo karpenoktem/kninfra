@@ -34,21 +34,11 @@ in {
     users.groups.infra = {};
     environment.systemPackages = [ pkgs.mongosh knshell ];
     systemd.services = lib.mkIf cfg.initialDB {
-      giedo = rec {
-        requires = [ "kn_initial_state.service" ];
-        after = requires;
-      };
-      kndjango = rec {
-        requires = [ "kn_initial_state.service" ];
-        after = requires;
-      };
-      rimapd = rec {
-        requires = [ "kn_initial_state.service" ];
-        after = requires;
-      };
       kn_initial_state = rec {
         requires = [ "mongodb.service" ];
         after = requires;
+        requiredBy = [ "giedo.service" "kndjango.service" "rimapd.service" ];
+        before = requiredBy;
         serviceConfig = {
           StateDirectory = "kndjango";
           Type = "oneshot";
