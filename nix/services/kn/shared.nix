@@ -4,6 +4,12 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.kn.shared;
+
+  knshell = pkgs.runCommandNoCC "knshell" { buildInputs = [ pkgs.makeWrapper ]; } ''
+    makeWrapper ${pkgs.kninfra}/bin/shell $out/bin/knshell \
+    ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') cfg.env)}
+  '';
+
 in {
   options.kn.shared = with lib; {
     enable = mkEnableOption "KN DB";
@@ -26,13 +32,7 @@ in {
     # TODO: limit access to mongodb
     services.mongodb.enable = true;
     users.groups.infra = {};
-    # socket activation
-    environment.systemPackages = [(
-      pkgs.runCommandNoCC "knshell" { buildInputs = [ pkgs.makeWrapper ]; } ''
-        makeWrapper ${pkgs.kninfra}/bin/shell $out/bin/knshell \
-        ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') cfg.env)}
-      ''
-    )];
+    environment.systemPackages = [ pkgs.mongosh knshell ];
     systemd.services = lib.mkIf cfg.initialDB {
       giedo = rec {
         requires = [ "kn_initial_state.service" ];
