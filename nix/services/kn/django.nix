@@ -93,7 +93,7 @@ in {
         DynamicUser = true;
         User = "kndjango";
         Group = "kndjango";
-        SupplementaryGroups = [ "fotos" "infra" ];
+        SupplementaryGroups = [ "fotos" "infra" "mongodb" ];
         ReadWritePaths = [ config.kn.fotos.dir ];
         CacheDirectory = "fotos";
         Restart = "on-failure";

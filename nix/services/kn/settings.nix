@@ -40,7 +40,7 @@ in {
     DEFAULT_FROM_EMAIL =
       "Karpe Noktems ledenadministratie <root@${MAILDOMAIN}>";
 
-    MONGO_HOST = "localhost";
+    MONGO_HOST = "mongodb://%2Frun%2Fmongodb%2Fmongodb.sock";
     MONGO_DB = "kn";
 
     MODED_MAILINGLISTS = [ "discussie" "in" "uit" "test" ];

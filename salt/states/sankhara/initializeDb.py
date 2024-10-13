@@ -6,7 +6,7 @@ import pymongo
 import yaml
 
 MONGO_DATABASE = 'kn'
-MONGO_HOST = 'localhost'
+MONGO_HOST = 'mongodb://%2Frun%2Fmongodb%2Fmongodb.sock'
 DB_FILE = os.path.join(os.path.dirname(__file__), "initial-db.yaml")
 
 yaml.SafeLoader.add_constructor('!id',

@@ -57,7 +57,7 @@ in {
         ReadWritePaths = ["/run/infra"];
         ExecStart = "${pkgs.kninfra}/utils/giedo.py";
         Restart = "on-failure";
-        SupplementaryGroups = "infra";
+        SupplementaryGroups = [ "infra" "mongodb" ];
         Type = "notify";
         NotifyAccess = "all";
         EnvironmentFile = config.age.secrets.kn-env.path;
