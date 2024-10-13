@@ -10,7 +10,7 @@ final: prev: {
       mkdir -p $out/bin
       makeWrapper ${nodejs}/bin/node $out/bin/kn-puppet \
         --add-flags ${../puppet.js} \
-        --set NODE_PATH ${puppeteer-cli.node_modules} \
+        --set NODE_PATH ${puppeteer-cli}/lib/node_modules/puppeteer-cli/node_modules \
         --set PUPPETEER_EXECUTABLE_PATH ${chromium}/bin/chromium
     '') {
     nodejs = final.nodejs-slim_latest;

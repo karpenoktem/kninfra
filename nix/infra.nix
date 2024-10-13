@@ -228,17 +228,20 @@ in rec {
       path = "/root/vm-host.key";
       type = "ed25519";
     }];
+    systemd.services."acme-mail.local".enable = false;
+    kn.settings.ALLOWED_HOSTS = [ "localhost" "localhost:8080" "vipassana.kn.cx" ];
     age.secrets.kn-env.file = ../secrets/vm.age;
     age.secrets.mailman-rest.file = ../secrets/mailman-rest-vm.age;
     kn.settings.DOMAINNAME = "vipassana.kn.cx";
     kn.shared.initialDB = true;
+    virtualisation.memorySize = 2048;
+    # install the vm-ssh.key.pub for ssh access
+    users.users.root.openssh.authorizedKeys.keyFiles = [ ./vm-ssh.key.pub ];
   };
 
   # virtualized system, used for development
   vm = { modulesPath, pkgs, ... }: {
     imports = [ virtualized "${modulesPath}/virtualisation/qemu-vm.nix" ];
-    # install the vm-ssh.key.pub for ssh access
-    users.users.root.openssh.authorizedKeys.keyFiles = [ ./vm-ssh.key.pub ];
     services.getty = {
       autologinUser = "root";
       helpLine = ''
@@ -254,13 +257,10 @@ in rec {
     };
     kn.django.package = "/kninfra-pub";
     kn.mailserver.hostname = "mail.local";
-    kn.settings.ALLOWED_HOSTS = [ "localhost" "localhost:8080" ];
-    systemd.services."acme-mail.local".enable = false;
     programs.bash.shellAliases."vm.stop" = "poweroff";
     system.fsPackages = [ pkgs.bindfs ];
     # qemu settings:
     virtualisation = {
-      memorySize = 2048;
       diskSize = 1024;
       # set up serial console
       graphics = false;

@@ -20,8 +20,8 @@ pytest = "*"
 urllib3 = "^1.26.14"
 
 # match with nixpkgs to keep patch intact in kndjango.nix
-GitPython = "3.1.27"
-mailman = "3.3.8"
+GitPython = "3.1.43"
+mailman = "3.3.9"
 
 pymongo = "^3.12.0"
 grpcio = "^1.39.0"

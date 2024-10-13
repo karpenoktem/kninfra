@@ -8,30 +8,36 @@ async function getAccData(page) {
     })
 }
 
+async function go_to(page, url) {
+    const url_str = url.toString()
+    console.log("Navigating to", url_str);
+    return page.goto(url_str);
+}
+
 async function toWiki(page) {
     const wiki_url = new URL("/wiki/Hoofdpagina", page.url())
     if (page.url() != wiki_url.toString()) {
-        return page.goto(wiki_url.toString())
+        return go_to(page, wiki_url)
     }
 }
 
 async function getWikiUser(page) {
     await toWiki(page)
     return page.evaluate(() => {
-        return document.getElementById('pt-userpage')?.textContent
+        return document.getElementById('pt-userpage')?.textContent?.trim()
     })
 }
 
 async function getWikiHeading(page) {
     await toWiki(page)
     return page.evaluate(() => {
-        return document.getElementById("firstHeading").textContent
+        return document.getElementById("firstHeading").textContent?.trim()
     })
 }
 
 async function testKNWebsite(browser, PARAM) {
     const page = await browser.newPage();
-    await page.goto(PARAM.host);
+    await go_to(page, PARAM.host);
     await Promise.all([
         page.waitForNavigation(),
         page.evaluate((PARAM) => {
@@ -47,11 +53,11 @@ async function testKNWebsite(browser, PARAM) {
     const accData = await getAccData(page)
     assert.ok(accData.valid, "api.valid")
     assert.equal(accData.name, PARAM.user, "api.name")
-    assert.equal(accData.email, PARAM.user + "@localhost", "api.email")
+    assert.equal(accData.email, PARAM.user + "@vipassana.kn.cx", "api.email")
     // todo: assert.equal(accData.email, PARAM.user + "@karpenoktem.nl", "api.email")
     assert.equal(await getWikiUser(page), PARAM.user[0].toUpperCase() + PARAM.user.slice(1), "wiki user")
     assert.equal(await getWikiHeading(page), "Hoofdpagina", "wiki page name")
-    await page.goto(PARAM.host + "/accounts/logout")
+    await go_to(page, PARAM.host + "/accounts/logout")
     assert.ok(!(await getAccData(page)).valid, "api logged out")
     assert.ok(!await getWikiUser(page), "wiki logged out")
     assert.equal(await getWikiHeading(page), "Fouten in rechten", "wiki loggedout permissions")

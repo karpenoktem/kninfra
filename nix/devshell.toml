@@ -5,7 +5,7 @@ packages = [
   #"python2",
   "python3-with-grpcio",
   "fd",
-  "nixfmt",
+  "nixfmt-classic",
   "nixos-rebuild",
   "gettext",
   "mongodb",

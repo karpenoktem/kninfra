@@ -4,8 +4,6 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.kn.shared;
-  # generate a json file with configuration for uwsgi
-  kn_env = config.kn.shared.env;
 in {
   options.kn.shared = with lib; {
     enable = mkEnableOption "KN DB";
@@ -32,7 +30,7 @@ in {
     environment.systemPackages = [(
       pkgs.runCommandNoCC "knshell" { buildInputs = [ pkgs.makeWrapper ]; } ''
         makeWrapper ${pkgs.kninfra}/bin/shell $out/bin/knshell \
-        ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') kn_env)}
+        ${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''--set "${n}" "${v}"'') cfg.env)}
       ''
     )];
     systemd.services = lib.mkIf cfg.initialDB {
@@ -64,6 +62,18 @@ in {
             touch /var/lib/kndjango/database-initialized
           fi
         '';
+      };
+      kn_initial_sync = rec {
+        requires = [ "giedo.service" "hans.service" "daan.service" ];
+        after = requires;
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          EnvironmentFile = config.age.secrets.kn-env.path;
+          ExecStart = "${pkgs.kninfra}/utils/giedo-sync.py";
+        };
+        environment = cfg.env;
       };
     };
   };
