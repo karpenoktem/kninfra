@@ -256,6 +256,8 @@ in rec {
       '';
     };
     kn.django.package = "/kninfra-pub";
+    kn.django.serveMediaUsingNginx = false;
+    kn.settings.INFRA_REPO = "/kninfra-pub";
     kn.mailserver.hostname = "mail.local";
     programs.bash.shellAliases."vm.stop" = "poweroff";
     system.fsPackages = [ pkgs.bindfs ];
@@ -268,6 +270,7 @@ in rec {
       sharedDirectories.kninfra = {
         source = "\${PRJ_ROOT:?please run this inside the devshell}";
         target = "/kninfra";
+        securityModel = "none";
       };
       # use bindfs to make it world-readable
       fileSystems."/kninfra-pub" = {
