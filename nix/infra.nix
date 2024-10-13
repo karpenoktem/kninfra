@@ -185,7 +185,7 @@ in rec {
       forceSSL = true;
     };
     age.secrets.kn-env.file = ../secrets/staging.age;
-    age.secrets.mailman-rest.file = ../secrets/mailman-rest-production.age;
+    age.secrets.mailman-rest.file = ../secrets/mailman-rest-staging.age;
     users.users = (lib.mapAttrs (username: options: {
       openssh.authorizedKeys.keys = options.sshkeys;
       group = username;
