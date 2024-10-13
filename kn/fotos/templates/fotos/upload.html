@@ -1,0 +1,244 @@
+{% extends "leden/base.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block styles %}
+{{ block.super }}
+<style>
+#input-add{
+  display: none;
+}
+#photos {
+  list-style: none;
+  padding: 0;
+}
+#photos li {
+  display: inline-block;
+  padding: 0 8px 8px 0;
+  position: relative;
+}
+#photos img {
+  padding: 0;
+  border: initial;
+  box-shadow: initial;
+  margin: initial;
+  max-width: initial;
+  background: initial;
+}
+#photos li .close {
+  position: absolute;
+  top: 0;
+  right: 8px;
+  display: block;
+  font-size: 24px;
+  line-height: 1;
+  width: 1em;
+  height: 1em;
+  color: white;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 200ms;
+  background: rgba(127, 127, 127, 0.7);
+  border-radius: 8px;
+  text-align: center;
+}
+#photos li:hover .close {
+  opacity: 1;
+}
+</style>
+{% endblock styles %}
+
+{% block body %}
+<p>
+  {% trans "Hier kun je foto's uploaden." %}
+  <a href="{{ album_name }}">{% trans "Terug naar album" %}</a>
+</p>
+<button id="button-add">Voeg foto's toe</button>
+<button id="button-upload" disabled>Opslaan</button>
+<span id="upload-status"></span>
+<input id="input-add" type="file" accept="image/jpeg" multiple/>
+<script>
+// Max image size (width and height) for previews.
+const MAXSIZE = 200;
+
+// To make things simpler for us, we require every file to have an unique name.
+var photosToUpload = new Map();
+var photosToDelete = [];
+
+// True while uploading. This is used to correctly update the button state.
+var uploading = false;
+
+// Shrink image to MAXSIZE while keeping the aspect ratio.
+function shrink(width, height) {
+  if (width <= MAXSIZE && height <= MAXSIZE) {
+    // Don't stretch if the image already fits in the area.
+    return [width, height];
+  }
+  if (width > height) {
+    return [MAXSIZE, MAXSIZE * height / width];
+  } else {
+    return [MAXSIZE * width / height, MAXSIZE];
+  }
+}
+
+// Convenience class for a single photo in the UI.
+class Photo {
+  constructor(file, element, objectURL) {
+    this.file = file;
+    this.element = element;
+    this.objectURL = objectURL;
+  }
+
+  remove() {
+    photosToUpload.delete(this.file.name);
+    this.element.remove();
+    URL.revokeObjectURL(this.objectURL.src);
+    updateButtons();
+  }
+}
+
+document.querySelector('#input-add').addEventListener('change', (e) => {
+  // Add the newly selected files to the upload page.
+  const files = e.target.files;
+  for (let file of e.target.files) {
+    // Don't upload more than one photo with the same name.
+    // TODO: should we warn the user?
+    if (photosToUpload.has(file.name)) {
+      console.warn('replacing file: ' + file.name);
+      photosToUpload.get(file.name).remove();
+    }
+
+    // Create image preview. This is fast, because it loads the image directly
+    // from the filesystem.
+    let img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    img.onload = (e) => {
+      // Shrink the image once it has loaded.
+      let [width, height] = shrink(e.target.width, e.target.height);
+      e.target.width = width;
+      e.target.height = height;
+    };
+    let li = document.createElement('li');
+    li.appendChild(img);
+    document.querySelector('#photos').appendChild(li);
+
+    // Keep track of this photo outside the DOM.
+    let photo = new Photo(file, li, img.src);
+    photosToUpload.set(file.name, photo);
+
+    // Add close button, which removes the image when clicked.
+    let closeBtn = document.createElement('span');
+    closeBtn.textContent = '×';
+    closeBtn.classList.add('close');
+    closeBtn.addEventListener('click', () => {
+      photo.remove();
+    });
+    li.appendChild(closeBtn);
+  }
+  updateButtons();
+});
+
+// Call this after changing fotosToUpload. It will make the upload button
+// clickable depending on whether there are any photos set to be uploaded.
+function updateButtons() {
+  document.querySelector('#button-add').disabled = uploading;
+  document.querySelector('#button-upload').disabled = uploading || (photosToUpload.size == 0 && photosToDelete.length == 0);
+}
+
+// Upload prepared photos, one by one.
+async function uploadPhotos(event) {
+  // Don't allow further actions while uploading.
+  uploading = true;
+  updateButtons();
+  let uploadStatus = document.querySelector('#upload-status');
+
+  // Delete photos that are marked as to-be-deleted.
+  if (photosToDelete.length != 0) {
+    uploadStatus.textContent = `${photosToDelete.length} foto's worden vewijderd...`;
+    let form = new FormData();
+    form.append('remove-photos', JSON.stringify(photosToDelete));
+    form.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    await fetch(document.location.href, {
+      method: 'POST',
+      body: form,
+    });
+    photosToDelete = [];
+  }
+
+  // Upload all photos, one by one.
+  // TODO: show upload progress of individual photos, for slow connections.
+  let uploadCount = 0;
+  let uploadTotal = photosToUpload.size;
+  let uploadError = '';
+  for (let [name, photo] of photosToUpload) {
+    uploadCount++;
+    uploadStatus.textContent = `Foto ${uploadCount}/${uploadTotal} (${name}) wordt geüpload...`;
+
+    // Create data to upload.
+    let form = new FormData();
+    form.append('photo-'+name, photo.file);
+    form.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+    // Upload the image.
+    try {
+      let result = await fetch(document.location.href, {
+        method: 'POST',
+        body: form,
+      });
+      if (!result.ok) {
+        console.error('failed to upload:', result.statusText);
+        uploadError = `Uploaden van ${name} mislukt: ${result.statusText}`;
+        break;
+      }
+      // Remove photo from photosToUpload, so that it won't be uploaded again in
+      // the future.
+      photosToUpload.delete(name);
+    } catch (e) {
+      console.error('failed to upload:', e);
+    }
+  }
+
+  uploading = false;
+  uploadStatus.textContent = uploadError;
+  updateButtons();
+}
+
+// Add "remove" button to existing photos.
+document.addEventListener('DOMContentLoaded', function() {
+  for (let li of document.querySelectorAll('#photos > li')) {
+    let closeBtn = document.createElement('span');
+    closeBtn.textContent = '×';
+    closeBtn.classList.add('close');
+    closeBtn.addEventListener('click', () => {
+      photosToDelete.push(li.dataset.name);
+      li.remove();
+      updateButtons();
+    });
+    li.appendChild(closeBtn);
+  }
+});
+
+// Simple wrapper to hide the <input type=file> element. Clicking the nicely
+// styled button will trigger a file selector.
+document.querySelector('#button-add').addEventListener('click', () => {
+  document.querySelector('#input-add').click();
+});
+
+// Upload all photos.
+document.querySelector('#button-upload').addEventListener('click', uploadPhotos);
+</script>
+<ul id="photos">
+  <!--
+    List existing photos uploaded by the user.
+    These can be removed like not-yet-uploaded photos (but will actually be
+    removed on the server when clicking "Opslaan".)
+  -->
+  {% for foto in fotos %}
+    <li data-name="{{ foto.name }}">
+      <img src="{{ foto.get_thumbnail_url }}"/>
+    </li>
+  {% endfor %}
+</ul>
+</div>
+{% endblock %}

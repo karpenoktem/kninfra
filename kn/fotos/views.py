@@ -1,9 +1,11 @@
+import json
 import os.path
 from time import gmtime, strftime
 from wsgiref.util import FileWrapper
 
 from zipseeker import ZipSeeker
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
@@ -99,6 +101,53 @@ def fotos(request, path=''):
             album.name + '.zip'
         return response
 
+    if 'upload' in request.GET:
+        if not album.event_date:
+            # This is not an event created through the UI.
+            # No link should exist to this page, but if it does (by mistake or
+            # because someone modified the URL manually), pretend the page
+            # doesn't exist.
+            raise Http404
+        if user is None:
+            raise PermissionDenied
+        if 'remove-photos' in request.POST:
+            for name in json.loads(request.POST.get('remove-photos', '[]')):
+                foto = fEs.by_path_and_name(album.full_path, name)
+                if not foto.uploaded_by == user:
+                    # Someone else uploaded this photo.
+                    raise PermissionDenied
+                foto.remove()
+        if len(request.FILES) != 0:
+            for (name, file) in request.FILES.items():
+                if not name.startswith('photo-'):
+                    continue
+                filename = name[len('photo-'):]
+
+                # Find a unique name for this path.
+                # Note that there is a small race condition here, but it's
+                # unlikely to matter in practice.
+                path = os.path.join(settings.PHOTOS_DIR, album.full_path, filename)
+                count = 0
+                while os.path.exists(path):
+                    count += 1
+                    n, e = os.path.splitext(filename)
+                    path = os.path.join(settings.PHOTOS_DIR, album.full_path, n + ('-%d' % count) + e)
+
+                # Write the file to the fotos directory.
+                with open(path+'.tmp', 'wb') as destination:
+                    for chunk in file.chunks():
+                        destination.write(chunk)
+                os.rename(path+'.tmp', path)
+
+                # Add the photo to the database.
+                fEs.create_foto(album, os.path.basename(path), user)
+
+            # Send an empty 200 response status.
+            return HttpResponse('', content_type='text/plain')
+        return render(request, 'fotos/upload.html',
+                      {'album_name': album.name,
+                       'fotos': album.list_user_fotos(user)})
+
     people = None
     if fEs.is_admin(user):
         # Get all members (now or in the past), and sort them first
@@ -123,6 +172,7 @@ def fotos(request, path=''):
     return render(request, 'fotos/fotos.html',
                   {'fotos': fotos,
                    'fotos_admin': fEs.is_admin(user),
+                   'is_event': bool(album.event_date),
                    'people': people})
 
 

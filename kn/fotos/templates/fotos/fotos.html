@@ -121,6 +121,9 @@ dit album zien.{% endblocktrans %}</p>
       <p class="description"></p>
 {% endif %}
 {% if user.is_authenticated %}
+      <p>
+        {% trans "Geüpload door:" %} <a href="" class="uploadedBy"></a>
+      </p>
       {% trans "Tags:" %}
       <ul class="tags">
       </ul>
@@ -139,5 +142,8 @@ dit album zien.{% endblocktrans %}</p>
 </div>
 <div id="fotos-footer">
   <a class="download" href="?download">{% trans "Download dit fotoalbum" %}</a>
+  <span id="fotos-upload-link" style="display: hidden">
+  - <a href="?upload">{% trans "Upload foto's" %}</a>
+  </span>
 </div>
 {% endblock body %}
