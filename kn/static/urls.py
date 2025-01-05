@@ -31,6 +31,8 @@ urlpatterns = [
         template_name='static/geschiedenis.html'), name='geschiedenis'),
     url(_(r'^activiteiten/?$'), TemplateView.as_view(
         template_name='static/activiteiten.html'), name='activiteiten'),
+    url(_(r'^vcp/?$'), TemplateView.as_view(
+        template_name='static/vcp.html'), name='vertrouwenscommissie'),
     url(_(r'^zakelijk/?$'), TemplateView.as_view(
         template_name='static/sponsorworden.html'), name='zakelijk'),
     url(_(r'^sponsors/?$'), TemplateView.as_view(
