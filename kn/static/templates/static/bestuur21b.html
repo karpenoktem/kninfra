@@ -1,0 +1,32 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block body %}
+
+<p>Bestuur 21b is een ambitieus bestuur dat met 4 leden noch heel groot, noch heel klein is.</p>
+
+<p><strong>Elise Gombert</strong> is de voorzitter en haar taak is het bestuur leiden en contact met andere verenigingen onderhouden. Dankzij haar opleiding tot docent economie kan zij goed onderhandelen en orde in de zaal scheppen.</p>
+
+<p><strong>Damian Pikulić</strong> is de secretaris die de administratie en communicatie bijhoudt. Dankzij zijn studie geschiedenis kan hij mails zonder d/t fouten schrijven en al onze documenten archiveren.</p>
+
+<p><strong>Yannick Kalalo</strong> is de penningmeester en die zorgt ervoor dat de financiële administratie van de vereniging op rolletjes loopt.</p>
+
+<p><strong>Yoanne Rutten</strong> is de pandmeesteres die allerlei zaken rondom de villa regelt. Met haar ervaring in de horeca zorgt ze ervoor dat het drank nooit op is.</p>
+
+
+<p>Alle bestuursleden zijn bereikbaar op de volgende adressen:</p>
+<ul>
+  <li>Elise Gombert, {% filter email %}voorzitter@karpenoktem.nl{% endfilter %}</li>
+  <li>Damian Pikulić, {% filter email %}secretaris@karpenoktem.nl{% endfilter %}</li>
+  <li>Yannick Kalalo, {% filter email %}penningmeester@karpenoktem.nl{% endfilter %}</li>
+  <li>Yoanne Rutten, {% filter email %}pandcommissaris@karpenoktem.nl{% endfilter %}</li>
+</ul>
+
+<div style="float: left;">⇐ {% trans "Het vorige" %},
+<a href="{% url "bestuur21a" %}">{% trans "eenentwintigste bestuur (oude samenstelling)" %}</a> ⇒
+</div>
+
+{% endblock body %}
+{# vim: set sw=2 ts=2 et: #}
