@@ -6,18 +6,18 @@
 {% url "activiteiten" as url_activiteiten %}
 {% url "route" as url_route %}
 {% url "agenda" as url_agenda %}
-<p>{% blocktrans with secretaris="secretaris@karpenoktem.nl"|email ik="ik@karpenoktem.nl"|email %}
-Lijkt het je leuk om lid te worden?
-Kom eens een keer langs bij een van onze
-<a href="{{ url_activiteiten }}">activiteiten</a>!
-Bijvoorbeeld op onze maandagavond borrels, of de activiteit of het
-avondeten op de vrijdag.
-Alle activiteiten zijn te vinden op de <a href="{{ url_agenda }}">agenda</a>.
-Inschrijfformulieren zijn te verkrijgen bij de bar, en kunnen daar ook ingevuld weer ingeleverd worden.
+<p>{% blocktrans with secretaris="secretaris@karpenoktem.nl"|email buddys="buddys@karpenoktem.nl"|email %}
+  Lijkt jou het leuk om een keertje op een van onze activiteiten te komen kijken? Kom vooral langs, bijna al onze activiteiten zijn open. Elke maandag hebben we een borrel en daarbuiten hebben we ook allerlei andere activiteiten! Denk bijvoorbeeld aan spelletjesavonden, nachtpicknicks en bandjesavonden! Alle activiteiten zijn te vinden op de <a href="{{ url_agenda }}">agenda</a>.
 </p>
-<p>Vind je het spannend om alleen naar een activiteit te gaan? Stuur dan een mailtje naar de Introductie Kommissie ({{ ik }}), dan zorgen wij ervoor dat je samen met een karpe-lid naar een activiteit gaat. </p>
-<p>Vragen? Stuur een e-mail naar {{ secretaris }} en dan is het zo
-geregeld!</p>
+<p>
+  Vind je het spannend om alleen naar een activiteit te gaan? Stuur dan een mailtje naar {{ buddys }}. Dan zorgen wij ervoor dat een van onze lieve leden met je meegaat.
+</p>
+<p>
+Weet je al zeker dat je lid wilt worden? Inschrijfformulieren kun je verkrijgen bij de bar tijdens een van onze activiteiten. 
+</p>
+<p>
+  Vragen? Stuur een e-mail naar {{ secretaris }} en dan is het zo geregeld!
+</p>
 {% endblocktrans %}
 
 <p>{% blocktrans with secretaris="secretaris@karpenoktem.nl"|email%}
