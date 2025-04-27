@@ -74,7 +74,7 @@ def delete_note(data, request):
         ( << {ok: false, error: "Note not found"} ) """
     if 'secretariaat' not in request.user.cached_groups_names:
         return {'ok': False, 'error': 'Permission denied'}
-    note = Es.note_by_id(_id(data.get('id')))
+    note = Es.Note.by_id(_id(data.get('id')))
     if note is None:
         return {'ok': False, 'error': 'Note not found'}
     note.delete()
