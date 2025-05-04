@@ -1,0 +1,79 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block styles %}
+{{ block.super }}
+<style>
+/* make photo full-width on small devices */
+@media screen and (max-width: 800px) {
+    #content img {
+        padding: 0;
+        margin: 4px 0;
+        max-width: 100vw;
+        border: 0;
+        margin-left: -15px;
+    }
+}
+@media screen and (max-width: 550px) {
+    #content img {
+        margin-left: -10px;
+    }
+}
+
+figure {
+    display: block;
+    text-align: center;
+    margin: 0;
+}
+figure img {
+    height: auto;
+}
+figcaption {
+    margin-left: 1em;
+}
+</style>
+{% endblock styles %}
+
+{% block body %}
+<figure>
+  <img width="800" height="601" src="{{ MEDIA_URL }}static/img/bestuur21c.jpg" alt="Bestuursfoto bestuur 21 C: Elise, Nikky, Yannick, Damian, Silke"
+       srcset="{{ MEDIA_URL }}static/img/bestuur21c-800.webp 1x, {{ MEDIA_URL }}static/img/bestuur21c-1600.webp 2x" />
+  <figcaption>
+    <small>{% trans "Van links naar rechts: Elise Gombert, Nikky Nijenhuis, Yannick Kalalo, Damian Pikulić, Silke Wiersma" %}</small>
+  </figcaption>
+</figure>
+
+<p>Bestuur 21C is een ambitieus bestuur met maar liefst vijf koppen dat ervoor zorgt dat Karpe ook het tweede semester kan doorpakken.</p>
+
+<p><strong>Elise Gombert</strong> is de voorzitter en haar taak is het bestuur leiden en contact met andere verenigingen onderhouden. Dankzij haar opleiding tot docent economie kan zij goed onderhandelen en orde in de zaal scheppen.</p>
+
+<p><strong>Damian Pikulić</strong> is de secretaris die de administratie en communicatie bijhoudt. Dankzij zijn studie geschiedenis kan hij mails zonder d/t fouten schrijven en inkomende stukken mentaal archiveren.</p>
+
+<p><strong>Yannick Kalalo</strong> is de penningmeester die de financiële administratie beheert. Dankzij zijn studie informatica kent hij alle getallen en kan hij naar verluid tot 158 tellen.</p>
+
+<p><strong>Nikky Nijenhuis</strong> is de pandcommissaris die vanuit haar achtergrond in duurzame management de schimmel in de Villa van Schaeck harmonieus doet zingen.</p>
+
+<p><strong>Silke Wiersma</strong> is de commissaris intern en omdat zij de studie wiskunde doet kunnen wij altijd erop rekenen dat zij integrale taken goed uitvoert.</p>
+
+
+<p>Alle bestuursleden zijn bereikbaar op de volgende adressen:</p>
+<ul>
+  <li>Elise Gombert, {% filter email %}voorzitter@karpenoktem.nl{% endfilter %}</li>
+  <li>Damian Pikulić, {% filter email %}secretaris@karpenoktem.nl{% endfilter %}</li>
+  <li>Yannick Kalalo, {% filter email %}penningmeester@karpenoktem.nl{% endfilter %}</li>
+  <li>Nikky Nijenhuis, {% filter email %}pandcommissaris@karpenoktem.nl{% endfilter %}</li>
+  <li>Silke Wiersma, {% filter email %}commissarisintern@karpenoktem.nl{% endfilter %}</li>
+</ul>
+
+<div style="float: left;">⇐ {% trans "Het vorige" %},
+<a href="{% url "bestuur21b" %}">{% trans "eenentwintigste bestuur (tweede samenstelling)" %}</a>
+</div>
+{# Add next link when bestuur 22 is known #}
+{# <div style="float: right;">{% trans "Het volgende" %}, #}
+{# <a href="{% url "bestuur22" %}">{% trans "tweeëntwintigste bestuur" %}</a> ⇒ #}
+{# </div> #}
+
+{% endblock body %}
+{# vim: set sw=2 ts=2 et: #}
