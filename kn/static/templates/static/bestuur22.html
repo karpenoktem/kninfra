@@ -1,0 +1,73 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block styles %}
+{{ block.super }}
+<style>
+/* make photo full-width on small devices */
+@media screen and (max-width: 800px) {
+    #content img {
+        padding: 0;
+        margin: 4px 0;
+        max-width: 100vw;
+        border: 0;
+        margin-left: -15px;
+    }
+}
+@media screen and (max-width: 550px) {
+    #content img {
+        margin-left: -10px;
+    }
+}
+
+figure {
+    display: block;
+    text-align: center;
+    margin: 0;
+}
+figure img {
+    height: auto;
+}
+figcaption {
+    margin-left: 1em;
+}
+</style>
+{% endblock styles %}
+
+{% block body %}
+<figure>
+  <img width="800" height="1148" src="{{ MEDIA_URL }}static/img/bestuur22.jpg" alt="Bestuursfoto bestuur 22: Damian, Bas, Rudolf"
+       srcset="{{ MEDIA_URL }}static/img/bestuur22-800.webp 1x, {{ MEDIA_URL }}static/img/bestuur22-1600.webp 2x" />
+  <figcaption>
+    <small>{% trans "Van links naar rechts: Damian Pikulić, Bas Laenen, Rudolf Hilgeman" %}</small>
+  </figcaption>
+</figure>
+
+<p>Bestuur 22 is een klein maar fijn bestuur dat verenigd wordt in onze gezamelijke beestachtige passie voor bestuur en borrels.</p>
+
+<p><strong>Damian Pikulić</strong> is de voorzitter die het bestuur leidt en contacten met de andere verenigingen onderhoudt. Hij kan dankzij zijn studie stads- en architectuurgeschiedenis planmatig het bestuur leiden en ruimte in de kamer opeisen bij vergaderingen met andere verenigingen.</p>
+
+<p><strong>Bas Laenen</strong> is als secretaris erg kundig in administreren en het opstellen van emails. Haar studie biomedische wetenschappen helpt haar om onze inbox in leven te houden.</p>
+
+<p><strong>Rudolf Hilgeman</strong> is de penningmeester en neemt ook veel pandgerelateerde taken op zich. Dankzij zijn studie informatica kan hij op technische wijze ons geld en alcoholpercentage maximaliseren.</p>
+
+
+<p>Het bestuur is op de volgende adressen bereikbaar:</p>
+<ul>
+  <li>Damian Pikulić, {% filter email %}voorzitter@karpenoktem.nl{% endfilter %}</li>
+  <li>Bas Laenen, {% filter email %}secretaris@karpenoktem.nl{% endfilter %}</li>
+  <li>Rudolf Hilgeman, {% filter email %}penningmeester@karpenoktem.nl{% endfilter %}</li>
+</ul>
+
+<div style="float: left;">⇐ {% trans "Het vorige" %},
+<a href="{% url "bestuur21c" %}">{% trans "eenentwintigste bestuur (derde samenstelling)" %}</a>
+</div>
+{# Add next link when bestuur 23 is known #}
+{# <div style="float: right;">{% trans "Het volgende" %}, #}
+{# <a href="{% url "bestuur23" %}">{% trans "drieëntwintigste bestuur" %}</a> ⇒ #}
+{# </div> #}
+
+{% endblock body %}
+{# vim: set sw=2 ts=2 et: #}
