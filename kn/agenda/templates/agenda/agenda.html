@@ -1,5 +1,6 @@
 {% extends "agenda/base.html" %}
 
+{% load base %}
 {% load i18n %}
 
 {% block body %}
@@ -9,6 +10,11 @@
   {% blocktrans %}Ben je geen lid, maar wil je wel op de hoogte
   blijven van onze activiteiten?  Join onze
   <a href="https://chat.whatsapp.com/CtDhzV493qHEz9L6le6crR">geïnteresseerden-whatsappgroep</a>{% endblocktrans %}!
+
+<p>
+  Vind je het spannend om alleen naar een activiteit te gaan? Stuur dan een mailtje naar {% filter email %}buddys@karpenoktem.nl{% endfilter %}. Dan zorgen wij ervoor dat een van onze lieve leden met je meegaat.
+</p>
+
   {% url "agenda-zeus" as url_agenda_zeus %}
   {% url "zusjes" as url_zusjes %}
   <p>{% blocktrans %}We hebben ook een <a href="{{ url_agenda_zeus }}">gezamelijke
