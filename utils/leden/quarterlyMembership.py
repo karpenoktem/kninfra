@@ -21,8 +21,7 @@ def main():
     for q in range(1, max_q + 1):
         start, end = Es.quarter_to_range(q)
         for m in leden.get_rrelated(_from=start, until=end, how=None,
-                                    deref_who=False, deref_with=False,
-                                    deref_how=False):
+                                    deref=set()):
             lut[id2name[m['who']]].add(q)
     for i, name in enumerate(sorted(six.itervalues(id2name))):
         if i % 20 == 0:

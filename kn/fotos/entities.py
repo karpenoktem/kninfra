@@ -5,6 +5,7 @@ import os
 import os.path
 import re
 import subprocess
+import typing
 from collections import namedtuple
 
 import PIL.Image
@@ -101,6 +102,7 @@ def actual_visibility(visibility):
 
 
 class FotoEntity(SONWrapper):
+    CACHES:typing.Dict[str, cache_tuple]
     CACHES = {}
 
     def __init__(self, data):

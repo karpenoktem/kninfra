@@ -37,14 +37,14 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def user_list(request, page):
-    pr = Paginator(Es.ecol.find({'types': 'user'}).sort(
+    pr = Paginator(Es.User.all().sort(
         'humanNames.human', 1), 20)
     try:
         p = pr.page(1 if page is None else page)
     except EmptyPage:
         raise Http404
     return render(request, 'leden/user_list.html',
-                  {'users': [Es.User(m) for m in p.object_list],
+                  {'users': p.object_list,
                    'page_obj': p, 'paginator': pr})
 
 
@@ -180,7 +180,7 @@ def _user_detail(request, user):
 
 def _group_detail(request, group):
     ctx = _entity_detail(request, group)
-    isFreeToJoin = group.has_tag(Es.id_by_name('!free-to-join', True))
+    isFreeToJoin = group.has_tag_name('!free-to-join')
     rel_id = None
     if isFreeToJoin:
         dt = now()
@@ -189,7 +189,7 @@ def _group_detail(request, group):
         assert len(rel) <= 1
         for r in rel:
             rel_id = r['_id']
-    ctx.update({'isFreeToJoin': group.has_tag(Es.by_name('!free-to-join')),
+    ctx.update({'isFreeToJoin': isFreeToJoin,
                 'request': request,
                 'relation_with_group': rel_id})
     return render(request, 'leden/group_detail.html', ctx)
@@ -276,7 +276,7 @@ def years_of_birth(request):
 
 @login_required
 def users_underage(request):
-    users = Es.users()
+    users = Es.User.all()
     users = filter(lambda u: u.is_active, users)
     users = filter(lambda u: u.is_underage, users)
     users = sorted(users, key=lambda x: x.dateOfBirth)
@@ -474,7 +474,7 @@ def secr_notes(request):
     if 'secretariaat' not in request.user.cached_groups_names:
         raise PermissionDenied
     return render(request, 'leden/secr_notes.html',
-                  {'notes': Es.get_notes()})
+                  {'notes': Es.Note.all()})
 
 
 @login_required
