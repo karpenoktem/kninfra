@@ -191,6 +191,9 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
   }
 
   KNF.prototype.display_fotos = function() {
+    // Show upload button only if this is an event (created through the UI).
+    $('#fotos-upload-link').toggle(this.fotos[this.path].is_event);
+
     if (!this.fotos[this.path])
       return;
 
@@ -286,6 +289,7 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
 
   KNF.prototype.read_fotos = function(path, data) {
     var album = {children:{},
+                 is_event: data.is_event,
                  visibility: data.visibility};
     this.fotos[path] = album;
 
@@ -602,6 +606,9 @@ var SWITCH_DURATION = 200; // 200ms, keep up to date with fotos.css
     $('.orig', frame)
         .attr('href', foto.full);
     $('.description', frame).text(foto.description || '');
+    $('.uploadedBy', frame)
+        .text(this.people[foto.uploadedBy])
+        .attr('href', '/smoelen/gebruiker/' + foto.uploadedBy + '/');
 
     var sidebar = $('.sidebar', frame);
     $('input.title', sidebar)
