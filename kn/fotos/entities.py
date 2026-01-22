@@ -15,6 +15,7 @@ from django.db.models import permalink
 from django.utils import six
 
 import kn.leden.entities as Es
+from kn.fotos.expiring_fifo_cache import ExpiringFifoCache
 from kn.fotos.utils import resize_proportional
 from kn.leden.mongo import SONWrapper, _id, db, son_property
 
@@ -402,6 +403,19 @@ class FotoEntity(SONWrapper):
         if save:
             self.save()
 
+def get_random_foto_for_vis(required_visibility, full_path):
+    try:
+        return entity(next(fcol.aggregate([
+            {'$match': {
+                'path': {'$regex': re.compile(
+                    "^%s(/|$)" % re.escape(full_path))},
+                'type': 'foto',
+                'effectiveVisibility': {'$in': tuple(required_visibility)}}},
+            {'$sample': {'size': 1}}
+        ])))
+    except StopIteration:
+        return None
+random_foto_cache = ExpiringFifoCache(get_random_foto_for_vis)
 
 class FotoAlbum(FotoEntity):
 
@@ -437,17 +451,7 @@ class FotoAlbum(FotoEntity):
 
     def get_random_foto_for(self, user):
         required_visibility = self.required_visibility(user)
-        try:
-            return entity(next(fcol.aggregate([
-                {'$match': {
-                    'path': {'$regex': re.compile(
-                        "^%s(/|$)" % re.escape(self.full_path))},
-                    'type': 'foto',
-                    'effectiveVisibility': {'$in': tuple(required_visibility)}}},
-                {'$sample': {'size': 1}}
-            ])))
-        except StopIteration:
-            return None
+        return random_foto_cache(required_visibility, self.full_path)
 
     def search(self, q, user):
         required_visibility = self.required_visibility(user)
