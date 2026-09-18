@@ -1,0 +1,86 @@
+{% extends "static/overbase.html" %}
+
+{% load base %}
+{% load i18n %}
+
+{% block styles %}
+{{ block.super }}
+<style>
+/* make photo full-width on small devices */
+@media screen and (max-width: 800px) {
+    #content img {
+        padding: 0;
+        margin: 4px 0;
+        max-width: 100vw;
+        border: 0;
+        margin-left: -15px;
+    }
+}
+@media screen and (max-width: 550px) {
+    #content img {
+        margin-left: -10px;
+    }
+}
+
+figure {
+    display: block;
+    text-align: center;
+    margin: 0;
+}
+figure img {
+    height: auto;
+}
+figcaption {
+    margin-left: 1em;
+}
+</style>
+{% endblock styles %}
+
+{% block body %}
+<figure>
+  <img width="800" height="533" src="{{ MEDIA_URL }}static/img/bestuur23.jpg" alt="Bestuursfoto bestuur 23: Balian, Sanne, Melody, Jeske"
+       srcset="{{ MEDIA_URL }}static/img/bestuur23-800.webp 1x, {{ MEDIA_URL }}static/img/bestuur23-1600.webp 2x" />
+  <figcaption>
+    <small>{% trans "Van links naar rechts: Balian Smeets, Sanne Koning, Melody Martens, Jeske Groenheiden" %}</small>
+  </figcaption>
+</figure>
+
+<p>Ten eerste, de voorzitter van dit jaar,<br />
+allemaal kennen jullie haar.<br />
+De nieuwe praeses vol met snoep en empathie,<br />
+de enige echte Melody!</p>
+
+<p>Degene die dit jaar secretaris gaat proberen,<br />
+die foutloos de ALV's zal notuleren.<br />
+Snel als een luipaard, zoet als honing,<br />
+give it up for Sanne Koning!</p>
+
+<p>De ridder die ons geld gaat bewaken,<br />
+secuur en klaar voor al haar taken.<br />
+Hopelijk kan ze ons faillissement vermijden,<br />
+onze penningmeester, Jeske Groenheiden!</p>
+
+<p>En dan degene die op de villa let,<br />
+tevens schoonmaker van het toilet.<br />
+Ook is hij dol als een dwaas,<br />
+Aanschouw Balian, onze pandbaas!</p>
+
+
+<p>Het bestuur is op de volgende adressen bereikbaar:</p>
+<ul>
+  <li>Melody Martens, {% filter email %}voorzitter@karpenoktem.nl{% endfilter %}</li>
+  <li>Sanne Koning, {% filter email %}secretaris@karpenoktem.nl{% endfilter %}</li>
+  <li>Jeske Groenheiden, {% filter email %}penningmeester@karpenoktem.nl{% endfilter %}</li>
+  <li>Balian Smeets, {% filter email %}pandcommissaris@karpenoktem.nl{% endfilter %}</li>
+</ul>
+
+<div style="float: left;">⇐ {% trans "Het vorige" %},
+<a href="{% url "bestuur22" %}">{% trans "tweeëntwintigste bestuur" %}</a>
+</div>
+{# Add next link when bestuur 24 is known #}
+{# <div style="float: right;">{% trans "Het volgende" %}, #}
+{# <a href="{% url "bestuur24" %}">{% trans "vierentwintigste bestuur" %}</a> ⇒ #}
+{# </div> #}
+
+{% endblock body %}
+{# vim: set sw=2 ts=2 et: #}
